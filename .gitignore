@@ -1,0 +1,19 @@
+# Godot generated files
+.godot/
+
+# Exported builds and packages
+builds/
+exports/
+*.app
+*.dmg
+*.pck
+*.zip
+
+# macOS and editor files
+.DS_Store
+*.swp
+*.tmp
+
+# Local logs and test artifacts
+logs/
+test-results/
