@@ -189,6 +189,8 @@ func _create_world_with_floor(width: float) -> Node2D:
 
 func _spawn_player(world: Node2D, position: Vector2) -> Player:
 	var player: Player = PLAYER_SCENE.instantiate() as Player
+	# Preserve the original M1 single-jump contract in this regression suite.
+	player.debug_enable_double_jump = false
 	player.position = position
 	world.add_child(player)
 	return player
@@ -243,6 +245,8 @@ func _release_all_inputs() -> void:
 	Input.action_release(PlayerScript.MOVE_LEFT_ACTION)
 	Input.action_release(PlayerScript.MOVE_RIGHT_ACTION)
 	Input.action_release(PlayerScript.JUMP_ACTION)
+	Input.action_release(PlayerScript.DASH_ACTION)
+	Input.action_release(PlayerScript.ATTACK_ACTION)
 
 
 func _expect(condition: bool, message: String) -> void:

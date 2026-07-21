@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`M1 玩家移动、跳跃与对应动画`
+当前版本：`M1.5 玩家动作原型`
 
 ## 当前范围
 
-M1包含可运行的玩家水平移动、跳跃、土狼时间、跳跃缓存、Camera2D跟随以及Idle/Run/Jump/Fall/Land动画。Dash、Attack、Hurt、Death的正式Gameplay逻辑仍属于M2，尚未接入Player。
+M1.5在M1移动基础上增加开发验证用二段跳、地面Dash和纯动画Attack。Attack没有伤害或Hitbox，Dash没有无敌帧；敌人、完整战斗、Hurt和Death Gameplay仍未开始。
 
 ## 环境要求
 
@@ -38,14 +38,16 @@ M1包含可运行的玩家水平移动、跳跃、土狼时间、跳跃缓存、
 
 ## 计划操作
 
-当前M1输入映射：
+当前试玩输入映射：
 
 | 动作 | 键盘 |
 | --- | --- |
 | 左右移动 | A / D 或方向键 |
-| 跳跃 | Space |
-| 攻击 | M2，当前未接入 |
-| 闪避 | M2，当前未接入 |
+| 跳跃 | Space；Debug开关启用时可二段跳 |
+| Attack动画 | J |
+| 地面Dash | Shift |
+
+正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。
 
 ## 文档
 

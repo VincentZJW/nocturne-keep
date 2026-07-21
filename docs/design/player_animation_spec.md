@@ -1,12 +1,12 @@
 # Player Animation Integration Specification
 
-Version: 1.1 — M1 movement integration
+Version: 1.2 — M1.5 player action prototype
 Date: 2026-07-21
-Status: M1 locomotion animations and movement integration complete; M2 actions remain preview-only
+Status: M1 locomotion complete; M1.5 double-jump/Dash/Attack prototype complete without combat
 
 ## Scope
 
-This document defines the player presentation layer for The Night Warden and its M1 locomotion integration. It covers sprite animation resource names, timing, loop behavior, priority arbitration, facing, movement-state selection, and preview controls. It does not implement Dash/Attack/Hurt/Death gameplay, health, damage, combos, enemies, or production levels.
+This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, and the limited M1.5 action prototype. It covers sprite animation resource names, timing, loop behavior, priority arbitration, facing, movement-state selection, debug double jump, ground Dash motion, and Attack animation triggering. It does not implement damage, hitboxes, hurtboxes, invulnerability, combos, enemies, bosses, or production levels.
 
 ## Node composition
 
@@ -91,7 +91,8 @@ Player (CharacterBody2D)
 │   └── AnimatedSprite2D
 ├── CollisionShape2D
 ├── Camera2D
-└── AnimationController
+├── AnimationController
+└── ActionController
 ```
 
 Dedicated input actions:
@@ -114,7 +115,47 @@ air-to-floor contact → land
 land finished → idle/run according to current input
 ```
 
-Land may be interrupted immediately by an accepted jump or horizontal movement. The controller prevents per-frame animation restart. Dash, Attack, Hurt, and Death are not referenced by `player.gd`; they remain accessible only in the animation preview until M2 approval.
+Land may be interrupted immediately by an accepted jump or horizontal movement. The controller prevents per-frame animation restart.
+
+## M1.5 action prototype
+
+Dedicated inputs extend the M1 map:
+
+- `player_dash`: physical Shift.
+- `player_attack`: physical J.
+
+### Double jump
+
+- `has_double_jump` defaults to `false` and remains the future formal unlock flag.
+- `debug_enable_double_jump` defaults to `true` only for the current trial scene.
+- `air_jumps_remaining` is restored to one on landing when either flag enables the capability.
+- A ground or coyote-time jump does not consume the air jump. Only a jump after the first-jump coyote window consumes it.
+- The shared 0.12-second input buffer feeds both valid ground and air jump paths, but one physics input edge can produce at most one jump.
+- `double_jump` is reserved as the future independent animation name. The prototype deliberately resets and replays Jump Start as fallback art; no final double-jump animation is claimed.
+
+### Ground Dash
+
+- Tuning resource: `player_action_prototype_config.tres`.
+- Speed 480 px/s; travel window 0.20 seconds; cooldown 0.45 seconds.
+- Frames one through four at 20 FPS are the travel window. Frame five is recovery with zero Dash velocity.
+- Dash may start only while grounded, blocks ordinary horizontal control for the complete five-frame action, and locks facing until completion.
+- Dash has no invulnerability, collision bypass, damage, or hitbox behavior.
+
+### Attack animation trigger
+
+- J requests the existing six-frame, 12 FPS non-looping Attack.
+- It locks facing and suppresses locomotion animation requests until all six frames complete.
+- Repeated J edges while active are rejected rather than restarting frame one.
+- Completion returns to Idle/Run on the ground or the appropriate air loop if the action finished airborne.
+- `attack_03` and `attack_04` remain queryable future hit-window metadata only; they have no Gameplay effect.
+
+### Active M1.5 priority
+
+```text
+attack > dash > jump/fall/land > run > idle
+```
+
+Attack wins if both action inputs arrive on the same physics frame. Once either action starts, the action component rejects the other until completion. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
 
 ## Pixel display and anchor rules
 

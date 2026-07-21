@@ -481,3 +481,103 @@ Status: complete — awaiting M1 gameplay approval
 - Jump Loop and Fall use two frames each by design; they prioritize readable poses over ornamental motion.
 - Hurt and Death remain explicit preview placeholders.
 - Dash, Attack, Hurt, Death gameplay, health/damage, hitboxes, enemies, bosses, and level production remain deferred to M2 or later and require separate approval.
+
+## M1.5 — Player action prototype
+
+Date: 2026-07-21
+Status: complete — awaiting M1.5 prototype approval
+
+### Goals and scope
+
+- Audit the committed Attack/Dash PNGs, persistent SpriteFrames entries, and independent preview controls before changing gameplay.
+- Add debug-enabled double-jump capability with a locked-by-default formal ability flag, one recoverable air jump, and no third jump.
+- Add one ground-only Dash prototype with fixed motion timing/cooldown and no invulnerability.
+- Add one Attack animation trigger with no damage, hitbox, combo, or enemy interaction.
+- Preserve the M1 locomotion flow, all reference art, the preview tool, and the existing Commit history.
+
+### Preflight audit
+
+- Git worktree was clean at milestone start; baseline commit: `cda7bdc feat: complete M1 player movement and animations`.
+- Both `assets/sprites/player/assassin/attack/` and `assets/sprites/player/assassin/dash/` exist.
+- All requested source frames exist: `attack_01.png` through `attack_06.png` and `dash_01.png` through `dash_05.png`.
+- `resources/player/player_sprite_frames.tres` contains non-looping `attack` at 12 FPS and non-looping `dash` at 20 FPS with the complete frame paths.
+- `scenes/tools/player_animation_preview.tscn` exposes dedicated Dash and Attack buttons. Its controller maps keys 7 and 8 to the same animations and calls the shared `PlayerAnimationController`.
+- Formal M1 gameplay did not show either action because `scripts/player/player.gd` intentionally contained only the six M1 locomotion states and `project.godot` contained no Dash or Attack input actions.
+- No missing art or SpriteFrames repair is required.
+
+### Planned implementation
+
+- Extend the reproducible Input Map with physical Shift for Dash and J for Attack.
+- Store Dash speed, duration, and cooldown in a typed action-prototype Resource.
+- Compose a focused `PlayerActionController` node beside the existing presentation controller; it will own action mutual exclusion, Dash timing, cooldown, and action completion signals.
+- Keep jump/coyote/buffer physics in the Player, with explicit `has_double_jump`, `debug_enable_double_jump`, and `air_jumps_remaining` state.
+- Add deterministic tests for asset audit, preview selection, double-jump consumption/recovery, third-jump rejection, Dash timing/cooldown, Attack completion, facing locks, and locomotion non-overwrite.
+
+### M2 exclusion guard
+
+- No enemy, boss, health, damage, invulnerability, hitbox, hurtbox, combo, or completed Hurt/Death gameplay is authorized.
+- `attack_03` and `attack_04` remain metadata-only future hit-window frames.
+- `double_jump` is reserved as a future animation name; this prototype may reuse existing Jump Start/Loop art and must not label that fallback as final art.
+
+### Delivered architecture and behavior
+
+- Added physical Shift and J input actions without altering the existing movement/jump bindings.
+- Added `PlayerActionPrototypeConfig` with Dash speed 480 px/s, motion duration 0.20 seconds, and cooldown 0.45 seconds.
+- Added a composed `PlayerActionController` sibling node. It owns only Attack/Dash mutual exclusion, the Dash motion/cooldown timers, and typed `action_started`/`action_finished` signals.
+- Extended Player with `has_double_jump=false`, `debug_enable_double_jump=true`, and `air_jumps_remaining`. Ground/coyote jumps preserve the air jump, the independent air path consumes one, landing restores it, and a third airborne jump is rejected.
+- The existing 0.12-second buffer is shared by legal ground and air jump paths. The pre-move/landing guard prevents one input edge from producing two jumps in one frame.
+- Reserved `double_jump` as the future animation name. The prototype explicitly resets and replays Jump Start as fallback art.
+- Dash starts only while grounded, locks facing, blocks ordinary horizontal control, applies motion only during the first four 20-FPS frames, uses the fifth frame as recovery, and provides no invulnerability.
+- Attack is animation-only, locks facing, cannot be restarted while active, and returns to the correct locomotion animation after frame six.
+- Simultaneous Attack/Dash input selects Attack. Once either action begins, the component rejects the other until completion.
+- Updated Main's internal test panel with all controls and an explicit debug-double-jump notice. The independent ten-animation preview remains intact.
+
+### Commands and actual results
+
+1. Filesystem/SpriteFrames/scene audit using `find`, `stat`, `shasum`, and `rg`.
+   - Result: both action directories and all 11 PNGs present; SpriteFrames entries complete; preview buttons/key mappings present; formal M1 absence traced to deliberate Player/Input scope rather than missing art.
+2. `Godot --headless --editor --path . --quit`
+   - Result: exit 0; registered the new typed Resource/controller classes and parsed the updated Player scene without script/resource errors.
+3. `Godot --headless --path . --script scripts/tools/configure_m1_input_map.gd`
+   - Result: exit 0; `M15_INPUT_MAP_CONFIG: OK`; physical Shift and J serialized into `project.godot`.
+4. `Godot --headless --path . --script tests/player/test_m1_player_movement.gd`
+   - Initial regression inherited the new debug capability and therefore correctly treated the old buffered-air test as a double jump. The M1-only harness was made explicit by disabling the debug override for that suite.
+   - Final result: exit 0; `M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)`.
+5. `Godot --headless --path . --script tests/player/test_m15_player_actions.gd`
+   - The first integrated version passed. During the full regression, a fixed-frame assertion occasionally sampled after Dash completion; it was replaced with direct motion-timer/completion-state observation and then passed three consecutive runs.
+   - Final result: exit 0; `M15_PLAYER_ACTION_TEST: PASS (assets, preview, double jump, dash, attack)`.
+6. `Godot --path . --write-movie /tmp/nocturne_keep_m15_main.png --fixed-fps 30 --quit-after 3 --audio-driver Dummy`
+   - Result: exit 0; rendered 1280×720 with GL Compatibility on Apple M4. Visual review confirmed sharp Player pixels and readable Move/Jump×2/Dash/Attack instructions.
+7. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_m15_preview.png --fixed-fps 10 --quit-after 2 --audio-driver Dummy`
+   - Result: exit 0; preview retained its ten controls, production Attack/Dash entries, nearest-neighbor scaling, and placeholder labels only for Hurt/Death.
+8. Final consolidated regression: editor import, concept validator, 21-frame/reference validator, ten-animation controller test, M1 movement test, M1.5 action test, standalone Player, preview, configured Main, and `git diff --check`.
+   - Result: every command exited 0; `M15_FINAL_REGRESSION:PASS`.
+
+### Automated acceptance results
+
+- All 11 Attack/Dash files exist and the persistent resource exposes the correct counts, rates, and non-looping flags.
+- Preview Dash and Attack buttons select and play the corresponding SpriteFrames animations.
+- Formal ability flag defaults false while the current debug trial supplies exactly one air jump.
+- Ground jump does not consume it; coyote applies only to the first jump; second jump consumes it; third jump is rejected; landing restores it.
+- Air Dash is rejected. Ground Dash speed, motion window, recovery, facing lock, input blocking, completion, and cooldown pass.
+- Attack wins simultaneous action input, survives ordinary movement requests, rejects restart spam, completes all six frames, and returns to Idle or Run.
+- Existing controller validation still confirms only `attack_03` and `attack_04` report the reserved future hit window.
+- Four original reference PNGs remain byte-identical.
+- No new health, damage, invulnerability, combo, enemy, boss, hitbox, or hurtbox behavior exists.
+
+### Manual acceptance requested
+
+1. Press Space twice during one airborne arc, then press a third time and confirm only the first two jumps occur.
+2. Land and repeat to confirm the debug air jump recovers.
+3. Press Shift on the ground, judge the 0.20-second travel plus recovery feel, and verify rapid Shift presses respect cooldown.
+4. Hold a direction and press J; confirm all six Attack frames finish before Run resumes and facing remains locked during the action.
+5. Press J and Shift together; confirm Attack wins once without action restart loops.
+6. Watch the Godot Output/Debugger during a normal manual session and report any environment-specific red error not reproduced by the automated suite.
+
+### Known limitations and handoff
+
+- `double_jump` has only a reserved name; Jump Start is temporary fallback art.
+- Dash and Attack are prototypes, not a combat system. Dash has no invulnerability and Attack has no gameplay hit detection.
+- Attack may play while airborne; on completion it returns to Jump Loop/Fall rather than forcing an invalid grounded animation.
+- Main remains an internal movement/action laboratory rather than a production level.
+- Hurt and Death remain preview placeholders with no formal Player trigger.
