@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/tools/player_animation_preview.gd" id="1_preview"]
+[ext_resource type="SpriteFrames" path="res://resources/player/player_sprite_frames.tres" id="2_frames"]
+[ext_resource type="Script" path="res://scripts/player/player_animation_controller.gd" id="3_controller"]
 
-[node name="PlayerAnimationPreview" type="Control"]
+[node name="PreviewRoot" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -23,84 +25,239 @@ color = Color(0.027, 0.043, 0.067, 1)
 
 [node name="FloorGlow" type="ColorRect" parent="."]
 layout_mode = 0
-offset_left = 270.0
-offset_top = 572.0
-offset_right = 754.0
-offset_bottom = 576.0
+offset_left = 264.0
+offset_top = 490.0
+offset_right = 760.0
+offset_bottom = 494.0
 mouse_filter = 2
 color = Color(0.376, 0.478, 0.565, 0.45)
 
-[node name="AnimatedSprite" type="AnimatedSprite2D" parent="."]
+[node name="Player" type="Node2D" parent="."]
+position = Vector2(512, 322)
+
+[node name="VisualRoot" type="Node2D" parent="Player"]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player/VisualRoot"]
 unique_name_in_owner = true
-position = Vector2(512, 380)
 scale = Vector2(6, 6)
 texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="AnimationController" type="Node" parent="Player"]
+unique_name_in_owner = true
+script = ExtResource("3_controller")
 
 [node name="Margin" type="MarginContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 32.0
-offset_top = 26.0
-offset_right = -32.0
-offset_bottom = -26.0
+offset_left = 28.0
+offset_top = 22.0
+offset_right = -28.0
+offset_bottom = -22.0
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Layout" type="VBoxContainer" parent="Margin"]
 layout_mode = 2
-theme_override_constants/separation = 10
+theme_override_constants/separation = 7
 
 [node name="Title" type="Label" parent="Margin/Layout"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
-theme_override_font_sizes/font_size = 30
-text = "THE NIGHT WARDEN · PLAYER ANIMATION PREVIEW"
+theme_override_font_sizes/font_size = 28
+text = "THE NIGHT WARDEN · SPRITEFRAMES PREVIEW"
 
 [node name="Subtitle" type="Label" parent="Margin/Layout"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
-theme_override_font_sizes/font_size = 16
-text = "第一批像素动画 · 64×64 production frames · preview scale 6×"
+theme_override_font_sizes/font_size = 15
+text = "64×64 · 6× nearest-neighbor · animations 1–0 · placeholders are explicitly labeled"
 
 [node name="Spacer" type="Control" parent="Margin/Layout"]
-custom_minimum_size = Vector2(0, 480)
+custom_minimum_size = Vector2(0, 400)
 layout_mode = 2
 
-[node name="Status" type="Label" parent="Margin/Layout"]
+[node name="Metadata" type="GridContainer" parent="Margin/Layout"]
+layout_mode = 2
+theme_override_constants/h_separation = 18
+theme_override_constants/v_separation = 3
+columns = 6
+
+[node name="AnimationNameTitle" type="Label" parent="Margin/Layout/Metadata"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
+text = "ANIMATION"
+
+[node name="FrameTitle" type="Label" parent="Margin/Layout/Metadata"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
+text = "FRAME"
+
+[node name="FpsTitle" type="Label" parent="Margin/Layout/Metadata"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
+text = "FPS"
+
+[node name="LoopTitle" type="Label" parent="Margin/Layout/Metadata"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
+text = "MODE"
+
+[node name="DirectionTitle" type="Label" parent="Margin/Layout/Metadata"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
+text = "FACING"
+
+[node name="LockTitle" type="Label" parent="Margin/Layout/Metadata"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
+text = "LOCKS"
+
+[node name="AnimationNameValue" type="Label" parent="Margin/Layout/Metadata"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(205, 0)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.725, 0.51, 0.263, 1)
-theme_override_font_sizes/font_size = 16
-text = "Generating animation frames…"
+text = "idle · PRODUCTION"
+
+[node name="FrameValue" type="Label" parent="Margin/Layout/Metadata"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(115, 0)
+layout_mode = 2
+text = "1 / 4"
+
+[node name="FpsValue" type="Label" parent="Margin/Layout/Metadata"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(78, 0)
+layout_mode = 2
+text = "5.0 FPS"
+
+[node name="LoopValue" type="Label" parent="Margin/Layout/Metadata"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(95, 0)
+layout_mode = 2
+text = "LOOP"
+
+[node name="DirectionValue" type="Label" parent="Margin/Layout/Metadata"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+text = "RIGHT · flip_h=false"
+
+[node name="LockValue" type="Label" parent="Margin/Layout/Metadata"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(190, 0)
+layout_mode = 2
+text = "animation=free · facing=free"
+
+[node name="EventValue" type="Label" parent="Margin/Layout"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
+text = "Ready"
 horizontal_alignment = 1
 
-[node name="Buttons" type="HBoxContainer" parent="Margin/Layout"]
+[node name="AnimationButtons" type="GridContainer" parent="Margin/Layout"]
 layout_mode = 2
-theme_override_constants/separation = 12
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 5
+columns = 5
+
+[node name="IdleButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "1 · idle"
+
+[node name="RunButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "2 · run"
+
+[node name="JumpStartButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "3 · jump_start [P]"
+
+[node name="JumpLoopButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "4 · jump_loop [P]"
+
+[node name="FallButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "5 · fall [P]"
+
+[node name="LandButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "6 · land [P]"
+
+[node name="DashButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "7 · dash"
+
+[node name="AttackButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "8 · attack"
+
+[node name="HurtButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "9 · hurt [P]"
+
+[node name="DeathButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "0 · death [P]"
+
+[node name="PlaybackButtons" type="HBoxContainer" parent="Margin/Layout"]
+layout_mode = 2
+theme_override_constants/separation = 8
 alignment = 1
 
-[node name="IdleButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="PlayButton" type="Button" parent="Margin/Layout/PlaybackButtons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 46)
+custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
-text = "1 · IDLE"
+text = "PLAY"
 
-[node name="RunButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="PauseButton" type="Button" parent="Margin/Layout/PlaybackButtons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 46)
+custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
-text = "2 · RUN"
+text = "PAUSE"
 
-[node name="DashButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="RestartButton" type="Button" parent="Margin/Layout/PlaybackButtons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 46)
+custom_minimum_size = Vector2(130, 34)
 layout_mode = 2
-text = "3 · DASH"
+text = "RESTART"
 
-[node name="AttackButton" type="Button" parent="Margin/Layout/Buttons"]
+[node name="FaceLeftButton" type="Button" parent="Margin/Layout/PlaybackButtons"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(150, 46)
+custom_minimum_size = Vector2(150, 34)
 layout_mode = 2
-text = "4 · ATTACK"
+text = "FACE LEFT"
+
+[node name="FaceRightButton" type="Button" parent="Margin/Layout/PlaybackButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(150, 34)
+layout_mode = 2
+text = "FACE RIGHT"

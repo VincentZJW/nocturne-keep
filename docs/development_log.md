@@ -287,3 +287,94 @@ Status: complete — awaiting animation approval; M1 remains paused
 - The preview is a design tool and is not configured as the project Main scene.
 - No atlas or `.tres` SpriteFrames resource is delivered yet; this batch uses individual PNGs and runtime-built preview frames.
 - Motion timing is an initial art-production cadence and still requires user approval before formal player integration.
+
+## Pre-M1 presentation integration — Player animation system
+
+Date: 2026-07-21
+Status: complete — awaiting animation-system approval; M1 gameplay remains paused
+
+### Goals and scope
+
+- Integrate the existing 21 production frames into one persistent `SpriteFrames` resource with exact names, FPS values, and loop flags.
+- Add clearly marked temporary frames for the six not-yet-authored actions: jump start, jump loop, fall, land, hurt, and death.
+- Build a typed, presentation-only `PlayerAnimationController` with priority, one-shot, direction-lock, and completion-signal behavior.
+- Upgrade the independent preview to expose all ten animations, playback controls, direction flipping, and live metadata.
+- Preserve all existing concept and reference PNGs and keep the formal Main scene unchanged.
+
+### Planned files
+
+- `scripts/player/player_animation_controller.gd` for animation selection and presentation locks only.
+- `resources/player/player_sprite_frames.tres` for persistent animation configuration.
+- `assets/sprites/player/assassin/placeholder/` for explicitly temporary PNG frames.
+- Updated `scenes/tools/player_animation_preview.tscn` and its tool controller.
+- `docs/design/player_animation_spec.md`, this log, and focused automated tests.
+
+### Planned validation
+
+- Headless editor import/parse with Godot 4.7.1.
+- Resource assertions for all names, counts, speeds, loop flags, texture imports, and shared foot baseline.
+- Controller assertions for priority, idempotent replay prevention, one-shot completion, loop behavior, and facing locks.
+- Independent preview startup and configured formal Main startup.
+
+### Scope guard
+
+- No movement physics, collision, input map, health, damage, hitbox implementation, combo, enemy, boss, level, or formal player scene integration is authorized in this batch.
+
+### Delivered architecture
+
+- Persistent `SpriteFrames`: ten snake_case animations with the requested counts, rates, and loop flags.
+- Composition: `PreviewRoot / Player / VisualRoot / AnimatedSprite2D` plus sibling `AnimationController`.
+- Presentation controller: typed signals, one-shot priority locks, Attack/Dash direction locks, queued facing, idempotent replay prevention, pause/resume/restart, and explicit reset.
+- Attack timing interface: zero-based frames `2` and `3`, corresponding to `attack_03` and `attack_04`; no hitbox or damage behavior was added.
+- Missing art: 19 PNGs under the dedicated `placeholder/` directory, with `placeholder_` prefixes and documentation labels.
+- Reference preservation: all four reference PNGs remain present and unchanged.
+
+### Commands and actual results
+
+1. `Godot --headless --editor --path . --quit`
+   - Initial pass registered the new builder/controller classes and imported assets.
+   - It exposed that a constructed `PackedInt32Array` is not a valid constant expression in Godot 4.7.1. The Attack window constant was corrected to a typed `Array[int]`, and the following import completed without parser/resource errors.
+2. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --placeholders-only`
+   - Result: exit 0; `PLAYER_PLACEHOLDER_EXPORT: 19 files, 0 failures`.
+3. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd`
+   - Result: exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK`.
+4. `Godot --headless --path . scenes/tools/player_animation_preview.tscn --quit-after 3`
+   - Result: exit 0 after the constant fix; the independently runnable preview loaded the persistent SpriteFrames without errors.
+5. `Godot --headless --path . --script tests/player/test_player_animation_system.gd`
+   - First run revealed a test-side API type mismatch (`get_animation_names()` returns `PackedStringArray`) and a real one-pixel baseline mismatch in `dash_03`.
+   - The test type was corrected. The Dash core source pose was shifted down one pixel, and production/placeholder assets were regenerated.
+   - Final result: exit 0; `PLAYER_ANIMATION_SYSTEM_TEST: PASS (10 animations, controller locks/signals verified)`.
+6. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_spriteframes_preview.png --fixed-fps 10 --quit-after 3 --audio-driver Dummy`
+   - Result: exit 0; GL Compatibility rendered the preview at 1280×720 on Apple M4.
+   - Visual review confirmed sharp 6× pixel scaling, complete metadata, ten action buttons, playback controls, and explicit placeholder labels. The ground guide was moved above the metadata after this review.
+7. Final regression: legacy concept validator, 21-frame source validator, 40-frame system/controller test, independent preview startup, configured Main startup, and `git diff --check`.
+   - Result: all commands exited 0. Reports: `PIXEL_CHARACTER_VALIDATION: PASS`, `PLAYER_ANIMATION_VALIDATION: PASS`, `PLAYER_ANIMATION_SYSTEM_TEST: PASS`, and `FINAL_PLAYER_ANIMATION_REGRESSION:PASS`.
+8. Priority tightening regression: editor parse, system/controller test, preview startup, Main startup, and whitespace check.
+   - Result: all commands exited 0; the system test remained `PASS` after adding explicit loop-priority release behavior.
+
+### Automated acceptance results
+
+- Exactly the ten required animation names exist; no extra animation is present.
+- Counts, FPS, and loop flags match the specification.
+- All 40 integrated frames are 64×64, binary-alpha, imported textures without mipmaps.
+- Idle/Run/Dash/Attack/Land/Hurt share visible ground row `y=60`.
+- Dash's first four frames span 0.20 seconds and its fifth frame completes before `one_shot_finished`.
+- Attack reaches frame six; `attack_03` and `attack_04` are the only reserved hit-window frames.
+- Same-animation requests do not rewind; looping actions do not emit one-shot completion.
+- Priority, Death persistence, Attack/Dash facing locks, queued flip, and unchanged sprite position all pass.
+- Lower-priority loops cannot overwrite higher-priority loops unless the caller explicitly authorizes a completed state transition.
+
+### Manual acceptance
+
+1. Run `scenes/tools/player_animation_preview.tscn` with `F6`.
+2. Select all ten buttons and confirm the production/placeholder label, frame count, FPS, and mode.
+3. During Dash or Attack, request the opposite facing and confirm it applies only after completion.
+4. Pause, resume, and restart both a loop and a one-shot.
+5. Confirm `attack_03` and `attack_04` display `HIT WINDOW` only as preview metadata.
+
+### Known limitations and scope check
+
+- Jump Start, Jump Loop, Fall, Land, Hurt, and Death use integration placeholders and require authored final frames later.
+- This system does not decide locomotion state; a future approved player state machine will call the presentation API.
+- `one_shot_finished` is an animation event only and has no damage, invulnerability, physics, or gameplay side effects.
+- Formal Main and its startup scene remain unchanged; no M1, enemy, boss, level, or combat functionality was added.

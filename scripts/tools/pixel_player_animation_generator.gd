@@ -109,7 +109,7 @@ static func _dash_poses() -> Array[PixelAssassinPose]:
 	return [
 		_pose(Vector2i(27, 29), Vector2i(47, 38), Vector2i(20, 40), Vector2i(42, 49), Vector2i(49, 58), Vector2i(27, 51), Vector2i(18, 58), Vector2i(60, 34), Vector2i(8, 48), Vector2i(14, 34)),
 		_pose(Vector2i(29, 28), Vector2i(52, 35), Vector2i(21, 41), Vector2i(45, 48), Vector2i(54, 56), Vector2i(27, 50), Vector2i(14, 58), Vector2i(63, 30), Vector2i(8, 50), Vector2i(12, 32)),
-		_pose(Vector2i(31, 30), Vector2i(55, 36), Vector2i(22, 42), Vector2i(47, 48), Vector2i(57, 54), Vector2i(29, 50), Vector2i(11, 57), Vector2i(63, 31), Vector2i(7, 49), Vector2i(13, 33), Vector2i(1, 0)),
+		_pose(Vector2i(31, 31), Vector2i(55, 37), Vector2i(22, 43), Vector2i(47, 49), Vector2i(57, 55), Vector2i(29, 51), Vector2i(11, 58), Vector2i(63, 32), Vector2i(7, 50), Vector2i(13, 34), Vector2i(1, 0)),
 		_pose(Vector2i(30, 29), Vector2i(54, 35), Vector2i(21, 41), Vector2i(46, 49), Vector2i(58, 57), Vector2i(28, 50), Vector2i(12, 58), Vector2i(63, 29), Vector2i(7, 48), Vector2i(12, 31)),
 		_pose(Vector2i(28, 27), Vector2i(50, 35), Vector2i(22, 39), Vector2i(43, 49), Vector2i(51, 58), Vector2i(29, 50), Vector2i(20, 58), Vector2i(63, 30), Vector2i(10, 47), Vector2i(16, 32)),
 	]
