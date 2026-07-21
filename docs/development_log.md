@@ -136,3 +136,88 @@ Status: complete
 
 - M0 contains no pixel-art textures, so the setting value is verified programmatically; its visual effect will first be observable when a pixel texture is introduced in an approved later milestone.
 - This pass does not add or test any M1 gameplay behavior.
+
+## Pre-M1 tool — Pixel character concept generator
+
+Date: 2026-07-21
+Status: complete — awaiting visual approval; M1 remains paused
+
+### Goals and scope
+
+- Replace the unavailable Figma workflow with a local Godot 4.7.1/GDScript pixel-character tool.
+- Generate an original 16-bit-inspired Concept C for The Night Warden at 64px plus a 48px readability floor.
+- Deliver front, side, silhouette, dagger, palette, key-pose, preview, and 1600×1000 board PNGs.
+- Keep the formal Main scene and all M1 movement/gameplay behavior unchanged.
+- Use no downloaded assets, online image generators, or paid external services.
+
+### Files planned
+
+- Tool scene: `scenes/tools/character_design_lab.tscn`.
+- Tool scripts: pixel canvas, character generator, board exporter, and preview orchestrator under `scripts/tools/`.
+- Generated sources: `assets/sprites/player/concept_c/`.
+- Design/QA: `docs/design/pixel_character_spec.md`, character board, lab preview, and QA report.
+- Validation: `tests/tools/validate_pixel_character_assets.gd`.
+
+### Scope check
+
+- No `CharacterBody2D`, movement, input action, collision, combat system, combo state, enemy, map, or level behavior was added.
+- `project.godot` and `scenes/main/main.tscn` were not modified.
+- The concept lab is independently runnable and is not configured as the project Main scene.
+- The attack drawings describe one basic attack only: main-hand slash followed by an offhand visual follow-through.
+
+### Implementation notes
+
+- Character pixels are authored directly on low-resolution `Image` canvases through clipped `fill_rect`, `set_pixel`, and Bresenham line operations.
+- 48px studies use nearest-neighbor resizing; board and lab previews use exact integer scaling.
+- The fixed requested five-color palette was retained without adjustment.
+- Import sidecars are retained for source assets because they record `compress/mode=0` and `mipmaps/generate=false`; `.godot/` remains ignored.
+- The board is composed inside an isolated 1600×1000 `SubViewport`; it does not alter the project viewport or formal UI.
+
+### Commands and actual results
+
+1. `Godot --headless --editor --path . --import --quit`
+   - Initial parse/import completed and registered the four tool classes without parser errors.
+   - The surrounding zsh wrapper initially attempted to assign the reserved variable `status`; the editor command itself exited successfully. The wrapper was corrected to task-specific variable names for later commands.
+2. `Godot --headless --path . scenes/tools/character_design_lab.tscn -- --generate-only --skip-board`
+   - First attempt exposed empty exported NodePaths in the hand-authored scene; switched the scene to typed unique-node references.
+   - Second attempt exposed GDScript typed-array literal conversion errors; replaced calls with explicitly typed local arrays.
+   - Corrected result: exit 0; all eleven transparent asset PNGs generated without warnings or errors.
+3. `Godot --path . scenes/tools/character_design_lab.tscn --audio-driver Dummy -- --generate-only`
+   - Result: exit 0 under the GL Compatibility renderer on Apple M4; the 1600×1000 design board was generated.
+4. `Godot --headless --editor --path . --import --quit`
+   - Result: exit 0; all generated PNGs imported as textures, with no script or resource errors.
+5. `Godot --headless --path . --script res://tests/tools/validate_pixel_character_assets.gd`
+   - First validation compared all raw bytes and correctly revealed that the importer normalizes RGB channels beneath fully transparent pixels. The check was narrowed to alpha plus visible RGBA pixels.
+   - Final result: exit 0; `PIXEL_CHARACTER_VALIDATION: PASS (11 assets + board)` with no warnings or errors.
+6. `Godot --path . scenes/tools/character_design_lab.tscn --write-movie /tmp/nocturne_keep_character_lab_final.png --fixed-fps 1 --quit-after 6 --audio-driver Dummy`
+   - Result: exit 0; six deterministic preview frames rendered. The final completed frame was preserved as `docs/qa/character_design_lab_preview.png`.
+   - Visual review found the first layout used native texture size despite integer-sized containers; `TextureRect` was corrected to explicit Nearest scaling and the QA image was regenerated.
+7. `Godot --headless --path . --quit-after 5`
+   - Final result: exit 0; the configured formal Main scene started and stopped without warnings or errors.
+8. `Godot --headless --path . scenes/tools/character_design_lab.tscn -- --generate-only --skip-board`
+   - Final result: exit 0; the independent lab generated all low-resolution PNG sources without a rendering display.
+9. Final parallel check: Main startup, pixel asset validator, and headless lab generation.
+   - Result: all three processes exited 0; validator reported `PASS (11 assets + board)`.
+
+### Visual acceptance results
+
+- The 64px front/side views read as the same character.
+- The pointed hood, pale eye, segmented torso, separate legs, short mantle, and warm clasp remain visible.
+- The main dagger clearly establishes right-facing orientation; the shorter offhand blade remains behind the body.
+- The 48px side view remains recognizable without anti-aliased or partial-alpha pixels.
+- The black silhouette retains hood, posture, weapon directions, mantle projection, and leg gap.
+- Board and lab screenshots were reviewed directly and are linked from `docs/qa/pixel_character_report.md`.
+
+### Manual acceptance
+
+1. Open `scenes/tools/character_design_lab.tscn` in Godot 4.7.1 and press `F6`.
+2. Confirm the status reaches `Export complete` and every preview group is visible by scrolling.
+3. Confirm character and dagger edges remain sharp and the 48px views are readable.
+4. Press the regenerate button and confirm the PNG/board timestamps update without changing the Main scene.
+5. Review the decisions listed at the end of `docs/design/pixel_character_spec.md` before approving any animation or M1 work.
+
+### Known limitations
+
+- The output is a concept baseline and three static key poses, not a final sprite sheet.
+- Board text uses system fonts, so a regenerated board may have small cross-platform typography differences; the character pixel data is deterministic.
+- M1 player movement remains intentionally unstarted in this pass.
