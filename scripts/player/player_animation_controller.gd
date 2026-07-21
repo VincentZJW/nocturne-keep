@@ -145,14 +145,15 @@ func _on_animation_finished() -> void:
 	var finished_animation: StringName = animated_sprite.animation
 	if finished_animation not in ONE_SHOT_ANIMATIONS:
 		return
-	one_shot_finished.emit(finished_animation)
 	if finished_animation == &"death":
+		one_shot_finished.emit(finished_animation)
 		return
 	_animation_locked = false
 	_locked_animation = &""
 	if _facing_locked:
 		_facing_locked = false
 		_apply_pending_facing()
+	one_shot_finished.emit(finished_animation)
 
 
 func _apply_pending_facing() -> void:

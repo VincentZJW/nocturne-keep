@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerMovementConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_movement_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+move_speed = 220.0
+ground_acceleration = 1400.0
+ground_deceleration = 1700.0
+air_acceleration = 850.0
+jump_velocity = -420.0
+gravity = 1100.0
+coyote_time = 0.1
+jump_buffer_time = 0.12
+input_deadzone = 0.1

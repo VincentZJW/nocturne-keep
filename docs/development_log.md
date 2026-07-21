@@ -378,3 +378,106 @@ Status: complete — awaiting animation-system approval; M1 gameplay remains pau
 - This system does not decide locomotion state; a future approved player state machine will call the presentation API.
 - `one_shot_finished` is an animation event only and has no damage, invulnerability, physics, or gameplay side effects.
 - Formal Main and its startup scene remain unchanged; no M1, enemy, boss, level, or combat functionality was added.
+
+## M1 — Animation completion and player movement integration
+
+Date: 2026-07-21
+Status: complete — awaiting M1 gameplay approval
+
+### Goals and scope
+
+- Replace only the Jump Start, Jump Loop, Fall, and Land placeholder art with formal 64×64 five-color pixel frames.
+- Revalidate the existing four-frame Idle and six-frame Run loops, preserving them unless a concrete anchor/readability defect is found.
+- Add the formal `CharacterBody2D` player with horizontal acceleration/deceleration, air control, gravity, jumping, 0.10-second coyote time, and 0.12-second jump buffering.
+- Add dedicated player movement input actions, a following `Camera2D`, collision, facing, and the six-state M1 animation flow.
+- Integrate the Player into Main with only minimal collision geometry needed to exercise M1 movement.
+
+### Planned files
+
+- Formal M1 animation PNGs under `assets/sprites/player/assassin/{jump_start,jump_loop,fall,land}/`.
+- Updated SpriteFrames builder/resource and preview metadata.
+- Player movement config resource, `scripts/player/player.gd`, and `scenes/player/player.tscn`.
+- M1 input entries in `project.godot` and a minimal movement test space in `scenes/main/main.tscn`.
+- Deterministic animation/movement tests, QA evidence, this log, and `docs/design/player_animation_spec.md`.
+
+### Baseline tuning from the Master Prompt
+
+- `move_speed=220`, `ground_acceleration=1400`, `ground_deceleration=1700`, `air_acceleration=850`.
+- `jump_velocity=-420`, `gravity=1100`, `coyote_time=0.10`, `jump_buffer_time=0.12`.
+- No tuning changes are planned before actual runtime evidence.
+
+### Planned validation
+
+- Exact animation names/counts/FPS/loop flags, transparency, no mipmaps, 48px readability, anchor and grounded baseline checks.
+- Deterministic movement acceleration/deceleration, collision, jump, coyote-time, jump-buffer, facing, camera, and animation-state checks.
+- Independent Player scene, animation preview, and formal Main startup/render checks with Godot 4.7.1.
+
+### M2 exclusion guard
+
+- Dash and Attack art/resource entries remain available in the preview only; the formal M1 Player must never request them.
+- Hurt and Death remain explicitly marked placeholders and are not called by M1 gameplay.
+- No hitbox, damage, health, invulnerability, dash movement, attack input, hurt/death flow, enemy, boss, or level-production system is authorized.
+
+### Delivered animation art
+
+- Replaced the eight temporary Jump Start, Jump Loop, Fall, and Land PNGs with authored 64×64 transparent five-color pixel frames in dedicated production directories.
+- Removed only the superseded M1 placeholder PNGs and their import sidecars after verifying that the rebuilt SpriteFrames resource no longer referenced them. Hurt and Death placeholders remain intact.
+- Revalidated the approved four-frame Idle and six-frame Run loops without overwriting them; their feet, alternating strides, dagger separation, and shared canvas anchor remained suitable for M1.
+- Generated `docs/qa/m1_player_animation_contact_sheet.png`, including nearest-neighbor 64px presentation and 48px readability samples.
+- Kept every Dash, Attack, concept, and `reference/` image unchanged.
+
+### Delivered Player integration
+
+- Added a reusable `CharacterBody2D` Player scene with `VisualRoot/AnimatedSprite2D`, `CollisionShape2D`, following `Camera2D`, and the existing `PlayerAnimationController` as `AnimationController`.
+- Added a typed movement configuration resource using the approved tuning values and no terminal-velocity cap.
+- Added dedicated A/D, arrow-key, and Space input actions through a reproducible InputMap configuration script.
+- Implemented ground acceleration/deceleration, air control, gravity, single jump, 0.10-second coyote time, 0.12-second input buffering, collision via `move_and_slide()`, and controller-owned horizontal facing.
+- Implemented an explicit six-state M1 animation flow. One-shot completion now releases presentation locks before notifying the Player, allowing Jump Start and Land callbacks to select their next locomotion state without replaying frame zero.
+- Replaced the M0 title-only Main contents with a minimal M1 movement test room, static collision floor/platforms, the instanced Player, and controls legend. The configured Main path itself was not changed.
+
+### Commands and actual results
+
+1. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --m1-animation-only`
+   - Result: exit 0; `PLAYER_M1_ANIMATION_EXPORT: 8 files, 0 failures`.
+2. `Godot --headless --editor --path . --quit`
+   - Result: exit 0; imported the new PNGs and parsed the new scene/scripts without resource errors.
+3. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd`
+   - Result: exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK`; formal M1 paths replaced the old placeholder references.
+4. `Godot --headless --path . --script scripts/tools/configure_m1_input_map.gd`
+   - Result: exit 0; `M1_INPUT_MAP_CONFIG: OK`.
+5. `Godot --headless --path . --script tests/player/test_m1_player_movement.gd`
+   - The first test revision released its synthetic jump input before the Player's physics callback and therefore did not exercise the jump. The harness was corrected to hold input across physics frames.
+   - Final result: exit 0; `M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)`.
+6. Consolidated regression: concept asset validator, 21-frame source validator, ten-animation/controller test, M1 movement test, standalone Player startup, animation preview startup, and configured Main startup.
+   - Result: every command exited 0. Reports: `PIXEL_CHARACTER_VALIDATION: PASS`, `PLAYER_ANIMATION_VALIDATION: PASS`, `PLAYER_ANIMATION_SYSTEM_TEST: PASS`, and `M1_PLAYER_MOVEMENT_TEST: PASS`.
+7. `Godot --path . --write-movie /tmp/nocturne_keep_m1_main.png --fixed-fps 30 --quit-after 3 --audio-driver Dummy`
+   - Result: exit 0 using GL Compatibility on Apple M4. Visual review confirmed the Player on collision ground, sharp pixels, intact camera presentation, and readable M1 controls.
+8. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_m1_preview.png --fixed-fps 10 --quit-after 3 --audio-driver Dummy`
+   - Result: exit 0. Visual review confirmed Jump Start/Loop/Fall/Land are shown as production art while only Hurt and Death retain placeholder labels.
+
+### Automated acceptance results
+
+- All six M1 animation groups have the required counts, FPS, and loop flags; the four newly authored groups use formal paths rather than `placeholder/`.
+- Jump Start, Jump Loop, Fall, and Land have distinct image hashes and visually distinct silhouettes.
+- All tested frames are 64×64, transparent, imported without mipmaps, and retain readable 48×48 nearest-neighbor reductions.
+- Ground acceleration reaches 220 px/s, deceleration returns to zero, left-facing uses `flip_h`, and the sprite node does not move while flipping.
+- The runtime sequence reaches Jump Start, Jump Loop, Fall, Land, and the correct grounded loop without per-frame restarts.
+- Coyote-time jump and buffered-on-landing jump both pass with real physics-frame input and collision.
+- Player settles on the floor without penetration; its enabled child Camera2D follows the Player.
+- Horizontal input or a new accepted jump can interrupt Land.
+- Formal Player state constants and animation requests contain no Dash, Attack, Hurt, or Death entry.
+
+### Manual acceptance requested
+
+1. Run the configured project and evaluate horizontal acceleration/deceleration feel with A/D and arrow keys.
+2. Walk off a platform and press Space within 0.10 seconds to judge coyote-time feel rather than only functional correctness.
+3. Press Space just before landing to judge the 0.12-second input-buffer feel.
+4. Check Jump Start, rising loop, Fall, and Land transitions at normal speed in both facing directions.
+5. Run `scenes/tools/player_animation_preview.tscn` and confirm Dash/Attack still play there but never activate during formal movement.
+
+### Known limitations and handoff
+
+- Main is an intentionally minimal movement laboratory, not a production level.
+- Jump Loop and Fall use two frames each by design; they prioritize readable poses over ornamental motion.
+- Hurt and Death remain explicit preview placeholders.
+- Dash, Attack, Hurt, Death gameplay, health/damage, hitboxes, enemies, bosses, and level production remain deferred to M2 or later and require separate approval.

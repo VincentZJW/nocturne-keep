@@ -26,6 +26,7 @@ const LOOPING: Dictionary[StringName, bool] = {
 	&"hurt": false, &"death": false,
 }
 const PRODUCTION_ANIMATIONS: Array[StringName] = [&"idle", &"run", &"dash", &"attack"]
+const M1_PRODUCTION_ANIMATIONS: Array[StringName] = [&"jump_start", &"jump_loop", &"fall", &"land"]
 
 
 static func build() -> SpriteFrames:
@@ -56,7 +57,7 @@ static func save() -> Error:
 
 static func frame_path(animation_name: StringName, frame_index: int) -> String:
 	var one_based_index: int = frame_index + 1
-	if animation_name in PRODUCTION_ANIMATIONS:
+	if animation_name in PRODUCTION_ANIMATIONS or animation_name in M1_PRODUCTION_ANIMATIONS:
 		return PRODUCTION_ROOT.path_join(str(animation_name)).path_join(
 			"%s_%02d.png" % [animation_name, one_based_index]
 		)
@@ -66,4 +67,4 @@ static func frame_path(animation_name: StringName, frame_index: int) -> String:
 
 
 static func is_placeholder(animation_name: StringName) -> bool:
-	return animation_name not in PRODUCTION_ANIMATIONS
+	return animation_name not in PRODUCTION_ANIMATIONS and animation_name not in M1_PRODUCTION_ANIMATIONS

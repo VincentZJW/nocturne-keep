@@ -8,10 +8,6 @@ const PixelCanvas: Script = preload("res://scripts/tools/pixel_art_canvas.gd")
 const OUTPUT_DIRECTORY: String = "res://assets/sprites/player/assassin/placeholder"
 const SOURCE_DIRECTORY: String = "res://assets/sprites/player/assassin"
 const PLACEHOLDER_COUNTS: Dictionary[String, int] = {
-	"jump_start": 2,
-	"jump_loop": 2,
-	"fall": 2,
-	"land": 2,
 	"hurt": 3,
 	"death": 8,
 }
@@ -58,22 +54,6 @@ static func _shift_binary(source: Image, offset: Vector2i) -> Image:
 
 static func _recipes() -> Dictionary[String, Array]:
 	return {
-		"jump_start": [
-			{"source": "idle/idle_04.png", "offset": Vector2i.ZERO},
-			{"source": "dash/dash_01.png", "offset": Vector2i(0, -1)},
-		],
-		"jump_loop": [
-			{"source": "run/run_02.png", "offset": Vector2i(0, -8)},
-			{"source": "run/run_05.png", "offset": Vector2i(0, -8)},
-		],
-		"fall": [
-			{"source": "run/run_03.png", "offset": Vector2i(0, -6)},
-			{"source": "run/run_06.png", "offset": Vector2i(0, -4)},
-		],
-		"land": [
-			{"source": "dash/dash_01.png", "offset": Vector2i.ZERO},
-			{"source": "idle/idle_04.png", "offset": Vector2i.ZERO},
-		],
 		"hurt": [
 			{"source": "attack/attack_02.png", "offset": Vector2i(1, 0)},
 			{"source": "attack/attack_01.png", "offset": Vector2i(-1, 0)},

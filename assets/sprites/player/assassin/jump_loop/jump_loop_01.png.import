@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://batvnatc0aain"
-path="res://.godot/imported/placeholder_land_01.png-652e056e5d3a02e60378ea68865fd136.ctex"
+uid="uid://dm2301gw4hbns"
+path="res://.godot/imported/jump_loop_01.png-d94d6fffeed818d22139992c37ac1523.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/assassin/placeholder/placeholder_land_01.png"
-dest_files=["res://.godot/imported/placeholder_land_01.png-652e056e5d3a02e60378ea68865fd136.ctex"]
+source_file="res://assets/sprites/player/assassin/jump_loop/jump_loop_01.png"
+dest_files=["res://.godot/imported/jump_loop_01.png-d94d6fffeed818d22139992c37ac1523.ctex"]
 
 [params]
 

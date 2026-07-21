@@ -183,25 +183,25 @@ text = "2 · run"
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "3 · jump_start [P]"
+text = "3 · jump_start"
 
 [node name="JumpLoopButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "4 · jump_loop [P]"
+text = "4 · jump_loop"
 
 [node name="FallButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "5 · fall [P]"
+text = "5 · fall"
 
 [node name="LandButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "6 · land [P]"
+text = "6 · land"
 
 [node name="DashButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true

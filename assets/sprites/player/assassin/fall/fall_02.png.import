@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bnn0n74pmfyak"
-path="res://.godot/imported/placeholder_land_02.png-21c7cb8dd314e66cc2484e40bd51cf1e.ctex"
+uid="uid://cfd3ha16xw7vi"
+path="res://.godot/imported/fall_02.png-773cbc1184956d9840d5b6af0a38dc9e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/assassin/placeholder/placeholder_land_02.png"
-dest_files=["res://.godot/imported/placeholder_land_02.png-21c7cb8dd314e66cc2484e40bd51cf1e.ctex"]
+source_file="res://assets/sprites/player/assassin/fall/fall_02.png"
+dest_files=["res://.godot/imported/fall_02.png-773cbc1184956d9840d5b6af0a38dc9e.ctex"]
 
 [params]
 
