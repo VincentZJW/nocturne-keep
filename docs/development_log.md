@@ -221,3 +221,69 @@ Status: complete — awaiting visual approval; M1 remains paused
 - The output is a concept baseline and three static key poses, not a final sprite sheet.
 - Board text uses system fonts, so a regenerated board may have small cross-platform typography differences; the character pixel data is deterministic.
 - M1 player movement remains intentionally unstarted in this pass.
+
+## Pre-M1 art production — Player pixel animation batch 01
+
+Date: 2026-07-21
+Status: complete — awaiting animation approval; M1 remains paused
+
+### Goals and scope
+
+- Preserve the approved front, side, dash, and attack static art as reference material instead of deleting it.
+- Extend the black-hooded dual-dagger design into 21 usable transparent 64×64 frames: Idle 4, Run 6, Dash 5, Attack 6.
+- Provide an independently runnable `AnimatedSprite2D` preview with manual action switching.
+- Validate a 48×48 readability floor without creating gameplay code, player controllers, enemies, bosses, maps, or formal Main integration.
+
+### Files planned and delivered
+
+- Animation outputs and reference copies: `assets/sprites/player/assassin/`.
+- Pose, renderer, sequence generator, QA sheet, and preview controller: `scripts/tools/`.
+- Independent preview: `scenes/tools/player_animation_preview.tscn`.
+- Automated validation: `tests/tools/validate_player_animation_assets.gd`.
+- Visual QA and updated specification: `docs/qa/player_animation_*` and `docs/design/pixel_character_spec.md`.
+
+### Preflight version-control state
+
+- Before this batch, `project.godot` was the only modified file.
+- Its sole diff moved `textures/canvas_textures/default_texture_filter=0` above the renderer keys. The key and value were unchanged, so the diff was an editor-normalized ordering change with no rendering behavior change.
+- The Nearest filter remained active. No additional project setting or formal Main change was made for this batch.
+
+### Implementation notes
+
+- A typed pose object stores the torso, hood, hands, knees, feet, blade tips, and mantle tip for each frame.
+- One renderer draws every pose with the same anatomy construction, proportions, dagger language, and fixed five-color palette.
+- The first animation pass exports separate PNGs rather than an atlas, keeping every frame directly inspectable and replaceable.
+- The original four reference images are copied byte-for-byte into `reference/`; the original `concept_c/` files remain in place.
+- Preview textures are created from the generated images and explicitly use Nearest filtering at 6× integer scale.
+- Source `.import` sidecars retain Lossless compression and disabled mipmaps; `.godot/` remains ignored.
+
+### Commands and actual results
+
+1. `Godot --version`
+   - Result: `4.7.1.stable.official.a13da4feb`.
+2. `Godot --headless --path . scenes/tools/player_animation_preview.tscn -- --generate-only`
+   - First attempt ran before the editor class scan and could not resolve the newly added global pose class. No assets were lost; the process was stopped.
+   - After the required editor import, result: exit 0; `PLAYER_ANIMATION_EXPORT: 21 frames + 4 references`.
+3. `Godot --headless --editor --path . --quit`
+   - Result: exit 0; registered new global classes and imported all 25 animation/reference PNGs without resource errors.
+4. `Godot --headless --path . --script tests/tools/validate_player_animation_assets.gd`
+   - Result: exit 0; `PLAYER_ANIMATION_VALIDATION: PASS (21 frames + 4 byte-identical references)`.
+5. `Godot --headless --path . scenes/tools/player_animation_preview.tscn --quit-after 3`
+   - Result: exit 0; independent animation preview loaded, generated frames, and played without script/resource errors.
+6. `Godot --headless --path . --quit-after 3`
+   - Result: exit 0; configured formal Main loaded and exited without errors.
+
+### Visual acceptance results
+
+- The 21-frame QA contact sheet was reviewed directly at original resolution.
+- Idle remains deliberately subtle; Run uses a readable six-frame alternating stride.
+- Dash uses a lower, longer travel silhouette with rear-leg extension.
+- Attack uses a planted lunge, extended main-hand thrust, rear support dagger, and distinct follow-through.
+- All four representative 48px checks retain hood, eye, legs, and both weapon directions without smoothing.
+
+### Scope check and known limitations
+
+- No formal gameplay scene, input action, movement state, collision, combat logic, combo system, enemy, boss, or map was added.
+- The preview is a design tool and is not configured as the project Main scene.
+- No atlas or `.tres` SpriteFrames resource is delivered yet; this batch uses individual PNGs and runtime-built preview frames.
+- Motion timing is an initial art-production cadence and still requires user approval before formal player integration.

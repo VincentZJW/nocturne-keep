@@ -1,12 +1,12 @@
 # The Night Warden — Pixel Character Specification
 
-Version: 1.0 concept baseline
+Version: 1.1 first animation batch
 Date: 2026-07-21
-Status: selected Concept C direction; awaiting visual approval
+Status: selected Concept C direction; idle/run/dash/attack animation batch implemented
 
 ## Scope
 
-This document defines the pre-M1 visual concept for **The Night Warden / 夜巡守卫**. It is a static 16-bit-inspired character study, not a final sprite sheet and not a gameplay implementation. No player controller, combat combo, state machine, input mapping, or Main-scene integration is included.
+This document defines the pre-M1 visual production baseline for **The Night Warden / 夜巡守卫**. It includes individual 16-bit-inspired animation frames and an internal preview, but not a gameplay implementation. No player controller, combat combo, state machine, input mapping, or Main-scene integration is included.
 
 ## Character direction
 
@@ -30,7 +30,7 @@ The silhouette must retain the hood, forward lean, short mantle, two legs, forwa
 - Default facing: right.
 - Future left-facing display: whole-sprite horizontal flip.
 - Preview scaling: integer multiples only with nearest-neighbor filtering.
-- Current deliverable: individual static PNG studies, not an animation atlas.
+- Current deliverable: individual 64×64 PNG animation frames; no atlas has been produced yet.
 
 ## Palette
 
@@ -87,6 +87,21 @@ All character and weapon PNGs have transparent backgrounds and binary alpha edge
 
 Key poses should be approved before in-between frames. Final sprite production should use Aseprite or an equivalent dedicated pixel-animation tool.
 
+## First production animation batch
+
+The original front view, side view, dash pose, and attack anticipation are preserved byte-for-byte under `assets/sprites/player/assassin/reference/`. They remain reference sources and were not deleted or altered.
+
+| Animation | Frames | Preview rate | Motion contract |
+| --- | ---: | ---: | --- |
+| Idle | 4 | 6 FPS | Small one-pixel breathing cycle; stable weapon readiness |
+| Run | 6 | 10 FPS | Alternating long stride, forward lean, counter-moving arms |
+| Dash | 5 | 12 FPS | Compress, accelerate, low extended core, settle |
+| Attack | 6 | 10 FPS | Ready, crossed-blade anticipation, forward lunge, thrust, follow-through, recover |
+
+All 21 frames are transparent `64×64` PNGs. The renderer shares one typed pose model, one anatomy renderer, and the exact five-color palette across all actions. Dash and Attack intentionally differ: Dash lowers and lengthens the whole silhouette for travel, while Attack plants a front leg and drives the main dagger through a forward thrust arc. The secondary dagger stays visible behind the torso in both actions.
+
+The QA contact sheet scales the 64px sources by exactly 2× and also includes one nearest-neighbor 48px representative for each animation. No 48px production frames are committed because 64px remains the requested production target; 48px is a validation floor.
+
 ## Godot generation architecture
 
 - `pixel_art_canvas.gd`: clipped pixel rectangles, Bresenham pixel lines, silhouette conversion, nearest-neighbor resize and compositing helpers.
@@ -94,6 +109,10 @@ Key poses should be approved before in-between frames. Final sprite production s
 - `character_board_exporter.gd`: builds the 1600×1000 concept board inside an isolated `SubViewport` and saves it as PNG.
 - `character_design_lab.gd`: orchestrates generation and populates the internal preview UI.
 - `character_design_lab.tscn`: independently runnable internal design scene; it is not the project Main scene.
+- `pixel_assassin_pose.gd`: typed per-frame joint, blade-tip, hood, and mantle coordinates.
+- `pixel_assassin_renderer.gd`: shared five-color 64px character renderer.
+- `pixel_player_animation_generator.gd`: owns the 4/6/5/6-frame action sequences, PNG export, and reference archival.
+- `player_animation_preview.tscn`: independently runnable `AnimatedSprite2D` viewer with buttons and number-key switching.
 
 ## Pixel import and display rules
 
@@ -116,8 +135,7 @@ The scene auto-generates on startup. Its button regenerates all PNGs and the des
 
 ## Decisions awaiting approval
 
-1. Whether the hood point should be sharper or slightly shorter.
-2. Whether the single eye glint should remain one-pixel-wide in side view.
-3. Whether the chest armor should retain the current symmetrical front segmentation.
-4. Whether the offhand blade should angle farther downward in the final idle pose.
-5. Whether 64px remains the production target before any full animation work begins.
+1. Whether the six-frame Run stride should stay broad or become a tighter stealth run.
+2. Whether Dash should retain the current long horizontal silhouette or tuck the rear blade closer.
+3. Whether Attack frame 02 should keep the readable crossed-blade anticipation.
+4. Whether the next approved asset step should be an atlas/SpriteFrames resource or additional Jump/Hurt/Death actions.
