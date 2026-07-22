@@ -1,6 +1,6 @@
 # Player Movement Specification
 
-Version: 1.2 — M1.5 fast Attack response
+Version: 1.3 — chained Ground Dash and stamina
 Date: 2026-07-22
 Status: implemented prototype; no combat resolution
 
@@ -17,10 +17,11 @@ Player (CharacterBody2D)
 ├── CollisionShape2D
 ├── Camera2D
 ├── AnimationController
+├── StaminaComponent
 └── ActionController
 ```
 
-`Player` owns CharacterBody2D physics and locomotion selection. `PlayerActionController` owns only action mutual exclusion, Dash timing/direction/cooldown, and action lifecycle signals. `PlayerAnimationController` owns only SpriteFrames presentation, priority, one-shot locks, and facing locks.
+`Player` owns CharacterBody2D physics and locomotion selection. `PlayerActionController` owns action mutual exclusion, edge-triggered Dash buffering, timing/direction, and lifecycle signals. `PlayerStaminaComponent` alone owns stamina spending and regeneration. `PlayerAnimationController` owns SpriteFrames presentation, priority, locks, and facing.
 
 ## Input Map
 
@@ -50,8 +51,9 @@ Movement values live in `res://resources/player/player_movement_config.tres`:
 Dash values live in `res://resources/player/player_action_prototype_config.tres`:
 
 - Dash speed: 480 px/s
-- motion duration: 0.20 seconds
-- shared cooldown: 0.45 seconds
+- motion duration per segment: 0.18 seconds
+- Ground Dash input buffer: 0.10 seconds (one entry)
+- minimum segment interval: 0.03 seconds
 - Dash Attack input window: 0.18 seconds after Dash starts
 - normal Attack input buffer: 0.10 seconds
 - Dash Attack speed: 320 px/s
@@ -71,10 +73,13 @@ The movement plus recovery durations total 0.25 seconds, matching five frames at
 
 ## Ground Dash
 
-- Ground Dash starts only while grounded and plays `ground_dash`.
+- Ground Dash starts only while grounded. The first segment plays `dash_start → dash_loop`; an unchained exit plays `dash_end`.
 - With horizontal input, direction follows input; without input, it follows current facing.
-- Ordinary horizontal control is disabled for the one-shot and facing is locked.
-- The first four 20-FPS frames apply 480 px/s motion for 0.20 seconds. Frame five is recovery.
+- Ordinary horizontal control is disabled and facing is locked.
+- Each accepted segment applies 480 px/s for 0.18 seconds through `velocity` and `move_and_slide()`.
+- A new Shift edge during the current segment stores one request for 0.10 seconds. At segment end, a live request with at least 25 stamina immediately restarts the motion timer while preserving `dash_loop`.
+- Holding Shift produces no later `is_action_just_pressed()` edges and therefore cannot auto-chain. Extra presses cannot hold more than one buffered segment.
+- If no request is live or stamina is insufficient, the action transitions to two-frame `dash_end`; it never inserts a complete standing pose between legal chained segments.
 - Ground Dash does not consume `air_dash_available`.
 
 ## Horizontal Air Dash
@@ -85,7 +90,7 @@ The movement plus recovery durations total 0.25 seconds, matching five frames at
 - Start sets `velocity.y` to zero. Vertical velocity remains zero and gravity is suspended throughout the Air Dash one-shot.
 - Starting consumes `air_dash_available` immediately. Repeated Shift edges cannot restart the action or grant another Air Dash.
 - Landing reliably resets availability. Coyote time never resets it.
-- Ground and Air Dash share the same 0.45-second cooldown.
+- Air Dash spends 25 stamina but ignores chained Shift input. There is no legacy 0.45-second cooldown.
 - On completion, normal gravity resumes and animation selection uses actual vertical velocity, entering Jump Loop if rising or Fall otherwise.
 
 ## Attack prototype
@@ -116,7 +121,7 @@ The movement plus recovery durations total 0.25 seconds, matching five frames at
 ## Action priority and recovery
 
 ```text
-dash_attack > attack > ground_dash / air_dash > land > jump_start > jump_loop / fall > run > idle
+dash_attack > attack > dash_start / dash_loop / dash_end / air_dash > land > jump_start > jump_loop / fall > run > idle
 ```
 
 - Same-frame Shift/J or J inside an active Dash window resolves to Dash Attack.
@@ -128,4 +133,4 @@ dash_attack > attack > ground_dash / air_dash > land > jump_start > jump_loop / 
 
 ## Acceptance boundaries
 
-Automated tests verify named Input Map bindings, immediate J response, one-entry Attack buffering, repeated complete Attack cycles, same-frame and Dash-first Dash Attack input, late-input rejection, once-per-Dash use, Air Dash preservation, direction/facing, gravity restoration, collision-safe movement, metadata windows, and ground/air recovery. Main's optional debug HUD also displays current Attack frame, buffer state/time, chain readiness, and measured input-to-effective-frame time. Player feel and visual timing still require manual playtesting.
+Automated tests additionally verify four full-stamina Ground Dash starts, rejected fifth start without a charge, held-Shift non-repetition, one-entry Dash buffering, segmented presentation, collision-wall stopping, delayed/rate-limited regeneration, Air Dash single-use, Dash Attack no-double-charge, and signal-driven HUD synchronization. Player feel and visual timing still require manual playtesting.

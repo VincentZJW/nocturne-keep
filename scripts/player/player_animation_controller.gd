@@ -9,13 +9,15 @@ signal facing_changed(facing_left: bool)
 
 const ATTACK_HIT_FRAMES: Array[int] = [1, 2]
 const DASH_ATTACK_HIT_FRAMES: Array[int] = [2, 3]
-const LOOP_ANIMATIONS: Array[StringName] = [&"idle", &"run", &"jump_loop", &"fall"]
+const LOOP_ANIMATIONS: Array[StringName] = [
+	&"idle", &"run", &"jump_loop", &"fall", &"dash_loop",
+]
 const ONE_SHOT_ANIMATIONS: Array[StringName] = [
-	&"jump_start", &"land", &"ground_dash", &"air_dash", &"attack", &"dash_attack",
+	&"jump_start", &"land", &"dash_start", &"dash_end", &"air_dash", &"attack", &"dash_attack",
 	&"hurt", &"death",
 ]
 const FACING_LOCK_ANIMATIONS: Array[StringName] = [
-	&"ground_dash", &"air_dash", &"attack", &"dash_attack",
+	&"dash_start", &"dash_loop", &"dash_end", &"air_dash", &"attack", &"dash_attack",
 ]
 const PRIORITIES: Dictionary[StringName, int] = {
 	&"idle": 10,
@@ -24,7 +26,9 @@ const PRIORITIES: Dictionary[StringName, int] = {
 	&"fall": 40,
 	&"jump_start": 50,
 	&"land": 60,
-	&"ground_dash": 70,
+	&"dash_start": 70,
+	&"dash_loop": 70,
+	&"dash_end": 70,
 	&"air_dash": 70,
 	&"attack": 80,
 	&"dash_attack": 85,
@@ -83,6 +87,24 @@ func restart_locked_one_shot(animation_name: StringName) -> bool:
 	animated_sprite.stop()
 	animated_sprite.set_frame_and_progress(0, 0.0)
 	animated_sprite.play(animation_name)
+	animation_changed.emit(animation_name)
+	return true
+
+
+func transition_locked_animation(animation_name: StringName) -> bool:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return false
+	if (
+		animation_name not in LOOP_ANIMATIONS
+		and animation_name not in ONE_SHOT_ANIMATIONS
+	):
+		return false
+	if not animated_sprite.sprite_frames.has_animation(animation_name):
+		return false
+	animated_sprite.play(animation_name)
+	_animation_locked = true
+	_locked_animation = animation_name
+	_facing_locked = animation_name in FACING_LOCK_ANIMATIONS
 	animation_changed.emit(animation_name)
 	return true
 

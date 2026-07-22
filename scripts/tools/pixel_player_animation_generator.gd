@@ -15,11 +15,15 @@ const DEPRECATED_ATTACK_SIX_FRAME_ROOT: String = (
 const DEPRECATED_DASH_ATTACK_SIX_FRAME_ROOT: String = (
 	"res://assets/sprites/player/assassin/reference/deprecated_dash_attack_six_frame"
 )
+const DEPRECATED_GROUND_DASH_ROOT: String = (
+	"res://assets/sprites/player/assassin/reference/deprecated_ground_dash_five_frame"
+)
 const ANIMATION_ORDER: Array[String] = [
-	"idle", "run", "ground_dash", "air_dash", "attack", "dash_attack",
+	"idle", "run", "dash_start", "dash_loop", "dash_end", "air_dash", "attack", "dash_attack",
 ]
 const FRAME_COUNTS: Dictionary[String, int] = {
-	"idle": 4, "run": 6, "ground_dash": 5, "air_dash": 5, "attack": 4,
+	"idle": 4, "run": 6, "dash_start": 2, "dash_loop": 3, "dash_end": 2,
+	"air_dash": 5, "attack": 4,
 	"dash_attack": 5,
 }
 
@@ -28,7 +32,9 @@ static func generate_all() -> Dictionary[String, Array]:
 	return {
 		"idle": _render_poses(_idle_poses()),
 		"run": _render_poses(_run_poses()),
-		"ground_dash": _render_poses(_ground_dash_poses()),
+		"dash_start": _render_poses(_dash_start_poses()),
+		"dash_loop": _render_poses(_dash_loop_poses()),
+		"dash_end": _render_poses(_dash_end_poses()),
 		"air_dash": _render_poses(_air_dash_poses()),
 		"attack": _render_poses(_attack_poses()),
 		"dash_attack": _render_poses(_dash_attack_poses()),
@@ -121,6 +127,36 @@ static func archive_fast_attack_sources() -> Dictionary[String, int]:
 	return results
 
 
+static func archive_ground_dash_source() -> Dictionary[String, int]:
+	var results: Dictionary[String, int] = {}
+	_archive_sequence(
+		"ground_dash", 5, DEPRECATED_GROUND_DASH_ROOT, "ground_dash_5f", results
+	)
+	return results
+
+
+static func remove_archived_ground_dash_source() -> Dictionary[String, int]:
+	var results: Dictionary[String, int] = {}
+	for frame_index: int in range(1, 6):
+		var source: String = OUTPUT_ROOT.path_join("ground_dash").path_join(
+			"ground_dash_%02d.png" % frame_index
+		)
+		var archived: String = DEPRECATED_GROUND_DASH_ROOT.path_join(
+			"ground_dash_5f_%02d.png" % frame_index
+		)
+		var source_bytes: PackedByteArray = FileAccess.get_file_as_bytes(source)
+		var archived_bytes: PackedByteArray = FileAccess.get_file_as_bytes(archived)
+		if source_bytes.is_empty() or source_bytes != archived_bytes:
+			results[source] = ERR_INVALID_DATA
+			continue
+		var absolute_source: String = ProjectSettings.globalize_path(source)
+		results[source] = DirAccess.remove_absolute(absolute_source)
+		var import_sidecar: String = absolute_source + ".import"
+		if FileAccess.file_exists(import_sidecar):
+			DirAccess.remove_absolute(import_sidecar)
+	return results
+
+
 static func _archive_sequence(
 		source_animation: String,
 		frame_count: int,
@@ -210,11 +246,23 @@ static func _run_poses() -> Array[PixelAssassinPose]:
 	]
 
 
-static func _ground_dash_poses() -> Array[PixelAssassinPose]:
+static func _dash_start_poses() -> Array[PixelAssassinPose]:
 	return [
 		_pose(Vector2i(27, 29), Vector2i(47, 38), Vector2i(20, 40), Vector2i(42, 49), Vector2i(49, 58), Vector2i(27, 51), Vector2i(18, 58), Vector2i(60, 34), Vector2i(8, 48), Vector2i(14, 34)),
 		_pose(Vector2i(29, 28), Vector2i(52, 35), Vector2i(21, 41), Vector2i(45, 48), Vector2i(54, 56), Vector2i(27, 50), Vector2i(14, 58), Vector2i(63, 30), Vector2i(8, 50), Vector2i(12, 32)),
+	]
+
+
+static func _dash_loop_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(29, 28), Vector2i(52, 35), Vector2i(21, 41), Vector2i(45, 48), Vector2i(54, 56), Vector2i(27, 50), Vector2i(14, 58), Vector2i(63, 30), Vector2i(8, 50), Vector2i(12, 32)),
 		_pose(Vector2i(31, 31), Vector2i(55, 37), Vector2i(22, 43), Vector2i(47, 49), Vector2i(57, 55), Vector2i(29, 51), Vector2i(11, 58), Vector2i(63, 32), Vector2i(7, 50), Vector2i(13, 34), Vector2i(1, 0)),
+		_pose(Vector2i(30, 29), Vector2i(54, 35), Vector2i(21, 41), Vector2i(46, 49), Vector2i(58, 57), Vector2i(28, 50), Vector2i(12, 58), Vector2i(63, 29), Vector2i(7, 48), Vector2i(12, 31)),
+	]
+
+
+static func _dash_end_poses() -> Array[PixelAssassinPose]:
+	return [
 		_pose(Vector2i(30, 29), Vector2i(54, 35), Vector2i(21, 41), Vector2i(46, 49), Vector2i(58, 57), Vector2i(28, 50), Vector2i(12, 58), Vector2i(63, 29), Vector2i(7, 48), Vector2i(12, 31)),
 		_pose(Vector2i(28, 27), Vector2i(50, 35), Vector2i(22, 39), Vector2i(43, 49), Vector2i(51, 58), Vector2i(29, 50), Vector2i(20, 58), Vector2i(63, 30), Vector2i(10, 47), Vector2i(16, 32)),
 	]

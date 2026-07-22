@@ -9,25 +9,30 @@ const PLACEHOLDER_ROOT: String = "res://assets/sprites/player/assassin/placehold
 
 const ANIMATION_ORDER: Array[StringName] = [
 	&"idle", &"run", &"jump_start", &"jump_loop", &"fall",
-	&"land", &"ground_dash", &"air_dash", &"attack", &"dash_attack", &"hurt", &"death",
+	&"land", &"dash_start", &"dash_loop", &"dash_end", &"air_dash", &"attack",
+	&"dash_attack", &"hurt", &"death",
 ]
 const FRAME_COUNTS: Dictionary[StringName, int] = {
 	&"idle": 4, &"run": 6, &"jump_start": 2, &"jump_loop": 2, &"fall": 2,
-	&"land": 2, &"ground_dash": 5, &"air_dash": 5, &"attack": 4,
+	&"land": 2, &"dash_start": 2, &"dash_loop": 3, &"dash_end": 2,
+	&"air_dash": 5, &"attack": 4,
 	&"dash_attack": 5, &"hurt": 3, &"death": 8,
 }
 const SPEEDS: Dictionary[StringName, float] = {
 	&"idle": 5.0, &"run": 10.0, &"jump_start": 12.0, &"jump_loop": 4.0,
-	&"fall": 4.0, &"land": 12.0, &"ground_dash": 20.0, &"air_dash": 20.0,
+	&"fall": 4.0, &"land": 12.0, &"dash_start": 20.0, &"dash_loop": 20.0,
+	&"dash_end": 20.0, &"air_dash": 20.0,
 	&"attack": 20.0, &"dash_attack": 20.0, &"hurt": 12.0, &"death": 8.0,
 }
 const LOOPING: Dictionary[StringName, bool] = {
 	&"idle": true, &"run": true, &"jump_start": false, &"jump_loop": true,
-	&"fall": true, &"land": false, &"ground_dash": false, &"air_dash": false,
+	&"fall": true, &"land": false, &"dash_start": false, &"dash_loop": true,
+	&"dash_end": false, &"air_dash": false,
 	&"attack": false, &"dash_attack": false, &"hurt": false, &"death": false,
 }
 const PRODUCTION_ANIMATIONS: Array[StringName] = [
-	&"idle", &"run", &"ground_dash", &"air_dash", &"attack", &"dash_attack",
+	&"idle", &"run", &"dash_start", &"dash_loop", &"dash_end", &"air_dash",
+	&"attack", &"dash_attack",
 ]
 const M1_PRODUCTION_ANIMATIONS: Array[StringName] = [&"jump_start", &"jump_loop", &"fall", &"land"]
 

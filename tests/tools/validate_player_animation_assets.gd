@@ -25,6 +25,7 @@ func _run_validation() -> void:
 		total_frames += _validate_animation(animation_name, failures)
 	_validate_references(failures)
 	_validate_fast_attack_archives(failures)
+	_validate_ground_dash_archive(failures)
 	_validate_action_distinction(failures)
 	_validate_project_isolation(failures)
 	if failures.is_empty():
@@ -136,8 +137,18 @@ func _validate_fast_attack_archives(failures: Array[String]) -> void:
 				failures.append("Missing or invalid six-frame archive: %s" % archive_path)
 
 
+func _validate_ground_dash_archive(failures: Array[String]) -> void:
+	for frame_index: int in range(1, 6):
+		var archive_path: String = Generator.DEPRECATED_GROUND_DASH_ROOT.path_join(
+			"ground_dash_5f_%02d.png" % frame_index
+		)
+		var image: Image = Image.load_from_file(ProjectSettings.globalize_path(archive_path))
+		if image == null or image.get_size() != Vector2i(64, 64):
+			failures.append("Missing or invalid Ground Dash archive: %s" % archive_path)
+
+
 func _validate_action_distinction(failures: Array[String]) -> void:
-	var ground_dash_path: String = Generator.OUTPUT_ROOT.path_join("ground_dash/ground_dash_03.png")
+	var ground_dash_path: String = Generator.OUTPUT_ROOT.path_join("dash_loop/dash_loop_02.png")
 	var air_dash_path: String = Generator.OUTPUT_ROOT.path_join("air_dash/air_dash_03.png")
 	var attack_path: String = Generator.OUTPUT_ROOT.path_join("attack/attack_03.png")
 	var dash_attack_path: String = Generator.OUTPUT_ROOT.path_join("dash_attack/dash_attack_03.png")

@@ -8,7 +8,7 @@ const Concept: Script = preload("res://scripts/tools/pixel_character_generator.g
 const Generator: Script = preload("res://scripts/tools/pixel_player_animation_generator.gd")
 
 const OUTPUT_PATH: String = "res://docs/qa/player_animation_contact_sheet.png"
-const SHEET_SIZE: Vector2i = Vector2i(1200, 1080)
+const SHEET_SIZE: Vector2i = Vector2i(1200, 1500)
 
 
 static func export(sequences: Dictionary[String, Array]) -> Error:
@@ -16,7 +16,8 @@ static func export(sequences: Dictionary[String, Array]) -> Error:
 	sheet.fill(Color("09111c"))
 	var row_colors: Array[Color] = [
 		Concept.MUTED_AMBER, Concept.MOONLIT_SLATE, Concept.MIDNIGHT_NAVY,
-		Concept.PALE_STEEL, Concept.MUTED_AMBER, Concept.PALE_STEEL,
+		Concept.MOONLIT_SLATE, Concept.PALE_STEEL, Concept.MIDNIGHT_NAVY,
+		Concept.MUTED_AMBER, Concept.PALE_STEEL,
 	]
 	for row: int in range(Generator.ANIMATION_ORDER.size()):
 		var animation_name: String = Generator.ANIMATION_ORDER[row]

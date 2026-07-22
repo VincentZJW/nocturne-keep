@@ -1,6 +1,6 @@
 # Player Action/Combat Interface Specification
 
-Version: 0.1 — Fast Attack response prototype
+Version: 0.2 — Dash-chain stamina compatibility
 Date: 2026-07-22
 Status: presentation and input contract only; no damage system
 
@@ -40,6 +40,8 @@ This is repetition of one basic Attack, not a formal combo tree: there are no br
 - Presentation: five frames at 20 FPS, non-looping, approximately 0.25 seconds.
 - Movement: 320 px/s for 0.15 seconds, then 0.10 seconds of linear deceleration through `CharacterBody2D.velocity` and `move_and_slide()`.
 - Dash Attack does not repeat from the normal Attack buffer and cannot be restarted by repeated J/Shift.
+- A legal Dash or same-frame Shift+J spends one 25-point Dash charge. Transitioning that active Dash into Dash Attack never spends a second charge.
+- Entering Dash Attack clears any pending Ground Dash request. Shift during Dash Attack cannot restart presentation or queue a follow-up; a later independent Shift may begin a new Dash only after completion.
 
 Future metadata-only effective frames are `dash_attack_03` and `dash_attack_04`. A future hitbox would be longer and narrow, face forward, disable outside the window, and remember targets once per action. None of this future behavior is instantiated now.
 
@@ -58,6 +60,10 @@ Hurt/Death remain preview-only placeholders. In the current Gameplay prototype:
 - Dash Attack completion restores grounded or airborne locomotion from actual contact state.
 
 Changing these cancellation rules requires a later explicit design decision.
+
+## Stamina boundary
+
+`PlayerStaminaComponent` is a movement-resource dependency, not a combat resolver. Normal Attack, jump, and double jump currently cost zero. Ground Dash and Air Dash each request one 25-point charge at successful start; Dash Attack reuses that paid action. The component exposes value/depleted/insufficient signals and contains no health, damage, target, or invulnerability behavior.
 
 ## Diagnostics and acceptance
 

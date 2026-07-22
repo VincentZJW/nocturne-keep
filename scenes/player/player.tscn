@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=9 format=3]
 
 [ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/player/player_movement_config.tres" id="2_config"]
@@ -6,6 +6,7 @@
 [ext_resource type="Script" path="res://scripts/player/player_animation_controller.gd" id="4_animation"]
 [ext_resource type="Script" path="res://scripts/player/player_action_controller.gd" id="5_action"]
 [ext_resource type="Resource" path="res://resources/player/player_action_prototype_config.tres" id="6_action_config"]
+[ext_resource type="Script" path="res://scripts/player/player_stamina_component.gd" id="7_stamina"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 52)
@@ -39,6 +40,10 @@ position_smoothing_speed = 7.0
 [node name="AnimationController" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_animation")
+
+[node name="StaminaComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_stamina")
 
 [node name="ActionController" type="Node" parent="."]
 unique_name_in_owner = true

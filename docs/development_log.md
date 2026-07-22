@@ -895,3 +895,88 @@ Status: complete — awaiting manual feel approval
 - The earlier J-first Dash Attack pairing was intentionally removed to satisfy immediate J response. Same-frame Shift+J and Dash-then-J remain supported.
 - Dash Attack still has no damage, invulnerability, or gameplay Hitbox. Hurt/Death remain preview placeholders.
 - No enemy, damage settlement, formal combo tree, or Boss work was started.
+## 2026-07-22 — Continuous Dash and stamina milestone (preflight)
+
+### Goal
+
+- Replace the legacy long Dash cooldown with one-entry, edge-triggered Ground Dash chaining limited by stamina.
+- Preserve one Air Dash per airborne cycle and keep Dash Attack compatible without charging stamina twice.
+- Add a presentation-only stamina HUD and optional diagnostics while keeping stamina ownership in a dedicated player component.
+
+### Planned files and tests
+
+- Add a typed `PlayerStaminaComponent`, connect it to `PlayerActionController`, `Player`, and a signal-driven Main HUD.
+- Split the Ground Dash presentation into `dash_start`, `dash_loop`, and `dash_end`; archive the current five-frame `ground_dash` source before replacement.
+- Update production generators, SpriteFrames, animation preview, automated tests, README, movement/combat specifications, and add `docs/design/stamina_system_spec.md`.
+- Verify independent Shift edges, one-entry Dash buffering, four full-stamina Dash starts, rejected fifth Dash without a charge, delayed/rate-limited regeneration, one Air Dash per airtime, Dash Attack compatibility, collision-safe movement, HUD synchronization, Main/preview startup, and a clean Godot 4.7.1 import.
+
+### Scope guard
+
+- This milestone adds no enemy, Boss, Hitbox, Hurtbox, health, damage, invulnerability, or additional skill system.
+- Holding Shift will never synthesize repeated Dash input; every segment requires a new `dash` action edge.
+- Landing restores only Air Dash eligibility. It neither refills stamina nor bypasses the regeneration delay.
+
+### Delivered implementation
+
+- Replaced the legacy 0.45-second Dash cooldown with 0.18-second paid segments, a 0.10-second one-entry Ground Dash buffer, and a 0.03-second minimum segment interval. Gameplay still reads only `Input.is_action_just_pressed("dash")`; holding Shift produces exactly one segment.
+- Added the composed, typed `PlayerStaminaComponent`: 100 maximum, 25 per successful Ground/Air Dash, 0.60-second post-spend delay, 35 points/second regeneration, clamping, and `stamina_changed`, `stamina_depleted`, and `stamina_insufficient` signals.
+- Ground Dash now moves through `dash_start` (2 frames), locked looping `dash_loop` (3 frames), and `dash_end` (2 frames), all at 20 FPS. A live paid chain resets only the collision-safe motion segment and remains in `dash_loop`, avoiding a standing recovery between segments.
+- Archived the prior five Ground Dash PNGs byte-identically under `assets/sprites/player/assassin/reference/deprecated_ground_dash_five_frame/` before removing their obsolete production paths. SHA-256 comparison matched all five source/archive pairs.
+- Preserved one Air Dash per airborne cycle. It costs stamina, ignores chained Shift, is restored only by landing, and never receives availability from Dash Attack or coyote time. Landing does not alter stamina.
+- Dash Attack continues to inherit direction and collision-safe movement, clears a pending Dash request, and never charges the already-paid Dash again. Same-frame legal Shift+J pays exactly one Dash charge.
+- Added a signal-driven fixed `Main/HUD/StaminaContainer` with 0–100 bar, numeric value, and one-shot insufficient feedback. Added optional diagnostics for stamina, regeneration timer, Dash buffer/time, segment number, Air Dash availability, action state, animation, and horizontal speed.
+- Updated the fourteen-animation preview, 31-frame production generator/contact sheet, SpriteFrames resource, animation/action regressions, README, movement/animation/combat specifications, and the new stamina specification. No enemy, health, damage, Hitbox, Hurtbox, invulnerability, Boss, or other skill system was added.
+
+### Commands and actual results
+
+1. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --archive-ground-dash-source`
+   - Exit 0; `PLAYER_GROUND_DASH_ARCHIVE: 5 files, 0 failures`.
+   - `shasum -a 256` reported identical hashes for every old production frame and archived counterpart.
+2. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --production-only`
+   - Exit 0; `PLAYER_PRODUCTION_EXPORT: 31 files, 0 failures` and regenerated `docs/qa/player_animation_contact_sheet.png`.
+3. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd`
+   - Exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK` with fourteen named animations.
+4. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --remove-archived-ground-dash-source`
+   - Exit 0; five exact obsolete sources removed only after byte comparison against the archive.
+5. Final `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_chain_dash_final_import.log`
+   - Exit 0; no script/resource error or warning.
+6. Exact Godot 4.7.1 serial regression suite:
+   - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
+   - `validate_player_animation_assets.gd`: `PASS (31 frames + 4 byte-identical references)` and validates the five-frame Dash archive.
+   - `test_player_animation_system.gd`: `PASS (14 animations, segmented Dash locks/signals verified)`.
+   - `test_m1_player_movement.gd`: `PASS (movement, jump assists, collision, camera, six animations)`.
+   - `test_m15_player_actions.gd`: `PASS (split Ground Dash, Air Dash reset, thrust Attack)`.
+   - `test_dash_attack.gd`: `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+   - `test_fast_attack.gd`: `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`.
+   - `test_chain_dash_stamina.gd`: `PASS (edge chaining, four charges, air limit, HUD, collision)`.
+7. `Godot --path . --write-movie /tmp/nocturne_keep_stamina_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy`
+   - Exit 0; GL Compatibility initialized on Apple M4 and rendered two 1280×720 Main frames. The fixed stamina HUD and three-line optional diagnostics fit without following the camera.
+8. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_stamina_preview.png --fixed-fps 20 --quit-after 2 --audio-driver Dummy`
+   - Exit 0; independent fourteen-animation preview rendered two frames without red Output/Debugger errors.
+9. Original-resolution review of Main, preview, and `docs/qa/player_animation_contact_sheet.png`, plus `git diff --check`
+   - HUD values/layout are readable; all three Ground Dash phases retain crisp nearest-neighbor pixels and the common baseline; diff check passed.
+
+### Automated acceptance results
+
+- One Shift edge starts one Dash. Holding Shift across completion produced one action-start event and one 25-point charge.
+- Four timed independent edges from full stamina produced four collision-safe Ground Dash segments and zero stamina. A fifth request started no action, spent nothing, and emitted one insufficient event.
+- Each accepted chained segment stayed in the low `dash_loop`; only final/rejected continuation entered `dash_end`. All motion used `CharacterBody2D.velocity` and `move_and_slide()`, and the chained wall test stopped at the collider boundary.
+- Regeneration remained zero through 0.59 seconds after spend, began after the 0.60-second threshold at 35 points/second, remained blocked during Dash/Dash Attack, and clamped to the configured maximum.
+- Air Dash charged once and disabled `air_dash_available`; a second airborne Shift spent nothing. Air Dash Attack spent nothing extra, did not restore availability, and landing restored only availability while the zero-regeneration test value remained 75.
+- The Main ProgressBar and numeric label updated to 75 immediately from the component signal. Insufficient feedback is a bounded tween, not a persistent flash.
+- Existing immediate Attack buffering, Dash Attack transition/motion, locomotion, animation locks, Main startup, and preview startup all remain green.
+
+### Manual acceptance requested
+
+1. Tap Shift four times with the next tap late in each Dash and judge whether chained `dash_loop` motion feels seamless rather than visually restarting.
+2. Hold Shift through a complete Dash and confirm it never repeats; then release and tap again to confirm a fresh edge is required.
+3. Spend all four charges and judge the one-shot insufficient bar feedback; wait and confirm the bar starts climbing after the configured delay.
+4. Verify one Air Dash per airtime, Air Dash-to-J Dash Attack, both facing directions, and wall contact in the Main trial scene.
+5. Toggle `ACTION DEBUG HUD` off and confirm the production-facing stamina bar remains visible and camera-independent.
+
+### Known limitations and handoff
+
+- The stamina bar uses replaceable pixel-style `StyleBoxFlat` placeholders, not final UI art.
+- Ground Dash chaining preserves the original direction and facing for the entire chain; a future explicit design decision is required before permitting per-segment turnarounds.
+- Air Dash remains a single non-looping five-frame presentation and cannot chain regardless of spare stamina.
+- Stamina currently pays only Dash-family starts. There are no upgrades, equipment modifiers, saves, consumables, enemies, damage, invulnerability, or formal skill framework.

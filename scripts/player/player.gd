@@ -37,6 +37,7 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @export var debug_enable_double_jump: bool = true
 @export_node_path("PlayerAnimationController") var animation_controller_path: NodePath = NodePath("AnimationController")
 @export_node_path("PlayerActionController") var action_controller_path: NodePath = NodePath("ActionController")
+@export_node_path("PlayerStaminaComponent") var stamina_component_path: NodePath = NodePath("StaminaComponent")
 
 @onready var animation_controller: PlayerAnimationController = get_node_or_null(
 	animation_controller_path
@@ -44,6 +45,9 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @onready var action_controller: PlayerActionController = get_node_or_null(
 	action_controller_path
 ) as PlayerActionController
+@onready var stamina_component: PlayerStaminaComponent = get_node_or_null(
+	stamina_component_path
+) as PlayerStaminaComponent
 
 var air_jumps_remaining: int = 0
 var air_dash_available: bool = true
@@ -65,6 +69,10 @@ func _ready() -> void:
 		return
 	if action_controller == null:
 		push_error("Player requires a PlayerActionController")
+		set_physics_process(false)
+		return
+	if stamina_component == null:
+		push_error("Player requires a PlayerStaminaComponent")
 		set_physics_process(false)
 		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
@@ -89,6 +97,10 @@ func _physics_process(delta: float) -> void:
 		was_on_floor,
 		air_dash_available,
 		animation_controller.animated_sprite.flip_h
+	)
+	stamina_component.advance(
+		delta,
+		action_controller.is_dash_active() or action_controller.is_dash_attack_active()
 	)
 	if action_controller.is_air_dash_active() or action_controller.is_airborne_dash_attack_active():
 		air_dash_available = false

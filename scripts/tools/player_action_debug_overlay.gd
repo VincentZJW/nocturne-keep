@@ -25,18 +25,26 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var actions: PlayerActionController = player.action_controller
+	var stamina: PlayerStaminaComponent = player.stamina_component
 	var response_time: float = actions.get_attack_input_to_hit_time()
 	var response_text: String = "--" if response_time < 0.0 else "%.3fs" % response_time
 	text = (
-		"STATE %s   COMBO WINDOW %s (%.2fs)   USED %s   AIR DASH %s   VX %.1f\n"
+		"STATE %s   ANIM %s   VX %.1f   AIR DASH %s   DASH #%d\n"
+		+ "STAMINA %.1f/%.1f   REGEN %.2fs   DASH BUFFER %s (%.2fs)   COMBO WINDOW %s   USED %s\n"
 		+ "ATTACK FRAME %d/4   BUFFERED %s   TIMER %.3fs   CHAIN %s   INPUT→HIT %s"
 	) % [
 		actions.get_action_state_name(),
-		"OPEN" if actions.is_dash_attack_input_window_open() else "closed",
-		actions.get_dash_attack_window_remaining(),
-		"true" if actions.is_dash_attack_used() else "false",
-		"ready" if player.air_dash_available else "spent",
+		player.animation_controller.animated_sprite.animation,
 		player.velocity.x,
+		"ready" if player.air_dash_available else "spent",
+		actions.get_current_dash_number(),
+		stamina.current_stamina,
+		stamina.max_stamina,
+		stamina.stamina_regen_timer,
+		"true" if actions.is_dash_buffered() else "false",
+		actions.get_dash_buffer_remaining(),
+		"OPEN" if actions.is_dash_attack_input_window_open() else "closed",
+		"true" if actions.is_dash_attack_used() else "false",
 		actions.get_current_attack_frame(),
 		"true" if actions.is_attack_buffered() else "false",
 		actions.get_attack_buffer_remaining(),

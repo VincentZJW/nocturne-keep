@@ -5,8 +5,9 @@
 [resource]
 script = ExtResource("1_config")
 dash_speed = 480.0
-dash_duration = 0.2
-dash_cooldown = 0.45
+dash_duration = 0.18
+dash_input_buffer_time = 0.1
+dash_min_interval = 0.03
 dash_attack_input_window = 0.18
 attack_buffer_time = 0.1
 dash_attack_speed = 320.0

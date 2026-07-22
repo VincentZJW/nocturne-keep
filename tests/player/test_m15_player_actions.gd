@@ -60,8 +60,9 @@ func _validate_inputs_and_assets() -> void:
 			"res://assets/sprites/player/assassin/reference/deprecated_attack_six_frame/attack_6f_%02d.png"
 			% frame_index
 		)
-	for animation_name: String in ["ground_dash", "air_dash"]:
-		for frame_index: int in range(1, 6):
+	for animation_name: String in ["dash_start", "dash_loop", "dash_end", "air_dash"]:
+		var frame_count: int = {"dash_start": 2, "dash_loop": 3, "dash_end": 2, "air_dash": 5}[animation_name]
+		for frame_index: int in range(1, frame_count + 1):
 			_validate_asset(
 				"res://assets/sprites/player/assassin/%s/%s_%02d.png"
 				% [animation_name, animation_name, frame_index]
@@ -77,7 +78,9 @@ func _validate_inputs_and_assets() -> void:
 	_expect(sprite_frames != null, "Player SpriteFrames resource is unreadable")
 	if sprite_frames == null:
 		return
-	_validate_sprite_animation(sprite_frames, &"ground_dash", 5, 20.0)
+	_validate_sprite_animation(sprite_frames, &"dash_start", 2, 20.0)
+	_validate_loop_animation(sprite_frames, &"dash_loop", 3, 20.0)
+	_validate_sprite_animation(sprite_frames, &"dash_end", 2, 20.0)
 	_validate_sprite_animation(sprite_frames, &"air_dash", 5, 20.0)
 	_validate_sprite_animation(sprite_frames, &"attack", 4, 20.0)
 	_validate_sprite_animation(sprite_frames, &"dash_attack", 5, 20.0)
@@ -92,7 +95,7 @@ func _validate_preview_controls() -> void:
 	await process_frame
 	var sprite: AnimatedSprite2D = preview.get_node("Player/VisualRoot/AnimatedSprite2D") as AnimatedSprite2D
 	var ground_button: Button = preview.get_node(
-		"Margin/Layout/AnimationButtons/GroundDashButton"
+		"Margin/Layout/AnimationButtons/DashStartButton"
 	) as Button
 	var air_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AirDashButton") as Button
 	var attack_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AttackButton") as Button
@@ -101,7 +104,7 @@ func _validate_preview_controls() -> void:
 	) as Button
 	ground_button.pressed.emit()
 	await process_frame
-	_expect(sprite.animation == &"ground_dash" and sprite.is_playing(), "Preview did not play ground_dash")
+	_expect(sprite.animation == &"dash_start" and sprite.is_playing(), "Preview did not play dash_start")
 	air_button.pressed.emit()
 	await process_frame
 	_expect(sprite.animation == &"air_dash" and sprite.is_playing(), "Preview did not play air_dash")
@@ -152,7 +155,7 @@ func _test_ground_dash_contract() -> void:
 	await _wait_physics_frames(4)
 	await _press_for_physics(PlayerScript.DASH_ACTION)
 	_expect(action_controller.is_ground_dash_active(), "Ground Dash did not start")
-	_expect(sprite.animation == &"ground_dash", "Ground Dash selected the wrong animation")
+	_expect(sprite.animation == &"dash_start", "Ground Dash selected the wrong start animation")
 	_expect(is_equal_approx(player.velocity.x, 480.0), "Ground Dash did not apply 480 px/s")
 	_expect(player.air_dash_available, "Ground Dash consumed the air Dash")
 	Input.action_press(PlayerScript.MOVE_LEFT_ACTION)
@@ -165,7 +168,7 @@ func _test_ground_dash_contract() -> void:
 	_expect(_action_started_events.count(&"ground_dash") == 1, "Ground Dash restarted while active")
 	_expect(sprite.animation == &"idle", "Ground Dash did not return to idle")
 	await _press_for_physics(PlayerScript.DASH_ACTION)
-	_expect(not action_controller.is_dash_active(), "Shared Dash cooldown allowed immediate restart")
+	_expect(action_controller.is_dash_active(), "Stamina-backed Ground Dash did not allow a fresh input")
 	_cleanup_world(world)
 	await process_frame
 
@@ -266,6 +269,18 @@ func _validate_sprite_animation(
 	_expect(sprite_frames.get_frame_count(animation_name) == expected_frames, "%s frame count mismatch" % animation_name)
 	_expect(is_equal_approx(sprite_frames.get_animation_speed(animation_name), expected_fps), "%s FPS mismatch" % animation_name)
 	_expect(not sprite_frames.get_animation_loop(animation_name), "%s unexpectedly loops" % animation_name)
+
+
+func _validate_loop_animation(
+		sprite_frames: SpriteFrames,
+		animation_name: StringName,
+		expected_frames: int,
+		expected_fps: float
+	) -> void:
+	_expect(sprite_frames.has_animation(animation_name), "SpriteFrames lacks %s" % animation_name)
+	_expect(sprite_frames.get_frame_count(animation_name) == expected_frames, "%s frame count mismatch" % animation_name)
+	_expect(is_equal_approx(sprite_frames.get_animation_speed(animation_name), expected_fps), "%s FPS mismatch" % animation_name)
+	_expect(sprite_frames.get_animation_loop(animation_name), "%s should loop" % animation_name)
 
 
 func _validate_attack_thrust_art() -> void:
@@ -419,7 +434,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("M15_PLAYER_ACTION_TEST: PASS (ground/air Dash, reset/cooldown, thrust Attack)")
+		print("M15_PLAYER_ACTION_TEST: PASS (split Ground Dash, Air Dash reset, thrust Attack)")
 		quit(0)
 		return
 	for failure: String in _failures:
