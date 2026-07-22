@@ -581,3 +581,109 @@ Status: complete — awaiting M1.5 prototype approval
 - Attack may play while airborne; on completion it returns to Jump Loop/Fall rather than forcing an invalid grounded animation.
 - Main remains an internal movement/action laboratory rather than a production level.
 - Hurt and Death remain preview placeholders with no formal Player trigger.
+
+## M1.5 revision — Air Dash and dual-dagger thrust
+
+Date: 2026-07-22
+Status: complete — awaiting manual approval
+
+### Goals and scope
+
+- Replace the current ground-only Dash restriction with one horizontal air Dash per airborne cycle while retaining the existing ground Dash.
+- Change the Input Map action from the provisional `player_dash` name to the approved `dash` action and bind physical Left Shift plus optional Right Shift.
+- Split presentation names into `ground_dash` and `air_dash`, with clearly different grounded and airborne silhouettes.
+- Archive all six pre-revision Attack PNGs before replacing the production sequence with a synchronous dual-dagger lunging thrust.
+- Preserve the Attack hit-window metadata at frames three and four without creating a Hitbox, Hurtbox, damage, enemy, boss, or combo system.
+
+### Preflight audit
+
+- Git worktree was clean; baseline commit: `0e7be18 feat: add M1.5 player action prototype`.
+- Existing ground Dash source contains five 64×64 transparent frames under `assets/sprites/player/assassin/dash/`; the persistent animation is named `dash` at 20 FPS.
+- Existing Attack contains six 64×64 transparent frames under `assets/sprites/player/assassin/attack/`; its second, fifth, and related transition poses do not maintain a synchronous two-blade forward thrust.
+- `PlayerActionController` currently rejects all airborne Dash attempts and stores only one generic Dash action state.
+- `Player` currently reads the Input Map action `player_dash`; Gameplay contains no direct Shift-key polling.
+- `docs/design/player_movement_spec.md` does not yet exist and will be created in this revision.
+
+### Planned files and tests
+
+- Update the procedural pose generator, production contact sheet, SpriteFrames builder/resource, animation controller, preview controller/scene, Player action component, Player integration, and reproducible Input Map writer.
+- Add archived old Attack PNGs under a reference/deprecated directory and new `air_dash` production PNGs.
+- Extend resource/controller tests for `ground_dash`, `air_dash`, frame counts, locks, hit-window metadata, and visual/action distinction.
+- Extend Gameplay tests for rising/falling air Dash, direction selection, vertical freeze, single-use/reset, shared cooldown, gravity restoration, repeat rejection, and correct post-Dash locomotion.
+- Run editor import, all existing regressions, standalone Player/preview/Main startup, and GL Compatibility visual captures with Godot 4.7.1.
+
+### Scope guard
+
+- No Attack movement will be added unless collision-safe behavior is clearly justified; this revision defaults to animation-only thrust.
+- No actual hitbox node, hit detection, damage, health, invulnerability, enemy, boss, or combo behavior is authorized.
+- Air Dash remains horizontal only; there is no vertical or diagonal Dash.
+
+### Delivered implementation
+
+- Replaced the provisional `player_dash` Input Map action with `dash`. It contains two physical Shift events distinguished by Left/Right key location. Gameplay reads only `Input.is_action_just_pressed(DASH_ACTION)` and contains no direct key polling.
+- Split the former generic presentation name into non-looping `ground_dash` and `air_dash`, both five frames at 20 FPS. The old generic `dash` SpriteFrames alias was removed to prevent ambiguous state selection.
+- Renamed the pre-existing five Ground Dash PNGs without art loss. Hash comparison confirmed each new `ground_dash_01`–`05` PNG is byte-identical to its corresponding former `dash_01`–`05` source; the duplicate old path was removed after verification.
+- Added five original 64×64 Air Dash frames with a horizontal airborne body, retracted legs, close arms/blades, trailing mantle, transparent background, fixed canvas anchor, Nearest import, and no mipmaps.
+- Archived all six previous Attack PNGs before production overwrite under `assets/sprites/player/assassin/reference/deprecated_attack_slash/`. SHA-256 evidence was captured before replacement and the archive files remain independently importable.
+- Replaced Attack with six original 64×64 synchronous dual-dagger thrust frames: guard, compression, drive, core strike, held extension, and recovery. The two forward blades are vertically separated and no sweeping arc is present.
+- Preserved `attack_03` and `attack_04` as query-only future hit-window metadata. No Hitbox, Hurtbox, damage, enemy, invulnerability, or combo node/logic was created.
+- Extended `PlayerActionController` with explicit Ground Dash and Air Dash states, a stored horizontal direction, mutual exclusion, the existing 480 px/s travel speed, 0.20-second motion timer, and shared 0.45-second cooldown.
+- Added `air_dash_available`. Air Dash can start while rising or falling, consumes the flag immediately, zeros vertical velocity, suspends gravity during the one-shot, rejects repeats, and resumes normal gravity afterward. Only an actual landing resets the flag; coyote time does not.
+- Direction uses live horizontal input when present because facing is updated immediately before action dispatch; otherwise it uses current facing. Ground/Air Dash and Attack lock facing until completion and flip with `AnimatedSprite2D.flip_h` only.
+- Updated the independent preview to eleven buttons/animations, the Main test overlay, reproducible asset/Input/SpriteFrames builders, placeholder regeneration references, asset validation, movement/animation specifications, README, and QA contact sheet/report.
+
+### Commands and actual results
+
+1. `Godot --headless --editor --path . --quit`
+   - Exit 0. Godot 4.7.1 imported the new PNGs and parsed all typed scripts/scenes without errors.
+2. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --archive-legacy-attack`
+   - Exit 0; `PLAYER_ATTACK_ARCHIVE: 6 files, 0 failures`. This ran before overwriting production Attack.
+3. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd`
+   - Exit 0; `PLAYER_PRODUCTION_EXPORT: 26 files, 0 failures`.
+4. `Godot --headless --path . --script scripts/tools/configure_m1_input_map.gd`
+   - Exit 0; `M15_INPUT_MAP_CONFIG: OK`. `dash` has Left and Right Shift; `player_dash` is absent.
+5. `Godot --headless --path . --script scripts/tools/player_sprite_frames_builder.gd`
+   - Exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK`.
+6. `Godot --headless --path . --script tests/tools/validate_player_animation_assets.gd`
+   - Exit 0; `PLAYER_ANIMATION_VALIDATION: PASS (26 frames + 4 byte-identical references)`.
+7. `Godot --headless --path . --script tests/player/test_player_animation_system.gd`
+   - Exit 0; `PLAYER_ANIMATION_SYSTEM_TEST: PASS (11 animations, controller locks/signals verified)`.
+8. `Godot --headless --path . --script tests/player/test_m1_player_movement.gd`
+   - Exit 0; `M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)`.
+9. `Godot --headless --path . --script tests/player/test_m15_player_actions.gd`
+   - Exit 0; `M15_PLAYER_ACTION_TEST: PASS (ground/air Dash, reset/cooldown, thrust Attack)`.
+10. `Godot --path . --write-movie /tmp/nocturne_keep_air_dash_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy`
+    - Exit 0; Main rendered at 1280×720 through GL Compatibility with the Player, camera view, and updated Ground/Air Dash controls visible. No red Output/Debugger errors appeared.
+11. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_air_dash_preview.png --fixed-fps 10 --quit-after 2 --audio-driver Dummy`
+    - Exit 0; preview rendered at 1280×720 with eleven controls including Ground Dash, Air Dash, and Attack. No red Output/Debugger errors appeared.
+12. Original-resolution inspection of `docs/qa/player_animation_contact_sheet.png` plus `git diff --check`.
+    - Visual result: Ground Dash reads planted, Air Dash reads airborne, Attack reads as two-blade forward thrust; pixel edges remain sharp. Diff check returned no whitespace errors.
+13. Final consolidated regression also ran `tests/tools/validate_pixel_character_assets.gd` before every animation and movement suite.
+    - Every command exited 0. Final reports: `PIXEL_CHARACTER_VALIDATION: PASS (11 assets + board)`, `PLAYER_ANIMATION_VALIDATION: PASS (26 frames + 4 byte-identical references)`, `PLAYER_ANIMATION_SYSTEM_TEST: PASS (11 animations, controller locks/signals verified)`, `M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)`, and `M15_PLAYER_ACTION_TEST: PASS (ground/air Dash, reset/cooldown, thrust Attack)`.
+
+### Automated acceptance results
+
+- Rising and falling Air Dash both start successfully; no-input direction uses facing and held input selects the matching direction.
+- Air Dash zeros vertical velocity, pauses gravity, plays `air_dash`, consumes one availability flag, rejects a second airborne Dash, and restores normal gravity after completion.
+- Landing restores exactly one Air Dash. Coyote time does not alter availability. Ground Dash does not consume the Air Dash.
+- Ground and Air Dash share cooldown, cannot restart from repeated Shift edges, apply horizontal motion for the first four frames, and lock facing.
+- The new Attack core has two separated forward Pale Steel blade bands and extends to the front edge of the 64×64 action silhouette. It differs from every archived slash frame.
+- Attack rejects repeat input, cannot be overwritten by locomotion, preserves frames three/four as metadata-only, and recovers to grounded or airborne locomotion appropriately.
+- Left-facing presentation uses `flip_h` without changing the player transform, collision, or sprite anchor.
+- Main, preview, M1 locomotion, reference assets, and debug double jump remain intact.
+
+### Manual acceptance requested
+
+1. In Main, try Shift during both ascent and descent, then attempt a second Air Dash before landing.
+2. Land and immediately retry to confirm availability resets reliably.
+3. Compare Ground Dash and Air Dash at full speed, especially the legs and perceived ground contact.
+4. Press J facing right and left and confirm both dagger tips read as a simultaneous thrust rather than a swing.
+5. Hold movement during action completion and confirm Ground Dash/Attack recover to Run while Air Dash recovers to Fall/Jump Loop.
+
+### Known limitations and handoff
+
+- The Air Dash is deliberately horizontal-only and provides no invulnerability.
+- Attack is presentation-only and adds no movement impulse; the future narrow forward Hitbox remains metadata, not a node.
+- Hurt and Death remain explicitly labeled preview placeholders.
+- Main remains an internal action laboratory, not a production level.
+- No enemy, damage, Hitbox, Hurtbox, combo, Boss, or other M2 combat work was started.

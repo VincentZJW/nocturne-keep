@@ -10,9 +10,9 @@ signal facing_changed(facing_left: bool)
 const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 const LOOP_ANIMATIONS: Array[StringName] = [&"idle", &"run", &"jump_loop", &"fall"]
 const ONE_SHOT_ANIMATIONS: Array[StringName] = [
-	&"jump_start", &"land", &"dash", &"attack", &"hurt", &"death",
+	&"jump_start", &"land", &"ground_dash", &"air_dash", &"attack", &"hurt", &"death",
 ]
-const FACING_LOCK_ANIMATIONS: Array[StringName] = [&"dash", &"attack"]
+const FACING_LOCK_ANIMATIONS: Array[StringName] = [&"ground_dash", &"air_dash", &"attack"]
 const PRIORITIES: Dictionary[StringName, int] = {
 	&"idle": 10,
 	&"run": 20,
@@ -20,7 +20,8 @@ const PRIORITIES: Dictionary[StringName, int] = {
 	&"fall": 40,
 	&"jump_start": 50,
 	&"land": 60,
-	&"dash": 70,
+	&"ground_dash": 70,
+	&"air_dash": 70,
 	&"attack": 80,
 	&"hurt": 90,
 	&"death": 100,

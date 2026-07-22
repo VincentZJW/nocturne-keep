@@ -62,11 +62,11 @@ static func _recipes() -> Dictionary[String, Array]:
 		"death": [
 			{"source": "idle/idle_04.png", "offset": Vector2i.ZERO},
 			{"source": "attack/attack_02.png", "offset": Vector2i(0, 1)},
-			{"source": "dash/dash_01.png", "offset": Vector2i(-1, 1)},
-			{"source": "dash/dash_02.png", "offset": Vector2i(-2, 2)},
-			{"source": "dash/dash_03.png", "offset": Vector2i(-3, 3)},
-			{"source": "dash/dash_04.png", "offset": Vector2i(-4, 3)},
-			{"source": "dash/dash_05.png", "offset": Vector2i(-5, 2)},
-			{"source": "dash/dash_03.png", "offset": Vector2i(-6, 4)},
+			{"source": "ground_dash/ground_dash_01.png", "offset": Vector2i(-1, 1)},
+			{"source": "ground_dash/ground_dash_02.png", "offset": Vector2i(-2, 2)},
+			{"source": "ground_dash/ground_dash_03.png", "offset": Vector2i(-3, 3)},
+			{"source": "ground_dash/ground_dash_04.png", "offset": Vector2i(-4, 3)},
+			{"source": "ground_dash/ground_dash_05.png", "offset": Vector2i(-5, 2)},
+			{"source": "ground_dash/ground_dash_03.png", "offset": Vector2i(-6, 4)},
 		],
 	}

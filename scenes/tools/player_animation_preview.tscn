@@ -75,7 +75,7 @@ text = "THE NIGHT WARDEN · SPRITEFRAMES PREVIEW"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
 theme_override_font_sizes/font_size = 15
-text = "64×64 · 6× nearest-neighbor · animations 1–0 · placeholders are explicitly labeled"
+text = "64×64 · 6× nearest-neighbor · animations 1–0/− · placeholders explicitly labeled"
 
 [node name="Spacer" type="Control" parent="Margin/Layout"]
 custom_minimum_size = Vector2(0, 400)
@@ -165,7 +165,7 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 5
-columns = 5
+columns = 6
 
 [node name="IdleButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
@@ -203,29 +203,35 @@ custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
 text = "6 · land"
 
-[node name="DashButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+[node name="GroundDashButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "7 · dash"
+text = "7 · ground_dash"
+
+[node name="AirDashButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "8 · air_dash"
 
 [node name="AttackButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "8 · attack"
+text = "9 · attack"
 
 [node name="HurtButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "9 · hurt [P]"
+text = "0 · hurt [P]"
 
 [node name="DeathButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "0 · death [P]"
+text = "− · death [P]"
 
 [node name="PlaybackButtons" type="HBoxContainer" parent="Margin/Layout"]
 layout_mode = 2

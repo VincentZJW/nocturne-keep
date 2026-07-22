@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dxyum6pkl5gu8"
-path="res://.godot/imported/dash_01.png-7067cd61d3993b242897e2e9bb316bd3.ctex"
+uid="uid://dl71tygib0hfw"
+path="res://.godot/imported/ground_dash_01.png-114ff23bcab609586036a3c635b62c89.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/assassin/dash/dash_01.png"
-dest_files=["res://.godot/imported/dash_01.png-7067cd61d3993b242897e2e9bb316bd3.ctex"]
+source_file="res://assets/sprites/player/assassin/ground_dash/ground_dash_01.png"
+dest_files=["res://.godot/imported/ground_dash_01.png-114ff23bcab609586036a3c635b62c89.ctex"]
 
 [params]
 

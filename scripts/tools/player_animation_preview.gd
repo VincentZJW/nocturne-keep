@@ -1,14 +1,14 @@
 class_name PlayerAnimationPreview
 extends Control
 
-## Internal ten-animation inspector. It is not the formal game Main scene.
+## Internal eleven-animation inspector. It is not the formal game Main scene.
 
 const SpriteFramesBuilder: Script = preload("res://scripts/tools/player_sprite_frames_builder.gd")
 
 const ANIMATION_KEYS: Dictionary[Key, StringName] = {
 	KEY_1: &"idle", KEY_2: &"run", KEY_3: &"jump_start", KEY_4: &"jump_loop",
-	KEY_5: &"fall", KEY_6: &"land", KEY_7: &"dash", KEY_8: &"attack",
-	KEY_9: &"hurt", KEY_0: &"death",
+	KEY_5: &"fall", KEY_6: &"land", KEY_7: &"ground_dash", KEY_8: &"air_dash",
+	KEY_9: &"attack", KEY_0: &"hurt", KEY_MINUS: &"death",
 }
 
 @onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
@@ -68,7 +68,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _connect_animation_buttons() -> void:
 	var buttons: Array[Button] = [
 		%IdleButton, %RunButton, %JumpStartButton, %JumpLoopButton, %FallButton,
-		%LandButton, %DashButton, %AttackButton, %HurtButton, %DeathButton,
+		%LandButton, %GroundDashButton, %AirDashButton, %AttackButton, %HurtButton,
+		%DeathButton,
 	]
 	for index: int in range(buttons.size()):
 		buttons[index].pressed.connect(_play_selected.bind(SpriteFramesBuilder.ANIMATION_ORDER[index]))

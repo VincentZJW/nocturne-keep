@@ -1,12 +1,12 @@
 # Player Animation Integration Specification
 
-Version: 1.2 — M1.5 player action prototype
-Date: 2026-07-21
-Status: M1 locomotion complete; M1.5 double-jump/Dash/Attack prototype complete without combat
+Version: 1.3 — Air Dash and dual-dagger thrust revision
+Date: 2026-07-22
+Status: M1 locomotion complete; M1.5 ground/air Dash and animation-only thrust complete without combat
 
 ## Scope
 
-This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, and the limited M1.5 action prototype. It covers sprite animation resource names, timing, loop behavior, priority arbitration, facing, movement-state selection, debug double jump, ground Dash motion, and Attack animation triggering. It does not implement damage, hitboxes, hurtboxes, invulnerability, combos, enemies, bosses, or production levels.
+This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, and the limited M1.5 action prototype. It covers sprite animation resource names, timing, loop behavior, priority arbitration, facing, movement-state selection, debug double jump, ground/horizontal air Dash motion, and Attack animation triggering. It does not implement damage, hitboxes, hurtboxes, invulnerability, combos, enemies, bosses, or production levels.
 
 ## Node composition
 
@@ -32,20 +32,23 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 | `jump_loop` | 2 | 4 | Yes | M1 production |
 | `fall` | 2 | 4 | Yes | M1 production |
 | `land` | 2 | 12 | No | M1 production |
-| `dash` | 5 | 20 | No | Production |
-| `attack` | 6 | 12 | No | Production |
+| `ground_dash` | 5 | 20 | No | Production |
+| `air_dash` | 5 | 20 | No | Production |
+| `attack` | 6 | 12 | No | Production dual-dagger thrust |
 | `hurt` | 3 | 12 | No | Placeholder |
 | `death` | 8 | 8 | No | Placeholder |
 
 Only Hurt and Death remain placeholders. Their files live under `assets/sprites/player/assassin/placeholder/`, every filename starts with `placeholder_`, and they must not be treated as approved final animation art.
 
-The original front, side, static Dash, and static Attack images remain byte-identical in `assets/sprites/player/assassin/reference/`.
+The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The six superseded sideways-slash Attack production frames are preserved byte-identically in `assets/sprites/player/assassin/reference/deprecated_attack_slash/`.
 
 ## Timing contracts
 
-Dash frames are `dash_01` start compression, `dash_02` rear-leg drive, `dash_03` travel core, `dash_04` extension, and `dash_05` recovery. At 20 FPS the first four frames span exactly `0.20 seconds`; frame five is visual recovery outside the planned movement window.
+Ground Dash frames are `ground_dash_01` start compression, `ground_dash_02` rear-leg drive, `ground_dash_03` travel core, `ground_dash_04` extension, and `ground_dash_05` recovery. At 20 FPS the first four frames span exactly `0.20 seconds`; frame five is visual recovery outside the movement window.
 
-Attack frames are ready, anticipation, lunge, strike, follow-through, and recover. `attack_03` and `attack_04` are reserved as the future hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes this frame query without implementing hitboxes or damage.
+Air Dash uses five independent non-looping frames. Its body is lower and more horizontal, both feet are pulled clear of the ground line, both blades remain readable close to the body, and its mantle trails backward. It deliberately avoids the grounded rear-leg push and the Attack's simultaneous extended blades.
+
+Attack is a synchronous dual-dagger lunging thrust: `attack_01` guard, `attack_02` compressed anticipation, `attack_03` drive and initial extension, `attack_04` full dual-blade core strike, `attack_05` short held extension, and `attack_06` retraction/recovery. Both blades point forward throughout the strike and are vertically offset so they remain separate. No slash arc is used. `attack_03` and `attack_04` are reserved as the future narrow forward hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes this frame query without implementing a Hitbox or damage.
 
 ## M1 locomotion art contract
 
@@ -61,7 +64,7 @@ All six M1 animation groups pass 48×48 nearest-neighbor readability checks. Gro
 ## Priority and lock contract
 
 ```text
-death > hurt > attack > dash > land > jump_start > jump_loop/fall > run > idle
+death > hurt > attack > ground_dash/air_dash > land > jump_start > jump_loop/fall > run > idle
 ```
 
 - Every one-shot locks ordinary lower-priority requests until `animation_finished`.
@@ -77,7 +80,7 @@ death > hurt > attack > dash > land > jump_start > jump_loop/fall > run > idle
 
 - All source art faces right.
 - `set_facing_left(true)` sets `flip_h=true`; right sets `flip_h=false`.
-- Attack and Dash lock facing for their full one-shot.
+- Attack, Ground Dash, and Air Dash lock facing for their full one-shot.
 - A facing request received during those locks is queued and applied immediately after completion.
 - Flipping never changes the sprite node position or its parent transforms.
 
@@ -121,7 +124,7 @@ Land may be interrupted immediately by an accepted jump or horizontal movement. 
 
 Dedicated inputs extend the M1 map:
 
-- `player_dash`: physical Shift.
+- `dash`: physical Left Shift and Right Shift through the Input Map only.
 - `player_attack`: physical J.
 
 ### Double jump
@@ -133,17 +136,20 @@ Dedicated inputs extend the M1 map:
 - The shared 0.12-second input buffer feeds both valid ground and air jump paths, but one physics input edge can produce at most one jump.
 - `double_jump` is reserved as the future independent animation name. The prototype deliberately resets and replays Jump Start as fallback art; no final double-jump animation is claimed.
 
-### Ground Dash
+### Ground and air Dash
 
 - Tuning resource: `player_action_prototype_config.tres`.
 - Speed 480 px/s; travel window 0.20 seconds; cooldown 0.45 seconds.
 - Frames one through four at 20 FPS are the travel window. Frame five is recovery with zero Dash velocity.
-- Dash may start only while grounded, blocks ordinary horizontal control for the complete five-frame action, and locks facing until completion.
+- Ground Dash uses input direction when present, otherwise current facing. It blocks ordinary horizontal control and locks facing until completion.
+- Air Dash is horizontal only. It may start during ascent or descent once per airborne cycle, uses input direction or current facing, zeroes vertical velocity, and suspends gravity for the action. Landing resets `air_dash_available`; coyote time never does.
+- Ground and air Dash share the same 0.45-second cooldown. Repeated Shift input cannot restart the current one-shot or provide additional air Dashes.
+- After Air Dash, normal gravity resumes and presentation selects Jump Loop or Fall from actual vertical velocity. After Ground Dash, presentation returns to Idle or Run.
 - Dash has no invulnerability, collision bypass, damage, or hitbox behavior.
 
 ### Attack animation trigger
 
-- J requests the existing six-frame, 12 FPS non-looping Attack.
+- J requests the six-frame, 12 FPS non-looping dual-dagger thrust Attack.
 - It locks facing and suppresses locomotion animation requests until all six frames complete.
 - Repeated J edges while active are rejected rather than restarting frame one.
 - Completion returns to Idle/Run on the ground or the appropriate air loop if the action finished airborne.
@@ -152,7 +158,7 @@ Dedicated inputs extend the M1 map:
 ### Active M1.5 priority
 
 ```text
-attack > dash > jump/fall/land > run > idle
+attack > ground_dash/air_dash > land > jump_start > jump_loop/fall > run > idle
 ```
 
 Attack wins if both action inputs arrive on the same physics frame. Once either action starts, the action component rejects the other until completion. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
@@ -163,8 +169,8 @@ Attack wins if both action inputs arrive on the same physics frame. Once either 
 - Source import uses Lossless compression with mipmaps disabled.
 - The project Canvas texture default and preview sprite both use Nearest filtering.
 - Preview scale is the integer value 6×.
-- Grounded production frames use a common visible ground baseline at source row `y=60`.
-- The animation canvas and centered sprite anchor remain fixed; airborne placeholders move pixels within that same canvas.
+- Grounded production frames use a common visible ground baseline at source row `y=60`; Air Dash keeps all visible feet above that line within the same canvas.
+- The animation canvas and centered sprite anchor remain fixed; airborne production poses move pixels within that same canvas.
 - The pre-existing Dash core frame was shifted down one pixel to correct its baseline without changing its pose design.
 
 ## Controller public API
@@ -182,4 +188,4 @@ The controller owns presentation state only. Movement state, health, damage, hit
 
 ## Preview usage
 
-Open `scenes/tools/player_animation_preview.tscn` and run the current scene (`F6`). Choose actions with the ten buttons or physical number keys `1` through `0`. The panel displays current animation, current frame, FPS, loop/one-shot mode, direction, locks, placeholder/production status, and the reserved Attack hit-window indicator. Playback can be resumed, paused, restarted, or flipped with dedicated buttons.
+Open `scenes/tools/player_animation_preview.tscn` and run the current scene (`F6`). Choose among eleven animations with the buttons or keys `1`–`0` plus Minus: `7` Ground Dash, `8` Air Dash, `9` Attack, `0` Hurt, and Minus Death. The panel displays current animation, current frame, FPS, loop/one-shot mode, direction, locks, placeholder/production status, and the reserved Attack hit-window indicator. Playback can be resumed, paused, restarted, or flipped with dedicated buttons.

@@ -1,6 +1,6 @@
 extends SceneTree
 
-## Headless validation for the first 21-frame Night Warden animation batch.
+## Headless validation for the current 26-frame Night Warden production batch.
 
 const PixelCanvas: Script = preload("res://scripts/tools/pixel_art_canvas.gd")
 const Concept: Script = preload("res://scripts/tools/pixel_character_generator.gd")
@@ -125,14 +125,21 @@ func _validate_references(failures: Array[String]) -> void:
 
 
 func _validate_action_distinction(failures: Array[String]) -> void:
-	var dash_path: String = Generator.OUTPUT_ROOT.path_join("dash/dash_03.png")
+	var ground_dash_path: String = Generator.OUTPUT_ROOT.path_join("ground_dash/ground_dash_03.png")
+	var air_dash_path: String = Generator.OUTPUT_ROOT.path_join("air_dash/air_dash_03.png")
 	var attack_path: String = Generator.OUTPUT_ROOT.path_join("attack/attack_04.png")
-	if FileAccess.get_sha256(ProjectSettings.globalize_path(dash_path)) == FileAccess.get_sha256(ProjectSettings.globalize_path(attack_path)):
-		failures.append("Dash core and attack strike are visually identical")
+	var action_hashes: Dictionary[String, bool] = {}
+	for path: String in [ground_dash_path, air_dash_path, attack_path]:
+		action_hashes[FileAccess.get_sha256(ProjectSettings.globalize_path(path))] = true
+	if action_hashes.size() != 3:
+		failures.append("Ground Dash, Air Dash, and Attack core frames are not visually distinct")
 	var idle: Image = Image.load_from_file(ProjectSettings.globalize_path(Generator.OUTPUT_ROOT.path_join("idle/idle_01.png")))
-	var dash: Image = Image.load_from_file(ProjectSettings.globalize_path(dash_path))
-	if _visible_top(dash) <= _visible_top(idle) + 3:
-		failures.append("Dash core is not visibly lower than idle stance")
+	var ground_dash: Image = Image.load_from_file(ProjectSettings.globalize_path(ground_dash_path))
+	var air_dash: Image = Image.load_from_file(ProjectSettings.globalize_path(air_dash_path))
+	if _visible_top(ground_dash) <= _visible_top(idle) + 3:
+		failures.append("Ground Dash core is not visibly lower than idle stance")
+	if _visible_bottom(air_dash) >= 60:
+		failures.append("Air Dash core reads as grounded instead of airborne")
 
 
 func _visible_top(image: Image) -> int:
@@ -141,6 +148,14 @@ func _visible_top(image: Image) -> int:
 			if image.get_pixel(x, y).a > 0.0:
 				return y
 	return image.get_height()
+
+
+func _visible_bottom(image: Image) -> int:
+	for y: int in range(image.get_height() - 1, -1, -1):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a > 0.0:
+				return y
+	return -1
 
 
 func _validate_project_isolation(failures: Array[String]) -> void:

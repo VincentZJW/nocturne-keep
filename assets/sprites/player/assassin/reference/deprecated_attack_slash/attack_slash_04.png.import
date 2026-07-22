@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d3v48assrc8f5"
-path="res://.godot/imported/dash_04.png-8fd1d4f40c3b5f555fa339d027e41c89.ctex"
+uid="uid://boco5c2hyt1mx"
+path="res://.godot/imported/attack_slash_04.png-150c485b75e624edd5ae1dc074c146f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/assassin/dash/dash_04.png"
-dest_files=["res://.godot/imported/dash_04.png-8fd1d4f40c3b5f555fa339d027e41c89.ctex"]
+source_file="res://assets/sprites/player/assassin/reference/deprecated_attack_slash/attack_slash_04.png"
+dest_files=["res://.godot/imported/attack_slash_04.png-150c485b75e624edd5ae1dc074c146f4.ctex"]
 
 [params]
 

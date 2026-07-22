@@ -15,6 +15,12 @@ func _initialize() -> void:
 
 
 func _build() -> void:
+	if OS.get_cmdline_user_args().has("--archive-legacy-attack"):
+		var archive_results: Dictionary[String, int] = ProductionGenerator.archive_current_attack()
+		var archive_failures: int = _count_failures(archive_results)
+		print("PLAYER_ATTACK_ARCHIVE: %d files, %d failures" % [archive_results.size(), archive_failures])
+		quit(0 if archive_failures == 0 else 1)
+		return
 	if OS.get_cmdline_user_args().has("--m1-contact-sheet"):
 		var sheet_error: Error = M1ContactSheet.export()
 		print("PLAYER_M1_CONTACT_SHEET: %s" % error_string(sheet_error))

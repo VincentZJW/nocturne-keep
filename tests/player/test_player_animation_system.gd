@@ -44,8 +44,9 @@ func _validate_resource(sprite_frames: SpriteFrames) -> void:
 		)
 	for actual_name: String in actual_names:
 		_expect(StringName(actual_name) in SpriteFramesBuilder.ANIMATION_ORDER, "Unexpected animation name: %s" % actual_name)
-	var dash_motion_seconds: float = 4.0 / sprite_frames.get_animation_speed(&"dash")
-	_expect(is_equal_approx(dash_motion_seconds, 0.2), "Dash movement window is not 0.20 seconds")
+	for dash_animation: StringName in [&"ground_dash", &"air_dash"]:
+		var dash_motion_seconds: float = 4.0 / sprite_frames.get_animation_speed(dash_animation)
+		_expect(is_equal_approx(dash_motion_seconds, 0.2), "%s movement window is not 0.20 seconds" % dash_animation)
 
 
 func _validate_source_frames(sprite_frames: SpriteFrames) -> void:
@@ -59,7 +60,7 @@ func _validate_source_frames(sprite_frames: SpriteFrames) -> void:
 			_expect(image.get_size() == Vector2i(64, 64), "Wrong texture size: %s[%d]" % [animation_name, frame_index])
 			_expect(not image.has_mipmaps(), "Mipmaps enabled: %s[%d]" % [animation_name, frame_index])
 			_expect(_has_binary_alpha(image), "Non-binary or empty alpha: %s[%d]" % [animation_name, frame_index])
-	for grounded_animation: StringName in [&"idle", &"run", &"dash", &"attack", &"land", &"hurt"]:
+	for grounded_animation: StringName in [&"idle", &"run", &"ground_dash", &"attack", &"land", &"hurt"]:
 		for frame_index: int in range(sprite_frames.get_frame_count(grounded_animation)):
 			var image: Image = sprite_frames.get_frame_texture(grounded_animation, frame_index).get_image()
 			_expect(
@@ -100,7 +101,8 @@ func _validate_controller(sprite_frames: SpriteFrames) -> void:
 	_expect(controller.is_animation_locked(), "Attack did not lock animation")
 	_expect(controller.is_facing_locked(), "Attack did not lock facing")
 	_expect(not controller.play_loop(&"run"), "Run overrode attack")
-	_expect(not controller.play_one_shot(&"dash"), "Dash overrode higher-priority attack")
+	_expect(not controller.play_one_shot(&"ground_dash"), "Ground Dash overrode higher-priority attack")
+	_expect(not controller.play_one_shot(&"air_dash"), "Air Dash overrode higher-priority attack")
 	_expect(controller.play_one_shot(&"hurt"), "Hurt did not override attack")
 	_expect(not controller.play_one_shot(&"attack"), "Attack overrode hurt")
 
@@ -108,15 +110,22 @@ func _validate_controller(sprite_frames: SpriteFrames) -> void:
 	controller.set_facing_left(false)
 	sprite.speed_scale = 100.0
 	_finished_events.clear()
-	_expect(controller.play_one_shot(&"dash"), "Dash request was rejected")
+	_expect(controller.play_one_shot(&"ground_dash"), "Ground Dash request was rejected")
 	var position_before_flip: Vector2 = sprite.position
 	_expect(not controller.set_facing_left(true), "Facing changed during dash lock")
 	_expect(not sprite.flip_h, "flip_h changed before dash finished")
 	await create_timer(0.08).timeout
-	_expect(_finished_events.has(&"dash"), "Dash did not emit one_shot_finished")
-	_expect(sprite.frame == 4, "Dash did not reach its fifth frame")
-	_expect(sprite.flip_h, "Queued facing was not applied after dash")
+	_expect(_finished_events.has(&"ground_dash"), "Ground Dash did not emit one_shot_finished")
+	_expect(sprite.frame == 4, "Ground Dash did not reach its fifth frame")
+	_expect(sprite.flip_h, "Queued facing was not applied after Ground Dash")
 	_expect(sprite.position == position_before_flip, "Horizontal flip moved the sprite node")
+
+	controller.reset_to_idle()
+	_finished_events.clear()
+	_expect(controller.play_one_shot(&"air_dash"), "Air Dash request was rejected")
+	await create_timer(0.08).timeout
+	_expect(_finished_events.has(&"air_dash"), "Air Dash did not emit one_shot_finished")
+	_expect(sprite.frame == 4, "Air Dash did not reach its fifth frame")
 
 	controller.reset_to_idle()
 	_finished_events.clear()
@@ -176,7 +185,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("PLAYER_ANIMATION_SYSTEM_TEST: PASS (10 animations, controller locks/signals verified)")
+		print("PLAYER_ANIMATION_SYSTEM_TEST: PASS (11 animations, controller locks/signals verified)")
 		quit(0)
 		return
 	for failure: String in _failures:

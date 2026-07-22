@@ -28,7 +28,7 @@ const STATE_ANIMATIONS: Dictionary[MovementState, StringName] = {
 const MOVE_LEFT_ACTION: StringName = &"player_move_left"
 const MOVE_RIGHT_ACTION: StringName = &"player_move_right"
 const JUMP_ACTION: StringName = &"player_jump"
-const DASH_ACTION: StringName = &"player_dash"
+const DASH_ACTION: StringName = &"dash"
 const ATTACK_ACTION: StringName = &"player_attack"
 const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 
@@ -46,6 +46,7 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 ) as PlayerActionController
 
 var air_jumps_remaining: int = 0
+var air_dash_available: bool = true
 var _movement_state: MovementState = MovementState.IDLE
 var _coyote_time_remaining: float = 0.0
 var _jump_buffer_remaining: float = 0.0
@@ -85,8 +86,12 @@ func _physics_process(delta: float) -> void:
 		attack_pressed,
 		dash_pressed,
 		was_on_floor,
+		air_dash_available,
 		animation_controller.animated_sprite.flip_h
 	)
+	if action_controller.is_air_dash_active():
+		air_dash_available = false
+		velocity.y = 0.0
 	if action_controller.is_dash_active():
 		velocity.x = action_controller.get_dash_horizontal_velocity()
 	else:
@@ -99,6 +104,7 @@ func _physics_process(delta: float) -> void:
 	var landed_this_frame: bool = not was_on_floor and is_on_floor()
 	if landed_this_frame and not jumped_before_move:
 		_restore_air_jumps()
+		air_dash_available = true
 		if action_controller.is_action_active() or not _try_consume_jump():
 			_enter_state(MovementState.LAND)
 			landed.emit()
@@ -148,7 +154,7 @@ func _prepare_action_facing(horizontal_input: float) -> void:
 
 
 func _apply_gravity(delta: float, was_on_floor: bool) -> void:
-	if not was_on_floor:
+	if not was_on_floor and not action_controller.is_air_dash_active():
 		velocity.y += movement_config.gravity * delta
 
 

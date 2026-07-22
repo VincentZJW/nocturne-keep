@@ -1,18 +1,20 @@
 class_name PlayerActionController
 extends Node
 
-## M1.5 action prototype: mutually exclusive Attack animation and ground Dash motion.
+## M1.5 action prototype: mutually exclusive Attack, ground Dash, and air Dash.
 
 signal action_started(action_name: StringName)
 signal action_finished(action_name: StringName)
 
 enum ActionState {
 	NONE,
-	DASH,
+	GROUND_DASH,
+	AIR_DASH,
 	ATTACK,
 }
 
-const DASH_ANIMATION: StringName = &"dash"
+const GROUND_DASH_ANIMATION: StringName = &"ground_dash"
+const AIR_DASH_ANIMATION: StringName = &"air_dash"
 const ATTACK_ANIMATION: StringName = &"attack"
 
 @export var action_config: PlayerActionPrototypeConfig
@@ -40,7 +42,7 @@ func _ready() -> void:
 
 func advance(delta: float) -> void:
 	_dash_cooldown_remaining = maxf(0.0, _dash_cooldown_remaining - delta)
-	if _action_state == ActionState.DASH:
+	if is_dash_active():
 		_dash_motion_remaining = maxf(0.0, _dash_motion_remaining - delta)
 
 
@@ -48,6 +50,7 @@ func try_start_actions(
 	attack_pressed: bool,
 	dash_pressed: bool,
 	is_grounded: bool,
+	air_dash_available: bool,
 	facing_left: bool
 ) -> bool:
 	if _action_state != ActionState.NONE or animation_controller == null:
@@ -55,9 +58,11 @@ func try_start_actions(
 	# Attack wins when both actions are requested on the same physics frame.
 	if attack_pressed:
 		return _start_action(ActionState.ATTACK, ATTACK_ANIMATION)
-	if dash_pressed and is_grounded and _dash_cooldown_remaining <= 0.0:
+	if dash_pressed and (is_grounded or air_dash_available) and _dash_cooldown_remaining <= 0.0:
 		_dash_direction = -1.0 if facing_left else 1.0
-		if _start_action(ActionState.DASH, DASH_ANIMATION):
+		var dash_state: ActionState = ActionState.GROUND_DASH if is_grounded else ActionState.AIR_DASH
+		var dash_animation: StringName = GROUND_DASH_ANIMATION if is_grounded else AIR_DASH_ANIMATION
+		if _start_action(dash_state, dash_animation):
 			_dash_motion_remaining = action_config.dash_duration
 			_dash_cooldown_remaining = action_config.dash_cooldown
 			return true
@@ -69,20 +74,30 @@ func is_action_active() -> bool:
 
 
 func is_dash_active() -> bool:
-	return _action_state == ActionState.DASH
+	return _action_state == ActionState.GROUND_DASH or _action_state == ActionState.AIR_DASH
+
+
+func is_ground_dash_active() -> bool:
+	return _action_state == ActionState.GROUND_DASH
+
+
+func is_air_dash_active() -> bool:
+	return _action_state == ActionState.AIR_DASH
 
 
 func get_action_name() -> StringName:
 	match _action_state:
-		ActionState.DASH:
-			return DASH_ANIMATION
+		ActionState.GROUND_DASH:
+			return GROUND_DASH_ANIMATION
+		ActionState.AIR_DASH:
+			return AIR_DASH_ANIMATION
 		ActionState.ATTACK:
 			return ATTACK_ANIMATION
 	return &""
 
 
 func get_dash_horizontal_velocity() -> float:
-	if _action_state != ActionState.DASH or _dash_motion_remaining <= 0.0:
+	if not is_dash_active() or _dash_motion_remaining <= 0.0:
 		return 0.0
 	return _dash_direction * action_config.dash_speed
 
@@ -93,6 +108,10 @@ func get_dash_motion_remaining() -> float:
 
 func get_dash_cooldown_remaining() -> float:
 	return _dash_cooldown_remaining
+
+
+func get_dash_direction() -> float:
+	return _dash_direction
 
 
 func _start_action(next_state: ActionState, animation_name: StringName) -> bool:
