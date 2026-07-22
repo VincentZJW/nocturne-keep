@@ -18,7 +18,7 @@ func _run_tests() -> void:
 	await _test_four_air_dash_chain_and_direction_change()
 	await _test_shared_ground_air_stamina_pool()
 	await _test_held_shift_and_air_wall_collision()
-	await _test_airborne_regeneration_block_and_ground_delay()
+	await _test_airborne_and_ground_regeneration()
 	_release_inputs()
 	_finish()
 
@@ -120,33 +120,69 @@ func _test_held_shift_and_air_wall_collision() -> void:
 	await process_frame
 
 
-func _test_airborne_regeneration_block_and_ground_delay() -> void:
-	var world: Node2D = _create_world(10000.0, false)
+func _test_airborne_and_ground_regeneration() -> void:
+	var world: Node2D = _create_world(100000.0, false)
 	var player: Player = _spawn_player(world, Vector2(0.0, 100.0))
-	await _wait_physics_frames(3)
-	await _tap_action(PlayerScript.DASH_ACTION)
-	await _wait_until_action_finished(player.action_controller, 30)
-	await _wait_physics_frames(120)
+	player.stamina_component.current_stamina = 50.0
+	player.stamina_component.stamina_regen_timer = 0.0
+	await _wait_physics_frames(60)
 	_expect(not player.is_on_floor(), "Air regeneration test unexpectedly landed")
-	_expect(is_equal_approx(player.stamina_component.current_stamina, 75.0), "Stamina regenerated while airborne")
-	_expect(is_equal_approx(player.stamina_component.stamina_regen_timer, 0.60), "Airborne time advanced regeneration delay")
+	_expect(
+		absf(player.stamina_component.current_stamina - 64.0) < 0.4,
+		"One airborne second did not regenerate at 40 percent"
+	)
+	player.stamina_component.current_stamina = 50.0
+	player.stamina_component.stamina_regen_timer = 0.0
+	await _tap_action(PlayerScript.ATTACK_ACTION)
+	_expect(player.action_controller.get_action_name() == &"attack", "Normal Attack test did not start")
+	_expect(not player.action_controller.is_stamina_regeneration_blocked(), "Zero-cost normal Attack is marked as a stamina action")
+	_expect(player.stamina_component.current_stamina > 50.0, "Zero-cost normal Attack blocked airborne regeneration")
+	_cleanup_world(world)
+	await process_frame
+
+	world = _create_world(100000.0, false)
+	player = _spawn_player(world, Vector2(0.0, 100.0))
+	player.stamina_component.current_stamina = 75.0
+	player.stamina_component.stamina_regen_timer = 0.0
+	await _tap_action(PlayerScript.DASH_ACTION)
+	_expect(player.action_controller.is_air_dash_active(), "Air Dash regeneration-block test did not start")
+	_expect(player.action_controller.is_stamina_regeneration_blocked(), "Air Dash is not marked as a stamina action")
+	_expect(is_equal_approx(player.stamina_component.current_stamina, 50.0), "Air Dash cost changed")
+	await _wait_physics_frames(5)
+	_expect(is_equal_approx(player.stamina_component.current_stamina, 50.0), "Air Dash regenerated during its action")
+	_expect(is_equal_approx(player.stamina_component.stamina_regen_timer, 0.60), "Air Dash advanced regeneration delay")
+	await _wait_until_action_finished(player.action_controller, 30)
+	await _wait_physics_frames(34)
+	_expect(is_equal_approx(player.stamina_component.current_stamina, 50.0), "Airborne stamina regenerated before delay")
+	await _wait_physics_frames(4)
+	_expect(player.stamina_component.current_stamina > 50.0, "Airborne stamina did not regenerate after delay")
+	_cleanup_world(world)
+	await process_frame
+
+	world = _create_world(100000.0, false)
+	player = _spawn_player(world, Vector2(0.0, 100.0))
+	await _tap_action(PlayerScript.DASH_ACTION)
+	await _tap_action(PlayerScript.ATTACK_ACTION)
+	_expect(player.action_controller.is_dash_attack_active(), "Dash Attack regeneration-block test did not start")
+	player.stamina_component.current_stamina = 50.0
+	player.stamina_component.stamina_regen_timer = 0.0
+	await _wait_physics_frames(5)
+	_expect(is_equal_approx(player.stamina_component.current_stamina, 50.0), "Dash Attack regenerated stamina")
+	_expect(is_zero_approx(player.stamina_component.stamina_regen_timer), "Dash Attack advanced regeneration timing")
 	_cleanup_world(world)
 	await process_frame
 
 	world = _create_world(300.0, false)
 	player = _spawn_player(world, Vector2(0.0, 252.0))
 	await _wait_physics_frames(5)
-	await _tap_action(PlayerScript.JUMP_ACTION)
-	await _wait_physics_frames(4)
-	await _tap_action(PlayerScript.DASH_ACTION)
-	await _wait_until_action_finished(player.action_controller, 30)
-	await _wait_until_grounded(player, 180)
-	var stamina_at_landing: float = player.stamina_component.current_stamina
-	_expect(is_equal_approx(stamina_at_landing, 75.0), "Landing immediately refilled stamina")
-	await _wait_physics_frames(34)
-	_expect(is_equal_approx(player.stamina_component.current_stamina, stamina_at_landing), "Ground stamina regenerated before 0.60 seconds")
-	await _wait_physics_frames(4)
-	_expect(player.stamina_component.current_stamina > stamina_at_landing, "Ground stamina did not regenerate after delay")
+	player.stamina_component.current_stamina = 50.0
+	player.stamina_component.stamina_regen_timer = 0.0
+	await _wait_physics_frames(60)
+	_expect(player.is_on_floor(), "Ground regeneration player left the floor")
+	_expect(
+		absf(player.stamina_component.current_stamina - 85.0) < 0.4,
+		"One grounded second did not regenerate at the full rate"
+	)
 	_cleanup_world(world)
 	await process_frame
 

@@ -28,10 +28,12 @@ func _process(_delta: float) -> void:
 	var stamina: PlayerStaminaComponent = player.stamina_component
 	var response_time: float = actions.get_attack_input_to_hit_time()
 	var response_text: String = "--" if response_time < 0.0 else "%.3fs" % response_time
-	var regeneration_state: String = (
-		"READY"
-		if player.is_on_floor() and not actions.is_action_active()
-		else "BLOCKED"
+	var regeneration_blocked: bool = actions.is_stamina_regeneration_blocked()
+	var regeneration_rate: float = stamina.get_regeneration_rate(player.is_on_floor())
+	var regeneration_state: String = "BLOCKED" if regeneration_blocked else (
+		"GROUND %.1f/s" % regeneration_rate
+		if player.is_on_floor()
+		else "AIR %.1f/s" % regeneration_rate
 	)
 	text = (
 		"FLOOR %s   STATE %s/%s   AIR DASH / GROUND DASH TYPE %s   DASH #%d   DIR %+.0f   VX %.1f   VY %.1f\n"

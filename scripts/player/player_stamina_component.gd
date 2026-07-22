@@ -11,6 +11,7 @@ signal stamina_insufficient
 @export_range(0.0, 1000.0, 1.0) var dash_stamina_cost: float = 25.0
 @export_range(0.0, 10.0, 0.01) var stamina_regen_delay: float = 0.60
 @export_range(0.0, 1000.0, 1.0) var stamina_regen_rate: float = 35.0
+@export_range(0.0, 1.0, 0.05) var airborne_stamina_regen_multiplier: float = 0.40
 
 var current_stamina: float = 100.0
 var stamina_regen_timer: float = 0.0
@@ -22,16 +23,23 @@ func _ready() -> void:
 	stamina_changed.emit(current_stamina, max_stamina)
 
 
-func advance(delta: float, regeneration_allowed: bool) -> void:
-	if not regeneration_allowed:
+func advance(delta: float, is_grounded: bool, regeneration_blocked: bool) -> void:
+	if regeneration_blocked:
 		return
 	stamina_regen_timer = maxf(0.0, stamina_regen_timer - delta)
 	if stamina_regen_timer > 0.0 or current_stamina >= max_stamina:
 		return
 	var previous_stamina: float = current_stamina
-	current_stamina = minf(max_stamina, current_stamina + stamina_regen_rate * delta)
+	current_stamina = minf(
+		max_stamina,
+		current_stamina + get_regeneration_rate(is_grounded) * delta
+	)
 	if not is_equal_approx(previous_stamina, current_stamina):
 		stamina_changed.emit(current_stamina, max_stamina)
+
+
+func get_regeneration_rate(is_grounded: bool) -> float:
+	return stamina_regen_rate if is_grounded else stamina_regen_rate * airborne_stamina_regen_multiplier
 
 
 func can_afford_dash() -> bool:

@@ -135,6 +135,10 @@ func is_action_active() -> bool:
 	return _action_state != ActionState.NONE
 
 
+func is_stamina_regeneration_blocked() -> bool:
+	return is_dash_active() or is_dash_attack_active()
+
+
 func is_dash_active() -> bool:
 	return _action_state == ActionState.GROUND_DASH or _action_state == ActionState.AIR_DASH
 

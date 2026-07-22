@@ -58,18 +58,35 @@ func _test_stamina_component_contract() -> void:
 	var stamina: PlayerStaminaComponent = PlayerStaminaComponent.new()
 	get_root().add_child(stamina)
 	_expect(is_equal_approx(stamina.current_stamina, 100.0), "Stamina did not initialize full")
+	_expect(is_equal_approx(stamina.stamina_regen_rate, 35.0), "Ground regeneration rate changed")
+	_expect(
+		is_equal_approx(stamina.airborne_stamina_regen_multiplier, 0.40),
+		"Airborne regeneration multiplier is not 0.40"
+	)
+	_expect(is_equal_approx(stamina.get_regeneration_rate(true), 35.0), "Ground regeneration lookup is wrong")
+	_expect(is_equal_approx(stamina.get_regeneration_rate(false), 14.0), "Airborne regeneration lookup is wrong")
+	stamina.airborne_stamina_regen_multiplier = 0.50
+	_expect(is_equal_approx(stamina.get_regeneration_rate(false), 17.5), "Airborne multiplier is not configurable")
+	stamina.airborne_stamina_regen_multiplier = 0.40
 	_expect(stamina.try_consume_dash(), "First stamina charge was rejected")
 	_expect(is_equal_approx(stamina.current_stamina, 75.0), "Dash did not cost 25 stamina")
-	stamina.advance(2.0, false)
-	_expect(is_equal_approx(stamina.current_stamina, 75.0), "Air/action-blocked time changed stamina")
-	_expect(is_equal_approx(stamina.stamina_regen_timer, 0.60), "Blocked time advanced regeneration delay")
-	stamina.advance(0.59, true)
-	_expect(is_equal_approx(stamina.current_stamina, 75.0), "Stamina regenerated before 0.60 grounded seconds")
-	stamina.advance(0.02, true)
-	_expect(stamina.current_stamina > 75.0, "Stamina did not regenerate after grounded delay")
+	stamina.advance(2.0, false, true)
+	_expect(is_equal_approx(stamina.current_stamina, 75.0), "Blocked Air Dash changed stamina")
+	_expect(is_equal_approx(stamina.stamina_regen_timer, 0.60), "Blocked Dash advanced regeneration delay")
+	stamina.advance(0.59, false, false)
+	_expect(is_equal_approx(stamina.current_stamina, 75.0), "Airborne stamina regenerated before delay")
+	stamina.advance(0.02, false, false)
+	_expect(stamina.current_stamina > 75.0, "Airborne stamina did not regenerate after delay")
+	stamina.current_stamina = 50.0
+	stamina.stamina_regen_timer = 0.0
+	stamina.advance(1.0, true, false)
+	_expect(is_equal_approx(stamina.current_stamina, 85.0), "One grounded second did not restore 35 stamina")
+	stamina.current_stamina = 50.0
+	stamina.advance(1.0, false, false)
+	_expect(is_equal_approx(stamina.current_stamina, 64.0), "One airborne second did not restore 14 stamina")
 	var before_block: float = stamina.current_stamina
-	stamina.advance(1.0, false)
-	_expect(is_equal_approx(stamina.current_stamina, before_block), "Blocked Dash state regenerated stamina")
+	stamina.advance(1.0, true, true)
+	_expect(is_equal_approx(stamina.current_stamina, before_block), "Blocked action regenerated stamina")
 	stamina.queue_free()
 
 
@@ -131,6 +148,7 @@ func _test_air_dash_and_dash_attack_costs() -> void:
 	_expect(is_equal_approx(player.stamina_component.current_stamina, 75.0), "Air Dash did not cost 25")
 	await _tap_action(PlayerScript.ATTACK_ACTION)
 	_expect(player.action_controller.is_dash_attack_active(), "Air Dash did not transition to Dash Attack")
+	_expect(player.action_controller.is_stamina_regeneration_blocked(), "Dash Attack is not marked as a stamina action")
 	_expect(is_equal_approx(player.stamina_component.current_stamina, 75.0), "Dash Attack charged stamina twice")
 	await _tap_action(PlayerScript.DASH_ACTION)
 	_expect(player.action_controller.is_dash_buffered(), "Dash Attack did not retain follow-up Dash input")
@@ -176,6 +194,10 @@ func _test_hud_binding() -> void:
 		await process_frame
 		_expect(is_equal_approx(bar.value, 75.0), "HUD bar did not follow stamina signal")
 		_expect(value_label.text == "075 / 100", "HUD numeric stamina is out of sync")
+		stamina.stamina_regen_timer = 0.0
+		stamina.advance(1.0, false, false)
+		_expect(is_equal_approx(bar.value, 89.0), "HUD did not follow airborne regeneration")
+		_expect(value_label.text == "089 / 100", "HUD airborne regeneration value is out of sync")
 	main.queue_free()
 	await process_frame
 

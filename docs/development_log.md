@@ -1094,3 +1094,87 @@ Status: complete — awaiting manual feel approval
 - Air Dash end begins gravity restoration during its two-frame recovery; there is no separate upward/downward/diagonal Dash or invulnerability.
 - Continuous Air Dash materially widens optional traversal. Current Main remains a laboratory with continuous floor, not a production level; future rooms must preserve a single-jump main route and treat continuous Air Dash as a high-mobility route rather than a mandatory early-game gate.
 - Hurt/Death remain preview placeholders. No enemy, health, damage settlement, Hitbox/Hurtbox, invulnerability, combo tree, Boss, or map redesign was added.
+
+## 2026-07-22 — Configurable airborne stamina regeneration (preflight)
+
+### Goal
+
+- Allow stamina recovery during ordinary ascent and free fall at a configurable fraction of the existing grounded rate.
+- Continue to block recovery during every stamina-consuming Dash/Dash-Attack action.
+- Preserve current movement, gravity, jump, animation, input, collision, Dash cost, and HUD ownership.
+
+### Baseline audit
+
+- Clean worktree at `e8af02b feat: add continuous air dash stamina chains`.
+- `PlayerStaminaComponent` owns `max_stamina=100`, `dash_stamina_cost=25`, `stamina_regen_delay=0.60`, `stamina_regen_rate=35`, the current value/timer, and typed UI signals.
+- `Player` currently calls `advance(delta, was_on_floor and not action_controller.is_action_active())`; airborne time and all actions therefore freeze both regeneration and its delay.
+- Successful Ground/Air Dash segments and direct Dash Attack are the only stamina spenders. Dash-to-Dash-Attack does not double-charge; a follow-up Dash pays normally. Jump, debug double jump, and normal Attack cost zero. No separate evade/dodge action exists.
+- `PlayerStaminaHud` only observes `stamina_changed` and `stamina_insufficient`; it owns no resource math.
+
+### Planned files and tests
+
+- Add an exported 0–1 airborne multiplier to `player_stamina_component.gd`, keep the established 35/s ground rate, and derive the default 14/s airborne rate from multiplier 0.40.
+- Pass contact state and a narrow stamina-action block from `Player`; expose that block query from `PlayerActionController` without changing action behavior.
+- Update optional debug status, README, and stamina/movement specifications.
+- Add deterministic component/integration coverage for ground rate, airborne rate, delay progress, Dash/Dash-Attack blocking, zero-cost Attack allowance, and signal-driven HUD updates; rerun all existing movement/action suites and Main startup.
+
+### Scope guard
+
+- Do not modify movement speed/acceleration, gravity, jump velocity/height, coyote time, input buffers, Dash physics, animation frames, collision, enemy/combat systems, or level geometry.
+- Do not add stamina costs to Jump, Double Jump, or normal Attack in this task.
+
+### Delivered implementation
+
+- Added exported `airborne_stamina_regen_multiplier=0.40` to `PlayerStaminaComponent`. The existing grounded `stamina_regen_rate=35` is preserved, producing a default derived airborne rate of 14/s. `get_regeneration_rate(is_grounded)` is the single rate calculation path and supports inspector/runtime tuning without business-logic literals.
+- Changed stamina advancement to accept `is_grounded` and `regeneration_blocked`. When unblocked, the existing 0.60-second delay now advances on ground or in ordinary air; recovery then uses the contact-appropriate rate. A blocked paid action freezes both value and delay exactly as before.
+- Added `PlayerActionController.is_stamina_regeneration_blocked()`, limited to Ground Dash, Air Dash, and Dash Attack—the only current stamina-consuming action states. Zero-cost normal Attack, Jump, Double Jump, Jump Loop, and Fall do not block recovery.
+- `Player` now forwards its pre-move floor contact plus that narrow action query. No velocity, gravity, jump, coyote, buffer, collision, animation, or action-transition values changed.
+- Kept the functional HUD signal-only. `stamina_changed` continues to update its bar/value for ground and air recovery. Updated optional diagnostics to show `GROUND 35.0/s`, `AIR 14.0/s`, or `BLOCKED`.
+- Updated README and movement/combat/stamina specifications. No scene structure or UI calculation ownership changed.
+
+### Commands and actual results
+
+1. Exact Godot 4.7.1 import after implementation:
+   - `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_airborne_stamina_final_import.log`
+   - Exit 0; no parse, script, resource, or warning output.
+2. Exact serial regression suite:
+   - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
+   - `validate_player_animation_assets.gd`: `PASS (33 frames + 4 byte-identical references)`.
+   - `test_player_animation_system.gd`: `PASS (16 animations, segmented Ground/Air Dash verified)`.
+   - `test_m1_player_movement.gd`: `PASS (movement, jump assists, collision, camera, six animations)`.
+   - `test_m15_player_actions.gd`: `PASS (split Ground Dash, chained Air Dash, thrust Attack)`.
+   - `test_dash_attack.gd`: `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+   - `test_fast_attack.gd`: `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`.
+   - `test_chain_dash_stamina.gd`: `PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)`.
+   - `test_continuous_air_dash.gd`: `PASS (four Air segments, mixed pool, direction, gravity, collision)`.
+   - `measure_player_level_metrics.gd`: primary envelopes unchanged—single jump 153.59/83.77, double jump 281.92/167.10, four-Air-Dash action range 344.00 px.
+3. After adding explicit configurable-multiplier, normal-Attack, and Dash-Attack block assertions, both stamina suites were rerun independently and passed.
+4. Main runtime render:
+   - `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --path . --write-movie /tmp/nocturne_keep_airborne_stamina_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy --log-file /tmp/nocturne_keep_airborne_stamina_main.log`
+   - Exit 0; GL Compatibility on Apple M4, two 1280×720 frames, no red errors/warnings. Original-resolution inspection confirmed the fixed HUD and `REGEN GROUND 35.0/s` debug status are readable.
+5. `git diff --check`: passed.
+
+### Automated acceptance results
+
+- Export default is 0.40 and changing it to 0.50 changes the derived air rate from 14.0 to 17.5 without code-branch edits.
+- One unblocked grounded second restores exactly 35; one unblocked airborne second restores exactly 14 at defaults.
+- Airborne time advances the 0.60-second delay. No value is restored before expiry; reduced-rate recovery begins afterward.
+- Air Dash and Dash Attack leave both current value and delay unchanged throughout their action. Ground Dash uses the same blocking query.
+- Zero-cost airborne normal Attack continues reduced-rate recovery. Jump and double jump remain zero-cost and use the ordinary air rule.
+- Spend costs, four-segment shared pool, failed fifth Dash, Dash Attack no-double-charge, continuous Dash, wall collision, movement/jump metrics, and animation state tests remain green.
+- The signal-driven HUD reflected an airborne component step from 75 to 89 immediately; it still owns no gameplay math.
+
+### Manual acceptance requested
+
+1. Spend stamina, jump/fall without Dashing, and confirm the bar starts rising slowly after the same 0.60-second delay.
+2. Compare airborne recovery with grounded recovery and judge whether the default 40% relationship feels appropriate.
+3. Air Dash or Dash Attack during the delay/recovery and confirm the bar freezes until the paid action finishes.
+4. Use normal Attack in air and confirm it does not freeze the bar under the current zero-cost design.
+5. Toggle `ACTION DEBUG HUD` and verify `GROUND 35.0/s`, `AIR 14.0/s`, and `BLOCKED` match the actual state.
+
+### Known limitations and handoff
+
+- Ground recovery remains 35/s rather than the prompt's illustrative 20/s value so this targeted change does not alter established ground recovery feel. The exported property remains configurable.
+- Recovery delay is paused during paid Dash/Dash-Attack actions, preserving the prior action-blocking contract; ordinary airborne time now advances it.
+- Normal Attack is allowed to recover because it currently costs zero. If later work assigns it a stamina cost, its block state must be changed with that same cost decision.
+- No dodge action currently exists. No stamina cost, movement, combat, enemy, Boss, damage, Hitbox/Hurtbox, invulnerability, animation, or level change was added.

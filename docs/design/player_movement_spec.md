@@ -21,7 +21,7 @@ Player (CharacterBody2D)
 └── ActionController
 ```
 
-`Player` owns CharacterBody2D physics and locomotion selection. `PlayerActionController` owns action exclusion, edge-triggered buffers, Dash timing/direction, and lifecycle signals. `PlayerStaminaComponent` alone owns stamina spending and grounded regeneration. `PlayerAnimationController` owns SpriteFrames presentation, priority, locks, and facing.
+`Player` owns CharacterBody2D physics and locomotion selection. `PlayerActionController` owns action exclusion, edge-triggered buffers, Dash timing/direction, lifecycle signals, and the narrow query that identifies stamina-consuming action states. `PlayerStaminaComponent` alone owns stamina spending and ground/air regeneration rates. `PlayerAnimationController` owns SpriteFrames presentation, priority, locks, and facing.
 
 ## Input Map
 
@@ -110,4 +110,4 @@ Hurt/Death remain preview-only placeholders. Legal transitions include GroundDas
 
 ## Acceptance boundary
 
-Automated coverage verifies Ground/Air four-segment chains, the shared mixed pool, rejected fifth input without spending, held-Shift non-repeat, one-entry buffering, Air direction reselection and within-segment lock, segmented presentation, wall collision, airborne regeneration blocking, grounded-only delay/rate, Dash Attack no-double-charge and follow-up Dash, HUD synchronization, and Main/preview regression. Player feel and route fairness still require manual playtesting.
+Automated coverage verifies Ground/Air four-segment chains, the shared mixed pool, rejected fifth input without spending, held-Shift non-repeat, one-entry buffering, Air direction reselection and within-segment lock, segmented presentation, wall collision, full grounded regeneration, 40% ordinary-air regeneration, paid-action blocking, Dash Attack no-double-charge and follow-up Dash, HUD synchronization, and Main/preview regression. Player feel and route fairness still require manual playtesting.

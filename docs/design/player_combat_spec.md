@@ -65,7 +65,7 @@ Changing these cancellation rules requires a later explicit design decision.
 
 ## Stamina boundary
 
-`PlayerStaminaComponent` is a movement-resource dependency, not a combat resolver. Normal Attack, jump, and double jump currently cost zero. Every successful Ground/Air Dash segment requests one shared 25-point charge; Dash Attack reuses the current paid action, while a post-Dash-Attack Dash pays as a new segment. The component exposes value/depleted/insufficient signals and contains no health, damage, target, or invulnerability behavior. Recovery is grounded-only and is blocked by Attack/Dash actions.
+`PlayerStaminaComponent` is a movement-resource dependency, not a combat resolver. Normal Attack, jump, and double jump currently cost zero. Every successful Ground/Air Dash segment requests one shared 25-point charge; Dash Attack reuses the current paid action, while a post-Dash-Attack Dash pays as a new segment. The component exposes value/depleted/insufficient signals and contains no health, damage, target, or invulnerability behavior. Paid Ground/Air Dash and Dash Attack states block recovery. Zero-cost normal Attack does not: it uses the full grounded rate or reduced airborne rate according to contact.
 
 ## Diagnostics and acceptance
 

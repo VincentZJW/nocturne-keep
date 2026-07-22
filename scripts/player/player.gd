@@ -99,7 +99,8 @@ func _physics_process(delta: float) -> void:
 	)
 	stamina_component.advance(
 		delta,
-		was_on_floor and not action_controller.is_action_active()
+		was_on_floor,
+		action_controller.is_stamina_regeneration_blocked()
 	)
 	if (
 		action_controller.is_air_dash_gravity_suspended()
