@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://hnb6e0ckgeuw"
-path="res://.godot/imported/air_dash_04.png-e133a1e9168367f498b3bf7ba10ab25b.ctex"
+uid="uid://dlridgilmb4lj"
+path="res://.godot/imported/air_dash_5f_05.png-04ec24f14410d532fd89dfd791d90bfb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/player/assassin/air_dash/air_dash_04.png"
-dest_files=["res://.godot/imported/air_dash_04.png-e133a1e9168367f498b3bf7ba10ab25b.ctex"]
+source_file="res://assets/sprites/player/assassin/reference/deprecated_air_dash_five_frame/air_dash_5f_05.png"
+dest_files=["res://.godot/imported/air_dash_5f_05.png-04ec24f14410d532fd89dfd791d90bfb.ctex"]
 
 [params]
 

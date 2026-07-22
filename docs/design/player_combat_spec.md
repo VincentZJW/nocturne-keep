@@ -1,6 +1,6 @@
 # Player Action/Combat Interface Specification
 
-Version: 0.2 — Dash-chain stamina compatibility
+Version: 0.3 — continuous Ground/Air Dash handoff
 Date: 2026-07-22
 Status: presentation and input contract only; no damage system
 
@@ -41,7 +41,9 @@ This is repetition of one basic Attack, not a formal combo tree: there are no br
 - Movement: 320 px/s for 0.15 seconds, then 0.10 seconds of linear deceleration through `CharacterBody2D.velocity` and `move_and_slide()`.
 - Dash Attack does not repeat from the normal Attack buffer and cannot be restarted by repeated J/Shift.
 - A legal Dash or same-frame Shift+J spends one 25-point Dash charge. Transitioning that active Dash into Dash Attack never spends a second charge.
-- Entering Dash Attack clears any pending Ground Dash request. Shift during Dash Attack cannot restart presentation or queue a follow-up; a later independent Shift may begin a new Dash only after completion.
+- Entering Dash Attack clears any request buffered before the transition. A new independent Shift edge during Dash Attack stores one follow-up without restarting presentation.
+- At completion, a live affordable follow-up starts a new paid Ground Dash or Air Dash according to actual floor contact. It inherits the buffered direction, increments the Dash chain number, and clears the request after one consumption.
+- The follow-up costs the normal 25 points; the Dash Attack transition itself still never charges the already-paid current Dash. If stamina is insufficient, the request is cleared and locomotion resumes.
 
 Future metadata-only effective frames are `dash_attack_03` and `dash_attack_04`. A future hitbox would be longer and narrow, face forward, disable outside the window, and remember targets once per action. None of this future behavior is instantiated now.
 
@@ -57,14 +59,14 @@ Hurt/Death remain preview-only placeholders. In the current Gameplay prototype:
 - Dash cannot cancel Attack;
 - Attack cannot cancel Dash Attack;
 - a legal Attack buffer may repeat only Attack;
-- Dash Attack completion restores grounded or airborne locomotion from actual contact state.
+- Dash Attack completion either consumes one legal Dash follow-up from actual contact state or restores grounded/airborne locomotion.
 
 Changing these cancellation rules requires a later explicit design decision.
 
 ## Stamina boundary
 
-`PlayerStaminaComponent` is a movement-resource dependency, not a combat resolver. Normal Attack, jump, and double jump currently cost zero. Ground Dash and Air Dash each request one 25-point charge at successful start; Dash Attack reuses that paid action. The component exposes value/depleted/insufficient signals and contains no health, damage, target, or invulnerability behavior.
+`PlayerStaminaComponent` is a movement-resource dependency, not a combat resolver. Normal Attack, jump, and double jump currently cost zero. Every successful Ground/Air Dash segment requests one shared 25-point charge; Dash Attack reuses the current paid action, while a post-Dash-Attack Dash pays as a new segment. The component exposes value/depleted/insufficient signals and contains no health, damage, target, or invulnerability behavior. Recovery is grounded-only and is blocked by Attack/Dash actions.
 
 ## Diagnostics and acceptance
 
-The optional Main debug HUD can be disabled and reports current Attack frame, buffer flag, remaining buffer time, chain-window state, and measured input-to-`attack_02` time. Automated tests cover immediate dispatch, every four-frame pose, a single early buffer, one-time consumption, four deliberate repeated Attacks, locomotion/facing locks, and the approximately 0.25-second Dash Attack.
+The optional Main debug HUD can be disabled and reports current Attack frame, both buffer flags/timers, Dash type/number/direction, chain-window state, and measured input-to-`attack_02` time. Automated tests cover immediate dispatch, every four-frame pose, a single early Attack buffer, one-time consumption, four deliberate repeated Attacks, locomotion/facing locks, the approximately 0.25-second Dash Attack, no-double-charge transition, and its paid Ground/Air Dash follow-up.

@@ -28,18 +28,28 @@ func _process(_delta: float) -> void:
 	var stamina: PlayerStaminaComponent = player.stamina_component
 	var response_time: float = actions.get_attack_input_to_hit_time()
 	var response_text: String = "--" if response_time < 0.0 else "%.3fs" % response_time
+	var regeneration_state: String = (
+		"READY"
+		if player.is_on_floor() and not actions.is_action_active()
+		else "BLOCKED"
+	)
 	text = (
-		"STATE %s   ANIM %s   VX %.1f   AIR DASH %s   DASH #%d\n"
-		+ "STAMINA %.1f/%.1f   REGEN %.2fs   DASH BUFFER %s (%.2fs)   COMBO WINDOW %s   USED %s\n"
-		+ "ATTACK FRAME %d/4   BUFFERED %s   TIMER %.3fs   CHAIN %s   INPUT→HIT %s"
+		"FLOOR %s   STATE %s/%s   AIR DASH / GROUND DASH TYPE %s   DASH #%d   DIR %+.0f   VX %.1f   VY %.1f\n"
+		+ "ANIM %s   STAMINA %.1f/%.1f   REGEN %s %.2fs   DASH BUFFER %s (%.2fs)\n"
+		+ "COMBO WINDOW %s   USED %s   ATTACK FRAME %d/4   BUFFERED %s   TIMER %.3fs   CHAIN %s   INPUT→HIT %s"
 	) % [
+		"true" if player.is_on_floor() else "false",
 		actions.get_action_state_name(),
-		player.animation_controller.animated_sprite.animation,
-		player.velocity.x,
-		"ready" if player.air_dash_available else "spent",
+		player.get_movement_state_name(),
+		actions.get_dash_type_name(),
 		actions.get_current_dash_number(),
+		actions.get_dash_direction(),
+		player.velocity.x,
+		player.velocity.y,
+		player.animation_controller.animated_sprite.animation,
 		stamina.current_stamina,
 		stamina.max_stamina,
+		regeneration_state,
 		stamina.stamina_regen_timer,
 		"true" if actions.is_dash_buffered() else "false",
 		actions.get_dash_buffer_remaining(),

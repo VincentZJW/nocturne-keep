@@ -18,12 +18,16 @@ const DEPRECATED_DASH_ATTACK_SIX_FRAME_ROOT: String = (
 const DEPRECATED_GROUND_DASH_ROOT: String = (
 	"res://assets/sprites/player/assassin/reference/deprecated_ground_dash_five_frame"
 )
+const DEPRECATED_AIR_DASH_ROOT: String = (
+	"res://assets/sprites/player/assassin/reference/deprecated_air_dash_five_frame"
+)
 const ANIMATION_ORDER: Array[String] = [
-	"idle", "run", "dash_start", "dash_loop", "dash_end", "air_dash", "attack", "dash_attack",
+	"idle", "run", "dash_start", "dash_loop", "dash_end", "air_dash_start",
+	"air_dash_loop", "air_dash_end", "attack", "dash_attack",
 ]
 const FRAME_COUNTS: Dictionary[String, int] = {
 	"idle": 4, "run": 6, "dash_start": 2, "dash_loop": 3, "dash_end": 2,
-	"air_dash": 5, "attack": 4,
+	"air_dash_start": 2, "air_dash_loop": 3, "air_dash_end": 2, "attack": 4,
 	"dash_attack": 5,
 }
 
@@ -35,7 +39,9 @@ static func generate_all() -> Dictionary[String, Array]:
 		"dash_start": _render_poses(_dash_start_poses()),
 		"dash_loop": _render_poses(_dash_loop_poses()),
 		"dash_end": _render_poses(_dash_end_poses()),
-		"air_dash": _render_poses(_air_dash_poses()),
+		"air_dash_start": _render_poses(_air_dash_start_poses()),
+		"air_dash_loop": _render_poses(_air_dash_loop_poses()),
+		"air_dash_end": _render_poses(_air_dash_end_poses()),
 		"attack": _render_poses(_attack_poses()),
 		"dash_attack": _render_poses(_dash_attack_poses()),
 	}
@@ -143,6 +149,36 @@ static func remove_archived_ground_dash_source() -> Dictionary[String, int]:
 		)
 		var archived: String = DEPRECATED_GROUND_DASH_ROOT.path_join(
 			"ground_dash_5f_%02d.png" % frame_index
+		)
+		var source_bytes: PackedByteArray = FileAccess.get_file_as_bytes(source)
+		var archived_bytes: PackedByteArray = FileAccess.get_file_as_bytes(archived)
+		if source_bytes.is_empty() or source_bytes != archived_bytes:
+			results[source] = ERR_INVALID_DATA
+			continue
+		var absolute_source: String = ProjectSettings.globalize_path(source)
+		results[source] = DirAccess.remove_absolute(absolute_source)
+		var import_sidecar: String = absolute_source + ".import"
+		if FileAccess.file_exists(import_sidecar):
+			DirAccess.remove_absolute(import_sidecar)
+	return results
+
+
+static func archive_air_dash_source() -> Dictionary[String, int]:
+	var results: Dictionary[String, int] = {}
+	_archive_sequence(
+		"air_dash", 5, DEPRECATED_AIR_DASH_ROOT, "air_dash_5f", results
+	)
+	return results
+
+
+static func remove_archived_air_dash_source() -> Dictionary[String, int]:
+	var results: Dictionary[String, int] = {}
+	for frame_index: int in range(1, 6):
+		var source: String = OUTPUT_ROOT.path_join("air_dash").path_join(
+			"air_dash_%02d.png" % frame_index
+		)
+		var archived: String = DEPRECATED_AIR_DASH_ROOT.path_join(
+			"air_dash_5f_%02d.png" % frame_index
 		)
 		var source_bytes: PackedByteArray = FileAccess.get_file_as_bytes(source)
 		var archived_bytes: PackedByteArray = FileAccess.get_file_as_bytes(archived)
@@ -268,11 +304,23 @@ static func _dash_end_poses() -> Array[PixelAssassinPose]:
 	]
 
 
-static func _air_dash_poses() -> Array[PixelAssassinPose]:
+static func _air_dash_start_poses() -> Array[PixelAssassinPose]:
 	return [
 		_pose(Vector2i(29, 25), Vector2i(48, 34), Vector2i(23, 39), Vector2i(39, 44), Vector2i(30, 52), Vector2i(29, 45), Vector2i(18, 51), Vector2i(60, 30), Vector2i(12, 47), Vector2i(13, 30)),
 		_pose(Vector2i(31, 26), Vector2i(50, 34), Vector2i(24, 40), Vector2i(37, 43), Vector2i(25, 51), Vector2i(29, 44), Vector2i(16, 49), Vector2i(62, 29), Vector2i(12, 47), Vector2i(11, 29), Vector2i(1, -1)),
+	]
+
+
+static func _air_dash_loop_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(31, 26), Vector2i(50, 34), Vector2i(24, 40), Vector2i(37, 43), Vector2i(25, 51), Vector2i(29, 44), Vector2i(16, 49), Vector2i(62, 29), Vector2i(12, 47), Vector2i(11, 29), Vector2i(1, -1)),
 		_pose(Vector2i(33, 28), Vector2i(51, 35), Vector2i(26, 41), Vector2i(36, 44), Vector2i(23, 50), Vector2i(29, 44), Vector2i(14, 48), Vector2i(63, 30), Vector2i(13, 47), Vector2i(9, 30), Vector2i(1, -1)),
+		_pose(Vector2i(32, 27), Vector2i(50, 34), Vector2i(25, 40), Vector2i(36, 43), Vector2i(24, 49), Vector2i(28, 44), Vector2i(15, 48), Vector2i(62, 29), Vector2i(12, 46), Vector2i(10, 29), Vector2i(1, -1)),
+	]
+
+
+static func _air_dash_end_poses() -> Array[PixelAssassinPose]:
+	return [
 		_pose(Vector2i(32, 27), Vector2i(50, 34), Vector2i(25, 40), Vector2i(36, 43), Vector2i(24, 49), Vector2i(28, 44), Vector2i(15, 48), Vector2i(62, 29), Vector2i(12, 46), Vector2i(10, 29), Vector2i(1, -1)),
 		_pose(Vector2i(29, 25), Vector2i(48, 34), Vector2i(23, 39), Vector2i(41, 46), Vector2i(47, 54), Vector2i(29, 47), Vector2i(21, 54), Vector2i(60, 30), Vector2i(12, 47), Vector2i(14, 31)),
 	]

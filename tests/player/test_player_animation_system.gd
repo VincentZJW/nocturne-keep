@@ -47,6 +47,9 @@ func _validate_resource(sprite_frames: SpriteFrames) -> void:
 	_expect(sprite_frames.get_animation_loop(&"dash_loop"), "dash_loop is not configured to loop")
 	_expect(not sprite_frames.get_animation_loop(&"dash_start"), "dash_start unexpectedly loops")
 	_expect(not sprite_frames.get_animation_loop(&"dash_end"), "dash_end unexpectedly loops")
+	_expect(sprite_frames.get_animation_loop(&"air_dash_loop"), "air_dash_loop is not configured to loop")
+	_expect(not sprite_frames.get_animation_loop(&"air_dash_start"), "air_dash_start unexpectedly loops")
+	_expect(not sprite_frames.get_animation_loop(&"air_dash_end"), "air_dash_end unexpectedly loops")
 
 
 func _validate_source_frames(sprite_frames: SpriteFrames) -> void:
@@ -105,7 +108,7 @@ func _validate_controller(sprite_frames: SpriteFrames) -> void:
 	_expect(controller.is_facing_locked(), "Attack did not lock facing")
 	_expect(not controller.play_loop(&"run"), "Run overrode attack")
 	_expect(not controller.play_one_shot(&"dash_start"), "Dash start overrode higher-priority attack")
-	_expect(not controller.play_one_shot(&"air_dash"), "Air Dash overrode higher-priority attack")
+	_expect(not controller.play_one_shot(&"air_dash_start"), "Air Dash start overrode higher-priority attack")
 	_expect(controller.play_one_shot(&"dash_attack"), "Dash Attack did not override lower-priority attack")
 	_expect(controller.play_one_shot(&"hurt"), "Hurt did not override attack")
 	_expect(not controller.play_one_shot(&"attack"), "Attack overrode hurt")
@@ -132,10 +135,16 @@ func _validate_controller(sprite_frames: SpriteFrames) -> void:
 
 	controller.reset_to_idle()
 	_finished_events.clear()
-	_expect(controller.play_one_shot(&"air_dash"), "Air Dash request was rejected")
+	_expect(controller.play_one_shot(&"air_dash_start"), "Air Dash start request was rejected")
 	await create_timer(0.08).timeout
-	_expect(_finished_events.has(&"air_dash"), "Air Dash did not emit one_shot_finished")
-	_expect(sprite.frame == 4, "Air Dash did not reach its fifth frame")
+	_expect(_finished_events.has(&"air_dash_start"), "Air Dash start did not emit one_shot_finished")
+	_expect(sprite.frame == 1, "Air Dash start did not reach its second frame")
+	_expect(controller.transition_locked_animation(&"air_dash_loop"), "Locked air_dash_loop transition failed")
+	_expect(controller.set_locked_facing_left(true), "Air Dash segment-boundary facing change failed")
+	_expect(sprite.flip_h, "Air Dash segment-boundary facing did not flip")
+	_expect(controller.transition_locked_animation(&"air_dash_end"), "Locked air_dash_end transition failed")
+	await create_timer(0.08).timeout
+	_expect(_finished_events.has(&"air_dash_end"), "Air Dash end did not emit one_shot_finished")
 
 	controller.reset_to_idle()
 	_finished_events.clear()
@@ -215,7 +224,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("PLAYER_ANIMATION_SYSTEM_TEST: PASS (14 animations, segmented Dash locks/signals verified)")
+		print("PLAYER_ANIMATION_SYSTEM_TEST: PASS (16 animations, segmented Ground/Air Dash verified)")
 		quit(0)
 		return
 	for failure: String in _failures:

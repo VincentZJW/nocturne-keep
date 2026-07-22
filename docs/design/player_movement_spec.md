@@ -1,12 +1,12 @@
 # Player Movement Specification
 
-Version: 1.3 — chained Ground Dash and stamina
+Version: 1.4 — continuous Ground/Air Dash with shared stamina
 Date: 2026-07-22
 Status: implemented prototype; no combat resolution
 
 ## Scope
 
-This specification covers the formal M1 locomotion plus the approved M1.5 debug double jump, Ground Dash, horizontal Air Dash, normal Attack, and one buffered Dash Attack transition. It excludes enemies, bosses, damage, Hitbox nodes, hurtboxes, invulnerability, combo trees, and production encounter design.
+This specification covers M1 locomotion plus the approved M1.5 debug double jump, continuous horizontal Ground/Air Dash, normal Attack, and Dash Attack transitions. It excludes enemies, bosses, damage, Hitbox/Hurtbox nodes, invulnerability, combo trees, and production encounter design.
 
 ## Player composition
 
@@ -21,7 +21,7 @@ Player (CharacterBody2D)
 └── ActionController
 ```
 
-`Player` owns CharacterBody2D physics and locomotion selection. `PlayerActionController` owns action mutual exclusion, edge-triggered Dash buffering, timing/direction, and lifecycle signals. `PlayerStaminaComponent` alone owns stamina spending and regeneration. `PlayerAnimationController` owns SpriteFrames presentation, priority, locks, and facing.
+`Player` owns CharacterBody2D physics and locomotion selection. `PlayerActionController` owns action exclusion, edge-triggered buffers, Dash timing/direction, and lifecycle signals. `PlayerStaminaComponent` alone owns stamina spending and grounded regeneration. `PlayerAnimationController` owns SpriteFrames presentation, priority, locks, and facing.
 
 ## Input Map
 
@@ -31,106 +31,83 @@ Player (CharacterBody2D)
 | `player_move_right` | D, Right Arrow | Horizontal input |
 | `player_jump` | Space | Ground/coyote/air jump request |
 | `dash` | Left Shift, Right Shift | Ground or horizontal Air Dash |
-| `attack` | J | Immediate normal Attack or Dash-to-Attack transition request |
+| `attack` | J | Immediate Attack or Dash-to-Dash-Attack request |
 
-Gameplay reads named Input Map actions. It contains no direct Shift key polling.
+Gameplay reads named Input Map actions only; there is no physical Shift polling. Every Dash segment requires a new `Input.is_action_just_pressed("dash")` edge, so holding Shift cannot synthesize a chain.
 
-## Locomotion parameters
+## Tuning
 
-Movement values live in `res://resources/player/player_movement_config.tres`:
+Locomotion values in `resources/player/player_movement_config.tres`:
 
-- maximum horizontal speed: 220 px/s
-- ground acceleration: 1400 px/s²
-- ground deceleration: 1700 px/s²
-- air acceleration: 850 px/s²
-- gravity: 1100 px/s²
-- jump velocity: -420 px/s
-- coyote time: 0.10 seconds
-- jump input buffer: 0.12 seconds
+- move speed 220 px/s; ground acceleration/deceleration 1400/1700 px/s²;
+- air acceleration 850 px/s²; gravity 1100 px/s²; jump velocity -420 px/s;
+- coyote time 0.10 s; jump buffer 0.12 s.
 
-Dash values live in `res://resources/player/player_action_prototype_config.tres`:
+Action values in `resources/player/player_action_prototype_config.tres`:
 
-- Dash speed: 480 px/s
-- motion duration per segment: 0.18 seconds
-- Ground Dash input buffer: 0.10 seconds (one entry)
-- minimum segment interval: 0.03 seconds
-- Dash Attack input window: 0.18 seconds after Dash starts
-- normal Attack input buffer: 0.10 seconds
-- Dash Attack speed: 320 px/s
-- sustained Dash Attack movement: 0.15 seconds
-- linear recovery/deceleration: 0.10 seconds
+- Dash speed 480 px/s; motion duration 0.18 s per paid segment;
+- one-entry Dash input buffer 0.10 s; minimum segment interval 0.03 s;
+- Dash Attack combination window 0.18 s;
+- normal Attack buffer 0.10 s;
+- Dash Attack 320 px/s for 0.15 s plus 0.10 s linear recovery.
 
-The movement plus recovery durations total 0.25 seconds, matching five frames at 20 FPS. Speed is intentionally lower than the 480 px/s Dash so the attack inherits momentum without becoming another full Dash.
+The removed 0.45-second Dash cooldown is not used. Stamina is the chain limiter.
 
 ## Jump and debug double jump
 
 - Ground and coyote jumps do not consume an air jump.
-- `has_double_jump` is the formal capability flag and defaults to `false`.
-- `debug_enable_double_jump` defaults to `true` only in the current trial Player scene.
+- `has_double_jump` is the formal capability flag and defaults false; `debug_enable_double_jump` is true only for the current trial Player.
 - One legal airborne jump consumes `air_jumps_remaining`; a third jump is rejected.
-- Landing restores the available air jump. Coyote time applies only to the ground jump and cannot restore airborne abilities.
-- The same 0.12-second buffer supports a legal ground or air jump, while one input edge can execute at most one jump.
+- Landing restores the air jump. Coyote time applies only to the first jump.
+- The 0.12-second buffer supports legal ground and air jumps, while one input edge executes at most once.
+
+## Unified Dash contract
+
+- Ground and Air Dash use one state controller, one 100-point stamina pool, and one 25-point cost per successful segment.
+- A Dash starts in the current physical domain: grounded becomes `GroundDash`; airborne becomes `AirDash`.
+- Horizontal input at segment start selects direction. With no horizontal input, current facing selects it.
+- Each accepted segment applies `dash_direction * 480` px/s for 0.18 s through `CharacterBody2D.velocity` and `move_and_slide()`.
+- Direction and `AnimatedSprite2D.flip_h` are locked within the segment. For Air Dash, a buffered next segment samples direction again and may reverse.
+- A new Shift edge stores at most one request for 0.10 s. A live request at segment end pays 25 stamina and continues immediately. Consumption clears the request.
+- Failure to pay clears the buffer and starts the appropriate end phase without spending.
+- One held Shift produces one segment. Presentation is never reset per physics frame and collision is never bypassed with direct position mutation.
+
+Full stamina therefore permits any four paid segments: four Ground, four Air, or a mixed total such as two Ground plus two Air.
 
 ## Ground Dash
 
-- Ground Dash starts only while grounded. The first segment plays `dash_start → dash_loop`; an unchained exit plays `dash_end`.
-- With horizontal input, direction follows input; without input, it follows current facing.
-- Ordinary horizontal control is disabled and facing is locked.
-- Each accepted segment applies 480 px/s for 0.18 seconds through `velocity` and `move_and_slide()`.
-- A new Shift edge during the current segment stores one request for 0.10 seconds. At segment end, a live request with at least 25 stamina immediately restarts the motion timer while preserving `dash_loop`.
-- Holding Shift produces no later `is_action_just_pressed()` edges and therefore cannot auto-chain. Extra presses cannot hold more than one buffered segment.
-- If no request is live or stamina is insufficient, the action transitions to two-frame `dash_end`; it never inserts a complete standing pose between legal chained segments.
-- Ground Dash does not consume `air_dash_available`.
+- The first segment presents `dash_start → dash_loop`. Successful continuations stay in the locked looping `dash_loop` and never insert a standing recovery.
+- When chaining stops or stamina is insufficient, `dash_end` plays before grounded locomotion resumes.
+- Ordinary horizontal control is disabled during Dash; facing remains locked to its direction.
 
-## Horizontal Air Dash
+## Continuous horizontal Air Dash
 
-- `air_dash_available` begins true and permits one Air Dash in an airborne cycle.
-- Rising and falling states can start `air_dash`; no upward, downward, or diagonal variants exist.
-- Input direction wins; otherwise current facing determines `dash_direction`.
-- Start sets `velocity.y` to zero. Vertical velocity remains zero and gravity is suspended throughout the Air Dash one-shot.
-- Starting consumes `air_dash_available` immediately. Repeated Shift edges cannot restart the action or grant another Air Dash.
-- Landing reliably resets availability. Coyote time never resets it.
-- Air Dash spends 25 stamina but ignores chained Shift input. There is no legacy 0.45-second cooldown.
-- On completion, normal gravity resumes and animation selection uses actual vertical velocity, entering Jump Loop if rising or Fall otherwise.
+- There is no `air_dash_available`, landing reset, or fixed per-airtime count. Air Dash can chain while rising or falling as long as the shared pool can pay.
+- Starting any Air Dash sets vertical velocity to zero. Gravity is suspended during paid motion segments.
+- The first segment presents `air_dash_start → air_dash_loop`; legal continuations remain in `air_dash_loop` with no Fall or restart phase between them.
+- Each continuation may reselect left/right from that Shift edge. Input cannot turn the current segment.
+- When no continuation succeeds, `air_dash_end` plays. Gravity resumes during this short two-frame recovery, then locomotion resolves from actual vertical velocity to Jump Loop or Fall.
+- Only horizontal Air Dash exists: no upward, downward, diagonal, invulnerable, or collision-bypassing variant.
 
-## Attack prototype
+## Attack and Dash Attack interaction
 
-- J plays one complete dual-dagger lunging-thrust animation and locks facing.
-- It has no movement impulse, so it cannot become a second Dash and cannot bypass collision.
-- Ordinary movement presentation cannot overwrite it. J starts immediately, and `attack_02` arrives after one 20-FPS frame (approximately 0.05 seconds).
-- One further J may be buffered for 0.10 seconds. It is consumed once at `attack_03` or completion and restarts the same four-frame action; it never resets frame zero immediately when pressed.
-- Attack remains uncancellable by Dash in this revision. Frames `attack_02` and `attack_03` are metadata-only reservations for a future narrow forward Hitbox. No Hitbox node or damage logic exists.
+- J begins the four-frame, 20 FPS dual-dagger thrust immediately. One later J can buffer one repeat; movement presentation cannot overwrite it.
+- Attack remains uncancellable by Dash in this revision.
+- J inside the first 0.18 s of Ground/Air Dash transitions to `DashAttack` and inherits direction. Same-frame Shift+J begins a legal direct Dash Attack.
+- Transitioning from an already-paid Dash costs nothing extra. A direct Dash Attack costs one Dash charge.
+- Entering Dash Attack clears a prior Dash buffer. A new Shift edge during Dash Attack may store exactly one follow-up.
+- At Dash Attack completion, a live affordable request starts a new paid GroundDash or AirDash from actual floor contact. This continuation increments the chain number, cannot restart Dash Attack, and cannot restore stamina.
 
-## Dash Attack input and state
+## State and priority
 
-- Shift alone starts Ground Dash or the one permitted Air Dash.
-- J during the first 0.18 seconds of that Dash transitions to `DashAttack`, inherits `dash_direction`, and marks `dash_attack_used=true`.
-- Same-frame Shift+J starts Dash Attack directly when the Dash is legal.
-- J pressed before Shift starts normal Attack immediately. A later Shift is rejected by the preserved no-Dash-cancel rule; there is no standalone-Attack latency for reverse-order pairing.
-- J after the Dash combination window is ignored for Dash Attack and is not leaked into a later action.
-- One Dash can transition once. Dash Attack blocks further Dash and Attack starts and rejects frame-zero restart spam.
-
-### Dash Attack movement
-
-- Movement remains inside `CharacterBody2D.velocity` followed by `move_and_slide()`; no global-position warp is used.
-- The first 0.15 seconds use 320 px/s along inherited Dash direction. The following 0.10 seconds linearly reduce that velocity to zero.
-- Ground completion returns to Run/Idle, or Land if the action contacted the floor from the air.
-- Air Dash Attack keeps vertical velocity at zero and suspends gravity only while the one-shot is active. Completion restores gravity and enters Fall unless a real landing occurred.
-- Starting or completing Air Dash Attack never restores `air_dash_available`; only actual landing does.
-
-## Action priority and recovery
+Explicit states are Idle, Run, Jump, DoubleJump, Fall, GroundDash, AirDash, DashAttack, Attack, and Land. Implemented action priority is:
 
 ```text
-dash_attack > attack > dash_start / dash_loop / dash_end / air_dash > land > jump_start > jump_loop / fall > run > idle
+death > hurt > dash_attack > attack > ground_dash / air_dash > land > jump / fall > run > idle
 ```
 
-- Same-frame Shift/J or J inside an active Dash window resolves to Dash Attack.
-- Normal Attack accepts one next-Attack buffer but rejects Dash; Dash Attack mutually excludes ordinary Attack/Dash input.
-- Ground Dash recovers to Run or Idle from current input.
-- Air Dash recovers to Jump Loop or Fall from vertical state.
-- Attack recovers to Run/Idle when grounded or Jump Loop/Fall when airborne.
-- Dash Attack preserves its ground/air origin for gravity handling and recovers from actual contact state.
+Hurt/Death remain preview-only placeholders. Legal transitions include GroundDash→GroundDash, AirDash→AirDash, either Dash→DashAttack, and DashAttack→GroundDash/AirDash based on contact. Stamina failure, held input, locomotion, or repeated J cannot restart an exclusive action.
 
-## Acceptance boundaries
+## Acceptance boundary
 
-Automated tests additionally verify four full-stamina Ground Dash starts, rejected fifth start without a charge, held-Shift non-repetition, one-entry Dash buffering, segmented presentation, collision-wall stopping, delayed/rate-limited regeneration, Air Dash single-use, Dash Attack no-double-charge, and signal-driven HUD synchronization. Player feel and visual timing still require manual playtesting.
+Automated coverage verifies Ground/Air four-segment chains, the shared mixed pool, rejected fifth input without spending, held-Shift non-repeat, one-entry buffering, Air direction reselection and within-segment lock, segmented presentation, wall collision, airborne regeneration blocking, grounded-only delay/rate, Dash Attack no-double-charge and follow-up Dash, HUD synchronization, and Main/preview regression. Player feel and route fairness still require manual playtesting.

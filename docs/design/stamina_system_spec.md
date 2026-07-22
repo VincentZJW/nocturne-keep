@@ -1,45 +1,56 @@
 # Player Stamina System Specification
 
-Version: 1.0
+Version: 1.1 — shared Dash pool and grounded-only recovery
 Date: 2026-07-22
 Status: implemented functional prototype
 
 ## Scope and ownership
 
-`PlayerStaminaComponent` is a composed child of `Player`. It alone owns the current value, affordability checks, successful Dash charges, regeneration delay/rate, clamping, and typed notifications. `PlayerActionController` requests a Dash charge only when a legal Ground/Air Dash or direct Dash Attack can start. `PlayerStaminaHud` observes signals and never calculates or mutates stamina.
+`PlayerStaminaComponent` is composed under `Player` and solely owns value, affordability, successful charges, grounded recovery timing, clamping, and typed signals. `PlayerActionController` requests charges; `PlayerStaminaHud` observes signals and never calculates or mutates stamina.
 
-This system does not implement health, damage, enemies, invulnerability, equipment modifiers, consumables, or a general skill-resource framework.
+This is not health, damage, equipment, consumable, save, or general skill-resource logic.
 
-## Parameters
+## Parameters and spending
 
 | Parameter | Value |
 | --- | ---: |
-| Maximum/current initial stamina | 100 |
-| Ground/Air Dash cost | 25 |
-| Regeneration delay after last spend | 0.60 s |
-| Regeneration rate | 35/s |
-| Minimum/maximum clamp | 0 / 100 |
+| Initial / maximum stamina | 100 |
+| Ground Dash cost | 25 |
+| Air Dash cost | 25 |
+| Eligible-ground recovery delay | 0.60 s |
+| Recovery rate | 35/s |
+| Clamp | 0–100 |
 
-Normal Attack, Dash Attack transition, jump, and debug double jump add no separate cost. A direct legal Shift+J pays one Dash cost because it creates the Dash Attack without an earlier Dash. A Dash-to-Dash-Attack transition has already paid and is never charged twice.
+- Every successful Ground/Air Dash segment spends 25 immediately and resets the delay to 0.60 s.
+- Ground and Air use the same pool; four accepted segments exhaust full stamina in any combination.
+- A rejected request spends nothing and emits one insufficient signal.
+- Dash→Dash-Attack reuses the paid segment. A direct same-frame Shift+J pays one charge. A Dash-Attack→Dash continuation pays the normal next-segment charge.
+- Normal Attack, jump, and debug double jump cost zero.
 
-## Regeneration
+## Grounded-only recovery
 
-- Every successful Dash spend resets `stamina_regen_timer` to 0.60 seconds.
-- Timer passage is measured from the last spend. No regeneration occurs while Ground Dash, Air Dash, or Dash Attack is active, even if the timer expires during that action.
-- After both conditions clear, stamina increases at 35 points per second and clamps at 100.
-- Landing restores only `air_dash_available`; it does not mutate stamina or its timer.
-- A rejected Dash spends nothing. Repeated landings and held Shift cannot bypass the rules.
+`Player` calls `advance(delta, regeneration_allowed)` with permission only when its pre-move floor state is true and no action is active. If permission is false, the component returns without decrementing its timer.
+
+Consequently:
+
+- Jump, Double Jump, Fall, Air Dash, Ground Dash, Dash Attack, and locked Attack provide zero recovery and zero delay progress.
+- Waiting in the air for any duration leaves both stamina and the remaining 0.60-second delay unchanged.
+- Landing neither refills stamina nor clears the timer. The player must accumulate 0.60 s of eligible grounded, action-free time before recovery begins.
+- Recovery then adds 35 points/s smoothly and clamps at 100.
+- Repeated landings and held Shift cannot bypass this timeline.
 
 ## Signals
 
-- `stamina_changed(current: float, maximum: float)` after a successful spend, regeneration step, reset, or guarded refund.
-- `stamina_depleted()` when a successful charge reaches zero.
-- `stamina_insufficient()` once for each independent legal Dash request that cannot pay 25 points.
+- `stamina_changed(current: float, maximum: float)` after spend, recovery, reset, or guarded refund;
+- `stamina_depleted()` when a successful charge reaches zero;
+- `stamina_insufficient()` for each independent legal request that cannot pay 25.
 
 ## HUD contract
 
-`Main/HUD` is a fixed `CanvasLayer`. `StaminaContainer` contains a 0–100 `ProgressBar` and debug-friendly numeric label. It updates from `stamina_changed`. An insufficient request triggers one short color/position feedback tween; it does not loop. Integer screen offsets and replaceable `StyleBoxFlat` styling keep the prototype UI independent from the gameplay component.
+`Main/HUD` is a fixed `CanvasLayer`. Its 0–100 `ProgressBar` and numeric label update from `stamina_changed`. One insufficient request triggers one bounded feedback tween; it never loops. The replaceable pixel-style appearance contains no resource rules.
+
+The optional Action Debug HUD reports current/maximum value, remaining delay, and `REGEN READY/BLOCKED`, alongside contact/action diagnostics. It can be disabled.
 
 ## Acceptance
 
-Automated coverage verifies exact costs, four starts from full, rejected fifth without a charge, 0.60-second delay, 35/s recovery, blocked recovery during Dash states, held-Shift non-repeat, one Air Dash per airtime, landing non-refill, Dash Attack non-double-charge, wall collision, and HUD synchronization. Manual acceptance remains required for chain rhythm, bar readability, and insufficient-feedback feel.
+Automated coverage verifies exact 25-point costs, four Ground/Air/mixed starts from full, rejected fifth with no cost, completely frozen airborne recovery, 0.60 s eligible-ground delay, 35/s rate, action blocking, Dash Attack no-double-charge and paid follow-up, held-input rejection, wall collision, clamping, signals, and HUD synchronization. Manual acceptance remains required for bar readability and depletion feel.

@@ -1,90 +1,108 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash/air_dash_01.png" id="1_a5k2v"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash/air_dash_02.png" id="2_16h6h"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash/air_dash_03.png" id="3_gun8m"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash/air_dash_04.png" id="4_c4sui"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash/air_dash_05.png" id="5_xx1fi"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_01.png" id="6_4464a"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_02.png" id="7_2pfa4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_03.png" id="8_qxwvr"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_04.png" id="9_24jf0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_01.png" id="10_55v4h"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_02.png" id="11_ehtmf"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_03.png" id="12_ku7ns"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_04.png" id="13_xiblh"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_05.png" id="14_0nl5r"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_end/dash_end_01.png" id="15_gfqnu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_end/dash_end_02.png" id="16_ocls1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_loop/dash_loop_01.png" id="17_en4bu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_loop/dash_loop_02.png" id="18_1lmct"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_loop/dash_loop_03.png" id="19_qmjah"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_start/dash_start_01.png" id="20_wpeam"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_start/dash_start_02.png" id="21_k15el"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_01.png" id="22_jgabi"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_02.png" id="23_lq5ng"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_03.png" id="24_abpko"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_04.png" id="25_shk0q"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_05.png" id="26_mqmq7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_06.png" id="27_to26y"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_07.png" id="28_dsqb0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_08.png" id="29_llady"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/fall/fall_01.png" id="30_1f0s2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/fall/fall_02.png" id="31_tt5fe"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_01.png" id="32_yb02f"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_02.png" id="33_tw35y"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_03.png" id="34_2sa3h"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_01.png" id="35_4qwbe"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_02.png" id="36_7we0j"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_03.png" id="37_fw7k0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_04.png" id="38_nh0vy"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_loop/jump_loop_01.png" id="39_mj13u"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_loop/jump_loop_02.png" id="40_ii043"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_start/jump_start_01.png" id="41_urtc1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_start/jump_start_02.png" id="42_evil7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/land/land_01.png" id="43_jsdpe"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/land/land_02.png" id="44_sw8pp"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_01.png" id="45_w7h42"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_02.png" id="46_edyb4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_03.png" id="47_6xsu0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_04.png" id="48_b8mn4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_05.png" id="49_11ybx"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_06.png" id="50_2vo41"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_end/air_dash_end_01.png" id="1_gun8m"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_end/air_dash_end_02.png" id="2_c4sui"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_loop/air_dash_loop_01.png" id="3_xx1fi"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_loop/air_dash_loop_02.png" id="4_4464a"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_loop/air_dash_loop_03.png" id="5_2pfa4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_start/air_dash_start_01.png" id="6_qxwvr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/air_dash_start/air_dash_start_02.png" id="7_24jf0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_01.png" id="8_55v4h"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_02.png" id="9_ehtmf"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_03.png" id="10_ku7ns"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/attack/attack_04.png" id="11_xiblh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_01.png" id="12_0nl5r"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_02.png" id="13_gfqnu"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_03.png" id="14_ocls1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_04.png" id="15_en4bu"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_attack/dash_attack_05.png" id="16_1lmct"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_end/dash_end_01.png" id="17_qmjah"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_end/dash_end_02.png" id="18_wpeam"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_loop/dash_loop_01.png" id="19_k15el"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_loop/dash_loop_02.png" id="20_jgabi"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_loop/dash_loop_03.png" id="21_lq5ng"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_start/dash_start_01.png" id="22_abpko"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/dash_start/dash_start_02.png" id="23_shk0q"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_01.png" id="24_mqmq7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_02.png" id="25_to26y"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_03.png" id="26_dsqb0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_04.png" id="27_llady"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_05.png" id="28_1f0s2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_06.png" id="29_tt5fe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_07.png" id="30_yb02f"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_death_08.png" id="31_tw35y"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/fall/fall_01.png" id="32_2sa3h"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/fall/fall_02.png" id="33_4qwbe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_01.png" id="34_7we0j"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_02.png" id="35_fw7k0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_03.png" id="36_nh0vy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_01.png" id="37_mj13u"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_02.png" id="38_ii043"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_03.png" id="39_urtc1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_04.png" id="40_evil7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_loop/jump_loop_01.png" id="41_jsdpe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_loop/jump_loop_02.png" id="42_sw8pp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_start/jump_start_01.png" id="43_w7h42"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/jump_start/jump_start_02.png" id="44_edyb4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/land/land_01.png" id="45_6xsu0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/land/land_02.png" id="46_b8mn4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_01.png" id="47_11ybx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_02.png" id="48_2vo41"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_03.png" id="49_0ibfe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_04.png" id="50_2j0gx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_05.png" id="51_bvxvp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/run/run_06.png" id="52_bk1m0"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_a5k2v")
+"texture": ExtResource("1_gun8m")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_16h6h")
-}, {
-"duration": 1.0,
-"texture": ExtResource("3_gun8m")
-}, {
-"duration": 1.0,
-"texture": ExtResource("4_c4sui")
-}, {
-"duration": 1.0,
-"texture": ExtResource("5_xx1fi")
+"texture": ExtResource("2_c4sui")
 }],
 "loop": 0,
-"name": &"air_dash",
+"name": &"air_dash_end",
 "speed": 20.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_4464a")
+"texture": ExtResource("3_xx1fi")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_2pfa4")
+"texture": ExtResource("4_4464a")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_qxwvr")
+"texture": ExtResource("5_2pfa4")
+}],
+"loop": 1,
+"name": &"air_dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_qxwvr")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_24jf0")
+"texture": ExtResource("7_24jf0")
+}],
+"loop": 0,
+"name": &"air_dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_55v4h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ehtmf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ku7ns")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_xiblh")
 }],
 "loop": 0,
 "name": &"attack",
@@ -92,19 +110,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("10_55v4h")
+"texture": ExtResource("12_0nl5r")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_ehtmf")
+"texture": ExtResource("13_gfqnu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("12_ku7ns")
+"texture": ExtResource("14_ocls1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_xiblh")
+"texture": ExtResource("15_en4bu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_0nl5r")
+"texture": ExtResource("16_1lmct")
 }],
 "loop": 0,
 "name": &"dash_attack",
@@ -112,10 +130,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("15_gfqnu")
+"texture": ExtResource("17_qmjah")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_ocls1")
+"texture": ExtResource("18_wpeam")
 }],
 "loop": 0,
 "name": &"dash_end",
@@ -123,13 +141,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("17_en4bu")
+"texture": ExtResource("19_k15el")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_1lmct")
+"texture": ExtResource("20_jgabi")
 }, {
 "duration": 1.0,
-"texture": ExtResource("19_qmjah")
+"texture": ExtResource("21_lq5ng")
 }],
 "loop": 1,
 "name": &"dash_loop",
@@ -137,10 +155,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("20_wpeam")
+"texture": ExtResource("22_abpko")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_k15el")
+"texture": ExtResource("23_shk0q")
 }],
 "loop": 0,
 "name": &"dash_start",
@@ -148,28 +166,28 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("22_jgabi")
+"texture": ExtResource("24_mqmq7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("23_lq5ng")
+"texture": ExtResource("25_to26y")
 }, {
 "duration": 1.0,
-"texture": ExtResource("24_abpko")
+"texture": ExtResource("26_dsqb0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("25_shk0q")
+"texture": ExtResource("27_llady")
 }, {
 "duration": 1.0,
-"texture": ExtResource("26_mqmq7")
+"texture": ExtResource("28_1f0s2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("27_to26y")
+"texture": ExtResource("29_tt5fe")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_dsqb0")
+"texture": ExtResource("30_yb02f")
 }, {
 "duration": 1.0,
-"texture": ExtResource("29_llady")
+"texture": ExtResource("31_tw35y")
 }],
 "loop": 0,
 "name": &"death",
@@ -177,10 +195,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("30_1f0s2")
+"texture": ExtResource("32_2sa3h")
 }, {
 "duration": 1.0,
-"texture": ExtResource("31_tt5fe")
+"texture": ExtResource("33_4qwbe")
 }],
 "loop": 1,
 "name": &"fall",
@@ -188,13 +206,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("32_yb02f")
+"texture": ExtResource("34_7we0j")
 }, {
 "duration": 1.0,
-"texture": ExtResource("33_tw35y")
+"texture": ExtResource("35_fw7k0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("34_2sa3h")
+"texture": ExtResource("36_nh0vy")
 }],
 "loop": 0,
 "name": &"hurt",
@@ -202,16 +220,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("35_4qwbe")
+"texture": ExtResource("37_mj13u")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_7we0j")
+"texture": ExtResource("38_ii043")
 }, {
 "duration": 1.0,
-"texture": ExtResource("37_fw7k0")
+"texture": ExtResource("39_urtc1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("38_nh0vy")
+"texture": ExtResource("40_evil7")
 }],
 "loop": 1,
 "name": &"idle",
@@ -219,10 +237,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("39_mj13u")
+"texture": ExtResource("41_jsdpe")
 }, {
 "duration": 1.0,
-"texture": ExtResource("40_ii043")
+"texture": ExtResource("42_sw8pp")
 }],
 "loop": 1,
 "name": &"jump_loop",
@@ -230,10 +248,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("41_urtc1")
+"texture": ExtResource("43_w7h42")
 }, {
 "duration": 1.0,
-"texture": ExtResource("42_evil7")
+"texture": ExtResource("44_edyb4")
 }],
 "loop": 0,
 "name": &"jump_start",
@@ -241,10 +259,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("43_jsdpe")
+"texture": ExtResource("45_6xsu0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("44_sw8pp")
+"texture": ExtResource("46_b8mn4")
 }],
 "loop": 0,
 "name": &"land",
@@ -252,22 +270,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("45_w7h42")
+"texture": ExtResource("47_11ybx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("46_edyb4")
+"texture": ExtResource("48_2vo41")
 }, {
 "duration": 1.0,
-"texture": ExtResource("47_6xsu0")
+"texture": ExtResource("49_0ibfe")
 }, {
 "duration": 1.0,
-"texture": ExtResource("48_b8mn4")
+"texture": ExtResource("50_2j0gx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("49_11ybx")
+"texture": ExtResource("51_bvxvp")
 }, {
 "duration": 1.0,
-"texture": ExtResource("50_2vo41")
+"texture": ExtResource("52_bk1m0")
 }],
 "loop": 1,
 "name": &"run",

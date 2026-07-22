@@ -50,7 +50,6 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 ) as PlayerStaminaComponent
 
 var air_jumps_remaining: int = 0
-var air_dash_available: bool = true
 var _movement_state: MovementState = MovementState.IDLE
 var _coyote_time_remaining: float = 0.0
 var _jump_buffer_remaining: float = 0.0
@@ -95,15 +94,17 @@ func _physics_process(delta: float) -> void:
 		attack_pressed,
 		dash_pressed,
 		was_on_floor,
-		air_dash_available,
+		horizontal_input,
 		animation_controller.animated_sprite.flip_h
 	)
 	stamina_component.advance(
 		delta,
-		action_controller.is_dash_active() or action_controller.is_dash_attack_active()
+		was_on_floor and not action_controller.is_action_active()
 	)
-	if action_controller.is_air_dash_active() or action_controller.is_airborne_dash_attack_active():
-		air_dash_available = false
+	if (
+		action_controller.is_air_dash_gravity_suspended()
+		or action_controller.is_airborne_dash_attack_active()
+	):
 		velocity.y = 0.0
 	if action_controller.is_dash_active() or action_controller.is_dash_attack_active():
 		velocity.x = action_controller.get_action_horizontal_velocity()
@@ -117,7 +118,6 @@ func _physics_process(delta: float) -> void:
 	var landed_this_frame: bool = not was_on_floor and is_on_floor()
 	if landed_this_frame and not jumped_before_move:
 		_restore_air_jumps()
-		air_dash_available = true
 		_landed_during_action = action_controller.is_action_active()
 		if action_controller.is_action_active() or not _try_consume_jump():
 			_enter_state(MovementState.LAND)
@@ -169,7 +169,7 @@ func _prepare_action_facing(horizontal_input: float) -> void:
 
 func _apply_gravity(delta: float, was_on_floor: bool) -> void:
 	var gravity_suspended: bool = (
-		action_controller.is_air_dash_active()
+		action_controller.is_air_dash_gravity_suspended()
 		or action_controller.is_airborne_dash_attack_active()
 	)
 	if not was_on_floor and not gravity_suspended:

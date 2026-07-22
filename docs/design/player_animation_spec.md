@@ -1,6 +1,6 @@
 # Player Animation Integration Specification
 
-Version: 1.6 — segmented chained Ground Dash
+Version: 1.7 — segmented chained Ground/Air Dash
 Date: 2026-07-22
 Status: M1 locomotion complete; M1.5 Dash/Attack/Dash Attack presentation complete without combat
 
@@ -35,7 +35,9 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 | `dash_start` | 2 | 20 | No | Production |
 | `dash_loop` | 3 | 20 | Yes | Production |
 | `dash_end` | 2 | 20 | No | Production |
-| `air_dash` | 5 | 20 | No | Production |
+| `air_dash_start` | 2 | 20 | No | Production |
+| `air_dash_loop` | 3 | 20 | Yes | Production |
+| `air_dash_end` | 2 | 20 | No | Production |
 | `attack` | 4 | 20 | No | Production fast dual-dagger thrust |
 | `dash_attack` | 5 | 20 | No | Production high-speed dual thrust |
 | `hurt` | 3 | 12 | No | Placeholder |
@@ -43,13 +45,13 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 
 Only Hurt and Death remain placeholders. Their files live under `assets/sprites/player/assassin/placeholder/`, every filename starts with `placeholder_`, and they must not be treated as approved final animation art.
 
-The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The superseded sideways-slash Attack remains in `reference/deprecated_attack_slash/`. The immediately preceding six-frame thrust sequences remain in their deprecated directories. The replaced five-frame Ground Dash is preserved byte-identically in `reference/deprecated_ground_dash_five_frame/`.
+The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The superseded sideways-slash Attack remains in `reference/deprecated_attack_slash/`. The immediately preceding six-frame thrust sequences remain in their deprecated directories. Replaced five-frame Ground and Air Dash sources are preserved byte-identically in `reference/deprecated_ground_dash_five_frame/` and `reference/deprecated_air_dash_five_frame/`.
 
 ## Timing contracts
 
 Ground Dash presentation is deliberately segmented. `dash_start` has two fast compression/drive frames and is used only for the first segment. `dash_loop` has three low, trailing-mantle travel frames and remains locked while 0.18-second motion segments chain. `dash_end` has two extension/recovery frames and plays only when no live paid segment follows. A legal chain therefore remains `dash_start → dash_loop → dash_loop … → dash_end`, with no inserted standing recovery.
 
-Air Dash uses five independent non-looping frames. Its body is lower and more horizontal, both feet are pulled clear of the ground line, both blades remain readable close to the body, and its mantle trails backward. It deliberately avoids the grounded rear-leg push and the Attack's simultaneous extended blades.
+Air Dash follows the same chain grammar: two-frame `air_dash_start`, three-frame locked `air_dash_loop`, and two-frame `air_dash_end`, all at 20 FPS. Only the first paid segment uses start; successful continuations remain in loop; the end phase occurs once after chaining stops. The body is horizontal, both feet stay clear of the ground line, both blades remain close and readable, and the mantle trails backward. It avoids the grounded rear-leg push and the Attack's extended paired blades.
 
 Attack is a synchronous four-frame dual-dagger thrust at 20 FPS: `attack_01` is the short compression, `attack_02` snaps both blades into the first core pose, `attack_03` holds maximum extension and opens the repeat window, and `attack_04` retracts quickly. Both blades point forward and remain vertically separated. The designed delay from J to `attack_02` is one 20-FPS frame, approximately 0.05 seconds. `attack_02` and `attack_03` are reserved as the future narrow forward hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes only metadata; there is no Hitbox or damage.
 
@@ -69,7 +71,7 @@ All six M1 animation groups pass 48×48 nearest-neighbor readability checks. Gro
 ## Priority and lock contract
 
 ```text
-death > hurt > dash_attack > attack > dash_start/dash_loop/dash_end/air_dash > land > jump_start > jump_loop/fall > run > idle
+death > hurt > dash_attack > attack > dash_start/dash_loop/dash_end/air_dash_start/air_dash_loop/air_dash_end > land > jump_start > jump_loop/fall > run > idle
 ```
 
 - Every one-shot locks ordinary lower-priority requests until `animation_finished`.
@@ -85,7 +87,8 @@ death > hurt > dash_attack > attack > dash_start/dash_loop/dash_end/air_dash > l
 
 - All source art faces right.
 - `set_facing_left(true)` sets `flip_h=true`; right sets `flip_h=false`.
-- Attack, Dash Attack, every segmented Ground Dash phase, and Air Dash lock facing for their full action.
+- Attack, Dash Attack, and every segmented Ground/Air Dash phase lock facing.
+- An Air Dash continuation may authoritatively replace locked facing exactly at its paid segment boundary; ordinary mid-segment facing requests remain queued.
 - A facing request received during those locks is queued and applied immediately after completion.
 - Flipping never changes the sprite node position or its parent transforms.
 
@@ -145,12 +148,13 @@ Dedicated inputs extend the M1 map:
 ### Ground and air Dash
 
 - Tuning resource: `player_action_prototype_config.tres`.
-- Speed 480 px/s; each paid travel segment is 0.18 seconds; the Ground Dash buffer is 0.10 seconds and minimum interval is 0.03 seconds.
+- Speed 480 px/s; each paid travel segment is 0.18 seconds; the shared Dash buffer is 0.10 seconds and minimum interval is 0.03 seconds.
 - The first Ground Dash enters `dash_start`, transitions into locked looping `dash_loop`, and reaches `dash_end` only after chaining stops or stamina is insufficient.
 - Ground Dash uses input direction when present, otherwise current facing. It blocks ordinary horizontal control and locks facing until completion.
-- Air Dash is horizontal only. It may start during ascent or descent once per airborne cycle, uses input direction or current facing, zeroes vertical velocity, and suspends gravity for the action. Landing resets `air_dash_available`; coyote time never does.
-- Each successful Ground/Air Dash spends 25 stamina. Ground Dash accepts exactly one later independent Shift edge; holding Shift cannot repeat it. Air Dash ignores chained Shift and remains one use per airborne cycle.
-- After Air Dash, normal gravity resumes and presentation selects Jump Loop or Fall from actual vertical velocity. After Ground Dash, presentation returns to Idle or Run.
+- Air Dash is horizontal only and may start or continue repeatedly during ascent/fall while shared stamina can pay. There is no per-airtime availability flag.
+- The first Air segment enters `air_dash_start`, then locked looping `air_dash_loop`; successful continuations remain in loop and may select a new direction only at the segment boundary. Only final/rejected continuation enters `air_dash_end`.
+- Each successful Ground/Air segment spends 25 stamina and accepts exactly one later independent Shift edge. Holding Shift cannot repeat either form.
+- Air segment start zeroes vertical velocity and suspends gravity. Gravity resumes during the final end phase; presentation then selects Jump Loop/Fall from actual vertical velocity. Ground completion returns to Idle/Run.
 - Dash has no invulnerability, collision bypass, damage, or hitbox behavior.
 
 ### Attack animation trigger
@@ -167,16 +171,17 @@ Dedicated inputs extend the M1 map:
 - Ground/Air Dash opens a 0.18-second combination window. J inside it interrupts the Dash presentation with the higher-priority `dash_attack` one-shot.
 - Same-frame Shift+J starts Dash Attack directly when Dash is legal. J during the existing 0.18-second Dash window also transitions to Dash Attack.
 - J pressed first now starts normal Attack immediately. Because Dash does not cancel Attack, Shift pressed on a later frame does not convert that Attack into Dash Attack.
-- A Dash can use this transition only once. Repeated J/Shift cannot restart Dash Attack, and normal Attack/Dash requests remain blocked until its fifth frame completes.
+- A Dash can use this transition only once. Repeated J cannot restart Dash Attack. One new Shift edge may buffer a paid follow-up Dash without restarting its five-frame presentation.
 - Ground and Air variants share the same animation in this pass. The action component retains airborne origin so physics can suspend gravity and recover to Fall/Land appropriately.
+- On completion, the follow-up becomes Ground or Air Dash from actual contact, uses its stored direction, pays 25, and enters the corresponding start/loop chain. If it cannot pay, locomotion resumes.
 
 ### Active M1.5 priority
 
 ```text
-dash_attack > attack > dash_start/dash_loop/dash_end/air_dash > land > jump_start > jump_loop/fall > run > idle
+dash_attack > attack > ground/air dash phases > land > jump_start > jump_loop/fall > run > idle
 ```
 
-Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts only its bounded one-entry Attack buffer; Dash Attack rejects further ordinary Dash/Attack starts. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
+Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts only its bounded one-entry Attack buffer; Dash Attack rejects Attack starts but may hold one Shift follow-up for its completion. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
 
 ## Pixel display and anchor rules
 
@@ -184,7 +189,7 @@ Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts
 - Source import uses Lossless compression with mipmaps disabled.
 - The project Canvas texture default and preview sprite both use Nearest filtering.
 - Preview scale is the integer value 6×.
-- Grounded production frames use a common visible ground baseline at source row `y=60`; Air Dash keeps all visible feet above that line within the same canvas.
+- Grounded production frames use a common visible ground baseline at source row `y=60`; all Air Dash phases keep visible feet above that line within the same canvas.
 - The animation canvas and centered sprite anchor remain fixed; airborne production poses move pixels within that same canvas.
 - The pre-existing Dash core frame was shifted down one pixel to correct its baseline without changing its pose design.
 
@@ -195,6 +200,7 @@ Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts
 - `restart_locked_one_shot(animation_name) -> bool` for an action-controller-authorized same-animation repeat
 - `transition_locked_animation(animation_name) -> bool` for state-authorized segmented Dash presentation
 - `set_facing_left(facing_left) -> bool`
+- `set_locked_facing_left(facing_left) -> void` for authoritative Air Dash boundary turns
 - `pause()`, `resume()`, `restart_current()`
 - `reset_to_idle()` for preview reset and future respawn ownership
 - `is_animation_locked()`, `is_facing_locked()`
@@ -206,4 +212,4 @@ The controller owns presentation state only. Movement state, health, damage, hit
 
 ## Preview usage
 
-Open `scenes/tools/player_animation_preview.tscn` and run the current scene (`F6`). Fourteen buttons expose every SpriteFrames entry, including independent `dash_start`, `dash_loop`, and `dash_end` inspection. The panel displays current animation, frame, FPS, loop mode, direction, locks, production status, and Attack/Dash Attack metadata windows. Playback can be resumed, paused, restarted, or flipped with dedicated buttons.
+Open `scenes/tools/player_animation_preview.tscn` and run the current scene (`F6`). Sixteen buttons expose every SpriteFrames entry, including independent Ground and Air `start`, `loop`, and `end` phases. The panel displays current animation, frame, FPS, loop mode, direction, locks, production status, and Attack/Dash Attack metadata windows. Playback can be resumed, paused, restarted, or flipped with dedicated buttons.

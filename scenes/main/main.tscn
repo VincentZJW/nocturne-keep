@@ -118,7 +118,7 @@ position = Vector2(320, 612)
 offset_left = 24.0
 offset_top = 22.0
 offset_right = 1010.0
-offset_bottom = 206.0
+offset_bottom = 222.0
 mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.88)
 
@@ -129,7 +129,7 @@ offset_right = 980.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
 theme_override_font_sizes/font_size = 20
-text = "M1.5 · CHAIN DASH + STAMINA LAB"
+text = "M1.5 · GROUND + AIR CHAIN DASH LAB"
 
 [node name="Instructions" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -138,7 +138,7 @@ offset_right = 980.0
 offset_bottom = 74.0
 theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
 theme_override_font_sizes/font_size = 14
-text = "MOVE A/D or ←/→   JUMP SPACE ×2   DASH SHIFT   CHAIN DASH tap SHIFT   ATTACK J   DASH ATTACK SHIFT → J"
+text = "MOVE A/D or ←/→   JUMP SPACE ×2   GROUND/AIR DASH SHIFT   CHAIN tap SHIFT   DASH ATTACK SHIFT → J"
 
 [node name="DebugAbility" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -161,10 +161,10 @@ text = "ACTION DEBUG HUD"
 offset_left = 16.0
 offset_top = 112.0
 offset_right = 980.0
-offset_bottom = 198.0
+offset_bottom = 214.0
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
 theme_override_font_sizes/font_size = 13
-text = "STATE None   COMBO WINDOW closed   USED false   AIR DASH ready   VX 0.0"
+text = "FLOOR true   STATE None/idle   AIR DASH / GROUND DASH TYPE None   DASH #0   STAMINA 100"
 script = ExtResource("2_debug")
 
 [node name="HUD" type="CanvasLayer" parent="."]

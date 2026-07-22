@@ -10,14 +10,16 @@ signal facing_changed(facing_left: bool)
 const ATTACK_HIT_FRAMES: Array[int] = [1, 2]
 const DASH_ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 const LOOP_ANIMATIONS: Array[StringName] = [
-	&"idle", &"run", &"jump_loop", &"fall", &"dash_loop",
+	&"idle", &"run", &"jump_loop", &"fall", &"dash_loop", &"air_dash_loop",
 ]
 const ONE_SHOT_ANIMATIONS: Array[StringName] = [
-	&"jump_start", &"land", &"dash_start", &"dash_end", &"air_dash", &"attack", &"dash_attack",
+	&"jump_start", &"land", &"dash_start", &"dash_end", &"air_dash_start", &"air_dash_end",
+	&"attack", &"dash_attack",
 	&"hurt", &"death",
 ]
 const FACING_LOCK_ANIMATIONS: Array[StringName] = [
-	&"dash_start", &"dash_loop", &"dash_end", &"air_dash", &"attack", &"dash_attack",
+	&"dash_start", &"dash_loop", &"dash_end", &"air_dash_start", &"air_dash_loop",
+	&"air_dash_end", &"attack", &"dash_attack",
 ]
 const PRIORITIES: Dictionary[StringName, int] = {
 	&"idle": 10,
@@ -29,7 +31,9 @@ const PRIORITIES: Dictionary[StringName, int] = {
 	&"dash_start": 70,
 	&"dash_loop": 70,
 	&"dash_end": 70,
-	&"air_dash": 70,
+	&"air_dash_start": 70,
+	&"air_dash_loop": 70,
+	&"air_dash_end": 70,
 	&"attack": 80,
 	&"dash_attack": 85,
 	&"hurt": 90,
@@ -116,6 +120,17 @@ func set_facing_left(facing_left: bool) -> bool:
 		_pending_facing_left = facing_left
 		_has_pending_facing = true
 		return false
+	if animated_sprite.flip_h == facing_left:
+		return true
+	animated_sprite.flip_h = facing_left
+	facing_changed.emit(facing_left)
+	return true
+
+
+func set_locked_facing_left(facing_left: bool) -> bool:
+	if animated_sprite == null or not _facing_locked:
+		return false
+	_has_pending_facing = false
 	if animated_sprite.flip_h == facing_left:
 		return true
 	animated_sprite.flip_h = facing_left

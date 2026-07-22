@@ -26,14 +26,14 @@ color = Color(0.027, 0.043, 0.067, 1)
 [node name="FloorGlow" type="ColorRect" parent="."]
 layout_mode = 0
 offset_left = 264.0
-offset_top = 490.0
+offset_top = 440.0
 offset_right = 760.0
-offset_bottom = 494.0
+offset_bottom = 444.0
 mouse_filter = 2
 color = Color(0.376, 0.478, 0.565, 0.45)
 
 [node name="Player" type="Node2D" parent="."]
-position = Vector2(512, 322)
+position = Vector2(512, 272)
 
 [node name="VisualRoot" type="Node2D" parent="Player"]
 
@@ -75,10 +75,10 @@ text = "THE NIGHT WARDEN · SPRITEFRAMES PREVIEW"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
 theme_override_font_sizes/font_size = 15
-text = "64×64 · 6× nearest-neighbor · 14 named animations · placeholders explicitly labeled"
+text = "64×64 · 6× nearest-neighbor · 16 named animations · placeholders explicitly labeled"
 
 [node name="Spacer" type="Control" parent="Margin/Layout"]
-custom_minimum_size = Vector2(0, 400)
+custom_minimum_size = Vector2(0, 350)
 layout_mode = 2
 
 [node name="Metadata" type="GridContainer" parent="Margin/Layout"]
@@ -221,35 +221,47 @@ custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
 text = "9 · dash_end"
 
-[node name="AirDashButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+[node name="AirDashStartButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "0 · air_dash"
+text = "0 · air_dash_start"
+
+[node name="AirDashLoopButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "− · air_dash_loop"
+
+[node name="AirDashEndButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "= · air_dash_end"
 
 [node name="AttackButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "− · attack"
+text = "[ · attack"
 
 [node name="DashAttackButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "= · dash_attack"
+text = "] · dash_attack"
 
 [node name="HurtButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "[ · hurt [P]"
+text = "; · hurt [P]"
 
 [node name="DeathButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
-text = "] · death [P]"
+text = "' · death [P]"
 
 [node name="PlaybackButtons" type="HBoxContainer" parent="Margin/Layout"]
 layout_mode = 2

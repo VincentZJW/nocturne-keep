@@ -15,6 +15,18 @@ func _initialize() -> void:
 
 
 func _build() -> void:
+	if OS.get_cmdline_user_args().has("--remove-archived-air-dash-source"):
+		var removal_results: Dictionary[String, int] = ProductionGenerator.remove_archived_air_dash_source()
+		var removal_failures: int = _count_failures(removal_results)
+		print("PLAYER_AIR_DASH_REMOVAL: %d files, %d failures" % [removal_results.size(), removal_failures])
+		quit(0 if removal_failures == 0 else 1)
+		return
+	if OS.get_cmdline_user_args().has("--archive-air-dash-source"):
+		var archive_results: Dictionary[String, int] = ProductionGenerator.archive_air_dash_source()
+		var archive_failures: int = _count_failures(archive_results)
+		print("PLAYER_AIR_DASH_ARCHIVE: %d files, %d failures" % [archive_results.size(), archive_failures])
+		quit(0 if archive_failures == 0 else 1)
+		return
 	if OS.get_cmdline_user_args().has("--remove-archived-ground-dash-source"):
 		var removal_results: Dictionary[String, int] = ProductionGenerator.remove_archived_ground_dash_source()
 		var removal_failures: int = _count_failures(removal_results)

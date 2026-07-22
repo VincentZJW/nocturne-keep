@@ -54,7 +54,7 @@ func _test_immediate_response_and_complete_frames() -> void:
 	var actions: PlayerActionController = player.action_controller
 	var sprite: AnimatedSprite2D = player.animation_controller.animated_sprite
 	await _wait_physics_frames(4)
-	var accepted: bool = actions.try_start_actions(true, false, true, true, false)
+	var accepted: bool = actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(accepted, "Immediate Attack request was rejected")
 	_expect(actions.get_action_name() == &"attack", "J did not start Attack on its first physics edge")
 	_expect(sprite.animation == &"attack" and sprite.frame == 0, "Immediate Attack did not begin at frame 01")
@@ -82,10 +82,10 @@ func _test_early_buffer_and_single_consumption() -> void:
 	_attack_started_count = 0
 	actions.action_started.connect(_on_action_started)
 	await _wait_physics_frames(4)
-	actions.try_start_actions(true, false, true, true, false)
+	actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(_attack_started_count == 1, "Initial Attack emitted the wrong start count")
 	# Press again during the locked first half. It must buffer, not reset frame 01.
-	actions.try_start_actions(true, false, true, true, false)
+	actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(actions.is_attack_buffered(), "Second early J was not buffered")
 	_expect(_attack_started_count == 1, "Buffered J immediately restarted Attack")
 	_expect(actions.get_attack_buffer_remaining() > 0.0, "Attack buffer timer did not start")
@@ -93,12 +93,12 @@ func _test_early_buffer_and_single_consumption() -> void:
 	sprite.frame = 1
 	sprite.frame_changed.emit()
 	actions.advance(0.05)
-	actions.try_start_actions(false, false, true, true, false)
+	actions.try_start_actions(false, false, true, 0.0, false)
 	_expect(_attack_started_count == 1, "Attack chained before attack_03")
 	sprite.frame = 2
 	sprite.frame_changed.emit()
 	actions.advance(0.05)
-	actions.try_start_actions(false, false, true, true, false)
+	actions.try_start_actions(false, false, true, 0.0, false)
 	_expect(_attack_started_count == 2, "Buffered Attack was not consumed at the chain window")
 	_expect(not actions.is_attack_buffered(), "Consumed Attack buffer was not cleared")
 	sprite.frame = 3
@@ -116,7 +116,7 @@ func _test_deliberate_repeated_chains() -> void:
 	_attack_started_count = 0
 	actions.action_started.connect(_on_action_started)
 	await _wait_physics_frames(4)
-	actions.try_start_actions(true, false, true, true, false)
+	actions.try_start_actions(true, false, true, 0.0, false)
 	for chain_index: int in range(3):
 		sprite.frame = 1
 		sprite.frame_changed.emit()
@@ -124,7 +124,7 @@ func _test_deliberate_repeated_chains() -> void:
 		sprite.frame = 2
 		sprite.frame_changed.emit()
 		_expect(actions.can_chain_attack(), "Attack %d never opened its frame-03 chain window" % (chain_index + 1))
-		actions.try_start_actions(true, false, true, true, false)
+		actions.try_start_actions(true, false, true, 0.0, false)
 		_expect(
 			_attack_started_count == chain_index + 2,
 			"Chain %d did not restart exactly once" % (chain_index + 1)
@@ -148,13 +148,13 @@ func _test_movement_and_facing_lock() -> void:
 	var actions: PlayerActionController = player.action_controller
 	var sprite: AnimatedSprite2D = player.animation_controller.animated_sprite
 	await _wait_physics_frames(4)
-	actions.try_start_actions(true, false, true, true, false)
+	actions.try_start_actions(true, false, true, 0.0, false)
 	var facing_change_accepted: bool = player.animation_controller.set_facing_left(true)
 	_expect(actions.get_action_name() == &"attack", "Movement cancelled active Attack")
 	_expect(sprite.animation == &"attack", "Movement animation overrode Attack")
 	_expect(not sprite.flip_h, "Attack facing changed before completion")
 	_expect(not facing_change_accepted, "Attack did not queue facing while locked")
-	actions.try_start_actions(false, true, true, true, false)
+	actions.try_start_actions(false, true, true, 0.0, false)
 	_expect(actions.get_action_name() == &"attack", "Dash cancelled Attack despite the preserved policy")
 	sprite.frame = 3
 	sprite.animation_finished.emit()
@@ -168,7 +168,7 @@ func _test_dash_attack_duration() -> void:
 	var player: Player = _spawn_player(world)
 	var actions: PlayerActionController = player.action_controller
 	await _wait_physics_frames(4)
-	actions.try_start_actions(true, true, true, true, false)
+	actions.try_start_actions(true, true, true, 0.0, false)
 	_expect(actions.is_dash_attack_active(), "Same-frame Shift/J did not start Dash Attack")
 	_expect(is_equal_approx(actions.get_action_horizontal_velocity(), 320.0), "Dash Attack did not start at 320 px/s")
 	actions.advance(0.15)

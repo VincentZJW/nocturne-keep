@@ -980,3 +980,117 @@ Status: complete — awaiting manual feel approval
 - Ground Dash chaining preserves the original direction and facing for the entire chain; a future explicit design decision is required before permitting per-segment turnarounds.
 - Air Dash remains a single non-looping five-frame presentation and cannot chain regardless of spare stamina.
 - Stamina currently pays only Dash-family starts. There are no upgrades, equipment modifiers, saves, consumables, enemies, damage, invulnerability, or formal skill framework.
+
+## 2026-07-22 — Continuous Air Dash and ground-only stamina recovery (preflight)
+
+### Goal
+
+- Remove the one-Air-Dash-per-airtime qualification and make Ground/Air Dash chains share the same 100-point stamina pool as their only count limit.
+- Add one-entry Air Dash and Dash Attack follow-up buffering, with per-segment direction selection and locked direction within each segment.
+- Restrict regeneration and its delay countdown to grounded, non-Dash, non-Dash-Attack, non-Attack time.
+- Split Air Dash presentation into `air_dash_start`, `air_dash_loop`, and `air_dash_end`, preserving the replaced five-frame source as a deprecated reference.
+
+### Baseline audit
+
+- Worktree is clean at `88118d4 feat: add chained dash stamina system`.
+- `Player.air_dash_available` currently hard-limits Air Dash to one use and is reset on landing; `PlayerActionController.try_start_actions()` rejects airborne Dash when that flag is false.
+- Ground Dash already supports one-entry edge-triggered chaining and spends 25 stamina per accepted segment, but Air Dash ignores later Shift edges.
+- Stamina currently decrements its 0.60-second timer even while airborne/action-blocked, so a long airtime may permit immediate recovery on landing. This conflicts with the newly required grounded-only recovery timeline.
+- Dash Attack currently rejects Shift entirely and clears the Dash buffer, so it cannot transition into a paid follow-up Ground/Air Dash.
+- Production presentation contains segmented Ground Dash but only one five-frame `air_dash` one-shot.
+
+### Planned files and tests
+
+- Refactor the action controller and Player integration to remove Air Dash qualification, unify Ground/Air chain resolution, store one buffered per-segment direction, and continue from Dash Attack according to actual floor contact.
+- Update stamina advancement, debug HUD, animation controller/builders/generator/preview, archive tooling, and all affected regressions.
+- Add deterministic continuous-Air-Dash coverage and a repeatable movement-metrics runner; record single jump, debug double jump, four-Air-Dash reach, and current Main platform implications in `docs/design/level_metrics.md`.
+- Run exact Godot 4.7.1 import, all existing regression suites, Main/preview rendering, collision tests, and diff checks.
+
+### Scope guard
+
+- No enemy, Boss, health, damage settlement, Hitbox/Hurtbox implementation, invulnerability, new attack, or map redesign is authorized.
+- Continuous Dash remains edge-triggered; held Shift must never synthesize additional segments.
+- Existing platforms will be measured and documented, not moved or globally raised.
+
+### Delivered implementation
+
+- Removed `Player.air_dash_available` and every landing/coyote qualification for Air Dash. Ground and Air now share the same paid segment path, 100-point pool, 25-point cost, 0.18-second motion time, 0.10-second one-entry Shift buffer, and 0.03-second minimum interval.
+- Air Dash can chain repeatedly in one airtime while stamina can pay. Each buffered segment samples its own left/right direction, locks velocity/facing for that segment, zeros vertical velocity, and preserves gravity suspension across a successful continuation. Held Shift produces no new input edge.
+- Split presentation into `air_dash_start` (2 frames, one-shot), `air_dash_loop` (3, looping), and `air_dash_end` (2, one-shot), all 20 FPS. A chain plays start once, loop through paid continuations, and end once. The superseded five PNGs were archived byte-identically under `assets/sprites/player/assassin/reference/deprecated_air_dash_five_frame/` before their production paths were removed.
+- `PlayerStaminaComponent.advance()` now accepts positive recovery permission. Airborne/action-blocked time neither regenerates stamina nor decrements the 0.60-second delay. Landing does not refill or clear the timer; only grounded, action-free time advances toward 35 points/second recovery.
+- Dash Attack clears pre-transition Dash input, accepts one new Shift edge during its action, and on completion starts a paid Ground/Air Dash from actual `CharacterBody2D.is_on_floor()` contact. The transition into Dash Attack is still free after its source Dash; the next segment costs exactly 25.
+- Expanded optional diagnostics with floor contact, locomotion/action state, Ground/Air Dash type, chain number, buffered request/time, stamina/recovery state, direction, horizontal/vertical velocity, animation, and existing Attack data. The fixed stamina HUD remains signal-driven and camera-independent.
+- Updated the production generator, archive/removal tooling, contact sheet, 16-animation SpriteFrames resource/controller/preview, Main laboratory copy, README, movement/animation/combat/stamina specifications, and tests. The preview layout was raised 50 px so all 16 selection and playback controls fit at 1280×720.
+- Added `tests/player/measure_player_level_metrics.gd` and `docs/design/level_metrics.md`. At 60 physics ticks/s, measured from the real Player scene: single jump 153.59 px horizontal / 83.77 px rise; debug double jump 281.92 / 167.10; four paid Air Dashes 344.00 px action-only and 362.22 px from Dash-entry takeoff position to landing.
+- Audited Main platforms without modifying them. Platform A/B widths (220/190 px) and the A→B edge gap (205 px) are below the 344 px chain envelope, so an already-elevated player can bypass their intermediate landing rhythm. Air Dash adds no lift: floor→B still exceeds the measured double-jump rise, and the continuous floor already makes both test platforms optional.
+
+### Commands and actual results
+
+1. `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --archive-air-dash-source`
+   - Exit 0; `PLAYER_AIR_DASH_ARCHIVE: 5 files, 0 failures`.
+   - SHA-256 of the five archived sources: `7671ec…`, `1034bc…`, `3ac64f…`, `11584a…`, and `8b8727…`; each matched its former production file before deletion.
+2. First `--production-only` generation attempt exposed an out-of-range contact-sheet row-color access. Godot printed a `SCRIPT ERROR` even though the script process returned 0; this run was not accepted.
+   - Fixed the contact sheet for ten production rows and 1200×1840 output.
+   - Rerun: `PLAYER_PRODUCTION_EXPORT: 33 files, 0 failures`, with no script error.
+3. Exact Godot editor import, SpriteFrames build, and guarded obsolete-source removal:
+   - `--headless --editor --path . --import --quit`: exit 0.
+   - animation asset build: `PLAYER_SPRITE_FRAMES_BUILD: OK`, 16 names.
+   - `--remove-archived-air-dash-source`: `5 files, 0 failures`; removal occurred only after byte comparison.
+4. The first movement-metrics run found a pre-tree `@onready` access, and the next found an incorrectly parenthesized format expression. Both emitted `SCRIPT ERROR` and were rejected. After fixes, the exact runner produced:
+   - `PLAYER_LEVEL_METRICS: PASS physics_fps=60 single_jump_range=153.59 single_jump_rise=83.77 double_jump_range=281.92 double_jump_rise=167.10 four_air_dash_range=344.00 four_air_dash_total_to_landing=362.22`.
+5. Final exact Godot 4.7.1 import:
+   - `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_air_chain_commit_import.log`
+   - Exit 0; no parse, script, or resource errors.
+6. Final serial regression suite using the same executable:
+   - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
+   - `validate_player_animation_assets.gd`: `PASS (33 frames + 4 byte-identical references)`; also validates both five-frame Dash archives.
+   - `test_player_animation_system.gd`: `PASS (16 animations, segmented Ground/Air Dash verified)`.
+   - `test_m1_player_movement.gd`: `PASS (movement, jump assists, collision, camera, six animations)`.
+   - `test_m15_player_actions.gd`: `PASS (split Ground Dash, chained Air Dash, thrust Attack)`.
+   - `test_dash_attack.gd`: `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+   - `test_fast_attack.gd`: `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`.
+   - `test_chain_dash_stamina.gd`: `PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)`.
+   - `test_continuous_air_dash.gd`: `PASS (four Air segments, mixed pool, direction, gravity, collision)`.
+   - `measure_player_level_metrics.gd`: PASS with the values recorded above.
+7. Main and preview runtime rendering:
+   - Main: `--path . --write-movie /tmp/nocturne_keep_continuous_air_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy`; exit 0, GL Compatibility on Apple M4, two 1280×720 frames.
+   - Preview after layout correction: `--path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_continuous_air_preview_v2.png --fixed-fps 20 --quit-after 2 --audio-driver Dummy`; exit 0, two 1280×720 frames.
+   - Log search found no `ERROR`, `SCRIPT ERROR`, parse error, or warning. Original-resolution review confirmed crisp nearest-neighbor art, readable HUD/debug rows, and fully visible preview controls.
+8. `git diff --check`: passed after removing documentation trailing whitespace.
+
+### Automated acceptance results
+
+1. Ground Dash chains from independent Shift edges: PASS.
+2. Air Dash chains repeatedly in one airtime: PASS.
+3. Full stamina accepts exactly four paid segments: PASS for Ground, Air, and 2+2 mixed use.
+4. Fifth zero-stamina request is rejected: PASS.
+5. Every accepted segment costs exactly 25: PASS.
+6. Failed request spends nothing and signals insufficient once: PASS.
+7. Airborne waiting leaves stamina and the 0.60-second timer unchanged: PASS.
+8. Landing does not refill; recovery begins after 0.60 eligible grounded seconds: PASS.
+9. Held Shift produces one segment/charge: PASS.
+10. Timed independent Shift edges continue without an inserted standing/Fall phase: PASS.
+11. Next Air segment can reverse direction: PASS.
+12. Current Air segment ignores ordinary direction changes and keeps velocity/facing locked: PASS.
+13. Air animation uses start once, loop during continuation, end once: PASS; contact sheet visually checked.
+14. Air Dash→Dash Attack→buffered Air Dash: PASS.
+15. Dash Attack source transition costs zero extra; follow-up costs one charge: PASS for grounded and airborne completion.
+16. Continuous Air Dash stops at a wall through `move_and_slide()`: PASS.
+17. Signal-driven bar and numeric label match the component: PASS.
+18. Final import, all headless suites, Main, and preview contain no red errors: PASS.
+
+### Manual acceptance requested
+
+1. Jump and tap Shift four times near each segment end; judge whether `air_dash_start → air_dash_loop … → air_dash_end` feels continuous at 20 FPS.
+2. During the next segment buffer, hold the opposite horizontal direction and confirm only the next paid segment flips; confirm the current segment never turns early.
+3. Try Ground/Air mixed spending and verify the HUD reaches 75/50/25/0, then wait airborne and confirm it remains frozen until 0.60 seconds of eligible ground time.
+4. Air Dash, press J, then Shift during Dash Attack; verify the follow-up uses the current contact domain and direction without restarting Dash Attack.
+5. Test wall contact in both directions and toggle `ACTION DEBUG HUD` off to confirm the stamina bar remains fixed and readable.
+
+### Known limitations and handoff
+
+- The 0.10-second Dash buffer intentionally rewards a new Shift edge in the latter portion of each 0.18-second segment; earlier inputs expire rather than queue multiple future segments. Manual feel tuning may revise the window later.
+- Ground Dash preserves its chain direction. Only Air Dash has approved per-segment turnaround behavior.
+- Air Dash end begins gravity restoration during its two-frame recovery; there is no separate upward/downward/diagonal Dash or invulnerability.
+- Continuous Air Dash materially widens optional traversal. Current Main remains a laboratory with continuous floor, not a production level; future rooms must preserve a single-jump main route and treat continuous Air Dash as a high-mobility route rather than a mandatory early-game gate.
+- Hurt/Death remain preview placeholders. No enemy, health, damage settlement, Hitbox/Hurtbox, invulnerability, combo tree, Boss, or map redesign was added.

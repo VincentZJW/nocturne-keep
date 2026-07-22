@@ -22,9 +22,11 @@ func _ready() -> void:
 	stamina_changed.emit(current_stamina, max_stamina)
 
 
-func advance(delta: float, regeneration_blocked: bool) -> void:
+func advance(delta: float, regeneration_allowed: bool) -> void:
+	if not regeneration_allowed:
+		return
 	stamina_regen_timer = maxf(0.0, stamina_regen_timer - delta)
-	if regeneration_blocked or stamina_regen_timer > 0.0 or current_stamina >= max_stamina:
+	if stamina_regen_timer > 0.0 or current_stamina >= max_stamina:
 		return
 	var previous_stamina: float = current_stamina
 	current_stamina = minf(max_stamina, current_stamina + stamina_regen_rate * delta)

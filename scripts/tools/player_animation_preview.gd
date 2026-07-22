@@ -1,15 +1,16 @@
 class_name PlayerAnimationPreview
 extends Control
 
-## Internal fourteen-animation inspector. It is not the formal game Main scene.
+## Internal sixteen-animation inspector. It is not the formal game Main scene.
 
 const SpriteFramesBuilder: Script = preload("res://scripts/tools/player_sprite_frames_builder.gd")
 
 const ANIMATION_KEYS: Dictionary[Key, StringName] = {
 	KEY_1: &"idle", KEY_2: &"run", KEY_3: &"jump_start", KEY_4: &"jump_loop",
 	KEY_5: &"fall", KEY_6: &"land", KEY_7: &"dash_start", KEY_8: &"dash_loop",
-	KEY_9: &"dash_end", KEY_0: &"air_dash", KEY_MINUS: &"attack",
-	KEY_EQUAL: &"dash_attack", KEY_BRACKETLEFT: &"hurt", KEY_BRACKETRIGHT: &"death",
+	KEY_9: &"dash_end", KEY_0: &"air_dash_start", KEY_MINUS: &"air_dash_loop",
+	KEY_EQUAL: &"air_dash_end", KEY_BRACKETLEFT: &"attack", KEY_BRACKETRIGHT: &"dash_attack",
+	KEY_SEMICOLON: &"hurt", KEY_APOSTROPHE: &"death",
 }
 
 @onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
@@ -73,7 +74,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _connect_animation_buttons() -> void:
 	var buttons: Array[Button] = [
 		%IdleButton, %RunButton, %JumpStartButton, %JumpLoopButton, %FallButton,
-		%LandButton, %DashStartButton, %DashLoopButton, %DashEndButton, %AirDashButton,
+		%LandButton, %DashStartButton, %DashLoopButton, %DashEndButton,
+		%AirDashStartButton, %AirDashLoopButton, %AirDashEndButton,
 		%AttackButton, %DashAttackButton, %HurtButton, %DeathButton,
 	]
 	for index: int in range(buttons.size()):

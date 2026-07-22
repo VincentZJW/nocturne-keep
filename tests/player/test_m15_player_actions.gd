@@ -60,8 +60,14 @@ func _validate_inputs_and_assets() -> void:
 			"res://assets/sprites/player/assassin/reference/deprecated_attack_six_frame/attack_6f_%02d.png"
 			% frame_index
 		)
-	for animation_name: String in ["dash_start", "dash_loop", "dash_end", "air_dash"]:
-		var frame_count: int = {"dash_start": 2, "dash_loop": 3, "dash_end": 2, "air_dash": 5}[animation_name]
+	for animation_name: String in [
+		"dash_start", "dash_loop", "dash_end",
+		"air_dash_start", "air_dash_loop", "air_dash_end",
+	]:
+		var frame_count: int = {
+			"dash_start": 2, "dash_loop": 3, "dash_end": 2,
+			"air_dash_start": 2, "air_dash_loop": 3, "air_dash_end": 2,
+		}[animation_name]
 		for frame_index: int in range(1, frame_count + 1):
 			_validate_asset(
 				"res://assets/sprites/player/assassin/%s/%s_%02d.png"
@@ -81,7 +87,9 @@ func _validate_inputs_and_assets() -> void:
 	_validate_sprite_animation(sprite_frames, &"dash_start", 2, 20.0)
 	_validate_loop_animation(sprite_frames, &"dash_loop", 3, 20.0)
 	_validate_sprite_animation(sprite_frames, &"dash_end", 2, 20.0)
-	_validate_sprite_animation(sprite_frames, &"air_dash", 5, 20.0)
+	_validate_sprite_animation(sprite_frames, &"air_dash_start", 2, 20.0)
+	_validate_loop_animation(sprite_frames, &"air_dash_loop", 3, 20.0)
+	_validate_sprite_animation(sprite_frames, &"air_dash_end", 2, 20.0)
 	_validate_sprite_animation(sprite_frames, &"attack", 4, 20.0)
 	_validate_sprite_animation(sprite_frames, &"dash_attack", 5, 20.0)
 	_expect(not sprite_frames.has_animation(&"dash"), "Ambiguous legacy dash animation alias still exists")
@@ -97,7 +105,7 @@ func _validate_preview_controls() -> void:
 	var ground_button: Button = preview.get_node(
 		"Margin/Layout/AnimationButtons/DashStartButton"
 	) as Button
-	var air_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AirDashButton") as Button
+	var air_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AirDashStartButton") as Button
 	var attack_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AttackButton") as Button
 	var dash_attack_button: Button = preview.get_node(
 		"Margin/Layout/AnimationButtons/DashAttackButton"
@@ -107,7 +115,7 @@ func _validate_preview_controls() -> void:
 	_expect(sprite.animation == &"dash_start" and sprite.is_playing(), "Preview did not play dash_start")
 	air_button.pressed.emit()
 	await process_frame
-	_expect(sprite.animation == &"air_dash" and sprite.is_playing(), "Preview did not play air_dash")
+	_expect(sprite.animation == &"air_dash_start" and sprite.is_playing(), "Preview did not play air_dash_start")
 	attack_button.pressed.emit()
 	await process_frame
 	_expect(sprite.animation == &"attack" and sprite.is_playing(), "Preview did not play attack")
@@ -157,7 +165,6 @@ func _test_ground_dash_contract() -> void:
 	_expect(action_controller.is_ground_dash_active(), "Ground Dash did not start")
 	_expect(sprite.animation == &"dash_start", "Ground Dash selected the wrong start animation")
 	_expect(is_equal_approx(player.velocity.x, 480.0), "Ground Dash did not apply 480 px/s")
-	_expect(player.air_dash_available, "Ground Dash consumed the air Dash")
 	Input.action_press(PlayerScript.MOVE_LEFT_ACTION)
 	await _wait_physics_frames(5)
 	_expect(not sprite.flip_h, "Ground Dash facing changed while locked")
@@ -181,51 +188,49 @@ func _test_air_dash_contract() -> void:
 	_connect_action_events(action_controller)
 	await _wait_physics_frames(4)
 
-	# Rising, no horizontal input: Dash follows current right-facing direction.
 	await _press_for_physics(PlayerScript.JUMP_ACTION)
 	await _wait_physics_frames(5)
 	_expect(player.velocity.y < 0.0, "Rising Air Dash setup is not ascending")
 	await _press_for_physics(PlayerScript.DASH_ACTION)
 	_expect(action_controller.is_air_dash_active(), "Rising Air Dash did not start")
-	_expect(sprite.animation == &"air_dash", "Rising Air Dash used the wrong animation")
+	_expect(sprite.animation == &"air_dash_start", "Rising Air Dash used the wrong start animation")
 	_expect(is_equal_approx(player.velocity.x, 480.0), "Facing-directed Air Dash used wrong horizontal speed")
 	_expect(is_zero_approx(player.velocity.y), "Air Dash did not freeze vertical velocity")
-	_expect(not player.air_dash_available, "Air Dash availability was not consumed")
+	_expect(is_equal_approx(player.stamina_component.current_stamina, 75.0), "Air Dash did not spend stamina")
+	await _wait_physics_frames(5)
 	await _press_for_physics(PlayerScript.DASH_ACTION)
-	_expect(_action_started_events.count(&"air_dash") == 1, "Repeated Shift restarted Air Dash")
-	await _wait_until_action_finished(action_controller, 24)
-	_expect(_action_finished_events.has(&"air_dash"), "Rising Air Dash did not finish")
-	_expect(not player.air_dash_available, "Coyote/air state incorrectly restored Air Dash")
-	await _wait_physics_frames(4)
-	_expect(player.velocity.y > 0.0, "Gravity did not resume after Air Dash")
-	_expect(sprite.animation == &"fall", "Air Dash did not return to Fall after vertical freeze")
-	await _press_for_physics(PlayerScript.DASH_ACTION)
-	_expect(not action_controller.is_dash_active(), "Second Air Dash was accepted before landing")
-	await _wait_until_grounded(player, 180)
-	_expect(player.air_dash_available, "Landing did not restore Air Dash")
+	await _wait_for_action_start_count(&"air_dash", 2, 16)
+	_expect(action_controller.get_current_dash_number() == 2, "Second Air Dash did not chain")
+	_expect(is_equal_approx(player.stamina_component.current_stamina, 50.0), "Second Air Dash did not spend stamina")
+	_expect(sprite.animation == &"air_dash_loop", "Continuous Air Dash inserted a start/end pose")
 
-	# Falling with left input: input direction overrides previous facing.
-	await _press_for_physics(PlayerScript.JUMP_ACTION)
-	await _wait_until_falling(player, 120)
 	Input.action_press(PlayerScript.MOVE_LEFT_ACTION)
-	await _wait_physics_frames(3)
+	await _wait_physics_frames(5)
 	await _press_for_physics(PlayerScript.DASH_ACTION)
-	_expect(action_controller.is_air_dash_active(), "Falling Air Dash did not start")
-	_expect(sprite.animation == &"air_dash", "Falling Air Dash used a grounded pose")
-	_expect(is_equal_approx(player.velocity.x, -480.0), "Left input did not choose Air Dash direction")
-	_expect(is_zero_approx(player.velocity.y), "Falling Air Dash did not cancel vertical speed")
-	_expect(sprite.flip_h, "Falling Air Dash did not face left")
+	await _wait_for_action_start_count(&"air_dash", 3, 16)
+	_expect(action_controller.get_dash_direction() < 0.0, "Next Air Dash did not choose buffered left direction")
+	_expect(player.velocity.x < 0.0 and sprite.flip_h, "Air Dash direction, velocity, and facing disagree")
 	Input.action_release(PlayerScript.MOVE_LEFT_ACTION)
-	Input.action_press(PlayerScript.MOVE_RIGHT_ACTION)
+	await _wait_until_action_finished(action_controller, 30)
+	_expect(_action_finished_events.has(&"air_dash"), "Continuous Air Dash did not finish")
 	await _wait_physics_frames(4)
-	_expect(sprite.flip_h, "Air Dash facing unlocked before completion")
-	_expect(player.velocity.x < 0.0, "Air Dash direction changed during the action")
-	Input.action_release(PlayerScript.MOVE_RIGHT_ACTION)
-	await _wait_until_action_finished(action_controller, 24)
+	_expect(player.velocity.y > 0.0, "Gravity did not resume after Air Dash chain")
+	_expect(sprite.animation == &"fall", "Air Dash chain did not return to Fall")
 	await _wait_until_grounded(player, 180)
-	_expect(player.air_dash_available, "Second landing did not reliably reset Air Dash")
 	_cleanup_world(world)
 	await process_frame
+
+
+func _wait_for_action_start_count(
+		action_name: StringName,
+		target_count: int,
+		maximum_frames: int
+	) -> void:
+	for frame_index: int in range(maximum_frames):
+		if _action_started_events.count(action_name) >= target_count:
+			return
+		await physics_frame
+	_failures.append("Action %s did not reach start count %d" % [action_name, target_count])
 
 
 func _test_attack_contract() -> void:
@@ -434,7 +439,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("M15_PLAYER_ACTION_TEST: PASS (split Ground Dash, Air Dash reset, thrust Attack)")
+		print("M15_PLAYER_ACTION_TEST: PASS (split Ground Dash, chained Air Dash, thrust Attack)")
 		quit(0)
 		return
 	for failure: String in _failures:

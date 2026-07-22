@@ -1,7 +1,7 @@
 class_name PlayerActionController
 extends Node
 
-## Edge-triggered player actions. Dash stamina is delegated to PlayerStaminaComponent.
+## Edge-triggered Ground/Air Dash chains plus Attack arbitration.
 
 signal action_started(action_name: StringName)
 signal action_finished(action_name: StringName)
@@ -16,10 +16,13 @@ enum ActionState {
 }
 
 const GROUND_DASH_ACTION: StringName = &"ground_dash"
+const AIR_DASH_ACTION: StringName = &"air_dash"
 const DASH_START_ANIMATION: StringName = &"dash_start"
 const DASH_LOOP_ANIMATION: StringName = &"dash_loop"
 const DASH_END_ANIMATION: StringName = &"dash_end"
-const AIR_DASH_ANIMATION: StringName = &"air_dash"
+const AIR_DASH_START_ANIMATION: StringName = &"air_dash_start"
+const AIR_DASH_LOOP_ANIMATION: StringName = &"air_dash_loop"
+const AIR_DASH_END_ANIMATION: StringName = &"air_dash_end"
 const ATTACK_ANIMATION: StringName = &"attack"
 const DASH_ATTACK_ANIMATION: StringName = &"dash_attack"
 
@@ -36,6 +39,7 @@ const DASH_ATTACK_ANIMATION: StringName = &"dash_attack"
 
 var _action_state: ActionState = ActionState.NONE
 var _dash_direction: float = 1.0
+var _buffered_dash_direction: float = 1.0
 var _dash_motion_remaining: float = 0.0
 var _dash_attack_window_remaining: float = 0.0
 var _dash_attack_elapsed: float = 0.0
@@ -44,8 +48,9 @@ var _dash_attack_started_airborne: bool = false
 var _dash_buffered: bool = false
 var _dash_buffer_timer: float = 0.0
 var _dash_segment_elapsed: float = 0.0
-var _ground_dash_ending: bool = false
+var _dash_ending: bool = false
 var _current_dash_number: int = 0
+var _latest_is_grounded: bool = true
 var _attack_buffer_timer: float = 0.0
 var _attack_buffered: bool = false
 var _last_attack_input_to_hit_time: float = -1.0
@@ -73,7 +78,7 @@ func advance(delta: float) -> void:
 		_dash_segment_elapsed += delta
 	elif is_dash_attack_active():
 		_dash_attack_elapsed += delta
-	if _dash_buffered:
+	if _dash_buffered and not is_dash_attack_active():
 		_dash_buffer_timer = maxf(0.0, _dash_buffer_timer - delta)
 		if _dash_buffer_timer <= 0.0:
 			_clear_dash_buffer()
@@ -85,12 +90,15 @@ func try_start_actions(
 	attack_pressed: bool,
 	dash_pressed: bool,
 	is_grounded: bool,
-	air_dash_available: bool,
+	horizontal_input: float,
 	facing_left: bool
 ) -> bool:
+	_latest_is_grounded = is_grounded
 	if animation_controller == null or stamina_component == null:
 		return false
 	if is_dash_attack_active():
+		if dash_pressed and not _dash_buffered:
+			_buffer_dash(horizontal_input, facing_left)
 		return false
 	if _action_state == ActionState.ATTACK:
 		if attack_pressed and not _attack_buffered:
@@ -101,35 +109,25 @@ func try_start_actions(
 		if _attack_buffered and _attack_buffer_timer <= 0.0:
 			_clear_attack_buffer()
 		return false
-	if _action_state == ActionState.GROUND_DASH:
+	if is_dash_active():
 		if attack_pressed and is_dash_attack_input_window_open():
 			return _transition_dash_to_dash_attack()
 		if dash_pressed and not _dash_buffered:
-			_dash_buffered = true
-			_dash_buffer_timer = action_config.dash_input_buffer_time
-		if _ground_dash_ending and dash_pressed:
-			return _continue_ground_dash()
-		if not _ground_dash_ending and _dash_motion_remaining <= 0.0:
-			return _resolve_ground_dash_segment()
-		return false
-	if _action_state == ActionState.AIR_DASH:
-		if attack_pressed and is_dash_attack_input_window_open():
-			return _transition_dash_to_dash_attack()
+			_buffer_dash(horizontal_input, facing_left)
+		if _dash_ending and dash_pressed:
+			return _continue_dash()
+		if not _dash_ending and _dash_motion_remaining <= 0.0:
+			return _resolve_dash_segment()
 		return false
 	if _action_state != ActionState.NONE:
 		return false
+	var requested_direction: float = _select_dash_direction(horizontal_input, facing_left)
 	if attack_pressed and dash_pressed:
-		if not is_grounded and not air_dash_available:
-			return _start_attack()
-		_dash_direction = -1.0 if facing_left else 1.0
-		return _start_direct_dash_attack(not is_grounded)
+		return _start_direct_dash_attack(not is_grounded, requested_direction)
 	if attack_pressed:
 		return _start_attack()
 	if dash_pressed:
-		if not is_grounded and not air_dash_available:
-			return false
-		_dash_direction = -1.0 if facing_left else 1.0
-		return _start_dash(is_grounded)
+		return _start_dash(is_grounded, requested_direction)
 	return false
 
 
@@ -147,6 +145,10 @@ func is_ground_dash_active() -> bool:
 
 func is_air_dash_active() -> bool:
 	return _action_state == ActionState.AIR_DASH
+
+
+func is_air_dash_gravity_suspended() -> bool:
+	return _action_state == ActionState.AIR_DASH and not _dash_ending
 
 
 func is_dash_attack_active() -> bool:
@@ -178,7 +180,7 @@ func get_action_name() -> StringName:
 		ActionState.GROUND_DASH:
 			return GROUND_DASH_ACTION
 		ActionState.AIR_DASH:
-			return AIR_DASH_ANIMATION
+			return AIR_DASH_ACTION
 		ActionState.ATTACK:
 			return ATTACK_ANIMATION
 		ActionState.DASH_ATTACK:
@@ -196,6 +198,16 @@ func get_action_state_name() -> StringName:
 			return &"Attack"
 		ActionState.DASH_ATTACK:
 			return &"DashAttack"
+	return &"None"
+
+
+func get_dash_type_name() -> StringName:
+	if is_ground_dash_active():
+		return &"GroundDash"
+	if is_air_dash_active():
+		return &"AirDash"
+	if is_dash_attack_active():
+		return &"AirDashAttack" if _dash_attack_started_airborne else &"GroundDashAttack"
 	return &"None"
 
 
@@ -264,63 +276,82 @@ func get_dash_direction() -> float:
 	return _dash_direction
 
 
-func _start_dash(is_grounded: bool) -> bool:
+func _select_dash_direction(horizontal_input: float, facing_left: bool) -> float:
+	if absf(horizontal_input) > 0.01:
+		return signf(horizontal_input)
+	return -1.0 if facing_left else 1.0
+
+
+func _buffer_dash(horizontal_input: float, facing_left: bool) -> void:
+	_dash_buffered = true
+	_dash_buffer_timer = action_config.dash_input_buffer_time
+	_buffered_dash_direction = _select_dash_direction(horizontal_input, facing_left)
+
+
+func _start_dash(is_grounded: bool, requested_direction: float) -> bool:
 	if not stamina_component.try_consume_dash():
 		return false
 	var dash_state: ActionState = ActionState.GROUND_DASH if is_grounded else ActionState.AIR_DASH
-	var dash_animation: StringName = DASH_START_ANIMATION if is_grounded else AIR_DASH_ANIMATION
+	var dash_animation: StringName = DASH_START_ANIMATION if is_grounded else AIR_DASH_START_ANIMATION
 	if not _start_action(dash_state, dash_animation):
-		# The resource was already validated at startup; refund only this impossible presentation failure.
 		stamina_component.refund_dash_charge()
 		return false
+	_dash_direction = requested_direction
+	animation_controller.set_locked_facing_left(_dash_direction < 0.0)
 	_dash_motion_remaining = action_config.dash_duration
 	_dash_attack_window_remaining = action_config.dash_attack_input_window
 	_dash_attack_used = false
 	_dash_attack_started_airborne = not is_grounded
 	_dash_segment_elapsed = 0.0
-	_ground_dash_ending = false
+	_dash_ending = false
 	_current_dash_number = 1
 	_clear_dash_buffer()
 	return true
 
 
-func _continue_ground_dash() -> bool:
+func _continue_dash() -> bool:
 	if _dash_segment_elapsed < action_config.dash_min_interval:
 		return false
 	if not stamina_component.try_consume_dash():
 		_clear_dash_buffer()
-		if not _ground_dash_ending:
-			_start_ground_dash_end()
+		if not _dash_ending:
+			_start_dash_end()
 		return false
+	var continuing_air_dash: bool = is_air_dash_active()
+	if continuing_air_dash:
+		_dash_direction = _buffered_dash_direction
+		animation_controller.set_locked_facing_left(_dash_direction < 0.0)
 	_clear_dash_buffer()
-	_ground_dash_ending = false
+	_dash_ending = false
 	_dash_motion_remaining = action_config.dash_duration
 	_dash_attack_window_remaining = action_config.dash_attack_input_window
 	_dash_attack_used = false
 	_dash_segment_elapsed = 0.0
 	_current_dash_number += 1
-	if animation_controller.animated_sprite.animation != DASH_LOOP_ANIMATION:
-		animation_controller.transition_locked_animation(DASH_LOOP_ANIMATION)
-	action_started.emit(GROUND_DASH_ACTION)
+	var loop_animation: StringName = AIR_DASH_LOOP_ANIMATION if continuing_air_dash else DASH_LOOP_ANIMATION
+	if animation_controller.animated_sprite.animation != loop_animation:
+		animation_controller.transition_locked_animation(loop_animation)
+	action_started.emit(get_action_name())
 	return true
 
 
-func _resolve_ground_dash_segment() -> bool:
+func _resolve_dash_segment() -> bool:
 	if _dash_buffered and _dash_buffer_timer > 0.0:
-		return _continue_ground_dash()
-	_start_ground_dash_end()
+		return _continue_dash()
+	_start_dash_end()
 	return false
 
 
-func _start_ground_dash_end() -> void:
+func _start_dash_end() -> void:
 	_clear_dash_buffer()
-	_ground_dash_ending = true
+	_dash_ending = true
 	_dash_motion_remaining = 0.0
 	_dash_attack_window_remaining = 0.0
-	animation_controller.transition_locked_animation(DASH_END_ANIMATION)
+	var end_animation: StringName = AIR_DASH_END_ANIMATION if is_air_dash_active() else DASH_END_ANIMATION
+	animation_controller.transition_locked_animation(end_animation)
 
 
-func _start_direct_dash_attack(started_airborne: bool) -> bool:
+func _start_direct_dash_attack(started_airborne: bool, requested_direction: float) -> bool:
 	if not stamina_component.try_consume_dash():
 		return false
 	_clear_dash_buffer()
@@ -328,6 +359,8 @@ func _start_direct_dash_attack(started_airborne: bool) -> bool:
 	if not animation_controller.play_one_shot(DASH_ATTACK_ANIMATION):
 		stamina_component.refund_dash_charge()
 		return false
+	_dash_direction = requested_direction
+	animation_controller.set_locked_facing_left(_dash_direction < 0.0)
 	_dash_attack_used = true
 	_dash_attack_started_airborne = started_airborne
 	_dash_attack_elapsed = 0.0
@@ -380,6 +413,24 @@ func _start_action(next_state: ActionState, animation_name: StringName) -> bool:
 	return true
 
 
+func _continue_after_dash_attack() -> bool:
+	if not _dash_buffered:
+		return false
+	var previous_dash_number: int = _current_dash_number
+	var requested_direction: float = _buffered_dash_direction
+	var next_grounded: bool = _latest_is_grounded
+	var player_body: CharacterBody2D = get_parent() as CharacterBody2D
+	if player_body != null:
+		next_grounded = player_body.is_on_floor()
+	_clear_dash_buffer()
+	_action_state = ActionState.NONE
+	if not _start_dash(next_grounded, requested_direction):
+		return false
+	_current_dash_number = previous_dash_number + 1
+	action_transitioned.emit(DASH_ATTACK_ANIMATION, get_action_name())
+	return true
+
+
 func _clear_dash_buffer() -> void:
 	_dash_buffered = false
 	_dash_buffer_timer = 0.0
@@ -402,7 +453,7 @@ func _finish_action(finished_action: StringName) -> void:
 	_dash_motion_remaining = 0.0
 	_dash_attack_window_remaining = 0.0
 	_dash_attack_elapsed = 0.0
-	_ground_dash_ending = false
+	_dash_ending = false
 	_current_dash_number = 0
 	action_finished.emit(finished_action)
 
@@ -423,12 +474,15 @@ func _on_animation_frame_changed() -> void:
 
 
 func _on_one_shot_finished(animation_name: StringName) -> void:
-	if _action_state == ActionState.GROUND_DASH:
-		if animation_name == DASH_START_ANIMATION and not _ground_dash_ending:
-			animation_controller.transition_locked_animation(DASH_LOOP_ANIMATION)
+	if is_dash_active():
+		var start_animation: StringName = AIR_DASH_START_ANIMATION if is_air_dash_active() else DASH_START_ANIMATION
+		var loop_animation: StringName = AIR_DASH_LOOP_ANIMATION if is_air_dash_active() else DASH_LOOP_ANIMATION
+		var end_animation: StringName = AIR_DASH_END_ANIMATION if is_air_dash_active() else DASH_END_ANIMATION
+		if animation_name == start_animation and not _dash_ending:
+			animation_controller.transition_locked_animation(loop_animation)
 			return
-		if animation_name == DASH_END_ANIMATION and _ground_dash_ending:
-			_finish_action(GROUND_DASH_ACTION)
+		if animation_name == end_animation and _dash_ending:
+			_finish_action(get_action_name())
 		return
 	if animation_name != get_action_name():
 		return
@@ -436,5 +490,7 @@ func _on_one_shot_finished(animation_name: StringName) -> void:
 		_action_state = ActionState.NONE
 		_clear_attack_buffer()
 		_start_attack()
+		return
+	if animation_name == DASH_ATTACK_ANIMATION and _continue_after_dash_attack():
 		return
 	_finish_action(animation_name)
