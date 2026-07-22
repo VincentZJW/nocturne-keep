@@ -29,7 +29,7 @@ const MOVE_LEFT_ACTION: StringName = &"player_move_left"
 const MOVE_RIGHT_ACTION: StringName = &"player_move_right"
 const JUMP_ACTION: StringName = &"player_jump"
 const DASH_ACTION: StringName = &"dash"
-const ATTACK_ACTION: StringName = &"player_attack"
+const ATTACK_ACTION: StringName = &"attack"
 const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 
 @export var movement_config: PlayerMovementConfig
@@ -51,6 +51,7 @@ var _movement_state: MovementState = MovementState.IDLE
 var _coyote_time_remaining: float = 0.0
 var _jump_buffer_remaining: float = 0.0
 var _last_horizontal_input: float = 0.0
+var _landed_during_action: bool = false
 
 
 func _ready() -> void:
@@ -89,11 +90,11 @@ func _physics_process(delta: float) -> void:
 		air_dash_available,
 		animation_controller.animated_sprite.flip_h
 	)
-	if action_controller.is_air_dash_active():
+	if action_controller.is_air_dash_active() or action_controller.is_airborne_dash_attack_active():
 		air_dash_available = false
 		velocity.y = 0.0
-	if action_controller.is_dash_active():
-		velocity.x = action_controller.get_dash_horizontal_velocity()
+	if action_controller.is_dash_active() or action_controller.is_dash_attack_active():
+		velocity.x = action_controller.get_action_horizontal_velocity()
 	else:
 		_apply_horizontal_velocity(horizontal_input, delta, was_on_floor)
 	_apply_gravity(delta, was_on_floor)
@@ -105,6 +106,7 @@ func _physics_process(delta: float) -> void:
 	if landed_this_frame and not jumped_before_move:
 		_restore_air_jumps()
 		air_dash_available = true
+		_landed_during_action = action_controller.is_action_active()
 		if action_controller.is_action_active() or not _try_consume_jump():
 			_enter_state(MovementState.LAND)
 			landed.emit()
@@ -154,7 +156,11 @@ func _prepare_action_facing(horizontal_input: float) -> void:
 
 
 func _apply_gravity(delta: float, was_on_floor: bool) -> void:
-	if not was_on_floor and not action_controller.is_air_dash_active():
+	var gravity_suspended: bool = (
+		action_controller.is_air_dash_active()
+		or action_controller.is_airborne_dash_attack_active()
+	)
+	if not was_on_floor and not gravity_suspended:
 		velocity.y += movement_config.gravity * delta
 
 
@@ -259,4 +265,9 @@ func _on_one_shot_finished(animation_name: StringName) -> void:
 
 
 func _on_action_finished(_animation_name: StringName) -> void:
+	if _landed_during_action and is_on_floor():
+		_landed_during_action = false
+		_enter_state(MovementState.LAND)
+		return
+	_landed_during_action = false
 	_resume_locomotion_after_action()

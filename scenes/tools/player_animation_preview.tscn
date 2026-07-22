@@ -75,7 +75,7 @@ text = "THE NIGHT WARDEN · SPRITEFRAMES PREVIEW"
 layout_mode = 2
 theme_override_colors/font_color = Color(0.376, 0.478, 0.565, 1)
 theme_override_font_sizes/font_size = 15
-text = "64×64 · 6× nearest-neighbor · animations 1–0/− · placeholders explicitly labeled"
+text = "64×64 · 6× nearest-neighbor · animations 1–0/=/− · placeholders explicitly labeled"
 
 [node name="Spacer" type="Control" parent="Margin/Layout"]
 custom_minimum_size = Vector2(0, 400)
@@ -220,6 +220,12 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(184, 34)
 layout_mode = 2
 text = "9 · attack"
+
+[node name="DashAttackButton" type="Button" parent="Margin/Layout/AnimationButtons"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(184, 34)
+layout_mode = 2
+text = "= · dash_attack"
 
 [node name="HurtButton" type="Button" parent="Margin/Layout/AnimationButtons"]
 unique_name_in_owner = true

@@ -1,12 +1,12 @@
 # Player Movement Specification
 
-Version: 1.0 — M1.5 air Dash revision
+Version: 1.1 — M1.5 Dash Attack input chain
 Date: 2026-07-22
 Status: implemented prototype; no combat resolution
 
 ## Scope
 
-This specification covers the formal M1 locomotion plus the approved M1.5 debug double jump, Ground Dash, horizontal Air Dash, and animation-only Attack trigger. It excludes enemies, bosses, damage, hitboxes, hurtboxes, invulnerability, combos, and production encounter design.
+This specification covers the formal M1 locomotion plus the approved M1.5 debug double jump, Ground Dash, horizontal Air Dash, normal Attack, and one buffered Dash Attack transition. It excludes enemies, bosses, damage, Hitbox nodes, hurtboxes, invulnerability, combo trees, and production encounter design.
 
 ## Player composition
 
@@ -30,7 +30,7 @@ Player (CharacterBody2D)
 | `player_move_right` | D, Right Arrow | Horizontal input |
 | `player_jump` | Space | Ground/coyote/air jump request |
 | `dash` | Left Shift, Right Shift | Ground or horizontal Air Dash |
-| `player_attack` | J | Animation-only Attack |
+| `attack` | J | Normal Attack or buffered Dash Attack request |
 
 Gameplay reads named Input Map actions. It contains no direct Shift key polling.
 
@@ -52,6 +52,13 @@ Dash values live in `res://resources/player/player_action_prototype_config.tres`
 - Dash speed: 480 px/s
 - motion duration: 0.20 seconds
 - shared cooldown: 0.45 seconds
+- Dash Attack input window: 0.18 seconds after Dash starts
+- Attack-first pairing buffer: 0.12 seconds
+- Dash Attack speed: 320 px/s
+- sustained Dash Attack movement: 0.18 seconds
+- linear recovery/deceleration: 0.195 seconds
+
+The movement plus recovery durations total 0.375 seconds, exactly matching six frames at 16 FPS. Speed is intentionally lower than the 480 px/s Dash so the attack inherits momentum without becoming another full Dash.
 
 ## Jump and debug double jump
 
@@ -88,18 +95,36 @@ Dash values live in `res://resources/player/player_action_prototype_config.tres`
 - Ordinary movement presentation cannot overwrite it; repeated J does not restart frame zero.
 - Frames `attack_03` and `attack_04` are metadata-only reservations for a future narrow forward Hitbox. No Hitbox node or damage logic exists in this milestone.
 
+## Dash Attack input and state
+
+- Shift alone starts Ground Dash or the one permitted Air Dash.
+- J during the first 0.18 seconds of that Dash transitions to `DashAttack`, inherits `dash_direction`, and marks `dash_attack_used=true`.
+- J pressed before Shift remains pending for 0.12 seconds. Shift within the buffer starts Dash Attack directly; without Shift it resolves to the standalone Attack.
+- This short standalone-Attack delay is the explicit tradeoff that supports both input orders without playing and cancelling a misleading normal-Attack frame.
+- J after the Dash combination window is ignored for Dash Attack and is not leaked into a later action.
+- One Dash can transition once. Dash Attack blocks further Dash and Attack starts and rejects frame-zero restart spam.
+
+### Dash Attack movement
+
+- Movement remains inside `CharacterBody2D.velocity` followed by `move_and_slide()`; no global-position warp is used.
+- The first 0.18 seconds use 320 px/s along inherited Dash direction. The following 0.195 seconds linearly reduce that velocity to zero.
+- Ground completion returns to Run/Idle, or Land if the action contacted the floor from the air.
+- Air Dash Attack keeps vertical velocity at zero and suspends gravity only while the one-shot is active. Completion restores gravity and enters Fall unless a real landing occurred.
+- Starting or completing Air Dash Attack never restores `air_dash_available`; only actual landing does.
+
 ## Action priority and recovery
 
 ```text
-attack > ground_dash / air_dash > land > jump_start > jump_loop / fall > run > idle
+dash_attack > attack > ground_dash / air_dash > land > jump_start > jump_loop / fall > run > idle
 ```
 
-- Attack wins simultaneous Attack/Dash input.
-- Attack and Dash mutually exclude each other while active.
+- Same-frame or buffered Attack/Dash input resolves to Dash Attack.
+- Normal Attack and Dash Attack mutually exclude ordinary Attack/Dash input while active.
 - Ground Dash recovers to Run or Idle from current input.
 - Air Dash recovers to Jump Loop or Fall from vertical state.
 - Attack recovers to Run/Idle when grounded or Jump Loop/Fall when airborne.
+- Dash Attack preserves its ground/air origin for gravity handling and recovers from actual contact state.
 
 ## Acceptance boundaries
 
-Automated tests verify named Input Map bindings, one Air Dash per airborne cycle, landing reset, rising/falling starts, direction fallback, vertical freeze, gravity restoration, shared cooldown, facing lock, action non-restart, and correct animation recovery. Player feel and visual timing still require manual playtesting in `res://scenes/main/main.tscn`.
+Automated tests verify named Input Map bindings, both chord orders, exact and near-simultaneous input, late-input rejection, once-per-Dash use, Air Dash preservation, direction/facing, gravity restoration, collision-safe movement, metadata windows, and ground/air recovery. Main's optional debug HUD displays current action state, combination-window state/time, use flag, Air Dash availability, and horizontal velocity. Player feel and visual timing still require manual playtesting.

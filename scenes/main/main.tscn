@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2600, 96)
@@ -104,34 +105,52 @@ position = Vector2(320, 612)
 [node name="Panel" type="ColorRect" parent="Interface"]
 offset_left = 24.0
 offset_top = 22.0
-offset_right = 850.0
-offset_bottom = 136.0
+offset_right = 1010.0
+offset_bottom = 184.0
 mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.88)
 
 [node name="Title" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
 offset_top = 10.0
-offset_right = 810.0
+offset_right = 980.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
 theme_override_font_sizes/font_size = 20
-text = "M1.5 · AIR DASH + THRUST PROTOTYPE"
+text = "M1.5 · DASH ATTACK INPUT LAB"
 
 [node name="Instructions" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
 offset_top = 44.0
-offset_right = 810.0
+offset_right = 980.0
 offset_bottom = 74.0
 theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
 theme_override_font_sizes/font_size = 14
-text = "MOVE  A / D or ← / →    JUMP  SPACE ×2    DASH  SHIFT (GROUND / AIR)    ATTACK  J"
+text = "MOVE  A / D or ← / →    JUMP  SPACE ×2    DASH  SHIFT    ATTACK  J    DASH ATTACK  SHIFT → J"
 
 [node name="DebugAbility" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
 offset_top = 78.0
-offset_right = 810.0
+offset_right = 650.0
 offset_bottom = 104.0
 theme_override_colors/font_color = Color(0.725, 0.51, 0.263, 1)
 theme_override_font_sizes/font_size = 13
 text = "DEBUG ABILITY · DOUBLE JUMP ENABLED (formal unlock flag remains false)"
+
+[node name="DebugToggle" type="CheckButton" parent="Interface/Panel"]
+offset_left = 760.0
+offset_top = 76.0
+offset_right = 968.0
+offset_bottom = 106.0
+button_pressed = true
+text = "ACTION DEBUG HUD"
+
+[node name="ActionDebug" type="Label" parent="Interface/Panel"]
+offset_left = 16.0
+offset_top = 112.0
+offset_right = 980.0
+offset_bottom = 146.0
+theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
+theme_override_font_sizes/font_size = 13
+text = "STATE None   COMBO WINDOW closed   USED false   AIR DASH ready   VX 0.0"
+script = ExtResource("2_debug")

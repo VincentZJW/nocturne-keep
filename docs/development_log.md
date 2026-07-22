@@ -687,3 +687,111 @@ Status: complete — awaiting manual approval
 - Hurt and Death remain explicitly labeled preview placeholders.
 - Main remains an internal action laboratory, not a production level.
 - No enemy, damage, Hitbox, Hurtbox, combo, Boss, or other M2 combat work was started.
+
+## M1.5 extension — Dash Attack input chain
+
+Date: 2026-07-22
+Status: in progress
+
+### Goals and scope
+
+- Add one `dash_attack` action reachable from Ground Dash or Air Dash by buffered Shift/J input without requiring a same-frame chord.
+- Preserve standalone Dash and standalone dual-dagger Attack behavior while introducing a configurable pairing window and attack-input buffer.
+- Add one six-frame, 16-FPS, non-looping shared Dash Attack animation with distinct high-speed dual-thrust readability at 64×64 and 48×48.
+- Apply inherited Dash direction and collision-safe CharacterBody2D movement, with reduced speed and recovery deceleration rather than a second full Dash.
+- Expose metadata-only future hit-window frames three through five and add an optional test-scene debug overlay.
+
+### Preflight audit
+
+- Git worktree was clean; baseline commit: `ad94391 feat: add air dash and dual-dagger thrust`.
+- Existing action state is one of None, Ground Dash, Air Dash, or Attack; Attack currently wins same-frame Shift/J and there is no cross-frame combination window.
+- Input Map currently uses `dash` for Left/Right Shift and the legacy project-local name `player_attack` for J. This milestone will adopt the requested `attack` action and remove the old alias.
+- `PlayerActionPrototypeConfig` currently centralizes Dash speed/duration/cooldown only; all Dash Attack timing and movement values will be added there.
+- Ground/Air Dash and Attack are separate one-shots with facing locks. SpriteFrames currently contains eleven animations; no `dash_attack` source or resource entry exists.
+- Existing Ground Dash, Air Dash, Attack, deprecated slash frames, concept references, M1 locomotion, debug double jump, and commit history must remain intact.
+
+### Planned implementation and tests
+
+- Extend the procedural animation generator, contact sheet, SpriteFrames builder/resource, animation controller, preview scene/controller, action configuration, action state component, Player physics integration, Main debug overlay, tests, and specifications.
+- Use a 0.18-second post-Dash combination window and 0.12-second pre-Dash Attack buffer. The latter deliberately adds at most 120 ms to a standalone Attack so an Attack-first near-chord can resolve without briefly playing/canceling the normal Attack.
+- Configure Dash Attack at 320 px/s with 0.18 seconds of sustained movement and 0.195 seconds of linear recovery, matching the complete 6/16-second animation while remaining below the 480 px/s Dash speed.
+- Test standalone inputs, both chord orders, late rejection, one-use/restart protection, ground/air recovery, Air Dash preservation rules, collision against a wall, facing, metadata, scene startup, and all existing regressions.
+
+### Scope guard
+
+- No Hitbox node, target tracking, enemy, health, damage, invulnerability, combo tree, Hurt/Death Gameplay, or Boss behavior is authorized.
+- Dash Attack may expose only a presentation query/signal contract for future frames three through five.
+- Ground and Air Dash Attack share one animation in this first pass; code retains the airborne-origin flag for distinct gravity and recovery behavior.
+
+### Delivered implementation
+
+- Replaced the legacy Input Map name `player_attack` with the requested `attack` action bound to physical J. Dash remains `dash` with Left/Right Shift. Gameplay reads only named Input Map actions.
+- Extended the typed action Resource with a 0.18-second post-Dash combination window, 0.12-second Attack-first buffer, 320 px/s Dash Attack speed, 0.18-second sustained movement, and 0.195-second recovery. The latter two total the full 0.375-second animation.
+- Added explicit `DashAttack` state, `dash_attack_used`, Ground/Air origin tracking, window/buffer timers, inherited direction, direct near-chord start, Dash-to-Dash-Attack transition, and typed `action_transitioned` signal.
+- Shift alone still starts Ground/Air Dash. J alone waits for the short pairing grace then starts normal Attack. J during the open Dash window transitions; J then Shift inside the buffer and same-frame Shift/J start Dash Attack directly.
+- Late J during Dash is rejected instead of leaking into a later Attack. Dash Attack blocks normal Attack and Dash, ignores repeat input, and cannot restart its first frame.
+- Dash Attack uses `CharacterBody2D.velocity` plus `move_and_slide()`: 320 px/s during the first 0.18 seconds, followed by linear deceleration for 0.195 seconds. It never writes `global_position` and passes a solid-wall collision test.
+- Air Dash Attack consumes the existing Air Dash opportunity, holds vertical velocity at zero while active, then restores gravity and enters Fall unless an actual landing occurred. It never refreshes `air_dash_available`; only landing does.
+- Added six original transparent 64×64 `dash_attack` PNGs, integrated them at 16 FPS non-looping, and preserved all existing Dash/Attack/reference/deprecated resources.
+- Added `is_dash_attack_hit_window()` for metadata-only frames three through five. No Hitbox node, target memory, damage, enemy, combo, or Boss implementation exists.
+- Added an optional Main action debug HUD showing current state, window/open time, use flag, Air Dash availability, and horizontal speed. Its checkbox disables the display without changing Gameplay.
+- Updated the twelve-animation preview, production generator/contact sheet, SpriteFrames resource, validation suites, README, animation/movement specifications, and QA report.
+
+### Commands and actual results
+
+1. Preflight reads of `AGENTS.md`, README, development log, technical architecture, relevant scripts/resources/scenes/tests, plus `git status` and recent history.
+   - Result: clean baseline `ad94391`; no prior Dash Attack art/state; existing Dash/Attack/reference assets intact.
+2. Initial `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd` before production generation.
+   - Result: the default SpriteFrames mode correctly reported six missing new Dash Attack textures. Existing source/reference PNGs were untouched; the temporarily incomplete SpriteFrames resource was rebuilt after import. The sequence was corrected rather than ignoring the errors.
+3. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --production-only`
+   - Exit 0; `PLAYER_PRODUCTION_EXPORT: 32 files, 0 failures`.
+4. `Godot --headless --editor --path . --quit`, followed by the default SpriteFrames build.
+   - Exit 0; six new PNGs imported without errors; `PLAYER_SPRITE_FRAMES_BUILD: OK`.
+5. `Godot --headless --path . --script scripts/tools/configure_m1_input_map.gd`
+   - Exit 0; `M15_INPUT_MAP_CONFIG: OK`; `dash` and `attack` are present, deprecated `player_dash`/`player_attack` are absent.
+6. `Godot --headless --path . --script tests/tools/validate_pixel_character_assets.gd`
+   - Exit 0; `PIXEL_CHARACTER_VALIDATION: PASS (11 assets + board)`.
+7. `Godot --headless --path . --script tests/tools/validate_player_animation_assets.gd`
+   - Exit 0; `PLAYER_ANIMATION_VALIDATION: PASS (32 frames + 4 byte-identical references)`.
+8. `Godot --headless --path . --script tests/player/test_player_animation_system.gd`
+   - Exit 0; `PLAYER_ANIMATION_SYSTEM_TEST: PASS (12 animations, controller locks/signals verified)`.
+9. `Godot --headless --path . --script tests/player/test_m1_player_movement.gd`
+   - Exit 0; `M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)`.
+10. `Godot --headless --path . --script tests/player/test_m15_player_actions.gd`
+    - Exit 0; `M15_PLAYER_ACTION_TEST: PASS (ground/air Dash, reset/cooldown, thrust Attack)`.
+11. `Godot --headless --path . --script tests/player/test_dash_attack.gd`
+    - The first timing assertion sampled one physics tick before the 0.18-second window closed; the test was corrected to sample the exact closed-window interval.
+    - Final exit 0; `DASH_ATTACK_TEST: PASS (buffer, transitions, air recovery, collision, debug HUD)`.
+12. `Godot --path . --write-movie /tmp/nocturne_keep_dash_attack_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy`
+    - Exit 0; Main rendered 1280×720 through GL Compatibility with complete controls and the action debug HUD. No red Output/Debugger errors appeared.
+13. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_dash_attack_preview.png --fixed-fps 10 --quit-after 2 --audio-driver Dummy`
+    - Exit 0; preview rendered 1280×720 with twelve animation buttons including Dash Attack. No red Output/Debugger errors appeared.
+14. Original-resolution review of `docs/qa/player_animation_contact_sheet.png` and `git diff --check`.
+    - Result: Dash Attack reads as a low high-speed dual thrust distinct from regular Dash and Attack; its 48×48 check remains readable; no whitespace errors.
+
+### Automated acceptance results
+
+- Standalone Shift, standalone J, Dash-then-J, J-then-Shift, and same-frame Shift/J all resolve to the intended action.
+- J after the 0.18-second combination window does not trigger Dash Attack or leak into a later Attack.
+- Each Dash produces at most one Dash Attack; repeated J/Shift cannot restart, cancel, or nest it.
+- Ground recovery reaches Run/Idle. Air recovery restores gravity, reaches Fall, keeps Air Dash spent, and restores it only on actual landing.
+- Dash Attack inherits direction, locks facing, flips correctly, moves below full Dash speed, decelerates, and cannot pass through the test wall.
+- SpriteFrames contains twelve correctly configured animations. Dash Attack frames are 64×64, binary-alpha, mipmap-free, palette-valid, and readable after 48×48 nearest-neighbor conversion.
+- Future Dash Attack hit-window queries return true only on frames three, four, and five.
+- Main and the preview scene remain independently runnable; all earlier movement, animation, double-jump, Dash, and Attack regressions pass.
+
+### Manual acceptance requested
+
+1. Press J alone repeatedly and judge whether the intentional 0.12-second pairing delay remains responsive enough.
+2. Try Shift then J at the beginning and near the end of the 0.18-second window on ground and in air.
+3. Compare the 320 px/s Dash Attack movement and recovery against the 480 px/s ordinary Dash.
+4. Inspect frames three through five facing both directions and confirm both dagger tips remain distinct at gameplay scale.
+5. Disable `ACTION DEBUG HUD` and confirm the laboratory view remains uncluttered.
+
+### Known limitations and handoff
+
+- Ground and Air Dash Attack intentionally share one animation; airborne origin is represented by world position and physics rather than a second art set.
+- Supporting Attack-first pairing adds up to 0.12 seconds of latency to standalone Attack; this requires manual feel approval.
+- Dash Attack has no invulnerability, gameplay Hitbox, target memory, damage, enemy interaction, or combo follow-up.
+- Hurt and Death remain preview-only placeholders; Main remains an internal action laboratory.
+- No enemy, formal damage settlement, combo tree, or Boss work was started.

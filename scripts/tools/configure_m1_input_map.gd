@@ -7,7 +7,7 @@ const ACTION_EVENTS: Dictionary[String, Array] = {
 	"player_move_right": [KEY_D, KEY_RIGHT],
 	"player_jump": [KEY_SPACE],
 	"dash": [KEY_SHIFT],
-	"player_attack": [KEY_J],
+	"attack": [KEY_J],
 }
 
 
@@ -17,6 +17,7 @@ func _initialize() -> void:
 
 func _configure() -> void:
 	ProjectSettings.set_setting("input/player_dash", null)
+	ProjectSettings.set_setting("input/player_attack", null)
 	for action_name: String in ACTION_EVENTS:
 		var events: Array[InputEventKey] = []
 		var keycodes: Array = ACTION_EVENTS[action_name]

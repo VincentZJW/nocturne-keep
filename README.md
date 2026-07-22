@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`M1.5 空中Dash与双匕首前刺修订`
+当前版本：`M1.5 Dash Attack输入链原型`
 
 ## 当前范围
 
-M1.5在M1移动基础上增加开发验证用二段跳、地面/水平空中Dash和纯动画双匕首前刺Attack。Attack没有伤害或Hitbox，Dash没有无敌帧；敌人、完整战斗、Hurt和Death Gameplay仍未开始。
+M1.5在M1移动基础上增加开发验证用二段跳、地面/水平空中Dash、普通双匕首前刺，以及可由Dash衔接的Dash Attack。所有攻击仍只有动画和移动接口，没有伤害或Hitbox；敌人、完整战斗、Hurt和Death Gameplay仍未开始。
 
 ## 环境要求
 
@@ -44,10 +44,12 @@ M1.5在M1移动基础上增加开发验证用二段跳、地面/水平空中Dash
 | --- | --- |
 | 左右移动 | A / D 或方向键 |
 | 跳跃 | Space；Debug开关启用时可二段跳 |
-| Attack动画 | J |
 | Dash / 冲刺 | Shift（Left Shift与Right Shift） |
+| 普通双匕首前刺 | J |
+| Dash Attack | Shift后在Dash中按J；J后0.12秒内按Shift也可组合 |
+| Air Dash Attack | 空中Shift后在Dash中按J |
 
-正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。空中每次离地最多Dash一次，落地后恢复；地面与空中Dash共享0.45秒冷却。
+正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。空中每次离地最多Dash一次，落地后恢复；地面与空中Dash共享0.45秒冷却。Dash Attack没有额外Dash次数、无敌帧或伤害判定。
 
 ## 文档
 

@@ -1,6 +1,6 @@
 extends SceneTree
 
-## M1.5 asset, preview, double-jump, ground/air Dash, and Attack prototype tests.
+## M1.5 asset, preview, double-jump, ground/air Dash, and standalone Attack regressions.
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
 const PREVIEW_SCENE: PackedScene = preload("res://scenes/tools/player_animation_preview.tscn")
@@ -31,7 +31,9 @@ func _run_tests() -> void:
 
 func _validate_inputs_and_assets() -> void:
 	_expect(PlayerScript.DASH_ACTION == &"dash", "Gameplay Dash action is not the approved Input Map name")
+	_expect(PlayerScript.ATTACK_ACTION == &"attack", "Gameplay Attack action is not the approved Input Map name")
 	_expect(not InputMap.has_action(&"player_dash"), "Deprecated player_dash Input Map action still exists")
+	_expect(not InputMap.has_action(&"player_attack"), "Deprecated player_attack Input Map action still exists")
 	for action_name: StringName in [PlayerScript.DASH_ACTION, PlayerScript.ATTACK_ACTION]:
 		_expect(InputMap.has_action(action_name), "Missing action: %s" % action_name)
 		_expect(not InputMap.action_get_events(action_name).is_empty(), "Input action has no events: %s" % action_name)
@@ -59,6 +61,8 @@ func _validate_inputs_and_assets() -> void:
 				"res://assets/sprites/player/assassin/%s/%s_%02d.png"
 				% [animation_name, animation_name, frame_index]
 			)
+	for frame_index: int in range(1, 7):
+		_validate_asset("res://assets/sprites/player/assassin/dash_attack/dash_attack_%02d.png" % frame_index)
 	var sprite_frames: SpriteFrames = load(SPRITE_FRAMES_PATH) as SpriteFrames
 	_expect(sprite_frames != null, "Player SpriteFrames resource is unreadable")
 	if sprite_frames == null:
@@ -66,6 +70,7 @@ func _validate_inputs_and_assets() -> void:
 	_validate_sprite_animation(sprite_frames, &"ground_dash", 5, 20.0)
 	_validate_sprite_animation(sprite_frames, &"air_dash", 5, 20.0)
 	_validate_sprite_animation(sprite_frames, &"attack", 6, 12.0)
+	_validate_sprite_animation(sprite_frames, &"dash_attack", 6, 16.0)
 	_expect(not sprite_frames.has_animation(&"dash"), "Ambiguous legacy dash animation alias still exists")
 	_expect(PlayerScript.DOUBLE_JUMP_ANIMATION == &"double_jump", "Future double_jump name is not reserved")
 	_validate_attack_thrust_art()
@@ -81,6 +86,9 @@ func _validate_preview_controls() -> void:
 	) as Button
 	var air_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AirDashButton") as Button
 	var attack_button: Button = preview.get_node("Margin/Layout/AnimationButtons/AttackButton") as Button
+	var dash_attack_button: Button = preview.get_node(
+		"Margin/Layout/AnimationButtons/DashAttackButton"
+	) as Button
 	ground_button.pressed.emit()
 	await process_frame
 	_expect(sprite.animation == &"ground_dash" and sprite.is_playing(), "Preview did not play ground_dash")
@@ -90,6 +98,9 @@ func _validate_preview_controls() -> void:
 	attack_button.pressed.emit()
 	await process_frame
 	_expect(sprite.animation == &"attack" and sprite.is_playing(), "Preview did not play attack")
+	dash_attack_button.pressed.emit()
+	await process_frame
+	_expect(sprite.animation == &"dash_attack" and sprite.is_playing(), "Preview did not play dash_attack")
 	preview.queue_free()
 	await process_frame
 
@@ -211,12 +222,10 @@ func _test_attack_contract() -> void:
 	var sprite: AnimatedSprite2D = player.animation_controller.animated_sprite
 	_connect_action_events(action_controller)
 	await _wait_physics_frames(4)
-	Input.action_press(PlayerScript.ATTACK_ACTION)
-	Input.action_press(PlayerScript.DASH_ACTION)
-	await _wait_physics_frames(2)
-	Input.action_release(PlayerScript.ATTACK_ACTION)
-	Input.action_release(PlayerScript.DASH_ACTION)
-	_expect(action_controller.get_action_name() == &"attack", "Attack did not win simultaneous priority")
+	await _press_for_physics(PlayerScript.ATTACK_ACTION)
+	_expect(action_controller.is_attack_buffer_pending(), "Standalone Attack did not enter its chord buffer")
+	await _wait_until_action_named(action_controller, &"attack", 12)
+	_expect(action_controller.get_action_name() == &"attack", "Standalone J did not resolve to Attack")
 	_expect(sprite.animation == &"attack", "Attack did not select its animation")
 	Input.action_press(PlayerScript.MOVE_LEFT_ACTION)
 	await _wait_physics_frames(8)
@@ -343,6 +352,18 @@ func _wait_until_action_finished(action_controller: PlayerActionController, maxi
 		if not action_controller.is_action_active():
 			return
 	_failures.append("Player action did not finish within test budget")
+
+
+func _wait_until_action_named(
+	action_controller: PlayerActionController,
+	action_name: StringName,
+	maximum_frames: int
+) -> void:
+	for frame_index: int in range(maximum_frames):
+		await physics_frame
+		if action_controller.get_action_name() == action_name:
+			return
+	_failures.append("Player action did not enter %s within test budget" % action_name)
 
 
 func _action_has_physical_key(action_name: StringName, keycode: Key, location: KeyLocation) -> bool:

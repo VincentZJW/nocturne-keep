@@ -128,11 +128,12 @@ func _validate_action_distinction(failures: Array[String]) -> void:
 	var ground_dash_path: String = Generator.OUTPUT_ROOT.path_join("ground_dash/ground_dash_03.png")
 	var air_dash_path: String = Generator.OUTPUT_ROOT.path_join("air_dash/air_dash_03.png")
 	var attack_path: String = Generator.OUTPUT_ROOT.path_join("attack/attack_04.png")
+	var dash_attack_path: String = Generator.OUTPUT_ROOT.path_join("dash_attack/dash_attack_04.png")
 	var action_hashes: Dictionary[String, bool] = {}
-	for path: String in [ground_dash_path, air_dash_path, attack_path]:
+	for path: String in [ground_dash_path, air_dash_path, attack_path, dash_attack_path]:
 		action_hashes[FileAccess.get_sha256(ProjectSettings.globalize_path(path))] = true
-	if action_hashes.size() != 3:
-		failures.append("Ground Dash, Air Dash, and Attack core frames are not visually distinct")
+	if action_hashes.size() != 4:
+		failures.append("Ground Dash, Air Dash, Attack, and Dash Attack core frames are not distinct")
 	var idle: Image = Image.load_from_file(ProjectSettings.globalize_path(Generator.OUTPUT_ROOT.path_join("idle/idle_01.png")))
 	var ground_dash: Image = Image.load_from_file(ProjectSettings.globalize_path(ground_dash_path))
 	var air_dash: Image = Image.load_from_file(ProjectSettings.globalize_path(air_dash_path))
@@ -140,6 +141,9 @@ func _validate_action_distinction(failures: Array[String]) -> void:
 		failures.append("Ground Dash core is not visibly lower than idle stance")
 	if _visible_bottom(air_dash) >= 60:
 		failures.append("Air Dash core reads as grounded instead of airborne")
+	var dash_attack: Image = Image.load_from_file(ProjectSettings.globalize_path(dash_attack_path))
+	if _visible_right(dash_attack) < 62:
+		failures.append("Dash Attack core does not form a forward weapon point")
 
 
 func _visible_top(image: Image) -> int:
@@ -155,6 +159,14 @@ func _visible_bottom(image: Image) -> int:
 		for x: int in range(image.get_width()):
 			if image.get_pixel(x, y).a > 0.0:
 				return y
+	return -1
+
+
+func _visible_right(image: Image) -> int:
+	for x: int in range(image.get_width() - 1, -1, -1):
+		for y: int in range(image.get_height()):
+			if image.get_pixel(x, y).a > 0.0:
+				return x
 	return -1
 
 

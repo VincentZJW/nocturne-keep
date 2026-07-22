@@ -8,11 +8,15 @@ signal animation_changed(animation_name: StringName)
 signal facing_changed(facing_left: bool)
 
 const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
+const DASH_ATTACK_HIT_FRAMES: Array[int] = [2, 3, 4]
 const LOOP_ANIMATIONS: Array[StringName] = [&"idle", &"run", &"jump_loop", &"fall"]
 const ONE_SHOT_ANIMATIONS: Array[StringName] = [
-	&"jump_start", &"land", &"ground_dash", &"air_dash", &"attack", &"hurt", &"death",
+	&"jump_start", &"land", &"ground_dash", &"air_dash", &"attack", &"dash_attack",
+	&"hurt", &"death",
 ]
-const FACING_LOCK_ANIMATIONS: Array[StringName] = [&"ground_dash", &"air_dash", &"attack"]
+const FACING_LOCK_ANIMATIONS: Array[StringName] = [
+	&"ground_dash", &"air_dash", &"attack", &"dash_attack",
+]
 const PRIORITIES: Dictionary[StringName, int] = {
 	&"idle": 10,
 	&"run": 20,
@@ -23,6 +27,7 @@ const PRIORITIES: Dictionary[StringName, int] = {
 	&"ground_dash": 70,
 	&"air_dash": 70,
 	&"attack": 80,
+	&"dash_attack": 85,
 	&"hurt": 90,
 	&"death": 100,
 }
@@ -117,6 +122,14 @@ func is_facing_locked() -> bool:
 
 func is_attack_hit_window() -> bool:
 	return animated_sprite != null and animated_sprite.animation == &"attack" and animated_sprite.frame in ATTACK_HIT_FRAMES
+
+
+func is_dash_attack_hit_window() -> bool:
+	return (
+		animated_sprite != null
+		and animated_sprite.animation == &"dash_attack"
+		and animated_sprite.frame in DASH_ATTACK_HIT_FRAMES
+	)
 
 
 func _can_play(animation_name: StringName, allow_lower_priority: bool) -> bool:

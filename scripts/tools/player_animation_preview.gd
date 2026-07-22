@@ -1,14 +1,14 @@
 class_name PlayerAnimationPreview
 extends Control
 
-## Internal eleven-animation inspector. It is not the formal game Main scene.
+## Internal twelve-animation inspector. It is not the formal game Main scene.
 
 const SpriteFramesBuilder: Script = preload("res://scripts/tools/player_sprite_frames_builder.gd")
 
 const ANIMATION_KEYS: Dictionary[Key, StringName] = {
 	KEY_1: &"idle", KEY_2: &"run", KEY_3: &"jump_start", KEY_4: &"jump_loop",
 	KEY_5: &"fall", KEY_6: &"land", KEY_7: &"ground_dash", KEY_8: &"air_dash",
-	KEY_9: &"attack", KEY_0: &"hurt", KEY_MINUS: &"death",
+	KEY_9: &"attack", KEY_EQUAL: &"dash_attack", KEY_0: &"hurt", KEY_MINUS: &"death",
 }
 
 @onready var animated_sprite: AnimatedSprite2D = %AnimatedSprite2D
@@ -47,7 +47,11 @@ func _process(_delta: float) -> void:
 	frame_label.text = "%d / %d%s" % [
 		animated_sprite.frame + 1,
 		sprite_frames.get_frame_count(animation_name),
-		" · HIT WINDOW" if animation_controller.is_attack_hit_window() else "",
+		(
+			" · HIT WINDOW"
+			if animation_controller.is_attack_hit_window() or animation_controller.is_dash_attack_hit_window()
+			else ""
+		),
 	]
 	fps_label.text = "%.1f FPS" % sprite_frames.get_animation_speed(animation_name)
 	loop_label.text = "LOOP" if sprite_frames.get_animation_loop(animation_name) else "ONE-SHOT"
@@ -68,8 +72,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _connect_animation_buttons() -> void:
 	var buttons: Array[Button] = [
 		%IdleButton, %RunButton, %JumpStartButton, %JumpLoopButton, %FallButton,
-		%LandButton, %GroundDashButton, %AirDashButton, %AttackButton, %HurtButton,
-		%DeathButton,
+		%LandButton, %GroundDashButton, %AirDashButton, %AttackButton, %DashAttackButton,
+		%HurtButton, %DeathButton,
 	]
 	for index: int in range(buttons.size()):
 		buttons[index].pressed.connect(_play_selected.bind(SpriteFramesBuilder.ANIMATION_ORDER[index]))
