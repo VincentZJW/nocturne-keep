@@ -14,26 +14,26 @@ M1.5在M1移动基础上增加开发验证用二段跳、可连续衔接的水�
 - Godot Engine 4.7.1 Standard
 - Git
 
-本机已验证的 Godot 可执行文件：
+请将 `GODOT_BIN` 设置为本机 Godot 4.7.1 可执行文件，例如：
 
-```text
-/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot
+```bash
+GODOT_BIN="/absolute/path/to/Godot"
 ```
 
-该绝对路径只用于本地运行说明，不会写入游戏逻辑、资源路径或存档。
+该变量只用于本地运行，不会写入游戏逻辑、资源路径或存档。
 
 ## 运行项目
 
 在仓库根目录执行：
 
 ```bash
-"/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot" --editor --path .
+"$GODOT_BIN" --editor --path .
 ```
 
 然后按 `F6` 运行当前场景，或按 `F5` 运行项目。也可以直接启动：
 
 ```bash
-"/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot" --path .
+"$GODOT_BIN" --path .
 ```
 
 ## 计划操作

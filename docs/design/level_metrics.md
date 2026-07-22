@@ -57,7 +57,7 @@ Do not require continuous Air Dash for the initial mainline. For gaps intended t
 ## Reproduction
 
 ```bash
-"/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot" \
+"$GODOT_BIN" \
   --headless --path . --script tests/player/measure_player_level_metrics.gd
 ```
 

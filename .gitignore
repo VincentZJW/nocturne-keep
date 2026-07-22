@@ -11,8 +11,22 @@ exports/
 
 # macOS and editor files
 .DS_Store
+.idea/
+.vscode/
+.fleet/
 *.swp
 *.tmp
+
+# Local secrets and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets/
 
 # Local logs and test artifacts
 logs/

@@ -128,7 +128,7 @@ The QA contact sheet scales the 64px sources by exactly 2× and also includes on
 Open `scenes/tools/character_design_lab.tscn` and run the current scene (`F6`), or execute:
 
 ```bash
-"/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot" --path . scenes/tools/character_design_lab.tscn
+"$GODOT_BIN" --path . scenes/tools/character_design_lab.tscn
 ```
 
 The scene auto-generates on startup. Its button regenerates all PNGs and the design board. For non-rendering automation, pass `-- --generate-only --skip-board`; the board export requires a rendering display.

@@ -8,7 +8,7 @@ Status: complete — awaiting approval for M1
 ### Preflight
 
 - Repository audit: directory was empty; no Git metadata or user files were present.
-- Godot discovery: PATH aliases `godot` and `godot4` were absent; application found at `/Users/USER/Downloads/Godot.app`.
+- Godot discovery: PATH aliases `godot` and `godot4` were absent; application found at the developer's local Godot application path.
 - Confirmed engine: `4.7.1.stable.official.a13da4feb`.
 - Confirmed OS: macOS 26.5.2 (Build 25F84).
 - Confirmed Git: 2.54.0; repository not initialized at preflight.
@@ -1026,7 +1026,7 @@ Status: complete — awaiting manual feel approval
 
 ### Commands and actual results
 
-1. `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --archive-air-dash-source`
+1. `$GODOT_BIN --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --archive-air-dash-source`
    - Exit 0; `PLAYER_AIR_DASH_ARCHIVE: 5 files, 0 failures`.
    - SHA-256 of the five archived sources: `7671ec…`, `1034bc…`, `3ac64f…`, `11584a…`, and `8b8727…`; each matched its former production file before deletion.
 2. First `--production-only` generation attempt exposed an out-of-range contact-sheet row-color access. Godot printed a `SCRIPT ERROR` even though the script process returned 0; this run was not accepted.
@@ -1039,7 +1039,7 @@ Status: complete — awaiting manual feel approval
 4. The first movement-metrics run found a pre-tree `@onready` access, and the next found an incorrectly parenthesized format expression. Both emitted `SCRIPT ERROR` and were rejected. After fixes, the exact runner produced:
    - `PLAYER_LEVEL_METRICS: PASS physics_fps=60 single_jump_range=153.59 single_jump_rise=83.77 double_jump_range=281.92 double_jump_rise=167.10 four_air_dash_range=344.00 four_air_dash_total_to_landing=362.22`.
 5. Final exact Godot 4.7.1 import:
-   - `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_air_chain_commit_import.log`
+   - `$GODOT_BIN --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_air_chain_commit_import.log`
    - Exit 0; no parse, script, or resource errors.
 6. Final serial regression suite using the same executable:
    - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
@@ -1135,7 +1135,7 @@ Status: complete — awaiting manual feel approval
 ### Commands and actual results
 
 1. Exact Godot 4.7.1 import after implementation:
-   - `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_airborne_stamina_final_import.log`
+   - `$GODOT_BIN --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_airborne_stamina_final_import.log`
    - Exit 0; no parse, script, resource, or warning output.
 2. Exact serial regression suite:
    - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
@@ -1150,7 +1150,7 @@ Status: complete — awaiting manual feel approval
    - `measure_player_level_metrics.gd`: primary envelopes unchanged—single jump 153.59/83.77, double jump 281.92/167.10, four-Air-Dash action range 344.00 px.
 3. After adding explicit configurable-multiplier, normal-Attack, and Dash-Attack block assertions, both stamina suites were rerun independently and passed.
 4. Main runtime render:
-   - `/Users/USER/Downloads/Godot.app/Contents/MacOS/Godot --path . --write-movie /tmp/nocturne_keep_airborne_stamina_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy --log-file /tmp/nocturne_keep_airborne_stamina_main.log`
+   - `$GODOT_BIN --path . --write-movie /tmp/nocturne_keep_airborne_stamina_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy --log-file /tmp/nocturne_keep_airborne_stamina_main.log`
    - Exit 0; GL Compatibility on Apple M4, two 1280×720 frames, no red errors/warnings. Original-resolution inspection confirmed the fixed HUD and `REGEN GROUND 35.0/s` debug status are readable.
 5. `git diff --check`: passed.
 
