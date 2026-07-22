@@ -1,6 +1,6 @@
 # Player Animation Integration Specification
 
-Version: 1.4 — Dash Attack input chain
+Version: 1.5 — Fast Attack response and buffering
 Date: 2026-07-22
 Status: M1 locomotion complete; M1.5 Dash/Attack/Dash Attack presentation complete without combat
 
@@ -34,14 +34,14 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 | `land` | 2 | 12 | No | M1 production |
 | `ground_dash` | 5 | 20 | No | Production |
 | `air_dash` | 5 | 20 | No | Production |
-| `attack` | 6 | 12 | No | Production dual-dagger thrust |
-| `dash_attack` | 6 | 16 | No | Production high-speed dual thrust |
+| `attack` | 4 | 20 | No | Production fast dual-dagger thrust |
+| `dash_attack` | 5 | 20 | No | Production high-speed dual thrust |
 | `hurt` | 3 | 12 | No | Placeholder |
 | `death` | 8 | 8 | No | Placeholder |
 
 Only Hurt and Death remain placeholders. Their files live under `assets/sprites/player/assassin/placeholder/`, every filename starts with `placeholder_`, and they must not be treated as approved final animation art.
 
-The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The six superseded sideways-slash Attack production frames are preserved byte-identically in `assets/sprites/player/assassin/reference/deprecated_attack_slash/`.
+The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The superseded sideways-slash Attack remains in `reference/deprecated_attack_slash/`. The immediately preceding six-frame thrust sequences are preserved byte-identically in `reference/deprecated_attack_six_frame/` and `reference/deprecated_dash_attack_six_frame/`.
 
 ## Timing contracts
 
@@ -49,9 +49,9 @@ Ground Dash frames are `ground_dash_01` start compression, `ground_dash_02` rear
 
 Air Dash uses five independent non-looping frames. Its body is lower and more horizontal, both feet are pulled clear of the ground line, both blades remain readable close to the body, and its mantle trails backward. It deliberately avoids the grounded rear-leg push and the Attack's simultaneous extended blades.
 
-Attack is a synchronous dual-dagger lunging thrust: `attack_01` guard, `attack_02` compressed anticipation, `attack_03` drive and initial extension, `attack_04` full dual-blade core strike, `attack_05` short held extension, and `attack_06` retraction/recovery. Both blades point forward throughout the strike and are vertically offset so they remain separate. No slash arc is used. `attack_03` and `attack_04` are reserved as the future narrow forward hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes this frame query without implementing a Hitbox or damage.
+Attack is a synchronous four-frame dual-dagger thrust at 20 FPS: `attack_01` is the short compression, `attack_02` snaps both blades into the first core pose, `attack_03` holds maximum extension and opens the repeat window, and `attack_04` retracts quickly. Both blades point forward and remain vertically separated. The designed delay from J to `attack_02` is one 20-FPS frame, approximately 0.05 seconds. `attack_02` and `attack_03` are reserved as the future narrow forward hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes only metadata; there is no Hitbox or damage.
 
-Dash Attack uses one shared ground/air six-frame sequence at 16 FPS: `dash_attack_01` inherits the low Dash line, `02` compresses elbows and body, `03` begins the paired thrust, `04` forms the full arrow-shaped dual-blade core, `05` holds a narrow extension, and `06` retracts while movement decelerates. Ground use reads as a bent lead-leg drive; the same fixed canvas remains coherent in the air because the Player body itself is airborne. It has no lateral slash or broad effect arc. `dash_attack_03` through `05` are query-only future hit-window metadata exposed by `is_dash_attack_hit_window()`.
+Dash Attack uses one shared ground/air five-frame sequence at 20 FPS: `dash_attack_01` inherits Dash and retracts both elbows, `02` starts paired extension, `03` forms the full arrow-shaped core, `04` holds the narrow thrust, and `05` retracts while movement decelerates. Total presentation time is approximately 0.25 seconds. It has no lateral slash or broad effect arc. `dash_attack_03` and `dash_attack_04` are query-only future hit-window metadata.
 
 ## M1 locomotion art contract
 
@@ -152,17 +152,19 @@ Dedicated inputs extend the M1 map:
 
 ### Attack animation trigger
 
-- J requests the six-frame, 12 FPS non-looping dual-dagger thrust Attack.
-- It locks facing and suppresses locomotion animation requests until all six frames complete.
-- Repeated J edges while active are rejected rather than restarting frame one.
+- J requests the four-frame, 20 FPS non-looping dual-dagger thrust immediately; it does not wait for key release or for a Dash pairing timer.
+- It locks facing and suppresses locomotion animation requests until completion.
+- A J edge during Attack stores at most one next-Attack request for 0.10 seconds. It never restarts frame one at input time.
+- From `attack_03` onward, a live buffer authorizes `restart_locked_one_shot("attack")`, consumes the buffer once, and starts the same basic Attack again. This is repeat chaining of one action, not a combo tree.
 - Completion returns to Idle/Run on the ground or the appropriate air loop if the action finished airborne.
-- `attack_03` and `attack_04` remain queryable future hit-window metadata only; they have no Gameplay effect.
+- `attack_02` and `attack_03` remain queryable future hit-window metadata only; they have no Gameplay effect.
 
 ### Dash Attack animation trigger
 
 - Ground/Air Dash opens a 0.18-second combination window. J inside it interrupts the Dash presentation with the higher-priority `dash_attack` one-shot.
-- J pressed first remains buffered for 0.12 seconds. Shift within that grace period starts Dash Attack directly without briefly playing normal Attack; if Shift never arrives, the buffer resolves to normal Attack.
-- A Dash can use this transition only once. Repeated J/Shift cannot restart Dash Attack, and normal Attack/Dash requests remain blocked until its sixth frame completes.
+- Same-frame Shift+J starts Dash Attack directly when Dash is legal. J during the existing 0.18-second Dash window also transitions to Dash Attack.
+- J pressed first now starts normal Attack immediately. Because Dash does not cancel Attack, Shift pressed on a later frame does not convert that Attack into Dash Attack.
+- A Dash can use this transition only once. Repeated J/Shift cannot restart Dash Attack, and normal Attack/Dash requests remain blocked until its fifth frame completes.
 - Ground and Air variants share the same animation in this pass. The action component retains airborne origin so physics can suspend gravity and recover to Fall/Land appropriately.
 
 ### Active M1.5 priority
@@ -171,7 +173,7 @@ Dedicated inputs extend the M1 map:
 dash_attack > attack > ground_dash/air_dash > land > jump_start > jump_loop/fall > run > idle
 ```
 
-Same-frame Shift/J and either input order within the configured grace periods resolve to Dash Attack. Once normal Attack or Dash Attack starts, the action component rejects ordinary Dash/Attack requests until completion. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
+Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts only its bounded one-entry Attack buffer; Dash Attack rejects further ordinary Dash/Attack starts. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
 
 ## Pixel display and anchor rules
 
@@ -187,6 +189,7 @@ Same-frame Shift/J and either input order within the configured grace periods re
 
 - `play_loop(animation_name, allow_lower_priority=false) -> bool`
 - `play_one_shot(animation_name) -> bool`
+- `restart_locked_one_shot(animation_name) -> bool` for an action-controller-authorized same-animation repeat
 - `set_facing_left(facing_left) -> bool`
 - `pause()`, `resume()`, `restart_current()`
 - `reset_to_idle()` for preview reset and future respawn ownership

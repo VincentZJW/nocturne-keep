@@ -57,7 +57,10 @@ static func _recipes() -> Dictionary[String, Array]:
 		"hurt": [
 			{"source": "attack/attack_02.png", "offset": Vector2i(1, 0)},
 			{"source": "attack/attack_01.png", "offset": Vector2i(-1, 0)},
-			{"source": "attack/attack_06.png", "offset": Vector2i.ZERO},
+			{
+				"source": "reference/deprecated_attack_six_frame/attack_6f_06.png",
+				"offset": Vector2i.ZERO,
+			},
 		],
 		"death": [
 			{"source": "idle/idle_04.png", "offset": Vector2i.ZERO},

@@ -691,7 +691,7 @@ Status: complete — awaiting manual approval
 ## M1.5 extension — Dash Attack input chain
 
 Date: 2026-07-22
-Status: in progress
+Status: complete — awaiting manual feel approval
 
 ### Goals and scope
 
@@ -795,3 +795,103 @@ Status: in progress
 - Dash Attack has no invulnerability, gameplay Hitbox, target memory, damage, enemy interaction, or combo follow-up.
 - Hurt and Death remain preview-only placeholders; Main remains an internal action laboratory.
 - No enemy, formal damage settlement, combo tree, or Boss work was started.
+
+## M1.5 refinement — Fast Attack response and buffering
+
+Date: 2026-07-22
+Status: complete — awaiting manual feel approval
+
+### Goals and scope
+
+- Compress the production `attack` animation from six frames at 12 FPS to four frames at 20 FPS, preserving a synchronous dual-dagger forward thrust and reducing input-to-core-pose latency to approximately 0.05 seconds.
+- Add a single-entry, 0.10-second Attack input buffer that may restart the same basic Attack only from frame three onward or at natural completion; rapid J input must never restart frame one immediately.
+- Compress `dash_attack` from six frames at 16 FPS to five frames at 20 FPS and align its future metadata-only hit window to frames three and four.
+- Archive both superseded six-frame animation sequences before production overwrite and retain all earlier references/deprecated assets.
+- Extend the optional debug HUD and deterministic tests with Attack frame, buffer timer, chain readiness, and measured input-to-effective-frame latency.
+
+### Preflight audit
+
+- Git worktree is clean at baseline commit `753003f feat: add buffered dash attack`.
+- Standalone J currently waits up to 0.12 seconds in order to support the older J-first near-chord path. This conflicts with the new immediate-Attack requirement and will be removed.
+- Same-frame Shift+J and Dash-then-J can remain Dash Attack paths. J-first will now start Attack immediately; the existing policy that Dash does not cancel Attack remains unchanged.
+- Production `attack` and `dash_attack` each currently contain six transparent 64×64 PNG frames. SpriteFrames configures them at 12 FPS and 16 FPS respectively.
+- Current future window metadata is Attack frames three/four and Dash Attack frames three/four/five. It will change to Attack frames two/three and Dash Attack frames three/four.
+
+### Planned files and tests
+
+- Update the pixel pose generator, archive/export tool, SpriteFrames builder/resource, animation controller, action config/controller, debug overlay, contact-sheet/asset validation, and affected Gameplay tests.
+- Add `docs/design/player_combat_spec.md`; update README, animation specification, movement specification where its input contract is affected, QA report, and this development log.
+- Verify immediate single Attack, approximately 0.05-second effective pose, one-entry buffer consumption, repeated complete attacks without frame-one starvation, movement/facing locks, five-frame Dash Attack duration, 48×48 readability, Main/preview startup, and all existing regressions with the exact Godot 4.7.1 executable.
+
+### Scope guard
+
+- This is one repeatable basic Attack animation, not a multi-animation combo tree.
+- Dash still cannot cancel an active Attack; no new cancel matrix is introduced.
+- No Hitbox node, target tracking, enemy, health, damage, invulnerability, Boss, Hurt Gameplay, or Death Gameplay is authorized.
+
+### Delivered implementation
+
+- Archived the immediately preceding six production Attack frames to `assets/sprites/player/assassin/reference/deprecated_attack_six_frame/` and six Dash Attack frames to `reference/deprecated_dash_attack_six_frame/`. Pre-overwrite SHA-256 comparison confirmed all twelve archive files are byte-identical to their production sources.
+- Rebuilt Attack as four distinct 64×64 frames at 20 FPS: short compression, first dual-thrust core, held maximum extension/chain window, and rapid retraction. Future metadata is now exactly `attack_02` and `attack_03`.
+- Rebuilt Dash Attack as five distinct 64×64 frames at 20 FPS: Dash carry-over, initial extension, arrow-shaped core, held thrust, and recovery. Future metadata is now exactly `dash_attack_03` and `dash_attack_04`.
+- Removed the 0.12-second standalone-Attack pairing delay. J now dispatches Attack immediately; the effective `attack_02` timeline begins after one 20-FPS frame (`0.05 seconds`).
+- Added a centralized `attack_buffer_time=0.10`. An active Attack stores at most one later J, never extends that entry from repeat spam, and consumes it only from frame three onward or at natural completion.
+- Added an animation-controller-authorized same-one-shot restart that preserves animation/facing locks. Each consumed buffer restarts the same basic Attack exactly once and emits a new action-start event; it does not define a combo branch.
+- Preserved the existing cancellation policy: Dash does not cancel Attack. Same-frame Shift+J and Dash-then-J still start Dash Attack, but J-first on an earlier frame is now an immediate normal Attack.
+- Shortened Dash Attack movement to 0.15 seconds at 320 px/s plus 0.10 seconds of linear recovery, totaling the five-frame 0.25-second presentation.
+- Extended the optional Main HUD with current Attack frame, buffer flag/timer, chain readiness, and input-to-first-effective-frame timeline. Updated Main labeling, SpriteFrames, preview data, procedural builders, placeholder dependencies, QA sheet/reports, README, animation/movement specifications, and the new combat-interface specification.
+
+### Commands and actual results
+
+1. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --archive-fast-attack-source`
+   - Exit 0; `PLAYER_FAST_ATTACK_ARCHIVE: 12 files, 0 failures`.
+   - `shasum -a 256` comparison before overwrite produced matching source/archive hashes for every old Attack and Dash Attack frame.
+2. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --production-only`
+   - Exit 0; `PLAYER_PRODUCTION_EXPORT: 29 files, 0 failures`. Obsolete production `attack_05`, `attack_06`, and `dash_attack_06` plus their import sidecars were removed only after archival.
+3. First editor import after source compression
+   - The editor reported the three removed frame paths because the persistent SpriteFrames resource still contained its old references. This was not ignored: the resource was immediately rebuilt with the new counts, and the final clean import below produced no error.
+4. `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd`
+   - Exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK` with Attack 4/20 FPS and Dash Attack 5/20 FPS.
+5. Final `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_fast_attack_import.log`
+   - Exit 0; no script/resource error or warning.
+6. Serial automated suites with exact Godot 4.7.1 executable:
+   - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
+   - `validate_player_animation_assets.gd`: `PASS (29 frames + 4 byte-identical references)`; additionally validates both new six-frame archive directories.
+   - `test_player_animation_system.gd`: `PASS (12 animations, controller locks/signals verified)`.
+   - `test_m1_player_movement.gd`: `PASS (movement, jump assists, collision, camera, six animations)`.
+   - `test_m15_player_actions.gd`: `PASS (ground/air Dash, reset/cooldown, thrust Attack)`.
+   - `test_dash_attack.gd`: `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+   - `test_fast_attack.gd`: `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`; repeated three consecutive runs also passed.
+7. `Godot --path . --write-movie /tmp/nocturne_keep_fast_attack_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy`
+   - Exit 0; GL Compatibility initialized on Apple M4 and rendered two 1280×720 Main frames. The expanded two-line HUD fits the panel and the project Main remains intact.
+8. `Godot --path . scenes/tools/player_animation_preview.tscn --write-movie /tmp/nocturne_keep_fast_attack_preview.png --fixed-fps 20 --quit-after 2 --audio-driver Dummy`
+   - Exit 0; the independent twelve-animation preview rendered two 1280×720 frames without red Output/Debugger errors.
+9. Original-resolution review of `docs/qa/player_animation_contact_sheet.png` and `git diff --check`
+   - The new Attack row shows two separate forward blades on frames two/three; Dash Attack shows the longer arrow silhouette on frames three/four. Both 48px checks retain hood, legs, and two weapon bands. Diff check passed.
+
+### Automated acceptance results
+
+- A normal Attack enters the action state synchronously on its accepted J edge. It never waits for J release or a chord timeout.
+- The timeline from accepted input to `attack_02` is exactly one 20-FPS frame (`0.05 seconds`) at normal speed.
+- One early repeat J remains buffered through the locked first half, does not restart frame one, and is consumed once when `attack_03` opens the chain window.
+- Four deliberately repeated Attacks each reached `attack_02` and `attack_03`; the action-start count matched the accepted input count, and stopping J allowed the final `attack_04` recovery to finish.
+- Movement presentation and facing cannot overwrite active Attack. The preserved Dash-during-Attack request is rejected.
+- Dash Attack retains collision-safe CharacterBody2D motion, reaches half speed midway through its 0.10-second recovery, and reaches zero at 0.25 seconds.
+- Both actions remain dual-hand forward thrusts with vertically separated blades and no lateral arc. Their 48×48 nearest-neighbor checks remain readable.
+- No Hitbox, Hurtbox, enemy, target memory, damage, health, invulnerability, Boss, or formal combo tree was added.
+
+### Manual acceptance requested
+
+1. Tap J once and judge whether the short frame-one compression and approximately 0.05-second first thrust feel immediate.
+2. Tap J repeatedly at slow, medium, and rapid rhythms; confirm the character finishes readable thrust cycles instead of sticking on frame one.
+3. Stop J after several repeats and confirm the final Attack retracts immediately into Idle/Run/air locomotion.
+4. Compare normal Attack (compact, stationary, 0.20 seconds) with Dash Attack (longer silhouette, inherited movement, 0.25 seconds) facing both directions.
+5. Confirm the chosen preserved rule—Shift cannot cancel an active Attack—matches the desired feel before any later cancel matrix is designed.
+
+### Known limitations and handoff
+
+- The one-entry buffer repeats one identical basic Attack; it has no alternating art, branch, damage scaling, target logic, or formal combo counter.
+- Input-to-effective-frame diagnostics report the SpriteFrames timeline at current `speed_scale`; they are deterministic presentation timing, not operating-system input-latency profiling.
+- The earlier J-first Dash Attack pairing was intentionally removed to satisfy immediate J response. Same-frame Shift+J and Dash-then-J remain supported.
+- Dash Attack still has no damage, invulnerability, or gameplay Hitbox. Hurt/Death remain preview placeholders.
+- No enemy, damage settlement, formal combo tree, or Boss work was started.

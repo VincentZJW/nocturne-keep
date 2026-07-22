@@ -1,6 +1,6 @@
 extends SceneTree
 
-## Headless validation for the current 26-frame Night Warden production batch.
+## Headless validation for the current 29-frame Night Warden production batch.
 
 const PixelCanvas: Script = preload("res://scripts/tools/pixel_art_canvas.gd")
 const Concept: Script = preload("res://scripts/tools/pixel_character_generator.gd")
@@ -24,6 +24,7 @@ func _run_validation() -> void:
 	for animation_name: String in Generator.ANIMATION_ORDER:
 		total_frames += _validate_animation(animation_name, failures)
 	_validate_references(failures)
+	_validate_fast_attack_archives(failures)
 	_validate_action_distinction(failures)
 	_validate_project_isolation(failures)
 	if failures.is_empty():
@@ -124,11 +125,22 @@ func _validate_references(failures: Array[String]) -> void:
 			failures.append("Reference is missing or not byte-identical: %s" % reference_path)
 
 
+func _validate_fast_attack_archives(failures: Array[String]) -> void:
+	for frame_index: int in range(1, 7):
+		for archive_path: String in [
+			Generator.DEPRECATED_ATTACK_SIX_FRAME_ROOT.path_join("attack_6f_%02d.png" % frame_index),
+			Generator.DEPRECATED_DASH_ATTACK_SIX_FRAME_ROOT.path_join("dash_attack_6f_%02d.png" % frame_index),
+		]:
+			var image: Image = Image.load_from_file(ProjectSettings.globalize_path(archive_path))
+			if image == null or image.get_size() != Vector2i(64, 64):
+				failures.append("Missing or invalid six-frame archive: %s" % archive_path)
+
+
 func _validate_action_distinction(failures: Array[String]) -> void:
 	var ground_dash_path: String = Generator.OUTPUT_ROOT.path_join("ground_dash/ground_dash_03.png")
 	var air_dash_path: String = Generator.OUTPUT_ROOT.path_join("air_dash/air_dash_03.png")
-	var attack_path: String = Generator.OUTPUT_ROOT.path_join("attack/attack_04.png")
-	var dash_attack_path: String = Generator.OUTPUT_ROOT.path_join("dash_attack/dash_attack_04.png")
+	var attack_path: String = Generator.OUTPUT_ROOT.path_join("attack/attack_03.png")
+	var dash_attack_path: String = Generator.OUTPUT_ROOT.path_join("dash_attack/dash_attack_03.png")
 	var action_hashes: Dictionary[String, bool] = {}
 	for path: String in [ground_dash_path, air_dash_path, attack_path, dash_attack_path]:
 		action_hashes[FileAccess.get_sha256(ProjectSettings.globalize_path(path))] = true

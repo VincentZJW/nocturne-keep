@@ -13,13 +13,13 @@ const ANIMATION_ORDER: Array[StringName] = [
 ]
 const FRAME_COUNTS: Dictionary[StringName, int] = {
 	&"idle": 4, &"run": 6, &"jump_start": 2, &"jump_loop": 2, &"fall": 2,
-	&"land": 2, &"ground_dash": 5, &"air_dash": 5, &"attack": 6,
-	&"dash_attack": 6, &"hurt": 3, &"death": 8,
+	&"land": 2, &"ground_dash": 5, &"air_dash": 5, &"attack": 4,
+	&"dash_attack": 5, &"hurt": 3, &"death": 8,
 }
 const SPEEDS: Dictionary[StringName, float] = {
 	&"idle": 5.0, &"run": 10.0, &"jump_start": 12.0, &"jump_loop": 4.0,
 	&"fall": 4.0, &"land": 12.0, &"ground_dash": 20.0, &"air_dash": 20.0,
-	&"attack": 12.0, &"dash_attack": 16.0, &"hurt": 12.0, &"death": 8.0,
+	&"attack": 20.0, &"dash_attack": 20.0, &"hurt": 12.0, &"death": 8.0,
 }
 const LOOPING: Dictionary[StringName, bool] = {
 	&"idle": true, &"run": true, &"jump_start": false, &"jump_loop": true,

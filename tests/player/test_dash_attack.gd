@@ -6,7 +6,7 @@ const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
 const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
 const PlayerScript: Script = preload("res://scripts/player/player.gd")
 const Concept: Script = preload("res://scripts/tools/pixel_character_generator.gd")
-const DASH_ATTACK_PATH: String = "res://assets/sprites/player/assassin/dash_attack/dash_attack_04.png"
+const DASH_ATTACK_PATH: String = "res://assets/sprites/player/assassin/dash_attack/dash_attack_03.png"
 
 var _failures: Array[String] = []
 var _started_actions: Array[StringName] = []
@@ -38,19 +38,19 @@ func _validate_configuration_and_art() -> void:
 	_expect(config != null, "Action prototype configuration is missing")
 	if config != null:
 		_expect(is_equal_approx(config.dash_attack_input_window, 0.18), "Combination window is not 0.18 seconds")
-		_expect(is_equal_approx(config.dash_attack_buffer_time, 0.12), "Attack buffer is not 0.12 seconds")
+		_expect(is_equal_approx(config.attack_buffer_time, 0.10), "Attack buffer is not 0.10 seconds")
 		_expect(is_equal_approx(config.dash_attack_speed, 320.0), "Dash Attack speed is not centralized")
 		_expect(
-			is_equal_approx(config.dash_attack_move_duration + config.dash_attack_recovery_duration, 0.375),
-			"Dash Attack movement/recovery does not match six frames at 16 FPS"
+			is_equal_approx(config.dash_attack_move_duration + config.dash_attack_recovery_duration, 0.25),
+			"Dash Attack movement/recovery does not match five frames at 20 FPS"
 		)
 	var sprite_frames: SpriteFrames = load(
 		"res://resources/player/player_sprite_frames.tres"
 	) as SpriteFrames
 	_expect(sprite_frames != null and sprite_frames.has_animation(&"dash_attack"), "dash_attack animation is missing")
 	if sprite_frames != null and sprite_frames.has_animation(&"dash_attack"):
-		_expect(sprite_frames.get_frame_count(&"dash_attack") == 6, "dash_attack frame count is not six")
-		_expect(is_equal_approx(sprite_frames.get_animation_speed(&"dash_attack"), 16.0), "dash_attack FPS is not 16")
+		_expect(sprite_frames.get_frame_count(&"dash_attack") == 5, "dash_attack frame count is not five")
+		_expect(is_equal_approx(sprite_frames.get_animation_speed(&"dash_attack"), 20.0), "dash_attack FPS is not 20")
 		_expect(not sprite_frames.get_animation_loop(&"dash_attack"), "dash_attack unexpectedly loops")
 	var core: Image = Image.load_from_file(ProjectSettings.globalize_path(DASH_ATTACK_PATH))
 	_expect(core != null and core.get_size() == Vector2i(64, 64), "Dash Attack core is not 64x64")
@@ -58,7 +58,7 @@ func _validate_configuration_and_art() -> void:
 		_expect(_color_count(core, Concept.PALE_STEEL, Rect2i(53, 27, 11, 6)) >= 4, "Upper thrust blade is unreadable")
 		_expect(_color_count(core, Concept.PALE_STEEL, Rect2i(52, 33, 12, 6)) >= 3, "Lower thrust blade is unreadable")
 		_expect(_visible_right(core) >= 62, "Dash Attack core lacks a forward arrow point")
-	for frame_index: int in [2, 3, 4]:
+	for frame_index: int in [2, 3]:
 		_expect(frame_index in PlayerAnimationController.DASH_ATTACK_HIT_FRAMES, "Future hit-window frame missing")
 
 
@@ -102,19 +102,19 @@ func _test_standalone_and_dash_transition() -> void:
 
 
 func _test_near_simultaneous_inputs() -> void:
-	# Attack-first input waits briefly, then pairs with Shift without playing normal Attack.
+	# The new immediate-response contract starts J now; Dash still cannot cancel Attack.
 	var world: Node2D = _create_world(2200.0)
 	var player: Player = _spawn_player(world, Vector2(0, 252))
 	var actions: PlayerActionController = player.action_controller
 	_connect_started(actions)
 	await _wait_physics_frames(4)
 	await _press_once(PlayerScript.ATTACK_ACTION)
-	_expect(actions.is_attack_buffer_pending(), "Attack-first chord did not enter the 0.12-second buffer")
-	_expect(not actions.is_action_active(), "Normal Attack started before the pairing buffer expired")
+	_expect(actions.get_action_name() == &"attack", "J did not start normal Attack immediately")
+	_expect(not actions.is_attack_buffered(), "Initial J was incorrectly stored as a future Attack")
 	await _wait_physics_frames(3)
 	await _press_once(PlayerScript.DASH_ACTION)
-	_expect(actions.is_dash_attack_active(), "Attack then Shift inside buffer did not start Dash Attack")
-	_expect(not _started_actions.has(&"attack"), "Near chord briefly played normal Attack")
+	_expect(actions.get_action_name() == &"attack", "Shift incorrectly cancelled active Attack")
+	_expect(not actions.is_dash_attack_active(), "J-first input incorrectly became Dash Attack after Attack began")
 	await _wait_until_action_finished(actions, 40)
 	_cleanup_world(world)
 	await process_frame
@@ -148,7 +148,7 @@ func _test_late_input_and_repeat_guard() -> void:
 	_expect(not actions.is_dash_attack_input_window_open(), "Dash Attack input window stayed open too long")
 	await _press_once(PlayerScript.ATTACK_ACTION)
 	_expect(not actions.is_dash_attack_active(), "Late J incorrectly entered Dash Attack")
-	_expect(not actions.is_attack_buffer_pending(), "Late Dash J leaked into a future normal Attack")
+	_expect(not actions.is_attack_buffered(), "Late Dash J leaked into a future normal Attack")
 	await _wait_until_action_finished(actions, 20)
 	_cleanup_world(world)
 	await process_frame
@@ -243,7 +243,10 @@ func _test_debug_overlay() -> void:
 	var debug_label: Label = main.get_node("Interface/Panel/ActionDebug") as Label
 	var toggle: CheckButton = main.get_node("Interface/Panel/DebugToggle") as CheckButton
 	_expect(debug_label.visible, "Action debug overlay is not initially visible in the test scene")
-	for required_text: String in ["STATE", "COMBO WINDOW", "USED", "AIR DASH", "VX"]:
+	for required_text: String in [
+		"STATE", "COMBO WINDOW", "USED", "AIR DASH", "VX", "ATTACK FRAME",
+		"BUFFERED", "TIMER", "CHAIN", "INPUT→HIT",
+	]:
 		_expect(debug_label.text.contains(required_text), "Debug overlay omits %s" % required_text)
 	toggle.button_pressed = false
 	await process_frame
@@ -358,7 +361,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("DASH_ATTACK_TEST: PASS (buffer, transitions, air recovery, collision, debug HUD)")
+		print("DASH_ATTACK_TEST: PASS (immediate J, transitions, air recovery, collision, debug HUD)")
 		quit(0)
 		return
 	for failure: String in _failures:

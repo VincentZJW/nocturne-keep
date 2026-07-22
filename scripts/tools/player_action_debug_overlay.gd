@@ -25,13 +25,23 @@ func _ready() -> void:
 
 func _process(_delta: float) -> void:
 	var actions: PlayerActionController = player.action_controller
-	text = "STATE %s   COMBO WINDOW %s (%.2fs)   USED %s   AIR DASH %s   VX %.1f" % [
+	var response_time: float = actions.get_attack_input_to_hit_time()
+	var response_text: String = "--" if response_time < 0.0 else "%.3fs" % response_time
+	text = (
+		"STATE %s   COMBO WINDOW %s (%.2fs)   USED %s   AIR DASH %s   VX %.1f\n"
+		+ "ATTACK FRAME %d/4   BUFFERED %s   TIMER %.3fs   CHAIN %s   INPUT→HIT %s"
+	) % [
 		actions.get_action_state_name(),
 		"OPEN" if actions.is_dash_attack_input_window_open() else "closed",
 		actions.get_dash_attack_window_remaining(),
 		"true" if actions.is_dash_attack_used() else "false",
 		"ready" if player.air_dash_available else "spent",
 		player.velocity.x,
+		actions.get_current_attack_frame(),
+		"true" if actions.is_attack_buffered() else "false",
+		actions.get_attack_buffer_remaining(),
+		"OPEN" if actions.can_chain_attack() else "closed",
+		response_text,
 	]
 
 

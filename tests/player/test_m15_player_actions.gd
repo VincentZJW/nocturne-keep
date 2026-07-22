@@ -49,10 +49,15 @@ func _validate_inputs_and_assets() -> void:
 		_action_has_physical_key(PlayerScript.ATTACK_ACTION, KEY_J, KEY_LOCATION_UNSPECIFIED),
 		"Attack is not mapped to physical J"
 	)
-	for frame_index: int in range(1, 7):
+	for frame_index: int in range(1, 5):
 		_validate_asset("res://assets/sprites/player/assassin/attack/attack_%02d.png" % frame_index)
+	for frame_index: int in range(1, 7):
 		_validate_asset(
 			"res://assets/sprites/player/assassin/reference/deprecated_attack_slash/attack_slash_%02d.png"
+			% frame_index
+		)
+		_validate_asset(
+			"res://assets/sprites/player/assassin/reference/deprecated_attack_six_frame/attack_6f_%02d.png"
 			% frame_index
 		)
 	for animation_name: String in ["ground_dash", "air_dash"]:
@@ -61,16 +66,21 @@ func _validate_inputs_and_assets() -> void:
 				"res://assets/sprites/player/assassin/%s/%s_%02d.png"
 				% [animation_name, animation_name, frame_index]
 			)
-	for frame_index: int in range(1, 7):
+	for frame_index: int in range(1, 6):
 		_validate_asset("res://assets/sprites/player/assassin/dash_attack/dash_attack_%02d.png" % frame_index)
+	for frame_index: int in range(1, 7):
+		_validate_asset(
+			"res://assets/sprites/player/assassin/reference/deprecated_dash_attack_six_frame/dash_attack_6f_%02d.png"
+			% frame_index
+		)
 	var sprite_frames: SpriteFrames = load(SPRITE_FRAMES_PATH) as SpriteFrames
 	_expect(sprite_frames != null, "Player SpriteFrames resource is unreadable")
 	if sprite_frames == null:
 		return
 	_validate_sprite_animation(sprite_frames, &"ground_dash", 5, 20.0)
 	_validate_sprite_animation(sprite_frames, &"air_dash", 5, 20.0)
-	_validate_sprite_animation(sprite_frames, &"attack", 6, 12.0)
-	_validate_sprite_animation(sprite_frames, &"dash_attack", 6, 16.0)
+	_validate_sprite_animation(sprite_frames, &"attack", 4, 20.0)
+	_validate_sprite_animation(sprite_frames, &"dash_attack", 5, 20.0)
 	_expect(not sprite_frames.has_animation(&"dash"), "Ambiguous legacy dash animation alias still exists")
 	_expect(PlayerScript.DOUBLE_JUMP_ANIMATION == &"double_jump", "Future double_jump name is not reserved")
 	_validate_attack_thrust_art()
@@ -223,16 +233,15 @@ func _test_attack_contract() -> void:
 	_connect_action_events(action_controller)
 	await _wait_physics_frames(4)
 	await _press_for_physics(PlayerScript.ATTACK_ACTION)
-	_expect(action_controller.is_attack_buffer_pending(), "Standalone Attack did not enter its chord buffer")
-	await _wait_until_action_named(action_controller, &"attack", 12)
-	_expect(action_controller.get_action_name() == &"attack", "Standalone J did not resolve to Attack")
+	_expect(action_controller.get_action_name() == &"attack", "Standalone J did not start Attack immediately")
+	_expect(not action_controller.is_attack_buffered(), "Initial J was incorrectly buffered")
 	_expect(sprite.animation == &"attack", "Attack did not select its animation")
 	Input.action_press(PlayerScript.MOVE_LEFT_ACTION)
-	await _wait_physics_frames(8)
+	await _wait_physics_frames(3)
 	_expect(sprite.animation == &"attack", "Movement animation overrode Attack")
 	_expect(not sprite.flip_h, "Attack facing changed while locked")
 	await _press_for_physics(PlayerScript.ATTACK_ACTION)
-	_expect(_action_started_events.count(&"attack") == 1, "Repeated input restarted Attack")
+	_expect(_action_started_events.count(&"attack") <= 2, "One buffered input started Attack more than once")
 	await _wait_until_action_finished(action_controller, 40)
 	_expect(_action_finished_events.has(&"attack"), "Attack did not emit completion")
 	await process_frame
@@ -260,16 +269,16 @@ func _validate_sprite_animation(
 
 
 func _validate_attack_thrust_art() -> void:
-	var current_path: String = "res://assets/sprites/player/assassin/attack/attack_04.png"
+	var current_path: String = "res://assets/sprites/player/assassin/attack/attack_03.png"
 	var archived_path: String = (
-		"res://assets/sprites/player/assassin/reference/deprecated_attack_slash/attack_slash_04.png"
+		"res://assets/sprites/player/assassin/reference/deprecated_attack_six_frame/attack_6f_04.png"
 	)
 	var current_hash: String = FileAccess.get_sha256(ProjectSettings.globalize_path(current_path))
 	var archived_hash: String = FileAccess.get_sha256(ProjectSettings.globalize_path(archived_path))
 	_expect(current_hash != archived_hash, "Production Attack was not changed from archived slash art")
 	var image: Image = Image.load_from_file(ProjectSettings.globalize_path(current_path))
-	_expect(_color_count(image, Concept.PALE_STEEL, Rect2i(52, 29, 12, 5)) >= 4, "Attack core lacks upper forward blade")
-	_expect(_color_count(image, Concept.PALE_STEEL, Rect2i(51, 34, 12, 5)) >= 3, "Attack core lacks lower forward blade")
+	_expect(_color_count(image, Concept.PALE_STEEL, Rect2i(52, 28, 12, 6)) >= 4, "Attack core lacks upper forward blade")
+	_expect(_color_count(image, Concept.PALE_STEEL, Rect2i(51, 34, 13, 6)) >= 3, "Attack core lacks lower forward blade")
 	_expect(_visible_right(image) >= 62, "Attack dagger tips do not extend beyond the body")
 
 

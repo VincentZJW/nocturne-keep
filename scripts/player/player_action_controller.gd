@@ -1,7 +1,7 @@
 class_name PlayerActionController
 extends Node
 
-## M1.5 action prototype: buffered Attack, Ground/Air Dash, and one Dash Attack transition.
+## M1.5 action prototype: fast buffered Attack, Ground/Air Dash, and one Dash Attack transition.
 
 signal action_started(action_name: StringName)
 signal action_finished(action_name: StringName)
@@ -35,8 +35,10 @@ var _dash_attack_window_remaining: float = 0.0
 var _dash_attack_elapsed: float = 0.0
 var _dash_attack_used: bool = false
 var _dash_attack_started_airborne: bool = false
-var _attack_buffer_remaining: float = 0.0
-var _attack_buffer_pending: bool = false
+var _attack_buffer_timer: float = 0.0
+var _attack_buffered: bool = false
+var _last_attack_input_to_hit_time: float = -1.0
+var _attack_hit_time_recorded: bool = false
 
 
 func _ready() -> void:
@@ -47,6 +49,7 @@ func _ready() -> void:
 		push_error("PlayerActionController requires a PlayerAnimationController")
 		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
+	animation_controller.animated_sprite.frame_changed.connect(_on_animation_frame_changed)
 
 
 func advance(delta: float) -> void:
@@ -56,8 +59,8 @@ func advance(delta: float) -> void:
 		_dash_attack_window_remaining = maxf(0.0, _dash_attack_window_remaining - delta)
 	elif is_dash_attack_active():
 		_dash_attack_elapsed += delta
-	if _attack_buffer_pending:
-		_attack_buffer_remaining = maxf(0.0, _attack_buffer_remaining - delta)
+	if _attack_buffered:
+		_attack_buffer_timer = maxf(0.0, _attack_buffer_timer - delta)
 
 
 func try_start_actions(
@@ -69,7 +72,16 @@ func try_start_actions(
 ) -> bool:
 	if animation_controller == null:
 		return false
-	if is_dash_attack_active() or _action_state == ActionState.ATTACK:
+	if is_dash_attack_active():
+		return false
+	if _action_state == ActionState.ATTACK:
+		if attack_pressed and not _attack_buffered:
+			_attack_buffered = true
+			_attack_buffer_timer = action_config.attack_buffer_time
+		if _attack_buffered and can_chain_attack():
+			return _chain_attack()
+		if _attack_buffered and _attack_buffer_timer <= 0.0:
+			_clear_attack_buffer()
 		return false
 	if is_dash_active():
 		if attack_pressed and is_dash_attack_input_window_open():
@@ -77,20 +89,20 @@ func try_start_actions(
 		return false
 	if _action_state != ActionState.NONE:
 		return false
-	if attack_pressed and not _attack_buffer_pending:
-		_attack_buffer_pending = true
-		_attack_buffer_remaining = action_config.dash_attack_buffer_time
-	if _attack_buffer_pending and _attack_buffer_remaining <= 0.0:
-		_clear_attack_buffer()
-		return _start_action(ActionState.ATTACK, ATTACK_ANIMATION)
+	if attack_pressed and dash_pressed:
+		if not is_grounded and not air_dash_available:
+			return _start_attack()
+		if _dash_cooldown_remaining <= 0.0:
+			_dash_direction = -1.0 if facing_left else 1.0
+			return _start_direct_dash_attack(not is_grounded)
+	if attack_pressed:
+		return _start_attack()
 	if dash_pressed:
 		if not is_grounded and not air_dash_available:
 			return false
 		if _dash_cooldown_remaining > 0.0:
 			return false
 		_dash_direction = -1.0 if facing_left else 1.0
-		if _attack_buffer_pending:
-			return _start_direct_dash_attack(not is_grounded)
 		return _start_dash(is_grounded)
 	return false
 
@@ -127,8 +139,8 @@ func is_dash_attack_used() -> bool:
 	return _dash_attack_used
 
 
-func is_attack_buffer_pending() -> bool:
-	return _attack_buffer_pending
+func is_attack_buffered() -> bool:
+	return _attack_buffered
 
 
 func get_action_name() -> StringName:
@@ -192,7 +204,26 @@ func get_dash_attack_window_remaining() -> float:
 
 
 func get_attack_buffer_remaining() -> float:
-	return _attack_buffer_remaining
+	return _attack_buffer_timer
+
+
+func get_current_attack_frame() -> int:
+	if _action_state != ActionState.ATTACK or animation_controller == null:
+		return 0
+	return animation_controller.animated_sprite.frame + 1
+
+
+func can_chain_attack() -> bool:
+	return (
+		_action_state == ActionState.ATTACK
+		and animation_controller != null
+		and animation_controller.animated_sprite.animation == ATTACK_ANIMATION
+		and animation_controller.animated_sprite.frame >= 2
+	)
+
+
+func get_attack_input_to_hit_time() -> float:
+	return _last_attack_input_to_hit_time
 
 
 func get_dash_direction() -> float:
@@ -226,6 +257,23 @@ func _start_direct_dash_attack(started_airborne: bool) -> bool:
 	return true
 
 
+func _start_attack() -> bool:
+	_clear_attack_buffer()
+	if not _start_action(ActionState.ATTACK, ATTACK_ANIMATION):
+		return false
+	_reset_attack_response_measurement()
+	return true
+
+
+func _chain_attack() -> bool:
+	if not animation_controller.restart_locked_one_shot(ATTACK_ANIMATION):
+		return false
+	_clear_attack_buffer()
+	_reset_attack_response_measurement()
+	action_started.emit(ATTACK_ANIMATION)
+	return true
+
+
 func _transition_dash_to_dash_attack() -> bool:
 	var previous_action: StringName = get_action_name()
 	if not animation_controller.play_one_shot(DASH_ATTACK_ANIMATION):
@@ -251,14 +299,40 @@ func _start_action(next_state: ActionState, animation_name: StringName) -> bool:
 
 
 func _clear_attack_buffer() -> void:
-	_attack_buffer_pending = false
-	_attack_buffer_remaining = 0.0
+	_attack_buffered = false
+	_attack_buffer_timer = 0.0
+
+
+func _reset_attack_response_measurement() -> void:
+	_last_attack_input_to_hit_time = -1.0
+	_attack_hit_time_recorded = false
+
+
+func _on_animation_frame_changed() -> void:
+	if (
+		_action_state != ActionState.ATTACK
+		or _attack_hit_time_recorded
+		or animation_controller.animated_sprite.animation != ATTACK_ANIMATION
+		or animation_controller.animated_sprite.frame < 1
+	):
+		return
+	var sprite_frames: SpriteFrames = animation_controller.animated_sprite.sprite_frames
+	var animation_speed: float = sprite_frames.get_animation_speed(ATTACK_ANIMATION)
+	var effective_speed: float = animation_speed * absf(animation_controller.animated_sprite.speed_scale)
+	_last_attack_input_to_hit_time = 1.0 / effective_speed if effective_speed > 0.0 else -1.0
+	_attack_hit_time_recorded = true
 
 
 func _on_one_shot_finished(animation_name: StringName) -> void:
 	if animation_name != get_action_name():
 		return
+	if animation_name == ATTACK_ANIMATION and _attack_buffered and _attack_buffer_timer > 0.0:
+		_action_state = ActionState.NONE
+		_clear_attack_buffer()
+		_start_attack()
+		return
 	_action_state = ActionState.NONE
+	_clear_attack_buffer()
 	_dash_motion_remaining = 0.0
 	_dash_attack_window_remaining = 0.0
 	_dash_attack_elapsed = 0.0

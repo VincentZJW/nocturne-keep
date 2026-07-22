@@ -15,6 +15,12 @@ func _initialize() -> void:
 
 
 func _build() -> void:
+	if OS.get_cmdline_user_args().has("--archive-fast-attack-source"):
+		var archive_results: Dictionary[String, int] = ProductionGenerator.archive_fast_attack_sources()
+		var archive_failures: int = _count_failures(archive_results)
+		print("PLAYER_FAST_ATTACK_ARCHIVE: %d files, %d failures" % [archive_results.size(), archive_failures])
+		quit(0 if archive_failures == 0 else 1)
+		return
 	if OS.get_cmdline_user_args().has("--archive-legacy-attack"):
 		var archive_results: Dictionary[String, int] = ProductionGenerator.archive_current_attack()
 		var archive_failures: int = _count_failures(archive_results)

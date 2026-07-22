@@ -7,8 +7,8 @@ signal one_shot_finished(animation_name: StringName)
 signal animation_changed(animation_name: StringName)
 signal facing_changed(facing_left: bool)
 
-const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
-const DASH_ATTACK_HIT_FRAMES: Array[int] = [2, 3, 4]
+const ATTACK_HIT_FRAMES: Array[int] = [1, 2]
+const DASH_ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 const LOOP_ANIMATIONS: Array[StringName] = [&"idle", &"run", &"jump_loop", &"fall"]
 const ONE_SHOT_ANIMATIONS: Array[StringName] = [
 	&"jump_start", &"land", &"ground_dash", &"air_dash", &"attack", &"dash_attack",
@@ -69,6 +69,21 @@ func play_one_shot(animation_name: StringName) -> bool:
 	_locked_animation = animation_name
 	if animation_name in FACING_LOCK_ANIMATIONS:
 		_facing_locked = true
+	return true
+
+
+func restart_locked_one_shot(animation_name: StringName) -> bool:
+	if (
+		animated_sprite == null
+		or not _animation_locked
+		or _locked_animation != animation_name
+		or animated_sprite.animation != animation_name
+	):
+		return false
+	animated_sprite.stop()
+	animated_sprite.set_frame_and_progress(0, 0.0)
+	animated_sprite.play(animation_name)
+	animation_changed.emit(animation_name)
 	return true
 
 

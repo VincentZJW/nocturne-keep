@@ -9,12 +9,18 @@ const Renderer: Script = preload("res://scripts/tools/pixel_assassin_renderer.gd
 const OUTPUT_ROOT: String = "res://assets/sprites/player/assassin"
 const REFERENCE_SOURCE: String = "res://assets/sprites/player/concept_c"
 const DEPRECATED_ATTACK_ROOT: String = "res://assets/sprites/player/assassin/reference/deprecated_attack_slash"
+const DEPRECATED_ATTACK_SIX_FRAME_ROOT: String = (
+	"res://assets/sprites/player/assassin/reference/deprecated_attack_six_frame"
+)
+const DEPRECATED_DASH_ATTACK_SIX_FRAME_ROOT: String = (
+	"res://assets/sprites/player/assassin/reference/deprecated_dash_attack_six_frame"
+)
 const ANIMATION_ORDER: Array[String] = [
 	"idle", "run", "ground_dash", "air_dash", "attack", "dash_attack",
 ]
 const FRAME_COUNTS: Dictionary[String, int] = {
-	"idle": 4, "run": 6, "ground_dash": 5, "air_dash": 5, "attack": 6,
-	"dash_attack": 6,
+	"idle": 4, "run": 6, "ground_dash": 5, "air_dash": 5, "attack": 4,
+	"dash_attack": 5,
 }
 
 
@@ -43,6 +49,7 @@ static func save_all(sequences: Dictionary[String, Array]) -> Dictionary[String,
 			var file_name: String = "%s_%02d.png" % [animation_name, index + 1]
 			var path: String = directory.path_join(file_name)
 			results[path] = image.save_png(path)
+		_remove_obsolete_frames(directory, animation_name, frames.size())
 	return results
 
 
@@ -101,6 +108,68 @@ static func archive_current_attack() -> Dictionary[String, int]:
 		file.store_buffer(bytes)
 		results[target] = OK
 	return results
+
+
+static func archive_fast_attack_sources() -> Dictionary[String, int]:
+	var results: Dictionary[String, int] = {}
+	_archive_sequence(
+		"attack", 6, DEPRECATED_ATTACK_SIX_FRAME_ROOT, "attack_6f", results
+	)
+	_archive_sequence(
+		"dash_attack", 6, DEPRECATED_DASH_ATTACK_SIX_FRAME_ROOT, "dash_attack_6f", results
+	)
+	return results
+
+
+static func _archive_sequence(
+		source_animation: String,
+		frame_count: int,
+		destination: String,
+		destination_prefix: String,
+		results: Dictionary[String, int]
+	) -> void:
+	var directory_error: Error = DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(destination)
+	)
+	if directory_error != OK:
+		results[destination] = directory_error
+		return
+	for frame_index: int in range(1, frame_count + 1):
+		var source: String = OUTPUT_ROOT.path_join(source_animation).path_join(
+			"%s_%02d.png" % [source_animation, frame_index]
+		)
+		var target: String = destination.path_join(
+			"%s_%02d.png" % [destination_prefix, frame_index]
+		)
+		if FileAccess.file_exists(ProjectSettings.globalize_path(target)):
+			results[target] = OK
+			continue
+		var bytes: PackedByteArray = FileAccess.get_file_as_bytes(source)
+		if bytes.is_empty():
+			results[target] = ERR_FILE_CANT_READ
+			continue
+		var file: FileAccess = FileAccess.open(target, FileAccess.WRITE)
+		if file == null:
+			results[target] = FileAccess.get_open_error()
+			continue
+		file.store_buffer(bytes)
+		results[target] = OK
+
+
+static func _remove_obsolete_frames(directory: String, animation_name: String, frame_count: int) -> void:
+	var next_index: int = frame_count + 1
+	while true:
+		var stale_path: String = directory.path_join(
+			"%s_%02d.png" % [animation_name, next_index]
+		)
+		var absolute_path: String = ProjectSettings.globalize_path(stale_path)
+		if not FileAccess.file_exists(absolute_path):
+			return
+		DirAccess.remove_absolute(absolute_path)
+		var sidecar_path: String = absolute_path + ".import"
+		if FileAccess.file_exists(sidecar_path):
+			DirAccess.remove_absolute(sidecar_path)
+		next_index += 1
 
 
 static func _render_poses(poses: Array[PixelAssassinPose]) -> Array[Image]:
@@ -163,22 +232,22 @@ static func _air_dash_poses() -> Array[PixelAssassinPose]:
 
 static func _attack_poses() -> Array[PixelAssassinPose]:
 	return [
-		_pose(Vector2i(28, 25), Vector2i(45, 34), Vector2i(41, 38), Vector2i(41, 48), Vector2i(47, 58), Vector2i(30, 49), Vector2i(24, 58), Vector2i(59, 31), Vector2i(53, 36), Vector2i(16, 31)),
-		_pose(Vector2i(27, 28), Vector2i(35, 34), Vector2i(33, 38), Vector2i(40, 49), Vector2i(46, 58), Vector2i(28, 50), Vector2i(19, 58), Vector2i(49, 31), Vector2i(44, 36), Vector2i(13, 32)),
-		_pose(Vector2i(30, 28), Vector2i(49, 34), Vector2i(47, 37), Vector2i(46, 48), Vector2i(54, 58), Vector2i(28, 50), Vector2i(14, 58), Vector2i(62, 31), Vector2i(58, 35), Vector2i(13, 31)),
-		_pose(Vector2i(32, 29), Vector2i(52, 34), Vector2i(50, 37), Vector2i(48, 48), Vector2i(56, 58), Vector2i(27, 49), Vector2i(10, 58), Vector2i(63, 31), Vector2i(60, 34), Vector2i(10, 31), Vector2i(1, 0)),
-		_pose(Vector2i(31, 29), Vector2i(51, 35), Vector2i(49, 38), Vector2i(47, 49), Vector2i(55, 58), Vector2i(28, 50), Vector2i(12, 58), Vector2i(63, 32), Vector2i(60, 35), Vector2i(12, 33), Vector2i(1, 0)),
-		_pose(Vector2i(29, 26), Vector2i(46, 35), Vector2i(42, 39), Vector2i(42, 49), Vector2i(48, 58), Vector2i(30, 50), Vector2i(22, 58), Vector2i(58, 31), Vector2i(53, 37), Vector2i(16, 32)),
+		# Extremely short compression: both elbows gather without a held guard frame.
+		_pose(Vector2i(27, 28), Vector2i(36, 34), Vector2i(34, 38), Vector2i(40, 49), Vector2i(46, 58), Vector2i(28, 50), Vector2i(19, 58), Vector2i(50, 31), Vector2i(46, 36), Vector2i(13, 32)),
+		# First core frame: both hands and vertically separated blades snap forward.
+		_pose(Vector2i(30, 28), Vector2i(50, 34), Vector2i(48, 38), Vector2i(46, 48), Vector2i(54, 58), Vector2i(28, 50), Vector2i(14, 58), Vector2i(63, 30), Vector2i(60, 35), Vector2i(12, 30)),
+		# Held extension and maximum lean; this is the chain-open frame.
+		_pose(Vector2i(32, 29), Vector2i(52, 34), Vector2i(50, 38), Vector2i(48, 48), Vector2i(56, 58), Vector2i(27, 49), Vector2i(10, 58), Vector2i(63, 30), Vector2i(61, 35), Vector2i(10, 31), Vector2i(1, 0)),
+		# Fast retraction restores the compact stance without a long recovery hold.
+		_pose(Vector2i(29, 26), Vector2i(46, 35), Vector2i(43, 39), Vector2i(42, 49), Vector2i(48, 58), Vector2i(30, 50), Vector2i(22, 58), Vector2i(58, 31), Vector2i(54, 37), Vector2i(16, 32)),
 	]
 
 
 static func _dash_attack_poses() -> Array[PixelAssassinPose]:
 	return [
-		# Preserve the low Dash silhouette while both hands begin to gather forward.
-		_pose(Vector2i(30, 29), Vector2i(46, 36), Vector2i(42, 40), Vector2i(45, 49), Vector2i(54, 58), Vector2i(28, 51), Vector2i(13, 58), Vector2i(59, 32), Vector2i(54, 38), Vector2i(11, 31)),
-		# Compress once more; elbows stay behind the torso while forward inertia remains clear.
+		# Dash carry-over and fast elbow retraction.
 		_pose(Vector2i(31, 31), Vector2i(40, 36), Vector2i(38, 41), Vector2i(46, 50), Vector2i(55, 58), Vector2i(27, 51), Vector2i(10, 58), Vector2i(54, 32), Vector2i(50, 38), Vector2i(9, 32), Vector2i(1, 0)),
-		# Drive into the thrust with a bent lead leg and a long rear-leg line.
+		# Both hands start forward while Dash inertia remains visible.
 		_pose(Vector2i(33, 29), Vector2i(50, 34), Vector2i(48, 38), Vector2i(48, 48), Vector2i(57, 58), Vector2i(27, 50), Vector2i(8, 58), Vector2i(63, 30), Vector2i(60, 35), Vector2i(8, 29), Vector2i(1, 0)),
 		# Core arrow silhouette: two simultaneous, vertically separated forward blades.
 		_pose(Vector2i(34, 30), Vector2i(53, 34), Vector2i(51, 38), Vector2i(49, 48), Vector2i(58, 58), Vector2i(26, 49), Vector2i(6, 58), Vector2i(63, 30), Vector2i(62, 35), Vector2i(6, 29), Vector2i(1, 0)),

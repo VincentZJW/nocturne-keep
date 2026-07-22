@@ -117,7 +117,7 @@ offset_right = 980.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
 theme_override_font_sizes/font_size = 20
-text = "M1.5 · DASH ATTACK INPUT LAB"
+text = "M1.5 · FAST ATTACK RESPONSE LAB"
 
 [node name="Instructions" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -126,7 +126,7 @@ offset_right = 980.0
 offset_bottom = 74.0
 theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
 theme_override_font_sizes/font_size = 14
-text = "MOVE  A / D or ← / →    JUMP  SPACE ×2    DASH  SHIFT    ATTACK  J    DASH ATTACK  SHIFT → J"
+text = "MOVE  A / D or ← / →    JUMP  SPACE ×2    DASH  SHIFT    ATTACK / REPEAT  J    DASH ATTACK  SHIFT → J"
 
 [node name="DebugAbility" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -149,7 +149,7 @@ text = "ACTION DEBUG HUD"
 offset_left = 16.0
 offset_top = 112.0
 offset_right = 980.0
-offset_bottom = 146.0
+offset_bottom = 170.0
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
 theme_override_font_sizes/font_size = 13
 text = "STATE None   COMBO WINDOW closed   USED false   AIR DASH ready   VX 0.0"

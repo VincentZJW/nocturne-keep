@@ -135,29 +135,34 @@ func _validate_controller(sprite_frames: SpriteFrames) -> void:
 	_expect(controller.play_one_shot(&"attack"), "Attack replay request was rejected")
 	await create_timer(0.08).timeout
 	_expect(_finished_events.has(&"attack"), "Attack did not emit one_shot_finished")
-	_expect(sprite.frame == 5, "Attack did not reach its sixth frame")
+	_expect(sprite.frame == 3, "Attack did not reach its fourth frame")
 	sprite.animation = &"attack"
+	sprite.frame = 1
+	_expect(controller.is_attack_hit_window(), "attack_02 is not in reserved hit window")
 	sprite.frame = 2
 	_expect(controller.is_attack_hit_window(), "attack_03 is not in reserved hit window")
 	sprite.frame = 3
-	_expect(controller.is_attack_hit_window(), "attack_04 is not in reserved hit window")
-	sprite.frame = 4
-	_expect(not controller.is_attack_hit_window(), "attack_05 incorrectly remains in hit window")
+	_expect(not controller.is_attack_hit_window(), "attack_04 incorrectly remains in hit window")
+	controller.reset_to_idle()
+	_expect(controller.play_one_shot(&"attack"), "Attack restart setup was rejected")
+	sprite.frame = 2
+	_expect(controller.restart_locked_one_shot(&"attack"), "Authorized Attack chain restart was rejected")
+	_expect(sprite.frame == 0 and controller.is_animation_locked(), "Attack chain restart lost frame zero or lock")
 
 	controller.reset_to_idle()
 	_finished_events.clear()
 	_expect(controller.play_one_shot(&"dash_attack"), "Dash Attack request was rejected")
 	await create_timer(0.08).timeout
 	_expect(_finished_events.has(&"dash_attack"), "Dash Attack did not emit one_shot_finished")
-	_expect(sprite.frame == 5, "Dash Attack did not reach its sixth frame")
+	_expect(sprite.frame == 4, "Dash Attack did not reach its fifth frame")
 	sprite.animation = &"dash_attack"
-	for active_frame: int in [2, 3, 4]:
+	for active_frame: int in [2, 3]:
 		sprite.frame = active_frame
 		_expect(controller.is_dash_attack_hit_window(), "Dash Attack active frame is missing")
 	sprite.frame = 1
 	_expect(not controller.is_dash_attack_hit_window(), "dash_attack_02 entered the future hit window")
-	sprite.frame = 5
-	_expect(not controller.is_dash_attack_hit_window(), "dash_attack_06 entered the future hit window")
+	sprite.frame = 4
+	_expect(not controller.is_dash_attack_hit_window(), "dash_attack_05 entered the future hit window")
 
 	controller.reset_to_idle()
 	_finished_events.clear()
