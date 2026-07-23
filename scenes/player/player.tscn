@@ -58,7 +58,7 @@ shape = SubResource("RectangleShape2D_player")
 [node name="Hurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
 collision_layer = 8
-collision_mask = 64
+collision_mask = 320
 monitoring = false
 script = ExtResource("11_hurtbox")
 faction = &"player"
@@ -79,6 +79,7 @@ monitoring = false
 monitorable = false
 script = ExtResource("12_hitbox")
 faction = &"player"
+attack_kind = &"normal_attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CombatRoot/AttackHitbox"]
 disabled = true
@@ -94,6 +95,7 @@ monitorable = false
 script = ExtResource("12_hitbox")
 damage = 2
 faction = &"player"
+attack_kind = &"dash_attack"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CombatRoot/DashAttackHitbox"]
 disabled = true

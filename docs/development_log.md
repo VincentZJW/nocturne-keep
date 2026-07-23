@@ -30,13 +30,13 @@ This section is the current project snapshot. The dated entries below are retain
 | Player death state | Implemented and re-verified; manual visual acceptance pending | `Player` enters one explicit `LifeState.DEAD`, cancels action/input/Stamina processing, and delegates a five-frame flat-body fall plus detached daggers and hooded ghost rise/pause to `PlayerDeathSequence`. |
 | Player respawn | Implemented and re-verified; single test spawn only | After the approximately 1.30-second presentation completes, Main's typed coordinator returns the same Player instance to one `Marker2D`, restores Health/Stamina and control state, hides the prompt, and retains Camera2D following. No checkpoint/session selection exists. |
 | Combat foundation | Implemented minimum; manual feedback acceptance pending | Typed Health/Hitbox/Hurtbox responsibilities, named layers, faction/dedup rejection, Player 1/2-point attacks, and one five-point sword source are tested. Player non-lethal Hurt now cancels actions, uses source-derived collision-safe knockback, and grants a 0.50-second multi-source grace window. Attributes, armor, and game-over flow do not exist. |
-| Enemies and boss | One normal melee enemy implemented and grouped in Main; manual acceptance pending | Cursed Castle Guard (`CastleGuard` internally) has original 24-frame art, centralized five-point sword tuning, six AI states, fair 0.35/0.10/0.45-second timing, five staged Main instances in four groups, and a one-enemy combat room. The second normal enemy, elite, and Boss remain unimplemented. |
-| Level and game flow | Main combat laboratory with activation groups implemented; formal rooms planned | Main has floor, two platforms, walls, one respawn marker, Player/HUD, and five Guards in four one-shot ActivationArea groups (1/1/1/2). The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
+| Enemies and boss | Four normal enemy prototypes implemented in Main; manual acceptance pending | Castle Guard plus Shield Guard, Spearman, and Crossbowman have original art, typed configs/scenes/AI, shared combat contracts, Hurt/Death, 9 staged Main instances, and mixed test-room coverage. Flying, elite, and Boss enemies remain unimplemented. |
+| Level and game flow | Mixed Main combat laboratory implemented; formal rooms planned | Main has floor, two platforms, walls, one respawn marker, Player/HUD, and nine mixed enemies in four one-shot groups (2/2/2/3). The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
 | Export/release | Pending verification / not configured | No `export_presets.cfg` was found during the audit. |
 
 ### Current validation baseline
 
-On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh import, started Main/Player/Guard/combat-room scenes, and passed all twenty-two repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. Coverage includes the previous Health/HUD/death/respawn/movement/action/assets baseline plus three production Hurt frames, 16 FPS metadata, action interruption, source-directed grounded/airborne knockback, wall collision, 0.50-second multi-source invulnerability, Death precedence, centralized five-point Guard damage, four persistent activation groups, five saved floor-safe Guard spawns, staged AI activation, and one-enemy combat-room preservation. Main runtime evidence recorded four groups/five Guards, positions `(500,610)`, `(1030,610)`, `(1500,610)`, `(2070,610)`, `(2310,610)`, damage 5, Group01 active, and later groups inactive at startup.
+On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh import, started all three new enemies, the projectile, both combat rooms, and configured Main, and passed all 26 repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. Coverage retains the Health/HUD/death/respawn/movement/action/assets/Hurt baseline and adds directional Block/back damage/GuardBreak, long spear geometry/timing, Crossbow Aim/Shoot/Reload, projectile one-hit/World cleanup, three enemy damage values, 85 production enemy frames, mixed encounter activation, nine saved Main enemies, live HUD/respawn, and closable debug presentation. Main runtime evidence records groups sized 2/2/2/3 with three Castle Guards, two Shield Guards, two Spearmen, and two Crossbowmen; Group01 is active and later groups are paused at startup.
 
 The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77 px rise, 281.92 px debug-double-jump range / 167.10 px rise, and 344.00 px of four-Air-Dash action travel. The total takeoff-to-landing Air-Dash measurement alternated between 360.33 px and 362.22 px across three consecutive audit runs; this approximately one-physics-frame variation is recorded as a test determinism issue rather than a changed movement parameter.
 
@@ -56,15 +56,50 @@ The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77
 4. Manually accept the new production Hurt silhouettes, flash strength, 2.5-pixel Camera shake, 180/-110 knockback, and existing death body/ghost readability at gameplay scale.
 5. Resolve or tolerance-bound the 360.33–362.22 px landing-total measurement variation; the 344.00 px Dash-only envelope is currently stable.
 6. Bring the M0 metadata/status in `game_design.md`, `technical_architecture.md`, and `known_issues.md` up to date in a separate documentation-only task.
-7. Manually tune Cursed Castle Guard detection, five-point pressure, 0.35-second telegraph readability, 3-Health durability, group spacing, and late dissolve contrast against real Player inputs/backgrounds; automated correctness does not establish encounter feel.
+7. Manually tune the four prototype enemy roles, especially Shield durability/break, Spear close dead zone, Crossbow Aim visibility, projectile pressure, Group04 spacing, and dissolve contrast; automated correctness does not establish encounter feel.
 8. Keep Main and the dedicated combat room classified as laboratory/placeholder presentation, not finished room or UI content.
 
 ### Next-stage plan — requires explicit approval
 
 1. **M1.5 acceptance gate:** perform manual feel/visual checks, record accepted tuning, and freeze movement/action metrics used for level construction.
 2. **Documentation alignment:** update the stale M0 design/architecture/known-issues metadata without changing gameplay, and decide whether a separate project plan is needed.
-3. **Cursed Castle Guard acceptance gate:** manually verify heavy-cut readability, both facings, edge behavior, all Player evasion verbs, 1/2-point attacks, Hurt interruption, grounded dissolve Death, and Reset behavior before tuning or reusing the enemy contract.
-4. **Content after explicit approval:** the next normal enemy should create a different spatial decision rather than copying the Guard. The second normal enemy, elite, three main rooms, boss arena, Boss, drops, and progression remain unauthorized and unstarted.
+3. **Enemy-variety acceptance gate:** manually verify Shield front/back/GuardBreak, Spear range/dead zone, Crossbow Aim/bolt/reload, all facings, Player evasion verbs, Hurt/Death, and the 2/2/2/3 Main route before any retuning.
+4. **Scope reconciliation after explicit approval:** select or merge prototype roles back toward the fixed two-normal-enemy production scope before elite/Boss/content work. Flying enemy, elite, three main rooms, boss arena, Boss, drops, and progression remain unauthorized and unstarted.
+
+## 2026-07-23 — First enemy variety batch (preflight)
+
+Status: complete — implementation, 26-script regression, standalone/F5 startup, and graphical inspection passed; manual combat-feel acceptance pending
+
+### Read-only findings
+
+- Git preflight: clean `master` at `707f043 test: enforce F5 main scene synchronization`, one local commit ahead of `origin/master`.
+- `project.godot` still explicitly sets `run/main_scene="res://scenes/main/main.tscn"`.
+- The existing Cursed Castle Guard is `res://scenes/enemies/castle_guard.tscn`, driven by `scripts/enemies/castle_guard.gd`, `CastleGuardStateMachine`, `HealthComponent`, `HurtboxComponent`, one sword `HitboxComponent`, Player `DetectionArea`, forward wall/floor RayCasts, and production `castle_guard_sprite_frames.tres`.
+- `HealthComponent`, `HitboxComponent`, and `HurtboxComponent` are already faction-safe reusable combat composition. Player normal/Dash Attack sources are separate Hitboxes but do not yet expose a typed attack-kind label required by frontal shield policy.
+- Castle Guard owns its gravity, target acquisition, patrol/chase/edge handling, Hurt interruption/knockback, facing, attack-frame gating, Death/dissolve, and debug API in one script. Those behaviors are stable but should not be copied three times.
+- `EncounterGroup` and `MainEnemyDebugOverlay` are currently hard-coded to `CastleGuard`; they must be generalized to a narrow enemy contract before mixed groups can activate and report correctly.
+- Collision layers currently name World, Player/Enemy Body, Player/Enemy Hurtbox, Player/Enemy Hitbox, and Detection. A ninth explicit Projectile layer is required; Player Hurtbox must accept both EnemyHitbox and Projectile while enemy Hurtboxes continue accepting PlayerHitbox only.
+- Main currently has four one-shot groups and five Castle Guards. The current 2600-pixel gray-box floor and two platforms can host four staged mixed groups without adding a production room or exceeding the fixed game scope.
+
+### Reuse plan
+
+- Add a thin `EnemyCombatant` contract for mixed encounter activation/debug and a `GroundEnemyBase` for the three new grounded enemies' common detection, gravity, edge checks, facing, Hurt, Death/dissolve, Health/Hurtbox, and AI enable/disable lifecycle.
+- Keep Castle Guard's proven AI logic; change only its parent contract and add generic type/debug/detection methods.
+- Extend `HitboxComponent` with a typed `attack_kind` and `HurtboxComponent` with an optional typed `EnemyHitPolicyComponent`. Implement frontal shield behavior in `ShieldBlockComponent`; blocked hits are consumed once without mutating Health.
+- Add separate typed configs, scenes, AI scripts, original Godot-Image pixel generators, SpriteFrames resources, and deterministic tests for Cursed Shield Guard, Decayed Spearman, Fallen Crossbowman, and `crossbow_bolt.tscn`.
+- Generalize `EncounterGroup` and Main debug to `EnemyCombatant`, create `enemy_variety_test_room.tscn`, and replace Main's homogeneous layout with four authored mixed groups of sizes `2/2/2/3` containing all four enemy types.
+
+### Planned files and verification
+
+- Gameplay: common enemy contract/base/config/hit policy, three enemy scripts/configs/scenes/resources, projectile script/scene, generalized encounters/debug, Player/Hitbox/Hurtbox collision metadata, and Main mixed instances.
+- Assets/tooling: 64×64 transparent original pixel frames under the three requested directories, one Godot generator, one SpriteFrames builder, and one variety contact sheet/QA frame.
+- Tests: focused combat-policy/projectile/enemy AI/assets/variety-room/Main mixed-encounter coverage plus the full existing suite.
+- Run exact Godot 4.7.1 fresh import, each enemy scene standalone, projectile/variety/combat rooms, configured F5 Main headless and graphical, all tests, log diagnostics, visual inspection, and `git diff --check`.
+
+### Scope check
+
+- Authorized: three normal grounded enemy types, one bolt projectile, necessary shared combat/AI contracts, one test room, mixed Main encounters, documentation, and tests.
+- Excluded: flying enemies, elite, Boss, drops, experience, equipment, new Player damage/tuning, complex combo trees, or production-room expansion.
 
 ## 2026-07-23 — F5 Main scene synchronization acceptance (preflight)
 
@@ -2218,3 +2253,58 @@ Status: complete — implementation, automated regression, scene startup, and gr
 - Hurt runs at 16.667 FPS rather than the suggested 10–12 because three frames must match the already-approved 0.18-second enemy hard-stun window; changing it would retune gameplay rather than only art.
 - Animation names and source folder remain `castle_guard` for API stability. This canonical enemy is the Cursed Castle Guard, not a separate un-cursed variant.
 - Work stops at the first enemy animation set. No second enemy, elite, Boss, drop, or unrelated Gameplay work was started.
+
+## 2026-07-23 — First enemy variety batch (delivery)
+
+Status: complete — automated/runtime/visual verification passed; manual balance and readability acceptance pending
+
+### Delivered implementation
+
+- Added Cursed Shield Guard, Decayed Spearman, and Fallen Crossbowman as independently instantiable 64×64 pixel enemies with centralized Resources, AnimatedSprite2D animation sets, grounded AI, attacks, Hurt interruption, fall/dissolve Death, and no ghost.
+- Added a 24×8 CrossbowBolt projectile with a separate Projectile collision layer, four-point one-hit damage, faction safety, World ray collision, three-second lifetime, and shooter-independent persistence.
+- Kept Health/Hitbox/Hurtbox as composed data/interaction authorities. Added `attack_kind`, an optional typed enemy hit policy, directional shield block/GuardBreak, a narrow `EnemyCombatant` encounter contract, and shared `GroundEnemyBase` lifecycle without copying Castle Guard AI three times.
+- Generalized `EncounterGroup` and Main debug from CastleGuard-only arrays to mixed `EnemyCombatant` arrays while retaining `get_guards()` for compatibility.
+- Generated and imported 85 original transparent enemy frames plus one bolt through Godot Image operations. All sources are lossless, nearest-filtered, mipmap-free, and pass a nearest-neighbor 48×48 readability floor.
+- Added `enemy_variety_test_room.tscn` with all four enemy types, a high platform, type-specific diagnostics, toggleable combat geometry, and Reset.
+- Replaced Main's homogeneous 1/1/1/2 layout with four mixed groups sized 2/2/2/3: Guard+Shield, Spear+Guard, platform Crossbow+Guard, and Shield+Spear+Crossbow. F5 remains `res://scenes/main/main.tscn`.
+
+### Prototype balance
+
+| Enemy | HP | Damage | Attack distance | Telegraph / recovery | Normal / Dash hits to kill | Hits to defeat 100-HP Player |
+| --- | ---: | ---: | ---: | --- | --- | ---: |
+| Castle Guard | 3 | 5 | 46 | 0.35 / 0.45 s | 3 / 2 | 20 |
+| Shield Guard | 20 | 8 | 46 | 0.40 / 0.55 s | 20 / 10* | 13 |
+| Spearman | 10 | 10 | 76 | 0.45 / 0.60 s | 10 / 5 | 10 |
+| Crossbowman | 5 | 4 | 260 | 0.60 Aim / 1.50 Reload | 5 / 3 | 25 |
+
+`*` Frontal Dash play requires one prior GuardBreak input, so the practical all-frontal sequence is at least 11. The explicit four-point bolt requirement is used instead of the earlier eight-point parameter suggestion.
+
+### Commands and actual results
+
+1. Exact Godot 4.7.1 asset pipeline:
+   - `pixel_enemy_variety_generator.gd`: exit 0; `ENEMY_VARIETY_PIXEL_BUILD: OK (86 files)`.
+   - Headless editor import: exit 0 with no parse/resource/diagnostic match.
+   - `enemy_variety_sprite_frames_builder.gd`: exit 0; three persistent SpriteFrames resources saved.
+2. Focused verification:
+   - `ENEMY_VARIETY_ASSET_TEST`: PASS for 85 64×64 sources, transparency, exact frame/FPS/loop metadata, lossless/no mipmaps, and 48px floor.
+   - `ENEMY_VARIETY_TEST`: PASS for frontal Block, back damage, Dash GuardBreak, Spear reach/window, Crossbow Aim/Shoot/Reload/bolt creation, Player 1/2-point damage, Death cleanup, and no enemy ghost.
+   - `ENEMY_VARIETY_DAMAGE_TEST`: PASS for Shield 8, Spear 10, Bolt 4, and Player Hurt entry.
+   - `CROSSBOW_BOLT_TEST`: PASS for one hit, four damage, and World collision cleanup.
+   - `MAIN_ENEMY_INTEGRATION_TEST`: PASS for F5 path, four groups, nine typed enemies, platform Crossbowman, activation, current resources, live HUD/respawn, debug toggle, and collision factions.
+3. Complete serial regression:
+   - Fresh headless editor import exited 0.
+   - All 26 scripts under `tests/` exited 0; output scan found no `SCRIPT ERROR`, `ERROR:`, or `WARNING:`.
+4. Scene startup:
+   - Shield Guard, Spearman, Crossbowman, CrossbowBolt, old combat room, new variety room, and configured F5 Main all exited 0 under bounded headless runs with no diagnostics.
+5. Graphical verification:
+   - Configured Main recorded three 1280×720 GL Compatibility frames; `docs/qa/enemy_variety_f5_main.png` visibly reports all 4 groups/9 enemies, Group01-only activation, live Health/Stamina, and the first Guard/Shield encounter.
+   - Variety room overview recorded two frames; `docs/qa/enemy_variety_test_room.png` shows the Player plus all four distinct silhouettes, including the Crossbowman on its platform. Representative shield attack, spear full extension, crossbow Aim, and final death/dissolve PNGs were inspected at original resolution.
+
+### Manual acceptance and known limitations
+
+1. Verify shield front/back classification under real left/right movement and judge 20 HP/0.60-second break duration.
+2. Judge Spear telegraph, 34-pixel close dead zone, and whether its 10 damage/0.60 recovery is fair.
+3. Confirm Crossbow Aim visibility, bolt/world collision, platform reach using Air Dash, and retreat behavior near edges.
+4. Play Group04 with debug off and judge three-role readability, spacing, and the Player's existing 0.50-second invulnerability.
+5. Enemy art and dissolve are authored prototype pixels with no audio, particles, shader dissolve, drops, navigation, jumping, or enemy respawn.
+6. The project contract targets two final normal-enemy types. This larger four-type runtime roster is an explicitly requested evaluation batch; a later approval gate must select/merge roles before final scope lock rather than treating all prototypes as committed production content.

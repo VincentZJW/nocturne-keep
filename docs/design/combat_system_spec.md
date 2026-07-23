@@ -1,94 +1,64 @@
-# Minimal Combat Foundation
+# Combat System Specification
 
-Version: 1.3 — Hurt feedback, five-point sword, and encounter activation
+Version: 1.4 — mixed grounded enemies, shield policy, and projectile channel
 Last updated: 2026-07-23
 
-## Purpose and player experience
-
-This foundation turns the existing readable Player attack poses into deterministic damage without moving Health ownership into animation or UI. The Player should feel fast and precise: the normal dual-dagger thrust deals one point, Dash Attack deals two, and neither can repeatedly damage the same target during one animation. The Cursed Castle Guard creates the first evade-and-punish decision through a slower raised-sword telegraph and committed heavy cut.
-
-All damage values and timings in this document are prototype hypotheses pending manual playtest. They are not a finalized balance curve.
-
-## Composition and ownership
+## Ownership
 
 ```text
 Actor
-├── HealthComponent       bounded current/max Health and guarded died signal
-├── HurtboxComponent      hostile-contact acceptance and Health forwarding
-└── HitboxComponent       active damage, faction, attack id, per-target memory
+├── HealthComponent       bounded Health and guarded died signal
+├── HurtboxComponent      faction/invulnerability acceptance and Health forwarding
+└── HitboxComponent       active damage, attack kind/id, one-hit target memory
 ```
 
-- `HealthComponent` remains the only Health data authority. HUD nodes observe signals and never calculate or store gameplay Health.
-- `HitboxComponent` owns damage, faction, active state, attack id, and one-hit-per-target memory. Starting a new attack id clears only that attack's target memory.
-- `HurtboxComponent` rejects disabled, invulnerable, dead, inactive, self-faction, and same-faction contacts before forwarding accepted damage.
-- Presentation/state owners decide when a Hitbox is active. Hitbox/Hurtbox components do not select animations or AI states.
+- Health remains the sole data authority; HUD only observes signals.
+- Hitbox/Hurtbox components do not select AI states or animations.
+- `EnemyHitPolicyComponent` is an optional pre-damage hook. `ShieldBlockComponent` consumes frontal normal hits and converts frontal Dash Attack to GuardBreak.
+- `EnemyCombatant` is the narrow encounter/debug contract. The three new actors share `GroundEnemyBase`; Castle Guard retains its stable AI implementation.
 
-## Named 2D collision layers
+## Collision layers
 
-| Bit | Name | Use |
+| Bit / value | Name | Purpose |
 | --- | --- | --- |
-| 1 | World | floors, platforms, and walls |
-| 2 | PlayerBody | Player `CharacterBody2D` |
-| 3 | EnemyBody | enemy `CharacterBody2D` |
-| 4 | PlayerHurtbox | receives hostile enemy hitboxes |
-| 5 | EnemyHurtbox | receives hostile Player hitboxes |
-| 6 | PlayerHitbox | Player Attack and Dash Attack |
-| 7 | EnemyHitbox | Castle Guard sword |
-| 8 | Detection | AI perception areas |
+| 1 / 1 | World | floors, platforms, walls |
+| 2 / 2 | PlayerBody | Player body |
+| 3 / 4 | EnemyBody | enemy bodies |
+| 4 / 8 | PlayerHurtbox | receives hostile melee/projectiles |
+| 5 / 16 | EnemyHurtbox | receives Player attacks |
+| 6 / 32 | PlayerHitbox | normal/Dash Attack |
+| 7 / 64 | EnemyHitbox | enemy melee |
+| 8 / 128 | Detection | Player acquisition only |
+| 9 / 256 | Projectile | ranged damage channel |
 
-Body collision and damage collision are intentionally separate. Player/enemy body contact may block movement but never mutates Health.
+Player Hurtbox mask is `320` (`EnemyHitbox + Projectile`). Enemy Hurtboxes accept only `PlayerHitbox`. Enemy body contact and enemy-on-enemy overlap never deal damage. Crossbow bolt root ray-checks World; its child Hitbox uses Projectile→PlayerHurtbox.
 
-### Concrete layer and mask matrix
+## Damage and active windows
 
-| Node | Layer | Mask | Result |
-| --- | --- | --- | --- |
-| Main floors/platforms/walls | World (1) | World (1) in Main | solid environment |
-| Player body | PlayerBody (2) | World + EnemyBody (1 + 4 = 5) | collides with terrain and enemy bodies |
-| Castle Guard body | EnemyBody (4) | World + PlayerBody (1 + 2 = 3) | collides with terrain and Player, never deals damage |
-| Player Hurtbox | PlayerHurtbox (8) | EnemyHitbox (64) | accepts active hostile sword areas only |
-| Guard Hurtbox | EnemyHurtbox (16) | PlayerHitbox (32) | accepts active Player Attack/Dash Attack only |
-| Player Attack hitboxes | PlayerHitbox (32) | EnemyHurtbox (16) | never hit the Player or allied sources |
-| Guard sword Hitbox | EnemyHitbox (64) | PlayerHurtbox (8) | never hits Guard Hurtboxes or bodies |
-| Guard DetectionArea | Detection (128) | PlayerBody (2) | target acquisition only, no damage |
+| Source | Damage | Active frames / cadence |
+| --- | ---: | --- |
+| Player `attack` | 1 | `attack_02/03` |
+| Player `dash_attack` | 2 | `dash_attack_03/04` |
+| Castle Guard sword | 5 | `attack_03/04`; 0.35 / 0.10 / 0.45 s |
+| Shield Guard weapon | 8 | `attack_03/04`; 0.40 / 0.10 / 0.55 s |
+| Spearman thrust | 10 | `attack_thrust_04/05`; 0.45 / 0.10 / 0.60 s |
+| Crossbow bolt | 4 | one hit after 0.60 s Aim; 1.50 s Reload |
 
-## Player attack integration
+Every accepted attack receives an id and can hit one target once. Hurt/death/action cancellation closes attack windows. Hitbox monitoring changes are deferred when required by PhysicsServer, while logical activation changes immediately.
 
-The Player keeps two distinct forward rectangles under `CombatRoot`, mirrored as a unit when `AnimatedSprite2D.flip_h` changes.
+## Enemy-specific rules
 
-| Action | Damage | Active frames | Shape intent |
-| --- | ---: | --- | --- |
-| `attack` | 1 | `attack_02`, `attack_03` | narrow dual-dagger thrust |
-| `dash_attack` | 2 | `dash_attack_03`, `dash_attack_04` | longer narrow forward thrust |
+- **Shield Guard:** frontal normal Attack is blocked with feedback and no Hurt. Frontal Dash Attack triggers a 0.60-second GuardBreak; back hits and hits during GuardBreak damage normally. Blocking is directional, derived from facing and source position.
+- **Spearman:** long narrow forward Hitbox and 76-pixel attack range. Below a 34-pixel minimum distance it retreats rather than producing a misleading rear/point-blank hit.
+- **Crossbowman:** Aim→Shoot→Reload; it retreats inside 70 pixels and has no melee attack. Bolts persist if the shooter dies, damage once, collide with World, and expire after 3 seconds.
+- **All enemies:** Hurt interrupts ordinary attacks and applies short knockback. Death stops AI, closes attack/detection/Hurtbox, plays fall/dissolve frames, emits presentation completion, and frees the node. Enemy death never creates the Player ghost.
 
-Each accepted Attack, chained Attack, direct Dash Attack, or Dash-to-Attack transition receives one new attack id. Frame changes open/close the matching Hitbox; action cancellation, completion, Player death, or transition closes both. Movement, stamina cost, attack buffering, Dash timing, and animation FPS are unchanged.
+## Main and test composition
 
-## Cursed Castle Guard sword integration
+F5 runs `res://scenes/main/main.tscn`. Its four one-shot encounter groups contain 9 enemies, sized 2/2/2/3: three Castle Guards, two Shield Guards, two Spearmen, and two Crossbowmen. One Crossbowman occupies PlatformB. Main's closable debug panel reports activation/counts and type-specific summaries via `EnemyCombatant`.
 
-The sword Hitbox deals five points and is active only on `attack_03` and `attack_04`. `resources/enemies/castle_guard_config.tres` is the single production tuning authority; the AI and debug views read that value rather than duplicating a literal. The corresponding art is a downward-forward one-handed heavy cut, not a thrust. Custom SpriteFrames duration ratios make those two frames total 0.10 seconds. The preceding raised-sword/loaded frames total 0.35 seconds and the final low-blade recovery frame lasts 0.45 seconds. One attack id can damage the Player once, then the Player's 0.50-second grace window rejects other sources. Hurt and Death immediately close the sword Hitbox. Death presentation has no damage, ghost, or persistent corpse collision; animation completion emits the presentation boundary and frees the enemy node.
-
-## Main and isolated test composition
-
-The F5 scene `res://scenes/main/main.tscn` composes five instances of the same reusable `castle_guard.tscn` under four `Main/World/Encounters` groups. Group sizes are 1/1/1/2 and saved Guard positions are `(500, 610)`, `(1030, 610)`, `(1500, 610)`, `(2070, 610)`, and `(2310, 610)`. Every group owns one Player-only ActivationArea; inactive Guard AI and detection are paused until first entry, after which activation remains latched for the scene run. The 2600-pixel floor is only about 2.03 1280-pixel screens, so five enemies are used instead of the suggested six to eight for a 3–5-screen map.
-
-Main's optional enemy debug panel reports each group's activation, engaged/alive/attacking counts and each Guard's Health, state, target, sword window, position, and actual damage. `res://scenes/tools/combat_test_room.tscn` remains an independent one-enemy laboratory with world-space combat guides and Reset.
-
-## Signals
-
-- `HitboxComponent.hit_confirmed(target, damage, attack_id)` reports an accepted unique target.
-- `HitboxComponent.active_changed(active)` supports test/debug presentation.
-- `HurtboxComponent.hit_received(damage, source_position, attack_id)` lets an actor react without owning damage calculation.
-- `HurtboxComponent.invulnerability_changed(invulnerable)` reports the Player-owned grace window without involving HUD.
-- Existing `HealthComponent.health_changed` and `HealthComponent.died` remain the public Health contract.
-- Player forwards contacts through `damage_received`; `PlayerHurtController` emits Hurt start/finish and a reserved audio request while `Player` owns state and collision movement.
-
-## Edge cases and failure states
-
-- Repeated overlap during one attack id is ignored.
-- Re-enabling a Hitbox with a new attack id permits a new hit.
-- Same-faction contact, body contact, disabled Hurtboxes, inactive Hitboxes, invalid/non-positive damage, and post-death damage do nothing.
-- A dying Castle Guard closes Hitbox/Hurtbox before playing Death, preventing late sword or corpse damage.
-- The first accepted non-lethal hit sets invulnerability synchronously, so another enemy contacting in the same physics frame is rejected. Death cancels Hurt presentation and respawn clears all Hurt timers/modulation/camera offset.
+`combat_test_room.tscn` remains the one-Guard regression room. `enemy_variety_test_room.tscn` contains all four types, a high platform, toggleable Hitbox/Hurtbox display, and Reset.
 
 ## Explicit exclusions
 
-No critical hits, attributes, armor formula, status effects, combo tree, enemy drops, enemy Health HUD, ranged damage, Boss logic, random spawning, or production encounter balancing is delivered here.
+No critical hits, armor formula, attributes, status effects, combo tree, drops, enemy Health HUD, flying/elite enemy, Boss, random spawning, or final encounter balance is delivered.

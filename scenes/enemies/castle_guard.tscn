@@ -69,6 +69,7 @@ monitoring = false
 monitorable = false
 script = ExtResource("6_hitbox")
 faction = &"enemy"
+attack_kind = &"enemy_melee"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/AttackHitbox"]
 disabled = true

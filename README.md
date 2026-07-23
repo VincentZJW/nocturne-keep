@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`玩家受击反馈与分组遭遇原型 · Cursed Castle Guard / 诅咒剑卫`
+当前版本：`第一批敌人多样性 · Shield Guard / Spearman / Crossbowman`
 
 ## 当前范围
 
-当前在M1.5移动/动作、耐力、玩家生命/死亡/重生与第一只近战敌人基础上，补齐了玩家正式Hurt反馈和灰盒遭遇分组。F5 Main在`World/Encounters`下手工布置4组、共5只复用同一`CastleGuard`场景的诅咒剑卫，组规模为1/1/1/2；玩家进入各组ActivationArea后才启用对应AI，不进行随机或无限生成。玩家普通双匕首前刺造成1点伤害，Dash Attack造成2点；剑卫在0.35秒前摇后的attack_03/04有效窗口造成5点伤害，身体接触不伤害。非致命命中会中断玩家Attack/Dash、播放3帧16 FPS Hurt、通过CharacterBody2D碰撞施加击退，并给予0.50秒受击无敌、克制闪色和轻微镜头震动。100点满血可承受20次5点攻击，第20次进入既有死亡/幽灵/重生流程。当前仍没有第二种敌人、精英、Boss、掉落、经验或复杂群体AI。
+当前在既有玩家移动、动作、耐力、生命、受击、死亡/幽灵/重生和诅咒剑卫基础上，加入三种完整普通敌人：正面格挡且可被Dash Attack破防的诅咒盾卫、拥有贴身死角的长距离腐朽长矛兵、具备Aim→Shoot→Reload节奏并发射碰墙销毁弩箭的堕落弩手。F5 Main在`World/Encounters`下布置4组、共9只混合敌人，组规模为2/2/2/3；所有组仍由ActivationArea分阶段启用。玩家攻击为1/2点；剑卫、盾卫、长矛兵、弩箭分别造成5/8/10/4点。敌人身体接触和同阵营接触不造成伤害。当前没有飞行敌人、精英、Boss、掉落、经验或装备系统。
 
 ## 环境要求
 
@@ -36,7 +36,7 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/main/main.tscn
 ```
 
-该场景包含Player、Health/Stamina HUD、死亡/重生流程，以及4个手工遭遇组中的5只Cursed Castle Guard。保存出生坐标为`(500, 610)`、`(1030, 610)`、`(1500, 610)`、`(2070, 610)`和`(2310, 610)`；Player出生于`(320, 612)`。第一组用于单敌教学，后续两组提供恢复间隔，末组包含两只保持240像素间距的守卫。未进入ActivationArea的组保持Idle并暂停AI。
+该场景包含Player、Health/Stamina HUD、死亡/重生流程，以及4个手工混合遭遇组。Player出生于`(320, 612)`；Group01为剑卫+盾卫，Group02为长矛兵+剑卫，Group03为高平台弩手+地面剑卫，Group04为盾卫+长矛兵+弩手。未进入ActivationArea的组保持Idle并暂停AI，同时活跃上限不超过3只。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -58,7 +58,15 @@ res://scenes/tools/combat_test_room.tscn
 
 测试房继续只包含一名Player和一只守卫，并提供血量、状态、实际剑伤害、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。Main的`ACTION DEBUG HUD`会显示玩家Hurt、无敌剩余、最近伤害/来源和击退速度；`ENEMY DEBUG`会显示各遭遇组的激活、参与战斗/存活/攻击数量，以及每只剑卫的实际伤害。
 
-建议Main人工测试顺序：在出生组观察0.35秒抬剑前摇及5点命中；确认玩家闪色、镜头轻震、向远离来源方向击退和0.50秒内不重复扣血；按J验证1点普通攻击，Shift后按J验证2点Dash Attack；继续向右依次触发其余三组，观察每组激活前保持暂停、组间有恢复空间、末组两敌不重叠。重新运行F5会恢复全部组和敌人。
+混合敌人独立测试房：
+
+```text
+res://scenes/tools/enemy_variety_test_room.tscn
+```
+
+该场景同时放置剑卫、盾卫、长矛兵和高平台弩手，提供每只敌人的类型、状态、生命、动画、攻击阶段、盾牌状态、射程/装填和弩箭数量，并有可关闭的Hitbox/Hurtbox显示与Reset。Main的`ENEMY DEBUG`使用同一通用敌人接口，不再硬编码为Castle Guard。
+
+建议Main人工测试顺序：先确认普通Attack被盾卫正面格挡、Dash Attack触发GuardBreak、绕后可直接伤害；随后测试长矛兵的远距狭长前刺和贴身死角；在高平台组观察弩手0.60秒Aim、发射和1.50秒Reload，并用跳跃/连续Air Dash接近。继续向右触发最终三敌组，确认玩家受击无敌、HUD、死亡幽灵与重生均保持正常。重新运行F5会恢复全部组和敌人。
 
 ## 计划操作
 
@@ -84,6 +92,10 @@ res://scenes/tools/combat_test_room.tscn
 - [玩家动作接口](docs/design/player_combat_spec.md)
 - [基础战斗组件规格](docs/design/combat_system_spec.md)
 - [Cursed Castle Guard敌人规格](docs/design/enemy_castle_guard_spec.md)
+- [敌人名册](docs/design/enemy_roster_spec.md)
+- [Cursed Shield Guard规格](docs/design/enemy_cursed_shield_guard_spec.md)
+- [Decayed Spearman规格](docs/design/enemy_decayed_spearman_spec.md)
+- [Fallen Crossbowman规格](docs/design/enemy_fallen_crossbowman_spec.md)
 - [灰盒遭遇设计规格](docs/design/encounter_design_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)

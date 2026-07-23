@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=25 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -10,6 +10,9 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/castle_guard.tscn" id="8_guard"]
 [ext_resource type="Script" path="res://scripts/tools/main_enemy_debug_overlay.gd" id="9_enemy_debug"]
 [ext_resource type="Script" path="res://scripts/encounters/encounter_group.gd" id="10_encounter"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/cursed_shield_guard.tscn" id="11_shield"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/decayed_spearman.tscn" id="12_spear"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/fallen_crossbowman.tscn" id="13_crossbow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2600, 96)
@@ -157,6 +160,9 @@ shape = SubResource("RectangleShape2D_encounter_01")
 [node name="CursedGuard01" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("8_guard")]
 position = Vector2(500, 610)
 
+[node name="CursedShieldGuard01" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("11_shield")]
+position = Vector2(690, 610)
+
 [node name="EncounterGroup02" type="Node2D" parent="World/Encounters"]
 script = ExtResource("10_encounter")
 encounter_name = &"EncounterGroup02"
@@ -172,8 +178,11 @@ shape = SubResource("RectangleShape2D_encounter_02")
 
 [node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup02"]
 
-[node name="CursedGuard02" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("8_guard")]
+[node name="DecayedSpearman01" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("12_spear")]
 position = Vector2(1030, 610)
+
+[node name="CursedGuard02" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(1170, 610)
 
 [node name="EncounterGroup03" type="Node2D" parent="World/Encounters"]
 script = ExtResource("10_encounter")
@@ -189,6 +198,9 @@ monitorable = false
 shape = SubResource("RectangleShape2D_encounter_03")
 
 [node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup03"]
+
+[node name="FallenCrossbowman01" parent="World/Encounters/EncounterGroup03/Enemies" instance=ExtResource("13_crossbow")]
+position = Vector2(1280, 396)
 
 [node name="CursedGuard03" parent="World/Encounters/EncounterGroup03/Enemies" instance=ExtResource("8_guard")]
 position = Vector2(1500, 610)
@@ -208,11 +220,14 @@ shape = SubResource("RectangleShape2D_encounter_04")
 
 [node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup04"]
 
-[node name="CursedGuard04A" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(2070, 610)
+[node name="CursedShieldGuard02" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("11_shield")]
+position = Vector2(1940, 610)
 
-[node name="CursedGuard04B" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(2310, 610)
+[node name="DecayedSpearman02" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("12_spear")]
+position = Vector2(2160, 610)
+
+[node name="FallenCrossbowman02" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("13_crossbow")]
+position = Vector2(2380, 610)
 
 [node name="PlayerRespawnController" type="Node" parent="."]
 script = ExtResource("7_respawn")
@@ -234,7 +249,7 @@ offset_right = 980.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
 theme_override_font_sizes/font_size = 20
-text = "M1.5 · CURSED CASTLE GUARD COMBAT LAB"
+text = "FIRST ENEMY VARIETY · GOTHIC CASTLE ENCOUNTERS"
 
 [node name="Instructions" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -297,7 +312,7 @@ offset_right = 540.0
 offset_bottom = 32.0
 theme_override_colors/font_color = Color(0.725, 0.51, 0.263, 1)
 theme_override_font_sizes/font_size = 14
-text = "CURSED CASTLE GUARDS · RUNTIME DEBUG"
+text = "MIXED ENEMY ROSTER · RUNTIME DEBUG"
 
 [node name="EnemyDebugToggle" type="CheckButton" parent="Interface/EnemyDebugPanel"]
 offset_left = 622.0

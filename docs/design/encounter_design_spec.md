@@ -1,69 +1,48 @@
 # Gray-box Encounter Design Specification
 
-Version: 1.0
+Version: 1.1
 Last updated: 2026-07-23
-Status: first-enemy hand-authored density prototype; manual feel acceptance pending
-
-## Scope and density decision
-
-The current F5 gray box has a 2600-pixel floor (`x=-100..2500`), approximately 2.03 screens at the 1280-pixel reference width. It is materially shorter than the 3–5-screen case for which six to eight enemies were suggested. The current target is therefore five Cursed Castle Guards, not an arbitrary high count.
-
-No new enemy type, elite, Boss, drop, experience, random spawn, respawn wave, or object pool is part of this design. `scenes/tools/combat_test_room.tscn` intentionally remains a one-Guard isolated laboratory.
+Status: mixed-roster gray-box; manual feel acceptance pending
 
 ## Main composition
 
-```text
-Main/World/Encounters
-├── EncounterGroup01 (1 Guard)
-│   ├── ActivationArea
-│   └── Enemies/CursedGuard01
-├── EncounterGroup02 (1 Guard)
-│   ├── ActivationArea
-│   └── Enemies/CursedGuard02
-├── EncounterGroup03 (1 Guard)
-│   ├── ActivationArea
-│   └── Enemies/CursedGuard03
-└── EncounterGroup04 (2 Guards)
-    ├── ActivationArea
-    └── Enemies/CursedGuard04A, CursedGuard04B
-```
+F5 Main has a 2600-pixel floor (`x=-100..2500`), about 2.03 reference screens. Nine enemies are staged rather than globally activated:
 
-| Group | Activation center | Guard spawn(s) | Design purpose |
+| Group | Activation center | Saved enemies | Purpose |
 | --- | --- | --- | --- |
-| 01 | `(430, 470)` | `(500, 610)` | immediate single-enemy teaching and Hurt readability |
-| 02 | `(850, 470)` | `(1030, 610)` | isolated repeat after a recovery gap |
-| 03 | `(1300, 470)` | `(1500, 610)` | platform-adjacent jump/Air Dash approach |
-| 04 | `(1840, 470)` | `(2070, 610)`, `(2310, 610)` | final two-enemy stamina and disengage check |
-
-All spawns use the valid ground baseline, remain separated, and leave the main route open. The gaps between encounter fronts provide time for the 0.60-second stamina regeneration delay and partial recovery before the next group.
+| 01 | `(430,470)` | Guard `(500,610)`, Shield `(690,610)` | teach sword timing and directional defense |
+| 02 | `(850,470)` | Spear `(1030,610)`, Guard `(1170,610)` | long-range spacing and close punish |
+| 03 | `(1300,470)` | Crossbow `(1280,396)`, Guard `(1500,610)` | high-platform ranged approach plus ground pressure |
+| 04 | `(1840,470)` | Shield `(1940,610)`, Spear `(2160,610)`, Crossbow `(2380,610)` | three-role gray-box stress test |
 
 ## Activation contract
 
-- `EncounterGroup` owns one Player-only `ActivationArea`, one `Enemies` container, a persistent `is_activated` flag, and debug counts.
-- Every Guard starts visually present in Idle but with AI physics and its DetectionArea paused.
-- First Player entry activates the group once, enables each Guard's AI/detection, and immediately supplies the Player target only if already within that Guard's own 180-pixel detection range.
-- Activation stays true for the current scene run. Dead Guards remain dead/removed; no timer recreates them.
-- Earlier groups may continue bounded Patrol after losing the Player, but only `Chase`, `Attack`, and `Hurt` count as engaged. Safe spacing plus the 260-pixel lose range prevents whole-map pursuit.
+- `EncounterGroup` owns one Player-only ActivationArea, an Enemies container, latched activation, and debug counts.
+- Every enemy is visible but has AI/detection paused before first entry.
+- Activation enables every `EnemyCombatant`; the Player is supplied only when already within that enemy's configured detection range.
+- Dead enemies remain removed. No wave, timer, pooling, or random respawn exists.
+- Engaged counts include Chase, Attack, Aim, Shoot, Reload, Retreat, Block, GuardBreak, and Hurt.
 
-## Multi-enemy fairness
+## Fairness constraints
 
-- Authored group size never exceeds two; the debug `simultaneous_attack_limit` is two.
-- The only two-enemy group uses 240-pixel spawn spacing. With 46-pixel attack range, both cannot occupy one attack origin without first repositioning around body collisions.
-- Guard bodies collide with Player but do not deal contact damage; Guards do not deal friendly fire.
-- Per-attack target memory prevents one sword swing from applying twice across `attack_03/04`.
-- Player's synchronous 0.50-second invulnerability rejects subsequent distinct Guard sources during the grace window, preventing multi-hit stun lock.
-- Guards retain edge/wall checks and cannot chase off the floor. There is no group-tactics, reservation, flanking, or formation AI in this milestone.
+- Group size never exceeds three; only Group04 uses three roles.
+- Enemies cannot walk off platform edges and do not jump. The platform Crossbowman may target the ground through its explicit 260-pixel vertical tolerance.
+- Body contact and friendly fire do no damage. Per-attack memory prevents repeated active-frame damage; Player's 0.50-second invulnerability prevents same-frame multi-source stun lock.
+- Shield group space permits a back approach. Spear groups have at least 140 pixels of horizontal setup. Crossbow groups have unobstructed horizontal lines and Air-Dash access.
+- These constraints establish reproducibility, not final difficulty. Group04 pressure requires manual playtesting.
 
 ## Debug and reset
 
-The closable Main enemy debug panel displays group name, activation, engaged count, alive count, attacking count/limit, and each Guard's state, Health, configured damage, target, sword window, and x-position. This is diagnostic presentation only.
-
-Reloading Main resets group activation and all five authored enemies. There is intentionally no infinite/random generation: deterministic placement makes Hurt, stamina, multi-source invulnerability, and encounter pacing reproducible for automated and manual tests.
+Main's closable enemy panel reports group activation, engaged/alive/attacking counts, and each enemy's type, state, Health, animation, damage, phase, shield state, spear range, reload timer, active bolt count, and x-position. Reloading Main resets all four groups and nine enemies.
 
 ## Manual acceptance
 
-1. Confirm only Group01 engages at startup and later groups remain Idle until their ActivationAreas are crossed.
-2. Verify a defeated group does not respawn and activation remains latched when walking back.
-3. Confirm recovery space exists between Groups 01–03 and that no Guard begins chasing from off-screen beyond its group.
-4. In Group04, verify both enemies remain spatially readable, do not overlap, and no more than two sword attacks can be active.
-5. Verify retreat, jump, Ground/Air Dash, normal Attack, Dash Attack, and stamina recovery remain usable through the complete route.
+1. Confirm only Group01 activates at spawn and later groups remain paused until crossed.
+2. Verify frontal Block, Dash GuardBreak, and back damage in Group01.
+3. Verify the Spearman telegraph/recovery and point-blank weakness in Group02.
+4. Reach the high Crossbowman in Group03 with jump/Air Dash and verify bolts collide with platforms/walls.
+5. Judge Group04 readability and escape space with no more than three active actors.
+
+## Exclusions
+
+No flying enemy, elite, Boss, drop, experience, equipment, random encounter, group tactics, formation, or production-room expansion is included.

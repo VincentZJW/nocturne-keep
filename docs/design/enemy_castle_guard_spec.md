@@ -93,16 +93,15 @@ All animations face right in source and use `flip_h`; `FacingRoot` mirrors only 
 
 ### F5 Main deployment
 
-`res://scenes/main/main.tscn` owns four hand-authored groups under `World/Encounters` and five saved instances of this same scene:
+`res://scenes/main/main.tscn` owns four mixed groups under `World/Encounters` and three saved instances of this scene:
 
 | Encounter | Saved Guard position(s) | Initial intent |
 | --- | --- | --- |
-| `EncounterGroup01` | `(500, 610)` | single-enemy tutorial immediately after spawn |
-| `EncounterGroup02` | `(1030, 610)` | second isolated check after recovery space |
-| `EncounterGroup03` | `(1500, 610)` | platform-adjacent movement/evasion check |
-| `EncounterGroup04` | `(2070, 610)`, `(2310, 610)` | two-enemy stamina/spacing check in the final gray-box segment |
+| `EncounterGroup01` | `(500, 610)` | baseline sword threat paired with Shield Guard |
+| `EncounterGroup02` | `(1170, 610)` | close pressure paired with Spearman |
+| `EncounterGroup03` | `(1500, 610)` | ground pressure beneath a platform Crossbowman |
 
-All stand on the Main floor top at y=640 with the shared 30-pixel body-foot offset and use independent bounded patrol homes. A group's ActivationArea enables its Guard AI only after Player entry and then remains latched for that scene run. The 1/1/1/2 distribution and 470–570-pixel gaps between group fronts prevent opening whole-map aggro; the final two are 240 pixels apart, so they cannot both begin a 46-pixel sword attack from one Player position. Main's `ENEMY DEBUG` toggle reports encounter activation/counts and every Guard's state, Health, target, sword window, position, and five-point damage.
+All stand on the Main floor top at y=640 and use independent bounded patrol homes. `EncounterGroup` now activates any `EnemyCombatant`, while the Castle Guard retains its original AI/state implementation. Main's debug toggle reports its state, Health, target, sword window, position, and five-point damage alongside the three newer enemy types.
 
 ### Independent test room
 

@@ -1,0 +1,160 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/attack/attack_01.png" id="1_lfy7u"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/attack/attack_02.png" id="2_r7g2n"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/attack/attack_03.png" id="3_4sj47"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/attack/attack_04.png" id="4_2fowp"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/attack/attack_05.png" id="5_mhsoq"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/block/block_01.png" id="6_4iwk3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/block/block_02.png" id="7_j7xvr"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/block/block_03.png" id="8_bjsvf"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/death/death_01.png" id="9_wjrpf"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/death/death_02.png" id="10_tw81g"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/death/death_03.png" id="11_fq5tx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/death/death_04.png" id="12_wv8vd"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/death/death_05.png" id="13_pi64m"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/death/death_06.png" id="14_sgvab"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/guard_break/guard_break_01.png" id="15_xshgt"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/guard_break/guard_break_02.png" id="16_ra44n"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/guard_break/guard_break_03.png" id="17_o8vf3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/hurt/hurt_01.png" id="18_4dn20"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/hurt/hurt_02.png" id="19_q5iuc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/hurt/hurt_03.png" id="20_hytlk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/idle/idle_01.png" id="21_ahtpd"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/idle/idle_02.png" id="22_pr44d"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/idle/idle_03.png" id="23_uqw2d"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/idle/idle_04.png" id="24_jkjr8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/walk/walk_01.png" id="25_nwb0v"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/walk/walk_02.png" id="26_d65hk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/walk/walk_03.png" id="27_icwup"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/walk/walk_04.png" id="28_5eq1l"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/walk/walk_05.png" id="29_dyapy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/walk/walk_06.png" id="30_ir2av"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 2.0,
+"texture": ExtResource("1_lfy7u")
+}, {
+"duration": 2.0,
+"texture": ExtResource("2_r7g2n")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_4sj47")
+}, {
+"duration": 0.5,
+"texture": ExtResource("4_2fowp")
+}, {
+"duration": 5.5,
+"texture": ExtResource("5_mhsoq")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_4iwk3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_j7xvr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_bjsvf")
+}],
+"loop": 0,
+"name": &"block",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_wjrpf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_tw81g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_fq5tx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_wv8vd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_pi64m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_sgvab")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_xshgt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ra44n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_o8vf3")
+}],
+"loop": 0,
+"name": &"guard_break",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_4dn20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_q5iuc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_hytlk")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.666667
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_ahtpd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_pr44d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_uqw2d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_jkjr8")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_nwb0v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_d65hk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_icwup")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_5eq1l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_dyapy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ir2av")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
+}]

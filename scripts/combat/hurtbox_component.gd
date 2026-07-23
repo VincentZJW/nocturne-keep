@@ -9,11 +9,15 @@ signal invulnerability_changed(invulnerable: bool)
 
 @export var faction: StringName = &"neutral"
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("../HealthComponent")
+@export_node_path("EnemyHitPolicyComponent") var hit_policy_path: NodePath
 @export var start_enabled: bool = true
 
 @onready var health_component: HealthComponent = get_node_or_null(
 	health_component_path
 ) as HealthComponent
+@onready var hit_policy: EnemyHitPolicyComponent = get_node_or_null(
+	hit_policy_path
+) as EnemyHitPolicyComponent if not hit_policy_path.is_empty() else null
 
 var is_enabled: bool = true
 var is_invulnerable: bool = false
@@ -39,11 +43,16 @@ func receive_hit(hitbox: HitboxComponent) -> bool:
 		or health_component.is_dead()
 	):
 		return false
+	var resolved_damage: int = hitbox.damage
+	if hit_policy != null:
+		resolved_damage = hit_policy.resolve_damage(hitbox)
+	if resolved_damage <= 0:
+		return true
 	var health_before: int = health_component.current_health
-	health_component.take_damage(hitbox.damage)
+	health_component.take_damage(resolved_damage)
 	if health_component.current_health >= health_before:
 		return false
-	hit_received.emit(hitbox.damage, hitbox.global_position, hitbox.attack_id)
+	hit_received.emit(resolved_damage, hitbox.global_position, hitbox.attack_id)
 	return true
 
 

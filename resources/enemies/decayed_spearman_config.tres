@@ -1,0 +1,28 @@
+[gd_resource type="Resource" script_class="DecayedSpearmanConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/enemies/decayed_spearman_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+display_name = &"DecayedSpearman"
+max_health = 10
+attack_damage = 10
+patrol_speed = 42.0
+chase_speed = 64.0
+ground_acceleration = 390.0
+ground_deceleration = 520.0
+gravity = 980.0
+patrol_half_width = 155.0
+platform_height_tolerance = 72.0
+detection_range = 205.0
+lose_target_range = 285.0
+attack_range = 76.0
+attack_windup = 0.45
+attack_active_duration = 0.1
+attack_recovery = 0.6
+hurt_duration = 0.18
+knockback_speed = 110.0
+initial_idle_duration = 0.55
+patrol_turn_pause = 0.25
+minimum_attack_distance = 34.0
+close_retreat_speed = 32.0

@@ -1,12 +1,7 @@
 class_name CastleGuard
-extends CharacterBody2D
+extends EnemyCombatant
 
 ## Cursed Castle Guard: bounded patrol, horizontal chase, telegraphed heavy sword cut.
-
-signal enemy_died
-signal presentation_finished
-signal target_changed(target: Player)
-signal attack_window_changed(active: bool)
 
 const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 
@@ -154,6 +149,41 @@ func is_ai_active() -> bool:
 
 func get_attack_damage() -> int:
 	return config.attack_damage if config != null else 0
+
+
+func get_enemy_type_name() -> StringName:
+	return &"CursedCastleGuard"
+
+
+func get_detection_range() -> float:
+	return config.detection_range if config != null else 0.0
+
+
+func get_health_component() -> HealthComponent:
+	return health_component
+
+
+func get_current_animation_name() -> StringName:
+	return animated_sprite.animation if animated_sprite != null else &""
+
+
+func get_attack_phase_name() -> StringName:
+	if get_state_name() != &"Attack":
+		return &"None"
+	return &"Active" if is_attack_window_active() else &"WindupOrRecovery"
+
+
+func get_debug_summary() -> String:
+	return "%s  %s  HP %d/%d  ANIM %s  DMG %d  TARGET %s  HIT %s" % [
+		get_enemy_type_name(),
+		get_state_name(),
+		health_component.current_health,
+		health_component.max_health,
+		animated_sprite.animation,
+		get_attack_damage(),
+		"PLAYER" if target != null and is_instance_valid(target) else "none",
+		"ON" if is_attack_window_active() else "off",
+	]
 
 
 func _process_idle(delta: float) -> void:

@@ -1,7 +1,7 @@
 class_name MainEnemyDebugOverlay
 extends Label
 
-## Main-scene-only live audit for the first melee enemy instances.
+## Main-scene-only live audit for mixed authored encounters.
 
 @export_node_path("Node2D") var encounters_root_path: NodePath = NodePath("../../../World/Encounters")
 @export_node_path("BaseButton") var toggle_button_path: NodePath = NodePath("../EnemyDebugToggle")
@@ -37,22 +37,13 @@ func _process(_delta: float) -> void:
 				encounter.simultaneous_attack_limit,
 			]
 		)
-		for guard: CastleGuard in encounter.get_guards():
-			if not is_instance_valid(guard):
+		for enemy: EnemyCombatant in encounter.get_enemies():
+			if not is_instance_valid(enemy):
 				continue
-			lines.append(
-				"  %s  %s  HP %d/%d  DMG %d  TARGET %s  SWORD %s  X %.0f" % [
-					guard.name,
-					guard.get_state_name(),
-					guard.health_component.current_health,
-					guard.health_component.max_health,
-					guard.get_attack_damage(),
-					"PLAYER" if guard.target != null and is_instance_valid(guard.target) else "none",
-					"ON" if guard.is_attack_window_active() else "off",
-					guard.global_position.x,
-				]
-			)
-	text = "\n".join(lines) if not lines.is_empty() else "NO ACTIVE CURSED CASTLE GUARDS"
+			lines.append("  %s  %s  X %.0f" % [
+				enemy.name, enemy.get_debug_summary(), enemy.global_position.x,
+			])
+	text = "\n".join(lines) if not lines.is_empty() else "NO AUTHORED ENEMIES"
 
 
 func _on_debug_toggled(enabled: bool) -> void:

@@ -8,6 +8,7 @@ signal active_changed(active: bool)
 
 @export_range(1, 9999, 1) var damage: int = 1
 @export var faction: StringName = &"neutral"
+@export var attack_kind: StringName = &"generic"
 @export var start_enabled: bool = false
 
 var attack_id: int = 0
@@ -58,7 +59,10 @@ func try_hit(target: HurtboxComponent) -> bool:
 func _set_active_internal(active: bool) -> void:
 	var changed: bool = is_active != active or monitoring != active
 	is_active = active
-	monitoring = active
+	# PhysicsServer rejects synchronous monitoring changes while an overlap
+	# signal is being dispatched (for example when a bolt resolves on hit).
+	# The logical state changes immediately; the server property follows safely.
+	set_deferred("monitoring", active)
 	set_physics_process(active)
 	for child: Node in get_children():
 		var collision_shape: CollisionShape2D = child as CollisionShape2D
@@ -73,7 +77,7 @@ func _physics_process(_delta: float) -> void:
 
 
 func _scan_existing_overlaps() -> void:
-	if not is_active:
+	if not is_active or not monitoring:
 		return
 	for area: Area2D in get_overlapping_areas():
 		var hurtbox: HurtboxComponent = area as HurtboxComponent
