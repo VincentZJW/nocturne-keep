@@ -1,6 +1,6 @@
 # Enemy Specification — Cursed Castle Guard / 诅咒剑卫
 
-Version: 1.1 — finalized first-enemy animation language
+Version: 1.2 — Main-scene deployment and runtime audit
 Last updated: 2026-07-23
 
 ## Role and visual identity
@@ -39,7 +39,7 @@ Idle → Patrol ⇄ Chase → Attack → Chase
 - **Chase:** horizontal pursuit only. The Guard stops at walls/edges and abandons a target outside the lose range or outside the same-platform height tolerance.
 - **Attack:** stops pursuit, locks its facing, raises the sword for a 0.35-second telegraph, commits to a diagonal downward heavy cut for a 0.10-second active window, then recovers for 0.45 seconds. It cannot restart each frame.
 - **Hurt:** cancels Attack/Hitbox, applies small away-from-source knockback, locks movement/attack for 0.18 seconds, then resumes Chase or Patrol.
-- **Death:** terminal. AI velocity, sword Hitbox, Hurtbox, detection, and actor-to-actor collision close immediately. Six frames show lethal imbalance, diagonal fall, grounded collapse, darkened fragmentation, and sparse final debris; animation completion then hides the actor. There is no ghost, corpse physics, or drop.
+- **Death:** terminal. AI velocity, sword Hitbox, Hurtbox, detection, and actor-to-actor collision close immediately. Six frames show lethal imbalance, diagonal fall, grounded collapse, darkened fragmentation, and sparse final debris; animation completion emits `presentation_finished` and frees the actor node. There is no ghost, corpse physics, or drop.
 
 ## Prototype tuning
 
@@ -90,6 +90,19 @@ All animations face right in source and use `flip_h`; `FacingRoot` mirrors only 
 - The Guard does not jump or walk off an edge to follow a Player on another platform.
 
 ## Test room and manual acceptance
+
+### F5 Main deployment
+
+`res://scenes/main/main.tscn` owns one `World/Enemies` container and two saved instances of this same scene:
+
+| Runtime node | Saved position | Initial intent |
+| --- | --- | --- |
+| `Main/World/Enemies/CursedGuardNear` | `(500, 610)` | 180 px right of Player; immediate detection/Chase and first combat check |
+| `Main/World/Enemies/CursedGuardFar` | `(850, 610)` | outside initial detection; separate patrol and later encounter |
+
+Both stand on the Main floor top at y=640 with the shared 30-pixel body-foot offset. They are inside the initial Player Camera2D view, use independent bounded patrol homes, share only the enemy PackedScene/config/SpriteFrames resources, and cannot fall through the platform because their bodies and probes use World layer 1. Main's `ENEMY DEBUG` toggle controls a display of state, Health, animation/frame, Player target, sword window, transform, speed, facing, and visibility.
+
+### Independent test room
 
 Run `scenes/tools/combat_test_room.tscn` directly. The room contains one Player, one Guard, flat bounded floor, Player Health/Stamina HUD, a three-line Player/Guard state display, toggleable Hurtbox/Hitbox/detection guides, and a Reset button.
 

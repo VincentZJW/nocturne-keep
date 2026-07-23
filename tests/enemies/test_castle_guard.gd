@@ -6,6 +6,8 @@ const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
 const GUARD_SCENE: PackedScene = preload("res://scenes/enemies/castle_guard.tscn")
 
 var _failures: Array[String] = []
+var _death_presentation_finished: bool = false
+var _death_tree_exited: bool = false
 
 
 func _initialize() -> void:
@@ -79,6 +81,8 @@ func _test_fair_attack(player: Player, guard: CastleGuard) -> void:
 
 
 func _test_hurt_interrupt_and_death(player: Player, guard: CastleGuard) -> void:
+	guard.presentation_finished.connect(_on_death_presentation_finished)
+	guard.tree_exited.connect(_on_death_tree_exited)
 	guard.health_component.reset_to_full()
 	player.global_position = guard.global_position + Vector2(-40.0, 0.0)
 	guard.set_target(player)
@@ -103,10 +107,12 @@ func _test_hurt_interrupt_and_death(player: Player, guard: CastleGuard) -> void:
 	_expect(not guard.hurtbox.is_enabled, "Death did not close Guard Hurtbox")
 	_expect(not guard.attack_hitbox.is_active, "Death retained sword Hitbox")
 	var death_position: Vector2 = guard.global_position
-	await _wait_physics_frames(50)
+	await _wait_physics_frames(5)
 	_expect(guard.global_position.distance_to(death_position) < 0.01, "Dead Guard continued moving")
-	_expect(guard.is_death_presentation_complete(), "Death animation did not complete")
-	_expect(not guard.visible, "Completed dead Guard was not hidden")
+	await _wait_physics_frames(50)
+	_expect(_death_presentation_finished, "Death animation did not reach its presentation boundary")
+	_expect(_death_tree_exited, "Completed dead Guard was not removed from the SceneTree")
+	_expect(not is_instance_valid(guard), "Completed dead Guard node is still alive")
 	source.queue_free()
 
 
@@ -161,6 +167,14 @@ func _wait_physics_frames(count: int) -> void:
 func _expect(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
+
+
+func _on_death_presentation_finished() -> void:
+	_death_presentation_finished = true
+
+
+func _on_death_tree_exited() -> void:
+	_death_tree_exited = true
 
 
 func _finish() -> void:

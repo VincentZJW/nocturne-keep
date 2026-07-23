@@ -357,6 +357,7 @@ func _on_animation_finished() -> void:
 				visible = false
 				set_physics_process(false)
 				presentation_finished.emit()
+				queue_free()
 
 
 func _on_health_died() -> void:

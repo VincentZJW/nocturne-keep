@@ -36,6 +36,20 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
+	if enemy == null or not is_instance_valid(enemy):
+		debug_label.text = (
+			"PLAYER HP %d/%d  STATE %s  ANIM %s\n"
+			+ "GUARD CLEARED AFTER DEATH/DISSOLVE\n"
+			+ "PLAYER HIT A:%s D:%s  GUARD SWORD:off"
+		) % [
+			player.health_component.current_health,
+			player.health_component.max_health,
+			player.get_life_state_name(),
+			player.animation_controller.animated_sprite.animation,
+			"ON" if player.action_controller.attack_hitbox.is_active else "off",
+			"ON" if player.action_controller.dash_attack_hitbox.is_active else "off",
+		]
+		return
 	var player_health: HealthComponent = player.health_component
 	var enemy_health: HealthComponent = enemy.health_component
 	debug_label.text = (
@@ -61,7 +75,12 @@ func _process(_delta: float) -> void:
 
 
 func _draw() -> void:
-	if not debug_visuals_enabled or player == null or enemy == null:
+	if (
+		not debug_visuals_enabled
+		or player == null
+		or enemy == null
+		or not is_instance_valid(enemy)
+	):
 		return
 	_draw_hurtbox(player.hurtbox, Color(0.30, 0.72, 1.0, 0.72))
 	_draw_hurtbox(enemy.hurtbox, Color(0.92, 0.38, 0.42, 0.72))
@@ -114,5 +133,5 @@ func _on_reset_pressed() -> void:
 
 func _run_guard_death_demo() -> void:
 	await get_tree().create_timer(0.25).timeout
-	if enemy != null and not enemy.is_dead():
+	if enemy != null and is_instance_valid(enemy) and not enemy.is_dead():
 		enemy.health_component.take_damage(enemy.health_component.current_health)

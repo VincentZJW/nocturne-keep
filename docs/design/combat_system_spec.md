@@ -1,6 +1,6 @@
 # Minimal Combat Foundation
 
-Version: 1.1 — Cursed Castle Guard animation integration
+Version: 1.2 — Main-scene enemy integration
 Last updated: 2026-07-23
 
 ## Purpose and player experience
@@ -38,6 +38,19 @@ Actor
 
 Body collision and damage collision are intentionally separate. Player/enemy body contact may block movement but never mutates Health.
 
+### Concrete layer and mask matrix
+
+| Node | Layer | Mask | Result |
+| --- | --- | --- | --- |
+| Main floors/platforms/walls | World (1) | World (1) in Main | solid environment |
+| Player body | PlayerBody (2) | World + EnemyBody (1 + 4 = 5) | collides with terrain and enemy bodies |
+| Castle Guard body | EnemyBody (4) | World + PlayerBody (1 + 2 = 3) | collides with terrain and Player, never deals damage |
+| Player Hurtbox | PlayerHurtbox (8) | EnemyHitbox (64) | accepts active hostile sword areas only |
+| Guard Hurtbox | EnemyHurtbox (16) | PlayerHitbox (32) | accepts active Player Attack/Dash Attack only |
+| Player Attack hitboxes | PlayerHitbox (32) | EnemyHurtbox (16) | never hit the Player or allied sources |
+| Guard sword Hitbox | EnemyHitbox (64) | PlayerHurtbox (8) | never hits Guard Hurtboxes or bodies |
+| Guard DetectionArea | Detection (128) | PlayerBody (2) | target acquisition only, no damage |
+
 ## Player attack integration
 
 The Player keeps two distinct forward rectangles under `CombatRoot`, mirrored as a unit when `AnimatedSprite2D.flip_h` changes.
@@ -51,7 +64,13 @@ Each accepted Attack, chained Attack, direct Dash Attack, or Dash-to-Attack tran
 
 ## Cursed Castle Guard sword integration
 
-The sword Hitbox deals one point and is active only on `attack_03` and `attack_04`. The corresponding art is a downward-forward one-handed heavy cut, not a thrust. Custom SpriteFrames duration ratios make those two frames total 0.10 seconds. The preceding raised-sword/loaded frames total 0.35 seconds and the final low-blade recovery frame lasts 0.45 seconds. Hurt and Death immediately close the sword Hitbox. Death presentation has no damage, ghost, or persistent corpse collision; its animation completion remains the cleanup boundary.
+The sword Hitbox deals one point and is active only on `attack_03` and `attack_04`. The corresponding art is a downward-forward one-handed heavy cut, not a thrust. Custom SpriteFrames duration ratios make those two frames total 0.10 seconds. The preceding raised-sword/loaded frames total 0.35 seconds and the final low-blade recovery frame lasts 0.45 seconds. Hurt and Death immediately close the sword Hitbox. Death presentation has no damage, ghost, or persistent corpse collision; animation completion emits the presentation boundary and frees the enemy node.
+
+## Main and isolated test composition
+
+The F5 scene `res://scenes/main/main.tscn` composes two instances of the same reusable `castle_guard.tscn` under `Main/World/Enemies`: `CursedGuardNear` at `(500, 610)` and `CursedGuardFar` at `(850, 610)`. No AI or damage logic is duplicated in Main. The first is exactly 180 pixels right of the Player spawn and can immediately demonstrate perception/Chase; the second begins 530 pixels away, outside detection, so both do not engage at once.
+
+Main's optional enemy debug panel reports live state, Health, animation/frame, target acquisition, sword active window, position, speed, facing, and visibility. `res://scenes/tools/combat_test_room.tscn` remains an independent one-enemy laboratory with world-space combat guides and Reset.
 
 ## Signals
 

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" path="res://scripts/ui/player_death_hud.gd" id="5_death_hud"]
 [ext_resource type="Script" path="res://scripts/tools/player_death_test_button.gd" id="6_death_test"]
 [ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="7_respawn"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/castle_guard.tscn" id="8_guard"]
+[ext_resource type="Script" path="res://scripts/tools/main_enemy_debug_overlay.gd" id="9_enemy_debug"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2600, 96)
@@ -122,6 +124,14 @@ position = Vector2(320, 612)
 [node name="Player" parent="World" instance=ExtResource("1_player")]
 position = Vector2(320, 612)
 
+[node name="Enemies" type="Node2D" parent="World"]
+
+[node name="CursedGuardNear" parent="World/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(500, 610)
+
+[node name="CursedGuardFar" parent="World/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(850, 610)
+
 [node name="PlayerRespawnController" type="Node" parent="."]
 script = ExtResource("7_respawn")
 
@@ -142,7 +152,7 @@ offset_right = 980.0
 offset_bottom = 38.0
 theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
 theme_override_font_sizes/font_size = 20
-text = "M1.5 · GROUND + AIR CHAIN DASH LAB"
+text = "M1.5 · CURSED CASTLE GUARD COMBAT LAB"
 
 [node name="Instructions" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -151,7 +161,7 @@ offset_right = 980.0
 offset_bottom = 74.0
 theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
 theme_override_font_sizes/font_size = 14
-text = "MOVE A/D or ←/→   JUMP SPACE ×2   GROUND/AIR DASH SHIFT   CHAIN tap SHIFT   DASH ATTACK SHIFT → J"
+text = "MOVE A/D or ←/→   JUMP SPACE ×2   ATTACK J   DASH SHIFT   CHAIN tap SHIFT   DASH ATTACK SHIFT → J"
 
 [node name="DebugAbility" type="Label" parent="Interface/Panel"]
 offset_left = 16.0
@@ -189,6 +199,41 @@ theme_override_colors/font_color = Color(0.89, 0.78, 0.78, 1)
 theme_override_font_sizes/font_size = 13
 text = "DEV TEST · TAKE 25 DAMAGE"
 script = ExtResource("6_death_test")
+
+[node name="EnemyDebugPanel" type="ColorRect" parent="Interface"]
+offset_left = 24.0
+offset_top = 286.0
+offset_right = 824.0
+offset_bottom = 430.0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.055, 0.88)
+
+[node name="Title" type="Label" parent="Interface/EnemyDebugPanel"]
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 540.0
+offset_bottom = 32.0
+theme_override_colors/font_color = Color(0.725, 0.51, 0.263, 1)
+theme_override_font_sizes/font_size = 14
+text = "CURSED CASTLE GUARDS · RUNTIME DEBUG"
+
+[node name="EnemyDebugToggle" type="CheckButton" parent="Interface/EnemyDebugPanel"]
+offset_left = 622.0
+offset_top = 2.0
+offset_right = 786.0
+offset_bottom = 34.0
+button_pressed = true
+text = "ENEMY DEBUG"
+
+[node name="EnemyDebug" type="Label" parent="Interface/EnemyDebugPanel"]
+offset_left = 14.0
+offset_top = 38.0
+offset_right = 786.0
+offset_bottom = 136.0
+theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
+theme_override_font_sizes/font_size = 12
+text = "CursedGuardNear\nCursedGuardFar"
+script = ExtResource("9_enemy_debug")
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 2

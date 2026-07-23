@@ -6,7 +6,7 @@
 
 ## 当前范围
 
-当前在M1.5移动/动作、耐力、玩家生命/死亡/重生基础上，增加第一只可战斗近战敌人Cursed Castle Guard（内部资源标识仍为`CastleGuard`）和最小通用战斗层。玩家普通双匕首前刺造成1点伤害，Dash Attack造成2点；诅咒剑卫在0.35秒抬剑蓄力后，以attack_03/04的0.10秒重斩窗口造成1点伤害，身体接触不伤害。敌人死亡表现为倒地、暗淡碎裂并直接消散，不生成主角式幽灵。Hitbox、Hurtbox与Health职责分离，同一攻击不会对同一目标重复结算。敌人具备Idle、Patrol、Chase、Attack、Hurt、Death，且不会主动走下平台。当前仍没有远程/飞行/精英敌人、Boss、掉落、复杂关卡、玩家无敌帧或正式受击状态。
+当前在M1.5移动/动作、耐力、玩家生命/死亡/重生基础上，增加第一只可战斗近战敌人Cursed Castle Guard（内部资源标识仍为`CastleGuard`）和最小通用战斗层。F5 Main现已在`World/Enemies`下放置两只复用同一敌人场景的剑卫：近卫用于出生点旁的立即战斗验证，远卫用于移动后的第二次遭遇。玩家普通双匕首前刺造成1点伤害，Dash Attack造成2点；诅咒剑卫在0.35秒抬剑蓄力后，以attack_03/04的0.10秒重斩窗口造成1点伤害，身体接触不伤害。敌人死亡表现为倒地、暗淡碎裂并直接消散，不生成主角式幽灵，完成后退出SceneTree。Hitbox、Hurtbox与Health职责分离，同一攻击不会对同一目标重复结算。敌人具备Idle、Patrol、Chase、Attack、Hurt、Death，且不会主动走下平台。当前仍没有远程/飞行/精英敌人、Boss、掉落、复杂关卡、玩家无敌帧或正式受击状态。
 
 ## 环境要求
 
@@ -30,19 +30,35 @@ GODOT_BIN="/absolute/path/to/Godot"
 "$GODOT_BIN" --editor --path .
 ```
 
-然后按 `F6` 运行当前场景，或按 `F5` 运行项目。也可以直接启动：
+按 `F5` 会始终运行项目配置的完整主场景：
+
+```text
+res://scenes/main/main.tscn
+```
+
+该场景包含Player、Health/Stamina HUD、死亡/重生流程和两只Cursed Castle Guard。其保存出生坐标分别为`(500, 610)`和`(850, 610)`；Player出生于`(320, 612)`。近卫约在Player右侧180像素，会首先发现并追击；远卫初始保持在感知范围外，不会与近卫同时围攻。
+
+`F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
 ```bash
 "$GODOT_BIN" --path .
 ```
 
-第一只敌人的独立战斗测试房：
+第一只敌人的独立战斗测试房仍保留在：
+
+```text
+res://scenes/tools/combat_test_room.tscn
+```
+
+在Godot的FileSystem面板双击该场景后按`F6`，或使用命令：
 
 ```bash
 "$GODOT_BIN" --path . res://scenes/tools/combat_test_room.tscn
 ```
 
-测试房包含玩家/守卫血量与状态调试信息、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。
+测试房包含一名Player、一只守卫、血量与状态调试信息、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。Main另有可关闭的`ENEMY DEBUG`面板，实时显示两只剑卫的状态、血量、动画/帧、目标、剑Hitbox、位置、朝向和水平速度。
+
+建议Main人工测试顺序：向右接近近卫，观察Idle/Patrol转为Chase及0.35秒抬剑前摇；按J验证1点普通攻击，Shift后在Dash中按J验证2点Dash Attack；使用后退、跳跃、Ground/Air Dash躲避；继续向右测试第二只守卫。敌人消散结束后会清理节点，重新运行F5即可重置两只守卫。
 
 ## 计划操作
 
@@ -74,4 +90,4 @@ GODOT_BIN="/absolute/path/to/Godot"
 
 ## 原创与素材
 
-当前画面仅由 Godot 原生节点和程序化几何图形组成，没有下载或复制第三方素材。后续资产必须登记来源并满足项目的原创及许可要求。
+当前角色与敌人像素图由项目内Godot `Image`工具原创生成，场景背景和灰盒几何使用Godot原生节点；没有下载或复制第三方素材。后续资产必须登记来源并满足项目的原创及许可要求。
