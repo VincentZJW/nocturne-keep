@@ -1,12 +1,15 @@
 class_name PixelCastleGuardGenerator
 extends RefCounted
 
-## Deterministically draws the original Castle Guard at gameplay resolution.
+## Deterministically draws the original Cursed Castle Guard at gameplay resolution.
 
 const PixelCanvas: Script = preload("res://scripts/tools/pixel_art_canvas.gd")
 
 const OUTPUT_ROOT: String = "res://assets/sprites/enemies/castle_guard"
 const CONTACT_SHEET_PATH: String = "res://docs/qa/castle_guard_animation_sheet.png"
+const REFERENCE_PATH: String = (
+	"res://assets/sprites/enemies/castle_guard/reference/cursed_castle_guard_reference.png"
+)
 const FRAME_COUNTS: Dictionary[StringName, int] = {
 	&"idle": 4,
 	&"walk": 6,
@@ -60,6 +63,7 @@ static func save_all(sequences: Dictionary[StringName, Array]) -> Dictionary[Str
 			var image: Image = frames[frame_index] as Image
 			results[file_path] = image.save_png(file_path)
 	results[CONTACT_SHEET_PATH] = _save_contact_sheet(sequences)
+	results[REFERENCE_PATH] = _save_reference_sheet(sequences)
 	return results
 
 
@@ -96,6 +100,47 @@ static func _save_contact_sheet(sequences: Dictionary[StringName, Array]) -> Err
 				Color("243441")
 			)
 	return sheet.save_png(CONTACT_SHEET_PATH)
+
+
+static func _save_reference_sheet(sequences: Dictionary[StringName, Array]) -> Error:
+	var directory_error: Error = DirAccess.make_dir_recursive_absolute(
+		ProjectSettings.globalize_path(REFERENCE_PATH.get_base_dir())
+	)
+	if directory_error != OK:
+		return directory_error
+	var scale_factor: int = 4
+	var cell_size: Vector2i = Vector2i(64, 64) * scale_factor
+	var margin: int = 16
+	var gap: int = 8
+	var sheet_size: Vector2i = Vector2i(
+		margin * 2 + cell_size.x * 3 + gap * 2,
+		margin * 2 + cell_size.y * 2 + gap
+	)
+	var sheet: Image = Image.create_empty(sheet_size.x, sheet_size.y, false, Image.FORMAT_RGBA8)
+	sheet.fill(Color("0b1018"))
+	var reference_frames: Array[Image] = [
+		(sequences[&"idle"][0] as Image),
+		(sequences[&"walk"][0] as Image),
+		(sequences[&"attack"][1] as Image),
+		(sequences[&"attack"][3] as Image),
+		(sequences[&"death"][3] as Image),
+		(sequences[&"death"][4] as Image),
+	]
+	for frame_index: int in range(reference_frames.size()):
+		var column: int = frame_index % 3
+		var row: int = frame_index / 3
+		var destination: Vector2i = Vector2i(
+			margin + column * (cell_size.x + gap),
+			margin + row * (cell_size.y + gap)
+		)
+		PixelCanvas.fill_rect(
+			sheet,
+			Rect2i(destination, cell_size),
+			Color("111b25")
+		)
+		var scaled: Image = PixelCanvas.resize_nearest(reference_frames[frame_index], cell_size)
+		sheet.blend_rect(scaled, Rect2i(Vector2i.ZERO, scaled.get_size()), destination)
+	return sheet.save_png(REFERENCE_PATH)
 
 
 static func _draw_frame(animation_name: StringName, frame_index: int) -> Image:
@@ -142,7 +187,13 @@ static func _draw_guard(
 
 
 static func _draw_attack(image: Image, frame_index: int) -> void:
-	var body_offsets: Array[Vector2i] = [Vector2i.ZERO, Vector2i(0, 2), Vector2i(2, 1), Vector2i(3, 1), Vector2i(1, 0)]
+	var body_offsets: Array[Vector2i] = [
+		Vector2i.ZERO,
+		Vector2i(-2, 2),
+		Vector2i(1, 1),
+		Vector2i(3, 2),
+		Vector2i(1, 0),
+	]
 	var offset: Vector2i = body_offsets[frame_index]
 	var center_x: int = 31 + offset.x
 	var body_top: int = 28 + offset.y
@@ -156,15 +207,17 @@ static func _draw_attack(image: Image, frame_index: int) -> void:
 	var sword_tip: Vector2i
 	match frame_index:
 		0:
-			sword_tip = Vector2i(center_x + 2, body_top - 15)
+			hand = Vector2i(center_x + 5, body_top + 5)
+			sword_tip = Vector2i(center_x + 1, body_top - 18)
 		1:
-			sword_tip = Vector2i(center_x + 11, body_top - 17)
+			hand = Vector2i(center_x + 5, body_top + 5)
+			sword_tip = Vector2i(center_x + 13, body_top - 17)
 		2:
-			hand = Vector2i(center_x + 11, body_top + 8)
-			sword_tip = Vector2i(61, body_top + 9)
+			hand = Vector2i(center_x + 9, body_top + 6)
+			sword_tip = Vector2i(59, body_top + 21)
 		3:
-			hand = Vector2i(center_x + 12, body_top + 9)
-			sword_tip = Vector2i(63, body_top + 12)
+			hand = Vector2i(center_x + 11, body_top + 8)
+			sword_tip = Vector2i(63, body_top + 24)
 		_:
 			sword_tip = Vector2i(center_x + 19, body_top + 17)
 	_draw_arm_and_sword(image, hand, sword_tip, frame_index < 2)
@@ -173,17 +226,68 @@ static func _draw_attack(image: Image, frame_index: int) -> void:
 
 static func _draw_death(frame_index: int) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
-	if frame_index <= 1:
-		_draw_guard(image, Vector2i(-frame_index * 2, frame_index * 5), -2, 3, frame_index, &"hurt")
-		return image
-	if frame_index == 2:
-		_draw_fallen_guard(image, 44, 18, false)
-		return image
-	if frame_index == 3:
-		_draw_fallen_guard(image, 50, 10, false)
-		return image
-	_draw_fallen_guard(image, 54 if frame_index == 4 else 55, 2, true)
+	match frame_index:
+		0:
+			_draw_guard(image, Vector2i(-2, 0), -2, 3, frame_index, &"hurt")
+		1:
+			_draw_fallen_guard(image, 41, 27, false)
+		2:
+			_draw_fallen_guard(image, 49, 15, false)
+		3:
+			_draw_fallen_guard(image, 55, 3, true)
+		4:
+			_draw_fallen_guard(image, 55, 2, true)
+			_apply_dissolve(image)
+		5:
+			_draw_dissolve_fragments(image)
 	return image
+
+
+static func _apply_dissolve(image: Image) -> void:
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			var source: Color = image.get_pixel(x, y)
+			if source.a <= 0.0:
+				continue
+			var pattern: int = posmod(x * 13 + y * 7, 11)
+			if pattern <= 2:
+				image.set_pixel(x, y, Color.TRANSPARENT)
+				continue
+			image.set_pixel(
+				x,
+				y,
+				Color(source.r * 0.52, source.g * 0.50, source.b * 0.58, 0.68)
+			)
+	var drifting_fragments: Array[Vector2i] = [
+		Vector2i(17, 45),
+		Vector2i(24, 48),
+		Vector2i(33, 43),
+		Vector2i(41, 47),
+		Vector2i(49, 44),
+	]
+	for fragment: Vector2i in drifting_fragments:
+		PixelCanvas.fill_rect(image, Rect2i(fragment, Vector2i(2, 2)), ARMOR_MID * Color(1, 1, 1, 0.72))
+
+
+static func _draw_dissolve_fragments(image: Image) -> void:
+	var fragments: Array[Vector2i] = [
+		Vector2i(12, 49),
+		Vector2i(18, 45),
+		Vector2i(23, 53),
+		Vector2i(29, 48),
+		Vector2i(34, 55),
+		Vector2i(39, 46),
+		Vector2i(45, 52),
+		Vector2i(51, 48),
+		Vector2i(57, 55),
+	]
+	for fragment_index: int in range(fragments.size()):
+		var fragment_size: Vector2i = Vector2i(2, 2) if fragment_index % 3 == 0 else Vector2i.ONE
+		var fragment_color: Color = (
+			ARMOR_MID if fragment_index % 2 == 0 else RUST_DARK
+		)
+		fragment_color.a = 0.38
+		PixelCanvas.fill_rect(image, Rect2i(fragments[fragment_index], fragment_size), fragment_color)
 
 
 static func _draw_fallen_guard(image: Image, body_y: int, slope: int, settled: bool) -> void:

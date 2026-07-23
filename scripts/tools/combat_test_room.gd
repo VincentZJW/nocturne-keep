@@ -30,6 +30,8 @@ func _ready() -> void:
 	debug_visuals_enabled = debug_toggle.button_pressed
 	if OS.get_cmdline_user_args().has("--combat-demo"):
 		player.global_position = enemy.global_position + Vector2(-90.0, 0.0)
+	if OS.get_cmdline_user_args().has("--guard-death-demo"):
+		call_deferred("_run_guard_death_demo")
 	queue_redraw()
 
 
@@ -108,3 +110,9 @@ func _on_debug_toggled(enabled: bool) -> void:
 
 func _on_reset_pressed() -> void:
 	get_tree().reload_current_scene()
+
+
+func _run_guard_death_demo() -> void:
+	await get_tree().create_timer(0.25).timeout
+	if enemy != null and not enemy.is_dead():
+		enemy.health_component.take_damage(enemy.health_component.current_health)

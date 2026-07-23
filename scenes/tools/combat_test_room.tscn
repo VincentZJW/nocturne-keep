@@ -104,7 +104,7 @@ offset_right = 744.0
 offset_bottom = 34.0
 theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
 theme_override_font_sizes/font_size = 18
-text = "CASTLE GUARD · MELEE COMBAT TEST ROOM"
+text = "CURSED CASTLE GUARD · MELEE COMBAT TEST ROOM"
 
 [node name="Instructions" type="Label" parent="Interface/Panel"]
 offset_left = 14.0

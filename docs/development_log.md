@@ -30,13 +30,13 @@ This section is the current project snapshot. The dated entries below are retain
 | Player death state | Implemented and re-verified; manual visual acceptance pending | `Player` enters one explicit `LifeState.DEAD`, cancels action/input/Stamina processing, and delegates a five-frame flat-body fall plus detached daggers and hooded ghost rise/pause to `PlayerDeathSequence`. |
 | Player respawn | Implemented and re-verified; single test spawn only | After the approximately 1.30-second presentation completes, Main's typed coordinator returns the same Player instance to one `Marker2D`, restores Health/Stamina and control state, hides the prompt, and retains Camera2D following. No checkpoint/session selection exists. |
 | Combat foundation | Implemented minimum; later defenses pending | Typed Health/Hitbox/Hurtbox responsibilities, named collision layers, faction rejection, active-window control, one-hit-per-attack target memory, Player 1/2-point attacks, and one enemy sword source are independently tested. Player invulnerability/Hurt Gameplay, attributes, armor, and game-over flow do not exist. |
-| Enemies and boss | One normal melee enemy implemented; manual acceptance pending | Castle Guard has original 24-frame pixel art, centralized tuning, Idle/Patrol/Chase/Attack/Hurt/Death, wall/edge safety, fair 0.35/0.10/0.45-second sword timing, and an independent combat test room. The second normal enemy, elite, and Boss remain unimplemented. |
+| Enemies and boss | One normal melee enemy implemented; manual acceptance pending | Cursed Castle Guard (`CastleGuard` internally) has original 24-frame pixel art plus a reference board, centralized tuning, Idle/Patrol/Chase/Attack/Hurt/Death, heavy diagonal sword art, grounded dissolve Death, wall/edge safety, fair 0.35/0.10/0.45-second sword timing, and an independent combat test room. The second normal enemy, elite, and Boss remain unimplemented. |
 | Level and game flow | Planned / not implemented beyond test spawn | Main is a movement/action laboratory with floor, two platforms, boundary walls, debug UI, and one fixed respawn marker. The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
 | Export/release | Pending verification / not configured | No `export_presets.cfg` was found during the audit. |
 
 ### Current validation baseline
 
-On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh headless editor import, five independently started scenes, and all twenty repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. The passing checks cover the prior Health/HUD/death/respawn/player asset/movement/action baseline plus Hitbox/Hurtbox faction and deduplication contracts, Player 1/2-point active windows, 24 Castle Guard PNGs and imports, five enemy animations and exact 0.90-second attack timing, patrol/edge/chase/fair attack/Hurt/Death states, body-contact safety, enemy damage, and the full Player death-presentation/respawn loop in the combat room.
+On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh headless editor import, independently started the Cursed Castle Guard, combat room, and configured Main scenes, and passed all twenty repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. The passing checks cover the prior Health/HUD/death/respawn/player asset/movement/action baseline plus Hitbox/Hurtbox faction and deduplication contracts, Player 1/2-point active windows, 24 enemy animation PNGs and their imports, the generated reference board, heavy-cut/dissolve visual invariants, five enemy animations and exact 0.90-second attack timing, patrol/edge/chase/fair attack/Hurt/Death states, body-contact safety, enemy damage, and the full Player death-presentation/respawn loop in the combat room.
 
 The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77 px rise, 281.92 px debug-double-jump range / 167.10 px rise, and 344.00 px of four-Air-Dash action travel. The total takeoff-to-landing Air-Dash measurement alternated between 360.33 px and 362.22 px across three consecutive audit runs; this approximately one-physics-frame variation is recorded as a test determinism issue rather than a changed movement parameter.
 
@@ -56,14 +56,14 @@ The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77
 4. Replace the remaining `hurt` placeholder only when its Gameplay state enters an approved milestone; manually accept the new production death body/ghost readability at game scale.
 5. Resolve or tolerance-bound the 360.33–362.22 px landing-total measurement variation; the 344.00 px Dash-only envelope is currently stable.
 6. Bring the M0 metadata/status in `game_design.md`, `technical_architecture.md`, and `known_issues.md` up to date in a separate documentation-only task.
-7. Manually tune Castle Guard detection, reach, 0.35-second telegraph readability, knockback, and 3-Health durability against real Player inputs; automated correctness does not establish encounter feel.
+7. Manually tune Cursed Castle Guard detection, reach, 0.35-second telegraph readability, knockback, 3-Health durability, and late dissolve contrast against real Player inputs/backgrounds; automated correctness does not establish encounter feel.
 8. Keep Main and the dedicated combat room classified as laboratory/placeholder presentation, not finished room or UI content.
 
 ### Next-stage plan — requires explicit approval
 
 1. **M1.5 acceptance gate:** perform manual feel/visual checks, record accepted tuning, and freeze movement/action metrics used for level construction.
 2. **Documentation alignment:** update the stale M0 design/architecture/known-issues metadata without changing gameplay, and decide whether a separate project plan is needed.
-3. **Castle Guard acceptance gate:** manually verify attack readability, both facings, edge behavior, all Player evasion verbs, 1/2-point attacks, Hurt interruption, Death readability, and Reset behavior before tuning or reusing the enemy contract.
+3. **Cursed Castle Guard acceptance gate:** manually verify heavy-cut readability, both facings, edge behavior, all Player evasion verbs, 1/2-point attacks, Hurt interruption, grounded dissolve Death, and Reset behavior before tuning or reusing the enemy contract.
 4. **Content after explicit approval:** the next normal enemy should create a different spatial decision rather than copying the Guard. The second normal enemy, elite, three main rooms, boss arena, Boss, drops, and progression remain unauthorized and unstarted.
 
 ## M0 — Environment and repository initialization
@@ -1873,3 +1873,89 @@ Status: complete — implementation and automated/graphical verification passed;
 - Natural defeat of the 100-Health Player takes many one-damage sword hits by design of the requested integer contract; automated tests lower Health to verify the death loop deterministically.
 - There is no navigation, jumping AI, attack variation, audio, particles, drops, encounter persistence, second enemy, elite, or Boss.
 - Work stops at the first Castle Guard and awaits manual combat-feel approval.
+
+## 2026-07-23 — Cursed Castle Guard animation refinement
+
+Date: 2026-07-23
+Status: complete — implementation, automated regression, scene startup, and graphical verification passed; manual animation-feel approval pending
+
+### Goal
+
+- Promote the existing first melee enemy's presentation name to `Cursed Castle Guard / 诅咒剑卫（诅咒古堡守卫）` while retaining the stable internal `CastleGuard` resource and scene identifiers.
+- Preserve the already functional four-frame Idle, six-frame heavy Walk, five-frame Attack, three-frame Hurt, and six-frame Death animation contracts.
+- Redraw the active Attack poses so frames three/four read as a committed one-handed heavy downward sword cut rather than a Player-like horizontal thrust.
+- Redraw the last two Death frames so a fully grounded body visibly darkens, fragments, and dissipates without a Player-style ghost; keep animation completion as the existing cleanup signal.
+- Add a generated reference asset under the enemy source tree and refresh the QA animation sheet for manual visual review.
+
+### Planned files and responsibilities
+
+- `scripts/tools/pixel_castle_guard_generator.gd`: refine attack/death pixel construction and generate a stable reference image.
+- `assets/sprites/enemies/castle_guard/`: regenerate only the deterministic enemy PNG sources and add `reference/`; retain the existing internal path to avoid duplicating or breaking the combat scene.
+- `resources/enemies/castle_guard_sprite_frames.tres`: rebuild against the imported frames without changing animation names or gameplay windows.
+- `scenes/tools/combat_test_room.tscn` and documentation: update presentation text to the canonical cursed-guard name while retaining `CastleGuard` code identifiers.
+- `tests/tools/validate_castle_guard_assets.gd`: add deterministic checks for the reference asset, grounded death pose, visible late-frame pixel reduction, and the absence of any enemy ghost node/resource.
+- `docs/design/enemy_castle_guard_spec.md`, `docs/design/combat_system_spec.md`, and this log: document the revised visual language and verified timing.
+
+### Verification plan
+
+1. Generate assets with the exact Godot 4.7.1 executable, run editor import, and rebuild SpriteFrames.
+2. Run the Castle Guard asset validator and enemy state/attack/death test in isolation.
+3. Start the enemy scene and combat test room independently, then run the complete repository regression suite.
+4. Capture the animation sheet and combat room at original resolution to inspect weight, attack readability, left/right flipping, foot baseline, grounded collapse, and dissolve.
+
+### Scope guard
+
+- This milestone changes only the first enemy's authored pixel presentation, persistent animation resource, validation, display naming, and documentation.
+- It does not add or retune Player movement/combat, enemy damage, AI ranges/speeds, a second enemy, elite, Boss, drops, audio, particles, navigation, or level content.
+- Attack Hitbox activation remains strictly on zero-based frames 2/3 (`attack_03/04`); death still uses no ghost and no physics-driven sword/body debris.
+
+### Delivered implementation
+
+- Kept the existing 24-frame production contract and stable `CastleGuard` scene/class paths, while promoting the visible name to Cursed Castle Guard / 诅咒剑卫. No duplicate enemy scene or asset tree was introduced.
+- Re-authored Attack frames one through four. Frames one/two now hold the sword overhead and load the torso backward; frames three/four drive a clearly diagonal downward-forward single-sword cut. The final frame retains the low committed recovery.
+- Re-authored all six Death frames into a continuous imbalance→diagonal fall→near-ground→fully grounded→dark fragmented body→sparse semitransparent debris sequence. Sprite completion still hides the actor; no ghost, particle system, RigidBody, or persistent corpse was added.
+- Added `assets/sprites/enemies/castle_guard/reference/cursed_castle_guard_reference.png`, a generated integer-scaled six-pose reference board. The existing QA animation sheet was regenerated at integer scale.
+- Added asset invariants for the reference/import, shared foot baseline, downward-forward steel pixels in active Attack art, fully grounded `death_04`, reduced/faded `death_05`, sparse `death_06`, and absence of a ghost node.
+- Added an internal-only `--guard-death-demo` command-line argument to the existing combat test room for deterministic graphical capture. It applies lethal damage after 0.25 seconds and does not affect normal gameplay.
+- Kept timing unchanged: Idle 4 FPS, Walk 8 FPS, Attack 10 FPS base with custom 0.35/0.10/0.45-second phases, Hurt 16.667 FPS matching 0.18 seconds, and Death 8 FPS. AI, damage, Health, collision, Player actions, and Main scene configuration were not retuned.
+
+### Files changed
+
+- Regenerated art: selected Attack and all Death PNGs under `assets/sprites/enemies/castle_guard/`; new generated `reference/` PNG/import; refreshed `docs/qa/castle_guard_animation_sheet.png`.
+- Generation/validation: `scripts/tools/pixel_castle_guard_generator.gd`, `tests/tools/validate_castle_guard_assets.gd`.
+- Presentation/test tool: `scripts/enemies/castle_guard.gd`, `scripts/tools/castle_guard_sprite_frames_builder.gd`, `scripts/tools/combat_test_room.gd`, `scenes/tools/combat_test_room.tscn`.
+- Documentation: `README.md`, `docs/design/enemy_castle_guard_spec.md`, `docs/design/combat_system_spec.md`, and this log.
+
+### Commands and actual results
+
+1. Asset generation and import with exact Godot `4.7.1.stable.official.a13da4feb`:
+   - `--script scripts/tools/build_castle_guard_assets.gd -- --generate`: exit 0; `CASTLE_GUARD_ASSET_EXPORT: 26 files, 0 failures` (24 production frames, QA sheet, reference board).
+   - Headless editor import: exit 0; changed Attack/Death sources and the new reference imported without script/resource errors or warnings.
+   - SpriteFrames rebuild: exit 0; `CASTLE_GUARD_SPRITE_FRAMES_BUILD: OK`.
+2. Focused validation:
+   - `CASTLE_GUARD_ASSET_TEST`: PASS — 24 frames plus reference, heavy cut, dissolve, exact timing, scene composition, nearest/lossless/mipmap-free imports, shared baseline, and no ghost.
+   - `CASTLE_GUARD_TEST`: PASS — patrol, edge safety, chase, both facings, fair active window, Hurt interruption, and Death cleanup.
+   - `PLAYER_ATTACK_DAMAGE_TEST`: PASS; `COMBAT_TEST_ROOM_TEST`: PASS.
+3. Complete serial regression:
+   - All 20 repository test scripts exited 0. Logs contained no `SCRIPT ERROR`, `ERROR:`, or `WARNING:`.
+   - Existing Player metrics remained unchanged: 153.59-pixel single-jump range, 281.92-pixel debug double-jump range, 344.00-pixel four-Air-Dash action travel, and 362.22 pixels through landing.
+4. Independent startup:
+   - Enemy scene, combat test room, and configured Main each exited 0 under two-frame headless startup with no diagnostics.
+5. Graphical verification:
+   - A 120-frame fixed-60-FPS combat capture showed the raised-sword telegraph, diagonal heavy cut, correct left-facing presentation, one active sword window, and one-point Player Health loss.
+   - A separate 90-frame death capture used the test-only demo argument. Inspected frames showed lethal recoil, grounded armor/sword, faded fragmented body, sparse debris, then complete hide. No ghost appeared.
+   - The regenerated contact sheet and reference board were inspected at original resolution; Idle/Walk baseline, heavy step alternation, Attack anticipation/cut/recovery, Hurt recoil, and Death stages are visually distinct.
+
+### Manual acceptance requested
+
+1. Run `scenes/tools/combat_test_room.tscn` and judge whether the six-frame Walk feels sufficiently heavy at actual gameplay scale rather than merely slower.
+2. Approach from both sides and confirm the overhead sword in `attack_01/02` gives a readable reaction window before the diagonal `attack_03/04` cut.
+3. Interrupt Attack with Player damage and verify the visual transition to Hurt feels intentional.
+4. Defeat the Guard normally and confirm the final two dissolve frames remain readable against the intended dark room background without resembling a Player ghost.
+
+### Known limitations and handoff
+
+- The guard has a deliberately compact 64×64 prototype silhouette with no subpixel armor motion, sword trail, audio, particles, or shader dissolve. The late Death breakup is authored directly into PNG pixels.
+- Hurt runs at 16.667 FPS rather than the suggested 10–12 because three frames must match the already-approved 0.18-second enemy hard-stun window; changing it would retune gameplay rather than only art.
+- Animation names and source folder remain `castle_guard` for API stability. This canonical enemy is the Cursed Castle Guard, not a separate un-cursed variant.
+- Work stops at the first enemy animation set. No second enemy, elite, Boss, drop, or unrelated Gameplay work was started.

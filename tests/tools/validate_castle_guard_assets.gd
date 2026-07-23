@@ -3,6 +3,10 @@ extends SceneTree
 ## Validates Castle Guard production PNGs, imports, timings, and scene composition.
 
 const FRAMES_PATH: String = "res://resources/enemies/castle_guard_sprite_frames.tres"
+const ASSET_ROOT: String = "res://assets/sprites/enemies/castle_guard"
+const REFERENCE_PATH: String = (
+	ASSET_ROOT + "/reference/cursed_castle_guard_reference.png"
+)
 const SCENE: PackedScene = preload("res://scenes/enemies/castle_guard.tscn")
 const ANIMATION_COUNTS: Dictionary[StringName, int] = {
 	&"idle": 4,
@@ -25,6 +29,10 @@ func _run_tests() -> void:
 	if sprite_frames != null:
 		_validate_sprite_frames(sprite_frames)
 	_validate_sources()
+	_validate_reference()
+	_validate_attack_art()
+	_validate_death_dissolve()
+	_validate_grounded_baselines()
 	await _validate_scene()
 	_finish()
 
@@ -54,7 +62,7 @@ func _validate_sprite_frames(sprite_frames: SpriteFrames) -> void:
 func _validate_sources() -> void:
 	for animation_name: StringName in ANIMATION_COUNTS:
 		for frame_index: int in range(ANIMATION_COUNTS[animation_name]):
-			var image_path: String = "res://assets/sprites/enemies/castle_guard/%s/%s_%02d.png" % [
+			var image_path: String = ASSET_ROOT + "/%s/%s_%02d.png" % [
 				animation_name,
 				animation_name,
 				frame_index + 1,
@@ -75,6 +83,68 @@ func _validate_sources() -> void:
 				_expect(import_text.contains("mipmaps/generate=false"), "%s enables mipmaps" % import_path)
 
 
+func _validate_reference() -> void:
+	_expect(FileAccess.file_exists(REFERENCE_PATH), "Missing Cursed Castle Guard reference image")
+	var reference: Image = _load_png(REFERENCE_PATH)
+	_expect(reference != null, "Could not decode Cursed Castle Guard reference image")
+	if reference != null:
+		_expect(reference.get_size() == Vector2i(816, 552), "Reference image size changed unexpectedly")
+	var import_path: String = REFERENCE_PATH + ".import"
+	_expect(FileAccess.file_exists(import_path), "Reference image import sidecar is missing")
+	if FileAccess.file_exists(import_path):
+		var import_text: String = FileAccess.get_file_as_string(import_path)
+		_expect(import_text.contains("compress/mode=0"), "Reference image is not lossless")
+		_expect(import_text.contains("mipmaps/generate=false"), "Reference image enables mipmaps")
+
+
+func _validate_attack_art() -> void:
+	var attack_03: Image = _load_png(ASSET_ROOT + "/attack/attack_03.png")
+	var attack_04: Image = _load_png(ASSET_ROOT + "/attack/attack_04.png")
+	_expect(attack_03 != null and attack_04 != null, "Could not load active Attack art")
+	if attack_03 == null or attack_04 == null:
+		return
+	var steel: Color = Color("bac4c5")
+	_expect(
+		_count_color_in_rect(attack_03, steel, Rect2i(48, 38, 16, 19)) >= 5,
+		"attack_03 does not carry a readable downward-forward steel blade"
+	)
+	_expect(
+		_count_color_in_rect(attack_04, steel, Rect2i(48, 40, 16, 19)) >= 5,
+		"attack_04 does not extend the heavy sword cut"
+	)
+
+
+func _validate_death_dissolve() -> void:
+	var grounded: Image = _load_png(ASSET_ROOT + "/death/death_04.png")
+	var dissolving: Image = _load_png(ASSET_ROOT + "/death/death_05.png")
+	var fragments: Image = _load_png(ASSET_ROOT + "/death/death_06.png")
+	_expect(grounded != null and dissolving != null and fragments != null, "Could not load Death art")
+	if grounded == null or dissolving == null or fragments == null:
+		return
+	var grounded_pixels: int = _count_visible_pixels(grounded)
+	var dissolving_pixels: int = _count_visible_pixels(dissolving)
+	var fragment_pixels: int = _count_visible_pixels(fragments)
+	_expect(_lowest_visible_y(grounded) >= 59, "death_04 is not visibly grounded")
+	_expect(dissolving_pixels < grounded_pixels, "death_05 does not remove body pixels")
+	_expect(fragment_pixels > 0, "death_06 has no final dissolve fragments")
+	_expect(fragment_pixels * 4 < dissolving_pixels, "death_06 still reads as a complete corpse")
+	_expect(_maximum_alpha(dissolving) < 0.80, "death_05 does not visibly fade")
+
+
+func _validate_grounded_baselines() -> void:
+	for animation_name: StringName in [&"idle", &"walk", &"attack", &"hurt"]:
+		for frame_index: int in range(ANIMATION_COUNTS[animation_name]):
+			var image_path: String = ASSET_ROOT + "/%s/%s_%02d.png" % [
+				animation_name,
+				animation_name,
+				frame_index + 1,
+			]
+			var frame: Image = _load_png(image_path)
+			_expect(frame != null, "Could not load baseline frame %s" % image_path)
+			if frame != null:
+				_expect(_lowest_visible_y(frame) == 60, "%s changed the shared foot baseline" % image_path)
+
+
 func _validate_scene() -> void:
 	var guard: CastleGuard = SCENE.instantiate() as CastleGuard
 	get_root().add_child(guard)
@@ -87,6 +157,7 @@ func _validate_scene() -> void:
 		_expect(guard.hurtbox != null, "Guard Hurtbox is missing")
 		_expect(guard.attack_hitbox != null, "Guard AttackHitbox is missing")
 		_expect(guard.state_machine != null, "Guard StateMachine is missing")
+		_expect(guard.find_child("*Ghost*", true, false) == null, "Enemy scene contains a Player-style ghost")
 		guard.queue_free()
 	await process_frame
 
@@ -101,6 +172,50 @@ func _has_transparency(image: Image) -> bool:
 	return false
 
 
+func _load_png(image_path: String) -> Image:
+	if not FileAccess.file_exists(image_path):
+		return null
+	var image: Image = Image.new()
+	var image_error: Error = image.load_png_from_buffer(FileAccess.get_file_as_bytes(image_path))
+	return image if image_error == OK else null
+
+
+func _count_visible_pixels(image: Image) -> int:
+	var count: int = 0
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a > 0.01:
+				count += 1
+	return count
+
+
+func _lowest_visible_y(image: Image) -> int:
+	var lowest: int = -1
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a > 0.01:
+				lowest = maxi(lowest, y)
+	return lowest
+
+
+func _maximum_alpha(image: Image) -> float:
+	var maximum: float = 0.0
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			maximum = maxf(maximum, image.get_pixel(x, y).a)
+	return maximum
+
+
+func _count_color_in_rect(image: Image, color: Color, rect: Rect2i) -> int:
+	var count: int = 0
+	var clipped: Rect2i = rect.intersection(Rect2i(Vector2i.ZERO, image.get_size()))
+	for y: int in range(clipped.position.y, clipped.end.y):
+		for x: int in range(clipped.position.x, clipped.end.x):
+			if image.get_pixel(x, y).is_equal_approx(color):
+				count += 1
+	return count
+
+
 func _expect(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
@@ -108,7 +223,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CASTLE_GUARD_ASSET_TEST: PASS (24 PNGs, imports, 5 animations, timing, scene)")
+		print("CASTLE_GUARD_ASSET_TEST: PASS (24 frames + reference, heavy cut, dissolve, timing, scene)")
 		quit(0)
 		return
 	for failure: String in _failures:

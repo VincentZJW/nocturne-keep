@@ -1,13 +1,13 @@
-# Enemy Specification — Castle Guard / 古堡守卫
+# Enemy Specification — Cursed Castle Guard / 诅咒剑卫
 
-Version: 1.0 — first melee prototype
+Version: 1.1 — finalized first-enemy animation language
 Last updated: 2026-07-23
 
 ## Role and visual identity
 
-Castle Guard is the first normal melee enemy and exists to test the complete Player attack/evasion/Health/death loop. It is an original 16-bit-inspired corrupted castle soldier: a broad dark-armored body, broken rust-colored helmet edge, hidden face, restrained dark-red eye slit, and one rusted steel sword. Its stance is wider and movement slower than The Night Warden, so the silhouette communicates weight rather than agility.
+Cursed Castle Guard（诅咒剑卫 / 诅咒古堡守卫）is the first normal melee enemy and exists to test the complete Player attack/evasion/Health/death loop. It is an original 16-bit-inspired corrupted castle soldier: a broad dark-armored body, broken rust-colored closed helmet, hidden face, restrained dark-red eye slit, heavy shoulder plates, and one rusted steel sword. Its stance is wider and movement slower than The Night Warden, so the silhouette communicates weight rather than agility. `CastleGuard` remains the internal class/resource identifier to preserve the already-tested scene and combat API; it does not represent a second enemy type.
 
-Twenty-four original 64×64 RGBA frames are generated deterministically with Godot `Image` operations. Source PNGs are transparent, imported Lossless without mipmaps, and displayed with Nearest filtering. The QA contact sheet is `docs/qa/castle_guard_animation_sheet.png`.
+Twenty-four original 64×64 RGBA frames are generated deterministically with Godot `Image` operations. Source PNGs are transparent, imported Lossless without mipmaps, and displayed with Nearest filtering. The QA contact sheet is `docs/qa/castle_guard_animation_sheet.png`; the stable six-pose visual reference is `assets/sprites/enemies/castle_guard/reference/cursed_castle_guard_reference.png`.
 
 ## Scene composition
 
@@ -37,9 +37,9 @@ Idle → Patrol ⇄ Chase → Attack → Chase
 - **Idle:** brief initial/turn pause, zero target velocity, idle animation.
 - **Patrol:** bounded horizontal walk. Wall, missing forward floor, or patrol limit causes a turn and short pause.
 - **Chase:** horizontal pursuit only. The Guard stops at walls/edges and abandons a target outside the lose range or outside the same-platform height tolerance.
-- **Attack:** stops pursuit, locks its facing, shows 0.35 seconds of windup, activates the sword for 0.10 seconds, then recovers for 0.45 seconds. It cannot restart each frame.
+- **Attack:** stops pursuit, locks its facing, raises the sword for a 0.35-second telegraph, commits to a diagonal downward heavy cut for a 0.10-second active window, then recovers for 0.45 seconds. It cannot restart each frame.
 - **Hurt:** cancels Attack/Hitbox, applies small away-from-source knockback, locks movement/attack for 0.18 seconds, then resumes Chase or Patrol.
-- **Death:** terminal. AI velocity, sword Hitbox, Hurtbox, detection, and actor-to-actor collision close immediately. A six-frame fall/collapse plays, then the actor hides. No drop is spawned.
+- **Death:** terminal. AI velocity, sword Hitbox, Hurtbox, detection, and actor-to-actor collision close immediately. Six frames show lethal imbalance, diagonal fall, grounded collapse, darkened fragmentation, and sparse final debris; animation completion then hides the actor. There is no ghost, corpse physics, or drop.
 
 ## Prototype tuning
 
@@ -63,11 +63,22 @@ These values are centralized and marked for manual feel testing. No tuning was m
 | --- | ---: | --- | --- |
 | `idle` | 4 | 4 FPS restrained armor breathing | yes |
 | `walk` | 6 | 8 FPS heavy alternating steps | yes |
-| `attack` | 5 | custom durations totaling 0.90 s | no |
+| `attack` | 5 | 10 FPS base with custom ratios totaling 0.90 s | no |
 | `hurt` | 3 | 16.667 FPS, about 0.18 s | no |
-| `death` | 6 | 8 FPS armor collapse | no |
+| `death` | 6 | 8 FPS fall, grounded pose, then dissolve | no |
 
 All animations face right in source and use `flip_h`; `FacingRoot` mirrors only sword combat geometry so left/right weapon reach remains in front.
+
+### Authored frame intent
+
+- **Idle 01–04:** restrained one-pixel breathing and armor/sword settling; feet remain on the shared baseline.
+- **Walk 01–06:** left/right contacts and transition poses alternate at 8 FPS. The torso remains upright, the sword hand stays controlled, and limited helmet/shoulder bob sells plate weight rather than Player-like agility.
+- **Attack 01–02:** vertical raised sword and rear-loaded anticipation communicate danger before damage is possible.
+- **Attack 03–04:** the arm and blade move downward-forward on a strong diagonal. These are the only active frames and intentionally contrast with the Player's narrow dual-dagger thrust.
+- **Attack 05:** the blade finishes low and forward during the punishable recovery.
+- **Hurt 01–03:** short recoil silhouettes match the configured 0.18-second hard reaction; the higher 16.667 FPS is intentional so presentation and state timing end together.
+- **Death 01–04:** imbalance, diagonal fall, near-ground transition, then a fully grounded body with the sword alongside it.
+- **Death 05–06:** the body loses opaque pixels and color, then only sparse semitransparent armor/rust fragments remain before cleanup. No Player ghost asset or node is referenced.
 
 ## Combat fairness
 
@@ -82,13 +93,15 @@ All animations face right in source and use `flip_h`; `FacingRoot` mirrors only 
 
 Run `scenes/tools/combat_test_room.tscn` directly. The room contains one Player, one Guard, flat bounded floor, Player Health/Stamina HUD, a three-line Player/Guard state display, toggleable Hurtbox/Hitbox/detection guides, and a Reset button.
 
+For deterministic graphical capture, the internal-only `--guard-death-demo` user argument applies lethal damage after 0.25 seconds. It does not run in normal play or alter enemy Health/Death behavior.
+
 Manual checks still required:
 
 1. Approach from both sides and judge whether the 0.35-second raised-sword pose is readable at gameplay scale.
 2. Evade five attacks using retreat, jump, Ground Dash, and Air Dash.
 3. Confirm J takes one Guard Health and Shift→J takes two without rear hits.
 4. Interrupt windup and active attack with Player damage; confirm the sword never lands afterward.
-5. Defeat the Guard and confirm its final collapse reads clearly and no invisible collision blocks the Player.
+5. Defeat the Guard and confirm `death_04` reads as fully grounded, `death_05/06` visibly dissipate without a ghost, and no invisible collision blocks the Player.
 
 ## Explicit exclusions
 

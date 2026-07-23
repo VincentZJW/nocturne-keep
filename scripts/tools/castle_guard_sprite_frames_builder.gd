@@ -1,7 +1,7 @@
 class_name CastleGuardSpriteFramesBuilder
 extends RefCounted
 
-## Builds the persistent Castle Guard SpriteFrames resource after PNG import.
+## Builds the persistent Cursed Castle Guard SpriteFrames resource after PNG import.
 
 const RESOURCE_PATH: String = "res://resources/enemies/castle_guard_sprite_frames.tres"
 const ASSET_ROOT: String = "res://assets/sprites/enemies/castle_guard"

@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`基础战斗原型 · Castle Guard / 古堡守卫`
+当前版本：`基础战斗原型 · Cursed Castle Guard / 诅咒剑卫`
 
 ## 当前范围
 
-当前在M1.5移动/动作、耐力、玩家生命/死亡/重生基础上，增加第一只可战斗近战敌人Castle Guard和最小通用战斗层。玩家普通双匕首前刺造成1点伤害，Dash Attack造成2点；古堡守卫的剑在0.35秒前摇后以0.10秒有效窗口造成1点伤害，身体接触不伤害。Hitbox、Hurtbox与Health职责分离，同一攻击不会对同一目标重复结算。敌人具备Idle、Patrol、Chase、Attack、Hurt、Death，且不会主动走下平台。当前仍没有远程/飞行/精英敌人、Boss、掉落、复杂关卡、玩家无敌帧或正式受击状态。
+当前在M1.5移动/动作、耐力、玩家生命/死亡/重生基础上，增加第一只可战斗近战敌人Cursed Castle Guard（内部资源标识仍为`CastleGuard`）和最小通用战斗层。玩家普通双匕首前刺造成1点伤害，Dash Attack造成2点；诅咒剑卫在0.35秒抬剑蓄力后，以attack_03/04的0.10秒重斩窗口造成1点伤害，身体接触不伤害。敌人死亡表现为倒地、暗淡碎裂并直接消散，不生成主角式幽灵。Hitbox、Hurtbox与Health职责分离，同一攻击不会对同一目标重复结算。敌人具备Idle、Patrol、Chase、Attack、Hurt、Death，且不会主动走下平台。当前仍没有远程/飞行/精英敌人、Boss、掉落、复杂关卡、玩家无敌帧或正式受击状态。
 
 ## 环境要求
 
@@ -67,7 +67,7 @@ GODOT_BIN="/absolute/path/to/Godot"
 - [开发日志](docs/development_log.md)
 - [玩家动作接口](docs/design/player_combat_spec.md)
 - [基础战斗组件规格](docs/design/combat_system_spec.md)
-- [Castle Guard敌人规格](docs/design/enemy_castle_guard_spec.md)
+- [Cursed Castle Guard敌人规格](docs/design/enemy_castle_guard_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)
 - [已知问题](docs/known_issues.md)

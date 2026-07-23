@@ -1,11 +1,11 @@
 # Minimal Combat Foundation
 
-Version: 1.0 — Castle Guard prototype
+Version: 1.1 — Cursed Castle Guard animation integration
 Last updated: 2026-07-23
 
 ## Purpose and player experience
 
-This foundation turns the existing readable Player attack poses into deterministic damage without moving Health ownership into animation or UI. The Player should feel fast and precise: the normal dual-dagger thrust deals one point, Dash Attack deals two, and neither can repeatedly damage the same target during one animation. The Castle Guard creates the first evade-and-punish decision through a slower sword telegraph.
+This foundation turns the existing readable Player attack poses into deterministic damage without moving Health ownership into animation or UI. The Player should feel fast and precise: the normal dual-dagger thrust deals one point, Dash Attack deals two, and neither can repeatedly damage the same target during one animation. The Cursed Castle Guard creates the first evade-and-punish decision through a slower raised-sword telegraph and committed heavy cut.
 
 All damage values and timings in this document are prototype hypotheses pending manual playtest. They are not a finalized balance curve.
 
@@ -49,9 +49,9 @@ The Player keeps two distinct forward rectangles under `CombatRoot`, mirrored as
 
 Each accepted Attack, chained Attack, direct Dash Attack, or Dash-to-Attack transition receives one new attack id. Frame changes open/close the matching Hitbox; action cancellation, completion, Player death, or transition closes both. Movement, stamina cost, attack buffering, Dash timing, and animation FPS are unchanged.
 
-## Castle Guard sword integration
+## Cursed Castle Guard sword integration
 
-The sword Hitbox deals one point and is active only on `attack_03` and `attack_04`. Custom SpriteFrames duration ratios make those two frames total 0.10 seconds. The preceding frames total 0.35 seconds and the final recovery frame lasts 0.45 seconds. Hurt and Death immediately close the sword Hitbox.
+The sword Hitbox deals one point and is active only on `attack_03` and `attack_04`. The corresponding art is a downward-forward one-handed heavy cut, not a thrust. Custom SpriteFrames duration ratios make those two frames total 0.10 seconds. The preceding raised-sword/loaded frames total 0.35 seconds and the final low-blade recovery frame lasts 0.45 seconds. Hurt and Death immediately close the sword Hitbox. Death presentation has no damage, ghost, or persistent corpse collision; its animation completion remains the cleanup boundary.
 
 ## Signals
 

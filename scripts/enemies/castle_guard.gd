@@ -1,7 +1,7 @@
 class_name CastleGuard
 extends CharacterBody2D
 
-## First melee enemy: bounded patrol, horizontal chase, telegraphed sword attack.
+## Cursed Castle Guard: bounded patrol, horizontal chase, telegraphed heavy sword cut.
 
 signal enemy_died
 signal presentation_finished
