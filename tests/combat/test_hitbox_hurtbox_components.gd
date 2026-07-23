@@ -12,6 +12,7 @@ func _initialize() -> void:
 func _run_tests() -> void:
 	await _test_damage_activation_and_deduplication()
 	await _test_faction_and_enable_guards()
+	await _test_disable_during_physics_area_signal()
 	_finish()
 
 
@@ -73,6 +74,29 @@ func _test_faction_and_enable_guards() -> void:
 	await process_frame
 
 
+func _test_disable_during_physics_area_signal() -> void:
+	var target_root: Node2D = Node2D.new()
+	var health: HealthComponent = HealthComponent.new()
+	health.name = "HealthComponent"
+	health.max_health = 1
+	var hurtbox: HurtboxComponent = _make_hurtbox(&"enemy")
+	target_root.add_child(health)
+	target_root.add_child(hurtbox)
+	health.died.connect(_disable_hurtbox_on_death.bind(hurtbox))
+	get_root().add_child(target_root)
+	var hitbox: HitboxComponent = _make_hitbox(&"player", 1)
+	hitbox.start_enabled = true
+	get_root().add_child(hitbox)
+	for _frame_index: int in range(3):
+		await physics_frame
+	_expect(health.is_dead(), "Physics Area2D entry did not deliver lethal damage")
+	_expect(not hurtbox.is_enabled, "Death callback did not immediately disable Hurtbox logic")
+	_expect(not hurtbox.monitorable, "Deferred Hurtbox monitorable state did not close")
+	target_root.queue_free()
+	hitbox.queue_free()
+	await process_frame
+
+
 func _make_hitbox(faction: StringName, damage: int) -> HitboxComponent:
 	var hitbox: HitboxComponent = HitboxComponent.new()
 	hitbox.faction = faction
@@ -101,6 +125,10 @@ func _make_hurtbox(faction: StringName) -> HurtboxComponent:
 	return hurtbox
 
 
+func _disable_hurtbox_on_death(hurtbox: HurtboxComponent) -> void:
+	hurtbox.set_enabled(false)
+
+
 func _expect(condition: bool, message: String) -> void:
 	if not condition:
 		_failures.append(message)
@@ -108,7 +136,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("HITBOX_HURTBOX_TEST: PASS (activation, faction, deduplication, Health forwarding)")
+		print("HITBOX_HURTBOX_TEST: PASS (activation, faction, deduplication, deferred physics disable)")
 		quit(0)
 		return
 	for failure: String in _failures:

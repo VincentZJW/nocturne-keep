@@ -50,7 +50,10 @@ func receive_hit(hitbox: HitboxComponent) -> bool:
 func set_enabled(enabled: bool) -> void:
 	var changed: bool = is_enabled != enabled or monitorable != enabled
 	is_enabled = enabled
-	monitorable = enabled
+	# PhysicsServer forbids a synchronous monitorable change while an Area2D
+	# enter/exit signal is being dispatched. The logical flag changes now so
+	# late contacts are rejected; only the server-backed property is deferred.
+	set_deferred("monitorable", enabled)
 	for child: Node in get_children():
 		var collision_shape: CollisionShape2D = child as CollisionShape2D
 		if collision_shape != null:

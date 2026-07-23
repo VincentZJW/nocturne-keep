@@ -66,6 +66,58 @@ The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77
 3. **Cursed Castle Guard acceptance gate:** manually verify heavy-cut readability, both facings, edge behavior, all Player evasion verbs, 1/2-point attacks, Hurt interruption, grounded dissolve Death, and Reset behavior before tuning or reusing the enemy contract.
 4. **Content after explicit approval:** the next normal enemy should create a different spatial decision rather than copying the Guard. The second normal enemy, elite, three main rooms, boss arena, Boss, drops, and progression remain unauthorized and unstarted.
 
+## 2026-07-23 — Godot Debugger five-error repair (preflight)
+
+Status: complete — five repeated Debugger errors identified and fixed; full regression passed
+
+### Read-only findings
+
+- Git preflight: clean `master` at `eb1e4fd feat: add player hurt and grouped encounters`, two commits ahead of `origin/master`.
+- The latest project `user://logs/godot.log` contains exactly five `ERROR:` entries. All five are the same Godot 4.7.1 engine guard: `Function blocked during in/out signal. Use set_deferred("monitorable", true/false).`
+- Each stack is identical: Player Hitbox `area_entered` → `HitboxComponent.try_hit()` → Guard `HurtboxComponent.receive_hit()` → Health reaches zero → `CastleGuard._enter_death()` → `HurtboxComponent.set_enabled(false)` → synchronous `Area2D.monitorable` assignment.
+- The error repeats once for each of the five Main Guards killed during the user's run; there are not five independent code defects.
+- `set_enabled()` already changes collision-shape disabled state with `set_deferred()`, but line 53 still writes `monitorable = enabled` synchronously. The component's immediate `is_enabled` flag already rejects any late contact in the same frame, so deferring the physics-server property is both safe and the Godot-required lifecycle behavior.
+- Previous automated tests did not reproduce this because most lethal tests call `try_hit()` directly rather than letting PhysicsServer emit a real `area_entered` callback.
+
+### Goals, planned files, and tests
+
+- Change only `scripts/combat/hurtbox_component.gd` so monitorability is queued with `set_deferred()` while logical enable/disable remains immediate.
+- Add a focused regression to `tests/combat/test_hitbox_hurtbox_components.gd` that creates overlapping areas, lets the physics engine emit `area_entered`, kills the target inside that callback chain, and verifies one death with no debugger error.
+- Re-run exact Godot 4.7.1 import, the focused component/Guard/Main tests, all repository tests, configured Main, and scan preserved logs for `ERROR:`/warnings.
+- Update only this development record beyond the focused code/test change; do not alter combat values, Player feel, enemy count, scene layout, art, or milestone scope.
+
+### Scope check
+
+- This is a lifecycle correctness fix for the existing Hurtbox composition.
+- It adds no enemy, skill, damage rule, animation, UI, encounter, Boss, drop, or progression content.
+
+### Delivered repair
+
+- Replaced the synchronous `monitorable = enabled` write in `HurtboxComponent.set_enabled()` with `set_deferred("monitorable", enabled)`, matching Godot 4.7.1's PhysicsServer lifecycle rule for Area2D enter/exit callbacks.
+- Kept `is_enabled` immediate. Therefore a lethal contact closes logical damage acceptance in the same call stack, while only the server-backed monitorability and CollisionShape2D state wait for the safe deferred phase.
+- Added a PhysicsServer-driven regression to `test_hitbox_hurtbox_components.gd`: overlapping hostile areas now let the engine emit `area_entered`, lethal damage disables the Hurtbox inside the callback chain, and the test verifies one death plus final non-monitorability. This covers the path that direct `try_hit()` tests previously missed.
+- No combat number, state priority, animation, scene, enemy placement, or Player input behavior changed.
+
+### Commands and actual results
+
+1. Historical evidence:
+   - Read the latest `user://logs/godot.log`; it contained exactly five copies of the same blocked `set_monitorable` stack, each ending at `HurtboxComponent.set_enabled()` during `CastleGuard._enter_death()`.
+2. Focused verification with exact Godot `4.7.1.stable.official.a13da4feb`:
+   - `Godot --headless --path . --script tests/combat/test_hitbox_hurtbox_components.gd`: PASS, including deferred physics disable; preserved log contains no error/warning.
+   - Fresh headless editor import: exit 0, no parse/resource/error/warning output.
+   - `test_castle_guard.gd`: PASS for patrol, Chase, fair Attack, Hurt, and Death.
+   - `test_main_enemy_integration.gd`: PASS for four groups, five Guards, Hurt, five-point damage, and Death.
+3. Full regression:
+   - All 22 repository test scripts exited 0.
+   - Exact stdout/log scan found no `SCRIPT ERROR`, `ERROR:`, `WARNING:`, or blocked in/out-signal diagnostic.
+   - Movement/action metrics remain unchanged: 153.59 px single-jump range, 281.92 px debug-double-jump range, 344.00 px four-Air-Dash action travel.
+4. Runtime startup:
+   - Configured Main completed a non-headless 120-frame GL Compatibility launch on Apple M4 with exit 0 and no diagnostics.
+
+### Manual acceptance
+
+- Clear the Godot Debugger's historical error list (or restart the editor), run F5, and defeat the five Guards again. The previous five entries remain visible until cleared, but no new `Function blocked during in/out signal` entry should be added.
+
 ## 2026-07-23 — Player Hurt feedback, Guard damage, and gray-box encounter density (preflight)
 
 Status: complete — implementation and automated regression passed; manual feel/visual acceptance pending
