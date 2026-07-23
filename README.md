@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`M1.5 连续地面/空中Dash与耐力原型`
+当前版本：`基础战斗原型 · Castle Guard / 古堡守卫`
 
 ## 当前范围
 
-M1.5在M1移动基础上增加开发验证用二段跳、可连续衔接的水平地面/空中Dash、功能性耐力条、可快速重复的双匕首前刺，以及Dash Attack。Ground Dash与Air Dash共享100点耐力，每段成功Dash消耗25点；没有新的Shift按下边沿就不会自动续段。耐力在地面按35点/秒回复，普通腾空/自由下落按可配置的40%倍率回复；付费Dash动作期间不回复。所有攻击仍只有动画、输入和移动接口，没有伤害或Hitbox；敌人、完整战斗、Hurt和Death Gameplay仍未开始。
+当前在M1.5移动/动作、耐力、玩家生命/死亡/重生基础上，增加第一只可战斗近战敌人Castle Guard和最小通用战斗层。玩家普通双匕首前刺造成1点伤害，Dash Attack造成2点；古堡守卫的剑在0.35秒前摇后以0.10秒有效窗口造成1点伤害，身体接触不伤害。Hitbox、Hurtbox与Health职责分离，同一攻击不会对同一目标重复结算。敌人具备Idle、Patrol、Chase、Attack、Hurt、Death，且不会主动走下平台。当前仍没有远程/飞行/精英敌人、Boss、掉落、复杂关卡、玩家无敌帧或正式受击状态。
 
 ## 环境要求
 
@@ -36,6 +36,14 @@ GODOT_BIN="/absolute/path/to/Godot"
 "$GODOT_BIN" --path .
 ```
 
+第一只敌人的独立战斗测试房：
+
+```bash
+"$GODOT_BIN" --path . res://scenes/tools/combat_test_room.tscn
+```
+
+测试房包含玩家/守卫血量与状态调试信息、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。
+
 ## 计划操作
 
 当前试玩输入映射：
@@ -46,11 +54,11 @@ GODOT_BIN="/absolute/path/to/Godot"
 | 跳跃 | Space；Debug开关启用时可二段跳 |
 | Dash / 冲刺 | Shift（Left Shift与Right Shift）；地面或空中均可 |
 | 连续Ground/Air Dash | 连续独立按下Shift；每段消耗共享耐力25点 |
-| 普通双匕首前刺 | J |
-| Dash Attack | Shift后在Dash的0.18秒窗口内按J；同帧Shift+J也可直接触发 |
+| 普通双匕首前刺 | J；对古堡守卫造成1点伤害 |
+| Dash Attack | Shift后在Dash的0.18秒窗口内按J；同帧Shift+J也可直接触发；造成2点伤害 |
 | Air Dash Attack | 空中Shift后在Dash中按J |
 
-连续按J时，当前Attack进入第3帧后会消费至多一条0.10秒缓存并重新播放同一基础突刺；这不是多段连招树。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费，期间可缓存一个后续Shift，结束时按实际接触状态转入付费Ground/Air Dash。当前没有无敌帧或伤害判定。
+连续按J时，当前Attack进入第3帧后会消费至多一条0.10秒缓存并重新播放同一基础突刺；这不是多段连招树。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费，期间可缓存一个后续Shift，结束时按实际接触状态转入付费Ground/Air Dash。当前没有玩家无敌帧、连招树或复杂伤害公式。
 
 ## 文档
 
@@ -58,6 +66,8 @@ GODOT_BIN="/absolute/path/to/Godot"
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
 - [玩家动作接口](docs/design/player_combat_spec.md)
+- [基础战斗组件规格](docs/design/combat_system_spec.md)
+- [Castle Guard敌人规格](docs/design/enemy_castle_guard_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)
 - [已知问题](docs/known_issues.md)

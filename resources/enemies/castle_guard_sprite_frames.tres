@@ -1,0 +1,126 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/attack/attack_01.png" id="1_7xwdy"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/attack/attack_02.png" id="2_bsy0i"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/attack/attack_03.png" id="3_iha7y"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/attack/attack_04.png" id="4_um6pc"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/attack/attack_05.png" id="5_7pj2b"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/death/death_01.png" id="6_qgnsl"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/death/death_02.png" id="7_ssf8t"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/death/death_03.png" id="8_seluj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/death/death_04.png" id="9_ynxp5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/death/death_05.png" id="10_isgfu"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/death/death_06.png" id="11_3y4fj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/hurt/hurt_01.png" id="12_3ygha"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/hurt/hurt_02.png" id="13_rm0va"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/hurt/hurt_03.png" id="14_yc2nh"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/idle/idle_01.png" id="15_xqdxj"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/idle/idle_02.png" id="16_yu50c"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/idle/idle_03.png" id="17_2h1bq"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/idle/idle_04.png" id="18_qu48m"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/walk/walk_01.png" id="19_thl2v"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/walk/walk_02.png" id="20_krnsk"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/walk/walk_03.png" id="21_cmfs6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/walk/walk_04.png" id="22_jmc4s"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/walk/walk_05.png" id="23_yipaq"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/castle_guard/walk/walk_06.png" id="24_l036g"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.75,
+"texture": ExtResource("1_7xwdy")
+}, {
+"duration": 1.75,
+"texture": ExtResource("2_bsy0i")
+}, {
+"duration": 0.5,
+"texture": ExtResource("3_iha7y")
+}, {
+"duration": 0.5,
+"texture": ExtResource("4_um6pc")
+}, {
+"duration": 4.5,
+"texture": ExtResource("5_7pj2b")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_qgnsl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ssf8t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_seluj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_ynxp5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_isgfu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_3y4fj")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_3ygha")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_rm0va")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_yc2nh")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.666667
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_xqdxj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_yu50c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_2h1bq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_qu48m")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_thl2v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_krnsk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_cmfs6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_jmc4s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_yipaq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_l036g")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]

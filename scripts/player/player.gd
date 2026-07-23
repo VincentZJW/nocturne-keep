@@ -7,6 +7,7 @@ signal movement_state_changed(state_name: StringName)
 signal jump_performed(from_coyote_time: bool)
 signal double_jump_performed(air_jumps_remaining: int)
 signal landed
+signal damage_received(damage: int, source_position: Vector2, attack_id: int)
 signal death_state_entered
 signal respawned(global_spawn_position: Vector2)
 
@@ -46,6 +47,7 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @export_node_path("PlayerActionController") var action_controller_path: NodePath = NodePath("ActionController")
 @export_node_path("PlayerStaminaComponent") var stamina_component_path: NodePath = NodePath("StaminaComponent")
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("HealthComponent")
+@export_node_path("HurtboxComponent") var hurtbox_path: NodePath = NodePath("Hurtbox")
 @export_node_path("Camera2D") var camera_path: NodePath = NodePath("Camera2D")
 
 @onready var animation_controller: PlayerAnimationController = get_node_or_null(
@@ -60,6 +62,7 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @onready var health_component: HealthComponent = get_node_or_null(
 	health_component_path
 ) as HealthComponent
+@onready var hurtbox: HurtboxComponent = get_node_or_null(hurtbox_path) as HurtboxComponent
 @onready var player_camera: Camera2D = get_node_or_null(camera_path) as Camera2D
 
 var air_jumps_remaining: int = 0
@@ -92,9 +95,14 @@ func _ready() -> void:
 		push_error("Player requires a HealthComponent")
 		set_physics_process(false)
 		return
+	if hurtbox == null:
+		push_error("Player requires a HurtboxComponent")
+		set_physics_process(false)
+		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
 	action_controller.action_finished.connect(_on_action_finished)
 	health_component.died.connect(_on_health_died)
+	hurtbox.hit_received.connect(_on_hurtbox_hit_received)
 	_restore_air_jumps()
 	animation_controller.play_loop(&"idle", true)
 
@@ -358,3 +366,7 @@ func _on_health_died() -> void:
 	action_controller.cancel_all_actions()
 	animation_controller.reset_to_idle()
 	death_state_entered.emit()
+
+
+func _on_hurtbox_hit_received(damage: int, source_position: Vector2, attack_id: int) -> void:
+	damage_received.emit(damage, source_position, attack_id)

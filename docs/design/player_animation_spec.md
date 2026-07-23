@@ -1,12 +1,12 @@
 # Player Animation Integration Specification
 
-Version: 1.8 — production death presentation sequence
+Version: 1.9 — minimal combat-window integration
 Date: 2026-07-23
 Status: M1/M1.5 movement/action presentation plus player death presentation complete
 
 ## Scope
 
-This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, the limited M1.5 action prototype, and the approved player death presentation. It covers sprite animation names, timing, loop behavior, priority arbitration, facing, Ground/Air Dash, normal Attack, Dash Attack, the five-frame body fall, and the hooded ghost visual. It does not implement enemy damage, Hitbox/Hurtbox nodes, invulnerability, combos, enemies, bosses, or production levels.
+This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, M1.5 actions, approved death presentation, and the animation events now consumed by the minimal combat foundation. It covers sprite animation names, timing, loop behavior, priority arbitration, facing, Ground/Air Dash, normal Attack, Dash Attack, the five-frame body fall, and the hooded ghost visual. Hitbox/Hurtbox ownership and Castle Guard behavior are specified separately; this layer still owns no Health, invulnerability, combo, Boss, or production-level logic.
 
 ## Node composition
 
@@ -53,9 +53,9 @@ Ground Dash presentation is deliberately segmented. `dash_start` has two fast co
 
 Air Dash follows the same chain grammar: two-frame `air_dash_start`, three-frame locked `air_dash_loop`, and two-frame `air_dash_end`, all at 20 FPS. Only the first paid segment uses start; successful continuations remain in loop; the end phase occurs once after chaining stops. The body is horizontal, both feet stay clear of the ground line, both blades remain close and readable, and the mantle trails backward. It avoids the grounded rear-leg push and the Attack's extended paired blades.
 
-Attack is a synchronous four-frame dual-dagger thrust at 20 FPS: `attack_01` is the short compression, `attack_02` snaps both blades into the first core pose, `attack_03` holds maximum extension and opens the repeat window, and `attack_04` retracts quickly. Both blades point forward and remain vertically separated. The designed delay from J to `attack_02` is one 20-FPS frame, approximately 0.05 seconds. `attack_02` and `attack_03` are reserved as the future narrow forward hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes only metadata; there is no Hitbox or damage.
+Attack is a synchronous four-frame dual-dagger thrust at 20 FPS: `attack_01` is the short compression, `attack_02` snaps both blades into the first core pose, `attack_03` holds maximum extension and opens the repeat window, and `attack_04` retracts quickly. Both blades point forward and remain vertically separated. The designed delay from J to `attack_02` is one 20-FPS frame, approximately 0.05 seconds. `PlayerAnimationController.is_attack_hit_window()` reports `attack_02/03`; `PlayerActionController` now uses that event to enable the separate one-damage narrow Hitbox and disables it for `01/04`.
 
-Dash Attack uses one shared ground/air five-frame sequence at 20 FPS: `dash_attack_01` inherits Dash and retracts both elbows, `02` starts paired extension, `03` forms the full arrow-shaped core, `04` holds the narrow thrust, and `05` retracts while movement decelerates. Total presentation time is approximately 0.25 seconds. It has no lateral slash or broad effect arc. `dash_attack_03` and `dash_attack_04` are query-only future hit-window metadata.
+Dash Attack uses one shared ground/air five-frame sequence at 20 FPS: `dash_attack_01` inherits Dash and retracts both elbows, `02` starts paired extension, `03` forms the full arrow-shaped core, `04` holds the narrow thrust, and `05` retracts while movement decelerates. Total presentation time is approximately 0.25 seconds. It has no lateral slash or broad effect arc. `dash_attack_03/04` now drive a separate two-damage narrow Hitbox; presentation still does not own damage calculation.
 
 Death uses five non-looping 64×64 frames at 11.111 FPS, approximately 0.45 seconds total. `death_01` breaks balance while both blades remain near the hands; `death_02` begins the backward fall; `death_03` approaches the floor and visibly separates both daggers; `death_04` reaches a horizontal grounded body; `death_05` is a still, fully horizontal corpse with the longer main dagger in front and shorter off-hand dagger on the opposite side. The final visible baseline is `y=60`, and its wide/low bounds are checked automatically at 64×64 and through nearest-neighbor 48×48 reduction.
 
@@ -107,6 +107,10 @@ Player (CharacterBody2D)
 │   └── DeathEffects
 │       └── GhostSprite
 ├── CollisionShape2D
+├── Hurtbox
+├── CombatRoot
+│   ├── AttackHitbox
+│   └── DashAttackHitbox
 ├── Camera2D
 ├── AnimationController
 ├── StaminaComponent

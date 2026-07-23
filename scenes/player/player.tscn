@@ -10,12 +10,25 @@
 [ext_resource type="Script" uid="uid://c03efik0danmi" path="res://scripts/combat/health_component.gd" id="8_health"]
 [ext_resource type="Script" path="res://scripts/player/player_death_sequence.gd" id="9_death_sequence"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/death/ghost_hooded_face.png" id="10_ghost"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="11_hurtbox"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="12_hitbox"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 52)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_player_hurtbox"]
+size = Vector2(22, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack_hitbox"]
+size = Vector2(42, 14)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dash_attack_hitbox"]
+size = Vector2(58, 16)
+
 [node name="Player" type="CharacterBody2D" unique_id=335625318]
 floor_snap_length = 6.0
+collision_layer = 2
+collision_mask = 5
 script = ExtResource("1_player")
 movement_config = ExtResource("2_config")
 
@@ -39,6 +52,50 @@ texture = ExtResource("10_ghost")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=194401465]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_player")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 8
+collision_mask = 64
+monitoring = false
+script = ExtResource("11_hurtbox")
+faction = &"player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_player_hurtbox")
+
+[node name="CombatRoot" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="AttackHitbox" type="Area2D" parent="CombatRoot"]
+unique_name_in_owner = true
+position = Vector2(29, -3)
+collision_layer = 32
+collision_mask = 16
+monitoring = false
+monitorable = false
+script = ExtResource("12_hitbox")
+faction = &"player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatRoot/AttackHitbox"]
+disabled = true
+shape = SubResource("RectangleShape2D_attack_hitbox")
+
+[node name="DashAttackHitbox" type="Area2D" parent="CombatRoot"]
+unique_name_in_owner = true
+position = Vector2(37, -3)
+collision_layer = 32
+collision_mask = 16
+monitoring = false
+monitorable = false
+script = ExtResource("12_hitbox")
+damage = 2
+faction = &"player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CombatRoot/DashAttackHitbox"]
+disabled = true
+shape = SubResource("RectangleShape2D_dash_attack_hitbox")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=184384772]
 position = Vector2(0, -105)

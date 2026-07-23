@@ -1,12 +1,12 @@
 # Player Action/Combat Interface Specification
 
-Version: 0.3 — continuous Ground/Air Dash handoff
-Date: 2026-07-22
-Status: presentation and input contract only; no damage system
+Version: 0.4 — Castle Guard damage integration
+Date: 2026-07-23
+Status: Player Attack/Dash Attack hitboxes integrated; no combo tree or invulnerability
 
 ## Scope boundary
 
-This document names the current Attack-facing interfaces so future combat work can integrate without mixing damage into movement or animation. The delivered prototype contains no Hitbox node, Hurtbox, target memory, damage, health mutation, enemy, Boss, invulnerability, or multi-animation combo tree.
+This document defines the Player-facing action interface and its narrow integration with the minimal combat foundation. Damage remains outside movement and animation ownership: `PlayerActionController` opens composed Hitbox nodes only when the presentation controller reports approved effective frames. The delivered prototype still contains no Player invulnerability, formal Hurt state, Boss, status/attribute damage, or multi-animation combo tree.
 
 ## Basic Attack
 
@@ -18,7 +18,7 @@ This document names the current Attack-facing interfaces so future combat work c
 - Facing remains locked through the action. Locomotion animation cannot override it.
 - Attack has no movement impulse in this prototype.
 
-Future metadata-only effective frames are `attack_02` and `attack_03`. A future narrow forward rectangle may query `PlayerAnimationController.is_attack_hit_window()`, mirror with facing, and remain disabled outside those frames. That node and all damage behavior are intentionally absent.
+`attack_02` and `attack_03` activate the narrow forward `CombatRoot/AttackHitbox` for one point of damage. Each accepted/repeated Attack receives a new attack id; the Hitbox remembers each target once for that id and remains disabled outside those frames. `CombatRoot` mirrors with facing without moving the Player body or Hurtbox.
 
 ## Repeat input buffer
 
@@ -45,7 +45,7 @@ This is repetition of one basic Attack, not a formal combo tree: there are no br
 - At completion, a live affordable follow-up starts a new paid Ground Dash or Air Dash according to actual floor contact. It inherits the buffered direction, increments the Dash chain number, and clears the request after one consumption.
 - The follow-up costs the normal 25 points; the Dash Attack transition itself still never charges the already-paid current Dash. If stamina is insufficient, the request is cleared and locomotion resumes.
 
-Future metadata-only effective frames are `dash_attack_03` and `dash_attack_04`. A future hitbox would be longer and narrow, face forward, disable outside the window, and remember targets once per action. None of this future behavior is instantiated now.
+`dash_attack_03` and `dash_attack_04` activate the longer narrow `CombatRoot/DashAttackHitbox` for two points of damage. It faces forward, disables outside the window, and remembers each target once per accepted Dash Attack. It does not repeat from the basic Attack buffer.
 
 ## Priority and cancellation
 
@@ -53,7 +53,7 @@ Future metadata-only effective frames are `dash_attack_03` and `dash_attack_04`.
 death > hurt > dash_attack > attack > ground_dash/air_dash > locomotion
 ```
 
-Hurt/Death remain preview-only placeholders. In the current Gameplay prototype:
+Player Hurt remains presentation-only placeholder art; Player Death is an active Gameplay state. In the current Gameplay prototype:
 
 - locomotion cannot cancel Attack or Dash Attack;
 - Dash cannot cancel Attack;
@@ -69,4 +69,4 @@ Changing these cancellation rules requires a later explicit design decision.
 
 ## Diagnostics and acceptance
 
-The optional Main debug HUD can be disabled and reports current Attack frame, both buffer flags/timers, Dash type/number/direction, chain-window state, and measured input-to-`attack_02` time. Automated tests cover immediate dispatch, every four-frame pose, a single early Attack buffer, one-time consumption, four deliberate repeated Attacks, locomotion/facing locks, the approximately 0.25-second Dash Attack, no-double-charge transition, and its paid Ground/Air Dash follow-up.
+The optional Main debug HUD can be disabled and reports current Attack frame, both buffer flags/timers, Dash type/number/direction, chain-window state, and measured input-to-`attack_02` time. The dedicated combat room additionally reports both Player hitboxes and the enemy sword window. Automated tests cover immediate dispatch, every four-frame pose, a single early Attack buffer, one-time consumption, four deliberate repeated Attacks, locomotion/facing locks, the approximately 0.25-second Dash Attack, no-double-charge transition, paid Ground/Air Dash follow-up, 1/2-point damage, active-window closure, facing, and per-attack target deduplication.

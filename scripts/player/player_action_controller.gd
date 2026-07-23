@@ -29,6 +29,13 @@ const DASH_ATTACK_ANIMATION: StringName = &"dash_attack"
 @export var action_config: PlayerActionPrototypeConfig
 @export_node_path("PlayerAnimationController") var animation_controller_path: NodePath = NodePath("../AnimationController")
 @export_node_path("PlayerStaminaComponent") var stamina_component_path: NodePath = NodePath("../StaminaComponent")
+@export_node_path("Node2D") var combat_root_path: NodePath = NodePath("../CombatRoot")
+@export_node_path("HitboxComponent") var attack_hitbox_path: NodePath = NodePath(
+	"../CombatRoot/AttackHitbox"
+)
+@export_node_path("HitboxComponent") var dash_attack_hitbox_path: NodePath = NodePath(
+	"../CombatRoot/DashAttackHitbox"
+)
 
 @onready var animation_controller: PlayerAnimationController = get_node_or_null(
 	animation_controller_path
@@ -36,6 +43,13 @@ const DASH_ATTACK_ANIMATION: StringName = &"dash_attack"
 @onready var stamina_component: PlayerStaminaComponent = get_node_or_null(
 	stamina_component_path
 ) as PlayerStaminaComponent
+@onready var combat_root: Node2D = get_node_or_null(combat_root_path) as Node2D
+@onready var attack_hitbox: HitboxComponent = get_node_or_null(
+	attack_hitbox_path
+) as HitboxComponent
+@onready var dash_attack_hitbox: HitboxComponent = get_node_or_null(
+	dash_attack_hitbox_path
+) as HitboxComponent
 
 var _action_state: ActionState = ActionState.NONE
 var _dash_direction: float = 1.0
@@ -55,6 +69,8 @@ var _attack_buffer_timer: float = 0.0
 var _attack_buffered: bool = false
 var _last_attack_input_to_hit_time: float = -1.0
 var _attack_hit_time_recorded: bool = false
+var _next_attack_id: int = 1
+var _current_attack_id: int = 0
 
 
 func _ready() -> void:
@@ -67,8 +83,14 @@ func _ready() -> void:
 	if stamina_component == null:
 		push_error("PlayerActionController requires a PlayerStaminaComponent")
 		return
+	if combat_root == null or attack_hitbox == null or dash_attack_hitbox == null:
+		push_error("PlayerActionController requires CombatRoot and both Player attack hitboxes")
+		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
 	animation_controller.animated_sprite.frame_changed.connect(_on_animation_frame_changed)
+	animation_controller.facing_changed.connect(_on_facing_changed)
+	_on_facing_changed(animation_controller.animated_sprite.flip_h)
+	_deactivate_attack_hitboxes()
 
 
 func advance(delta: float) -> void:
@@ -148,6 +170,7 @@ func cancel_all_actions() -> void:
 	_dash_ending = false
 	_current_dash_number = 0
 	_reset_attack_response_measurement()
+	_deactivate_attack_hitboxes()
 
 
 func is_stamina_regeneration_blocked() -> bool:
@@ -386,6 +409,8 @@ func _start_direct_dash_attack(started_airborne: bool, requested_direction: floa
 	_dash_attack_window_remaining = 0.0
 	_current_dash_number = 1
 	_action_state = ActionState.DASH_ATTACK
+	_prepare_new_attack_id()
+	_deactivate_attack_hitboxes()
 	action_started.emit(DASH_ATTACK_ANIMATION)
 	return true
 
@@ -394,6 +419,8 @@ func _start_attack() -> bool:
 	_clear_attack_buffer()
 	if not _start_action(ActionState.ATTACK, ATTACK_ANIMATION):
 		return false
+	_prepare_new_attack_id()
+	_deactivate_attack_hitboxes()
 	_reset_attack_response_measurement()
 	return true
 
@@ -402,6 +429,8 @@ func _chain_attack() -> bool:
 	if not animation_controller.restart_locked_one_shot(ATTACK_ANIMATION):
 		return false
 	_clear_attack_buffer()
+	_prepare_new_attack_id()
+	_deactivate_attack_hitboxes()
 	_reset_attack_response_measurement()
 	action_started.emit(ATTACK_ANIMATION)
 	return true
@@ -417,6 +446,8 @@ func _transition_dash_to_dash_attack() -> bool:
 	_dash_motion_remaining = 0.0
 	_dash_attack_window_remaining = 0.0
 	_action_state = ActionState.DASH_ATTACK
+	_prepare_new_attack_id()
+	_deactivate_attack_hitboxes()
 	_clear_dash_buffer()
 	_clear_attack_buffer()
 	action_transitioned.emit(previous_action, DASH_ATTACK_ANIMATION)
@@ -474,10 +505,12 @@ func _finish_action(finished_action: StringName) -> void:
 	_dash_attack_elapsed = 0.0
 	_dash_ending = false
 	_current_dash_number = 0
+	_deactivate_attack_hitboxes()
 	action_finished.emit(finished_action)
 
 
 func _on_animation_frame_changed() -> void:
+	_sync_attack_hitboxes()
 	if (
 		_action_state != ActionState.ATTACK
 		or _attack_hit_time_recorded
@@ -490,6 +523,42 @@ func _on_animation_frame_changed() -> void:
 	var effective_speed: float = animation_speed * absf(animation_controller.animated_sprite.speed_scale)
 	_last_attack_input_to_hit_time = 1.0 / effective_speed if effective_speed > 0.0 else -1.0
 	_attack_hit_time_recorded = true
+
+
+func _prepare_new_attack_id() -> void:
+	_current_attack_id = _next_attack_id
+	_next_attack_id += 1
+	if _next_attack_id <= 0:
+		_next_attack_id = 1
+
+
+func _sync_attack_hitboxes() -> void:
+	if animation_controller == null:
+		_deactivate_attack_hitboxes()
+		return
+	if _action_state == ActionState.ATTACK and animation_controller.is_attack_hit_window():
+		if not attack_hitbox.is_active:
+			attack_hitbox.begin_attack(_current_attack_id, 1)
+		dash_attack_hitbox.end_attack()
+		return
+	if _action_state == ActionState.DASH_ATTACK and animation_controller.is_dash_attack_hit_window():
+		if not dash_attack_hitbox.is_active:
+			dash_attack_hitbox.begin_attack(_current_attack_id, 2)
+		attack_hitbox.end_attack()
+		return
+	_deactivate_attack_hitboxes()
+
+
+func _deactivate_attack_hitboxes() -> void:
+	if attack_hitbox != null:
+		attack_hitbox.end_attack()
+	if dash_attack_hitbox != null:
+		dash_attack_hitbox.end_attack()
+
+
+func _on_facing_changed(facing_left: bool) -> void:
+	if combat_root != null:
+		combat_root.scale.x = -1.0 if facing_left else 1.0
 
 
 func _on_one_shot_finished(animation_name: StringName) -> void:

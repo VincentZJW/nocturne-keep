@@ -181,7 +181,10 @@ func _test_dash_attack_duration() -> void:
 	sprite.frame = 4
 	sprite.animation_finished.emit()
 	_expect(not actions.is_action_active(), "Dash Attack did not finish after its fifth frame")
-	_expect(player.find_children("*Hitbox*").is_empty(), "Fast Attack work created an unauthorized Hitbox")
+	_expect(actions.attack_hitbox != null, "Player AttackHitbox is missing after combat integration")
+	_expect(actions.dash_attack_hitbox != null, "Player DashAttackHitbox is missing after combat integration")
+	_expect(not actions.attack_hitbox.is_active, "AttackHitbox remained active after Dash Attack")
+	_expect(not actions.dash_attack_hitbox.is_active, "DashAttackHitbox remained active after completion")
 	_cleanup_world(world)
 	await process_frame
 

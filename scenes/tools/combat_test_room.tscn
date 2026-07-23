@@ -1,0 +1,252 @@
+[gd_scene load_steps=17 format=3]
+
+[ext_resource type="Script" path="res://scripts/tools/combat_test_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="2_player"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/castle_guard.tscn" id="3_guard"]
+[ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="4_respawn"]
+[ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="5_stamina_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="6_health_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_death_hud.gd" id="7_death_hud"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
+size = Vector2(1400, 120)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(48, 720)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bar_background"]
+bg_color = Color(0.025, 0.035, 0.055, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.376, 0.478, 0.565, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.66, 0.27, 0.34, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_fill"]
+bg_color = Color(0.725, 0.51, 0.263, 1)
+
+[node name="CombatTestRoom" type="Node2D"]
+script = ExtResource("1_room")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.018, 0.015, 0.031, 1)
+
+[node name="CastleSilhouette" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 600, 0, 350, 170, 350, 170, 300, 220, 245, 270, 300, 270, 430, 570, 430, 570, 320, 630, 250, 690, 320, 690, 420, 1030, 420, 1030, 330, 1080, 270, 1130, 330, 1130, 600)
+color = Color(0.055, 0.05, 0.08, 1)
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="Floor" type="StaticBody2D" parent="World"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="Visual" type="Polygon2D" parent="World/Floor"]
+polygon = PackedVector2Array(-60, 600, 1340, 600, 1340, 720, -60, 720)
+color = Color(0.11, 0.105, 0.145, 1)
+
+[node name="TopLine" type="Polygon2D" parent="World/Floor"]
+polygon = PackedVector2Array(-60, 600, 1340, 600, 1340, 606, -60, 606)
+color = Color(0.376, 0.478, 0.565, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Floor"]
+position = Vector2(640, 660)
+shape = SubResource("RectangleShape2D_floor")
+
+[node name="LeftWall" type="StaticBody2D" parent="World"]
+position = Vector2(-24, 360)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/LeftWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="World"]
+position = Vector2(1304, 360)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/RightWall"]
+shape = SubResource("RectangleShape2D_wall")
+
+[node name="SpawnPoint" type="Marker2D" parent="World"]
+position = Vector2(260, 572)
+
+[node name="Player" parent="World" instance=ExtResource("2_player")]
+position = Vector2(260, 572)
+
+[node name="CastleGuard" parent="World" instance=ExtResource("3_guard")]
+position = Vector2(760, 570)
+
+[node name="PlayerRespawnController" type="Node" parent="."]
+script = ExtResource("4_respawn")
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="ColorRect" parent="Interface"]
+offset_left = 20.0
+offset_top = 18.0
+offset_right = 786.0
+offset_bottom = 180.0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.055, 0.92)
+
+[node name="Title" type="Label" parent="Interface/Panel"]
+offset_left = 14.0
+offset_top = 8.0
+offset_right = 744.0
+offset_bottom = 34.0
+theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
+theme_override_font_sizes/font_size = 18
+text = "CASTLE GUARD · MELEE COMBAT TEST ROOM"
+
+[node name="Instructions" type="Label" parent="Interface/Panel"]
+offset_left = 14.0
+offset_top = 36.0
+offset_right = 744.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
+theme_override_font_sizes/font_size = 13
+text = "A/D MOVE  ·  SPACE JUMP  ·  SHIFT DASH  ·  J ATTACK  ·  SHIFT → J DASH ATTACK"
+
+[node name="DebugLabel" type="Label" parent="Interface/Panel"]
+offset_left = 14.0
+offset_top = 66.0
+offset_right = 744.0
+offset_bottom = 140.0
+theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
+theme_override_font_sizes/font_size = 12
+text = "PLAYER HP 100/100\nGUARD HP 3/3\nHITBOX STATUS"
+
+[node name="DebugToggle" type="CheckButton" parent="Interface/Panel"]
+offset_left = 530.0
+offset_top = 108.0
+offset_right = 650.0
+offset_bottom = 148.0
+button_pressed = true
+text = "HITBOXES"
+
+[node name="ResetButton" type="Button" parent="Interface/Panel"]
+offset_left = 652.0
+offset_top = 108.0
+offset_right = 746.0
+offset_bottom = 148.0
+text = "RESET"
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 2
+script = ExtResource("5_stamina_hud")
+
+[node name="HealthContainer" type="ColorRect" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 1032.0
+offset_top = 24.0
+offset_right = 1256.0
+offset_bottom = 90.0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.055, 0.92)
+script = ExtResource("6_health_hud")
+
+[node name="Title" type="Label" parent="HUD/HealthContainer"]
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 112.0
+offset_bottom = 26.0
+theme_override_font_sizes/font_size = 12
+text = "HEALTH"
+
+[node name="HealthValue" type="Label" parent="HUD/HealthContainer"]
+unique_name_in_owner = true
+offset_left = 118.0
+offset_top = 6.0
+offset_right = 214.0
+offset_bottom = 26.0
+theme_override_font_sizes/font_size = 12
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/HealthContainer"]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 34.0
+offset_right = 214.0
+offset_bottom = 54.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+show_percentage = false
+
+[node name="StaminaContainer" type="ColorRect" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 1032.0
+offset_top = 100.0
+offset_right = 1256.0
+offset_bottom = 166.0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.055, 0.92)
+
+[node name="Title" type="Label" parent="HUD/StaminaContainer"]
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 112.0
+offset_bottom = 26.0
+theme_override_font_sizes/font_size = 12
+text = "STAMINA"
+
+[node name="StaminaValue" type="Label" parent="HUD/StaminaContainer"]
+unique_name_in_owner = true
+offset_left = 118.0
+offset_top = 6.0
+offset_right = 214.0
+offset_bottom = 26.0
+theme_override_font_sizes/font_size = 12
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="StaminaBar" type="ProgressBar" parent="HUD/StaminaContainer"]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 34.0
+offset_right = 214.0
+offset_bottom = 54.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_bar_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
+value = 100.0
+show_percentage = false
+
+[node name="DeathOverlay" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 430.0
+offset_top = 280.0
+offset_right = 850.0
+offset_bottom = 400.0
+mouse_filter = 2
+color = Color(0.025, 0.02, 0.035, 0.94)
+script = ExtResource("7_death_hud")
+
+[node name="Title" type="Label" parent="HUD/DeathOverlay"]
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 400.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.78, 0.31, 0.38, 1)
+theme_override_font_sizes/font_size = 30
+text = "YOU DIED"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/DeathOverlay"]
+offset_left = 20.0
+offset_top = 66.0
+offset_right = 400.0
+offset_bottom = 100.0
+theme_override_font_sizes/font_size = 18
+text = "已阵亡"
+horizontal_alignment = 1

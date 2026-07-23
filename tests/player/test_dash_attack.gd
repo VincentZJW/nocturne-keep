@@ -229,7 +229,10 @@ func _test_left_facing_and_wall_collision() -> void:
 	Input.action_release(PlayerScript.ATTACK_ACTION)
 	await _wait_until_action_finished(actions, 40)
 	_expect(player.position.x <= 98.5, "Dash Attack bypassed CharacterBody2D wall collision")
-	_expect(player.find_children("*Hitbox*").is_empty(), "Dash Attack created an unauthorized Hitbox")
+	_expect(actions.attack_hitbox != null, "Player AttackHitbox is missing after combat integration")
+	_expect(actions.dash_attack_hitbox != null, "Player DashAttackHitbox is missing after combat integration")
+	_expect(not actions.attack_hitbox.is_active, "AttackHitbox remained active after wall collision")
+	_expect(not actions.dash_attack_hitbox.is_active, "DashAttackHitbox remained active after wall collision")
 	_cleanup_world(world)
 	await process_frame
 
