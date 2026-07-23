@@ -3,7 +3,7 @@
 ## Current authoritative status
 
 - Last audited: 2026-07-23
-- Implementation baseline before this revision: `master` at `37d116c feat: integrate cursed guards into main scene`
+- Implementation baseline before this revision: `master` at `04c8769 fix: defer hurtbox physics state changes`
 - Engine verified in this audit: `4.7.1.stable.official.a13da4feb`
 
 This section is the current project snapshot. The dated entries below are retained as historical records of what was planned, implemented, tested, and still awaiting approval at each point in time. A historical plan or an earlier test result is not, by itself, evidence that a later feature exists or still passes.
@@ -65,6 +65,66 @@ The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77
 2. **Documentation alignment:** update the stale M0 design/architecture/known-issues metadata without changing gameplay, and decide whether a separate project plan is needed.
 3. **Cursed Castle Guard acceptance gate:** manually verify heavy-cut readability, both facings, edge behavior, all Player evasion verbs, 1/2-point attacks, Hurt interruption, grounded dissolve Death, and Reset behavior before tuning or reusing the enemy contract.
 4. **Content after explicit approval:** the next normal enemy should create a different spatial decision rather than copying the Guard. The second normal enemy, elite, three main rooms, boss arena, Boss, drops, and progression remain unauthorized and unstarted.
+
+## 2026-07-23 — F5 Main scene synchronization acceptance (preflight)
+
+Status: complete — configured Main, standalone combat room, graphical evidence, and full regression passed
+
+### Read-only findings
+
+- Git preflight: clean `master` at `04c8769 fix: defer hurtbox physics state changes`, synchronized with `origin/master`.
+- `project.godot` explicitly sets `run/main_scene="res://scenes/main/main.tscn"`; this path was read from project settings rather than inferred from filenames.
+- Main directly instances `res://scenes/player/player.tscn` at `Main/World/Player` and `res://scenes/enemies/castle_guard.tscn` five times beneath `Main/World/Encounters/EncounterGroup01..04/Enemies`.
+- The saved Main composition contains one `Marker2D` spawn, the typed respawn coordinator, signal-driven Health/Stamina HUD, Player action/death debug controls, four authored activation areas, and one/two-enemy group sizes of `1/1/1/2`.
+- The current Player PackedScene composes the latest Player SpriteFrames, movement/action/Hurt configurations, AnimationController, Stamina/Health/Hurtbox, normal and Dash Attack Hitboxes, Camera2D, HurtController, and death/ghost sequence.
+- The current Guard PackedScene composes the latest Guard SpriteFrames/configuration and centralized sword damage is `5`. No Main instance overrides the PackedScene with an older script, SpriteFrames resource, or damage value.
+- Existing Main-specific coverage proves group activation, five-point Guard damage, Player Hurt/invulnerability, and Guard Death cleanup; separate Player tests exercise movement/actions and Main-backed death/ghost/respawn. This task will add a saved/runtime resource-path and HUD/debug-state guard so future tool-scene-only integrations fail CI-style verification.
+
+### Goals, planned files, and tests
+
+- Strengthen `tests/combat/test_main_enemy_integration.gd` with explicit checks for the configured F5 path, Player/Guard source PackedScenes, latest SpriteFrames/config resources, composed gameplay controllers, live Health/Stamina HUD binding, respawn wiring, and closable debug presentation.
+- Do not alter Player feel, input mapping, combat values, enemy placement, encounter count, AI, animation art, collision shapes, or the Main node tree unless runtime evidence exposes a real synchronization defect.
+- Run the exact Godot `4.7.1.stable.official.a13da4feb` executable for fresh import, focused Main integration, Player movement/actions, Hurt, death/respawn, Guard/combat room, full repository regression, configured F5 graphical startup, and diagnostic-log scanning.
+- Preserve Main graphical evidence and a concise audit report under `docs/qa/`; update README only if the verified F5 route differs from its current instructions.
+
+### Scope check
+
+- This is an integration/acceptance hardening task for already approved Player, Guard, encounter, HUD, death, and respawn work.
+- It adds no new gameplay verb, enemy type, damage rule, room, Boss, item, drop, animation, or tuning change.
+
+### Delivered acceptance hardening
+
+- Strengthened `test_main_enemy_integration.gd` so it fails if configured F5 stops targeting `scenes/main/main.tscn`, if Main switches to an outdated Player/Guard PackedScene, SpriteFrames, action/Hurt/Guard config, or if any saved Guard overrides the centralized five-point damage.
+- Added Main-runtime checks for the exact Player gameplay composition, live signal-bound Health/Stamina HUD, SpawnPoint/respawn wiring, active Player Camera2D, and independently closable action/enemy debug overlays.
+- Replaced the previous direct terminal Guard damage in the Main test with the Main Player's actual action controller and composed Hitboxes: the real four-frame normal Attack deals one point, then the real Dash Attack deals two points and causes the three-Health Guard's Death/dissolve cleanup.
+- Preserved the first Guard's natural AI sword path and now also proves Hurt recovery before Player control resumes. The Guard still deals exactly five points, the immediate second hit is rejected during the 0.50-second invulnerability window, and the Player returns to Alive.
+- No runtime scene, art, parameter, input, Player code, enemy code, HUD code, collision, or encounter placement changed because the saved Main was already synchronized. The only executable change is stronger regression coverage preventing future tool-scene-only delivery.
+- Added `docs/qa/f5_main_sync_report.md`, an inspected 1280×720 configured-Main frame, and focused import/Main/combat-room logs. The Movie Maker's duplicate first two frames and generated silent WAV were discarded; the final evidence frame remains.
+
+### Commands and actual results
+
+1. Exact engine and parsing:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Fresh headless editor import: exit 0; no parse, resource, script, error, or warning diagnostics.
+2. Configured F5 Main:
+   - `Godot --headless --path . --quit-after 180`: exit 0 with no diagnostics.
+   - `test_main_enemy_integration.gd`: PASS for latest resource paths, live HUD, debug toggles, four activation groups/five Guards, natural five-point Guard Attack, Player Hurt/invulnerability/recovery, real one-point Player Attack, real two-point Dash Attack, Guard Death/dissolve, and active Camera2D.
+3. Independent scene and focused behavior:
+   - Explicit `combat_test_room.tscn` startup: exit 0.
+   - `test_m1_player_movement.gd`: PASS for movement, jump assists, collision, Camera, and six locomotion animations.
+   - `test_player_hurt_reaction.gd`: PASS for production Hurt, action interruption, collision-safe knockback, invulnerability, airborne handling, and Death precedence.
+   - `test_player_death_presentation.gd`: PASS for flat body, released daggers, ghost rise/pause, and cleanup.
+   - Main-backed `test_player_respawn.gd`: PASS in its preserved focused run for delayed ghost-complete respawn, SpawnPoint return, Health/Stamina/HUD reset, Camera continuity, and input recovery.
+4. Full regression:
+   - All 22 repository test scripts passed individually. Preserved log scan contains no `SCRIPT ERROR`, `ERROR:`, `WARNING:`, parse error, missing resource, or blocked PhysicsServer call.
+5. Graphical F5-equivalent run:
+   - `Godot --path . --write-movie docs/qa/f5_main_sync_runtime.png --fixed-fps 1 --quit-after 3 --audio-driver Dummy`: exit 0 using GL Compatibility on Apple M4.
+   - Inspected `docs/qa/f5_main_sync_runtime00000002.png` at 1280×720. It visibly shows the Main Player, first Guard encounter, four group/five Guard rows with damage 5, and live Health/Stamina/action HUD.
+
+### Manual acceptance still required
+
+- Use F5 with both debug toggles disabled and judge Player movement/jump/double-jump/continuous-Dash feel, Attack/Dash Attack readability, Hurt knockback/shake comfort, Guard windup fairness, late two-enemy pressure, and death/ghost visual quality. Automated results establish correctness and persistence, not subjective feel.
+- Rerun F5 after closing/reopening the editor to confirm the same saved Main presentation in the user's local editor workflow; resource-path and serialized-scene checks already prove persistence at file level.
 
 ## 2026-07-23 — Godot Debugger five-error repair (preflight)
 

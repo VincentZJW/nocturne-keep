@@ -1,0 +1,4 @@
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_RUNTIME_AUDIT: groups=4 guards=5 spawns=[(500.0, 610.0), (1030.0, 610.0), (1500.0, 610.0), (2070.0, 610.0), (2310.0, 610.0)] damage=5 first_active=true later_active=false
+MAIN_ENEMY_INTEGRATION_TEST: PASS (latest resources/HUD, 5 Guards, 4 activations, 1/2/5 damage, Hurt, Death)

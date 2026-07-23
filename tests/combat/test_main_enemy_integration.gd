@@ -4,6 +4,15 @@ extends SceneTree
 
 const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
 const EXPECTED_MAIN_PATH: String = "res://scenes/main/main.tscn"
+const EXPECTED_PLAYER_SCENE_PATH: String = "res://scenes/player/player.tscn"
+const EXPECTED_GUARD_SCENE_PATH: String = "res://scenes/enemies/castle_guard.tscn"
+const EXPECTED_PLAYER_FRAMES_PATH: String = "res://resources/player/player_sprite_frames.tres"
+const EXPECTED_GUARD_FRAMES_PATH: String = "res://resources/enemies/castle_guard_sprite_frames.tres"
+const EXPECTED_PLAYER_MOVEMENT_CONFIG_PATH: String = "res://resources/player/player_movement_config.tres"
+const EXPECTED_PLAYER_ACTION_CONFIG_PATH: String = "res://resources/player/player_action_prototype_config.tres"
+const EXPECTED_PLAYER_HURT_CONFIG_PATH: String = "res://resources/player/player_hurt_config.tres"
+const EXPECTED_GUARD_CONFIG_PATH: String = "res://resources/enemies/castle_guard_config.tres"
+const EXPECTED_GHOST_TEXTURE_PATH: String = "res://assets/sprites/player/assassin/death/ghost_hooded_face.png"
 const GROUP_NAMES: Array[StringName] = [
 	&"EncounterGroup01", &"EncounterGroup02", &"EncounterGroup03", &"EncounterGroup04",
 ]
@@ -57,6 +66,7 @@ func _run_tests() -> void:
 	_test_saved_composition(groups, guards)
 	await _wait_physics_frames(8)
 	_test_runtime_composition(main, player, groups, guards)
+	await _test_latest_resource_and_hud_wiring(main, player, guards)
 	await _test_main_ai_attack(player, guards[0])
 	await _test_encounter_activation(player, groups)
 	await _test_guard_damage_and_death(player, guards[4])
@@ -103,6 +113,91 @@ func _test_runtime_composition(
 	)
 
 
+func _test_latest_resource_and_hud_wiring(
+	main: Node2D,
+	player: Player,
+	guards: Array[CastleGuard]
+) -> void:
+	_expect(player.scene_file_path == EXPECTED_PLAYER_SCENE_PATH, "Main Player uses an unexpected PackedScene")
+	_expect(
+		player.animation_controller.animated_sprite.sprite_frames.resource_path == EXPECTED_PLAYER_FRAMES_PATH,
+		"Main Player does not use the latest SpriteFrames resource"
+	)
+	_expect(
+		player.movement_config.resource_path == EXPECTED_PLAYER_MOVEMENT_CONFIG_PATH,
+		"Main Player does not use the latest movement configuration"
+	)
+	_expect(
+		player.action_controller.action_config.resource_path == EXPECTED_PLAYER_ACTION_CONFIG_PATH,
+		"Main Player does not use the latest action configuration"
+	)
+	_expect(
+		player.hurt_controller.config.resource_path == EXPECTED_PLAYER_HURT_CONFIG_PATH,
+		"Main Player does not use the latest Hurt configuration"
+	)
+	_expect(player.health_component != null and player.stamina_component != null, "Main Player lacks Health or Stamina")
+	_expect(player.hurtbox != null and player.hurt_controller != null, "Main Player lacks Hurt composition")
+	_expect(player.action_controller.attack_hitbox != null, "Main Player lacks the normal Attack Hitbox")
+	_expect(player.action_controller.dash_attack_hitbox != null, "Main Player lacks the Dash Attack Hitbox")
+	var death_sequence: PlayerDeathSequence = player.get_node_or_null("DeathSequence") as PlayerDeathSequence
+	_expect(death_sequence != null, "Main Player lacks the death/ghost sequence")
+	if death_sequence != null:
+		_expect(
+			death_sequence.ghost_sprite.texture.resource_path == EXPECTED_GHOST_TEXTURE_PATH,
+			"Main Player death sequence uses an unexpected ghost texture"
+		)
+	for guard: CastleGuard in guards:
+		_expect(guard.scene_file_path == EXPECTED_GUARD_SCENE_PATH, "%s uses an unexpected PackedScene" % guard.name)
+		_expect(guard.config.resource_path == EXPECTED_GUARD_CONFIG_PATH, "%s uses an old Guard config" % guard.name)
+		_expect(
+			guard.animated_sprite.sprite_frames.resource_path == EXPECTED_GUARD_FRAMES_PATH,
+			"%s uses old Guard SpriteFrames" % guard.name
+		)
+	var health_hud: PlayerHealthHud = main.get_node_or_null("HUD/HealthContainer") as PlayerHealthHud
+	var stamina_hud: PlayerStaminaHud = main.get_node_or_null("HUD") as PlayerStaminaHud
+	var respawn_controller: PlayerRespawnController = main.get_node_or_null(
+		"PlayerRespawnController"
+	) as PlayerRespawnController
+	_expect(health_hud != null and health_hud.health_component == player.health_component, "Main Health HUD is not bound to Player Health")
+	_expect(stamina_hud != null and stamina_hud.stamina_component == player.stamina_component, "Main Stamina HUD is not bound to Player Stamina")
+	_expect(
+		respawn_controller != null
+		and respawn_controller.player == player
+		and respawn_controller.spawn_point == main.get_node_or_null("World/SpawnPoint"),
+		"Main respawn coordinator is not wired to the saved Player and SpawnPoint"
+	)
+	player.health_component.take_damage(7)
+	player.stamina_component.try_consume_dash()
+	await process_frame
+	_expect(health_hud.health_bar.value == 93.0, "Main Health HUD did not display live Player Health")
+	_expect(stamina_hud.stamina_bar.value == 75.0, "Main Stamina HUD did not display live Player Stamina")
+	player.health_component.reset_to_full()
+	player.stamina_component.reset_to_full()
+	await process_frame
+	_expect(health_hud.health_bar.value == 100.0, "Main Health HUD did not restore to full")
+	_expect(stamina_hud.stamina_bar.value == 100.0, "Main Stamina HUD did not restore to full")
+	var action_debug: PlayerActionDebugOverlay = main.get_node_or_null(
+		"Interface/Panel/ActionDebug"
+	) as PlayerActionDebugOverlay
+	var action_toggle: CheckButton = main.get_node_or_null("Interface/Panel/DebugToggle") as CheckButton
+	var enemy_debug: MainEnemyDebugOverlay = main.get_node_or_null(
+		"Interface/EnemyDebugPanel/EnemyDebug"
+	) as MainEnemyDebugOverlay
+	var enemy_toggle: CheckButton = main.get_node_or_null(
+		"Interface/EnemyDebugPanel/EnemyDebugToggle"
+	) as CheckButton
+	_expect(action_debug != null and action_toggle != null, "Main action debug controls are incomplete")
+	_expect(enemy_debug != null and enemy_toggle != null, "Main enemy debug controls are incomplete")
+	if action_debug != null and action_toggle != null:
+		action_toggle.toggled.emit(false)
+		_expect(not action_debug.visible and not action_debug.is_processing(), "Action debug cannot be disabled")
+		action_toggle.toggled.emit(true)
+	if enemy_debug != null and enemy_toggle != null:
+		enemy_toggle.toggled.emit(false)
+		_expect(not enemy_debug.visible and not enemy_debug.is_processing(), "Enemy debug cannot be disabled")
+		enemy_toggle.toggled.emit(true)
+
+
 func _test_main_ai_attack(player: Player, guard: CastleGuard) -> void:
 	var health_before: int = player.health_component.current_health
 	for _frame_index: int in range(180):
@@ -147,7 +242,6 @@ func _test_guard_damage_and_death(player: Player, guard: CastleGuard) -> void:
 	guard.presentation_finished.connect(_on_guard_presentation_finished)
 	guard.tree_exited.connect(_on_guard_tree_exited)
 	guard.set_physics_process(false)
-	player.set_physics_process(false)
 	player.health_component.reset_to_full()
 	player.hurt_controller.reset_after_respawn()
 	guard.attack_hitbox.global_position = player.hurtbox.global_position
@@ -155,9 +249,32 @@ func _test_guard_damage_and_death(player: Player, guard: CastleGuard) -> void:
 	_expect(guard.attack_hitbox.try_hit(player.hurtbox), "Main Guard sword did not hit Player Hurtbox")
 	_expect(player.health_component.current_health == 95, "Main Guard sword did not deal exactly five damage")
 	guard.attack_hitbox.end_attack()
-	guard.health_component.take_damage(guard.health_component.current_health)
+	await _wait_physics_frames(20)
+	_expect(player.get_life_state_name() == &"Alive", "Main Player did not recover from Hurt")
+	player.set_physics_process(false)
+	var player_sprite: AnimatedSprite2D = player.animation_controller.animated_sprite
+	var normal_started: bool = player.action_controller.try_start_actions(true, false, true, 0.0, false)
+	_expect(normal_started, "Main Player normal Attack did not start")
+	player_sprite.frame = 1
+	player_sprite.frame_changed.emit()
+	_expect(player.action_controller.attack_hitbox.is_active, "Main Player normal Attack Hitbox did not open")
+	_expect(player.action_controller.attack_hitbox.try_hit(guard.hurtbox), "Main Player normal Attack missed Guard Hurtbox")
+	_expect(guard.health_component.current_health == 2, "Main Player normal Attack did not deal one damage")
+	player_sprite.frame = 3
+	player_sprite.animation_finished.emit()
+	var dash_attack_started: bool = player.action_controller.try_start_actions(
+		true, true, true, 1.0, false
+	)
+	_expect(dash_attack_started, "Main Player Dash Attack did not start")
+	player_sprite.frame = 2
+	player_sprite.frame_changed.emit()
+	_expect(player.action_controller.dash_attack_hitbox.is_active, "Main Player Dash Attack Hitbox did not open")
+	_expect(player.action_controller.dash_attack_hitbox.try_hit(guard.hurtbox), "Main Player Dash Attack missed Guard Hurtbox")
+	_expect(guard.health_component.current_health == 0, "Main Player Dash Attack did not deal two damage")
 	_expect(guard.get_state_name() == &"Death", "Lethal damage did not enter Guard Death")
 	_expect(not guard.hurtbox.is_enabled and not guard.attack_hitbox.is_active, "Dead Guard retained a combat area")
+	player_sprite.frame = 4
+	player_sprite.animation_finished.emit()
 	guard.set_physics_process(true)
 	player.set_physics_process(true)
 	await _wait_physics_frames(50)
@@ -202,7 +319,7 @@ func _on_guard_tree_exited() -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("MAIN_ENEMY_INTEGRATION_TEST: PASS (5 Guards, 4 activations, Hurt, 5 damage, Death)")
+		print("MAIN_ENEMY_INTEGRATION_TEST: PASS (latest resources/HUD, 5 Guards, 4 activations, 1/2/5 damage, Hurt, Death)")
 		quit(0)
 		return
 	for failure: String in _failures:
