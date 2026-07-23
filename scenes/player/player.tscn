@@ -1,51 +1,67 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene format=3 uid="uid://ilk7wlpsv544"]
 
-[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://b67b3qhsr1bvs" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/player/player_movement_config.tres" id="2_config"]
 [ext_resource type="SpriteFrames" path="res://resources/player/player_sprite_frames.tres" id="3_frames"]
-[ext_resource type="Script" path="res://scripts/player/player_animation_controller.gd" id="4_animation"]
-[ext_resource type="Script" path="res://scripts/player/player_action_controller.gd" id="5_action"]
+[ext_resource type="Script" uid="uid://b7bmyh6wlf4g6" path="res://scripts/player/player_animation_controller.gd" id="4_animation"]
+[ext_resource type="Script" uid="uid://ccsp2gd6r0gae" path="res://scripts/player/player_action_controller.gd" id="5_action"]
 [ext_resource type="Resource" path="res://resources/player/player_action_prototype_config.tres" id="6_action_config"]
-[ext_resource type="Script" path="res://scripts/player/player_stamina_component.gd" id="7_stamina"]
+[ext_resource type="Script" uid="uid://dfaarqq2cfogf" path="res://scripts/player/player_stamina_component.gd" id="7_stamina"]
+[ext_resource type="Script" uid="uid://c03efik0danmi" path="res://scripts/combat/health_component.gd" id="8_health"]
+[ext_resource type="Script" path="res://scripts/player/player_death_sequence.gd" id="9_death_sequence"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/death/ghost_hooded_face.png" id="10_ghost"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 52)
 
-[node name="Player" type="CharacterBody2D"]
-collision_layer = 1
-collision_mask = 1
+[node name="Player" type="CharacterBody2D" unique_id=335625318]
 floor_snap_length = 6.0
-floor_stop_on_slope = true
 script = ExtResource("1_player")
 movement_config = ExtResource("2_config")
 
-[node name="VisualRoot" type="Node2D" parent="."]
+[node name="VisualRoot" type="Node2D" parent="." unique_id=850200934]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=2043044438]
 unique_name_in_owner = true
 texture_filter = 1
 sprite_frames = ExtResource("3_frames")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="DeathEffects" type="Node2D" parent="VisualRoot"]
+z_index = 2
+
+[node name="GhostSprite" type="Sprite2D" parent="VisualRoot/DeathEffects"]
+visible = false
+texture_filter = 1
+texture = ExtResource("10_ghost")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=194401465]
 position = Vector2(0, 2)
 shape = SubResource("RectangleShape2D_player")
 
-[node name="Camera2D" type="Camera2D" parent="."]
+[node name="Camera2D" type="Camera2D" parent="." unique_id=184384772]
 position = Vector2(0, -105)
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 
-[node name="AnimationController" type="Node" parent="."]
+[node name="AnimationController" type="Node" parent="." unique_id=746064858]
 unique_name_in_owner = true
 script = ExtResource("4_animation")
 
-[node name="StaminaComponent" type="Node" parent="."]
+[node name="StaminaComponent" type="Node" parent="." unique_id=1001739661]
 unique_name_in_owner = true
 script = ExtResource("7_stamina")
 
-[node name="ActionController" type="Node" parent="."]
+[node name="HealthComponent" type="Node" parent="." unique_id=61933881]
+unique_name_in_owner = true
+script = ExtResource("8_health")
+
+[node name="ActionController" type="Node" parent="." unique_id=1075942809]
 unique_name_in_owner = true
 script = ExtResource("5_action")
 action_config = ExtResource("6_action_config")
+
+[node name="DeathSequence" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("9_death_sequence")

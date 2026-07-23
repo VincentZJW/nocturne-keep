@@ -1,5 +1,71 @@
 # Development Log
 
+## Current authoritative status
+
+- Last audited: 2026-07-23
+- Audit baseline: `master` at `e11638b chore: harden repository privacy rules`
+- Engine verified in this audit: `4.7.1.stable.official.a13da4feb`
+
+This section is the current project snapshot. The dated entries below are retained as historical records of what was planned, implemented, tested, and still awaiting approval at each point in time. A historical plan or an earlier test result is not, by itself, evidence that a later feature exists or still passes.
+
+### Status vocabulary
+
+- **Implemented and re-verified** — the referenced files exist and the current HEAD passed the listed automated check during the 2026-07-22 documentation audit.
+- **Implemented; manual acceptance pending** — code/assets and automated coverage exist, but player feel or visual acceptance still requires a human playtest.
+- **Placeholder** — a deliberately temporary asset or presentation exists and must not be treated as final content.
+- **Planned / not implemented** — described by design or architecture documents but absent from the current runtime scene/code path.
+- **Pending verification** — the repository contains related material, but this audit did not establish runtime acceptance.
+
+### Current delivery matrix
+
+| Area | Current status | Repository evidence |
+| --- | --- | --- |
+| M0 project baseline | Implemented and re-verified | `project.godot` targets Godot 4.7 GL Compatibility and `scenes/main/main.tscn`; current headless import and Main startup passed. |
+| Pixel character concept tool | Implemented and re-verified | Runnable design lab, eleven concept PNGs, 1600×1000 board, generator scripts, and asset validator are present. |
+| Player animation presentation | Implemented and re-verified | `AnimatedSprite2D`, `PlayerAnimationController`, a 16-animation `SpriteFrames` resource, production/reference assets, and preview tooling are present. `death` is a five-frame production body fall; only `hurt` remains placeholder art. |
+| M1 locomotion | Implemented and re-verified | `CharacterBody2D` movement, ground/air acceleration, gravity, jump, 0.10 s coyote time, 0.12 s jump buffer, Camera2D, facing, and six locomotion animations passed the current regression. |
+| Debug double jump | Implemented for testing; formal unlock pending | `has_double_jump` defaults false, while `debug_enable_double_jump` defaults true in `Player`; no ability-unlock/session system exists. |
+| M1.5 actions | Implemented and re-verified; manual feel approval pending | Four-frame Attack, Ground/Air Dash chains, Dash Attack, input buffers, collision-safe motion, stamina component/HUD, and configurable airborne regeneration passed current automated tests. No damage is produced. |
+| Player Health HUD | Implemented and re-verified | `Main/HUD/HealthContainer` observes the composed Player `HealthComponent`, initializes without polling, displays current/maximum values, and supports explicit signal-safe rebinding. It does not own Health data or death behavior. |
+| Player death state | Implemented and re-verified; manual visual acceptance pending | `Player` enters one explicit `LifeState.DEAD`, cancels action/input/Stamina processing, and delegates a five-frame flat-body fall plus detached daggers and hooded ghost rise/pause to `PlayerDeathSequence`. |
+| Player respawn | Implemented and re-verified; single test spawn only | After the approximately 1.30-second presentation completes, Main's typed coordinator returns the same Player instance to one `Marker2D`, restores Health/Stamina and control state, hides the prompt, and retains Camera2D following. No checkpoint/session selection exists. |
+| Combat foundation | Partially implemented | Player composes an independently tested `HealthComponent` with bounded mutation and death signaling, plus death/respawn consumers. Formal damage sources, Hitbox, Hurtbox, invulnerability, target memory, enemy damage, and game-over flow do not exist. Attack effective frames remain metadata/interfaces only. |
+| Enemies and boss | Planned / not implemented | Enemy/Boss scene, script, and resource directories contain no implemented actors. |
+| Level and game flow | Planned / not implemented beyond test spawn | Main is a movement/action laboratory with floor, two platforms, boundary walls, debug UI, and one fixed respawn marker. The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
+| Export/release | Pending verification / not configured | No `export_presets.cfg` was found during the audit. |
+
+### Current validation baseline
+
+On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh headless editor import, headless Main/Player startup, and all fifteen repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. The passing checks cover the isolated Health contract, signal-driven Health HUD, explicit death-state lockout, five-frame horizontal death body and detached daggers, hooded ghost rise/0.50-second pause/cleanup, presentation-gated repeatable single-point respawn, eleven concept assets plus the board, 38 current production action/death frames plus the ghost and four byte-identical references, sixteen configured animations, M1 movement, M1.5 actions, Dash Attack, fast Attack buffering, shared Ground/Air Dash stamina, continuous Air Dash, and level metrics.
+
+The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77 px rise, 281.92 px debug-double-jump range / 167.10 px rise, and 344.00 px of four-Air-Dash action travel. The total takeoff-to-landing Air-Dash measurement alternated between 360.33 px and 362.22 px across three consecutive audit runs; this approximately one-physics-frame variation is recorded as a test determinism issue rather than a changed movement parameter.
+
+### Documentation responsibility
+
+- `docs/development_log.md` is the single primary development record and current-status source.
+- `README.md` accurately identifies the current build as an M1.5 prototype and links here.
+- `docs/game_design.md` and `docs/technical_architecture.md` are M0-era target/baseline documents. Their combat, level, enemy, checkpoint, and flow descriptions are plans, not delivered functionality.
+- `docs/known_issues.md` was last reviewed at M0 and is stale. It must not be used alone to assess the current build.
+- No separate `PLAN.md`, `ROADMAP.md`, `PROJECT_PLAN.md`, `PROGRESS.md`, `WORKLOG.md`, or equivalent primary progress file was found. Creating a duplicate development log is therefore unnecessary.
+
+### Open issues and improvement needs
+
+1. Complete a manual Godot editor/playtest acceptance pass for the latest continuous Ground/Air Dash, Attack chaining, Dash Attack handoff, stamina recovery, wall contact, both facings, HUD behavior, and animation readability.
+2. Decide whether continuous airborne Dash and the current 100/25 stamina economy are accepted design baselines before building levels around the measured reach.
+3. Replace the debug-default double jump with the planned ability-unlock/session-state path before treating progression as implemented.
+4. Replace the remaining `hurt` placeholder only when its Gameplay state enters an approved milestone; manually accept the new production death body/ghost readability at game scale.
+5. Resolve or tolerance-bound the 360.33–362.22 px landing-total measurement variation; the 344.00 px Dash-only envelope is currently stable.
+6. Bring the M0 metadata/status in `game_design.md`, `technical_architecture.md`, and `known_issues.md` up to date in a separate documentation-only task.
+7. Define named collision layers/masks before implementing combat; current Player and world body collision use the baseline layer/mask rather than the planned actor/hitbox/hurtbox separation.
+8. Keep Main's geometric level and stamina/debug interface classified as laboratory/placeholder presentation, not finished room or UI content.
+
+### Next-stage plan — requires explicit approval
+
+1. **M1.5 acceptance gate:** perform manual feel/visual checks, record accepted tuning, and freeze movement/action metrics used for level construction.
+2. **Documentation alignment:** update the stale M0 design/architecture/known-issues metadata without changing gameplay, and decide whether a separate project plan is needed.
+3. **M2 combat foundation:** only after approval, add separated typed Damage/Health/Hitbox/Hurtbox/invulnerability responsibilities and connect the existing Attack/Dash-Attack frame windows. Do not add combo branches as part of the foundation.
+4. **Content after combat foundation:** proceed milestone by milestone toward the fixed scope of two normal enemy types, one elite, three main rooms, one boss arena, one boss, checkpoint/unlock flow, and victory flow. None of these content milestones is authorized or started by this documentation audit.
+
 ## M0 — Environment and repository initialization
 
 Date: 2026-07-20
@@ -1178,3 +1244,529 @@ Status: complete — awaiting manual feel approval
 - Recovery delay is paused during paid Dash/Dash-Attack actions, preserving the prior action-blocking contract; ordinary airborne time now advances it.
 - Normal Attack is allowed to recover because it currently costs zero. If later work assigns it a stamina cost, its block state must be changed with that same cost decision.
 - No dodge action currently exists. No stamina cost, movement, combat, enemy, Boss, damage, Hitbox/Hurtbox, invulnerability, animation, or level change was added.
+
+## 2026-07-22 — Development log documentation audit
+
+Date: 2026-07-22
+Status: complete — documentation-only audit; no Gameplay/content change and no Git commit/push
+
+### Scope and document selection
+
+- Searched the repository for development-log, changelog, progress, worklog, journal, roadmap, plan, and TODO-style filenames and references.
+- Confirmed `docs/development_log.md` is the only document fulfilling the primary development-log role and is linked from README.
+- Retained every historical entry and added the authoritative status section at the top of this file instead of creating a competing log.
+- No `.gd`, scene, project setting, input map, resource, test, asset, import sidecar, plugin, Shader, audio, or export file was intentionally changed.
+
+### Evidence inspected
+
+- Git: clean `master` tracking `origin/master`, fourteen reachable commits through `e11638b`, and the commit subjects/stat history.
+- Project/runtime configuration: `project.godot`, Main, Player, both tool scenes, player tuning resources, and the 16-animation SpriteFrames resource.
+- Runtime ownership: Player movement, action, animation, stamina, HUD, debug overlay, and their explicit node dependencies/signals.
+- Automated coverage: all ten scripts under `tests/player/` and `tests/tools/`.
+- Documentation: README, the full historical development log, technical architecture, game-design baseline, known issues, player movement/animation/combat/stamina specifications, level metrics, and QA reports.
+- Content inventory: player concept/production/reference/placeholder assets and the empty planned enemy, boss, level, combat, core, and system implementation directories.
+
+### Current automated verification
+
+Commands used the exact executable at the developer's local `GODOT_BIN` path; logs were written under `/tmp`.
+
+1. `Godot --headless --editor --path . --import --quit`
+   - Exit 0; no script/resource error or warning detected.
+2. `validate_pixel_character_assets.gd`
+   - `PIXEL_CHARACTER_VALIDATION: PASS (11 assets + board)`.
+3. `validate_player_animation_assets.gd`
+   - `PLAYER_ANIMATION_VALIDATION: PASS (33 frames + 4 byte-identical references)`.
+4. `test_player_animation_system.gd`
+   - `PASS (16 animations, segmented Ground/Air Dash verified)`.
+5. `test_m1_player_movement.gd`
+   - `PASS (movement, jump assists, collision, camera, six animations)`.
+6. `test_m15_player_actions.gd`
+   - `PASS (split Ground Dash, chained Air Dash, thrust Attack)`.
+7. `test_dash_attack.gd`
+   - `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+8. `test_fast_attack.gd`
+   - `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`.
+9. `test_chain_dash_stamina.gd`
+   - `PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)`.
+10. `test_continuous_air_dash.gd`
+    - `PASS (four Air segments, mixed pool, direction, gravity, collision)`.
+11. `measure_player_level_metrics.gd`, run three times
+    - All three runs passed. Jump and four-Dash action-range values were identical; takeoff-to-landing totals were `360.33`, `362.22`, and `360.33` px.
+12. `Godot --headless --path . --quit-after 2`
+    - Exit 0; configured Main scene started and stopped without detected error/warning output.
+
+### Audit conclusions
+
+- Current automated evidence supports the M0, pixel-art tool, animation presentation, M1 locomotion, and M1.5 action/stamina implementation claims listed in the new status matrix.
+- It does not establish final player feel, final art approval, editor Debugger cleanliness during an interactive session, export readiness, or full-playthrough quality; those remain pending manual verification.
+- M2 combat architecture and all enemy/Boss/room/progression systems remain planned only. Existing Attack and Dash Attack are animation/input/movement prototypes without damage resolution.
+- The dated M0 metadata in the design baseline, architecture, and known-issues documents is a documentation-maintenance issue, not evidence that current Gameplay is absent.
+- Final document-only diff verification passed: `git diff --check` reported no error, and `git diff --name-only` listed only `docs/development_log.md`.
+
+## 2026-07-22 — PLAYER-HP-001 player health data foundation
+
+Date: 2026-07-22
+Status: complete — unified Health mutation contract verified; no damage source or death state added
+
+### Approved scope extension preflight
+
+- The existing working-tree `HealthComponent` is the only Health implementation. It already owns maximum/current values, clamping, reset, and `health_changed`, but has no `take_damage`, `heal`, `died`, or death-signal guard.
+- Player uses composed Animation, Action, Stamina, and Health nodes; locomotion uses `MovementState` while actions use a separate `ActionState`. Extending the existing Health node is the smallest architecture-consistent change.
+- The current stamina HUD is signal-driven and does not own stamina math. No player health HUD or Gameplay death state exists; preview-only `death` art remains a placeholder.
+- This extension will modify only the existing Health component and its isolated test, then update this log. Player scene structure, movement/actions, stamina/HUD, input, presentation, enemies, and levels remain out of scope.
+
+### Goal
+
+- Add a small, independently testable player health component with a configurable maximum, a clamped current value, unified damage/healing methods, reset-to-full behavior, typed change/death signals, and repeated-death protection.
+- Attach the component to the existing Player scene without coupling it to movement, actions, animation, stamina, or UI.
+
+### Planned files and tests
+
+- Add `scripts/combat/health_component.gd` and attach `HealthComponent` under `scenes/player/player.tscn`.
+- Add `tests/combat/test_health_component.gd` for defaults, custom maximum, lower/upper clamping, damage, healing, reset behavior, signal order, death guarding/rearming, and Player-scene composition.
+- Run the exact Godot 4.7.1 editor import, the new isolated test, all ten existing regression scripts, and configured Main startup.
+
+### Scope guard
+
+- This task adds only Health value mutation semantics. It does not add damage sources, a player death/hurt state, invulnerability, knockback, respawn, health UI, Hitbox/Hurtbox, enemies, levels, or new input.
+- Existing movement, jump, Dash, Attack, stamina, animation, and Main behavior must remain unchanged.
+
+### Delivered implementation
+
+- Added the statically typed, composition-first `HealthComponent` under `scripts/combat/`. It owns `max_health`, a read/write `current_health` property, clamping to `0...max_health`, `take_damage(amount)`, `heal(amount)`, `reset_to_full()`, `is_dead()`, typed `health_changed(current, maximum)`, and `died` notification.
+- The exported maximum defaults to 100 and is sanitized to a minimum of one during `_ready()`. Current health initializes to the resulting maximum and emits its initial value once.
+- Non-positive damage/healing requests are ignored. Overkill damage clamps to zero, excess healing clamps to maximum, and post-death damage cannot mutate the value.
+- Unchanged assignments do not emit duplicate notifications. A lethal change emits `health_changed` before `died`; repeated zero/damage cannot emit `died` again. Restoring positive health through healing/reset rearms one later death event.
+- Both the explicit setter, direct property assignment, damage, healing, and reset use the same clamp/signal path.
+- Added a uniquely addressable `HealthComponent` child to the Player scene. `player.gd`, Main, input, movement, action, stamina, animation, and UI code were not changed.
+- Added an isolated SceneTree test for default/custom/invalid maximum values, lower/upper clamping, damage/healing limits, lethal event order, death suppression/rearming, reset behavior, and Player scene composition.
+- Godot generated tracked UID sidecars for the two new GDScript files during exact editor import.
+
+### Files
+
+- New: `scripts/combat/health_component.gd` and its generated `.uid`.
+- Modified: `scenes/player/player.tscn` (one composed node and script resource only).
+- New: `tests/combat/test_health_component.gd` and its generated `.uid`.
+- Modified: `docs/development_log.md`, preserving the pre-existing documentation-audit changes.
+
+### Commands and actual results
+
+1. Exact engine check and final editor import:
+   - `$GODOT_BIN --version` returned `4.7.1.stable.official.a13da4feb`.
+   - `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_hp_damage_import.log`: exit 0; no parse, script, resource, or warning match.
+2. New isolated test:
+   - `Godot --headless --path . --script tests/combat/test_health_component.gd --log-file /tmp/nocturne_keep_hp_damage_test.log`.
+   - Exit 0; damage, healing, clamping, signal order, death guard/rearm, and Player composition assertions passed.
+3. Final serial regression suite using the same executable:
+   - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
+   - `validate_player_animation_assets.gd`: `PASS (33 frames + 4 byte-identical references)`.
+   - `test_player_animation_system.gd`: `PASS (16 animations, segmented Ground/Air Dash verified)`.
+   - `test_m1_player_movement.gd`: `PASS (movement, jump assists, collision, camera, six animations)`.
+   - `test_m15_player_actions.gd`: `PASS (split Ground Dash, chained Air Dash, thrust Attack)`.
+   - `test_dash_attack.gd`: `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+   - `test_fast_attack.gd`: `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`.
+   - `test_chain_dash_stamina.gd`: `PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)`.
+   - `test_continuous_air_dash.gd`: `PASS (four Air segments, mixed pool, direction, gravity, collision)`.
+   - `measure_player_level_metrics.gd`: PASS; unchanged primary values of 153.59/83.77 single jump, 281.92/167.10 debug double jump, and 344.00 four-Air-Dash action range.
+4. Configured Main startup:
+   - `Godot --headless --path . --quit-after 2 --log-file /tmp/nocturne_keep_hp_damage_main.log`: exit 0.
+5. Final suite log scan:
+   - No `SCRIPT ERROR`, `ERROR:`, `WARNING:`, parse error, or missing-resource match.
+
+### Verification note
+
+- The first aggregate regression attempt used `status` as a zsh variable and stopped after its first passing test because that name is read-only; the wrapper was corrected without changing project files.
+- A subsequent aggregate run observed one transient `Preview did not play dash_start` assertion in `test_m15_player_actions.gd`. The test then passed three consecutive isolated runs and passed again in the final full serial suite. No animation/preview code was changed. This is recorded as an existing one-frame preview-test timing sensitivity, not treated as a Health regression.
+
+### Scope result and handoff
+
+- PLAYER-HP-001 acceptance is satisfied at the reusable component-contract level. There is intentionally no visible health UI, damage source, death state, or current Gameplay caller of the mutation methods.
+- No manual player-feel acceptance is required for this isolated contract. A future health HUD, hazard, enemy attack, or death-state task will require separate approval and verification.
+- Recommended next task, subject to explicit approval: a signal-driven player Health HUD that observes this component without owning or mutating its values.
+- No Git commit or push was performed. The pre-existing uncommitted development-log audit remains in the same working-tree file alongside this incremental record.
+
+## 2026-07-22 — PLAYER-HP-002 signal-driven player Health HUD
+
+Date: 2026-07-22
+Status: complete — automated and visual verification passed
+
+### Goal
+
+- Add a fixed player Health bar above the existing Stamina bar in `Main/HUD`, matching its dimensions, margins, typography, and numeric presentation.
+- Keep Health data exclusively in `HealthComponent`; the HUD observes `health_changed`, initializes from current state, and supports explicit rebinding without per-frame polling.
+
+### Planned files and tests
+
+- Add `scripts/ui/player_health_hud.gd` as a presentation-only, typed, rebindable observer.
+- Modify `scenes/main/main.tscn` to add `HealthContainer`, `HealthValue`, and `HealthBar` while preserving the existing Stamina and debug HUD ownership/paths.
+- Add `tests/ui/test_player_health_hud.gd` for initial state, damage/healing/reset signal updates, progress limits, old-signal disconnection during rebinding, and Stamina HUD regression.
+- Run exact Godot 4.7.1 import, the new HUD test, all eleven current tests, configured Main startup, and a nearest-neighbor graphical capture for visual inspection.
+
+### Scope guard
+
+- Do not add damage sources, player death state/prompt, respawn, spawn point, enemies, Hitbox/Hurtbox, effects, sound, low-health feedback, or health-bar animation.
+- Do not modify player movement/actions, Health mutation semantics, Stamina calculation/HUD script, debug overlay logic, input, collision, or level geometry.
+
+### Delivered implementation
+
+- Added `PlayerHealthHud` as a typed, presentation-only `Control`. It resolves the configured Player `HealthComponent`, subscribes to `health_changed`, and immediately renders the component's current state without `_process()` polling.
+- Added `bind_health_component(component)` for future Player replacement. Rebinding disconnects the previous valid component before subscribing to the new one; `_exit_tree()` also disconnects. An explicit unbound state shows `--- / ---` rather than inventing Health data.
+- Added `Main/HUD/HealthContainer` above the existing `StaminaContainer`, using the same 224×66 px container, 204×20 px bar, margins, 12 px typography, dark background, cool border, fixed CanvasLayer, and `%03d / %03d` numeric format. Health uses a muted crimson fill; Stamina retains its existing amber fill and node paths.
+- Moved only the Stamina container's screen offsets from y=24–90 to y=100–166. `PlayerStaminaHud`, its signal/calculation ownership, and the separate `Interface/Panel/ActionDebug` hierarchy were not changed.
+- Added integration coverage for initial 100/100 state, `take_damage(10)`, `heal(10)`, `reset_to_full()`, ProgressBar bounds, Health rebinding, old-signal disconnection, new-signal updates, Stamina consumption/display, and debug-HUD preservation.
+- Godot generated `.gd.uid` sidecars for the new HUD and test scripts during editor import.
+
+### Files
+
+- New: `scripts/ui/player_health_hud.gd` and generated `.uid`.
+- Modified: `scenes/main/main.tscn` for Health HUD nodes/styles and Stamina vertical placement only.
+- New: `tests/ui/test_player_health_hud.gd` and generated `.uid`.
+- Modified: `docs/development_log.md`, preserving all pre-existing uncommitted audit and PLAYER-HP-001 history.
+
+### Commands and actual results
+
+1. Exact Godot 4.7.1 editor import:
+   - `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_hp_hud_import.log`.
+   - Exit 0; `PlayerHealthHud` registered and no parse/script/resource warning was detected.
+2. New HUD integration test:
+   - Initial run correctly passed the Health, Stamina, and rebind assertions but failed the test-only debug path `Interface/ActionDebug`; the actual unchanged path is `Interface/Panel/ActionDebug`.
+   - After correcting only that assertion path: `Godot --headless --path . --script tests/ui/test_player_health_hud.gd --log-file /tmp/nocturne_keep_hp_hud_test_v2.log`.
+   - Exit 0; `PLAYER_HEALTH_HUD_TEST: PASS (initial, signals, reset, rebind, Stamina regression)`.
+3. Final serial suite using the exact executable:
+   - `test_health_component.gd`: `PASS (health, damage, healing, death guard, Player composition)`.
+   - `test_player_health_hud.gd`: `PASS (initial, signals, reset, rebind, Stamina regression)`.
+   - `validate_pixel_character_assets.gd`: `PASS (11 assets + board)`.
+   - `validate_player_animation_assets.gd`: `PASS (33 frames + 4 byte-identical references)`.
+   - `test_player_animation_system.gd`: `PASS (16 animations, segmented Ground/Air Dash verified)`.
+   - `test_m1_player_movement.gd`: `PASS (movement, jump assists, collision, camera, six animations)`.
+   - `test_m15_player_actions.gd`: `PASS (split Ground Dash, chained Air Dash, thrust Attack)`.
+   - `test_dash_attack.gd`: `PASS (immediate J, transitions, air recovery, collision, debug HUD)`.
+   - `test_fast_attack.gd`: `PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)`.
+   - `test_chain_dash_stamina.gd`: `PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)`.
+   - `test_continuous_air_dash.gd`: `PASS (four Air segments, mixed pool, direction, gravity, collision)`.
+   - `measure_player_level_metrics.gd`: PASS with unchanged 153.59/83.77 single-jump, 281.92/167.10 debug-double-jump, and 344.00 four-Air-Dash action envelopes.
+4. Configured Main startup:
+   - `Godot --headless --path . --quit-after 2 --log-file /tmp/nocturne_keep_hp_hud_main_headless.log`: exit 0.
+   - All suite/Main logs scanned clean for script error, error, warning, parse error, and missing resource.
+5. Graphical Main capture:
+   - `Godot --path . --write-movie /tmp/nocturne_keep_hp_hud_main.png --fixed-fps 30 --quit-after 2 --audio-driver Dummy --log-file /tmp/nocturne_keep_hp_hud_main_graphical.log`.
+   - Exit 0; GL Compatibility on Apple M4, two 1280×720 frames. Original-resolution inspection confirmed aligned Health/Stamina blocks, legible values, distinct fills, and no debug-HUD overlap.
+
+### Automated acceptance results
+
+- Main starts at Health 100/100; bar bounds/value and text match the component.
+- `take_damage(10)` updates the bar to 90 and text to `090 / 100` synchronously through `health_changed`; `heal(10)` and `reset_to_full()` restore 100/100.
+- Rebinding to a 60-maximum replacement initializes 60/60, ignores later signals from the old component, and follows the new component to 45/60.
+- Stamina still spends to 75 and renders `075 / 100`; its script and gameplay state are unchanged.
+- Debug HUD structure, all movement/action/stamina regressions, Main startup, and measured movement envelopes remain intact.
+
+### Manual acceptance requested
+
+1. Run Main and confirm the upper-right HEALTH block sits directly above STAMINA with equal width/margins and remains fixed while the camera moves.
+2. Confirm muted crimson Health and amber Stamina remain distinguishable against the moon/background at the target display.
+3. Health mutation currently has no Gameplay input or enemy source; use the automated test or Remote Inspector only if manually checking value changes. Do not interpret the absence of in-game damage as a HUD failure.
+
+### Scope result and handoff
+
+- PLAYER-HP-002 is complete. No death state/prompt, respawn, spawn point, enemy, damage area, Hitbox/Hurtbox, health animation/effect, or sound was added.
+- No plan/roadmap document exists to synchronize; this primary development log contains the task status.
+- The next ordered task is `PLAYER-DEATH-001`, but it remains unapproved and was not started.
+- No Git commit or push was performed; final output will report the complete working-tree diff, including preserved earlier uncommitted changes.
+
+## 2026-07-22 — PLAYER-DEATH-001 player death state
+
+Date: 2026-07-22
+Status: complete — automated and graphical death-state verification passed
+
+### Goal
+
+- Enter one explicit Player death state when the existing `HealthComponent.died` signal fires, cancel active movement/actions, block subsequent Gameplay input and Stamina processing, and expose a one-shot one-second delay hook for the future respawn task.
+- Add a temporary `YOU DIED / 已阵亡` HUD prompt and one clearly marked development-only button that applies 25 Health damage for manual testing.
+
+### Planned files and tests
+
+- Modify `scripts/player/player.gd` to own the life-state transition and typed death signals while preserving the existing movement/action state split.
+- Add a narrow action-controller cancellation method so an in-progress Dash/Attack cannot remain active after death.
+- Add presentation-only `scripts/ui/player_death_hud.gd`, test-only `scripts/tools/player_death_test_button.gd`, and their Main scene nodes.
+- Add `tests/player/test_player_death_state.gd` for one-shot death entry, action/velocity cancellation, input/Stamina lockout, zero-Health HUD, prompt visibility, delay hook, and repeated-damage protection.
+- Run exact Godot 4.7.1 import, the new death test, all twelve current tests, Main startup, and graphical/manual-button verification.
+
+### Scope guard
+
+- The existing eight-frame `death` animation remains explicitly placeholder art; using it does not approve or create a final death animation.
+- Do not add respawn movement/reset, spawn points, checkpoints, enemies, Hitbox/Hurtbox, damage areas, invulnerability, knockback, game-over flow, effects, sound, or input-map actions.
+- Preserve the unrelated current `player_sprite_frames.tres` UID-normalization diff without editing or reverting it.
+
+### Delivered implementation
+
+- Added a separate `Player.LifeState` (`ALIVE`, `DEAD`) rather than expanding or disturbing the six-state locomotion enum. `HealthComponent.died` is connected once during Player readiness.
+- Death entry is guarded and performs one transition: sets the life state, zeros velocity/coyote/jump buffers/pending movement, cancels active action data, clears action buffers, resets presentation arbitration, plays the existing explicitly placeholder `death` animation, and emits `death_state_entered`.
+- Dead physics processing advances only the one-second `death_state_delay`, forces zero velocity through the existing `CharacterBody2D.move_and_slide()` path, and returns before input, jump, action, Stamina, and locomotion animation processing. It emits `death_delay_elapsed` once and does not respawn.
+- Added `PlayerActionController.cancel_all_actions()` as a narrow non-emitting cancellation path. It clears current Dash/Attack state, timing, buffers, action response data, and chain count without falsely reporting a normal action completion that could resume locomotion.
+- Added a temporary fixed `DeathOverlay` displaying `YOU DIED / 已阵亡`; it only observes `Player.death_state_entered`. No health/death state is stored in the HUD.
+- Added `Interface/DamageTestButton`, labeled `DEV TEST · TAKE 25 DAMAGE`. Its test-only script resolves the current Player Health component on each independent click and calls `take_damage(25)`; it adds no input action or damage area.
+- Added deterministic death coverage that starts a real Dash, spends 25 Stamina, kills through four button presses, verifies Dash cancellation, zero Health HUD, prompt/placeholder animation, blocked movement/jump/Dash/Attack, frozen Stamina, one death event, one delay event, repeated-damage protection, and absence of respawn.
+- Godot generated `.gd.uid` sidecars for the new death HUD, test button, and test scripts during editor import.
+
+### Files
+
+- Modified: `scripts/player/player.gd` for life-state ownership and death transition only.
+- Modified: `scripts/player/player_action_controller.gd` for the narrow cancellation method.
+- New: `scripts/ui/player_death_hud.gd` and generated `.uid`.
+- New: `scripts/tools/player_death_test_button.gd` and generated `.uid`.
+- Modified: `scenes/main/main.tscn` for the temporary prompt and development-only button.
+- New: `tests/player/test_player_death_state.gd` and generated `.uid`.
+- Modified: `docs/development_log.md`, retaining all earlier uncommitted task history.
+- Unrelated/pre-existing and preserved: `resources/player/player_sprite_frames.tres` UID serialization diff; this task did not edit its animation data.
+
+### Commands and actual results
+
+1. Exact Godot 4.7.1 import:
+   - `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_player_death_import.log`.
+   - Exit 0; `PlayerDeathHud` and `PlayerDeathTestButton` registered with no parse/script/resource warning.
+2. Isolated death integration:
+   - `Godot --headless --path . --script tests/player/test_player_death_state.gd --log-file /tmp/nocturne_keep_player_death_test.log`.
+   - Exit 0; `PLAYER_DEATH_STATE_TEST: PASS (single entry, lockout, HUD, delay, no respawn)`.
+3. Final serial suite with the exact executable:
+   - `test_health_component.gd`: PASS.
+   - `test_player_health_hud.gd`: PASS.
+   - `test_player_death_state.gd`: PASS.
+   - Both asset validators: PASS.
+   - Animation system, M1 movement, M1.5 actions, Dash Attack, fast Attack, chained Stamina Dash, continuous Air Dash, and level-metrics tests: all PASS.
+   - Level metrics remain unchanged at 153.59/83.77 single jump, 281.92/167.10 debug double jump, and 344.00 four-Air-Dash action range.
+4. Configured Main startup:
+   - `Godot --headless --path . --quit-after 2 --log-file /tmp/nocturne_keep_player_death_main_headless.log`: exit 0.
+   - All thirteen suite/Main logs scanned clean for script error, error, warning, parse error, and missing resource.
+5. Graphical automated button run:
+   - `Godot --path . --script tests/player/test_player_death_state.gd --write-movie /tmp/nocturne_keep_player_death_visual.png --fixed-fps 60 --audio-driver Dummy --log-file /tmp/nocturne_keep_player_death_visual.log`.
+   - Exit 0; GL Compatibility on Apple M4, 95 frames at 1280×720. Frames 20 and 70 were inspected at original resolution.
+   - Visual result: Health `000 / 100`, Stamina frozen at `075 / 100`, debug animation `death`, readable centered prompt, visible development button, and placeholder sprite settling to its final death pose.
+
+### Automated acceptance results
+
+- Four independent button presses cause 25 damage each and enter death exactly once at zero Health.
+- A Ground Dash active at the lethal hit is cancelled; velocity becomes and remains zero.
+- Held move, jump, Dash, and Attack inputs for twelve physics frames cannot move the Player, restart an action, or spend/regenerate Stamina.
+- Post-death damage does not re-enter Player death. The one-second delay signal emits once and remains one after further waiting.
+- Health HUD stays at zero and the death prompt stays visible. PLAYER-DEATH-001 intentionally leaves the Player dead after the delay.
+- All pre-existing Health, HUD, movement, action, animation, Stamina, collision, and metrics tests remain green.
+
+### Manual acceptance requested
+
+1. In the opened Main window, click `DEV TEST · TAKE 25 DAMAGE` four times; confirm Health steps 100→75→50→25→0 and the prompt appears only at zero.
+2. Start moving, Dashing, or attacking before the fourth click; confirm the lethal hit stops the action and subsequent A/D, Space, Shift, and J do nothing.
+3. Wait beyond one second and confirm no respawn occurs yet; PLAYER-RESPAWN-001 remains a separate approval gate.
+4. Treat the current death frames as placeholder art, not visual approval of the final death animation.
+
+### Scope result and handoff
+
+- PLAYER-DEATH-001 is complete. No spawn point, respawn/reset, enemy, damage area, Hitbox/Hurtbox, invulnerability, checkpoint, game over, effect, sound, or final death animation was added.
+- The next ordered task is `PLAYER-RESPAWN-001`, but it remains unapproved and was not started.
+- No Git commit or push was performed. Final diff reporting separates this task from the preserved earlier work and unrelated SpriteFrames UID normalization.
+
+## 2026-07-22 — PLAYER-RESPAWN-001 single spawn point and player respawn
+
+Date: 2026-07-22
+Status: complete — automated and graphical verification passed; manual acceptance requested
+
+### Approved scope preflight
+
+- `PLAYER-DEATH-001` currently emits `death_delay_elapsed` once after its configured one-second delay, but intentionally leaves the Player dead. There is no spawn point, respawn coordinator, position reset, Health/Stamina restoration, or death-prompt dismissal.
+- Player already owns the internal state that must be reset: life state, velocity, coyote/jump buffers, air-jump availability, action controller, movement animation, Health, and Stamina. Main owns the current test-level Player instance and is therefore the narrow scene-level owner for selecting a spawn point.
+- The Health and Stamina HUDs already observe their components' typed signals. Calling the existing `reset_to_full()` methods will update both displays without adding polling or UI-owned Gameplay data.
+- The existing death integration test explicitly verifies that no respawn occurs. It will retain that isolated contract by disabling the new coordinator before lethal damage; a separate respawn integration test will own death-to-respawn assertions.
+
+### Goal
+
+- Add one `Marker2D` spawn point to the current Main test scene and a typed, composition-based coordinator that responds to the Player's existing death-delay hook.
+- Respawn the Player at that point exactly once per death, restore Health and Stamina, clear movement/action/jump/death timers, restore input and idle presentation, dismiss the temporary death prompt, and keep the child Camera2D following the same Player instance.
+
+### Planned files and tests
+
+- Modify `scripts/player/player.gd` with a single public `respawn_at(global_spawn_position)` reset boundary and typed `respawned` signal.
+- Add `scripts/systems/player_respawn_controller.gd`; modify `scenes/main/main.tscn` with `World/SpawnPoint` and `PlayerRespawnController` using exported NodePaths.
+- Modify `scripts/ui/player_death_hud.gd` to hide on the Player's typed respawn signal.
+- Update `tests/player/test_player_death_state.gd` to disable the coordinator for isolated death-state verification; add `tests/player/test_player_respawn.gd` for position, Health, Stamina, actions, prompt, camera, duplicate protection, repeated cycles, and restored movement.
+- Run the exact Godot 4.7.1 import, both focused death/respawn tests, the complete existing regression suite, configured Main startup, and a graphical death-to-respawn capture.
+
+### Scope guard
+
+- This task adds only one fixed spawn point and delayed Player reset. It does not add checkpoints, multiple spawn selection, enemies, damage areas, Hitbox/Hurtbox, invulnerability, knockback, game-over flow, final death/respawn art, sound, save state, or new input.
+- Preserve all pre-existing uncommitted Health/HUD/death work and the unrelated `player_sprite_frames.tres` UID-normalization diff. Do not change movement feel, action timing, collision shapes, level geometry, Input Map, or animation frame data.
+
+### Delivered implementation
+
+- Added `Player.respawn_at(global_spawn_position)` as the single atomic reset boundary. It rejects calls while alive; for a dead Player it teleports to the approved marker, clears velocity, coyote/jump/input/landing/action/death state, restores the configured air-jump count, resets Health and Stamina through their existing component APIs, restores Idle animation/locomotion, resets Camera2D smoothing, emits typed `movement_state_changed` and `respawned` signals, and returns success.
+- Added `PlayerRespawnController` under `scripts/systems/`. It resolves Player and `Marker2D` through typed exported NodePaths, observes the existing one-shot `death_delay_elapsed`, guards re-entry, calls the Player-owned reset once, and emits its own typed level-level notification. Its exported `enabled` switch supports isolated death-state testing without changing production defaults.
+- Added `World/SpawnPoint` at the current safe floor spawn `(320, 612)` and a Main-level `PlayerRespawnController`. This is one fixed test spawn, not a checkpoint/session system.
+- Updated the presentation-only `PlayerDeathHud` to observe `Player.respawned` and hide itself. Health and Stamina bars continue to update from their component signals; no HUD owns or mutates Gameplay data.
+- Preserved the death-state test by disabling the coordinator before lethal damage, so it still proves the one-shot dead-state contract independently. Added a separate respawn integration test that executes two complete death cycles and verifies delay, one respawn per death, position, Health/Stamina/timers, action/jump state, prompt/HUD, Camera parentage, input recovery, and death-signal rearming.
+- Godot 4.7.1 import generated UID sidecars for the new controller and respawn test scripts.
+
+### Files
+
+- Modified: `scripts/player/player.gd` for the typed respawn signal, Camera reference, and atomic reset method.
+- New: `scripts/systems/player_respawn_controller.gd` and generated `.uid`.
+- Modified: `scripts/ui/player_death_hud.gd` to dismiss on respawn.
+- Modified: `scenes/main/main.tscn` for one `Marker2D` and the coordinator node.
+- Modified: `tests/player/test_player_death_state.gd` to isolate death behavior by disabling the coordinator.
+- New: `tests/player/test_player_respawn.gd` and generated `.uid`.
+- Modified: `docs/development_log.md`, retaining all prior uncommitted history.
+- Preserved unrelated/pre-existing changes, including `resources/player/player_sprite_frames.tres` UID normalization; this task did not edit animation data.
+
+### Commands and actual results
+
+1. Exact engine and editor import:
+   - `$GODOT_BIN --version` returned `4.7.1.stable.official.a13da4feb`.
+   - `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_player_respawn_import.log`: exit 0; the new controller/test classes registered without parse, script, resource, or warning output.
+2. Focused contract tests:
+   - `Godot --headless --path . --script tests/player/test_player_death_state.gd --log-file /tmp/nocturne_keep_player_death_after_respawn.log`: exit 0; isolated death entry, lockout, prompt, one-shot delay, and no-respawn assertions passed with the coordinator disabled.
+   - `Godot --headless --path . --script tests/player/test_player_respawn.gd --log-file /tmp/nocturne_keep_player_respawn_test.log`: exit 0; `PLAYER_RESPAWN_TEST: PASS (delay, reset, HUD, repeat cycle, input recovery)`.
+3. Final serial regression suite with the same executable:
+   - All fourteen scripts passed: Health component; Health HUD; death state; respawn; both asset validators; animation system; M1 movement; M1.5 actions; Dash Attack; fast Attack; chained Dash/Stamina; continuous Air Dash; and level metrics.
+   - Stable metrics remain 153.59/83.77 single jump, 281.92/167.10 debug double jump, and 344.00 four-Air-Dash action range.
+4. Scene startup checks:
+   - `Godot --headless --path . --quit-after 2 --log-file /tmp/nocturne_keep_respawn_main_v2.log`: exit 0.
+   - `Godot --headless --path . res://scenes/player/player.tscn --quit-after 2 --log-file /tmp/nocturne_keep_respawn_player_scene_v2.log`: exit 0, confirming Player remains independently instantiable.
+   - Final logs contained no `SCRIPT ERROR`, `ERROR:`, `WARNING:`, parse error, or missing-resource match.
+5. Graphical death-to-respawn run:
+   - `Godot --path . --script tests/player/test_player_respawn.gd --write-movie /tmp/nocturne_keep_player_respawn_visual.png --fixed-fps 60 --audio-driver Dummy --log-file /tmp/nocturne_keep_player_respawn_visual.log`: exit 0; GL Compatibility on Apple M4, 111 frames at 1280×720.
+   - Frames 30 and 75 were inspected at original resolution. Frame 30 shows zero Health, frozen 75 Stamina, death animation/debug state, and the centered prompt. Frame 75 shows the Player back on the safe floor marker, Idle, prompt hidden, and both HUD values restored to 100/100.
+
+### Automated acceptance results
+
+- Lethal damage enters the existing dead state first; no respawn occurs before the configured one-second delay.
+- Each delay expiry produces exactly one respawn. Waiting additional frames produces no duplicate, and a second lethal cycle independently respawns exactly once, confirming Health death signaling and Player timers rearm correctly.
+- The Player returns to `(320, 612)` with zero velocity, zero death/coyote/jump-buffer timers, one Debug air jump restored, no active Dash/Attack, Idle state/presentation, full Health, full Stamina, and zero Stamina regeneration delay.
+- The temporary prompt hides and both signal-driven HUD bars/numbers restore to 100/100. Movement input works again after respawn.
+- The same Camera2D remains a child of the same Player instance and smoothing is reset after the teleport. Graphical capture confirms the camera follows the respawned position.
+- All prior animation, movement, action, Stamina, collision, asset, and metrics regressions remain green.
+
+### Manual acceptance requested
+
+1. Run Main and move away from the initial floor position.
+2. Spend some Stamina, then click `DEV TEST · TAKE 25 DAMAGE` until Health reaches zero; confirm input locks and the death prompt appears.
+3. Wait approximately one second; confirm the Player returns to the initial safe floor position, prompt disappears, Health/Stamina both read `100 / 100`, and movement/jump/Dash/Attack work again.
+4. Repeat the cycle once to confirm no duplicate or stuck respawn. Treat the current death presentation as placeholder art.
+
+### Known limitations and handoff
+
+- This is one fixed Main-scene spawn with a direct delayed reset. It does not choose checkpoints, persist a spawn across scenes, provide post-respawn invulnerability, reset enemies, or implement a game-over/session flow.
+- Because no enemy or damage area exists, immediate repeated damage at the spawn is not yet possible or tested. That protection belongs to a later approved damage/combat-loop task.
+- No movement, Input Map, action timing, collision shape, animation frame, enemy, Hitbox/Hurtbox, or damage-source logic was changed.
+- `PLAYER-RESPAWN-001` is complete. The next ordered task remains `ENEMY-BASE-001`, but it was not started and requires explicit approval.
+- No Git commit or push was performed. Final diff reporting separates this task from preserved earlier work and the unrelated SpriteFrames UID normalization.
+
+## 2026-07-23 — Player death presentation sequence
+
+Date: 2026-07-23
+Status: complete — asset, timing, regression, and graphical verification passed; manual visual acceptance requested
+
+### Approved scope preflight
+
+- The active `death` animation is still an eight-frame placeholder assembled from shifted standing art at 8 FPS. It does not show a fall, horizontal corpse, or released daggers.
+- `Player` currently starts that placeholder animation and advances a fixed one-second internal death timer. `PlayerRespawnController` listens to `death_delay_elapsed` and respawns immediately when that timer expires; there is no presentation-completion gate.
+- Player input/action/Stamina lockout and one-shot death-state entry already exist and pass tests. There is no active Hitbox/Hurtbox or damage shape to disable; cancelling `PlayerActionController` already removes the current attack/dash state and reserved hit-window animation.
+- No ghost texture, ghost node, death-sequence component, or `player_respawn_spec.md` exists. The current single Main `SpawnPoint` and atomic `Player.respawn_at()` reset contract are functional and should be preserved.
+
+### Goal
+
+- Replace the placeholder death presentation with five original 64×64 pixel frames that progress from lethal imbalance to a clearly horizontal body, with the main and off-hand daggers visibly released beside it.
+- Add one original transparent hooded-face ghost texture and a composed death-sequence controller that waits for the body animation, floats the ghost upward 8–16 pixels, holds it for exactly 0.50 seconds, cleans it up, and only then authorizes the existing respawn coordinator.
+
+### Planned files and tests
+
+- Add a deterministic Godot Image generator under `scripts/tools/` and generate `assets/sprites/player/assassin/death/death_01.png` through `death_05.png` plus `assets/sprites/player/assassin/death/ghost_hooded_face.png`.
+- Update `PlayerSpriteFramesBuilder` and the persistent SpriteFrames resource to use five production death frames at approximately 0.45 seconds total.
+- Add `scripts/player/player_death_sequence.gd` and compose it with a nearest-neighbor `GhostSprite` in `scenes/player/player.tscn`.
+- Narrow `player.gd` to death-state ownership and airborne corpse gravity; change `PlayerRespawnController` to listen to typed death-sequence completion instead of a fixed Player timer.
+- Update death/respawn/animation validators and add focused death-presentation timing/cleanup assertions; update `docs/design/player_animation_spec.md`, create `docs/design/player_respawn_spec.md`, and complete this log entry.
+
+### Scope guard
+
+- Do not add enemies, Bosses, damage resolution, Hitbox/Hurtbox nodes, invulnerability, checkpoints, new inputs, sound, particles, RigidBody dagger physics, or unrelated movement/action changes.
+- Preserve the current fixed Main spawn, Health/Stamina reset behavior, all reference assets, and every pre-existing uncommitted change. The old placeholder death PNGs remain as unreferenced historical material rather than being deleted.
+
+### Delivered implementation
+
+- Added a deterministic, statically typed Godot Image generator for five original 64×64 death frames and one transparent hooded-face ghost. The active frames move from lethal imbalance through backward collapse to a low horizontal corpse. `death_03` visibly releases both weapons; `death_05` leaves the longer main dagger in front and shorter off-hand dagger on the opposite side without introducing physics bodies.
+- Rebuilt `player_sprite_frames.tres` so `death` uses the production `death/death_01...05.png` sequence at 11.111111 FPS, non-looping, for approximately 0.45 seconds. The final wide/low silhouette shares source ground row `y=60`; every body frame also passes the existing nearest-neighbor 48×48 readability path. The previous eight placeholder death PNGs remain unmodified and unreferenced.
+- Added a 64×64 pale-blue/white semi-transparent ghost with a front-facing hood, dark face opening, two sharp eye highlights, and a restrained alpha halo. It is a single nearest-neighbor `Sprite2D`, not a particle system or generated runtime blur.
+- Added composed `PlayerDeathSequence`. It listens to typed Player life-cycle signals, starts the locked body animation once, reveals the ghost only after `death_05`, floats it upward 14 pixels over 0.35 seconds, holds it visibly for 0.50 seconds, hides it, then emits `sequence_completed`. Its generation guard and single owned Tween prevent late or duplicated completion; respawn cleanup resets the ghost to its hidden default state.
+- Removed the parallel fixed one-second Player death timer. Player now owns only `LifeState.DEAD`, action/input/Stamina lockout, and safe dead-body vertical gravity; an airborne dead Player falls without steering. `PlayerRespawnController` listens only to `PlayerDeathSequence.sequence_completed`, so body/ghost presentation must finish before `respawn_at()` can restore the Player.
+- Extended automated coverage for five-frame metadata, 64×64/import/mipmap/palette rules, unique frame hashes, final corpse bounds/baseline, ghost partial alpha, sequence phase ordering, 14-pixel rise, 0.50-second pause, no early respawn, duplicate prevention, cleanup, two complete respawn cycles, and restored control/HUD.
+- Updated the animation specification and added a dedicated death/respawn ownership, timing, cleanup, and limitation specification.
+
+### Generated PNGs
+
+| Path | Bytes | SHA-256 | Purpose |
+| --- | ---: | --- | --- |
+| `assets/sprites/player/assassin/death/death_01.png` | 690 | `6f40a823b45b0126cd516281d0052a798af1555df6a6d345f310f60f85aad5b3` | Lethal imbalance |
+| `assets/sprites/player/assassin/death/death_02.png` | 664 | `f76d5f44a547e72d3e68aaff8a82919426a9e526c83150cdc56c3f9540dbacf3` | Backward fall |
+| `assets/sprites/player/assassin/death/death_03.png` | 579 | `254ad829307a67828e7e502d039a183eec2a53d66f240df1d7e68b5ac2992085` | Near-ground weapon release |
+| `assets/sprites/player/assassin/death/death_04.png` | 555 | `4aeffb49fd6bff316d985a07a2af9f54d6396d2a1f814542c576d59b363cad93` | Horizontal impact |
+| `assets/sprites/player/assassin/death/death_05.png` | 548 | `4aba4225c45209a42379971f8eb728c8e9729b035c9465016bae1b2d5542b922` | Still corpse and detached daggers |
+| `assets/sprites/player/assassin/death/ghost_hooded_face.png` | 483 | `29853c753398a327b18ffb36d9bcdc72308a7bc4cd54f319e6700cdc9128ede9` | Semi-transparent hooded spirit |
+
+All six are 64×64 RGBA PNG sources with transparent backgrounds, no source mipmaps, Lossless Godot import, and Nearest canvas display.
+
+### Files
+
+- New: `scripts/tools/pixel_player_death_generator.gd` and generated UID.
+- Modified: `scripts/tools/build_player_animation_assets.gd`, `scripts/tools/player_sprite_frames_builder.gd`, and `resources/player/player_sprite_frames.tres`.
+- New: six PNG sources and Godot import sidecars under `assets/sprites/player/assassin/death/`.
+- New: `scripts/player/player_death_sequence.gd` and generated UID.
+- Modified: `scenes/player/player.tscn`, `scripts/player/player.gd`, and `scripts/systems/player_respawn_controller.gd`.
+- New: `tests/player/test_player_death_presentation.gd` and generated UID.
+- Modified: death-state, respawn, animation-system, and animation-asset tests.
+- Modified: `docs/design/player_animation_spec.md`; new: `docs/design/player_respawn_spec.md`; modified: this log.
+- Preserved: all Health/HUD/death/respawn work already present in the uncommitted working tree and the unrelated SpriteFrames UID normalization history. No placeholder/reference asset was deleted.
+
+### Commands and actual results
+
+1. Asset generation and persistent resource build with exact Godot 4.7.1:
+   - `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --death-presentation-only`: exit 0; `PLAYER_DEATH_PRESENTATION_EXPORT: 6 files, 0 failures`.
+   - `Godot --headless --editor --path . --import --quit --log-file /tmp/nocturne_keep_death_asset_import.log`: exit 0; six PNGs imported without error/warning.
+   - `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd --log-file /tmp/nocturne_keep_death_frames_build.log`: exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK`.
+2. Focused validation:
+   - `validate_player_animation_assets.gd`: PASS, `38 frames + ghost + 4 byte-identical references`.
+   - `test_player_animation_system.gd`: PASS, all 16 animations plus production death count/FPS/loop/flat-body metadata.
+   - `test_player_death_state.gd`: PASS, single entry, input/action/Stamina lockout, HUD, full presentation, no respawn when disabled.
+   - `test_player_death_presentation.gd`: PASS, flat body, released daggers, ghost rise/pause, duplicate prevention, and cleanup.
+   - `test_player_respawn.gd`: PASS, two full presentation-gated death/respawn cycles and input recovery.
+3. Final serial suite:
+   - All fifteen repository scripts passed. Health, HUD, asset, movement, animation, M1.5 action, fast Attack, Dash Attack, chained Stamina, continuous Air Dash, collision, and respawn regressions remain green.
+   - Level metrics remain unchanged at 153.59/83.77 single jump, 281.92/167.10 debug double jump, and 344.00 four-Air-Dash action range.
+4. Startup and log scan:
+   - Configured Main and independently instantiated Player scene both exited 0 under `--headless --quit-after 2`.
+   - All final import/suite/startup logs contained no `SCRIPT ERROR`, `ERROR:`, `WARNING:`, parse error, or missing-resource match.
+5. Graphical verification:
+   - `test_player_death_presentation.gd` with `--write-movie`, fixed 60 FPS: exit 0, 90 frames at 1280×720. Frames 20, 38, 58, and 80 were inspected at original resolution and show the low corpse, both blades, ghost emergence, top pause, and stable prompt/HUD.
+   - `test_player_respawn.gd` with `--write-movie`, fixed 60 FPS: exit 0, 212 frames. Frame 90 confirms the first full sequence has cleaned the ghost/prompt and restored the Player and both bars to 100/100 at the spawn.
+
+### Automated acceptance results
+
+- Health zero enters Dead once, cancels ongoing actions, blocks all Gameplay input, and keeps Stamina unchanged through the sequence.
+- `death_05` is a clearly horizontal final frame; both daggers are detached and remain static beside the body. Its production source is distinct from all earlier placeholder frames.
+- The ghost cannot appear before body completion. It rises from the corpse by 14 pixels, reaches `GhostPause`, remains visible for at least 29 physics frames (approximately 0.50 seconds), then is hidden before completion.
+- The full sequence cannot complete before its body/emerge/pause phases; the timing test requires at least 72 physics frames and observed the nominal approximately 1.30-second flow.
+- Repeated zero-Health damage cannot spawn another sequence or ghost. The one owned Tween and ghost node are cleaned after completion and again on respawn.
+- Respawn occurs only after `sequence_completed`; two consecutive cycles restore the fixed spawn position, full Health/Stamina, Idle, action/jump buffers, Camera following, HUD, and normal input exactly once per death.
+- All previous Gameplay metrics and regressions remain unchanged.
+
+### Manual acceptance requested
+
+1. Run Main, click `DEV TEST · TAKE 25 DAMAGE` four times, and watch the complete sequence without pressing further inputs.
+2. Confirm the body reads as falling backward and finishes fully horizontal, with the longer blade in front and shorter blade on the other side rather than still in the hands.
+3. Confirm the hooded front-face ghost emerges only after the body settles, rises a small readable distance, visibly pauses, then disappears immediately before respawn.
+4. Repeat facing left and right, and trigger one death while airborne to verify the dead body falls without steering and the ghost remains centered on the Player.
+5. Confirm the approximately 1.30-second duration feels neither abrupt nor sluggish at normal play speed.
+
+### Known limitations and handoff
+
+- Dagger release is authored directly into the death frames; there is no independent trajectory, bounce, or RigidBody simulation.
+- The ghost is a deliberately small single Sprite2D with alpha glow, not a particle/VFX stack. Manual approval may request contrast tuning against future room backgrounds.
+- Airborne death uses normal vertical gravity while the body animation proceeds; at extreme future room heights, presentation could complete before landing and may require a separate floor-confirmation gate.
+- Main still has one fixed test spawn and no respawn invulnerability, enemy reset, checkpoint selection, audio, screen fade, or final game-over flow.
+- No enemy, Boss, damage-source, Hitbox/Hurtbox, combat resolution, input, movement tuning, or unrelated Gameplay system was added.
+- No Git commit or push was performed. Work stops here for visual approval.

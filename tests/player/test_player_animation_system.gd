@@ -73,6 +73,12 @@ func _validate_source_frames(sprite_frames: SpriteFrames) -> void:
 				_visible_bottom(image) == 60,
 				"Ground baseline changed: %s[%d] bottom=%d" % [grounded_animation, frame_index, _visible_bottom(image)]
 			)
+	var death_final: Image = sprite_frames.get_frame_texture(&"death", 4).get_image()
+	var death_width: int = _visible_right(death_final) - _visible_left(death_final) + 1
+	var death_height: int = _visible_bottom(death_final) - _visible_top(death_final) + 1
+	_expect(_visible_bottom(death_final) == 60, "death_05 does not share the ground baseline")
+	_expect(death_width >= 54, "death_05 is not wide enough to read as a flat body")
+	_expect(death_height <= 20, "death_05 remains too tall to read as a flat body")
 
 
 func _validate_controller(sprite_frames: SpriteFrames) -> void:
@@ -210,6 +216,30 @@ func _visible_bottom(image: Image) -> int:
 		for x: int in range(image.get_width()):
 			if image.get_pixel(x, y).a > 0.0:
 				return y
+	return -1
+
+
+func _visible_top(image: Image) -> int:
+	for y: int in range(image.get_height()):
+		for x: int in range(image.get_width()):
+			if image.get_pixel(x, y).a > 0.0:
+				return y
+	return image.get_height()
+
+
+func _visible_left(image: Image) -> int:
+	for x: int in range(image.get_width()):
+		for y: int in range(image.get_height()):
+			if image.get_pixel(x, y).a > 0.0:
+				return x
+	return image.get_width()
+
+
+func _visible_right(image: Image) -> int:
+	for x: int in range(image.get_width() - 1, -1, -1):
+		for y: int in range(image.get_height()):
+			if image.get_pixel(x, y).a > 0.0:
+				return x
 	return -1
 
 

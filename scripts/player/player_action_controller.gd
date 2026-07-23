@@ -135,6 +135,21 @@ func is_action_active() -> bool:
 	return _action_state != ActionState.NONE
 
 
+func cancel_all_actions() -> void:
+	_action_state = ActionState.NONE
+	_clear_attack_buffer()
+	_clear_dash_buffer()
+	_dash_motion_remaining = 0.0
+	_dash_attack_window_remaining = 0.0
+	_dash_attack_elapsed = 0.0
+	_dash_attack_used = false
+	_dash_attack_started_airborne = false
+	_dash_segment_elapsed = 0.0
+	_dash_ending = false
+	_current_dash_number = 0
+	_reset_attack_response_measurement()
+
+
 func is_stamina_regeneration_blocked() -> bool:
 	return is_dash_active() or is_dash_attack_active()
 

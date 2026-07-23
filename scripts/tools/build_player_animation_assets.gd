@@ -8,6 +8,7 @@ const ProductionGenerator: Script = preload("res://scripts/tools/pixel_player_an
 const ContactSheet: Script = preload("res://scripts/tools/player_animation_contact_sheet.gd")
 const M1AnimationGenerator: Script = preload("res://scripts/tools/pixel_player_m1_animation_generator.gd")
 const M1ContactSheet: Script = preload("res://scripts/tools/player_m1_animation_contact_sheet.gd")
+const DeathGenerator: Script = preload("res://scripts/tools/pixel_player_death_generator.gd")
 
 
 func _initialize() -> void:
@@ -15,6 +16,12 @@ func _initialize() -> void:
 
 
 func _build() -> void:
+	if OS.get_cmdline_user_args().has("--death-presentation-only"):
+		var death_results: Dictionary[String, int] = DeathGenerator.save_all()
+		var death_failures: int = _count_failures(death_results)
+		print("PLAYER_DEATH_PRESENTATION_EXPORT: %d files, %d failures" % [death_results.size(), death_failures])
+		quit(0 if death_failures == 0 else 1)
+		return
 	if OS.get_cmdline_user_args().has("--remove-archived-air-dash-source"):
 		var removal_results: Dictionary[String, int] = ProductionGenerator.remove_archived_air_dash_source()
 		var removal_failures: int = _count_failures(removal_results)

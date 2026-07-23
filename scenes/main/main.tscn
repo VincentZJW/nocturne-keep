@@ -1,8 +1,12 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
 [ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="3_stamina_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="4_health_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_death_hud.gd" id="5_death_hud"]
+[ext_resource type="Script" path="res://scripts/tools/player_death_test_button.gd" id="6_death_test"]
+[ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="7_respawn"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2600, 96)
@@ -26,6 +30,9 @@ border_color = Color(0.376, 0.478, 0.565, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_fill"]
 bg_color = Color(0.725, 0.51, 0.263, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
+bg_color = Color(0.66, 0.27, 0.34, 1)
 
 [node name="Main" type="Node2D"]
 
@@ -109,8 +116,14 @@ collision_mask = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/RightWall"]
 shape = SubResource("RectangleShape2D_wall")
 
+[node name="SpawnPoint" type="Marker2D" parent="World"]
+position = Vector2(320, 612)
+
 [node name="Player" parent="World" instance=ExtResource("1_player")]
 position = Vector2(320, 612)
+
+[node name="PlayerRespawnController" type="Node" parent="."]
+script = ExtResource("7_respawn")
 
 [node name="Interface" type="CanvasLayer" parent="."]
 
@@ -167,16 +180,68 @@ theme_override_font_sizes/font_size = 13
 text = "FLOOR true   STATE None/idle   AIR DASH / GROUND DASH TYPE None   DASH #0   STAMINA 100"
 script = ExtResource("2_debug")
 
+[node name="DamageTestButton" type="Button" parent="Interface"]
+offset_left = 24.0
+offset_top = 234.0
+offset_right = 228.0
+offset_bottom = 272.0
+theme_override_colors/font_color = Color(0.89, 0.78, 0.78, 1)
+theme_override_font_sizes/font_size = 13
+text = "DEV TEST · TAKE 25 DAMAGE"
+script = ExtResource("6_death_test")
+
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 2
 script = ExtResource("3_stamina_hud")
 
-[node name="StaminaContainer" type="ColorRect" parent="HUD"]
+[node name="HealthContainer" type="ColorRect" parent="HUD"]
 unique_name_in_owner = true
 offset_left = 1032.0
 offset_top = 24.0
 offset_right = 1256.0
 offset_bottom = 90.0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.055, 0.92)
+script = ExtResource("4_health_hud")
+
+[node name="Title" type="Label" parent="HUD/HealthContainer"]
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 112.0
+offset_bottom = 26.0
+theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
+theme_override_font_sizes/font_size = 12
+text = "HEALTH"
+
+[node name="HealthValue" type="Label" parent="HUD/HealthContainer"]
+unique_name_in_owner = true
+offset_left = 118.0
+offset_top = 6.0
+offset_right = 214.0
+offset_bottom = 26.0
+theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
+theme_override_font_sizes/font_size = 12
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/HealthContainer"]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 34.0
+offset_right = 214.0
+offset_bottom = 54.0
+mouse_filter = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background")
+theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
+value = 100.0
+show_percentage = false
+
+[node name="StaminaContainer" type="ColorRect" parent="HUD"]
+unique_name_in_owner = true
+offset_left = 1032.0
+offset_top = 100.0
+offset_right = 1256.0
+offset_bottom = 166.0
 mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.92)
 
@@ -211,3 +276,33 @@ theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background"
 theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
+
+[node name="DeathOverlay" type="ColorRect" parent="HUD"]
+visible = false
+offset_left = 430.0
+offset_top = 280.0
+offset_right = 850.0
+offset_bottom = 400.0
+mouse_filter = 2
+color = Color(0.025, 0.02, 0.035, 0.94)
+script = ExtResource("5_death_hud")
+
+[node name="Title" type="Label" parent="HUD/DeathOverlay"]
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 400.0
+offset_bottom = 58.0
+theme_override_colors/font_color = Color(0.78, 0.31, 0.38, 1)
+theme_override_font_sizes/font_size = 30
+text = "YOU DIED"
+horizontal_alignment = 1
+
+[node name="Subtitle" type="Label" parent="HUD/DeathOverlay"]
+offset_left = 20.0
+offset_top = 66.0
+offset_right = 400.0
+offset_bottom = 100.0
+theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
+theme_override_font_sizes/font_size = 18
+text = "已阵亡"
+horizontal_alignment = 1

@@ -1,12 +1,12 @@
 # Player Animation Integration Specification
 
-Version: 1.7 — segmented chained Ground/Air Dash
-Date: 2026-07-22
-Status: M1 locomotion complete; M1.5 Dash/Attack/Dash Attack presentation complete without combat
+Version: 1.8 — production death presentation sequence
+Date: 2026-07-23
+Status: M1/M1.5 movement/action presentation plus player death presentation complete
 
 ## Scope
 
-This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, and the limited M1.5 action prototype. It covers sprite animation names, timing, loop behavior, priority arbitration, facing, ground/horizontal air Dash, normal Attack, and the buffered Dash Attack transition. It does not implement damage, Hitbox nodes, hurtboxes, invulnerability, combos, enemies, bosses, or production levels.
+This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, the limited M1.5 action prototype, and the approved player death presentation. It covers sprite animation names, timing, loop behavior, priority arbitration, facing, Ground/Air Dash, normal Attack, Dash Attack, the five-frame body fall, and the hooded ghost visual. It does not implement enemy damage, Hitbox/Hurtbox nodes, invulnerability, combos, enemies, bosses, or production levels.
 
 ## Node composition
 
@@ -41,9 +41,9 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 | `attack` | 4 | 20 | No | Production fast dual-dagger thrust |
 | `dash_attack` | 5 | 20 | No | Production high-speed dual thrust |
 | `hurt` | 3 | 12 | No | Placeholder |
-| `death` | 8 | 8 | No | Placeholder |
+| `death` | 5 | 11.111 | No | Production horizontal body fall, ~0.45 s |
 
-Only Hurt and Death remain placeholders. Their files live under `assets/sprites/player/assassin/placeholder/`, every filename starts with `placeholder_`, and they must not be treated as approved final animation art.
+Only Hurt remains a placeholder. Its files live under `assets/sprites/player/assassin/placeholder/` and must not be treated as approved final art. The old eight `placeholder_death_*` files remain unreferenced historical material; active death art lives in `assets/sprites/player/assassin/death/`.
 
 The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The superseded sideways-slash Attack remains in `reference/deprecated_attack_slash/`. The immediately preceding six-frame thrust sequences remain in their deprecated directories. Replaced five-frame Ground and Air Dash sources are preserved byte-identically in `reference/deprecated_ground_dash_five_frame/` and `reference/deprecated_air_dash_five_frame/`.
 
@@ -56,6 +56,10 @@ Air Dash follows the same chain grammar: two-frame `air_dash_start`, three-frame
 Attack is a synchronous four-frame dual-dagger thrust at 20 FPS: `attack_01` is the short compression, `attack_02` snaps both blades into the first core pose, `attack_03` holds maximum extension and opens the repeat window, and `attack_04` retracts quickly. Both blades point forward and remain vertically separated. The designed delay from J to `attack_02` is one 20-FPS frame, approximately 0.05 seconds. `attack_02` and `attack_03` are reserved as the future narrow forward hitbox-active window. `PlayerAnimationController.is_attack_hit_window()` exposes only metadata; there is no Hitbox or damage.
 
 Dash Attack uses one shared ground/air five-frame sequence at 20 FPS: `dash_attack_01` inherits Dash and retracts both elbows, `02` starts paired extension, `03` forms the full arrow-shaped core, `04` holds the narrow thrust, and `05` retracts while movement decelerates. Total presentation time is approximately 0.25 seconds. It has no lateral slash or broad effect arc. `dash_attack_03` and `dash_attack_04` are query-only future hit-window metadata.
+
+Death uses five non-looping 64×64 frames at 11.111 FPS, approximately 0.45 seconds total. `death_01` breaks balance while both blades remain near the hands; `death_02` begins the backward fall; `death_03` approaches the floor and visibly separates both daggers; `death_04` reaches a horizontal grounded body; `death_05` is a still, fully horizontal corpse with the longer main dagger in front and shorter off-hand dagger on the opposite side. The final visible baseline is `y=60`, and its wide/low bounds are checked automatically at 64×64 and through nearest-neighbor 48×48 reduction.
+
+The separate `ghost_hooded_face.png` is not a SpriteFrames entry. It is a 64×64 transparent, pale-blue/white hooded front-face texture with two readable eye highlights and controlled partial-alpha glow. `PlayerDeathSequence` reveals it only after `death` finishes, moves it upward 14 pixels over 0.35 seconds, holds it for 0.50 seconds, then hides it before signaling respawn readiness.
 
 ## M1 locomotion art contract
 
@@ -99,12 +103,15 @@ Scene: `res://scenes/player/player.tscn`
 ```text
 Player (CharacterBody2D)
 ├── VisualRoot
-│   └── AnimatedSprite2D
+│   ├── AnimatedSprite2D
+│   └── DeathEffects
+│       └── GhostSprite
 ├── CollisionShape2D
 ├── Camera2D
 ├── AnimationController
 ├── StaminaComponent
-└── ActionController
+├── ActionController
+└── DeathSequence
 ```
 
 Dedicated input actions:
@@ -181,7 +188,7 @@ Dedicated inputs extend the M1 map:
 dash_attack > attack > ground/air dash phases > land > jump_start > jump_loop/fall > run > idle
 ```
 
-Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts only its bounded one-entry Attack buffer; Dash Attack rejects Attack starts but may hold one Shift follow-up for its completion. Hurt and Death remain available only to the independent animation preview and have no formal Player caller.
+Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts only its bounded one-entry Attack buffer; Dash Attack rejects Attack starts but may hold one Shift follow-up for its completion. Hurt remains preview-only. Death is now entered only through the Player Health death state and is orchestrated by `PlayerDeathSequence`; ordinary locomotion/actions cannot override it.
 
 ## Pixel display and anchor rules
 
@@ -208,7 +215,7 @@ Same-frame Shift/J and Dash-then-J resolve to Dash Attack. Normal Attack accepts
 - `is_dash_attack_hit_window()`
 - `one_shot_finished`, `animation_changed`, and `facing_changed` typed signals
 
-The controller owns presentation state only. Movement state, health, damage, hitboxes, and respawn decisions remain external responsibilities.
+The animation controller owns animation arbitration only. `PlayerDeathSequence` owns death presentation timing, while Player owns life state and the Main-level respawn controller owns the spawn decision. Health, damage, hitboxes, and checkpoint selection remain external responsibilities.
 
 ## Preview usage
 
