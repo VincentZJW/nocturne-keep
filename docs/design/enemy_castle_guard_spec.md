@@ -1,6 +1,6 @@
 # Enemy Specification — Cursed Castle Guard / 诅咒剑卫
 
-Version: 1.2 — Main-scene deployment and runtime audit
+Version: 1.3 — five-point damage and grouped Main deployment
 Last updated: 2026-07-23
 
 ## Role and visual identity
@@ -53,7 +53,7 @@ Idle → Patrol ⇄ Chase → Attack → Chase
 | windup / active / recovery | 0.35 / 0.10 / 0.45 s | readable commitment and punish window |
 | hurt duration | 0.18 s | clear feedback without permanent stun lock assumption |
 | knockback speed | 120 px/s | small readable displacement |
-| sword damage | 1 | first integer damage contract; Player Health remains 100 |
+| sword damage | 5 | centralized prototype pressure; 100-Health Player survives 19 and dies on hit 20 |
 
 These values are centralized and marked for manual feel testing. No tuning was made to Player movement, jump, Dash, stamina, attack animation, or death timing.
 
@@ -93,14 +93,16 @@ All animations face right in source and use `flip_h`; `FacingRoot` mirrors only 
 
 ### F5 Main deployment
 
-`res://scenes/main/main.tscn` owns one `World/Enemies` container and two saved instances of this same scene:
+`res://scenes/main/main.tscn` owns four hand-authored groups under `World/Encounters` and five saved instances of this same scene:
 
-| Runtime node | Saved position | Initial intent |
+| Encounter | Saved Guard position(s) | Initial intent |
 | --- | --- | --- |
-| `Main/World/Enemies/CursedGuardNear` | `(500, 610)` | 180 px right of Player; immediate detection/Chase and first combat check |
-| `Main/World/Enemies/CursedGuardFar` | `(850, 610)` | outside initial detection; separate patrol and later encounter |
+| `EncounterGroup01` | `(500, 610)` | single-enemy tutorial immediately after spawn |
+| `EncounterGroup02` | `(1030, 610)` | second isolated check after recovery space |
+| `EncounterGroup03` | `(1500, 610)` | platform-adjacent movement/evasion check |
+| `EncounterGroup04` | `(2070, 610)`, `(2310, 610)` | two-enemy stamina/spacing check in the final gray-box segment |
 
-Both stand on the Main floor top at y=640 with the shared 30-pixel body-foot offset. They are inside the initial Player Camera2D view, use independent bounded patrol homes, share only the enemy PackedScene/config/SpriteFrames resources, and cannot fall through the platform because their bodies and probes use World layer 1. Main's `ENEMY DEBUG` toggle controls a display of state, Health, animation/frame, Player target, sword window, transform, speed, facing, and visibility.
+All stand on the Main floor top at y=640 with the shared 30-pixel body-foot offset and use independent bounded patrol homes. A group's ActivationArea enables its Guard AI only after Player entry and then remains latched for that scene run. The 1/1/1/2 distribution and 470–570-pixel gaps between group fronts prevent opening whole-map aggro; the final two are 240 pixels apart, so they cannot both begin a 46-pixel sword attack from one Player position. Main's `ENEMY DEBUG` toggle reports encounter activation/counts and every Guard's state, Health, target, sword window, position, and five-point damage.
 
 ### Independent test room
 
@@ -118,4 +120,4 @@ Manual checks still required:
 
 ## Explicit exclusions
 
-No navigation, jumping AI, ranged attack, shield block, poise, drop, respawn, encounter controller, second enemy, elite, or Boss is included.
+No navigation, jumping AI, ranged attack, shield block, poise, drop, enemy respawn, random spawning, second enemy, elite, or Boss is included. The encounter controller only gates the existing AI and owns no combat behavior.

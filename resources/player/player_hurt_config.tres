@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerHurtConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player_hurt_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+hurt_knockback_horizontal = 180.0
+hurt_knockback_vertical = -110.0
+airborne_vertical_multiplier = 0.7
+hurt_stun_duration = 0.16
+hurt_control_recovery_duration = 0.08
+invulnerability_duration = 0.5
+hit_flash_duration = 0.08
+camera_shake_strength = 2.5
+camera_shake_duration = 0.1

@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="7_respawn"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/castle_guard.tscn" id="8_guard"]
 [ext_resource type="Script" path="res://scripts/tools/main_enemy_debug_overlay.gd" id="9_enemy_debug"]
+[ext_resource type="Script" path="res://scripts/encounters/encounter_group.gd" id="10_encounter"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2600, 96)
@@ -21,6 +22,18 @@ size = Vector2(190, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(48, 900)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_01"]
+size = Vector2(300, 360)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_02"]
+size = Vector2(300, 360)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_03"]
+size = Vector2(300, 360)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_04"]
+size = Vector2(320, 360)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_background"]
 bg_color = Color(0.025, 0.035, 0.055, 1)
@@ -124,13 +137,82 @@ position = Vector2(320, 612)
 [node name="Player" parent="World" instance=ExtResource("1_player")]
 position = Vector2(320, 612)
 
-[node name="Enemies" type="Node2D" parent="World"]
+[node name="Encounters" type="Node2D" parent="World"]
 
-[node name="CursedGuardNear" parent="World/Enemies" instance=ExtResource("8_guard")]
+[node name="EncounterGroup01" type="Node2D" parent="World/Encounters"]
+script = ExtResource("10_encounter")
+encounter_name = &"EncounterGroup01"
+
+[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup01"]
+position = Vector2(430, 470)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup01/ActivationArea"]
+shape = SubResource("RectangleShape2D_encounter_01")
+
+[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup01"]
+
+[node name="CursedGuard01" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("8_guard")]
 position = Vector2(500, 610)
 
-[node name="CursedGuardFar" parent="World/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(850, 610)
+[node name="EncounterGroup02" type="Node2D" parent="World/Encounters"]
+script = ExtResource("10_encounter")
+encounter_name = &"EncounterGroup02"
+
+[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup02"]
+position = Vector2(850, 470)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup02/ActivationArea"]
+shape = SubResource("RectangleShape2D_encounter_02")
+
+[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup02"]
+
+[node name="CursedGuard02" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(1030, 610)
+
+[node name="EncounterGroup03" type="Node2D" parent="World/Encounters"]
+script = ExtResource("10_encounter")
+encounter_name = &"EncounterGroup03"
+
+[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup03"]
+position = Vector2(1300, 470)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup03/ActivationArea"]
+shape = SubResource("RectangleShape2D_encounter_03")
+
+[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup03"]
+
+[node name="CursedGuard03" parent="World/Encounters/EncounterGroup03/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(1500, 610)
+
+[node name="EncounterGroup04" type="Node2D" parent="World/Encounters"]
+script = ExtResource("10_encounter")
+encounter_name = &"EncounterGroup04"
+
+[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup04"]
+position = Vector2(1840, 470)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup04/ActivationArea"]
+shape = SubResource("RectangleShape2D_encounter_04")
+
+[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup04"]
+
+[node name="CursedGuard04A" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(2070, 610)
+
+[node name="CursedGuard04B" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("8_guard")]
+position = Vector2(2310, 610)
 
 [node name="PlayerRespawnController" type="Node" parent="."]
 script = ExtResource("7_respawn")
@@ -141,7 +223,7 @@ script = ExtResource("7_respawn")
 offset_left = 24.0
 offset_top = 22.0
 offset_right = 1010.0
-offset_bottom = 222.0
+offset_bottom = 272.0
 mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.88)
 
@@ -184,7 +266,7 @@ text = "ACTION DEBUG HUD"
 offset_left = 16.0
 offset_top = 112.0
 offset_right = 980.0
-offset_bottom = 214.0
+offset_bottom = 264.0
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
 theme_override_font_sizes/font_size = 13
 text = "FLOOR true   STATE None/idle   AIR DASH / GROUND DASH TYPE None   DASH #0   STAMINA 100"
@@ -192,9 +274,9 @@ script = ExtResource("2_debug")
 
 [node name="DamageTestButton" type="Button" parent="Interface"]
 offset_left = 24.0
-offset_top = 234.0
+offset_top = 282.0
 offset_right = 228.0
-offset_bottom = 272.0
+offset_bottom = 320.0
 theme_override_colors/font_color = Color(0.89, 0.78, 0.78, 1)
 theme_override_font_sizes/font_size = 13
 text = "DEV TEST · TAKE 25 DAMAGE"
@@ -202,9 +284,9 @@ script = ExtResource("6_death_test")
 
 [node name="EnemyDebugPanel" type="ColorRect" parent="Interface"]
 offset_left = 24.0
-offset_top = 286.0
+offset_top = 330.0
 offset_right = 824.0
-offset_bottom = 430.0
+offset_bottom = 580.0
 mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.88)
 
@@ -229,10 +311,10 @@ text = "ENEMY DEBUG"
 offset_left = 14.0
 offset_top = 38.0
 offset_right = 786.0
-offset_bottom = 136.0
+offset_bottom = 242.0
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
 theme_override_font_sizes/font_size = 12
-text = "CursedGuardNear\nCursedGuardFar"
+text = "EncounterGroup01\nEncounterGroup02\nEncounterGroup03\nEncounterGroup04"
 script = ExtResource("9_enemy_debug")
 
 [node name="HUD" type="CanvasLayer" parent="."]

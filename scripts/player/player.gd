@@ -22,6 +22,7 @@ enum MovementState {
 
 enum LifeState {
 	ALIVE,
+	HURT,
 	DEAD,
 }
 
@@ -48,6 +49,7 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @export_node_path("PlayerStaminaComponent") var stamina_component_path: NodePath = NodePath("StaminaComponent")
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("HealthComponent")
 @export_node_path("HurtboxComponent") var hurtbox_path: NodePath = NodePath("Hurtbox")
+@export_node_path("PlayerHurtController") var hurt_controller_path: NodePath = NodePath("HurtController")
 @export_node_path("Camera2D") var camera_path: NodePath = NodePath("Camera2D")
 
 @onready var animation_controller: PlayerAnimationController = get_node_or_null(
@@ -63,6 +65,9 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 	health_component_path
 ) as HealthComponent
 @onready var hurtbox: HurtboxComponent = get_node_or_null(hurtbox_path) as HurtboxComponent
+@onready var hurt_controller: PlayerHurtController = get_node_or_null(
+	hurt_controller_path
+) as PlayerHurtController
 @onready var player_camera: Camera2D = get_node_or_null(camera_path) as Camera2D
 
 var air_jumps_remaining: int = 0
@@ -99,8 +104,14 @@ func _ready() -> void:
 		push_error("Player requires a HurtboxComponent")
 		set_physics_process(false)
 		return
+	if hurt_controller == null:
+		push_error("Player requires a PlayerHurtController")
+		set_physics_process(false)
+		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
 	action_controller.action_finished.connect(_on_action_finished)
+	hurt_controller.hurt_started.connect(_on_hurt_started)
+	hurt_controller.hurt_finished.connect(_on_hurt_finished)
 	health_component.died.connect(_on_health_died)
 	hurtbox.hit_received.connect(_on_hurtbox_hit_received)
 	_restore_air_jumps()
@@ -115,6 +126,9 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.y += movement_config.gravity * delta
 		move_and_slide()
+		return
+	if is_hurt():
+		_process_hurt_motion(delta)
 		return
 	var was_on_floor: bool = is_on_floor()
 	var horizontal_input: float = Input.get_axis(MOVE_LEFT_ACTION, MOVE_RIGHT_ACTION)
@@ -166,11 +180,20 @@ func get_movement_state_name() -> StringName:
 
 
 func get_life_state_name() -> StringName:
-	return &"Dead" if _life_state == LifeState.DEAD else &"Alive"
+	match _life_state:
+		LifeState.HURT:
+			return &"Hurt"
+		LifeState.DEAD:
+			return &"Dead"
+	return &"Alive"
 
 
 func is_dead() -> bool:
 	return _life_state == LifeState.DEAD
+
+
+func is_hurt() -> bool:
+	return _life_state == LifeState.HURT
 
 
 func respawn_at(global_spawn_position: Vector2) -> bool:
@@ -186,6 +209,7 @@ func respawn_at(global_spawn_position: Vector2) -> bool:
 	_restore_air_jumps()
 	stamina_component.reset_to_full()
 	health_component.reset_to_full()
+	hurt_controller.reset_after_respawn()
 	_life_state = LifeState.ALIVE
 	animation_controller.reset_to_idle()
 	_movement_state = MovementState.IDLE
@@ -202,6 +226,19 @@ func get_coyote_time_remaining() -> float:
 
 func get_jump_buffer_remaining() -> float:
 	return _jump_buffer_remaining
+
+
+func _process_hurt_motion(delta: float) -> void:
+	var was_on_floor: bool = is_on_floor()
+	stamina_component.advance(delta, was_on_floor, false)
+	velocity.x = hurt_controller.get_recovery_horizontal_velocity(velocity.x, delta)
+	if not was_on_floor:
+		velocity.y += movement_config.gravity * delta
+	else:
+		velocity.y = 0.0
+	move_and_slide()
+	if not was_on_floor and is_on_floor():
+		_restore_air_jumps()
 
 
 func _update_jump_assist_timers(delta: float, was_on_floor: bool, jump_pressed: bool) -> void:
@@ -364,8 +401,30 @@ func _on_health_died() -> void:
 	_last_horizontal_input = 0.0
 	_landed_during_action = false
 	action_controller.cancel_all_actions()
+	hurt_controller.cancel_for_death()
 	animation_controller.reset_to_idle()
 	death_state_entered.emit()
+
+
+func _on_hurt_started(
+	knockback_velocity: Vector2,
+	_damage: int,
+	_source_position: Vector2
+) -> void:
+	if is_dead():
+		return
+	_life_state = LifeState.HURT
+	velocity = knockback_velocity
+	_coyote_time_remaining = 0.0
+	_jump_buffer_remaining = 0.0
+	_landed_during_action = false
+
+
+func _on_hurt_finished() -> void:
+	if is_dead():
+		return
+	_life_state = LifeState.ALIVE
+	_resume_locomotion_after_action()
 
 
 func _on_hurtbox_hit_received(damage: int, source_position: Vector2, attack_id: int) -> void:

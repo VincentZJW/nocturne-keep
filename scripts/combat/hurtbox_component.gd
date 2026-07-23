@@ -5,6 +5,7 @@ extends Area2D
 
 signal hit_received(damage: int, source_position: Vector2, attack_id: int)
 signal enabled_changed(enabled: bool)
+signal invulnerability_changed(invulnerable: bool)
 
 @export var faction: StringName = &"neutral"
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("../HealthComponent")
@@ -15,6 +16,7 @@ signal enabled_changed(enabled: bool)
 ) as HealthComponent
 
 var is_enabled: bool = true
+var is_invulnerable: bool = false
 
 
 func _ready() -> void:
@@ -29,6 +31,7 @@ func _ready() -> void:
 func receive_hit(hitbox: HitboxComponent) -> bool:
 	if (
 		not is_enabled
+		or is_invulnerable
 		or hitbox == null
 		or not hitbox.is_active
 		or hitbox.faction == faction
@@ -54,3 +57,10 @@ func set_enabled(enabled: bool) -> void:
 			collision_shape.set_deferred("disabled", not enabled)
 	if changed:
 		enabled_changed.emit(enabled)
+
+
+func set_invulnerable(invulnerable: bool) -> void:
+	if is_invulnerable == invulnerable:
+		return
+	is_invulnerable = invulnerable
+	invulnerability_changed.emit(invulnerable)

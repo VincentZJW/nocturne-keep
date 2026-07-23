@@ -30,9 +30,9 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/death/death_05.png" id="28_to26y"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/fall/fall_01.png" id="29_dsqb0"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/fall/fall_02.png" id="30_llady"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_01.png" id="31_1f0s2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_02.png" id="32_tt5fe"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/placeholder/placeholder_hurt_03.png" id="33_yb02f"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/hurt/hurt_01.png" id="31_1f0s2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/hurt/hurt_02.png" id="32_tt5fe"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/hurt/hurt_03.png" id="33_yb02f"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_01.png" id="34_tw35y"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_02.png" id="35_2sa3h"]
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/idle/idle_03.png" id="36_4qwbe"]
@@ -204,7 +204,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"hurt",
-"speed": 12.0
+"speed": 16.0
 }, {
 "frames": [{
 "duration": 1.0,

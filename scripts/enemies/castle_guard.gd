@@ -52,6 +52,7 @@ var _state_timer: float = 0.0
 var _next_attack_id: int = 1
 var _current_attack_id: int = 0
 var _death_presentation_complete: bool = false
+var _ai_active: bool = true
 
 
 func _ready() -> void:
@@ -124,6 +125,35 @@ func is_dead() -> bool:
 
 func is_death_presentation_complete() -> bool:
 	return _death_presentation_complete
+
+
+func set_ai_active(active: bool) -> void:
+	if is_dead() or _ai_active == active:
+		return
+	_ai_active = active
+	attack_hitbox.end_attack()
+	attack_window_changed.emit(false)
+	if not active:
+		target = null
+		velocity = Vector2.ZERO
+		state_machine.transition(CastleGuardStateMachine.State.IDLE)
+		_state_timer = config.initial_idle_duration
+		_play_animation(&"idle")
+		detection_area.set_deferred("monitoring", false)
+		set_physics_process(false)
+		return
+	_state_timer = config.initial_idle_duration
+	_play_animation(&"idle")
+	detection_area.set_deferred("monitoring", true)
+	set_physics_process(true)
+
+
+func is_ai_active() -> bool:
+	return _ai_active
+
+
+func get_attack_damage() -> int:
+	return config.attack_damage if config != null else 0
 
 
 func _process_idle(delta: float) -> void:

@@ -24,7 +24,7 @@ const SPEEDS: Dictionary[StringName, float] = {
 	&"fall": 4.0, &"land": 12.0, &"dash_start": 20.0, &"dash_loop": 20.0,
 	&"dash_end": 20.0, &"air_dash_start": 20.0, &"air_dash_loop": 20.0,
 	&"air_dash_end": 20.0,
-	&"attack": 20.0, &"dash_attack": 20.0, &"hurt": 12.0, &"death": 11.111111,
+	&"attack": 20.0, &"dash_attack": 20.0, &"hurt": 16.0, &"death": 11.111111,
 }
 const LOOPING: Dictionary[StringName, bool] = {
 	&"idle": true, &"run": true, &"jump_start": false, &"jump_loop": true,
@@ -36,7 +36,7 @@ const LOOPING: Dictionary[StringName, bool] = {
 const PRODUCTION_ANIMATIONS: Array[StringName] = [
 	&"idle", &"run", &"dash_start", &"dash_loop", &"dash_end", &"air_dash_start",
 	&"air_dash_loop", &"air_dash_end",
-	&"attack", &"dash_attack",
+	&"attack", &"dash_attack", &"hurt",
 	&"death",
 ]
 const M1_PRODUCTION_ANIMATIONS: Array[StringName] = [&"jump_start", &"jump_loop", &"fall", &"land"]

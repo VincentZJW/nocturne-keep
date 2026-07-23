@@ -3,7 +3,7 @@
 ## Current authoritative status
 
 - Last audited: 2026-07-23
-- Audit baseline before Main enemy integration: `master` at `5e897f6 feat: refine cursed castle guard animations`
+- Implementation baseline before this revision: `master` at `37d116c feat: integrate cursed guards into main scene`
 - Engine verified in this audit: `4.7.1.stable.official.a13da4feb`
 
 This section is the current project snapshot. The dated entries below are retained as historical records of what was planned, implemented, tested, and still awaiting approval at each point in time. A historical plan or an earlier test result is not, by itself, evidence that a later feature exists or still passes.
@@ -22,21 +22,21 @@ This section is the current project snapshot. The dated entries below are retain
 | --- | --- | --- |
 | M0 project baseline | Implemented and re-verified | `project.godot` targets Godot 4.7 GL Compatibility and `scenes/main/main.tscn`; current headless import and Main startup passed. |
 | Pixel character concept tool | Implemented and re-verified | Runnable design lab, eleven concept PNGs, 1600×1000 board, generator scripts, and asset validator are present. |
-| Player animation presentation | Implemented and re-verified | `AnimatedSprite2D`, `PlayerAnimationController`, a 16-animation `SpriteFrames` resource, production/reference assets, and preview tooling are present. `death` is a five-frame production body fall; only `hurt` remains placeholder art. |
+| Player animation presentation | Implemented and re-verified | `AnimatedSprite2D`, `PlayerAnimationController`, a 16-animation `SpriteFrames` resource, production/reference assets, and preview tooling are present. `death` is a five-frame production body fall; `hurt` is now a three-frame, 16 FPS production recoil sequence. |
 | M1 locomotion | Implemented and re-verified | `CharacterBody2D` movement, ground/air acceleration, gravity, jump, 0.10 s coyote time, 0.12 s jump buffer, Camera2D, facing, and six locomotion animations passed the current regression. |
 | Debug double jump | Implemented for testing; formal unlock pending | `has_double_jump` defaults false, while `debug_enable_double_jump` defaults true in `Player`; no ability-unlock/session system exists. |
 | M1.5 actions | Implemented and re-verified; manual feel approval pending | Four-frame Attack, Ground/Air Dash chains, Dash Attack, input buffers, collision-safe motion, stamina component/HUD, and configurable airborne regeneration passed current automated tests. Attack now drives one-damage and Dash Attack two-damage composed Hitboxes only on their approved frames. |
 | Player Health HUD | Implemented and re-verified | `Main/HUD/HealthContainer` observes the composed Player `HealthComponent`, initializes without polling, displays current/maximum values, and supports explicit signal-safe rebinding. It does not own Health data or death behavior. |
 | Player death state | Implemented and re-verified; manual visual acceptance pending | `Player` enters one explicit `LifeState.DEAD`, cancels action/input/Stamina processing, and delegates a five-frame flat-body fall plus detached daggers and hooded ghost rise/pause to `PlayerDeathSequence`. |
 | Player respawn | Implemented and re-verified; single test spawn only | After the approximately 1.30-second presentation completes, Main's typed coordinator returns the same Player instance to one `Marker2D`, restores Health/Stamina and control state, hides the prompt, and retains Camera2D following. No checkpoint/session selection exists. |
-| Combat foundation | Implemented minimum; later defenses pending | Typed Health/Hitbox/Hurtbox responsibilities, named collision layers, faction rejection, active-window control, one-hit-per-attack target memory, Player 1/2-point attacks, and one enemy sword source are independently tested. Player invulnerability/Hurt Gameplay, attributes, armor, and game-over flow do not exist. |
-| Enemies and boss | One normal melee enemy implemented and integrated in Main; manual acceptance pending | Cursed Castle Guard (`CastleGuard` internally) has original 24-frame pixel art plus a reference board, centralized tuning, Idle/Patrol/Chase/Attack/Hurt/Death, heavy diagonal sword art, grounded dissolve/SceneTree cleanup, wall/edge safety, fair 0.35/0.10/0.45-second sword timing, two staged Main instances, and an independent combat test room. The second normal enemy, elite, and Boss remain unimplemented. |
-| Level and game flow | Main combat laboratory implemented; formal rooms planned | Main has floor, two platforms, boundary walls, one respawn marker, Player/HUD, and two spaced Cursed Castle Guards under `World/Enemies`. The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
+| Combat foundation | Implemented minimum; manual feedback acceptance pending | Typed Health/Hitbox/Hurtbox responsibilities, named layers, faction/dedup rejection, Player 1/2-point attacks, and one five-point sword source are tested. Player non-lethal Hurt now cancels actions, uses source-derived collision-safe knockback, and grants a 0.50-second multi-source grace window. Attributes, armor, and game-over flow do not exist. |
+| Enemies and boss | One normal melee enemy implemented and grouped in Main; manual acceptance pending | Cursed Castle Guard (`CastleGuard` internally) has original 24-frame art, centralized five-point sword tuning, six AI states, fair 0.35/0.10/0.45-second timing, five staged Main instances in four groups, and a one-enemy combat room. The second normal enemy, elite, and Boss remain unimplemented. |
+| Level and game flow | Main combat laboratory with activation groups implemented; formal rooms planned | Main has floor, two platforms, walls, one respawn marker, Player/HUD, and five Guards in four one-shot ActivationArea groups (1/1/1/2). The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
 | Export/release | Pending verification / not configured | No `export_presets.cfg` was found during the audit. |
 
 ### Current validation baseline
 
-On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh headless editor import, independently started the Cursed Castle Guard, combat room, and configured Main scenes, and passed all twenty-one repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. The passing checks cover the prior Health/HUD/death/respawn/player asset/movement/action baseline plus Hitbox/Hurtbox faction and deduplication contracts, Player 1/2-point active windows, 24 enemy animation PNGs and their imports, the generated reference board, heavy-cut/dissolve visual invariants, five enemy animations and exact 0.90-second attack timing, patrol/edge/chase/fair attack/Hurt/Death states, body-contact safety, enemy damage, full Player death-presentation/respawn, and the configured F5 Main's live Player/Camera/two-enemy composition. Runtime evidence recorded the near Guard alive/visible in Chase with `walk`, 3/3 Health and a Player target while the far Guard remained alive/visible in Idle with `idle`, 3/3 Health and no target.
+On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh import, started Main/Player/Guard/combat-room scenes, and passed all twenty-two repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. Coverage includes the previous Health/HUD/death/respawn/movement/action/assets baseline plus three production Hurt frames, 16 FPS metadata, action interruption, source-directed grounded/airborne knockback, wall collision, 0.50-second multi-source invulnerability, Death precedence, centralized five-point Guard damage, four persistent activation groups, five saved floor-safe Guard spawns, staged AI activation, and one-enemy combat-room preservation. Main runtime evidence recorded four groups/five Guards, positions `(500,610)`, `(1030,610)`, `(1500,610)`, `(2070,610)`, `(2310,610)`, damage 5, Group01 active, and later groups inactive at startup.
 
 The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77 px rise, 281.92 px debug-double-jump range / 167.10 px rise, and 344.00 px of four-Air-Dash action travel. The total takeoff-to-landing Air-Dash measurement alternated between 360.33 px and 362.22 px across three consecutive audit runs; this approximately one-physics-frame variation is recorded as a test determinism issue rather than a changed movement parameter.
 
@@ -53,10 +53,10 @@ The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77
 1. Complete a manual Godot editor/playtest acceptance pass for the latest continuous Ground/Air Dash, Attack chaining, Dash Attack handoff, stamina recovery, wall contact, both facings, HUD behavior, and animation readability.
 2. Decide whether continuous airborne Dash and the current 100/25 stamina economy are accepted design baselines before building levels around the measured reach.
 3. Replace the debug-default double jump with the planned ability-unlock/session-state path before treating progression as implemented.
-4. Replace the remaining `hurt` placeholder only when its Gameplay state enters an approved milestone; manually accept the new production death body/ghost readability at game scale.
+4. Manually accept the new production Hurt silhouettes, flash strength, 2.5-pixel Camera shake, 180/-110 knockback, and existing death body/ghost readability at gameplay scale.
 5. Resolve or tolerance-bound the 360.33–362.22 px landing-total measurement variation; the 344.00 px Dash-only envelope is currently stable.
 6. Bring the M0 metadata/status in `game_design.md`, `technical_architecture.md`, and `known_issues.md` up to date in a separate documentation-only task.
-7. Manually tune Cursed Castle Guard detection, reach, 0.35-second telegraph readability, knockback, 3-Health durability, and late dissolve contrast against real Player inputs/backgrounds; automated correctness does not establish encounter feel.
+7. Manually tune Cursed Castle Guard detection, five-point pressure, 0.35-second telegraph readability, 3-Health durability, group spacing, and late dissolve contrast against real Player inputs/backgrounds; automated correctness does not establish encounter feel.
 8. Keep Main and the dedicated combat room classified as laboratory/placeholder presentation, not finished room or UI content.
 
 ### Next-stage plan — requires explicit approval
@@ -65,6 +65,77 @@ The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77
 2. **Documentation alignment:** update the stale M0 design/architecture/known-issues metadata without changing gameplay, and decide whether a separate project plan is needed.
 3. **Cursed Castle Guard acceptance gate:** manually verify heavy-cut readability, both facings, edge behavior, all Player evasion verbs, 1/2-point attacks, Hurt interruption, grounded dissolve Death, and Reset behavior before tuning or reusing the enemy contract.
 4. **Content after explicit approval:** the next normal enemy should create a different spatial decision rather than copying the Guard. The second normal enemy, elite, three main rooms, boss arena, Boss, drops, and progression remain unauthorized and unstarted.
+
+## 2026-07-23 — Player Hurt feedback, Guard damage, and gray-box encounter density (preflight)
+
+Status: complete — implementation and automated regression passed; manual feel/visual acceptance pending
+
+### Read-only findings
+
+- Git preflight: clean `master` at `37d116c feat: integrate cursed guards into main scene`, one local commit ahead of `origin/master`.
+- Player Health is composed through `HealthComponent` with the unchanged default/runtime maximum and current value of 100/100. The Player has only `ALIVE` and `DEAD` life states; accepted Hurtbox contacts currently emit `damage_received` but do not enter a Hurt state, cancel actions, apply knockback, grant invulnerability, flash the sprite, or shake Camera2D.
+- `hurt` already exists in the Player SpriteFrames contract as three non-looping frames, but it runs at 12 FPS and references `placeholder_hurt_01..03.png`. Those images are generated by shifting existing Attack/reference frames; they are explicitly placeholder art, not a production recoil sequence.
+- Cursed Castle Guard sword damage has one tuning authority: `resources/enemies/castle_guard_config.tres` currently sets `attack_damage = 1`; `castle_guard.gd` copies that value into the sword Hitbox and uses it for each new active window. No separate gameplay script hardcodes the production sword value.
+- Hitbox target memory already prevents one `attack_id` from damaging the same Hurtbox on multiple active frames. There is no Player-side invulnerability, so different attack ids or multiple enemies can currently apply damage without a shared grace window.
+- F5 Main contains exactly two Guard instances at `(500, 610)` and `(850, 610)`, directly under `World/Enemies`. There is no encounter group, ActivationArea, persistent activation flag, active-enemy cap, or encounter debug authority.
+- The gray-box floor spans approximately 2600 horizontal pixels (`-100..2500`), about 2.03 viewports at 1280px rather than the suggested 3–5-screen case. The density target is therefore five Guards across four hand-authored groups (1/1/1/2), not six to eight.
+- Pre-change runtime audit passed: configured Main loaded both Guards and the active Player Camera, with the near Guard in Chase and the far Guard Idle; no baseline Godot error or warning was emitted.
+
+### Goals and planned files
+
+- Replace the three placeholder Hurt frames with original 64×64 production pixel poses at 16 FPS, archive the exact placeholder sources under `reference/deprecated_hurt_placeholder/`, rebuild SpriteFrames, and retain Nearest/lossless/mipmap-free imports.
+- Add a focused typed Player Hurt reaction component/config for one accepted hit: source-derived knockback, 0.16-second stun plus 0.08-second recovery, 0.50-second invulnerability, action/buffer/Hitbox cancellation, non-lethal Hurt arbitration, restrained flash and Camera shake, and safe death/respawn cleanup. Global Hit Stop will remain disabled unless tests establish a safe local implementation.
+- Change the single Guard damage resource value from 1 to 5 and expose the actual damage in debug output without duplicating it in AI code.
+- Replace Main's flat two-enemy container with four hand-authored activation groups containing five total instances. Add one reusable encounter controller/scene contract that keeps inactive AI paused, activates once when Player enters, and reports group/active/alive/attacking counts.
+- Planned implementation areas: Player scene/scripts/resource, Hurtbox invulnerability support, Player asset tooling/resources/tests, Guard config/debug/tests, Main encounter composition/controller/tests, README, five existing design/log documents, and new `docs/design/encounter_design_spec.md`.
+
+### Verification plan
+
+1. Generate/archive/import Hurt PNGs and rebuild Player SpriteFrames with exact Godot 4.7.1; validate frame count, 16 FPS, binary transparency, common baseline, distinct recoil silhouettes, and 48px readability.
+2. Test grounded/airborne source-directed knockback, wall collision, Attack/Dash/Dash-Attack cancellation, buffer/Hitbox cleanup, 0.50-second multi-source rejection, flash/Camera restoration, lethal Death priority, and respawn reset.
+3. Verify Guard windup remains damage-free, `attack_03/04` deal one deduplicated 5-point hit, body contact remains harmless, and 100 Health permits exactly twenty such hits.
+4. Verify five saved Main Guards, four persistent activation groups, staged activation, no opening whole-map aggro, no spawn overlap, maximum two attackers per group, safe floor positions, and one-enemy combat-room preservation.
+5. Run all repository scripts, isolated Player/Guard/combat-room scenes, configured Main, graphical captures, log scans, and `git diff --check`.
+
+### Scope check
+
+- This revision changes only Player Hurt feedback, the existing Cursed Castle Guard damage value, and first-enemy gray-box encounter density/activation.
+- It does not add another enemy type, elite, Boss, drop, experience, random/infinite spawning, object pooling, complex squad tactics, new Player skill, or formal production level.
+
+### Delivered implementation
+
+- Replaced the placeholder Hurt contract with three original 64×64 frames at 16 FPS. The sequence uses a real rearward torso/hood shift, unstable dagger arms, a lifted/recovering stance, common y=60 ground baseline, binary transparency, and Nearest imports. The exact former placeholder PNGs remain under `assets/sprites/player/assassin/reference/deprecated_hurt_placeholder/`.
+- Added typed `PlayerHurtConfig` and `PlayerHurtController`, composed as `Player/HurtController`. Accepted non-lethal hits cancel all action state/buffers/Hitboxes, enter `LifeState.HURT`, play the production animation, apply 180 px/s source-opposed horizontal and -110 px/s vertical knockback (70% vertical in air), lock control for 0.16 seconds plus 0.08-second recovery, and move only through Player velocity plus `move_and_slide()`.
+- Extended `HurtboxComponent` with synchronous invulnerability rejection and a typed state signal. One accepted hit grants 0.50 seconds; distinct sources in the same or later physics frames are rejected until expiry. Death cancels Hurt feedback, and respawn clears invulnerability, sprite modulation, camera offset, timers, and history.
+- Added 0.08-second pale-red flash/flicker and a deterministic decaying 2.5-pixel, 0.10-second Camera2D shake. Reserved `hurt_audio_requested`; no fake audio was added. Global Hit Stop remains disabled because existing death/ghost/respawn timers must not be frozen by a global time-scale mutation.
+- Changed the one Guard tuning authority to `attack_damage = 5`; AI active windows and both debug views read the same resource value. Player maximum Health stays 100, so hits 1–19 are survivable and hit 20 is lethal from full Health.
+- Added reusable `EncounterGroup` activation gating and replaced flat `World/Enemies` with four Main groups containing five total Guards (1/1/1/2). Inactive groups keep their Guard visuals in Idle while AI/detection are paused; Player entry activates once for the scene run. Authored spacing and the 260-pixel lose range prevent startup whole-map aggro, while the only two-enemy group caps local participation at two.
+- Expanded closable diagnostics with Player Health/LifeState, invulnerability/stun remaining, last damage/source/knockback and encounter activation/engaged/alive/attacking counts plus actual Guard damage. The dedicated combat room still contains exactly one Guard.
+
+### Commands and actual results
+
+1. Asset and parse pipeline with exact `4.7.1.stable.official.a13da4feb`:
+   - `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd -- --hurt-production-only`: exit 0; six outputs (three production frames plus three archived placeholders), zero failures.
+   - `Godot --headless --editor --path . --import --quit`: exit 0; all six PNGs imported and new classes registered without diagnostics.
+   - `Godot --headless --path . --script scripts/tools/build_player_animation_assets.gd`: exit 0; `PLAYER_SPRITE_FRAMES_BUILD: OK`.
+2. Focused runtime checks:
+   - `test_player_hurt_reaction.gd`: PASS for production art, action interruption, collision wall knockback, multi-source invulnerability, airborne scaling, and Death precedence.
+   - `test_castle_guard.gd`: PASS with 0.35-second safe windup and one deduplicated five-point active hit.
+   - `test_main_enemy_integration.gd`: PASS for configured F5 scene, four groups/five Guards, staged activation, Hurt, five-point damage, and enemy Death cleanup.
+   - `test_combat_test_room.gd`: PASS; its one Guard still drives damage, Player death presentation, and respawn.
+3. Full regression:
+   - All 22 `tests/**/*.gd` scripts exited 0. Log scan found no `SCRIPT ERROR`, `ERROR:`, `WARNING:`, parse error, or missing resource.
+   - Stable movement metrics remain single jump 153.59 px / 83.77 px rise, debug double jump 281.92 px / 167.10 px rise, four-Air-Dash action travel 344.00 px; this run's landing total was 362.22 px.
+4. Startup checks:
+   - Configured Main, independent `combat_test_room.tscn`, and independent `castle_guard.tscn` each exited 0 under `--headless --quit-after 3` with no diagnostics.
+   - Configured Main also completed a non-headless 120-frame launch on GL Compatibility / Apple M4 (`OpenGL API 4.1 Metal`) with exit 0 and no error/warning output.
+   - Final PNG audit: all three Hurt sources are distinct 64×64 files (808/830/819 bytes), imported Lossless with mipmaps disabled; the focused test also passed byte-identical placeholder archival and 48×48 nearest-neighbor readability.
+
+### Manual acceptance still required
+
+- At gameplay scale, judge whether all three Hurt poses, flash, and shake communicate impact without reading as Death or excessive screen motion.
+- Verify grounded and airborne knockback feel fair from both sides, especially next to walls and during Player Attack/Dash/Dash Attack.
+- Traverse all four groups and confirm the 1/1/1/2 pacing leaves enough stamina recovery space and the final pair does not feel like unavoidable synchronized pressure.
 
 ## 2026-07-23 — Main scene Cursed Castle Guard integration audit (preflight)
 

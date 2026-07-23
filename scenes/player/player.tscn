@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ilk7wlpsv544"]
+[gd_scene load_steps=19 format=3 uid="uid://ilk7wlpsv544"]
 
 [ext_resource type="Script" uid="uid://b67b3qhsr1bvs" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/player/player_movement_config.tres" id="2_config"]
@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/death/ghost_hooded_face.png" id="10_ghost"]
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="11_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="12_hitbox"]
+[ext_resource type="Script" path="res://scripts/player/player_hurt_controller.gd" id="13_hurt_controller"]
+[ext_resource type="Resource" path="res://resources/player/player_hurt_config.tres" id="14_hurt_config"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 52)
@@ -118,6 +120,11 @@ script = ExtResource("8_health")
 unique_name_in_owner = true
 script = ExtResource("5_action")
 action_config = ExtResource("6_action_config")
+
+[node name="HurtController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("13_hurt_controller")
+config = ExtResource("14_hurt_config")
 
 [node name="DeathSequence" type="Node" parent="."]
 unique_name_in_owner = true

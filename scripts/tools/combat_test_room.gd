@@ -53,18 +53,20 @@ func _process(_delta: float) -> void:
 	var player_health: HealthComponent = player.health_component
 	var enemy_health: HealthComponent = enemy.health_component
 	debug_label.text = (
-		"PLAYER HP %d/%d  STATE %s  ANIM %s\n"
-		+ "GUARD HP %d/%d  STATE %s  ANIM %s\n"
+		"PLAYER HP %d/%d  STATE %s  ANIM %s  INVULN %.2fs\n"
+		+ "GUARD HP %d/%d  STATE %s  ANIM %s  DAMAGE %d\n"
 		+ "PLAYER HIT A:%s D:%s  GUARD SWORD:%s  FACING %s"
 	) % [
 		player_health.current_health,
 		player_health.max_health,
 		player.get_life_state_name(),
 		player.animation_controller.animated_sprite.animation,
+		player.hurt_controller.get_invulnerability_remaining(),
 		enemy_health.current_health,
 		enemy_health.max_health,
 		enemy.get_state_name(),
 		enemy.animated_sprite.animation,
+		enemy.get_attack_damage(),
 		"ON" if player.action_controller.attack_hitbox.is_active else "off",
 		"ON" if player.action_controller.dash_attack_hitbox.is_active else "off",
 		"ON" if enemy.is_attack_window_active() else "off",

@@ -1,12 +1,12 @@
 # Player Action/Combat Interface Specification
 
-Version: 0.4 — Castle Guard damage integration
+Version: 0.5 — Player Hurt reaction and invulnerability
 Date: 2026-07-23
-Status: Player Attack/Dash Attack hitboxes integrated; no combo tree or invulnerability
+Status: Player Attack/Dash Attack and non-lethal Hurt integrated; no combo tree
 
 ## Scope boundary
 
-This document defines the Player-facing action interface and its narrow integration with the minimal combat foundation. Damage remains outside movement and animation ownership: `PlayerActionController` opens composed Hitbox nodes only when the presentation controller reports approved effective frames. The delivered prototype still contains no Player invulnerability, formal Hurt state, Boss, status/attribute damage, or multi-animation combo tree.
+This document defines the Player-facing action interface and its narrow integration with the minimal combat foundation. Damage remains outside movement and animation ownership: `PlayerActionController` opens composed Hitbox nodes only when the presentation controller reports approved effective frames, while `PlayerHurtController` reacts to accepted hostile contacts. The delivered prototype still contains no Boss, armor/status formula, or multi-animation combo tree.
 
 ## Basic Attack
 
@@ -53,15 +53,31 @@ This is repetition of one basic Attack, not a formal combo tree: there are no br
 death > hurt > dash_attack > attack > ground_dash/air_dash > locomotion
 ```
 
-Player Hurt remains presentation-only placeholder art; Player Death is an active Gameplay state. In the current Gameplay prototype:
+Player Hurt is a formal `LifeState.HURT`; Player Death remains higher priority. In the current Gameplay prototype:
 
 - locomotion cannot cancel Attack or Dash Attack;
 - Dash cannot cancel Attack;
 - Attack cannot cancel Dash Attack;
 - a legal Attack buffer may repeat only Attack;
 - Dash Attack completion either consumes one legal Dash follow-up from actual contact state or restores grounded/airborne locomotion.
+- accepted non-lethal damage cancels Attack, Ground/Air Dash, Dash Attack, their input buffers, and both Player Hitboxes before the 3-frame Hurt animation starts;
+- lethal damage enters Death directly and never applies the ordinary Hurt impulse.
 
 Changing these cancellation rules requires a later explicit design decision.
+
+## Hurt reaction and grace window
+
+`PlayerHurtController` owns the focused reaction configuration; `Player` remains responsible for `CharacterBody2D.velocity` and `move_and_slide()`:
+
+- horizontal knockback: 180 px/s away from `HurtboxComponent.hit_received.source_position`;
+- vertical knockback: -110 px/s on ground and 70% of that impulse in air;
+- 0.16-second hard stun followed by 0.08-second horizontal recovery;
+- 0.50-second Hurtbox invulnerability, rejecting even distinct attack ids or simultaneous enemy sources;
+- 0.08-second pale-red flash and 0.10-second, 2.5-pixel decaying Camera2D shake;
+- reserved `hurt_audio_requested(damage)` signal; no placeholder sound is authored;
+- global hit stop is deliberately disabled because this prototype's death/ghost/respawn sequence uses timers that must not be globally frozen.
+
+The production `hurt` animation contains three original 64×64 frames at 16 FPS and is horizontally flipped with the rest of the Player. The old three shifted placeholder frames remain byte-identical under `reference/deprecated_hurt_placeholder/` for audit history.
 
 ## Stamina boundary
 
@@ -69,4 +85,4 @@ Changing these cancellation rules requires a later explicit design decision.
 
 ## Diagnostics and acceptance
 
-The optional Main debug HUD can be disabled and reports current Attack frame, both buffer flags/timers, Dash type/number/direction, chain-window state, and measured input-to-`attack_02` time. The dedicated combat room additionally reports both Player hitboxes and the enemy sword window. Automated tests cover immediate dispatch, every four-frame pose, a single early Attack buffer, one-time consumption, four deliberate repeated Attacks, locomotion/facing locks, the approximately 0.25-second Dash Attack, no-double-charge transition, paid Ground/Air Dash follow-up, 1/2-point damage, active-window closure, facing, and per-attack target deduplication.
+The optional Main debug HUD can be disabled and reports current Attack frame, buffers/timers, Dash state, Health/LifeState, invulnerability/stun remaining, last damage/source, and knockback velocity. The dedicated combat room additionally reports both Player hitboxes, the enemy sword window, and its actual configured damage. Automated tests cover the existing action contracts plus grounded/airborne source-derived Hurt, collision-safe wall knockback, action interruption, multi-source invulnerability, animation metadata, and lethal Death precedence.

@@ -5,7 +5,7 @@ extends Resource
 
 @export_category("Vitals")
 @export_range(1, 100, 1) var max_health: int = 3
-@export_range(1, 100, 1) var attack_damage: int = 1
+@export_range(1, 100, 1) var attack_damage: int = 5
 
 @export_category("Locomotion")
 @export var patrol_speed: float = 45.0

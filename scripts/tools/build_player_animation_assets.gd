@@ -9,6 +9,7 @@ const ContactSheet: Script = preload("res://scripts/tools/player_animation_conta
 const M1AnimationGenerator: Script = preload("res://scripts/tools/pixel_player_m1_animation_generator.gd")
 const M1ContactSheet: Script = preload("res://scripts/tools/player_m1_animation_contact_sheet.gd")
 const DeathGenerator: Script = preload("res://scripts/tools/pixel_player_death_generator.gd")
+const HurtGenerator: Script = preload("res://scripts/tools/pixel_player_hurt_generator.gd")
 
 
 func _initialize() -> void:
@@ -16,6 +17,12 @@ func _initialize() -> void:
 
 
 func _build() -> void:
+	if OS.get_cmdline_user_args().has("--hurt-production-only"):
+		var hurt_results: Dictionary[String, int] = HurtGenerator.save_all()
+		var hurt_failures: int = _count_failures(hurt_results)
+		print("PLAYER_HURT_EXPORT: %d files, %d failures" % [hurt_results.size(), hurt_failures])
+		quit(0 if hurt_failures == 0 else 1)
+		return
 	if OS.get_cmdline_user_args().has("--death-presentation-only"):
 		var death_results: Dictionary[String, int] = DeathGenerator.save_all()
 		var death_failures: int = _count_failures(death_results)

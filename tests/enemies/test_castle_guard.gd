@@ -74,9 +74,9 @@ func _test_fair_attack(player: Player, guard: CastleGuard) -> void:
 	await _wait_physics_frames(18)
 	_expect(player.health_component.current_health == health_before, "Guard damaged Player before 0.35s windup")
 	await _wait_until_health_changes(player.health_component, health_before, 20)
-	_expect(player.health_component.current_health == health_before - 1, "Guard active frames did not deal exactly one damage")
+	_expect(player.health_component.current_health == health_before - 5, "Guard active frames did not deal exactly five damage")
 	await _wait_physics_frames(34)
-	_expect(player.health_component.current_health == health_before - 1, "One sword attack damaged Player more than once")
+	_expect(player.health_component.current_health == health_before - 5, "One sword attack damaged Player more than once")
 	_expect(not guard.is_attack_window_active(), "Sword Hitbox remained active during/after recovery")
 
 

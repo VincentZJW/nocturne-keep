@@ -44,11 +44,11 @@ func _test_body_contact_has_no_damage(player: Player, guard: CastleGuard) -> voi
 
 
 func _test_enemy_damage_death_and_respawn(player: Player, guard: CastleGuard) -> void:
-	player.health_component.set_current_health(1)
+	player.health_component.set_current_health(guard.get_attack_damage())
 	guard.attack_hitbox.global_position = player.hurtbox.global_position
-	guard.attack_hitbox.begin_attack(9901, 1)
+	guard.attack_hitbox.begin_attack(9901, guard.get_attack_damage())
 	_expect(guard.attack_hitbox.try_hit(player.hurtbox), "Guard sword did not reach Player Hurtbox")
-	_expect(player.health_component.current_health == 0, "Guard sword did not deal one lethal damage")
+	_expect(player.health_component.current_health == 0, "Guard sword did not deal one five-point lethal hit")
 	_expect(player.is_dead(), "Lethal enemy damage did not enter Player death state")
 	_expect(player.hurtbox.health_component.is_dead() and player.is_dead(), "Player death state and Health diverged")
 	guard.attack_hitbox.end_attack()
