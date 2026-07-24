@@ -26,3 +26,4 @@ initial_idle_duration = 0.55
 patrol_turn_pause = 0.25
 minimum_attack_distance = 34.0
 close_retreat_speed = 32.0
+direction_lock_duration = 0.15

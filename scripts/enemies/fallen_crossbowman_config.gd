@@ -4,6 +4,7 @@ extends EnemyGroundConfig
 ## Ranged cadence and projectile tuning for the first grounded shooter.
 
 @export var aim_duration: float = 0.60
+@export var aim_lock_duration: float = 0.18
 @export var reload_duration: float = 1.50
 @export var projectile_speed: float = 260.0
 @export_range(1, 100, 1) var projectile_damage: int = 6

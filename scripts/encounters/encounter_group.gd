@@ -6,7 +6,7 @@ extends Node2D
 signal encounter_activated(encounter_name: StringName)
 
 @export var encounter_name: StringName = &"EncounterGroup"
-@export_range(1, 3, 1) var simultaneous_attack_limit: int = 2
+@export_range(1, 4, 1) var simultaneous_attack_limit: int = 2
 @export var start_activated: bool = false
 @export_node_path("Area2D") var activation_area_path: NodePath = NodePath("ActivationArea")
 @export_node_path("Node2D") var enemies_root_path: NodePath = NodePath("Enemies")
@@ -82,7 +82,8 @@ func get_engaged_enemy_count() -> int:
 			continue
 		if enemy.get_state_name() in [
 			&"Chase", &"Attack", &"Aim", &"Shoot", &"Reload", &"Retreat",
-			&"Block", &"Turn", &"GuardBreak", &"Hurt",
+			&"Block", &"Turn", &"GuardBreak", &"Hurt", &"Track", &"DiveWindup",
+			&"Dive", &"GroundStun", &"ReturnToAir",
 		]:
 			count += 1
 	return count
@@ -91,7 +92,7 @@ func get_engaged_enemy_count() -> int:
 func get_attacking_enemy_count() -> int:
 	var count: int = 0
 	for enemy: EnemyCombatant in get_enemies():
-		if is_instance_valid(enemy) and enemy.get_state_name() in [&"Attack", &"Shoot"]:
+		if is_instance_valid(enemy) and enemy.get_state_name() in [&"Attack", &"Shoot", &"Dive"]:
 			count += 1
 	return count
 

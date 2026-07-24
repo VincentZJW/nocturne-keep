@@ -1,0 +1,99 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/bosses/fallen_gate_knight.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://resources/bosses/fallen_gate_knight_config.tres" id="2_config"]
+[ext_resource type="SpriteFrames" path="res://resources/bosses/fallen_gate_knight_sprite_frames.tres" id="3_frames"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://scripts/combat/shield_component.gd" id="7_shield"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(38, 58)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurtbox"]
+size = Vector2(52, 66)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_melee"]
+size = Vector2(100, 42)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_shockwave"]
+size = Vector2(130, 26)
+
+[node name="FallenGateKnight" type="CharacterBody2D"]
+floor_snap_length = 6.0
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_boss")
+config = ExtResource("2_config")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+position = Vector2(0, -4)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+unique_name_in_owner = true
+texture_filter = 1
+sprite_frames = ExtResource("3_frames")
+animation = &"idle_shielded"
+autoplay = "idle_shielded"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 15)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_health")
+
+[node name="ShieldComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_shield")
+center_tolerance = 10.0
+body_path = NodePath("..")
+facing_root_path = NodePath("../FacingRoot")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, 12)
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5_hurtbox")
+faction = &"enemy"
+hit_policy_path = NodePath("../ShieldComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("RectangleShape2D_hurtbox")
+
+[node name="FacingRoot" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="MeleeHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(65, 4)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_melee"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/MeleeHitbox"]
+disabled = true
+shape = SubResource("RectangleShape2D_melee")
+
+[node name="ShockwaveHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(90, 28)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_shockwave"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/ShockwaveHitbox"]
+disabled = true
+shape = SubResource("RectangleShape2D_shockwave")

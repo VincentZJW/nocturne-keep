@@ -1,6 +1,6 @@
 # Player Movement and Level Metrics
 
-Version: 1.0
+Version: 1.1
 Date: 2026-07-22
 Status: measured prototype guidance; no map redesign performed
 
@@ -31,18 +31,21 @@ Current collision geometry in `scenes/main/main.tscn`:
 
 | Element | Horizontal span | Top Y | Relative rise from previous surface |
 | --- | --- | ---: | ---: |
-| Floor | -100 to 2500 | 640 | — |
+| Floor | -100 to 6600 | 640 | — |
 | Platform A | 760 to 980 | 508 | 132 px above floor |
-| Platform B | 1185 to 1375 | 426 | 82 px above Platform A; 214 px above floor |
+| Platform B | 2685 to 2875 | 426 | 214 px above floor; Crossbow staging |
+| Platform C | 4310 to 4530 | 458 | 182 px above floor; Group06 Crossbow |
+| Platform D | 5050 to 5270 | 438 | 202 px above floor; Group07 Crossbow |
+| Gargoyle perch | 3440 to 3680 | 328 | visual/World Dive collision surface |
+
+The first-level combat route now adds authored platforms centered at x=2780, 4420, and 5160 plus a Gargoyle perch at x=3560. These remain optional combat staging surfaces above the continuous floor. The Boss arena spans approximately x=5630..6480; checkpoint `(5480,612)` and Boss spawn `(6120,596)` are separated by enough horizontal room for all Player movement options and the Boss charge.
 
 Implications:
 
-- Both Platform A (220 px wide) and Platform B (190 px wide) are narrower than the 344 px four-Air-Dash envelope. A player already at a suitable height can pass either platform's full horizontal footprint without landing.
-- The A→B horizontal edge gap is 205 px, also below the chain envelope. Continuous Air Dash can bypass the intended intermediate landing rhythm between their edges.
-- A stationary single jump rises only 83.77 px. This is barely above the 82 px A→B elevation change and leaves about 1.77 px of vertical tolerance; it is not a robust production route at the measured 153.59 px horizontal range.
-- Debug double jump rises 167.10 px, enough for floor→A (132 px), but not floor→B (214 px). Continuous horizontal Air Dash adds no lift, so it does not by itself make floor→B reachable without an elevation source.
-- From the current spawn center at x=320 to Platform A's left edge is 440 px, more than the isolated 344 px and measured 362.22 px takeoff-to-landing Air-Dash envelope. The chain does not make that stationary direct transfer automatic.
-- The current floor is continuous under both platforms, so both are already optional visual/test platforms rather than mandatory main-route gates. No existing platform was moved or raised in this task.
+- Every combat platform is narrower than the measured 344 px four-Air-Dash envelope, so a player at suitable height can cross its footprint without landing.
+- The continuous floor is the required main route. Elevated Crossbow positions are optional approach problems and never require Air Dash to continue the level.
+- The 182–214 px floor-to-platform rises exceed a stationary single jump and usually require the debug double jump or chained mobility to reach directly; Crossbowmen can still be defeated from the floor when line of attack permits.
+- Encounter safe gaps are substantially longer than one full-stamina Dash chain, so an early chain cannot skip all activation boundaries or enter the Boss room from spawn.
 
 ## Route-design guidance
 

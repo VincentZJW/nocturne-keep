@@ -95,8 +95,9 @@ func _process_aim(delta: float) -> void:
 		transition_state(RETREAT)
 		play_animation(&"walk")
 		return
-	set_facing_direction(signf(offset.x))
 	state_timer = maxf(0.0, state_timer - delta)
+	if state_timer > ranged_config.aim_lock_duration:
+		set_facing_direction(signf(offset.x))
 	if state_timer <= 0.0:
 		_enter_shoot()
 

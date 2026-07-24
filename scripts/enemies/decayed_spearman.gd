@@ -16,6 +16,7 @@ const ATTACK_HIT_FRAMES: Array[int] = [3, 4]
 
 var next_attack_id: int = 1
 var current_attack_id: int = 0
+var attack_direction_locked: bool = false
 
 
 func _on_common_ready() -> void:
@@ -37,6 +38,7 @@ func _process_enemy_state(delta: float) -> void:
 			_process_chase(delta)
 		ATTACK:
 			velocity.x = move_toward(velocity.x, 0.0, config.ground_deceleration * delta)
+			_update_attack_direction_lock()
 
 
 func _process_idle(delta: float) -> void:
@@ -107,8 +109,19 @@ func _enter_attack() -> void:
 	velocity.x = 0.0
 	current_attack_id = next_attack_id
 	next_attack_id += 1
+	attack_direction_locked = false
 	attack_hitbox.end_attack()
 	play_animation(&"attack_thrust", true)
+
+
+func _update_attack_direction_lock() -> void:
+	if attack_direction_locked or not has_valid_target():
+		return
+	# Three equal windup frames span 0.45 s; the final 0.15 s is frame 02 (zero-based).
+	if animated_sprite.frame >= 2:
+		attack_direction_locked = true
+		return
+	set_facing_direction(signf(target.global_position.x - global_position.x))
 
 
 func _on_attack_cancelled() -> void:

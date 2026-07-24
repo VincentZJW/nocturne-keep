@@ -8,8 +8,10 @@ extends Label
 @export var details_expanded: bool = false
 @export_range(0.10, 0.20, 0.01) var refresh_interval: float = 0.15
 @export_node_path("Node2D") var encounters_root_path: NodePath = NodePath("../../../World/Encounters")
+@export_node_path("FallenGateKnight") var boss_path: NodePath
 
 @onready var encounters_root: Node2D = get_node_or_null(encounters_root_path) as Node2D
+@onready var boss: FallenGateKnight = get_node_or_null(boss_path) as FallenGateKnight if not boss_path.is_empty() else null
 
 var _refresh_accumulator: float = 0.0
 
@@ -94,6 +96,11 @@ func _build_compact_text() -> String:
 
 func _build_expanded_text() -> String:
 	var lines: PackedStringArray = []
+	if boss != null and is_instance_valid(boss):
+		lines.append("BOSS  %s  ROOM %s  DEAD %s" % [
+			boss.get_debug_summary(), "locked" if boss.room_engaged else "open",
+			"yes" if boss.is_dead() else "no",
+		])
 	for child: Node in encounters_root.get_children():
 		var encounter: EncounterGroup = child as EncounterGroup
 		if encounter == null:
@@ -141,5 +148,7 @@ func _get_short_enemy_name(enemy_type: StringName) -> String:
 			return "Spearman"
 		&"FallenCrossbowman":
 			return "Crossbowman"
+		&"GargoyleSentinel":
+			return "Gargoyle"
 		_:
 			return String(enemy_type)

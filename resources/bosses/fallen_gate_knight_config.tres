@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="FallenGateKnightConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/bosses/fallen_gate_knight_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+display_name = &"FallenGateKnight"
+display_name_en = "FALLEN GATE KNIGHT"
+display_name_zh = "堕落门卫骑士"
+max_health = 18
+shield_health = 6
+shield_bash_damage = 8
+sword_slash_damage = 10
+heavy_overhead_damage = 15
+charge_thrust_damage = 12
+shockwave_damage = 8
+shielded_move_speed = 52.0
+unshielded_move_speed = 68.0
+acceleration = 340.0
+deceleration = 480.0
+gravity = 980.0
+detection_range = 520.0
+attack_range = 88.0
+shield_break_stun = 0.9
+phase_transition_duration = 1.1
+turn_duration = 0.18
+attack_recovery = 0.48
+shield_break_flash_duration = 0.07
+shield_break_flash_alpha = 0.35

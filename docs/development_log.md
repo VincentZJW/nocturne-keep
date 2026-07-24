@@ -2840,3 +2840,96 @@ Status: complete — unified source routing, two-layer attack-id deduplication, 
 - Manually repeat the front Dash test from both sides at normal input speed and judge the reduced flash on the target display. Automated geometry, routing, state, and original-resolution rendering are verified; subjective brightness still requires user acceptance.
 - The shared Shield Guard scene intentionally has one Hurtbox detector rather than separate physical Shield/Body Areas. Expanded `SH_DETECT/BODY_DETECT` fields describe the final unified route, not two independent damage writers.
 - The consumed-key ledger retains the latest 64 attack keys per Shield Guard, which is ample for the encounter and bounded against unbounded growth. Shield reset clears it; shield break does not.
+
+## 2026-07-24 — First-level enemy roster and Fallen Gate Knight Boss (preflight)
+
+Status: in progress — implementation and acceptance evidence pending
+
+### Goal
+
+- Add the airborne `GargoyleSentinel` normal enemy with a readable Dive → GroundStun → Return loop.
+- Add the two-phase `FallenGateKnight` Boss with independently routed Body/Shield Health, five distinct attack families, Boss HUD, arena gates, checkpoint/reset flow, and level-complete exit.
+- Expand configured F5 Main from four groups/nine enemies to seven groups/eighteen enemies, then place a separate Boss room after the normal-enemy route.
+- Preserve all approved Player, Shield Guard, normal-enemy, HUD, damage, death, and respawn behavior.
+
+### Read-only audit
+
+- `project.godot` resolves F5 to `res://scenes/main/main.tscn`; the authored viewport is 1280×720.
+- Main currently ends near x=2500, contains one Player spawn, four one-shot EncounterGroups, and nine normal enemies: Castle Guard ×3, Shield Guard ×2, Spearman ×2, Crossbowman ×2. It has no gargoyle, Boss, Boss room gates, pre-Boss checkpoint, Boss HUD, or level exit.
+- Existing combat composition is reusable: `EnemyCombatant`, `GroundEnemyBase`, `HealthComponent`, `HitboxComponent`, `HurtboxComponent`, and the corrected `ShieldComponent` already provide typed contracts, faction filtering, stable attack-id deduplication, and single-route Shield/Body damage.
+- Castle Guard, Shield Guard, Spearman, Crossbowman, Player Health, and Player 1/2 attack damage match the approved balance. Spearman lacks the requested 0.15-second late-windup direction lock; Crossbowman tracks continuously through Aim and lacks the requested final 0.18-second aim lock.
+- `PlayerRespawnController` currently owns one fixed `Marker2D` reference and has no checkpoint setter or Boss-reset handshake.
+- `EncounterGroup` supports mixed `EnemyCombatant` children but limits simultaneous attackers to three and its engaged/attacking state lists do not include Gargoyle states.
+- Current Main Debug uses typed enemy queries and compact/expanded text reuse. It needs only bounded Gargoyle/Boss fields; no new gameplay authority belongs in Debug UI.
+
+### Planned files and responsibilities
+
+- Gargoyle config/script/scene, generated transparent pixel frames, SpriteFrames, and focused tests: flight state, dive collision/damage, stun counter-window, return, hurt, and shatter death.
+- Fallen Gate Knight config/script/scene and art: Boss AI/presentation, shared ShieldComponent routing, phase transition, distinct attack windows, no-ghost death, and resettable instance lifecycle.
+- Boss room controller and Boss HUD: encounter locking, checkpoint selection, Player restore, Boss reset on Player respawn, signal-driven bars, gate-open message, and level-complete exit.
+- Main/encounters/debug: extend the graybox, author seven staged groups with eighteen normal enemies, add Gargoyle teaching space and a separate Boss arena, then surface concise debug state.
+- Existing Spearman/Crossbowman config and scripts: add only the missing direction/aim lock parameters without changing approved cadence or balance.
+- Tests, QA capture scripts/evidence, README, combat/roster/encounter/Boss specs, level metrics, and this log.
+
+### Verification plan
+
+1. Generate/import/build all art with exact Godot 4.7.1; validate frame names, transparency, nearest/lossless/no-mipmap imports, anchors, facings, and 48-pixel readability.
+2. Run focused component/enemy/Boss/room tests, updated Main integration tests, every independent scene, and the complete serial repository suite.
+3. Run configured F5 Main headlessly and graphically; verify seven encounter activations, all five normal types, Boss lock/phase/death/reset/exit, Player attacks/Hurt/death/respawn, HUD bindings, collision/camera, and zero final errors.
+4. Retain original-resolution configured-Main screenshots and log output under `docs/qa/`.
+
+### Scope guard
+
+- No flying-enemy variant, elite enemy, second Boss, third Boss phase, summons, experience, loot, inventory, equipment, save system, second level, or unrelated Player/balance redesign.
+
+### Delivered implementation
+
+- Added `GargoyleSentinelConfig`, a composed `GargoyleSentinel` scene, ten named animations, and 41 original 64×64 source frames. The state loop is Dormant/Wake → Track → 0.45-second DiveWindup with final 0.15-second lock → one-hit Dive → World-impact GroundStun 0.65 → ReturnToAir. Health 3, damage 7, 220-pixel detection, 45 hover speed, 300 Dive speed, 70-pixel return height, and 1.10-second cooldown are centralized in one Config.
+- Added a resettable `FallenGateKnight` Boss composed from the existing Health/Hitbox/Hurtbox and corrected ShieldComponent rather than a duplicate routing implementation. Body is 18, Shield is 6; Bash/Slash/Heavy/Charge/Shockwave damage is 8/10/15/12/8. All seven attack families use stable ids, bounded active frames, faction filtering, and CharacterBody collision motion.
+- Authored 18 Boss animations and 90 original 96×96 source frames. Phase 1 cycles Shield Bash, Sword Slash, and Heavy Overhead. Shield zero has no Body overflow, plays a 0.90-second ShieldBreak plus 1.10-second PhaseTransition, permanently removes defense, and enters faster Phase 2 with Combo Slash, Jump Smash, Charge Thrust, and Shockwave Strike. Death drops the sword, collapses/dissolves, emits completion, and never creates a ghost.
+- Added `BossRoomController`: checkpoint `(5480,612)`, entry x=5600, entrance gate x=5630, Boss `(6120,596)`, exit gate x=6480, and exit trigger x=6540. Entry restores Player Health/Stamina, selects checkpoint, locks the arena, activates Boss, and shows HUD. Player respawn fully resets Boss and rearms entry. Boss death opens the exit and displays the bilingual gate message; exit displays level complete without loading another level.
+- Added a signal-driven Boss HUD for name, Body 18, and Shield 6. Shield zero hides the Shield bar and reports `BROKEN`; Boss death fades the panel. The HUD never owns combat values.
+- Expanded configured Main floor to x=-100..6600 with seven staged normal encounters and eighteen enemies: Guard 8, Shield 2, Spear 2, Crossbow 3, Gargoyle 3. Group sizes are 2/3/2/2/2/3/4; Group05 isolates Gargoyles, Group06/07 combine mechanics, and the Boss arena contains no normals.
+- Added only the missing approved direction rules to existing enemies: Spearman locks the final 0.15 seconds of windup and Crossbowman locks the final 0.18 seconds of Aim. All existing Health, damage, attack cadence, Player, Shield Guard, and HUD balance remains unchanged.
+- Extended Main Debug type naming and expanded summaries for Gargoyle Dive/stun/target/height and Boss Phase/Body/Shield/state/Hitbox/room/dead fields. Existing compact panel dimensions, F1/F2/F3 behavior, and Debug-off behavior remain unchanged.
+- Added independent Gargoyle/Boss test rooms, deterministic pixel/SpriteFrames builders, focused state/combat/room tests, source-asset validation, and configured-Main graphical capture tooling.
+
+### Commands and actual results
+
+1. Engine and baseline:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Baseline configured Main `--headless --path . --quit-after 120`: exit 0, no script/resource diagnostics.
+2. Asset production:
+   - `--script res://scripts/tools/pixel_first_level_boss_generator.gd`: `FIRST_LEVEL_BOSS_PIXEL_BUILD: OK (131 files)`.
+   - `--headless --path . --import`: exit 0.
+   - `--script res://scripts/tools/first_level_boss_sprite_frames_builder.gd`: `FIRST_LEVEL_BOSS_SPRITE_FRAMES_BUILD: OK`.
+   - `validate_first_level_boss_assets.gd`: PASS — 131 transparent frames, Gargoyle 64×64, Boss 96×96, lossless import, no mipmaps.
+3. Focused behavior:
+   - `test_gargoyle_sentinel.gd`: PASS — wake, 7-damage one-hit Dive, 0.65 GroundStun, return, death fall/shatter, no ghost.
+   - `test_first_level_boss.gd`: PASS — Main nodes/coordinates, entry restore/lock/HUD, Shield 6 routing/no overflow, Phase 2, all seven attack-family active windows and 8/10/15/12/8 damage, one-hit memory, death/exit, and full respawn reset.
+   - `test_main_enemy_integration.gd`: PASS — seven groups, eighteen mixed enemies, every saved Main PackedScene/resource, activation, Player 1/2 damage, normal-enemy death, Gargoyle shatter, HUD/respawn, and Boss room.
+4. Independent scenes:
+   - `gargoyle_sentinel.tscn`, `fallen_gate_knight.tscn`, `gargoyle_test_room.tscn`, and `boss_test_room.tscn` each ran headlessly for 120 frames with exit 0 and no final diagnostics.
+5. Complete regression:
+   - Exact Godot import plus every `.gd` under `tests/` in sorted serial order: `FINAL_TESTS count=31 failures=0`; captured output contained no final `SCRIPT ERROR`, `ERROR:`, or `WARNING:` diagnostics.
+   - Existing measured Player envelope remains unchanged: single jump 153.59 px, debug double jump 281.92 px, four-Air-Dash action range 344.00 px.
+6. Configured Main runtime:
+   - `Godot --headless --path . --quit-after 120 --log-file docs/qa/first_level_main_headless.log`: exit 0, no red errors.
+   - Graphical GL Compatibility run on Apple M4 using `capture_first_level_main.gd`: exit 0 and printed `FIRST_LEVEL_MAIN_QA: groups=7 normals=18 boss=BossIntro locked=true hud=true`.
+   - `docs/qa/first_level_main_gargoyle.png`: 1280×720, SHA-256 `80ef35cbcdfe721563267ad7e83d3996560d2c2b393e7a408e3b755d85ff5262`.
+   - `docs/qa/first_level_main_boss.png`: 1280×720, SHA-256 `c23d4d53469baa5a373bf1905f1fd4dcd8a8bfdebf9b7cf92bb388cb7a84f867`.
+   - Both images were inspected at original resolution: Gargoyle silhouettes, Boss/Player scale, arena gate, 18/6 Boss HUD, formal HP/Stamina HUD, and nearest-neighbor pixel edges are visibly present in the actual configured Main.
+
+### F5 Main synchronization
+
+- `application/run/main_scene` remains `res://scenes/main/main.tscn`.
+- Normal enemy instances live at `World/Encounters/EncounterGroup01..07/Enemies/*` and all reference shared current PackedScenes. Gargoyles are Group05 at `(3480,270)` / `(3680,270)` and Group07 at `(4960,300)`.
+- Boss integration is saved under `World/BossRoom`: `BossCheckpoint`, `EntryTrigger`, `EntranceGate`, `FallenGateKnight`, `ExitGate`, and `ExitTrigger`. `BossRoomController` is the Main sibling coordinator; `HUD/BossHealthHud` and `HUD/LevelCompletePanel` are the live presentation instances.
+- Player Camera limits now cover 0..6600; floor/world collision and the right boundary extend through the exit. Formal Health/Stamina bindings, Debug Canvas, Player death ghost, respawn controller, and all existing shared Player resources remain live.
+
+### Manual acceptance and known limitations
+
+- Manual play should judge Group06/07 multi-enemy fairness, Gargoyle windup/ground-stun readability, and each Boss telegraph at normal input speed. Automated tests prove timing, routing, collision interfaces, and saved integration, not subjective difficulty.
+- Boss Phase 2 is a deterministic four-attack cycle for gray-box reproducibility. There is no behavior tree, random weighting, third phase, summon, elite, reward, or audio pass.
+- Boss reset currently occurs after the existing complete Player death/ghost sequence; normal enemies already defeated before the checkpoint remain removed. This is intentional for the one-checkpoint first-level gray box.
+- The level-complete exit displays a terminal overlay and does not load a second level, as scoped.

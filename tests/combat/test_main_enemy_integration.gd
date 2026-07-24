@@ -4,10 +4,11 @@ extends SceneTree
 
 const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
 const EXPECTED_MAIN_PATH: String = "res://scenes/main/main.tscn"
-const GROUP_SIZES: Array[int] = [2, 2, 2, 3]
+const GROUP_SIZES: Array[int] = [2, 3, 2, 2, 2, 3, 4]
 const ACTIVATION_POSITIONS: Array[Vector2] = [
-	Vector2(430.0, 612.0), Vector2(850.0, 612.0),
-	Vector2(1300.0, 612.0), Vector2(1840.0, 612.0),
+	Vector2(430.0, 612.0), Vector2(1120.0, 612.0), Vector2(1960.0, 612.0),
+	Vector2(2670.0, 612.0), Vector2(3370.0, 612.0), Vector2(4120.0, 612.0),
+	Vector2(4880.0, 612.0),
 ]
 
 var _failures: Array[String] = []
@@ -35,8 +36,8 @@ func _run_tests() -> void:
 	await _wait_physics_frames(8)
 	var groups: Array[EncounterGroup] = _collect_groups(encounters_root)
 	var enemies: Array[EnemyCombatant] = _collect_enemies(groups)
-	_expect(groups.size() == 4, "Main does not contain four authored encounters")
-	_expect(enemies.size() == 9, "Main does not contain nine mixed enemies")
+	_expect(groups.size() == 7, "Main does not contain seven authored encounters")
+	_expect(enemies.size() == 18, "Main does not contain eighteen mixed enemies")
 	_test_saved_roster(groups, enemies)
 	_test_main_system_wiring(main, player)
 	await _test_encounter_activation(player, groups)
@@ -77,10 +78,11 @@ func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyComba
 				"%s lacks the live GuardBreakMarker" % enemy.name
 			)
 		_test_enemy_balance_profile(enemy)
-	_expect(counts.get(&"CursedCastleGuard", 0) == 3, "Main Castle Guard count mismatch")
+	_expect(counts.get(&"CursedCastleGuard", 0) == 8, "Main Castle Guard count mismatch")
 	_expect(counts.get(&"CursedShieldGuard", 0) == 2, "Main Shield Guard count mismatch")
 	_expect(counts.get(&"DecayedSpearman", 0) == 2, "Main Spearman count mismatch")
-	_expect(counts.get(&"FallenCrossbowman", 0) == 2, "Main Crossbowman count mismatch")
+	_expect(counts.get(&"FallenCrossbowman", 0) == 3, "Main Crossbowman count mismatch")
+	_expect(counts.get(&"GargoyleSentinel", 0) == 3, "Main Gargoyle count mismatch")
 	_expect(
 		main_has_platform_crossbow(groups),
 		"Main lacks the authored high-platform Crossbowman"
@@ -128,6 +130,7 @@ func _test_main_system_wiring(main: Node2D, player: Player) -> void:
 		)
 		_expect(_debug_contains_profile(enemy_debug.text, "DecayedSpearman", "HP 5/5", "DMG 10"), "Main Debug omits current Spearman balance")
 		_expect(_debug_contains_profile(enemy_debug.text, "FallenCrossbowman", "HP 4/4", "DMG 6"), "Main Debug omits current Crossbowman balance")
+		_expect(_debug_contains_profile(enemy_debug.text, "GargoyleSentinel", "HP 3/3", "ANIM"), "Main Debug omits Gargoyle fields")
 		debug_controller.set_compact_mode(true)
 	player.health_component.take_damage(7)
 	player.stamina_component.try_consume_dash()
@@ -150,13 +153,15 @@ func _test_encounter_activation(player: Player, groups: Array[EncounterGroup]) -
 	var max_alive: int = 0
 	for group: EncounterGroup in groups:
 		max_alive = maxi(max_alive, group.get_alive_enemy_count())
-	_expect(max_alive <= 3, "A Main encounter exceeds the three-enemy cap")
+	_expect(max_alive <= 4, "A Main encounter exceeds the four-enemy cap")
 
 
 func _test_combat_wiring(enemies: Array[EnemyCombatant], player: Player) -> void:
 	var type_occurrences: Dictionary[StringName, int] = {}
 	for enemy: EnemyCombatant in enemies:
-		var hitbox: HitboxComponent = enemy.get_node_or_null("FacingRoot/AttackHitbox") as HitboxComponent
+		var hitbox: HitboxComponent = enemy.get_node_or_null(
+			"FacingRoot/DiveHitbox" if enemy is GargoyleSentinel else "FacingRoot/AttackHitbox"
+		) as HitboxComponent
 		if enemy is FallenCrossbowman:
 			_expect((enemy as FallenCrossbowman).projectile_scene != null, "Crossbowman lacks bolt PackedScene")
 			_expect(enemy.get_attack_damage() == 6, "Crossbow bolt damage is not six")
@@ -181,17 +186,20 @@ func _test_combat_wiring(enemies: Array[EnemyCombatant], player: Player) -> void
 		var sprite: AnimatedSprite2D = enemy.get_node_or_null(
 			"VisualRoot/AnimatedSprite2D"
 		) as AnimatedSprite2D
-		var expected_death: StringName = (
-			&"death_unshielded"
-			if enemy is CursedShieldGuard and (enemy as CursedShieldGuard).is_shield_broken()
-			else &"death"
-		)
+		var expected_death: StringName = &"death"
+		if enemy is CursedShieldGuard and (enemy as CursedShieldGuard).is_shield_broken():
+			expected_death = &"death_unshielded"
+		elif enemy is GargoyleSentinel:
+			expected_death = &"death_fall"
 		_expect(
 			sprite != null and sprite.animation == expected_death,
 			"%s did not play the correct Main Death animation" % enemy.name
 		)
 		if sprite != null:
 			sprite.animation_finished.emit()
+			if enemy is GargoyleSentinel:
+				_expect(sprite.animation == &"death_shatter", "Main Gargoyle did not enter shatter")
+				sprite.animation_finished.emit()
 			_expect(not enemy.visible, "%s did not complete Main death dissolve cleanup" % enemy.name)
 
 
@@ -336,6 +344,8 @@ func _get_expected_main_kill_count(enemy_type: StringName, use_dash: bool) -> in
 			return 3 if use_dash else 5
 		&"FallenCrossbowman":
 			return 2 if use_dash else 4
+		&"GargoyleSentinel":
+			return 2 if use_dash else 3
 		_:
 			return 0
 
@@ -356,6 +366,9 @@ func _test_enemy_balance_profile(enemy: EnemyCombatant) -> void:
 		&"FallenCrossbowman":
 			expected_health = 4
 			expected_damage = 6
+		&"GargoyleSentinel":
+			expected_health = 3
+			expected_damage = 7
 		_:
 			_expect(false, "Unknown Main enemy type %s" % enemy.get_enemy_type_name())
 			return
@@ -403,7 +416,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("MAIN_ENEMY_INTEGRATION_TEST: PASS (4 groups, 9 mixed enemies, HUD/respawn, projectile layer)")
+		print("MAIN_ENEMY_INTEGRATION_TEST: PASS (7 groups, 18 mixed enemies, Boss room, HUD/respawn)")
 		quit(0)
 		return
 	for failure: String in _failures:

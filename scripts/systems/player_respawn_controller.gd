@@ -21,6 +21,13 @@ signal player_respawned(global_spawn_position: Vector2)
 var _respawn_in_progress: bool = false
 
 
+func set_spawn_point(new_spawn_point: Marker2D) -> bool:
+	if new_spawn_point == null or not is_instance_valid(new_spawn_point):
+		return false
+	spawn_point = new_spawn_point
+	return true
+
+
 func _ready() -> void:
 	if player == null:
 		push_error("PlayerRespawnController requires a Player target")

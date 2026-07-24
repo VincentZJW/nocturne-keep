@@ -25,6 +25,7 @@ knockback_speed = 105.0
 initial_idle_duration = 0.7
 patrol_turn_pause = 0.25
 aim_duration = 0.6
+aim_lock_duration = 0.18
 reload_duration = 1.5
 projectile_speed = 260.0
 projectile_damage = 6

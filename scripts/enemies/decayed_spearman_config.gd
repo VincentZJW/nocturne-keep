@@ -5,3 +5,4 @@ extends EnemyGroundConfig
 
 @export var minimum_attack_distance: float = 34.0
 @export var close_retreat_speed: float = 32.0
+@export var direction_lock_duration: float = 0.15

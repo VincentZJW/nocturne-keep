@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一批敌人多样性 · Shield Guard / Spearman / Crossbowman`
+当前版本：`第一关敌人阵容与Boss · Gargoyle Sentinel / Fallen Gate Knight`
 
 ## 当前范围
 
-当前在既有玩家移动、动作、耐力、生命、受击、死亡/幽灵/重生和诅咒剑卫基础上，加入三种完整普通敌人：拥有独立3点盾量与5点本体生命的诅咒盾卫、拥有贴身死角的长距离腐朽长矛兵、具备Aim→Shoot→Reload节奏并发射碰墙销毁弩箭的堕落弩手。F5 Main在`World/Encounters`下布置4组、共9只混合敌人，组规模为2/2/2/3；所有组仍由ActivationArea分阶段启用。玩家普通/Dash Attack保持1/2点；正面命中完整盾牌时只削减盾量，背后或中心重叠命中直接伤害本体。剑卫、盾卫、长矛兵、弩箭分别造成5/8/10/6点。敌人身体接触和同阵营接触不造成伤害。当前没有飞行敌人、精英、Boss、掉落、经验或装备系统。
+当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后进入独立Boss房迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。新增石像鬼拥有0.45秒俯冲前摇、7点单次伤害、世界碰撞后的0.65秒地面反击窗口以及倒地碎裂死亡。Boss拥有18点本体、6点独立盾量、五类伤害动作、永久破盾Phase 2、信号驱动Boss HUD、房门锁定、战前检查点、死亡后完整Boss重置以及关卡完成出口。玩家普通/Dash Attack仍为1/2点，既有普通敌人数值与玩家能力均未改动。当前没有精英、第二Boss、掉落、经验、装备、存档或第二关。
 
 ## 环境要求
 
@@ -36,7 +36,7 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/main/main.tscn
 ```
 
-该场景包含Player、Health/Stamina HUD、死亡/重生流程，以及4个手工混合遭遇组。Player出生于`(320, 612)`；Group01将盾卫放在`(500, 610)`、剑卫放在`(690, 610)`，便于开局单独验证盾量与绕后；Group02为长矛兵+剑卫，Group03为高平台弩手+地面剑卫，Group04为盾卫+长矛兵+弩手。未进入ActivationArea的组保持Idle并暂停AI，同时活跃上限不超过3只。
+该场景包含Player、Health/Stamina HUD、死亡/重生流程、7个手工普通遭遇组和一个Boss房。Player出生于`(320,612)`；普通组规模为2/3/2/2/2/3/4，逐步教学基础剑卫、长矛、盾牌、弩箭、石像鬼，再进行混合检验。Boss检查点位于`(5480,612)`，Boss出生于`(6120,596)`；进入后恢复Player Health/Stamina并锁门。Boss死亡后出口开放并显示第一关完成信息。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -66,7 +66,16 @@ res://scenes/tools/enemy_variety_test_room.tscn
 
 该场景同时放置剑卫、盾卫、长矛兵和高平台弩手，提供每只敌人的类型、状态、生命、动画、攻击阶段、盾牌状态、射程/装填和弩箭数量，并有可关闭的Hitbox/Hurtbox显示与Reset。Main的`ENEMY DEBUG`使用同一通用敌人接口，不再硬编码为Castle Guard。
 
-建议Main人工测试顺序：先在Group01对盾卫正面连续普通Attack，观察`SH 3/3 → 2/3 → 1/3 → 0/3`及完整/轻裂/重裂/破碎视觉；重新运行后，两次正面Dash Attack也应破盾且本体保持5/5。跳到或Dash到背后，在约0.22秒转身延迟内攻击会绕过盾牌直接伤害本体。破盾后进入0.65秒GuardBreak，之后盾牌永久消失。随后测试长矛兵与弩手，继续确认玩家受击、HUD、死亡幽灵和重生正常。
+新增独立测试房：
+
+```text
+res://scenes/tools/gargoyle_test_room.tscn
+res://scenes/tools/boss_test_room.tscn
+```
+
+它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5 Main的七组实际遭遇和Boss房流程为准。
+
+建议Main人工测试顺序：Group01验证两只基础剑卫；Group02验证长矛兵最后0.15秒锁向；Group03观察盾卫`SH 3/3 → 2/3 → 1/3 → 0/3`、绕后和永久破盾；Group04验证弩手最后0.18秒瞄准锁定；Group05在石像鬼俯冲撞地后的0.65秒窗口反击；Group06/07验证三到四只混合敌人的可读性。最后进入Boss房，确认入场恢复/关门、6点盾量、永久破盾Phase 2、死亡后开门，以及Player死亡重生会完整重置Boss。
 
 当前灰盒击杀次数：剑卫普通/Dash为3/2；盾卫从背后或破盾后击杀本体为5/3，纯正面总输入为普通8次或Dash 5次（前3/2次只削减盾量且破盾伤害不溢出）；长矛兵为5/3；弩手为4/2。满血Player分别在剑卫第20、盾卫第13、长矛兵第10、弩箭第17次命中时死亡。
 
@@ -108,6 +117,10 @@ Main开发调试快捷键：
 - [Cursed Shield Guard规格](docs/design/enemy_cursed_shield_guard_spec.md)
 - [Decayed Spearman规格](docs/design/enemy_decayed_spearman_spec.md)
 - [Fallen Crossbowman规格](docs/design/enemy_fallen_crossbowman_spec.md)
+- [Gargoyle Sentinel规格](docs/design/enemy_gargoyle_sentinel_spec.md)
+- [Fallen Gate Knight Boss规格](docs/design/boss_fallen_gate_knight_spec.md)
+- [第一关遭遇规格](docs/design/first_level_encounter_spec.md)
+- [Boss房与重生规格](docs/design/boss_room_spec.md)
 - [灰盒遭遇设计规格](docs/design/encounter_design_spec.md)
 - [Debug HUD规格](docs/design/debug_hud_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
