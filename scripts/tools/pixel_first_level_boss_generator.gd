@@ -21,12 +21,17 @@ const GARGOYLE: Dictionary[String, int] = {
 }
 const BOSS: Dictionary[String, int] = {
 	"idle_shielded": 4, "walk_shielded": 6, "shield_block": 4,
+	"turn_shielded": 3,
 	"shield_bash": 5, "sword_slash": 5, "heavy_overhead": 6,
 	"hurt_shielded": 3, "shield_break": 5, "phase_transition": 5,
-	"idle_unshielded": 4, "walk_unshielded": 6, "combo_slash_1": 5,
+	"idle_unshielded": 4, "walk_unshielded": 6, "turn_unshielded": 3,
+	"combo_slash_1": 5,
 	"combo_slash_2": 5, "jump_smash": 6, "charge_thrust": 5,
 	"shockwave_strike": 6, "hurt_unshielded": 3, "death": 7,
 }
+const BOSS_SHIELD_DAMAGE_STATES: Array[String] = [
+	"intact", "damaged", "critical", "broken",
+]
 
 
 func _initialize() -> void:
@@ -42,6 +47,12 @@ func _initialize() -> void:
 			var path: String = _frame_path("bosses/fallen_gate_knight", animation_name, frame)
 			failures += 0 if _save_png(_draw_boss(animation_name, frame), path) == OK else 1
 			total += 1
+	for visual_state: String in BOSS_SHIELD_DAMAGE_STATES:
+		var shield_path: String = ROOT.path_join("bosses/fallen_gate_knight/shield_damage").path_join(
+			visual_state
+		).path_join("%s_01.png" % visual_state)
+		failures += 0 if _save_png(_draw_boss_shield_damage(visual_state), shield_path) == OK else 1
+		total += 1
 	print("FIRST_LEVEL_BOSS_PIXEL_BUILD: %s (%d files)" % ["OK" if failures == 0 else "FAIL", total])
 	quit(0 if failures == 0 else 1)
 
@@ -96,9 +107,10 @@ func _draw_boss(animation_name: String, frame: int) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(96, 96))
 	var unshielded: bool = animation_name in [
 		"phase_transition", "idle_unshielded", "walk_unshielded", "combo_slash_1",
-		"combo_slash_2", "jump_smash", "charge_thrust", "shockwave_strike",
+		"turn_unshielded", "combo_slash_2", "jump_smash", "charge_thrust", "shockwave_strike",
 		"hurt_unshielded", "death",
 	]
+	var turn_inset: int = [0, 5, 2][frame] if animation_name.begins_with("turn") else 0
 	var death_fall: int = mini(frame, 4) * 8 if animation_name == "death" else 0
 	var bob: int = 1 if animation_name.begins_with("idle") and frame in [1, 2] else 0
 	var walk: int = [-5, -2, 1, 5, 2, -1][frame] if animation_name.begins_with("walk") else 0
@@ -106,21 +118,21 @@ func _draw_boss(animation_name: String, frame: int) -> Image:
 	var top: int = 20 + bob + mini(death_fall, 24)
 	var armor: Color = FADE if animation_name == "death" and frame >= 5 else IRON
 	# Heavy 1.6x body, closed helm, eye slit, broad shoulders.
-	PixelCanvas.fill_rect(image, Rect2i(cx - 13, top + 24, 27, 35), VOID)
-	PixelCanvas.fill_rect(image, Rect2i(cx - 10, top + 26, 21, 29), armor)
-	PixelCanvas.fill_rect(image, Rect2i(cx - 17, top + 24, 8, 13), MID)
-	PixelCanvas.fill_rect(image, Rect2i(cx + 10, top + 24, 8, 13), MID)
-	PixelCanvas.fill_rect(image, Rect2i(cx - 11, top, 23, 23), VOID)
-	PixelCanvas.fill_rect(image, Rect2i(cx - 8, top + 3, 17, 15), armor)
-	PixelCanvas.fill_rect(image, Rect2i(cx - 9, top + 12, 19, 4), MID)
+	PixelCanvas.fill_rect(image, Rect2i(cx - 13 + turn_inset, top + 24, 27 - turn_inset * 2, 35), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(cx - 10 + turn_inset, top + 26, 21 - turn_inset * 2, 29), armor)
+	PixelCanvas.fill_rect(image, Rect2i(cx - 17 + turn_inset, top + 24, 8, 13), MID)
+	PixelCanvas.fill_rect(image, Rect2i(cx + 10 - turn_inset, top + 24, 8, 13), MID)
+	PixelCanvas.fill_rect(image, Rect2i(cx - 11 + turn_inset, top, 23 - turn_inset * 2, 23), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(cx - 8 + turn_inset, top + 3, 17 - turn_inset * 2, 15), armor)
+	PixelCanvas.fill_rect(image, Rect2i(cx - 9 + turn_inset, top + 12, 19 - turn_inset * 2, 4), MID)
 	PixelCanvas.fill_rect(image, Rect2i(cx + 4, top + 13, 4, 2), EYE)
 	PixelCanvas.draw_line(image, Vector2i(cx - 7, top + 55), Vector2i(cx - 12 - walk, 87), armor, 8)
 	PixelCanvas.draw_line(image, Vector2i(cx + 7, top + 55), Vector2i(cx + 13 + walk, 87), armor, 8)
 	PixelCanvas.fill_rect(image, Rect2i(cx - 21 - walk, 85, 17, 5), VOID)
 	PixelCanvas.fill_rect(image, Rect2i(cx + 3 + walk, 85, 18, 5), VOID)
 	if not unshielded:
-		_draw_boss_shield(image, Vector2i(cx + 18, top + 40), animation_name, frame)
-	_draw_boss_sword(image, Vector2i(cx - 9, top + 34), animation_name, frame)
+		_draw_boss_shield(image, Vector2i(cx + 18 - turn_inset, top + 40), animation_name, frame)
+	_draw_boss_sword(image, Vector2i(cx - 9 + turn_inset, top + 34), animation_name, frame)
 	if animation_name in ["shield_break", "phase_transition"]:
 		_draw_boss_fragments(image, Vector2i(cx + 21, top + 39), frame)
 	if animation_name == "shockwave_strike" and frame in [3, 4]:
@@ -128,6 +140,21 @@ func _draw_boss(animation_name: String, frame: int) -> Image:
 	if animation_name == "death" and frame >= 5:
 		PixelCanvas.fill_rect(image, Rect2i(15, 87, 7, 4), FADE)
 		PixelCanvas.fill_rect(image, Rect2i(61, 84, 6, 5), FADE)
+	return image
+
+
+func _draw_boss_shield_damage(visual_state: String) -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(96, 96))
+	if visual_state in ["intact", "broken"]:
+		return image
+	# Full-canvas overlays align to the baked shield and remain nearest-neighbor under flip_h.
+	PixelCanvas.draw_line(image, Vector2i(62, 49), Vector2i(67, 57), VOID, 2)
+	PixelCanvas.draw_line(image, Vector2i(67, 57), Vector2i(63, 65), STEEL, 1)
+	if visual_state == "critical":
+		PixelCanvas.draw_line(image, Vector2i(58, 54), Vector2i(64, 59), VOID, 2)
+		PixelCanvas.draw_line(image, Vector2i(64, 59), Vector2i(70, 68), VOID, 2)
+		PixelCanvas.fill_rect(image, Rect2i(71, 69, 5, 6), VOID)
+		PixelCanvas.fill_rect(image, Rect2i(60, 46, 3, 3), GOLD)
 	return image
 
 

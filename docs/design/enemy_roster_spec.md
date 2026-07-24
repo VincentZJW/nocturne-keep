@@ -25,7 +25,7 @@ The shared enemy Config resources are the sole authored tuning authority. Enemy 
 
 All five enemies use transparent original 64×64 pixel frames, nearest filtering, no mipmaps, right-facing source art with runtime horizontal flip, common factions, body-contact safety, Hurt interruption, and non-ghost fall/dissolve or shatter death. Gargoyle Health 3 means 3 normal or 2 Dash attacks; its 7-damage Dive kills a full-Health Player on the 15th hit.
 
-The first-level Boss is tracked separately: Fallen Gate Knight has Body 18, Shield 6, and two phases. See `boss_fallen_gate_knight_spec.md`.
+The first-level Boss is tracked separately: Fallen Gate Knight has Body 18, Shield 10, and two phases. Shield 15 is documented only as a future hard-mode candidate. See `boss_fallen_gate_knight_spec.md`.
 
 ## Scope boundary
 

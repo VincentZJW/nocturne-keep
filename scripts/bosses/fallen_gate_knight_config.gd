@@ -10,7 +10,7 @@ extends Resource
 
 @export_category("Vitals")
 @export_range(1, 999, 1) var max_health: int = 18
-@export_range(1, 99, 1) var shield_health: int = 6
+@export_range(1, 99, 1) var boss_shield_max_health: int = 10
 
 @export_category("Damage")
 @export_range(1, 100, 1) var shield_bash_damage: int = 8
@@ -31,7 +31,10 @@ extends Resource
 @export_category("Cadence")
 @export var shield_break_stun: float = 0.90
 @export var phase_transition_duration: float = 1.10
-@export var turn_duration: float = 0.18
+@export var boss_turn_reaction_delay: float = 0.07
+@export var boss_turn_animation_duration: float = 0.10
+@export var boss_turn_cooldown: float = 0.12
+@export_range(0.0, 32.0, 1.0) var turn_side_threshold: float = 12.0
 @export var attack_recovery: float = 0.48
 @export var shield_break_flash_duration: float = 0.07
 @export_range(0.0, 1.0, 0.05) var shield_break_flash_alpha: float = 0.35

@@ -11,6 +11,7 @@ signal boss_defeated
 const BOSS_INTRO: StringName = &"BossIntro"
 const IDLE_SHIELDED: StringName = &"IdleShielded"
 const APPROACH_SHIELDED: StringName = &"ApproachShielded"
+const TURN_SHIELDED: StringName = &"TurnShielded"
 const SHIELD_BLOCK: StringName = &"ShieldBlock"
 const SHIELD_BASH: StringName = &"ShieldBash"
 const SWORD_SLASH: StringName = &"SwordSlash"
@@ -21,6 +22,7 @@ const PHASE_TRANSITION: StringName = &"PhaseTransition"
 const HURT_SHIELDED: StringName = &"HurtShielded"
 const IDLE_UNSHIELDED: StringName = &"IdleUnshielded"
 const APPROACH_UNSHIELDED: StringName = &"ApproachUnshielded"
+const TURN_UNSHIELDED: StringName = &"TurnUnshielded"
 const COMBO_SLASH: StringName = &"ComboSlash"
 const JUMP_SMASH: StringName = &"JumpSmash"
 const CHARGE_THRUST: StringName = &"ChargeThrust"
@@ -36,6 +38,9 @@ const ATTACK_STATES: Array[StringName] = [
 
 @export var config: FallenGateKnightConfig
 @export_node_path("AnimatedSprite2D") var animated_sprite_path: NodePath = NodePath("VisualRoot/AnimatedSprite2D")
+@export_node_path("AnimatedSprite2D") var shield_damage_overlay_path: NodePath = NodePath(
+	"VisualRoot/ShieldDamageOverlay"
+)
 @export_node_path("Node2D") var facing_root_path: NodePath = NodePath("FacingRoot")
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("HealthComponent")
 @export_node_path("ShieldComponent") var shield_component_path: NodePath = NodePath("ShieldComponent")
@@ -47,6 +52,9 @@ const ATTACK_STATES: Array[StringName] = [
 @export var bridge_max_x: float = 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = get_node_or_null(animated_sprite_path) as AnimatedSprite2D
+@onready var shield_damage_overlay: AnimatedSprite2D = get_node_or_null(
+	shield_damage_overlay_path
+) as AnimatedSprite2D
 @onready var facing_root: Node2D = get_node_or_null(facing_root_path) as Node2D
 @onready var health_component: HealthComponent = get_node_or_null(health_component_path) as HealthComponent
 @onready var shield_component: ShieldComponent = get_node_or_null(shield_component_path) as ShieldComponent
@@ -65,7 +73,11 @@ var attack_cycle: int = 0
 var current_attack_id: int = 0
 var _next_attack_id: int = 1
 var _turn_timer: float = 0.0
+var _turn_cooldown_timer: float = 0.0
 var _pending_facing: float = 0.0
+var _turn_return_state: StringName = &""
+var _turn_return_timer: float = 0.0
+var _turn_commit_queued: bool = false
 var _initial_position: Vector2 = Vector2.ZERO
 var _defeat_emitted: bool = false
 var _combo_second_step: bool = false
@@ -78,7 +90,7 @@ func _ready() -> void:
 	_initial_position = global_position
 	health_component.max_health = config.max_health
 	health_component.reset_to_full()
-	shield_component.shield_max_health = config.shield_health
+	shield_component.shield_max_health = config.boss_shield_max_health
 	shield_component.reset_shield()
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 	animated_sprite.frame_changed.connect(_on_animation_frame_changed)
@@ -86,7 +98,9 @@ func _ready() -> void:
 	hurtbox.hit_received.connect(_on_hurtbox_hit_received)
 	shield_component.shield_hit.connect(_on_shield_hit)
 	shield_component.shield_broken.connect(_on_shield_broken)
+	shield_component.shield_health_changed.connect(_on_shield_health_changed)
 	set_facing_direction(facing_direction)
+	_update_shield_visual(shield_component.shield_current_health)
 	_end_attack_window()
 	play_animation(&"idle_shielded")
 	set_physics_process(false)
@@ -100,6 +114,7 @@ func _physics_process(delta: float) -> void:
 		velocity.y += config.gravity * delta
 	else:
 		velocity.y = 0.0
+	_turn_cooldown_timer = maxf(0.0, _turn_cooldown_timer - delta)
 	match current_state:
 		BOSS_INTRO, SHIELD_BLOCK, GUARD_RECOVERY, SHIELD_BREAK, PHASE_TRANSITION, RECOVERY, HURT_SHIELDED, HURT_UNSHIELDED:
 			_process_timed_state(delta)
@@ -107,6 +122,8 @@ func _physics_process(delta: float) -> void:
 			_process_idle(delta)
 		APPROACH_SHIELDED, APPROACH_UNSHIELDED:
 			_process_approach(delta)
+		TURN_SHIELDED, TURN_UNSHIELDED:
+			_process_turn_state(delta)
 		SHIELD_BASH, SWORD_SLASH, HEAVY_OVERHEAD, COMBO_SLASH, JUMP_SMASH, CHARGE_THRUST, SHOCKWAVE_STRIKE:
 			_process_attack_motion(delta)
 	move_and_slide()
@@ -139,7 +156,7 @@ func reset_boss() -> void:
 	hurtbox.set_enabled(true)
 	health_component.max_health = config.max_health
 	health_component.reset_to_full()
-	shield_component.shield_max_health = config.shield_health
+	shield_component.shield_max_health = config.boss_shield_max_health
 	shield_component.reset_shield()
 	current_phase = 1
 	current_state = BOSS_INTRO
@@ -147,12 +164,17 @@ func reset_boss() -> void:
 	attack_cycle = 0
 	_combo_second_step = false
 	_turn_timer = 0.0
+	_turn_cooldown_timer = 0.0
 	_pending_facing = 0.0
+	_turn_return_state = &""
+	_turn_return_timer = 0.0
+	_turn_commit_queued = false
 	_defeat_emitted = false
 	room_engaged = false
 	ai_active = false
 	target = null
 	set_facing_direction(-1.0)
+	_update_shield_visual(shield_component.shield_current_health)
 	play_animation(&"idle_shielded", true)
 	set_physics_process(false)
 	phase_changed.emit(current_phase)
@@ -173,6 +195,7 @@ func set_ai_active(active: bool) -> void:
 		ai_active = false
 		velocity = Vector2.ZERO
 		_end_attack_window()
+		_interrupt_turn()
 		set_physics_process(false)
 
 
@@ -217,11 +240,13 @@ func is_attack_window_active() -> bool:
 
 
 func get_debug_summary() -> String:
-	return "%s  P%d  %s  BODY %d/%d  SH %d/%d  ANIM %s  HIT %s  LOCK %.2f" % [
+	return "%s  P%d  %s  BODY %d/%d  SH %d/%d %s  ANIM %s  HIT %s  TURN %s %.2f  CD %.2f" % [
 		get_enemy_type_name(), current_phase, current_state,
 		health_component.current_health, health_component.max_health,
 		shield_component.shield_current_health, shield_component.shield_max_health,
-		animated_sprite.animation, "ON" if is_attack_window_active() else "off", _turn_timer,
+		_get_shield_visual_state().to_upper(), animated_sprite.animation,
+		"ON" if is_attack_window_active() else "off", _get_turn_phase_name(), _turn_timer,
+		_turn_cooldown_timer,
 	]
 
 
@@ -252,12 +277,16 @@ func set_facing_direction(direction: float) -> void:
 		return
 	facing_direction = signf(direction)
 	animated_sprite.flip_h = facing_direction < 0.0
+	shield_damage_overlay.flip_h = facing_direction < 0.0
 	facing_root.scale.x = facing_direction
+	_update_shield_overlay_pose()
 
 
 func _process_timed_state(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 	state_timer = maxf(0.0, state_timer - delta)
+	if current_state in [GUARD_RECOVERY, RECOVERY] and _process_turn_request(delta):
+		return
 	if state_timer > 0.0:
 		return
 	match current_state:
@@ -281,6 +310,8 @@ func _process_idle(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 	if not _has_target():
 		return
+	if _process_turn_request(delta):
+		return
 	transition_state(APPROACH_SHIELDED if current_phase == 1 else APPROACH_UNSHIELDED)
 	play_animation(&"walk_shielded" if current_phase == 1 else &"walk_unshielded")
 
@@ -290,7 +321,9 @@ func _process_approach(delta: float) -> void:
 		_enter_idle()
 		return
 	var offset: Vector2 = target.global_position - global_position
-	_update_turn(signf(offset.x), delta)
+	if _process_turn_request(delta):
+		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+		return
 	if absf(offset.x) <= config.attack_range:
 		velocity.x = 0.0
 		_start_next_attack()
@@ -320,19 +353,104 @@ func _enforce_bridge_bounds() -> void:
 		velocity.x = 0.0
 
 
-func _update_turn(desired_direction: float, delta: float) -> void:
-	if is_zero_approx(desired_direction) or desired_direction == facing_direction:
-		_turn_timer = 0.0
-		_pending_facing = 0.0
-		return
+func _process_turn_request(delta: float) -> bool:
+	if not _has_target() or _turn_cooldown_timer > 0.0:
+		_cancel_turn_request()
+		return false
+	var offset_x: float = target.global_position.x - global_position.x
+	if absf(offset_x) <= config.turn_side_threshold:
+		_cancel_turn_request()
+		return false
+	var desired_direction: float = signf(offset_x)
+	if desired_direction == facing_direction:
+		_cancel_turn_request()
+		return false
 	if _pending_facing != desired_direction:
 		_pending_facing = desired_direction
-		_turn_timer = config.turn_duration
+		_turn_timer = config.boss_turn_reaction_delay
+	if _turn_timer <= delta + 0.000001:
+		_turn_timer = 0.0
+		_start_turn_state()
 	else:
-		_turn_timer = maxf(0.0, _turn_timer - delta)
-	if _turn_timer <= 0.0:
+		_turn_timer -= delta
+	return true
+
+
+func _start_turn_state() -> void:
+	_turn_return_state = current_state
+	_turn_return_timer = maxf(0.0, state_timer - config.boss_turn_animation_duration)
+	var turn_state: StringName = TURN_SHIELDED if current_phase == 1 else TURN_UNSHIELDED
+	transition_state(turn_state)
+	_turn_timer = config.boss_turn_animation_duration
+	velocity.x = 0.0
+	play_animation(&"turn_shielded" if current_phase == 1 else &"turn_unshielded", true)
+
+
+func _process_turn_state(delta: float) -> void:
+	velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+	if _turn_commit_queued:
+		return
+	if _turn_timer > delta + 0.000001:
+		_turn_timer -= delta
+		return
+	_turn_timer = 0.0
+	_turn_commit_queued = true
+	call_deferred("_commit_turn")
+
+
+func _commit_turn() -> void:
+	if not _turn_commit_queued or current_state not in [TURN_SHIELDED, TURN_UNSHIELDED]:
+		return
+	_turn_commit_queued = false
+	if not is_zero_approx(_pending_facing):
 		set_facing_direction(_pending_facing)
-		_pending_facing = 0.0
+	_turn_cooldown_timer = config.boss_turn_cooldown
+	_pending_facing = 0.0
+	_turn_timer = 0.0
+	_restore_state_after_turn()
+
+
+func _restore_state_after_turn() -> void:
+	var return_state: StringName = _turn_return_state
+	var return_timer: float = _turn_return_timer
+	_turn_return_state = &""
+	_turn_return_timer = 0.0
+	if return_state in [GUARD_RECOVERY, RECOVERY] and return_timer > 0.0:
+		transition_state(return_state)
+		state_timer = return_timer
+		play_animation(&"idle_shielded" if current_phase == 1 else &"idle_unshielded", true)
+		return
+	if return_state in [APPROACH_SHIELDED, APPROACH_UNSHIELDED]:
+		transition_state(APPROACH_SHIELDED if current_phase == 1 else APPROACH_UNSHIELDED)
+		play_animation(&"walk_shielded" if current_phase == 1 else &"walk_unshielded", true)
+		return
+	_enter_idle()
+
+
+func _cancel_turn_request() -> void:
+	if current_state in [TURN_SHIELDED, TURN_UNSHIELDED]:
+		return
+	_turn_timer = 0.0
+	_pending_facing = 0.0
+	_turn_return_state = &""
+	_turn_return_timer = 0.0
+	_turn_commit_queued = false
+
+
+func _interrupt_turn() -> void:
+	_turn_timer = 0.0
+	_pending_facing = 0.0
+	_turn_return_state = &""
+	_turn_return_timer = 0.0
+	_turn_commit_queued = false
+
+
+func _get_turn_phase_name() -> String:
+	if current_state in [TURN_SHIELDED, TURN_UNSHIELDED]:
+		return "COMMIT" if _turn_commit_queued else "ANIM"
+	if not is_zero_approx(_pending_facing):
+		return "REACT"
+	return "OFF"
 
 
 func _start_next_attack() -> void:
@@ -348,6 +466,7 @@ func _start_next_attack() -> void:
 func _start_attack(attack_state: StringName) -> void:
 	if not transition_state(attack_state):
 		return
+	_interrupt_turn()
 	velocity.x = 0.0
 	current_attack_id = _next_attack_id
 	_next_attack_id += 1
@@ -372,6 +491,7 @@ func _start_attack(attack_state: StringName) -> void:
 
 
 func _on_animation_frame_changed() -> void:
+	_update_shield_overlay_pose()
 	if current_state not in ATTACK_STATES:
 		_end_attack_window()
 		return
@@ -455,6 +575,7 @@ func _on_shield_hit(_hitbox: HitboxComponent, _damage: int, _remaining: int) -> 
 	if current_state in [DEATH, SHIELD_BREAK, PHASE_TRANSITION]:
 		return
 	_end_attack_window()
+	_interrupt_turn()
 	transition_state(SHIELD_BLOCK)
 	state_timer = 0.22
 	velocity.x = 0.0
@@ -465,6 +586,7 @@ func _on_shield_broken(_hitbox: HitboxComponent) -> void:
 	if current_state == DEATH:
 		return
 	_end_attack_window()
+	_interrupt_turn()
 	transition_state(SHIELD_BREAK)
 	state_timer = config.shield_break_stun
 	velocity = Vector2.ZERO
@@ -479,6 +601,7 @@ func _on_hurtbox_hit_received(_damage: int, source_position: Vector2, _attack_id
 	if current_state in [DEATH, SHIELD_BREAK, PHASE_TRANSITION]:
 		return
 	_end_attack_window()
+	_interrupt_turn()
 	var hurt_state: StringName = HURT_SHIELDED if current_phase == 1 else HURT_UNSHIELDED
 	transition_state(hurt_state)
 	state_timer = 0.20
@@ -490,6 +613,7 @@ func _on_health_died() -> void:
 	if current_state == DEATH:
 		return
 	_end_attack_window()
+	_interrupt_turn()
 	transition_state(DEATH)
 	ai_active = false
 	room_engaged = false
@@ -507,6 +631,46 @@ func _enter_idle() -> void:
 	play_animation(&"idle_shielded" if current_phase == 1 else &"idle_unshielded")
 
 
+func _on_shield_health_changed(current: int, _maximum: int) -> void:
+	_update_shield_visual(current)
+
+
+func _update_shield_visual(current: int) -> void:
+	if shield_damage_overlay == null:
+		return
+	var visual_state: StringName = _get_shield_visual_state(current)
+	shield_damage_overlay.visible = visual_state not in [&"intact", &"broken"]
+	shield_damage_overlay.play(visual_state)
+	_update_shield_overlay_pose()
+
+
+func _update_shield_overlay_pose() -> void:
+	if shield_damage_overlay == null or animated_sprite == null:
+		return
+	var offset: Vector2 = Vector2.ZERO
+	if animated_sprite.animation == &"turn_shielded":
+		var turn_insets: Array[int] = [0, 5, 2]
+		offset.x = -float(turn_insets[mini(animated_sprite.frame, 2)]) * facing_direction
+	elif animated_sprite.animation == &"shield_bash" and animated_sprite.frame in [2, 3]:
+		offset.x = 5.0 * facing_direction
+	if animated_sprite.animation == &"idle_shielded" and animated_sprite.frame in [1, 2]:
+		offset.y = 1.0
+	shield_damage_overlay.position = offset
+
+
+func _get_shield_visual_state(current: int = -1) -> StringName:
+	var shield_health: int = (
+		shield_component.shield_current_health if current < 0 else current
+	)
+	if shield_component.is_shield_broken() or shield_health <= 0:
+		return &"broken"
+	if shield_health >= 8:
+		return &"intact"
+	if shield_health >= 5:
+		return &"damaged"
+	return &"critical"
+
+
 func _has_target() -> bool:
 	return target != null and is_instance_valid(target) and not target.is_dead()
 
@@ -515,7 +679,7 @@ func _validate_dependencies() -> bool:
 	if config == null:
 		push_error("FallenGateKnight requires FallenGateKnightConfig")
 		return false
-	if animated_sprite == null or facing_root == null or health_component == null or shield_component == null or hurtbox == null or melee_hitbox == null or shockwave_hitbox == null:
+	if animated_sprite == null or shield_damage_overlay == null or facing_root == null or health_component == null or shield_component == null or hurtbox == null or melee_hitbox == null or shockwave_hitbox == null:
 		push_error("FallenGateKnight scene composition is incomplete")
 		return false
 	return true

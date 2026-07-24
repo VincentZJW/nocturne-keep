@@ -17,7 +17,7 @@ func _initialize() -> void:
 		total += files.size()
 		for path: String in files:
 			_validate_png(path, ROOTS[root_path])
-	_expect(total == 131, "Expected 131 Gargoyle/Boss source frames, found %d" % total)
+	_expect(total == 141, "Expected 141 Gargoyle/Boss source frames, found %d" % total)
 	_finish()
 
 
@@ -57,7 +57,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("FIRST_LEVEL_BOSS_ASSET_TEST: PASS (131 transparent lossless/no-mipmap frames)")
+		print("FIRST_LEVEL_BOSS_ASSET_TEST: PASS (141 transparent lossless/no-mipmap frames)")
 		quit(0)
 		return
 	for failure: String in _failures:

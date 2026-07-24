@@ -3078,3 +3078,77 @@ Status: complete — solid collision, configured-Main castle bridge flow, 34-scr
 - The bridge is intentionally continuous across its 800-pixel combat span. The moat is naturally reachable at the marked bank-to-bridge opening and through forced test placement; no hidden gap was inserted into the combat floor.
 - Environmental art remains gray-box native Godot polygons. The dark water, old timber, chain posts, barrier and castle facade establish readable function but are not a final tile/art/audio pass.
 - No Player tuning, enemy/Boss balance, enemy AI, HUD dimensions, new enemy, Boss skill, equipment or second-level content was changed.
+
+## 2026-07-24 — Fallen Gate Knight turn response and Shield durability (preflight)
+
+Status: complete — configured-Main implementation, 34-script regression and graphical QA passed; manual feel acceptance pending
+
+### Goal
+
+- Raise only the first Boss Shield from 6 to 10 while retaining Body 18, all Boss damage/skills/movement, and Player Normal/Dash Attack damage 1/2.
+- Replace the current delayed instantaneous mirror with a readable two-stage turn: 0.07-second reaction plus 0.10-second authored turn animation, followed by a 0.12-second anti-jitter cooldown.
+- Keep contact-time front/back Shield routing, no break-hit overflow, reset behavior, signal-driven Boss HUD, and the configured F5 Main instance synchronized.
+
+### Read-only audit
+
+- `project.godot` resolves F5 to `res://scenes/main/main.tscn`. The live Boss is `Main/World/CastleEntranceArea/FallenGateKnight`, instanced from `res://scenes/bosses/fallen_gate_knight.tscn`; the live HUD is `Main/HUD/BossHealthHud`.
+- `res://resources/bosses/fallen_gate_knight_config.tres` currently owns Body 18, Shield 6, and one `turn_duration = 0.18`. Main overrides only bridge bounds; it has no Shield or turn Inspector override.
+- Turning currently updates only in `ApproachShielded` / `ApproachUnshielded`. The first detection tick initializes 0.18 seconds without consuming that tick, so a 60 Hz free-Approach turn completes in about 0.20 seconds and then instantly changes both `AnimatedSprite2D.flip_h` and `FacingRoot.scale.x`. Attacks, Hurt, ShieldBreak, PhaseTransition, GuardRecovery, ordinary Recovery and Death do not update turning; the perceived delay can therefore stack the remaining locked attack plus 0.48-second Recovery before the 0.20-second turn.
+- There is no center-side threshold in Boss turning, no post-turn cooldown, no Turn state, and no turn animation. The shared `ShieldComponent` does classify source side at contact and consumes one attack id before routing, so existing rear/front routing and no-overflow break behavior can be retained.
+- `BossHealthHud` listens to `HealthComponent.health_changed` and `ShieldComponent.shield_health_changed`; it does not own combat data. Its saved scene defaults still show 6/6, but binding replaces them with the component's real values.
+
+### Planned files, tests, and scope check
+
+- Update the centralized Boss config, Boss state/presentation script, Boss scene/SpriteFrames and deterministic original pixel generators; add Shield damage overlays for intact/damaged/critical/broken and authored shielded/unshielded turn frames.
+- Extend the saved-Main Boss test for 10-point routing, HUD/reset, 0.16–0.20-second turn completion, reaction cancellation, center hysteresis, cooldown and attack-direction locking. Run all repository tests plus exact Godot 4.7.1 import, headless F5 and graphical F5 checks.
+- Update only the requested Boss, room, combat and metric specifications plus this log. No Player tuning, Boss Body/damage/skill/movement, other enemy, bridge/moat/gate geometry or completion-flow change is in scope.
+
+### Delivered implementation
+
+- Replaced the single `turn_duration = 0.18` delayed mirror with centralized `boss_turn_reaction_delay = 0.07`, `boss_turn_animation_duration = 0.10`, `boss_turn_cooldown = 0.12`, and `turn_side_threshold = 12`. Added explicit `TurnShielded` / `TurnUnshielded` states and three-frame 30 FPS original pixel animations.
+- Idle, Approach, GuardRecovery and Recovery can request a turn. A rear request cancels if the Player returns to the current front or the 12-pixel center zone before reaction completes. All attacks, Hurt, ShieldBreak, PhaseTransition and Death retain locked facing and interrupt/reject turn requests.
+- The visual and `FacingRoot` now commit together only after the turn animation. Commit is deferred until the current contact frame completes, so Shield routing on that frame uses the old facing and the next frame uses the new facing. A 0.12-second cooldown prevents center-line oscillation.
+- Raised only `boss_shield_max_health` from 6 to 10. Body remains 18, Player Normal/Dash damage remains 1/2, every Boss damage/movement/skill/cadence value remains unchanged, frontal hits remain Shield-only, rear hits remain Body-only, and the breaking attack still discards overflow and cannot hit Body with the same attack id.
+- Added a signal-driven full-canvas pixel `ShieldDamageOverlay`: 10–8 intact, 7–5 damaged, 4–1 critical, and 0 broken. Its offsets follow shielded Idle, ShieldBash and Turn frames; the existing restrained shield-break flash/animation remains unchanged.
+- The signal-driven Boss HUD now initializes from and displays 10/10, decrements from real Shield signals, shows `BROKEN` at zero, and returns to 10/10 on reset. Main's saved HUD defaults were synchronized for editor/runtime consistency without moving combat ownership into UI.
+- `reset_boss()` now restores Body 18, Shield 10, intact overlay, initial left facing, Phase 1, and clears reaction, animation-commit and cooldown state. Main still overrides only bridge bounds and directly instances the shared latest Boss scene/config.
+
+### Measured timing and balance records
+
+- Previous free-Approach behavior: about 0.20 seconds at 60 Hz from first detection to an instantaneous mirror (0.18 configured plus its initialization/fixed-step boundary). During a locked attack it could additionally wait for the remaining attack and up to the 0.48-second Recovery because Recovery did not process turning.
+- New free-Approach and GuardRecovery behavior: 0.1833 seconds measured at 60 Hz from clear rear detection to queued contact-frame commit, inside the 0.16–0.20-second target. Authored nominal duration is 0.17 seconds.
+- Full Shield break counts: 10 Normal Attacks, 5 Dash Attacks, or any 1/2-damage mix totaling 10 (for example 4 Dash + 2 Normal). Body remains 18 through five frontal Dash hits; a rear Normal + Dash changes Body 18→15 while Shield stays unchanged.
+- Deterministic tests found no center-threshold flip, stale reaction after returning front, cooldown bypass, attack-state turn, same-frame rear-to-front routing error, or break-hit overflow. Subjective Phase 1/Phase 2 average duration and average successful rear hit count require manual multi-run play; they were not fabricated from automation. Shield 15 remains documentation-only as a future hard-mode candidate.
+
+### Commands and actual results
+
+1. Exact asset build/import:
+   - `Godot --headless --path . --script scripts/tools/pixel_first_level_boss_generator.gd`: PASS, 141 original Gargoyle/Boss PNG files.
+   - `Godot --headless --path . --import --quit-after 120`: final rerun exit 0 without diagnostics.
+   - `Godot --headless --path . --script scripts/tools/first_level_boss_sprite_frames_builder.gd`: PASS, current Boss and Shield-overlay SpriteFrames saved.
+2. Focused saved-Main checks:
+   - `tests/combat/test_first_level_boss.gd`: PASS; printed `BOSS_TURN_TIMING: free=0.1833 recovery=0.1833`, 10-point Shield/HUD/front/rear/no-overflow/reset and every unchanged attack profile.
+   - `tests/tools/validate_first_level_boss_assets.gd`: PASS, 141 transparent lossless/no-mipmap frames.
+   - `tests/level/test_castle_bridge_flow.gd`: PASS, moat death/ghost/respawn and 10-point Boss reset/persistence.
+   - `tests/combat/test_main_enemy_integration.gd`: PASS, seven groups/18 normal enemies/Boss room/HUD/respawn unchanged.
+   - The first Debug HUD invocation used obsolete `tests/tools/test_main_debug_hud.gd` and correctly failed as missing; the located real command `tests/ui/test_main_debug_hud.gd` then passed compact/expanded/hidden/F1–F4 behavior. The missing-path attempt is not counted as a project failure or a passed test.
+3. Complete regression:
+   - Exact Godot serial execution of every `.gd` under `tests/`: `FULL_TESTS count=34 failures=0`; runner rejected nonzero exit plus `SCRIPT ERROR`, `ERROR:`, `WARNING:` and explicit failure summaries.
+4. Configured F5 Main runtime:
+   - Headless `Godot --headless --path . --quit-after 600 --log-file docs/qa/fallen_gate_knight_f5_headless.log`: exit 0, no Script Error/Error/Warning diagnostics.
+   - Graphical `Godot --path . --quit-after 300 --log-file docs/qa/fallen_gate_knight_f5_graphical.log`: exit 0, GL Compatibility on Apple M4, no diagnostics.
+   - Graphical configured-Main capture script: exit 0 and `FALLEN_GATE_KNIGHT_QA: ... shield=6/10 visual=damaged state=TurnShielded turn_frame=1` from `Main/World/CastleEntranceArea/FallenGateKnight`.
+
+### Configured-Main QA evidence
+
+- `docs/qa/fallen_gate_knight_shield_10_main.png`: 1280×720, SHA-256 `d53cca07279235c754f724a5ccf6e5be017e59b463d683f2752777eb6bfb3888`; live HUD visibly reads Body 18/18 and Shield 10/10.
+- `docs/qa/fallen_gate_knight_shield_damaged_main.png`: 1280×720, SHA-256 `dfbcd6393bc5029d49191335defc98c3771e8d1821d8432f6cccd05462e42b02`; four real frontal Normal hits produce Shield 6/10 and the damaged overlay without Body loss.
+- `docs/qa/fallen_gate_knight_turn_main.png`: 1280×720, SHA-256 `778f8bee555bbdcfc7730180b104b500532de34f2348128beef35a474bcd3cde`; configured Main shows `TurnShielded` frame 2 before facing/Hitbox commit.
+- Original-resolution inspection confirmed sharp nearest-neighbor art, readable shield/sword/body compression during turn, synchronized HUD values, and no full-screen shield flash.
+
+### Manual acceptance and known limitations
+
+- Manually repeat jump, double-jump and Air Dash cross-ups at normal speed, and judge whether the 0.1833-second response leaves one satisfying Normal hit or the start of one Dash Attack without permitting sustained rear output. Automation proves timing/routing/state locks, not perceived pressure.
+- Manually record several complete Phase 1/2 durations and rear-hit counts. They depend on human movement/attack choice and are intentionally marked pending instead of inferred from deterministic damage counts.
+- The turn is a compact three-frame 96×96 pixel twist rather than skeletal interpolation. The damage overlay uses three visible durability levels plus the existing broken animation; it does not create ten unique Shield sprites.
+- No Player value, Boss Body/damage/movement/skill, normal-enemy behavior, bridge/moat/gate geometry, HUD placement or chapter-completion flow changed.

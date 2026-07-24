@@ -909,8 +909,8 @@ offset_right = 466.0
 offset_bottom = 84.0
 theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background")
 theme_override_styles/fill = SubResource("StyleBoxFlat_boss_shield_fill")
-value = 6.0
-max_value = 6.0
+value = 10.0
+max_value = 10.0
 show_percentage = false
 
 [node name="BossShieldValue" type="Label" parent="HUD/BossHealthHud/BossShieldRow"]
@@ -919,7 +919,7 @@ offset_left = 472.0
 offset_top = 63.0
 offset_right = 548.0
 offset_bottom = 85.0
-text = "06 / 06"
+text = "10 / 10"
 horizontal_alignment = 2
 
 [node name="LevelCompletePanel" type="ColorRect" parent="HUD"]

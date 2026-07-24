@@ -95,6 +95,20 @@ Because elevated surfaces are now solid, the valid route starts just beyond an e
 | Boss entry | x=5780 | 27.5% into bridge |
 | CastleGate | center x=6400, 48×260 | visible closure; 1.00-second lift |
 
+### Fallen Gate Knight response metrics
+
+| Metric | Configured Main value | Fixed-step result / purpose |
+| --- | ---: | --- |
+| Body Health | 18 | unchanged |
+| Shield Health | 10 | 10 Normal or 5 Dash Attacks; 15 reserved as a future hard-mode candidate only |
+| Turn reaction | 0.07 s | cancellable while Player returns to front/center |
+| Turn animation | 0.10 s | three authored 96×96 frames; no instantaneous mirror |
+| Total turn | 0.17 s authored | 0.1833 s measured at 60 physics ticks/s |
+| Side threshold | 12 px | center-line hysteresis |
+| Turn cooldown | 0.12 s | prevents repeated left/right jitter |
+
+The Player retains a brief rear reward: Shield routing keeps the old facing until the turn's deferred contact-frame commit. Attack windups/active frames remain direction-locked, while GuardRecovery and ordinary Recovery can begin the fast turn without changing any Boss attack cadence setting.
+
 Bridge and castle floor meet flush at x=6360. The near bank intentionally ends 40 pixels before the bridge at x=5560: a forgiving single jump crosses it, while walking off allows the existing moat death flow to be tested. Moat water/hazard occupies x=5520..6360 below the bridge.
 
 ### Enemy alignment after repair

@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/bosses/fallen_gate_knight.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://resources/bosses/fallen_gate_knight_config.tres" id="2_config"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/combat/shield_component.gd" id="7_shield"]
+[ext_resource type="SpriteFrames" path="res://resources/bosses/fallen_gate_knight_shield_damage_sprite_frames.tres" id="8_shield_damage"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(38, 58)
@@ -36,6 +37,14 @@ texture_filter = 1
 sprite_frames = ExtResource("3_frames")
 animation = &"idle_shielded"
 autoplay = "idle_shielded"
+
+[node name="ShieldDamageOverlay" type="AnimatedSprite2D" parent="VisualRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 1
+texture_filter = 1
+sprite_frames = ExtResource("8_shield_damage")
+animation = &"intact"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 15)

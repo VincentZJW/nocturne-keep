@@ -22,7 +22,8 @@ func _run_tests() -> void:
 	var hud: BossHealthHud = main.get_node("HUD/BossHealthHud") as BossHealthHud
 	_test_main_structure(main, boss, room, hud)
 	_test_room_entry(player, boss, room, respawn, hud)
-	_test_boss_shield_and_phase(player, boss)
+	_test_boss_turn_response(player, boss)
+	_test_boss_shield_and_phase(player, boss, hud)
 	_test_boss_attack_profiles(main, boss)
 	_test_boss_death_and_exit(main, player, boss, room)
 	_test_room_reset(player, boss, room, respawn)
@@ -63,6 +64,7 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 	_expect(room.castle_gate_controller.gate_audio.stream != null, "Castle gate placeholder audio was not built")
 	var required_animations: Array[StringName] = [
 		&"idle_shielded", &"walk_shielded", &"shield_block", &"shield_bash",
+		&"turn_shielded", &"turn_unshielded",
 		&"sword_slash", &"heavy_overhead", &"hurt_shielded", &"shield_break",
 		&"phase_transition", &"idle_unshielded", &"walk_unshielded", &"combo_slash_1",
 		&"combo_slash_2", &"jump_smash", &"charge_thrust", &"shockwave_strike",
@@ -70,7 +72,14 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 	]
 	for animation_name: StringName in required_animations:
 		_expect(boss.animated_sprite.sprite_frames.has_animation(animation_name), "Boss animation missing: %s" % animation_name)
-	_expect(boss.config.max_health == 18 and boss.config.shield_health == 6, "Boss Body/Shield balance mismatch")
+	_expect(
+		boss.config.max_health == 18 and boss.config.boss_shield_max_health == 10,
+		"Boss Body/Shield balance mismatch"
+	)
+	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.07), "Boss turn reaction mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.10), "Boss turn animation mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_cooldown, 0.12), "Boss turn cooldown mismatch")
+	_expect(is_equal_approx(boss.config.turn_side_threshold, 12.0), "Boss turn threshold mismatch")
 	_expect(boss.config.shield_bash_damage == 8, "Boss Shield Bash damage mismatch")
 	_expect(boss.config.sword_slash_damage == 10, "Boss Slash damage mismatch")
 	_expect(boss.config.heavy_overhead_damage == 15, "Boss Heavy damage mismatch")
@@ -93,25 +102,135 @@ func _test_room_entry(player: Player, boss: FallenGateKnight, room: BossRoomCont
 	_expect(player.player_camera.limit_left == 5340 and player.player_camera.limit_right == 6620, "Boss camera limits were not applied")
 
 
-func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight) -> void:
+func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
+	boss.set_physics_process(false)
+	boss.current_phase = 1
+	boss.current_state = FallenGateKnight.APPROACH_SHIELDED
+	boss.state_timer = 0.0
+	boss.set_target(player)
+	boss.set_facing_direction(-1.0)
+	boss._interrupt_turn()
+	boss._turn_cooldown_timer = 0.0
+	player.global_position = boss.global_position + Vector2(120.0, 0.0)
+	var step: float = 1.0 / 60.0
+	var elapsed: float = 0.0
+	var saw_turn_animation: bool = false
+	while not boss._turn_commit_queued and elapsed < 0.50:
+		if boss.current_state in [FallenGateKnight.TURN_SHIELDED, FallenGateKnight.TURN_UNSHIELDED]:
+			saw_turn_animation = true
+			boss._process_turn_state(step)
+		else:
+			boss._process_approach(step)
+		elapsed += step
+	_expect(saw_turn_animation, "Boss did not enter authored Turn state")
+	_expect(
+		elapsed >= 0.16 and elapsed <= 0.20,
+		"Boss turn completed outside 0.16-0.20 seconds: %.4f" % elapsed
+	)
+	_expect(boss.facing_direction < 0.0, "Boss flipped before the contact frame completed")
+	_expect(
+		boss.shield_component.classify_source_side(player.global_position) == ShieldComponent.SIDE_BACK,
+		"Turn-completion contact frame did not retain old rear routing"
+	)
+	boss._commit_turn()
+	_expect(boss.facing_direction > 0.0, "Boss did not complete turn toward rear target")
+	_expect(
+		boss.shield_component.classify_source_side(player.global_position) == ShieldComponent.SIDE_FRONT,
+		"Post-turn contact did not adopt new frontal Shield routing"
+	)
+	_expect(boss.animated_sprite.flip_h == false, "Boss visual did not finish facing right")
+	_expect(boss.facing_root.scale.x > 0.0, "Boss Hitbox facing did not match visual")
+
+	# A target returning to the old front during the reaction delay cancels cleanly.
+	boss.set_facing_direction(-1.0)
+	boss.current_state = FallenGateKnight.APPROACH_SHIELDED
+	boss._interrupt_turn()
+	boss._turn_cooldown_timer = 0.0
+	player.global_position = boss.global_position + Vector2(120.0, 0.0)
+	boss._process_turn_request(step)
+	boss._process_turn_request(step)
+	player.global_position = boss.global_position + Vector2(-120.0, 0.0)
+	_expect(not boss._process_turn_request(step), "Boss did not cancel stale rear-side turn")
+	_expect(is_zero_approx(boss._pending_facing), "Canceled Boss turn retained pending facing")
+
+	# The center tolerance and post-turn cooldown prevent flip jitter.
+	player.global_position = boss.global_position + Vector2(8.0, 0.0)
+	for _frame: int in range(12):
+		_expect(not boss._process_turn_request(step), "Boss turned inside center tolerance")
+	_expect(boss.facing_direction < 0.0, "Center tolerance changed Boss facing")
+	boss._turn_cooldown_timer = boss.config.boss_turn_cooldown
+	player.global_position = boss.global_position + Vector2(120.0, 0.0)
+	_expect(not boss._process_turn_request(step), "Boss ignored post-turn cooldown")
+
+	# Attack direction remains locked; Recovery is the first state allowed to react.
+	boss._turn_cooldown_timer = 0.0
+	boss.current_state = FallenGateKnight.SWORD_SLASH
+	boss.play_animation(&"sword_slash", true)
+	for _frame: int in range(12):
+		boss._process_attack_motion(step)
+	_expect(boss.facing_direction < 0.0, "Boss turned during locked SwordSlash")
+	boss._on_animation_finished()
+	_expect(boss.current_state == FallenGateKnight.GUARD_RECOVERY, "Boss did not enter GuardRecovery")
+	var recovery_elapsed: float = 0.0
+	while not boss._turn_commit_queued and recovery_elapsed < 0.30:
+		if boss.current_state == FallenGateKnight.TURN_SHIELDED:
+			boss._process_turn_state(step)
+		else:
+			boss._process_timed_state(step)
+		recovery_elapsed += step
+	boss._commit_turn()
+	_expect(boss.facing_direction > 0.0, "Boss did not turn during GuardRecovery")
+	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.16..0.20" % [elapsed, recovery_elapsed])
+
+
+func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight, hud: BossHealthHud) -> void:
 	boss.set_physics_process(false)
 	boss.set_facing_direction(-1.0)
 	player.global_position = boss.global_position + Vector2(-55.0, 0.0)
 	var normal: HitboxComponent = player.action_controller.attack_hitbox
 	var dash: HitboxComponent = player.action_controller.dash_attack_hitbox
-	for index: int in range(2):
-		dash.begin_attack(70_000 + index, 2, 1.0, player)
+	boss.health_component.reset_to_full()
+	boss.shield_component.reset_shield()
+	boss.current_phase = 1
+	boss.current_state = FallenGateKnight.IDLE_SHIELDED
+	normal.begin_attack(70_000, 1, 1.0, player)
+	_expect(normal.try_hit(boss.hurtbox), "Boss frontal normal Attack did not reach Shield")
+	normal.end_attack()
+	_expect(boss.health_component.current_health == 18, "Boss frontal normal leaked into Body")
+	_expect(boss.shield_component.shield_current_health == 9, "Boss frontal normal did not reduce Shield 10→9")
+	_expect(hud.shield_value.text == "09 / 10", "Boss HUD did not display Shield 9/10")
+
+	# Contact-time rear routing bypasses Shield while preserving the Shield value.
+	player.global_position = boss.global_position + Vector2(55.0, 0.0)
+	normal.begin_attack(70_001, 1, -1.0, player)
+	_expect(normal.try_hit(boss.hurtbox), "Boss rear normal Attack was rejected")
+	normal.end_attack()
+	dash.begin_attack(70_002, 2, -1.0, player)
+	_expect(dash.try_hit(boss.hurtbox), "Boss rear Dash Attack was rejected")
+	dash.end_attack()
+	_expect(boss.health_component.current_health == 15, "Boss rear 1+2 damage routing mismatch")
+	_expect(boss.shield_component.shield_current_health == 9, "Boss rear attacks changed Shield")
+
+	# Five frontal Dash Attacks break exactly 10 Shield without same-hit overflow.
+	boss.health_component.reset_to_full()
+	boss.shield_component.reset_shield()
+	boss.current_phase = 1
+	boss.current_state = FallenGateKnight.IDLE_SHIELDED
+	player.global_position = boss.global_position + Vector2(-55.0, 0.0)
+	for index: int in range(5):
+		dash.begin_attack(70_100 + index, 2, 1.0, player)
 		_expect(dash.try_hit(boss.hurtbox), "Boss frontal Dash did not reach Shield")
 		dash.end_attack()
-	_expect(boss.health_component.current_health == 18, "Boss Shield route leaked into Body")
-	_expect(boss.shield_component.shield_current_health == 2, "Boss two Dashes did not reduce Shield 6→2")
-	for index: int in range(2):
-		normal.begin_attack(70_100 + index, 1, 1.0, player)
-		_expect(normal.try_hit(boss.hurtbox), "Boss frontal normal Attack did not reach Shield")
-		normal.end_attack()
+		if index == 0:
+			_expect(boss._get_shield_visual_state() == &"intact", "Boss Shield 8/10 was not intact")
+		elif index == 1:
+			_expect(boss._get_shield_visual_state() == &"damaged", "Boss Shield 6/10 was not damaged")
+		elif index == 3:
+			_expect(boss._get_shield_visual_state() == &"critical", "Boss Shield 2/10 was not critical")
 	_expect(boss.shield_component.shield_current_health == 0, "Boss Shield did not break at zero")
 	_expect(boss.health_component.current_health == 18, "Boss breaking hit overflowed into Body")
 	_expect(boss.get_state_name() == &"ShieldBreak", "Boss did not enter ShieldBreak")
+	_expect(hud.shield_value.text == "BROKEN", "Boss HUD did not display broken Shield")
 	boss._process_timed_state(0.91)
 	_expect(boss.get_state_name() == &"PhaseTransition", "Boss did not enter phase transition")
 	boss._process_timed_state(1.11)
@@ -195,7 +314,10 @@ func _test_room_reset(player: Player, boss: FallenGateKnight, room: BossRoomCont
 	respawn.player_respawned.emit(room.checkpoint.global_position)
 	_expect(not room.encounter_started and not room.room_is_locked, "Player respawn did not reset Boss room")
 	_expect(boss.health_component.current_health == 18, "Boss reset did not restore Body Health")
-	_expect(boss.shield_component.shield_current_health == 6, "Boss reset did not restore Shield")
+	_expect(boss.shield_component.shield_current_health == 10, "Boss reset did not restore Shield")
+	_expect(boss._get_shield_visual_state() == &"intact", "Boss reset did not restore intact Shield")
+	_expect(is_zero_approx(boss._turn_timer), "Boss reset retained turn timer")
+	_expect(is_zero_approx(boss._turn_cooldown_timer), "Boss reset retained turn cooldown")
 	_expect(not boss.is_ai_active(), "Boss reset left AI active")
 	_expect(room.rear_barrier.collision_layer == 0, "Boss reset did not reopen rear barrier")
 	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Boss reset did not close castle gate")

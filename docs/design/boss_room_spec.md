@@ -25,7 +25,7 @@ The former meaningless blocker was `Main/World/BossRoom/EntranceGate` at x=5630.
 
 1. Reaching the near-bank checkpoint selects `(5480,612)`. Entering the bridge trigger restores Player HP/Stamina, closes the visible rear barrier, keeps the castle gate closed, locks Camera limits to x=5340..6620, activates the Boss, and displays the signal-driven Boss HUD.
 2. Boss movement and charge motion are clamped to x=5650..6320. These logical bounds do not create a Player collider. Approaching either edge cancels outward velocity; Player movement across the bridge is unaffected.
-3. Player death or moat death runs the existing five-frame body collapse, dagger drop, ghost rise, 0.50-second ghost pause, then respawns at the checkpoint. An uncleared Boss restores Body 18, Shield 6, shield visuals, initial position and Phase 1; rear barrier reopens, castle gate closes, Camera limits release, and Boss HUD hides.
+3. Player death or moat death runs the existing five-frame body collapse, dagger drop, ghost rise, 0.50-second ghost pause, then respawns at the checkpoint. An uncleared Boss restores Body 18, Shield 10, intact shield visuals, initial left facing, zeroed turn timers/cooldown and Phase 1; rear barrier reopens, castle gate closes, Camera limits release, and Boss HUD hides.
 4. `boss_defeated` is emitted only after the Boss death animation completes. The controller then opens the rear barrier, releases Camera limits, and starts the 1.00-second raised-portcullis animation.
 5. `GateCollision` remains enabled for the complete opening animation. Only `gate_opened` disables its World layer/collision and enables `CastleEntranceTrigger`; the message becomes `The castle gate is open. / 城堡大门已经开启。`.
 6. Crossing the enabled trigger shows `CHAPTER I COMPLETE / 第一章完成`. No second-level scene is loaded or fabricated.
@@ -42,3 +42,4 @@ Boss completion is persistent for the current Main instance: a later Player deat
 - Castle gate is a visible iron-barred slab, not an invisible wall. The facade is also solid and leaves a readable 80-pixel doorway; the completion trigger sits inside that doorway before the right tower collision.
 - Gate opening plays a quiet, deterministic synthesized chain/stone placeholder from `GateAudio`; it uses no downloaded asset and remains replaceable by a licensed final sound.
 - Boss HUD observes Body/Shield signals only and never mutates combat data.
+- The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 10-point Shield and 0.07/0.10/0.12-second reaction/animation/cooldown resource values directly.

@@ -74,7 +74,10 @@ func _test_uncleared_moat_reset(
 	_expect(player.global_position == room.checkpoint.global_position, "Moat respawn missed BossCheckpoint")
 	_expect(not room.encounter_started and not boss.is_ai_active(), "Uncleared Boss did not reset after moat death")
 	_expect(boss.health_component.current_health == boss.config.max_health, "Boss Body did not reset after moat death")
-	_expect(boss.shield_component.shield_current_health == boss.config.shield_health, "Boss Shield did not reset after moat death")
+	_expect(
+		boss.shield_component.shield_current_health == boss.config.boss_shield_max_health,
+		"Boss Shield did not reset after moat death"
+	)
 	_expect(hazard.is_armed(), "Moat did not rearm after respawn")
 
 
