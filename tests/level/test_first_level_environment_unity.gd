@@ -71,13 +71,13 @@ func _test_gameplay_geometry_preserved(main: Node2D) -> void:
 		var shape: RectangleShape2D = collision.shape as RectangleShape2D
 		_expect(shape.size == expected_platforms[platform_path], "Environment pass changed %s geometry" % platform_path)
 	var encounters: Node2D = main.get_node("World/Encounters") as Node2D
-	_expect(encounters.get_child_count() == 7, "Environment pass changed the seven encounter groups")
+	_expect(encounters.get_child_count() == 18, "Chapter I requires eighteen encounter groups")
 	var normal_enemy_count: int = 0
 	for encounter_node: Node in encounters.get_children():
 		var encounter: EncounterGroup = encounter_node as EncounterGroup
 		if encounter != null:
 			normal_enemy_count += encounter.get_enemies().size()
-	_expect(normal_enemy_count == 18, "Environment pass changed the 18-enemy roster")
+	_expect(normal_enemy_count == 34, "Chapter I requires the exact 34-enemy roster")
 
 
 func _test_gate_and_camera_contract(main: Node2D) -> void:

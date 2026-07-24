@@ -275,5 +275,5 @@ func _validate_project_isolation(failures: Array[String]) -> void:
 	if filter_value != 0:
 		failures.append("Canvas texture filter is not nearest: %d" % filter_value)
 	var main_scene: String = str(ProjectSettings.get_setting("application/run/main_scene", ""))
-	if main_scene != "res://scenes/main/main.tscn":
-		failures.append("Formal Main scene changed: %s" % main_scene)
+	if main_scene != "res://scenes/cinematics/opening_cinematic.tscn":
+		failures.append("Formal Chapter I opening scene changed: %s" % main_scene)

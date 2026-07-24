@@ -4,8 +4,11 @@ extends Node2D
 ## Hand-authored, one-shot activation boundary for a small mixed-enemy encounter.
 
 signal encounter_activated(encounter_name: StringName)
+signal encounter_cleared(encounter_name: StringName)
 
 @export var encounter_name: StringName = &"EncounterGroup"
+@export var region_name: StringName = &"Unassigned"
+@export var is_optional: bool = false
 @export_range(1, 4, 1) var simultaneous_attack_limit: int = 2
 @export var start_activated: bool = false
 @export_node_path("Area2D") var activation_area_path: NodePath = NodePath("ActivationArea")
@@ -15,6 +18,7 @@ signal encounter_activated(encounter_name: StringName)
 @onready var enemies_root: Node2D = get_node_or_null(enemies_root_path) as Node2D
 
 var is_activated: bool = false
+var is_cleared: bool = false
 
 
 func _ready() -> void:
@@ -24,6 +28,8 @@ func _ready() -> void:
 	activation_area.body_entered.connect(_on_activation_body_entered)
 	for enemy: EnemyCombatant in get_enemies():
 		enemy.set_ai_active(false)
+		if not enemy.enemy_died.is_connected(_on_enemy_died):
+			enemy.enemy_died.connect(_on_enemy_died)
 	if start_activated:
 		activate()
 
@@ -42,6 +48,7 @@ func activate(player: Player = null) -> bool:
 		):
 			enemy.set_target(player)
 	encounter_activated.emit(encounter_name)
+	_check_cleared()
 	return true
 
 
@@ -101,3 +108,14 @@ func _on_activation_body_entered(body: Node2D) -> void:
 	var player: Player = body as Player
 	if player != null:
 		activate(player)
+
+
+func _on_enemy_died() -> void:
+	call_deferred("_check_cleared")
+
+
+func _check_cleared() -> void:
+	if not is_activated or is_cleared or get_alive_enemy_count() > 0:
+		return
+	is_cleared = true
+	encounter_cleared.emit(encounter_name)

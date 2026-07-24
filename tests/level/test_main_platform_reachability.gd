@@ -3,7 +3,7 @@ extends SceneTree
 ## Saved F5 Main traversal audit plus real Player/physics landing checks.
 
 const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
-const MAIN_PATH: String = "res://scenes/main/main.tscn"
+const MAIN_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
 const DOUBLE_JUMP_RISE: float = 167.10
 const CHALLENGE_LIMIT: float = DOUBLE_JUMP_RISE * 0.90
 const MINIMUM_SAFE_WIDTH: float = 48.0
@@ -26,7 +26,7 @@ func _initialize() -> void:
 func _run_tests() -> void:
 	_expect(
 		ProjectSettings.get_setting("application/run/main_scene", "") == MAIN_PATH,
-		"F5 does not resolve to the audited Main scene"
+		"F5 does not resolve to the authored opening before Main"
 	)
 	var main: Node2D = MAIN_SCENE.instantiate() as Node2D
 	get_root().add_child(main)
@@ -74,12 +74,10 @@ func _test_saved_platform_geometry(main: Node2D) -> void:
 
 func _test_enemy_platform_alignment(main: Node2D) -> void:
 	var crossbow_paths: Array[NodePath] = [
-		NodePath("World/Encounters/EncounterGroup04/Enemies/FallenCrossbowman01"),
-		NodePath("World/Encounters/EncounterGroup06/Enemies/FallenCrossbowman02"),
-		NodePath("World/Encounters/EncounterGroup07/Enemies/FallenCrossbowman03"),
+		NodePath("World/Encounters/ApproachOptional01/Enemies/ApproachCrossbowman02"),
 	]
 	var platform_paths: Array[NodePath] = [
-		NodePath("World/PlatformB"), NodePath("World/PlatformC"), NodePath("World/PlatformD"),
+		NodePath("World/PlatformD"),
 	]
 	for index: int in range(crossbow_paths.size()):
 		var enemy: FallenCrossbowman = main.get_node_or_null(crossbow_paths[index]) as FallenCrossbowman
@@ -93,8 +91,7 @@ func _test_enemy_platform_alignment(main: Node2D) -> void:
 	var perch: StaticBody2D = main.get_node_or_null("World/GargoylePerch") as StaticBody2D
 	var perch_shape: RectangleShape2D = _surface_shape(perch)
 	for gargoyle_path: NodePath in [
-		NodePath("World/Encounters/EncounterGroup05/Enemies/GargoyleSentinel01"),
-		NodePath("World/Encounters/EncounterGroup05/Enemies/GargoyleSentinel02"),
+		NodePath("World/Encounters/ForestEncounter03/Enemies/ForestGargoyle01"),
 	]:
 		var gargoyle: GargoyleSentinel = main.get_node_or_null(gargoyle_path) as GargoyleSentinel
 		_expect(gargoyle != null, "%s is missing" % gargoyle_path)

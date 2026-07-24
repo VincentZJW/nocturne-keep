@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一关环境统一与尖顶哥特城堡强化 · Castle Approach Graybox 3.3`
+当前版本：`第一章叙事开场、嵌入式教程与34敌人路线 · Chapter I Graybox 4.0`
 
 ## 当前范围
 
-当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3）。视觉路线从`Dark Forest Outskirts`的荒野泥石路、层叠树海、枯树、雾、破栅栏与路边废墟开始，经森林逐渐稀疏、岗楼/断墙/铁门残骸增多的`Castle Frontier`，再进入分层尖塔、城墙和石砌平台构成的Ravenmourn外围。玩家随后穿过标记`RAVENMOURN CASTLE`的非阻挡哥特铁拱门，从Boss检查点踏上深青蓝护城河上的加固旧木桥迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。桥后保存一座原创16-bit-inspired多尖塔宏伟城堡背景，以及视觉宽度88像素、物理阻挡保持48×260的厚重木铁升降门。Boss死亡后不弹出章节/开门文字：大门用1.20秒缓慢升起，碰撞清空后玩家自行进入门洞，经0.55秒无文字淡出抵达极简`RavenmournThreshold`占位过渡场景。当前没有第二关正式玩法、掉落、经验、装备或存档。
+F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入正式Main。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人（Guard 14、Shield 5、Spearman 6、Crossbowman 5、Gargoyle 4），其中27只在主路线、7只在可选高台路线。视觉路线从`Ravenmourn Outskirts`经Dark Forest、Castle Outskirts和Castle Approach抵达木桥Boss区；四个中途/战前检查点复用现有死亡、幽灵与重生流程。Fallen Gate Knight死亡时只显示一句“钟……认得你。 / The bell… remembers you.”，随后保留1.20秒重门和无文字阈厅过渡。当前没有第二关正式玩法、掉落、经验、装备、存档或新能力树。
 
 ## 环境要求
 
@@ -30,13 +30,13 @@ GODOT_BIN="/absolute/path/to/Godot"
 "$GODOT_BIN" --editor --path .
 ```
 
-按 `F5` 会始终运行项目配置的完整主场景：
+按 `F5` 会先运行项目配置的开场场景：
 
 ```text
-res://scenes/main/main.tscn
+res://scenes/cinematics/opening_cinematic.tscn
 ```
 
-该场景包含Player、Health/Stamina HUD、死亡/重生流程、7个手工普通遭遇组和保存于`World/CastleEntranceArea`的城堡木桥Boss区。Player出生于`(320,612)`；普通组规模为2/3/2/2/2/3/4。三个弩手台顶部为y=500/504/508，石像鬼落点顶部为y=492；Solid化后需从平台边缘起跳并落在顶部，不能再从正下方穿过。Boss检查点位于`(5480,612)`；河岸x=5520与木桥x=5560之间是一个40像素、普通单跳即可跨越的护城河入口，木桥延伸至x=6360且顶面y=640，Boss出生于`(6120,596)`。走下河岸跌入`MoatHazard`会复用玩家倒地、幽灵、0.50秒停顿与检查点重生；未击败Boss会完整重置，已击败Boss不会复活。
+自然播放或跳过后加载`res://scenes/main/main.tscn`。Main包含Player、Health/Stamina HUD、教程提示、死亡/重生、18个手工遭遇组和`World/CastleEntranceArea`木桥Boss区。Player出生于`(320,612)`；教程、森林、郊区和城堡接近区分别配置8/10/9/7只普通敌人。Boss检查点位于`(5480,612)`；木桥延伸至x=6360且顶面y=640，Boss出生于`(6120,596)`。走下河岸跌入`MoatHazard`继续复用既有完整死亡流程。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -73,7 +73,7 @@ res://scenes/tools/gargoyle_test_room.tscn
 res://scenes/tools/boss_test_room.tscn
 ```
 
-它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5 Main的七组实际遭遇和城堡木桥流程为准。
+它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5开场后Main的18组实际遭遇和城堡木桥流程为准。
 
 建议Main人工测试顺序：从出生点观察月亮、远景树海与前景枯树的层次，沿Group01..03确认泥石路、杂草、灌木、破栅栏、路标、车轮和墓石不会掩盖攻击；在Group03..05观察森林减少、废岗楼/断墙/铁门增加且远处尖塔逐渐放大。继续从边缘登上PlatformB/C/D与GargoylePerch，在Group06/07确认后段城墙、石砖、碎石、杂草和链条仍保持敌人可读性。到达`(5480,612)`前应看到`RAVENMOURN CASTLE`铁拱门且可自由通行；踏上木桥后确认深青蓝水面/倒影/桥影、多尖塔城堡主体、加宽重门、10点Boss盾量与Phase 2正常。击败Boss后等待完整1.20秒升门，确认没有章节/开门大字、Player控制保留，然后自行进入`CastleEntranceTrigger`并无文字淡出到阈厅占位场景。
 
@@ -111,6 +111,14 @@ Main开发调试快捷键：
 - [技术架构](docs/technical_architecture.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
+- [世界观](docs/narrative/world_bible.md)
+- [开场分镜](docs/narrative/opening_cinematic_script.md)
+- [第一章叙事](docs/narrative/chapter_01_story_spec.md)
+- [主角叙事规格](docs/narrative/character_protagonist_spec.md)
+- [嵌入式教程规格](docs/design/tutorial_spec.md)
+- [第一关34敌人编排](docs/design/first_level_encounter_spec.md)
+- [环境叙事规格](docs/design/environment_storytelling_spec.md)
+- [检查点与重生规格](docs/design/checkpoint_and_respawn_spec.md)
 - [玩家动作接口](docs/design/player_combat_spec.md)
 - [基础战斗组件规格](docs/design/combat_system_spec.md)
 - [Cursed Castle Guard敌人规格](docs/design/enemy_castle_guard_spec.md)

@@ -49,3 +49,19 @@ Presentation remains separate from hazard authority. `WaterVisual`, `WaterDepth`
 - Gate opening plays a quiet, deterministic synthesized chain/stone placeholder from `GateAudio`; it uses no downloaded asset and remains replaceable by a licensed final sound.
 - Boss HUD observes Body/Shield signals only and never mutates combat data.
 - The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 10-point Shield and 0.10/0.13/0.12-second reaction/animation/cooldown resource values directly.
+
+## Chapter I narrative epilogue addendum
+
+Main arena: `Main/World/CastleEntranceArea`
+Controller: `Main/BossRoomController`
+
+The existing bridge, rear battle barrier, camera lock, Boss reset, Health HUD, weighted gate, and castle threshold remain authoritative. No normal enemy from the 34-enemy roster is placed on the bridge.
+
+On Boss body Health death, `BossLastWordsPresenter` displays once:
+
+> 钟……认得你。
+> The bell… remembers you.
+
+The line is a small bottom-centered subtitle. It does not pause AI, delay or own the death animation, open the gate, or transition scenes. `BossRoomController` remains the only gate/threshold authority. A room reset clears the one-shot subtitle latch so the next valid fight can present it again.
+
+After the death presentation, the gate opens with its existing 1.2-second weighted motion. Entering the enabled `CastleEntranceTrigger` invokes the existing text-free fade into `ravenmourn_threshold.tscn`; no second gameplay level is created.

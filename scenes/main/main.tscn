@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3]
+[gd_scene load_steps=66 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -7,14 +7,8 @@
 [ext_resource type="Script" path="res://scripts/ui/player_death_hud.gd" id="5_death_hud"]
 [ext_resource type="Script" path="res://scripts/tools/player_death_test_button.gd" id="6_death_test"]
 [ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="7_respawn"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/castle_guard.tscn" id="8_guard"]
 [ext_resource type="Script" path="res://scripts/tools/main_enemy_debug_overlay.gd" id="9_enemy_debug"]
-[ext_resource type="Script" path="res://scripts/encounters/encounter_group.gd" id="10_encounter"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/cursed_shield_guard.tscn" id="11_shield"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/decayed_spearman.tscn" id="12_spear"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/fallen_crossbowman.tscn" id="13_crossbow"]
 [ext_resource type="Script" path="res://scripts/tools/main_debug_hud_controller.gd" id="14_debug_hud"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/gargoyle_sentinel.tscn" id="15_gargoyle"]
 [ext_resource type="PackedScene" path="res://scenes/bosses/fallen_gate_knight.tscn" id="16_boss"]
 [ext_resource type="Script" path="res://scripts/bosses/boss_room_controller.gd" id="17_boss_room"]
 [ext_resource type="Script" path="res://scripts/bosses/boss_health_hud.gd" id="18_boss_hud"]
@@ -32,6 +26,12 @@
 [ext_resource type="Script" path="res://scripts/world/dark_forest_outskirts_art.gd" id="30_forest_art"]
 [ext_resource type="Script" path="res://scripts/world/castle_frontier_transition_art.gd" id="31_transition_art"]
 [ext_resource type="Script" path="res://scripts/world/outskirts_surface_details.gd" id="32_outskirts_details"]
+[ext_resource type="PackedScene" path="res://scenes/levels/first_level_encounters.tscn" id="33_encounters"]
+[ext_resource type="PackedScene" path="res://scenes/ui/tutorial_prompt_ui.tscn" id="34_tutorial_ui"]
+[ext_resource type="Script" path="res://scripts/tutorial/tutorial_controller.gd" id="35_tutorial"]
+[ext_resource type="Script" path="res://scripts/systems/checkpoint_trigger.gd" id="36_checkpoint"]
+[ext_resource type="Script" path="res://scripts/world/chapter_one_storytelling_art.gd" id="37_story_art"]
+[ext_resource type="Script" path="res://scripts/ui/boss_last_words_presenter.gd" id="38_boss_words"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(5620, 96)
@@ -54,27 +54,6 @@ size = Vector2(240, 24)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
 size = Vector2(48, 900)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_01"]
-size = Vector2(300, 360)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_02"]
-size = Vector2(300, 360)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_03"]
-size = Vector2(300, 360)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_04"]
-size = Vector2(320, 360)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_05"]
-size = Vector2(340, 420)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_06"]
-size = Vector2(340, 420)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_encounter_07"]
-size = Vector2(360, 420)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boss_trigger"]
 size = Vector2(120, 420)
 
@@ -92,6 +71,12 @@ size = Vector2(840, 104)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint_trigger"]
 size = Vector2(120, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tutorial_log"]
+size = Vector2(52, 44)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tutorial_platform"]
+size = Vector2(176, 20)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rear_barrier"]
 size = Vector2(28, 260)
@@ -248,6 +233,45 @@ script = ExtResource("23_surface_details")
 [node name="OutskirtsSurfaceDetails" type="Node2D" parent="World"]
 script = ExtResource("32_outskirts_details")
 
+[node name="ChapterOneStorytellingArt" type="Node2D" parent="World"]
+script = ExtResource("37_story_art")
+
+[node name="TutorialFallenLog" type="StaticBody2D" parent="World"]
+position = Vector2(620, 618)
+collision_layer = 1
+collision_mask = 1
+
+[node name="LogVisual" type="Polygon2D" parent="World/TutorialFallenLog"]
+polygon = PackedVector2Array(-30, -22, 25, -22, 31, 20, -31, 20)
+color = Color(0.18, 0.12, 0.1, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialFallenLog"]
+shape = SubResource("RectangleShape2D_tutorial_log")
+
+[node name="TutorialLaunchPlatform" type="StaticBody2D" parent="World"]
+position = Vector2(2170, 522)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="World/TutorialLaunchPlatform"]
+polygon = PackedVector2Array(-88, -10, 88, -10, 88, 10, -88, 10)
+color = Color(0.18, 0.18, 0.24, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialLaunchPlatform"]
+shape = SubResource("RectangleShape2D_tutorial_platform")
+
+[node name="TutorialAirDashPlatform" type="StaticBody2D" parent="World"]
+position = Vector2(2460, 452)
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="World/TutorialAirDashPlatform"]
+polygon = PackedVector2Array(-88, -10, 88, -10, 88, 10, -88, 10)
+color = Color(0.21, 0.21, 0.28, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialAirDashPlatform"]
+shape = SubResource("RectangleShape2D_tutorial_platform")
+
 [node name="LeftWall" type="StaticBody2D" parent="World"]
 position = Vector2(-124, 360)
 collision_layer = 1
@@ -276,169 +300,54 @@ limit_top = 0
 limit_right = 6600
 limit_bottom = 720
 
-[node name="Encounters" type="Node2D" parent="World"]
+[node name="Encounters" parent="World" instance=ExtResource("33_encounters")]
 
-[node name="EncounterGroup01" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup01"
+[node name="Checkpoints" type="Node2D" parent="World"]
 
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup01"]
-position = Vector2(430, 470)
+[node name="AfterTutorial" type="Area2D" parent="World/Checkpoints"]
+position = Vector2(2580, 550)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
+script = ExtResource("36_checkpoint")
+checkpoint_id = &"after_tutorial"
+respawn_controller_path = NodePath("../../../PlayerRespawnController")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup01/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_01")
+[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterTutorial"]
+position = Vector2(0, 62)
 
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup01"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterTutorial"]
+shape = SubResource("RectangleShape2D_checkpoint_trigger")
 
-[node name="CursedGuard01" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(550, 610)
-
-[node name="CursedGuard02" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(710, 610)
-
-[node name="EncounterGroup02" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup02"
-
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup02"]
-position = Vector2(1120, 470)
+[node name="AfterForest" type="Area2D" parent="World/Checkpoints"]
+position = Vector2(3780, 550)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
+script = ExtResource("36_checkpoint")
+checkpoint_id = &"after_forest"
+respawn_controller_path = NodePath("../../../PlayerRespawnController")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup02/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_02")
+[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterForest"]
+position = Vector2(0, 62)
 
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup02"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterForest"]
+shape = SubResource("RectangleShape2D_checkpoint_trigger")
 
-[node name="DecayedSpearman01" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("12_spear")]
-position = Vector2(1620, 610)
-
-[node name="CursedGuard03" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(1300, 610)
-
-[node name="CursedGuard04" parent="World/Encounters/EncounterGroup02/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(1460, 610)
-
-[node name="EncounterGroup03" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup03"
-
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup03"]
-position = Vector2(1960, 470)
+[node name="AfterOutskirts" type="Area2D" parent="World/Checkpoints"]
+position = Vector2(4780, 550)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
+script = ExtResource("36_checkpoint")
+checkpoint_id = &"after_outskirts"
+respawn_controller_path = NodePath("../../../PlayerRespawnController")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup03/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_03")
+[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterOutskirts"]
+position = Vector2(0, 62)
 
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup03"]
-
-[node name="CursedShieldGuard01" parent="World/Encounters/EncounterGroup03/Enemies" instance=ExtResource("11_shield")]
-position = Vector2(2160, 610)
-
-[node name="CursedGuard05" parent="World/Encounters/EncounterGroup03/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(2360, 610)
-
-[node name="EncounterGroup04" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup04"
-
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup04"]
-position = Vector2(2670, 470)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup04/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_04")
-
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup04"]
-
-[node name="FallenCrossbowman01" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("13_crossbow")]
-position = Vector2(2780, 470)
-
-[node name="CursedGuard06" parent="World/Encounters/EncounterGroup04/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(3020, 610)
-
-[node name="EncounterGroup05" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup05"
-
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup05"]
-position = Vector2(3370, 430)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup05/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_05")
-
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup05"]
-
-[node name="GargoyleSentinel01" parent="World/Encounters/EncounterGroup05/Enemies" instance=ExtResource("15_gargoyle")]
-position = Vector2(3500, 402)
-
-[node name="GargoyleSentinel02" parent="World/Encounters/EncounterGroup05/Enemies" instance=ExtResource("15_gargoyle")]
-position = Vector2(3620, 402)
-
-[node name="EncounterGroup06" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup06"
-simultaneous_attack_limit = 3
-
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup06"]
-position = Vector2(4120, 430)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup06/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_06")
-
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup06"]
-
-[node name="CursedShieldGuard02" parent="World/Encounters/EncounterGroup06/Enemies" instance=ExtResource("11_shield")]
-position = Vector2(4260, 610)
-
-[node name="DecayedSpearman02" parent="World/Encounters/EncounterGroup06/Enemies" instance=ExtResource("12_spear")]
-position = Vector2(4500, 610)
-
-[node name="FallenCrossbowman02" parent="World/Encounters/EncounterGroup06/Enemies" instance=ExtResource("13_crossbow")]
-position = Vector2(4420, 474)
-
-[node name="EncounterGroup07" type="Node2D" parent="World/Encounters"]
-script = ExtResource("10_encounter")
-encounter_name = &"EncounterGroup07"
-simultaneous_attack_limit = 4
-
-[node name="ActivationArea" type="Area2D" parent="World/Encounters/EncounterGroup07"]
-position = Vector2(4880, 430)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Encounters/EncounterGroup07/ActivationArea"]
-shape = SubResource("RectangleShape2D_encounter_07")
-
-[node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup07"]
-
-[node name="GargoyleSentinel03" parent="World/Encounters/EncounterGroup07/Enemies" instance=ExtResource("15_gargoyle")]
-position = Vector2(4960, 300)
-
-[node name="CursedGuard07" parent="World/Encounters/EncounterGroup07/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(5200, 610)
-
-[node name="CursedGuard08" parent="World/Encounters/EncounterGroup07/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(5380, 610)
-
-[node name="FallenCrossbowman03" parent="World/Encounters/EncounterGroup07/Enemies" instance=ExtResource("13_crossbow")]
-position = Vector2(5160, 478)
-
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterOutskirts"]
+shape = SubResource("RectangleShape2D_checkpoint_trigger")
 [node name="CastleEntranceArea" type="Node2D" parent="World"]
 
 [node name="NearBank" type="Polygon2D" parent="World/CastleEntranceArea"]
@@ -793,6 +702,8 @@ script = ExtResource("19_traversal_debug")
 layer = 2
 script = ExtResource("3_stamina_hud")
 
+[node name="TutorialPrompt" parent="HUD" instance=ExtResource("34_tutorial_ui")]
+
 [node name="HealthContainer" type="ColorRect" parent="HUD"]
 unique_name_in_owner = true
 anchor_left = 1.0
@@ -991,6 +902,29 @@ offset_bottom = 85.0
 text = "10 / 10"
 horizontal_alignment = 2
 
+[node name="BossLastWords" type="Label" parent="HUD"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -138.0
+offset_right = 210.0
+offset_bottom = -88.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.82, 0.86, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.04, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 16
+text = "钟……认得你。\nThe bell… remembers you."
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("38_boss_words")
+boss_path = NodePath("../../World/CastleEntranceArea/FallenGateKnight")
+room_controller_path = NodePath("../../BossRoomController")
+
 [node name="CastleEntranceTransition" type="CanvasLayer" parent="."]
 layer = 50
 script = ExtResource("29_entrance_transition")
@@ -1007,3 +941,6 @@ color = Color(0.008, 0.01, 0.018, 1)
 
 [node name="BossRoomController" type="Node" parent="."]
 script = ExtResource("17_boss_room")
+
+[node name="TutorialController" type="Node" parent="."]
+script = ExtResource("35_tutorial")

@@ -3368,3 +3368,81 @@ Status: in progress — read-only Main audit complete; implementation and config
 - Manually defeat the Boss and judge the wider gate's perceived weight during the unchanged 1.20-second rise. Automated gate coverage proves the physical blocker remains until full clearance and the transition still works.
 - Environment art remains an original Godot-native gray-box presentation pass, not final hand-painted TileSet/parallax/shader production art. It intentionally uses static world-space layers and clean low-detail shapes so it cannot change physics or camera behavior.
 - No Player mechanic, enemy/Boss value or AI, encounter count, collision, hazard, HUD behavior, second-level gameplay or external asset was introduced.
+## 2026-07-24 — Chapter I opening, embedded tutorial and 34-enemy authored route (preflight)
+
+Status: in progress — runtime audit and baseline exact-Godot verification complete
+
+### Goal
+
+- Establish the approved `Veil of Ravenmourn / 鸦泣之帷` world premise and a 60–90 second skippable pixel-panel opening before Player control.
+- Enter the existing first-level Main directly from the cinematic, present eleven small in-world tutorial steps without modifying Player movement/combat code, and retain progress for the current Main instance across death/respawn.
+- Replace the seven-group/18-enemy Main roster with the specified eighteen authored encounters and exact 34-enemy composition: Guard 14, Shield 5, Spearman 6, Crossbowman 5, Gargoyle 4; 27 mainline and 7 optional.
+- Preserve every approved Player/enemy/Boss value and core mechanic, the castle environment, moat/bridge/gate collision, text-free post-Boss entrance and the absence of second-level gameplay.
+
+### Read-only audit
+
+- Git began clean on `master` at `e0e7ad1`, five commits ahead of `origin/master`. `project.godot` currently resolves F5 directly to `res://scenes/main/main.tscn`; there is no title, New Game, opening cinematic, CutsceneController, TutorialController, tutorial prompt, subtitle/dialogue layer or save system.
+- Main Player is `Main/World/Player`, instanced from `res://scenes/player/player.tscn`. Its typed public signals already expose jump, double jump, landing, movement, damage/death/respawn; its composed `ActionController` exposes typed `action_started`/`action_finished`. Tutorial observation can therefore remain outside Player.
+- `Main/World/Encounters` currently contains seven direct `EncounterGroup` nodes and eighteen normal enemies: Guard 8, Shield 2, Spearman 2, Crossbowman 3, Gargoyle 3. Activation is one-shot; all enemy AI is disabled until Player enters each saved `ActivationArea`.
+- Respawn authority is `Main/PlayerRespawnController`, initially bound to `Main/World/SpawnPoint`; Boss checkpoint selection/reset is already composed through `BossRoomController`. No general-purpose first-level checkpoint trigger exists.
+- Boss bridge is `Main/World/CastleEntranceArea`; Boss is `.../FallenGateKnight`, gate is `.../CastleGate`, and entrance trigger is `.../CastleEntranceTrigger`. `BossRoomController` opens the weighted 1.20-second gate only after `boss_defeated`, enables entry only after `gate_opened`, then delegates the 0.55-second text-free fade to `Main/CastleEntranceTransition` and `res://scenes/transitions/ravenmourn_threshold.tscn`.
+- No chapter-complete/gate-open UI or visible message exists in the current Main. Exact Godot 4.7.1 baseline import and configured 180-frame F5 both exited 0 with no Script Error/Error/Warning diagnostics.
+
+### Planned files, tests, and scope check
+
+- Add typed timeline Resource/controller/art and a standalone `scenes/cinematics/opening_cinematic.tscn`; make it the configured F5 entry while retaining `scenes/main/main.tscn` as the gameplay level target.
+- Add a composed TutorialController plus independently instantiable TutorialPromptUI, saved tutorial obstacle/platform nodes, three reusable checkpoint triggers and visual-only Chapter I storytelling art directly to Main.
+- Move the authored normal roster into one independently instantiable `first_level_encounters.tscn` with eighteen direct EncounterGroups so current debug tooling remains simple; extend EncounterGroup only with metadata and clear/reset-safe signals needed by tutorial/checkpoint orchestration.
+- Add a Boss last-words presenter that observes existing Boss Health/room-reset signals without changing Boss combat or gate timing. Keep the existing threshold scene as the approved castle-entry placeholder.
+- Add deterministic startup/cinematic/tutorial/roster/checkpoint/Boss-flow tests, configured-F5 capture evidence and three route simulations. Update the required narrative/design documents and README.
+- Scope excludes new enemy types, second Boss, full second level, saves, equipment, experience, drops, skills, Player/enemy/Boss tuning, core combat changes and external/licensed assets.
+
+### Delivered implementation
+
+- Added the standalone, eight-shot `OpeningCinematic` and made it the persisted F5 entry. Its typed timeline contains 66 seconds of shot holds plus seven 0.60-second transitions (70.2 seconds authored total), bilingual Chinese/English subtitles, a 1.5-second skip lockout and 0.75-second ESC/Enter hold. Natural completion and skip stop Timer plus art/transition Tweens before loading Main.
+- Established the approved `Veil of Ravenmourn / 鸦泣之帷` canon: Valendor / 瓦伦多尔王国, Ravenmourn Castle, The Hollow Bell / 无声之钟, Night of Hollow Bells / 空钟之夜, Veiled Order / 暮帷会, Veilbound / 夜誓者, Soul Mark / 魂契印, the failed expedition, resurrection and protagonist culpability mystery.
+- Added a composed eleven-step `TutorialController` and small bilingual `TutorialPromptUI`. It observes Player/ActionController/Encounter/Shield signals without changing locomotion or combat. Progress belongs to Main and therefore survives Player respawn in the current runtime; explicit development reset/replay APIs are available.
+- Added the solid tutorial log, launch platform and air-dash landing platform; existing Player metrics and traversal physics remain unchanged. Added three reusable one-shot CheckpointTriggers after tutorial, forest and outskirts; the existing Boss checkpoint remains the fourth progression checkpoint.
+- Replaced the seven-group serialized roster with `first_level_encounters.tscn`: 18 direct EncounterGroups, 34 normal enemies, exact Guard/Shield/Spear/Crossbow/Gargoyle totals 14/5/6/5/4, 27 mainline and 7 optional. AI remains disabled until local one-shot activation. The Boss bridge has no normal enemy.
+- Added a collision-free Chapter I environment-storytelling renderer with fallen Order cloak/daggers, warning post, empty armor, spear remains, failed camp, Soul Mark fragments and recurring crows.
+- Added the one-shot Boss subtitle “钟……认得你。 / The bell… remembers you.” on Boss Health death. It resets with the existing Boss room, but does not own combat, death, gate or transition. The weighted 1.20-second gate and text-free `ravenmourn_threshold.tscn` transition remain unchanged.
+- Added a Chapter I composition test and graphical QA driver; updated prior tests that intentionally guarded the replaced F5 path, roster size and pre-tutorial traversal route. No Player/enemy/Boss tuning or core mechanic changed.
+
+### Saved F5 and Main synchronization
+
+- `project.godot` now resolves `run/main_scene` to `res://scenes/cinematics/opening_cinematic.tscn`; its only gameplay target is `res://scenes/main/main.tscn`.
+- Main Player remains `Main/World/Player`; tutorial is `Main/TutorialController` and `Main/HUD/TutorialPrompt`; normal roster is the instance `Main/World/Encounters`; checkpoints are `Main/World/Checkpoints/*` plus `Main/World/CastleEntranceArea/BossCheckpoint`.
+- Boss, gate and threshold authority remain `Main/World/CastleEntranceArea/FallenGateKnight`, `.../CastleGate`, `.../CastleEntranceTrigger`, `Main/BossRoomController` and `Main/CastleEntranceTransition`.
+- A repository search found no visible `Chapter Complete`, `第一章完结` or `Gate Open` gameplay node/string under scenes or scripts.
+
+### Commands and actual results
+
+1. Exact engine/import/startup:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`: exit 0; all new typed classes registered with no diagnostics.
+   - Graphical configured F5 (`--quit-after 300 --audio-driver Dummy`): exit 0 on GL Compatibility / Apple M4; no Error/Warning (`docs/qa/chapter_01_f5_opening.log`).
+   - Graphical direct Main runtime (`--quit-after 600 ... res://scenes/main/main.tscn`): exit 0; no Error/Warning (`docs/qa/chapter_01_main_runtime.log`).
+2. Chapter I and complete regression:
+   - `tests/level/test_chapter_one_flow.gd`: PASS for F5 entry, eight shots, 70.2-second duration, skip stop/dedup, eleven-step tutorial composition, exact roster/regions/optional total, checkpoint binding, Boss line, gate and threshold.
+   - `tests/combat/test_main_enemy_integration.gd`: PASS for 18 groups, 34 live mixed enemies, type totals, activation, current combat/Health/Shield values, HUD, respawn and Boss room.
+   - `tests/level/test_main_traversal_routes.gd`: PASS using real Input from spawn and no post-spawn teleport: tutorial obstacle, mainline without Air Dash, optional Crossbow route and novice Gargoyle platform route.
+   - Serial execution of all 37 repository test scripts with exact Godot 4.7.1: `FULL_TESTS count=37 failures=0`.
+3. Graphical QA:
+   - `scripts/tools/capture_chapter_one_qa.gd`: exit 0; GL Compatibility on Apple M4; seven 1280×720 images captured from the opening/Main PackedScenes.
+
+### QA evidence
+
+- `docs/qa/chapter_01_opening_black_bell.png` — Hollow Bell shot, bilingual subtitle.
+- `docs/qa/chapter_01_opening_awakening.png` — resurrection/Soul Mark shot, bilingual subtitle.
+- `docs/qa/chapter_01_tutorial_area.png` — saved Main tutorial obstacle and Jump prompt.
+- `docs/qa/chapter_01_shield_tutorial.png` — isolated Shield lesson and live formal HUD.
+- `docs/qa/chapter_01_mixed_encounter.png` — Outskirts mixed ground/elevated composition.
+- `docs/qa/chapter_01_boss_bridge.png` — live bridge Boss/HUD/gate composition.
+- `docs/qa/chapter_01_gate_entry.png` — raised weighted gate and Player-controlled entrance with no completion text.
+
+### Acceptance status and known limitations
+
+- Automated route A covers the non-Air-Dash mainline to Boss entry; route B covers optional elevated Crossbow/Gargoyle traversal; route C combines repeated Player death/respawn, Boss reset/defeat and threshold contracts across dedicated deterministic suites. All passed.
+- Three complete human F5 playthroughs (natural opening/mainline, skipped opening plus optional region, and tutorial/level/Boss death-recovery run) remain manual acceptance. Automation and capture prove composition/state contracts, but must not be represented as human judgment of 20–30 minute pacing, tutorial clarity or encounter fairness.
+- The opening uses original Godot-native 2D panel art rather than a pre-rendered film, licensed music or final hand-painted pixel illustrations. Environmental narrative props are deliberately visual-only.
+- Tutorial progress persists only for the current Main runtime because no save system exists. Encounter death persistence/checkpoint serialization is not introduced.
+- No second level, sixth normal enemy, second Boss, equipment, experience, drops, skill tree, or new combat tuning was added.

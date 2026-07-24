@@ -3,12 +3,15 @@ extends SceneTree
 ## Saved F5 Main audit: mixed roster, authored activation, live HUD, and latest resources.
 
 const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
-const EXPECTED_MAIN_PATH: String = "res://scenes/main/main.tscn"
-const GROUP_SIZES: Array[int] = [2, 3, 2, 2, 2, 3, 4]
+const EXPECTED_MAIN_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
+const GROUP_SIZES: Array[int] = [1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 3]
 const ACTIVATION_POSITIONS: Array[Vector2] = [
-	Vector2(430.0, 612.0), Vector2(1120.0, 612.0), Vector2(1960.0, 612.0),
-	Vector2(2670.0, 612.0), Vector2(3370.0, 612.0), Vector2(4120.0, 612.0),
-	Vector2(4880.0, 612.0),
+	Vector2(930.0, 612.0), Vector2(1220.0, 612.0), Vector2(1480.0, 612.0),
+	Vector2(1800.0, 612.0), Vector2(2070.0, 612.0), Vector2(2320.0, 612.0),
+	Vector2(2640.0, 612.0), Vector2(2920.0, 612.0), Vector2(3200.0, 612.0),
+	Vector2(2780.0, 470.0), Vector2(3500.0, 612.0), Vector2(3820.0, 612.0),
+	Vector2(4100.0, 612.0), Vector2(4400.0, 612.0), Vector2(4420.0, 474.0),
+	Vector2(4800.0, 612.0), Vector2(5080.0, 612.0), Vector2(5160.0, 478.0),
 ]
 
 var _failures: Array[String] = []
@@ -21,7 +24,7 @@ func _initialize() -> void:
 func _run_tests() -> void:
 	_expect(
 		ProjectSettings.get_setting("application/run/main_scene", "") == EXPECTED_MAIN_PATH,
-		"F5 run/main_scene is not the authored Main"
+		"F5 run/main_scene is not the authored opening cinematic"
 	)
 	var main: Node2D = MAIN_SCENE.instantiate() as Node2D
 	get_root().add_child(main)
@@ -36,8 +39,8 @@ func _run_tests() -> void:
 	await _wait_physics_frames(8)
 	var groups: Array[EncounterGroup] = _collect_groups(encounters_root)
 	var enemies: Array[EnemyCombatant] = _collect_enemies(groups)
-	_expect(groups.size() == 7, "Main does not contain seven authored encounters")
-	_expect(enemies.size() == 18, "Main does not contain eighteen mixed enemies")
+	_expect(groups.size() == 18, "Main does not contain eighteen authored encounters")
+	_expect(enemies.size() == 34, "Main does not contain thirty-four mixed enemies")
 	_test_saved_roster(groups, enemies)
 	_test_main_system_wiring(main, player)
 	await _test_encounter_activation(player, groups)
@@ -89,11 +92,11 @@ func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyComba
 				"%s does not use the latest shared Gargoyle SpriteFrames" % enemy.name
 			)
 		_test_enemy_balance_profile(enemy)
-	_expect(counts.get(&"CursedCastleGuard", 0) == 8, "Main Castle Guard count mismatch")
-	_expect(counts.get(&"CursedShieldGuard", 0) == 2, "Main Shield Guard count mismatch")
-	_expect(counts.get(&"DecayedSpearman", 0) == 2, "Main Spearman count mismatch")
-	_expect(counts.get(&"FallenCrossbowman", 0) == 3, "Main Crossbowman count mismatch")
-	_expect(counts.get(&"GargoyleSentinel", 0) == 3, "Main Gargoyle count mismatch")
+	_expect(counts.get(&"CursedCastleGuard", 0) == 14, "Main Castle Guard count mismatch")
+	_expect(counts.get(&"CursedShieldGuard", 0) == 5, "Main Shield Guard count mismatch")
+	_expect(counts.get(&"DecayedSpearman", 0) == 6, "Main Spearman count mismatch")
+	_expect(counts.get(&"FallenCrossbowman", 0) == 5, "Main Crossbowman count mismatch")
+	_expect(counts.get(&"GargoyleSentinel", 0) == 4, "Main Gargoyle count mismatch")
 	_expect(
 		main_has_platform_crossbow(groups),
 		"Main lacks the authored high-platform Crossbowman"
@@ -152,8 +155,7 @@ func _test_main_system_wiring(main: Node2D, player: Player) -> void:
 
 
 func _test_encounter_activation(player: Player, groups: Array[EncounterGroup]) -> void:
-	_expect(groups[0].is_activated, "Spawn encounter did not activate")
-	for index: int in range(1, groups.size()):
+	for index: int in range(groups.size()):
 		_expect(not groups[index].is_activated, "%s activated early" % groups[index].name)
 		player.global_position = ACTIVATION_POSITIONS[index]
 		await _wait_physics_frames(4)
@@ -427,7 +429,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("MAIN_ENEMY_INTEGRATION_TEST: PASS (7 groups, 18 mixed enemies, Boss room, HUD/respawn)")
+		print("MAIN_ENEMY_INTEGRATION_TEST: PASS (18 groups, 34 mixed enemies, Boss room, HUD/respawn)")
 		quit(0)
 		return
 	for failure: String in _failures:

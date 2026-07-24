@@ -147,3 +147,25 @@ MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 solid surfaces, jump/double-jump unders
 MAIN_TRAVERSAL_ROUTES_TEST: PASS (mainline no Air Dash, mobility Crossbow route, novice-timing Gargoyle route; no teleport)
 CASTLE_BRIDGE_FLOW_TEST: PASS (solid underside, moat death/respawn, Boss reset/persistence)
 ```
+
+## Chapter I opening/tutorial/roster metrics
+
+Viewport design target: 1280×720. Player camera limits remain 0–6600 horizontally and 0–720 vertically.
+
+| Metric | Value |
+|---|---:|
+| Main route start | x 320 |
+| Tutorial end/checkpoint | x 2580 |
+| Forest end/checkpoint | x 3780 |
+| Outskirts end/checkpoint | x 4780 |
+| Boss checkpoint | x 5480 |
+| Castle threshold | x 6428 |
+| Normal enemies | 34 |
+| EncounterGroups | 18 |
+| Mainline enemies | 27 |
+| Optional enemies | 7 |
+| Bosses | 1 |
+
+Tutorial additions use solid `StaticBody2D` collision and integer positions: fallen log center (620, 618), launch platform (2170, 522), landing platform (2460, 452). Existing Platform A–D, Gargoyle perch, world floor, bridge, walls, moat hazard, and castle collision remain unchanged.
+
+Automated metrics validate composition and node contracts. Jump timing, air-dash comfort, sightline fairness, encounter recovery length, and a 20–30 minute first-play target remain manual acceptance items.

@@ -22,10 +22,18 @@ func _test_mainline_without_air_dash() -> void:
 	var main: Node2D = await _spawn_main_for_traversal()
 	var player: Player = main.get_node("World/Player") as Player
 	Input.action_press(Player.MOVE_RIGHT_ACTION)
+	var tutorial_jump_started: bool = false
+	var tutorial_jump_released: bool = false
 	var bridge_jump_started: bool = false
 	var bridge_jump_released: bool = false
 	for frame_index: int in range(2200):
 		await physics_frame
+		if not tutorial_jump_started and player.global_position.x >= 530.0:
+			Input.action_press(Player.JUMP_ACTION)
+			tutorial_jump_started = true
+		elif tutorial_jump_started and not tutorial_jump_released:
+			Input.action_release(Player.JUMP_ACTION)
+			tutorial_jump_released = true
 		if not bridge_jump_started and player.global_position.x >= 5470.0:
 			Input.action_press(Player.JUMP_ACTION)
 			bridge_jump_started = true
@@ -41,7 +49,7 @@ func _test_mainline_without_air_dash() -> void:
 	var groups: Array[Node] = main.get_node("World/Encounters").get_children()
 	for group_node: Node in groups:
 		var group: EncounterGroup = group_node as EncounterGroup
-		if group != null:
+		if group != null and not group.is_optional:
 			_expect(group.is_activated, "%s was not entered on the floor mainline" % group.name)
 	_cleanup_main(main)
 
@@ -88,6 +96,8 @@ func _spawn_main_for_traversal() -> Node2D:
 
 
 func _move_to_floor_x(player: Player, target_x: float) -> void:
+	if player.global_position.x < 700.0 and target_x > 700.0:
+		await _cross_tutorial_log(player)
 	if not player.is_on_floor() or _player_foot_y(player) < 620.0:
 		Input.action_press(Player.MOVE_RIGHT_ACTION)
 		for frame_index: int in range(240):
@@ -113,6 +123,25 @@ func _move_to_floor_x(player: Player, target_x: float) -> void:
 	Input.action_release(Player.MOVE_RIGHT_ACTION)
 	await _wait_physics_frames(10)
 	_expect(absf(player.global_position.x - target_x) <= 8.0, "Could not approach route target x=%.0f" % target_x)
+
+
+func _cross_tutorial_log(player: Player) -> void:
+	var jump_started: bool = false
+	var jump_released: bool = false
+	Input.action_press(Player.MOVE_RIGHT_ACTION)
+	for _frame: int in range(240):
+		await physics_frame
+		if not jump_started and player.global_position.x >= 530.0:
+			Input.action_press(Player.JUMP_ACTION)
+			jump_started = true
+		elif jump_started and not jump_released:
+			Input.action_release(Player.JUMP_ACTION)
+			jump_released = true
+		if player.global_position.x >= 700.0:
+			break
+	Input.action_release(Player.MOVE_RIGHT_ACTION)
+	Input.action_release(Player.JUMP_ACTION)
+	_expect(player.global_position.x >= 700.0, "Tutorial jump obstacle could not be crossed")
 
 
 func _perform_double_jump_to_surface(

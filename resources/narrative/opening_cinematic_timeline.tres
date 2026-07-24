@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="OpeningCinematicTimeline" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/cinematics/opening_cinematic_timeline.gd" id="1_timeline"]
+
+[resource]
+script = ExtResource("1_timeline")
+shot_durations = PackedFloat32Array(8, 8, 9, 8, 9, 8, 7, 9)
+subtitles_zh = PackedStringArray("很久以前，鸦泣城堡守护着瓦伦多尔王国的北境。", "城堡之下，封印着一口只有将死之人与亡魂能够听见的无声之钟。", "七年前的空钟之夜，它在无人敲击时连续响了十三次。", "从那一夜起，死者无法安息，森林腐朽，诅咒向王国蔓延。", "暮帷会最后一支夜誓者队伍进入城堡；无人归来。", "今晚，其中一名夜誓者从死亡中苏醒，破损的魂契印仍在发亮。", "女人、地下石门、黑钟、染血双手：是你打开了那扇门。", "你必须返回鸦泣城堡，查明自己是阻止诅咒的人，还是释放它的人。")
+subtitles_en = PackedStringArray("Long ago, Ravenmourn Castle guarded the northern reach of Valendor.", "Beneath it lay the Hollow Bell, heard only by the dying and the dead.", "Seven years ago, on the Night of Hollow Bells, it rang thirteen times untouched.", "From that night, the dead found no rest, the forest rotted, and the curse spread.", "The last Veilbound of the Veiled Order entered the castle. None returned.", "Tonight, one Veilbound wakes from death, a broken Soul Mark still shining.", "A woman, an opened stone door, the black bell, bloodied hands: you opened that door.", "Return to Ravenmourn and learn whether you came to stop the curse—or released it.")
