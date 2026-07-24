@@ -74,7 +74,10 @@ func main_has_platform_crossbow(groups: Array[EncounterGroup]) -> bool:
 
 func _test_main_system_wiring(main: Node2D, player: Player) -> void:
 	_expect(player.player_camera.enabled, "Main Player Camera2D is disabled")
-	_expect(main.has_node("Interface/EnemyDebugPanel/EnemyDebug"), "Main mixed-enemy debug overlay is missing")
+	_expect(
+		main.has_node("Interface/DebugHudRoot/EnemyDebugPanel/Content/EnemyScroll/EnemyDebug"),
+		"Main mixed-enemy debug overlay is missing"
+	)
 	var health_hud: PlayerHealthHud = main.get_node_or_null("HUD/HealthContainer") as PlayerHealthHud
 	var stamina_hud: PlayerStaminaHud = main.get_node_or_null("HUD") as PlayerStaminaHud
 	var respawn: PlayerRespawnController = main.get_node_or_null("PlayerRespawnController") as PlayerRespawnController
@@ -82,16 +85,16 @@ func _test_main_system_wiring(main: Node2D, player: Player) -> void:
 	_expect(stamina_hud != null and stamina_hud.stamina_component == player.stamina_component, "Main Stamina HUD is not live-bound")
 	_expect(respawn != null and respawn.player == player, "Main respawn controller is not bound to Player")
 	var enemy_debug: MainEnemyDebugOverlay = main.get_node_or_null(
-		"Interface/EnemyDebugPanel/EnemyDebug"
+		"Interface/DebugHudRoot/EnemyDebugPanel/Content/EnemyScroll/EnemyDebug"
 	) as MainEnemyDebugOverlay
-	var enemy_toggle: CheckButton = main.get_node_or_null(
-		"Interface/EnemyDebugPanel/EnemyDebugToggle"
-	) as CheckButton
-	_expect(enemy_debug != null and enemy_toggle != null, "Main enemy debug controls are incomplete")
-	if enemy_debug != null and enemy_toggle != null:
-		enemy_toggle.toggled.emit(false)
+	var debug_controller: MainDebugHudController = main.get_node_or_null(
+		"Interface"
+	) as MainDebugHudController
+	_expect(enemy_debug != null and debug_controller != null, "Main enemy debug controls are incomplete")
+	if enemy_debug != null and debug_controller != null:
+		debug_controller.set_debug_hud_visible(false)
 		_expect(not enemy_debug.visible and not enemy_debug.is_processing(), "Main enemy debug cannot be disabled")
-		enemy_toggle.toggled.emit(true)
+		debug_controller.set_debug_hud_visible(true)
 	player.health_component.take_damage(7)
 	player.stamina_component.try_consume_dash()
 	_expect(health_hud.health_bar.value == 93.0, "Main Health HUD did not update")

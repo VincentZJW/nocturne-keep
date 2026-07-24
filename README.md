@@ -56,7 +56,7 @@ res://scenes/tools/combat_test_room.tscn
 "$GODOT_BIN" --path . res://scenes/tools/combat_test_room.tscn
 ```
 
-测试房继续只包含一名Player和一只守卫，并提供血量、状态、实际剑伤害、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。Main的`ACTION DEBUG HUD`会显示玩家Hurt、无敌剩余、最近伤害/来源和击退速度；`ENEMY DEBUG`会显示各遭遇组的激活、参与战斗/存活/攻击数量，以及每只剑卫的实际伤害。
+测试房继续只包含一名Player和一只守卫，并提供血量、状态、实际剑伤害、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。Main默认使用紧凑Debug HUD：左上保留Player状态、HP、耐力、速度、Dash、Hurt与无敌摘要；左下保留当前遭遇及存活/参与/攻击数量。F2展开后仍可查看原有全部Action字段和每只敌人的完整运行信息。
 
 混合敌人独立测试房：
 
@@ -82,6 +82,16 @@ res://scenes/tools/enemy_variety_test_room.tscn
 | Dash Attack | Shift后在Dash的0.18秒窗口内按J；同帧Shift+J也可直接触发；造成2点伤害 |
 | Air Dash Attack | 空中Shift后在Dash中按J |
 
+Main开发调试快捷键：
+
+| 调试动作 | 键盘 | 默认状态 |
+| --- | --- | --- |
+| 显示/隐藏全部Debug HUD | F1 | 显示 |
+| Compact/Expanded切换 | F2 | Compact |
+| 单独展开/折叠Enemy详情 | F3 | 折叠 |
+
+正式Health/Stamina始终显示，不受F1影响。左下`TAKE 25 DMG`仅用于开发死亡/重生验证，并会随Debug HUD一起隐藏。Main的调试面板使用锚点与容器布局；Enemy文本最多每0.15秒更新一次，隐藏时停止拼接。完整结构与字段契约见[Debug HUD规格](docs/design/debug_hud_spec.md)。
+
 连续按J时，当前Attack进入第3帧后会消费至多一条0.10秒缓存并重新播放同一基础突刺；这不是多段连招树。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。当前没有连招树或复杂伤害公式。
 
 ## 文档
@@ -97,6 +107,7 @@ res://scenes/tools/enemy_variety_test_room.tscn
 - [Decayed Spearman规格](docs/design/enemy_decayed_spearman_spec.md)
 - [Fallen Crossbowman规格](docs/design/enemy_fallen_crossbowman_spec.md)
 - [灰盒遭遇设计规格](docs/design/encounter_design_spec.md)
+- [Debug HUD规格](docs/design/debug_hud_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)
 - [已知问题](docs/known_issues.md)

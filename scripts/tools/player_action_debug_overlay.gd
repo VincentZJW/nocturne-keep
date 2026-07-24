@@ -4,11 +4,10 @@ extends Label
 ## Optional diagnostics for the internal Main action laboratory. It owns no gameplay state.
 
 @export var debug_visible: bool = true
+@export var compact_mode: bool = true
 @export_node_path("Player") var player_path: NodePath = NodePath("../../../World/Player")
-@export_node_path("BaseButton") var toggle_button_path: NodePath = NodePath("../DebugToggle")
 
 @onready var player: Player = get_node_or_null(player_path) as Player
-@onready var toggle_button: BaseButton = get_node_or_null(toggle_button_path) as BaseButton
 
 
 func _ready() -> void:
@@ -16,21 +15,57 @@ func _ready() -> void:
 		push_error("PlayerActionDebugOverlay requires a Player target")
 		set_process(false)
 		return
-	if toggle_button != null:
-		toggle_button.button_pressed = debug_visible
-		toggle_button.toggled.connect(_on_debug_toggled)
 	visible = debug_visible
 	set_process(debug_visible)
+	_refresh_text()
 
 
 func _process(_delta: float) -> void:
+	_refresh_text()
+
+
+func set_debug_visible(enabled: bool) -> void:
+	debug_visible = enabled
+	visible = enabled
+	set_process(enabled)
+	if enabled:
+		_refresh_text()
+
+
+func set_compact_mode(enabled: bool) -> void:
+	compact_mode = enabled
+	_refresh_text()
+
+
+func _refresh_text() -> void:
+	if player == null:
+		return
 	var actions: PlayerActionController = player.action_controller
 	var stamina: PlayerStaminaComponent = player.stamina_component
+	var hurt: PlayerHurtController = player.hurt_controller
+	var health: HealthComponent = player.health_component
+	if compact_mode:
+		var action_state: String = actions.get_action_state_name()
+		var display_state: String = player.get_movement_state_name() if action_state == "None" else action_state
+		text = (
+			"PLAYER  STATE %s | HP %d/%d | STA %d/%d\n"
+			+ "VX %.0f  VY %.0f | DASH %d | HURT %.2f | INV %.2f"
+		) % [
+			display_state,
+			health.current_health,
+			health.max_health,
+			roundi(stamina.current_stamina),
+			roundi(stamina.max_stamina),
+			player.velocity.x,
+			player.velocity.y,
+			actions.get_current_dash_number(),
+			hurt.get_hurt_stun_remaining(),
+			hurt.get_invulnerability_remaining(),
+		]
+		return
 	var response_time: float = actions.get_attack_input_to_hit_time()
 	var response_text: String = "--" if response_time < 0.0 else "%.3fs" % response_time
 	var regeneration_blocked: bool = actions.is_stamina_regeneration_blocked()
-	var hurt: PlayerHurtController = player.hurt_controller
-	var health: HealthComponent = player.health_component
 	var regeneration_rate: float = stamina.get_regeneration_rate(player.is_on_floor())
 	var regeneration_state: String = "BLOCKED" if regeneration_blocked else (
 		"GROUND %.1f/s" % regeneration_rate
@@ -77,9 +112,3 @@ func _process(_delta: float) -> void:
 		hurt.get_last_knockback_velocity().x,
 		hurt.get_last_knockback_velocity().y,
 	]
-
-
-func _on_debug_toggled(enabled: bool) -> void:
-	debug_visible = enabled
-	visible = enabled
-	set_process(enabled)

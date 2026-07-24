@@ -3,25 +3,89 @@ extends Label
 
 ## Main-scene-only live audit for mixed authored encounters.
 
+@export var debug_visible: bool = true
+@export var compact_mode: bool = true
+@export var details_expanded: bool = false
+@export_range(0.10, 0.20, 0.01) var refresh_interval: float = 0.15
 @export_node_path("Node2D") var encounters_root_path: NodePath = NodePath("../../../World/Encounters")
-@export_node_path("BaseButton") var toggle_button_path: NodePath = NodePath("../EnemyDebugToggle")
 
 @onready var encounters_root: Node2D = get_node_or_null(encounters_root_path) as Node2D
-@onready var toggle_button: BaseButton = get_node_or_null(toggle_button_path) as BaseButton
+
+var _refresh_accumulator: float = 0.0
 
 
 func _ready() -> void:
-	if encounters_root == null or toggle_button == null:
-		push_error("MainEnemyDebugOverlay requires Encounters and EnemyDebugToggle")
+	if encounters_root == null:
+		push_error("MainEnemyDebugOverlay requires an Encounters root")
 		set_process(false)
 		return
-	toggle_button.toggled.connect(_on_debug_toggled)
-	_on_debug_toggled(toggle_button.button_pressed)
+	set_debug_visible(debug_visible)
 
 
-func _process(_delta: float) -> void:
-	if not visible:
+func _process(delta: float) -> void:
+	_refresh_accumulator += delta
+	if _refresh_accumulator < refresh_interval:
 		return
+	_refresh_accumulator = 0.0
+	_refresh_text()
+
+
+func set_debug_visible(enabled: bool) -> void:
+	debug_visible = enabled
+	visible = enabled
+	set_process(enabled)
+	if enabled:
+		_refresh_accumulator = 0.0
+		_refresh_text()
+
+
+func set_compact_mode(enabled: bool) -> void:
+	compact_mode = enabled
+	_refresh_text()
+
+
+func set_details_expanded(enabled: bool) -> void:
+	details_expanded = enabled
+	_refresh_text()
+
+
+func _refresh_text() -> void:
+	if encounters_root == null:
+		return
+	if compact_mode and not details_expanded:
+		text = _build_compact_text()
+	else:
+		text = _build_expanded_text()
+
+
+func _build_compact_text() -> String:
+	var encounter: EncounterGroup = _get_current_encounter()
+	if encounter == null:
+		return "ENC -- | ALIVE 0 | ENGAGED 0 | ATK 0/0\nNO AUTHORED ENEMIES"
+	var short_name: String = String(encounter.encounter_name).replace("EncounterGroup", "")
+	var type_counts: Dictionary[String, int] = {}
+	for enemy: EnemyCombatant in encounter.get_enemies():
+		if not is_instance_valid(enemy) or enemy.is_dead():
+			continue
+		var type_name: String = _get_short_enemy_name(enemy.get_enemy_type_name())
+		type_counts[type_name] = type_counts.get(type_name, 0) + 1
+	var type_parts: PackedStringArray = []
+	for type_name: String in type_counts:
+		type_parts.append("%s ×%d" % [type_name, type_counts[type_name]])
+	var roster_text: String = "NO LIVING ENEMIES" if type_parts.is_empty() else " | ".join(type_parts)
+	return (
+		"ENC %s | ALIVE %d | ENGAGED %d | ATK %d/%d\n%s"
+	) % [
+		short_name,
+		encounter.get_alive_enemy_count(),
+		encounter.get_engaged_enemy_count(),
+		encounter.get_attacking_enemy_count(),
+		encounter.simultaneous_attack_limit,
+		roster_text,
+	]
+
+
+func _build_expanded_text() -> String:
 	var lines: PackedStringArray = []
 	for child: Node in encounters_root.get_children():
 		var encounter: EncounterGroup = child as EncounterGroup
@@ -43,9 +107,32 @@ func _process(_delta: float) -> void:
 			lines.append("  %s  %s  X %.0f" % [
 				enemy.name, enemy.get_debug_summary(), enemy.global_position.x,
 			])
-	text = "\n".join(lines) if not lines.is_empty() else "NO AUTHORED ENEMIES"
+	return "\n".join(lines) if not lines.is_empty() else "NO AUTHORED ENEMIES"
 
 
-func _on_debug_toggled(enabled: bool) -> void:
-	visible = enabled
-	set_process(enabled)
+func _get_current_encounter() -> EncounterGroup:
+	var first_encounter: EncounterGroup = null
+	var latest_activated: EncounterGroup = null
+	for child: Node in encounters_root.get_children():
+		var encounter: EncounterGroup = child as EncounterGroup
+		if encounter == null:
+			continue
+		if first_encounter == null:
+			first_encounter = encounter
+		if encounter.is_activated:
+			latest_activated = encounter
+	return latest_activated if latest_activated != null else first_encounter
+
+
+func _get_short_enemy_name(enemy_type: StringName) -> String:
+	match enemy_type:
+		&"CursedCastleGuard":
+			return "Guard"
+		&"CursedShieldGuard":
+			return "Shield Guard"
+		&"DecayedSpearman":
+			return "Spearman"
+		&"FallenCrossbowman":
+			return "Crossbowman"
+		_:
+			return String(enemy_type)

@@ -242,15 +242,19 @@ func _test_debug_overlay() -> void:
 	get_root().add_child(main)
 	await process_frame
 	await process_frame
-	var debug_label: Label = main.get_node("Interface/Panel/ActionDebug") as Label
-	var toggle: CheckButton = main.get_node("Interface/Panel/DebugToggle") as CheckButton
+	var debug_label: Label = main.get_node(
+		"Interface/DebugHudRoot/Panel/Content/ActionScroll/ActionDebug"
+	) as Label
+	var controller: MainDebugHudController = main.get_node("Interface") as MainDebugHudController
+	controller.set_compact_mode(false)
+	await process_frame
 	_expect(debug_label.visible, "Action debug overlay is not initially visible in the test scene")
 	for required_text: String in [
 		"STATE", "COMBO WINDOW", "USED", "AIR DASH", "VX", "ATTACK FRAME",
 		"BUFFERED", "TIMER", "CHAIN", "INPUT→HIT",
 	]:
 		_expect(debug_label.text.contains(required_text), "Debug overlay omits %s" % required_text)
-	toggle.button_pressed = false
+	controller.set_debug_hud_visible(false)
 	await process_frame
 	_expect(not debug_label.visible, "Action debug overlay cannot be disabled")
 	main.queue_free()

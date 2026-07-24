@@ -67,7 +67,10 @@ func _test_health_display_and_stamina_regression() -> void:
 		stamina.try_consume_dash()
 		_expect(is_equal_approx(stamina_bar.value, 75.0), "Stamina bar stopped following its component")
 		_expect(stamina_value.text == "075 / 100", "Stamina numeric display changed")
-	_expect(main.has_node("Interface/Panel/ActionDebug"), "Debug HUD structure was changed")
+	_expect(
+		main.has_node("Interface/DebugHudRoot/Panel/Content/ActionScroll/ActionDebug"),
+		"Debug HUD structure was changed"
+	)
 	main.queue_free()
 	await process_frame
 

@@ -2308,3 +2308,110 @@ Status: complete — automated/runtime/visual verification passed; manual balanc
 4. Play Group04 with debug off and judge three-role readability, spacing, and the Player's existing 0.50-second invulnerability.
 5. Enemy art and dissolve are authored prototype pixels with no audio, particles, shader dissolve, drops, navigation, jumping, or enemy respawn.
 6. The project contract targets two final normal-enemy types. This larger four-type runtime roster is an explicitly requested evaluation batch; a later approval gate must select/merge roles before final scope lock rather than treating all prototypes as committed production content.
+
+## 2026-07-24 — Compact Debug HUD (preflight)
+
+Status: in progress — read-only audit complete; implementation and verification pending
+
+### Goal
+
+- Keep every existing Player and Enemy diagnostic field available while making the F5 Main view default to a compact two-line summary.
+- Add independent F1 visibility, F2 compact/expanded, and F3 Enemy-detail controls through Input Map actions.
+- Reduce the formal Health/Stamina footprint and the development damage button without changing their data sources or behavior.
+- Replace the current fixed large panels with anchored, container-driven layout that remains on-screen from a small test window through 1920×1080.
+
+### Read-only audit
+
+- `run/main_scene` is `res://scenes/main/main.tscn`; the design viewport is 1280×720 with `canvas_items` stretch.
+- Main uses two CanvasLayers: `Main/Interface` for development UI and `Main/HUD` for formal vitals/death UI.
+- Player Action diagnostics are currently `Main/Interface/Panel/ActionDebug`, a Label driven every frame by `scripts/tools/player_action_debug_overlay.gd` inside a fixed 986×250 ColorRect.
+- Enemy diagnostics are currently `Main/Interface/EnemyDebugPanel/EnemyDebug`, a Label driven every frame by `scripts/tools/main_enemy_debug_overlay.gd` inside a fixed 800×250 ColorRect. It serializes all encounter groups and all live enemy summaries every frame.
+- Health is `Main/HUD/HealthContainer` (`PlayerHealthHud`, signal-driven); Stamina is `Main/HUD/StaminaContainer` (`PlayerStaminaHud` on the CanvasLayer, signal-driven). Their current fixed width is 224 pixels.
+- `Main/Interface/DamageTestButton` is a 204×38 Button using the existing test-only damage script.
+- The current panels use fixed offsets and do not provide responsive anchors or Compact/Expanded state. Existing CheckButtons only hide their individual labels.
+
+### Planned files and responsibilities
+
+- `project.godot`: add non-conflicting F1/F2/F3 Input Map actions.
+- `scripts/tools/main_debug_hud_controller.gd`: own visibility, compact mode, Enemy detail state, responsive panel sizing, and small fold controls without recreating nodes.
+- `scripts/tools/player_action_debug_overlay.gd`: retain the full five-line diagnostic payload and add a two-line compact renderer.
+- `scripts/tools/main_enemy_debug_overlay.gd`: retain the full per-enemy payload, add encounter summary rendering, and throttle visible text refresh to 0.15 seconds.
+- `scenes/main/main.tscn`: anchor the debug surfaces, place their children in Containers/ScrollContainer, compact formal vitals, and shrink the existing damage button.
+- UI/integration tests: verify defaults, toggles, preserved expanded fields, signal-driven formal HUD, responsive bounds, and current Main resource paths.
+- `README.md`, `docs/design/debug_hud_spec.md`, and this log: document operation, exact structure, evidence, and acceptance steps.
+
+### Verification plan
+
+1. Run exact Godot 4.7.1 headless import/parse checks and focused HUD/Main integration tests.
+2. Run the complete repository test suite serially and scan all logs for errors and warnings.
+3. Start the configured Main scene headlessly and graphically; verify Player/enemy systems remain unchanged.
+4. Exercise layout at approximately 1280×664, 1280×720, 1920×1080, and a smaller window.
+5. Capture and inspect Compact, Expanded, and fully hidden Debug HUD states under `docs/qa/`.
+
+### Scope guard
+
+- No combat values, Player abilities, enemy AI, encounter composition, animation, collision, Health/Stamina authority, or death/respawn behavior will change.
+- No existing debug field will be deleted; fields omitted from Compact mode remain available in Expanded mode.
+- The work applies to the configured F5 Main scene, not only a tool or preview scene.
+
+### Delivered implementation
+
+- Added `MainDebugHudController` directly to `Main/Interface`. It owns typed visibility/compact/Enemy-detail signals, handles Input Map actions, updates existing controls in place, and recalculates bounded panel geometry when the viewport changes.
+- Rebuilt Main's development layout under a full-rect `DebugHudRoot`. Player Debug is a 340×64 top-left surface; Enemy Debug is a 380×68 bottom-left surface; both use MarginContainer plus ScrollContainer and 11-pixel text. Their backgrounds use 66% opacity.
+- Added the default two-line Player summary (`PLAYER/STATE/HP/STA` plus `VX/VY/DASH/HURT/INV`) while preserving the original five-line payload exactly in Expanded mode.
+- Added the default two-line active-encounter summary (`ENC/ALIVE/ENGAGED/ATK` plus live type counts). The original four-group/per-enemy diagnostic list remains available in Expanded or F3 Enemy-only detail mode.
+- Reduced Enemy diagnostic refresh from every rendered frame to once per 0.15 seconds and disabled both overlay processors when F1 hides Debug.
+- Registered F1 `debug_toggle_hud`, F2 `debug_toggle_compact`, and F3 `debug_toggle_enemy_details`. Small 20×20 `+`/`−` buttons mirror F2/F3 without rebuilding nodes or reconnecting signals.
+- Anchored formal Health and Stamina to the top-right at 196×56 each, kept their signal-driven bindings intact, reduced label type to 11 pixels, and retained visible numeric current/maximum values.
+- Anchored the existing development damage button to the lower-left at 120×28, renamed its visible text to `TAKE 25 DMG`, and kept its original 25-damage behavior. It now hides with the Debug root.
+- Center-anchored the existing Death overlay so the HUD remains bounded if the viewport changes; no death timing, presentation, or respawn behavior changed.
+- Added deterministic command-line-only screenshot states (`--debug-expanded`, `--debug-hidden`) to the Debug presentation controller. These flags affect QA capture only and do not alter the default F5 state.
+
+### Main scene synchronization
+
+- Configured F5 path: `res://scenes/main/main.tscn`.
+- Updated instance paths: `Main/Interface`, `Main/Interface/DebugHudRoot/Panel`, `Main/Interface/DebugHudRoot/EnemyDebugPanel`, `Main/Interface/DebugHudRoot/DamageTestButton`, `Main/HUD/HealthContainer`, and `Main/HUD/StaminaContainer`.
+- Current overlay resources: `res://scripts/tools/main_debug_hud_controller.gd`, `res://scripts/tools/player_action_debug_overlay.gd`, and `res://scripts/tools/main_enemy_debug_overlay.gd`.
+- Main continues to instantiate the current Player plus all four encounter groups/nine mixed enemies. Existing integration tests confirmed live Health/Stamina, respawn, enemy components, projectiles, and activation after the HUD path update.
+
+### Commands and actual results
+
+1. Exact Godot `4.7.1.stable.official.a13da4feb` import/parse:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit`: exit 0; scripts/classes and Main loaded without errors or warnings.
+2. Focused HUD and integration verification:
+   - `tests/ui/test_main_debug_hud.gd`: PASS for default Compact, preserved Expanded content, Enemy-only expansion, F1/F2/F3 end-to-end Input events, processor suspension, formal-HUD independence, compact dimensions, and responsive bounds.
+   - `test_player_health_hud.gd`, `test_main_enemy_integration.gd`, `test_dash_attack.gd`, `test_player_death_state.gd`, `test_player_respawn.gd`, and `test_chain_dash_stamina.gd`: all PASS after saved Main path changes.
+3. Responsive layout:
+   - The isolated HUD test temporarily disabled project content scaling and verified compact/expanded surfaces at 800×540, 1280×664, 1280×720, and 1920×1080. Every panel stayed inside the viewport; Player Debug did not overlap Health, Enemy Debug did not overlap its button, and expanded Player/Enemy surfaces did not overlap.
+   - Graphical Movie Maker follows the project's 1280×720 logical canvas under `canvas_items`, so physical `--resolution` requests are encoded at the authored logical size. The responsive test therefore performs the additional scale-disabled true-bound check described above.
+4. Complete regression:
+   - All 27 scripts under `tests/` exited 0. The combined log scan found no `SCRIPT ERROR`, `ERROR:`, or `WARNING:`.
+   - Existing Player metrics remained stable: 153.59-pixel single-jump range, 281.92-pixel debug double-jump range, 344.00-pixel four-Air-Dash range, and 360.33 pixels through landing in this run.
+5. Scene startup:
+   - Configured Main ran headlessly for 120 frames; `combat_test_room.tscn` and `enemy_variety_test_room.tscn` also started independently. All exited 0 without matched diagnostics.
+6. Actual GL Compatibility F5 captures on Apple M4:
+   - Compact, Expanded, and hidden Main each rendered one fixed-FPS 1280×720 frame and exited 0. Log scans found no errors or warnings.
+   - Original-resolution inspection confirmed the Player and first Guard/Shield encounter remain visible in Compact, all legacy text is readable through Expanded scrolling, and hidden Debug leaves only formal HP/STA.
+7. `git diff --check`: PASS.
+
+### QA evidence
+
+- `docs/qa/debug_hud_compact00000000.png`: default F5 Compact Player/Enemy summaries, compact damage button, formal vitals.
+- `docs/qa/debug_hud_expanded00000000.png`: complete Player fields and all authored group/enemy rows.
+- `docs/qa/debug_hud_hidden00000000.png`: Debug root and damage button hidden; formal Health/Stamina remain visible.
+
+### Manual acceptance requested
+
+1. Run F5 and use F1 twice; confirm all development panels/button disappear and return without affecting Health/Stamina or gameplay.
+2. Use F2 while moving, attacking, taking damage, and Dashing; confirm the complete original diagnostic values remain live and Compact restores immediately.
+3. Use F3 in Compact mode; confirm only Enemy details expand and that the ScrollContainer keeps the lower panel bounded.
+4. Resize the project window around 1280×664, 1280×720, and 1920×1080; confirm default engine-font readability and that the authored logical UI scaling is acceptable on the target display.
+5. Judge whether 66% Debug backgrounds provide sufficient contrast on future brighter rooms; this is a presentation approval, not a data or combat change.
+
+### Known limitations and handoff
+
+- Expanded mode intentionally occupies more of the left side because it preserves every original diagnostic field. It is an explicit inspection mode, not the startup presentation.
+- The project uses a 1280×720 logical canvas with `canvas_items` stretch. Very small or non-16:9 physical windows scale that logical canvas rather than authoring a second breakpoint-specific font size.
+- Current controls use Godot's engine font, not a final licensed pixel UI font. The text remains vector-rendered and is independent of nearest-neighbor sprite filtering.
+- Enemy Compact selection follows the latest activated authored group in scene order; encounters are currently one-shot and sequential. A future non-linear encounter system may require an explicit focus authority.
+- No debug field, combat value, Player ability, enemy AI/state, encounter member, Health/Stamina rule, animation, collision, or death/respawn behavior was removed or retuned.

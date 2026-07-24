@@ -32,7 +32,7 @@ func _test_death_state_contract() -> void:
 	var death_sequence: PlayerDeathSequence = player.get_node("DeathSequence") as PlayerDeathSequence
 	var health: HealthComponent = player.health_component
 	var stamina: PlayerStaminaComponent = player.stamina_component
-	var damage_button: Button = main.get_node("Interface/DamageTestButton") as Button
+	var damage_button: Button = main.get_node("Interface/DebugHudRoot/DamageTestButton") as Button
 	var death_overlay: Control = main.get_node("HUD/DeathOverlay") as Control
 	var health_bar: ProgressBar = main.get_node("HUD/HealthContainer/HealthBar") as ProgressBar
 	var health_value: Label = main.get_node("HUD/HealthContainer/HealthValue") as Label

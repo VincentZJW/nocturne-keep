@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/enemies/cursed_shield_guard.tscn" id="11_shield"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/decayed_spearman.tscn" id="12_spear"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/fallen_crossbowman.tscn" id="13_crossbow"]
+[ext_resource type="Script" path="res://scripts/tools/main_debug_hud_controller.gd" id="14_debug_hud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(2600, 96)
@@ -233,104 +234,124 @@ position = Vector2(2380, 610)
 script = ExtResource("7_respawn")
 
 [node name="Interface" type="CanvasLayer" parent="."]
+script = ExtResource("14_debug_hud")
 
-[node name="Panel" type="ColorRect" parent="Interface"]
-offset_left = 24.0
-offset_top = 22.0
-offset_right = 1010.0
-offset_bottom = 272.0
+[node name="DebugHudRoot" type="Control" parent="Interface"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
-color = Color(0.025, 0.035, 0.055, 0.88)
 
-[node name="Title" type="Label" parent="Interface/Panel"]
-offset_left = 16.0
-offset_top = 10.0
-offset_right = 980.0
-offset_bottom = 38.0
-theme_override_colors/font_color = Color(0.84, 0.87, 0.89, 1)
-theme_override_font_sizes/font_size = 20
-text = "FIRST ENEMY VARIETY · GOTHIC CASTLE ENCOUNTERS"
+[node name="Panel" type="ColorRect" parent="Interface/DebugHudRoot"]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 352.0
+offset_bottom = 76.0
+mouse_filter = 1
+color = Color(0.025, 0.035, 0.055, 0.66)
 
-[node name="Instructions" type="Label" parent="Interface/Panel"]
-offset_left = 16.0
-offset_top = 44.0
-offset_right = 980.0
-offset_bottom = 74.0
-theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
-theme_override_font_sizes/font_size = 14
-text = "MOVE A/D or ←/→   JUMP SPACE ×2   ATTACK J   DASH SHIFT   CHAIN tap SHIFT   DASH ATTACK SHIFT → J"
+[node name="Content" type="MarginContainer" parent="Interface/DebugHudRoot/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 6
 
-[node name="DebugAbility" type="Label" parent="Interface/Panel"]
-offset_left = 16.0
-offset_top = 78.0
-offset_right = 650.0
-offset_bottom = 104.0
-theme_override_colors/font_color = Color(0.725, 0.51, 0.263, 1)
-theme_override_font_sizes/font_size = 13
-text = "DEBUG ABILITY · DOUBLE JUMP ENABLED (formal unlock flag remains false)"
+[node name="ActionScroll" type="ScrollContainer" parent="Interface/DebugHudRoot/Panel/Content"]
+layout_mode = 2
+vertical_scroll_mode = 0
 
-[node name="DebugToggle" type="CheckButton" parent="Interface/Panel"]
-offset_left = 760.0
-offset_top = 76.0
-offset_right = 968.0
-offset_bottom = 106.0
-button_pressed = true
-text = "ACTION DEBUG HUD"
-
-[node name="ActionDebug" type="Label" parent="Interface/Panel"]
-offset_left = 16.0
-offset_top = 112.0
-offset_right = 980.0
-offset_bottom = 264.0
+[node name="ActionDebug" type="Label" parent="Interface/DebugHudRoot/Panel/Content/ActionScroll"]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
-theme_override_font_sizes/font_size = 13
-text = "FLOOR true   STATE None/idle   AIR DASH / GROUND DASH TYPE None   DASH #0   STAMINA 100"
+theme_override_font_sizes/font_size = 11
+text = "PLAYER  STATE idle | HP 100/100 | STA 100/100\nVX 0  VY 0 | DASH 0 | HURT 0.00 | INV 0.00"
 script = ExtResource("2_debug")
+player_path = NodePath("../../../../../../World/Player")
 
-[node name="DamageTestButton" type="Button" parent="Interface"]
-offset_left = 24.0
-offset_top = 282.0
-offset_right = 228.0
-offset_bottom = 320.0
+[node name="DebugToggle" type="Button" parent="Interface/DebugHudRoot/Panel"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -24.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 10
+text = "+"
+
+[node name="DamageTestButton" type="Button" parent="Interface/DebugHudRoot"]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -40.0
+offset_right = 132.0
+offset_bottom = -12.0
+grow_vertical = 0
 theme_override_colors/font_color = Color(0.89, 0.78, 0.78, 1)
-theme_override_font_sizes/font_size = 13
-text = "DEV TEST · TAKE 25 DAMAGE"
+theme_override_font_sizes/font_size = 10
+text = "TAKE 25 DMG"
 script = ExtResource("6_death_test")
+health_component_path = NodePath("../../../World/Player/HealthComponent")
 
-[node name="EnemyDebugPanel" type="ColorRect" parent="Interface"]
-offset_left = 24.0
-offset_top = 330.0
-offset_right = 824.0
-offset_bottom = 580.0
-mouse_filter = 2
-color = Color(0.025, 0.035, 0.055, 0.88)
+[node name="EnemyDebugPanel" type="ColorRect" parent="Interface/DebugHudRoot"]
+layout_mode = 0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 12.0
+offset_top = -118.0
+offset_right = 392.0
+offset_bottom = -50.0
+grow_vertical = 0
+mouse_filter = 1
+color = Color(0.025, 0.035, 0.055, 0.66)
 
-[node name="Title" type="Label" parent="Interface/EnemyDebugPanel"]
-offset_left = 14.0
-offset_top = 8.0
-offset_right = 540.0
-offset_bottom = 32.0
-theme_override_colors/font_color = Color(0.725, 0.51, 0.263, 1)
-theme_override_font_sizes/font_size = 14
-text = "MIXED ENEMY ROSTER · RUNTIME DEBUG"
+[node name="Content" type="MarginContainer" parent="Interface/DebugHudRoot/EnemyDebugPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 7
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 26
+theme_override_constants/margin_bottom = 6
 
-[node name="EnemyDebugToggle" type="CheckButton" parent="Interface/EnemyDebugPanel"]
-offset_left = 622.0
-offset_top = 2.0
-offset_right = 786.0
-offset_bottom = 34.0
-button_pressed = true
-text = "ENEMY DEBUG"
+[node name="EnemyScroll" type="ScrollContainer" parent="Interface/DebugHudRoot/EnemyDebugPanel/Content"]
+layout_mode = 2
+horizontal_scroll_mode = 0
 
-[node name="EnemyDebug" type="Label" parent="Interface/EnemyDebugPanel"]
-offset_left = 14.0
-offset_top = 38.0
-offset_right = 786.0
-offset_bottom = 242.0
+[node name="EnemyDebug" type="Label" parent="Interface/DebugHudRoot/EnemyDebugPanel/Content/EnemyScroll"]
+layout_mode = 2
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
-theme_override_font_sizes/font_size = 12
-text = "EncounterGroup01\nEncounterGroup02\nEncounterGroup03\nEncounterGroup04"
+theme_override_font_sizes/font_size = 11
+text = "ENC 01 | ALIVE 2 | ENGAGED 0 | ATK 0/2\nGuard ×1 | Shield Guard ×1"
 script = ExtResource("9_enemy_debug")
+encounters_root_path = NodePath("../../../../../../World/Encounters")
+
+[node name="EnemyDebugToggle" type="Button" parent="Interface/DebugHudRoot/EnemyDebugPanel"]
+layout_mode = 0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -24.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 24.0
+grow_horizontal = 0
+theme_override_font_sizes/font_size = 10
+text = "+"
 
 [node name="HUD" type="CanvasLayer" parent="."]
 layer = 2
@@ -338,40 +359,43 @@ script = ExtResource("3_stamina_hud")
 
 [node name="HealthContainer" type="ColorRect" parent="HUD"]
 unique_name_in_owner = true
-offset_left = 1032.0
-offset_top = 24.0
-offset_right = 1256.0
-offset_bottom = 90.0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -208.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 68.0
+grow_horizontal = 0
 mouse_filter = 2
-color = Color(0.025, 0.035, 0.055, 0.92)
+color = Color(0.025, 0.035, 0.055, 0.82)
 script = ExtResource("4_health_hud")
 
 [node name="Title" type="Label" parent="HUD/HealthContainer"]
 offset_left = 10.0
-offset_top = 6.0
-offset_right = 112.0
-offset_bottom = 26.0
+offset_top = 4.0
+offset_right = 90.0
+offset_bottom = 22.0
 theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
-theme_override_font_sizes/font_size = 12
-text = "HEALTH"
+theme_override_font_sizes/font_size = 11
+text = "HP"
 
 [node name="HealthValue" type="Label" parent="HUD/HealthContainer"]
 unique_name_in_owner = true
-offset_left = 118.0
-offset_top = 6.0
-offset_right = 214.0
-offset_bottom = 26.0
+offset_left = 92.0
+offset_top = 4.0
+offset_right = 186.0
+offset_bottom = 22.0
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 text = "100 / 100"
 horizontal_alignment = 2
 
 [node name="HealthBar" type="ProgressBar" parent="HUD/HealthContainer"]
 unique_name_in_owner = true
 offset_left = 10.0
-offset_top = 34.0
-offset_right = 214.0
-offset_bottom = 54.0
+offset_top = 28.0
+offset_right = 186.0
+offset_bottom = 46.0
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background")
 theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
@@ -380,39 +404,42 @@ show_percentage = false
 
 [node name="StaminaContainer" type="ColorRect" parent="HUD"]
 unique_name_in_owner = true
-offset_left = 1032.0
-offset_top = 100.0
-offset_right = 1256.0
-offset_bottom = 166.0
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -208.0
+offset_top = 74.0
+offset_right = -12.0
+offset_bottom = 130.0
+grow_horizontal = 0
 mouse_filter = 2
-color = Color(0.025, 0.035, 0.055, 0.92)
+color = Color(0.025, 0.035, 0.055, 0.82)
 
 [node name="Title" type="Label" parent="HUD/StaminaContainer"]
 offset_left = 10.0
-offset_top = 6.0
-offset_right = 112.0
-offset_bottom = 26.0
+offset_top = 4.0
+offset_right = 90.0
+offset_bottom = 22.0
 theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
-theme_override_font_sizes/font_size = 12
-text = "STAMINA"
+theme_override_font_sizes/font_size = 11
+text = "STA"
 
 [node name="StaminaValue" type="Label" parent="HUD/StaminaContainer"]
 unique_name_in_owner = true
-offset_left = 118.0
-offset_top = 6.0
-offset_right = 214.0
-offset_bottom = 26.0
+offset_left = 92.0
+offset_top = 4.0
+offset_right = 186.0
+offset_bottom = 22.0
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 11
 text = "100 / 100"
 horizontal_alignment = 2
 
 [node name="StaminaBar" type="ProgressBar" parent="HUD/StaminaContainer"]
 unique_name_in_owner = true
 offset_left = 10.0
-offset_top = 34.0
-offset_right = 214.0
-offset_bottom = 54.0
+offset_top = 28.0
+offset_right = 186.0
+offset_bottom = 46.0
 mouse_filter = 2
 theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background")
 theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
@@ -421,10 +448,16 @@ show_percentage = false
 
 [node name="DeathOverlay" type="ColorRect" parent="HUD"]
 visible = false
-offset_left = 430.0
-offset_top = 280.0
-offset_right = 850.0
-offset_bottom = 400.0
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -210.0
+offset_top = -60.0
+offset_right = 210.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
 mouse_filter = 2
 color = Color(0.025, 0.02, 0.035, 0.94)
 script = ExtResource("5_death_hud")
