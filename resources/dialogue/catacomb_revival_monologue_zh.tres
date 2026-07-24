@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CatacombDialogue" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/narrative/catacomb_dialogue.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+sequence_id = &"catacomb_revival_monologue"
+locale_code = &"zh_CN"
+speakers = PackedStringArray("夜巡守卫", "夜巡守卫", "夜巡守卫")
+lines = PackedStringArray("我……不是已经死了吗？", "这里是……暮帷会的墓窟？", "我究竟沉睡了多久？")
+cues = Array[StringName]([&"player_sit", &"player_look_hands", &"player_look_around"])
+durations = PackedFloat32Array(2.6, 2.7, 2.4)

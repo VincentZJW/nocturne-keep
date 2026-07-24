@@ -40,7 +40,7 @@ func _test_opening_contract() -> void:
 	_expect(opening.timeline.get_shot_count() == 8, "Opening does not contain eight shots")
 	_expect(opening.get_authored_duration() >= 60.0 and opening.get_authored_duration() <= 90.0, "Opening duration is outside 60–90 seconds")
 	_expect(opening.skip_unlock_delay >= 1.5, "Opening skip unlocks too early")
-	_expect(opening.target_scene_path == "res://scenes/main/main.tscn", "Opening does not transition to Main")
+	_expect(opening.target_scene_path == "res://scenes/levels/veilbound_catacomb.tscn", "Opening does not transition to Veilbound Catacomb")
 	_expect(opening.get_node_or_null("UI/SubtitlePanel") != null, "Opening bilingual subtitle panel missing")
 	_expect(opening.get_node_or_null("UI/SkipPanel") != null, "Opening hold-to-skip UI missing")
 	opening.scene_change_enabled = false
@@ -51,6 +51,7 @@ func _test_opening_contract() -> void:
 
 
 func _test_main_composition(main: Node2D) -> void:
+	_expect(main.has_node("World/DarkForestTutorialSpawn"), "Main lacks DarkForestTutorialSpawn")
 	_expect(main.get_node_or_null("TutorialController") is TutorialController, "Main lacks TutorialController")
 	_expect(main.get_node_or_null("HUD/TutorialPrompt") is TutorialPromptUI, "Main lacks tutorial prompt UI")
 	_expect(main.has_node("World/ChapterOneStorytellingArt"), "Main lacks visual storytelling layer")

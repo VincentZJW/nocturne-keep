@@ -15,6 +15,6 @@ Authored duration: 70.2 seconds including inter-shot fades.
 | 7 | 7 s | Fragmented helmet, dagger, hand and bell memories | Make amnesia concrete. |
 | 8 | 9 s | The Night Warden departs toward the castle | Transfer intent to the player. |
 
-All shots use bilingual Chinese/English subtitles from the timeline resource. ESC or Enter must be held for 0.75 s; the skip affordance unlocks only after 1.5 s. Skip and natural completion stop the timer and both active Tween channels, fade to black, and load `res://scenes/main/main.tscn`. The cinematic scene contains no Player, HUD, enemy, or AI nodes.
+All shots use bilingual Chinese/English subtitles from the timeline resource. ESC or Enter must be held for 0.75 s; the skip affordance unlocks only after 1.5 s. Skip and natural completion stop the timer and both active Tween channels, fade to black, record Opening completion, and load `res://scenes/levels/veilbound_catacomb.tscn`. The cinematic scene contains no Player, HUD, enemy, or AI nodes; Main is reached only through the catacomb exit.
 
 The art is native Godot 2D drawing, deliberately limited and graphic rather than a pre-rendered video. This keeps the sequence editable, licensed, and deterministic.

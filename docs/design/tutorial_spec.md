@@ -5,6 +5,8 @@ Prompt UI: `res://scenes/ui/tutorial_prompt_ui.tscn`
 
 The tutorial is event-driven and belongs to Main, not Player. Its eleven completion flags therefore survive player death and respawn for the life of the current Main instance. It never pauses gameplay and never displays a completion banner.
 
+The tutorial begins only after `Opening Cinematic -> Veilbound Catacomb -> DarkForestTutorialSpawn`. The catacomb permits A/D movement and E interaction but deliberately blocks jump, double jump, Attack, Dash, and Dash Attack. Those verbs remain introduced by the existing Main sequence below; the revival scene does not mark any tutorial step complete.
+
 | Step | Prompt | Completion evidence |
 |---:|---|---|
 | 1 | A/D or arrows | 72 px horizontal travel |

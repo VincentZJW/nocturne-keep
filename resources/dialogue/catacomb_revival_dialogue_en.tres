@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CatacombDialogue" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/narrative/catacomb_dialogue.gd" id="1_dialogue"]
+
+[resource]
+script = ExtResource("1_dialogue")
+sequence_id = &"catacomb_revival"
+locale_code = &"en"
+speakers = PackedStringArray("CANDLE WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "THE NIGHT WARDEN", "THE NIGHT WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "THE NIGHT WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "CANDLE WARDEN", "CANDLE WARDEN")
+lines = PackedStringArray("Seven years.", "Who are you?", "One who keeps the gate for the dead.", "Why am I alive?", "You did not return to life.", "Your soul was merely drawn back into its body.", "The Soul Mark…", "It refuses to let you leave.", "I remember a door.", "A bell.", "And… blood.", "Some memories protect us.", "Others wait only for us to repeat the same mistake.", "Where must I go?", "Go to Ravenmourn Castle.", "Find the Hollow Bell.", "Silence it forever, before the fourteenth toll.", "Why me?", "Because the bell remembers you.", "And because you are the only one who ever returned.", "I returned?", "Cross the dark forest.", "Follow the old king’s road.", "The gate knight still waits upon the bridge.", "Defeat him, and the castle gate will open.", "Take up your blades, Veilbound.", "Before you seek the truth, learn how to live again.")
+cues = Array[StringName]([&"warden_talk", &"player_talk", &"warden_talk", &"player_talk", &"warden_talk", &"warden_raise_lantern", &"player_look_hands", &"warden_talk", &"player_memory", &"player_memory", &"player_memory", &"warden_talk", &"warden_talk", &"player_talk", &"warden_talk", &"warden_talk", &"warden_raise_lantern", &"player_talk", &"warden_talk", &"warden_talk", &"player_talk", &"warden_turn_away", &"warden_talk", &"warden_talk", &"warden_talk", &"warden_raise_lantern", &"warden_talk"])
+durations = PackedFloat32Array(1.9, 1.6, 2.1, 1.7, 1.8, 2.6, 1.7, 1.9, 1.9, 1.5, 1.7, 2.2, 2.7, 1.6, 1.7, 1.7, 2.6, 1.6, 1.8, 2.4, 1.7, 1.7, 1.8, 2.2, 2.1, 2.1, 2.7)

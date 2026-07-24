@@ -40,7 +40,7 @@ Main
 5. The hooded front-face ghost appears at local offset `(0, 7)`, fades in, and rises 14 pixels over 0.35 seconds.
 6. At the top of the rise, the ghost remains visible for exactly 0.50 seconds.
 7. The sequence hides the ghost, sets its phase to Idle, and emits `sequence_completed` once.
-8. The enabled Main respawn coordinator returns the Player to `World/SpawnPoint`, restores Health/Stamina and control state, resets Camera2D smoothing and Idle presentation, and emits `respawned`.
+8. The enabled Main respawn coordinator initially returns the Player to `World/DarkForestTutorialSpawn`, restores Health/Stamina and control state, resets Camera2D smoothing and Idle presentation, and emits `respawned`.
 9. HUD values restore through component signals and the death overlay hides through `Player.respawned`.
 
 Nominal total presentation time is approximately `0.45 + 0.35 + 0.50 = 1.30 seconds`. Respawn is completion-gated; there is no parallel fixed Player timer that can fire early.
@@ -61,7 +61,7 @@ One sequence may own at most one ghost tween. Sequence generation guards prevent
 
 ## Current limitations
 
-- Main exposes one fixed test `SpawnPoint`; it is not a checkpoint system.
+- Main exposes `DarkForestTutorialSpawn` as its initial forest spawn, then scene-local checkpoints can replace the active Marker2D.
 - Respawn does not reset enemies because no enemy exists yet.
 - There is no respawn invulnerability, fade transition, sound, particle system, or separate dagger physics.
 - The death overlay and damage button remain development presentation/testing aids.

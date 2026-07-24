@@ -26,6 +26,12 @@ enum LifeState {
 	DEAD,
 }
 
+enum InputProfile {
+	FULL,
+	CATACOMB_MOVE_ONLY,
+	LOCKED,
+}
+
 const STATE_ANIMATIONS: Dictionary[MovementState, StringName] = {
 	MovementState.IDLE: &"idle",
 	MovementState.RUN: &"run",
@@ -77,6 +83,7 @@ var _jump_buffer_remaining: float = 0.0
 var _last_horizontal_input: float = 0.0
 var _landed_during_action: bool = false
 var _life_state: LifeState = LifeState.ALIVE
+var _input_profile: InputProfile = InputProfile.FULL
 
 
 func _ready() -> void:
@@ -132,10 +139,14 @@ func _physics_process(delta: float) -> void:
 		_process_hurt_motion(delta)
 		return
 	var was_on_floor: bool = is_on_floor()
-	var horizontal_input: float = Input.get_axis(MOVE_LEFT_ACTION, MOVE_RIGHT_ACTION)
-	var jump_pressed: bool = Input.is_action_just_pressed(JUMP_ACTION)
-	var dash_pressed: bool = Input.is_action_just_pressed(DASH_ACTION)
-	var attack_pressed: bool = Input.is_action_just_pressed(ATTACK_ACTION)
+	var horizontal_input: float = (
+		Input.get_axis(MOVE_LEFT_ACTION, MOVE_RIGHT_ACTION)
+		if _input_profile != InputProfile.LOCKED else 0.0
+	)
+	var full_input_enabled: bool = _input_profile == InputProfile.FULL
+	var jump_pressed: bool = full_input_enabled and Input.is_action_just_pressed(JUMP_ACTION)
+	var dash_pressed: bool = full_input_enabled and Input.is_action_just_pressed(DASH_ACTION)
+	var attack_pressed: bool = full_input_enabled and Input.is_action_just_pressed(ATTACK_ACTION)
 	_last_horizontal_input = horizontal_input
 	_update_jump_assist_timers(delta, was_on_floor, jump_pressed)
 	action_controller.advance(delta)
@@ -190,6 +201,19 @@ func get_life_state_name() -> StringName:
 	return &"Alive"
 
 
+func set_input_profile(profile: InputProfile) -> void:
+	_input_profile = profile
+	if profile != InputProfile.FULL:
+		action_controller.cancel_all_actions()
+		_jump_buffer_remaining = 0.0
+	if profile == InputProfile.LOCKED:
+		velocity.x = 0.0
+
+
+func get_input_profile() -> InputProfile:
+	return _input_profile
+
+
 func is_dead() -> bool:
 	return _life_state == LifeState.DEAD
 
@@ -213,6 +237,7 @@ func respawn_at(global_spawn_position: Vector2) -> bool:
 	health_component.reset_to_full()
 	hurt_controller.reset_after_respawn()
 	_life_state = LifeState.ALIVE
+	_input_profile = InputProfile.FULL
 	animation_controller.reset_to_idle()
 	_movement_state = MovementState.IDLE
 	if player_camera != null:

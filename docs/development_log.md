@@ -1,5 +1,60 @@
 # Development Log
 
+## 2026-07-24 — Veilbound Catacomb revival sequence (preflight)
+
+Status: complete — implementation, 39-script regression, real scene transitions, graphical QA and F5 startup passed; manual pacing/visual acceptance pending
+
+### Read-only findings
+
+- Git preflight: clean `master` at `7e3efaf feat: add Chapter I opening tutorial and encounters`, synchronized with `origin/master`.
+- `project.godot` configures F5 as `res://scenes/cinematics/opening_cinematic.tscn`; the Opening controller currently fades directly to `res://scenes/main/main.tscn` on both natural completion and skip.
+- Main is `res://scenes/main/main.tscn`. Its current Player and fixed respawn marker both begin at `(320, 612)` under `Main/World`; this is the authored Dark Forest tutorial entrance and will be named explicitly as `Main/World/DarkForestTutorialSpawn` while preserving the same position.
+- The existing Chapter I tutorial is scene-local and event-driven (`Main/TutorialController`), starts immediately in Main, and owns the small bilingual tutorial/location panel. Main also owns the signal-driven Health/Stamina HUD and compact Debug HUD.
+- No general DialogueController, CutsceneController, objective controller, NPC base scene, or new-game session service exists. The only scene fades are the Opening controller and the castle-threshold transition. A narrow catacomb-local controller plus structured dialogue Resources is therefore the minimum compatible composition.
+- Player gameplay input is read directly in `Player._physics_process()`. A narrow control-profile API is required so the catacomb can permit horizontal movement while blocking jump, Dash, Attack, Hurtbox combat, and double jump without changing any movement/combat tuning.
+- The current later death flow is Player-local and checkpoint-driven. The new story revival must remain an independent one-shot scene and must not replace or call the combat respawn sequence.
+
+### Goals, planned files, tests, and scope
+
+- Add `veilbound_catacomb.tscn`, a typed catacomb controller, original native-2D catacomb art, a self-contained Candle Warden NPC, data-driven bilingual dialogue Resources, a small dialogue/objective UI, dagger pickup, optional observations, rune stone door, and explicit exit trigger.
+- Redirect Opening to the catacomb. The catacomb will fade to Main only after revival/dialogue completion, dagger pickup, door opening, and voluntary Player entry. Main will expose `World/DarkForestTutorialSpawn`, retain the same forest start coordinates, and start the existing tutorial only after this scene load.
+- Add deterministic tests for structured dialogue order/localization, natural/skip state completion, Player control gating, dagger/door prerequisites, the exit target, F5 route, and Main tutorial spawn. Run exact Godot 4.7.1 import/parse checks, repository regressions, configured startup, isolated scene startup, and graphical QA capture.
+- Scope is limited to the Chapter I startup bridge. Player/Enemy/Boss Health, damage, counts, timings, encounters, forest/castle art direction, bridge, gate, and second-level content remain unchanged.
+
+### Delivered implementation
+
+- Redirected both natural and skipped Opening completion to `res://scenes/levels/veilbound_catacomb.tscn` while preserving `project.godot` F5 authority at the Opening scene. A runtime-only `ChapterSession` Autoload records opening, revival, dagger, exit and current Chapter objective flags across scene changes; it owns no gameplay or disk save.
+- Added an independently instantiable 1600×720 Veilbound Catacomb with original native-2D cold-stone environment, broken sarcophagi, Veiled Order crest/remains, severed altar, blue soul fires, mist, soul particles, rune door and moonlit forest threshold. No enemy, Boss, Hitbox or encounter was added.
+- Added a story-only `RevivalPlayerArt` presentation separate from combat death/respawn. It provides corpse, twitch, breath, sit, hands, kneel, stand, unarmed and descending-soul poses. A procedural low bell, silver-blue Soul Mark pulse and timed scene beats produce an approximately 68.9-second natural revival including dialogue.
+- Added standalone `CandleWarden` scene/script with seated, rise, walk, idle, talk, lantern-raise and turn-away presentation. It contains no combat or follow AI.
+- Added four aligned structured dialogue Resources: three-line protagonist monologue plus 27-line Candle Warden conversation in Chinese and English. Runtime validates speakers/lines/cues/durations, displays a bottom bilingual subtitle, supports automatic or Enter advance, and completes once on 0.75-second Escape/Enter hold skip.
+- Added a narrow Player input profile boundary. The catacomb automatic sequence locks Player; completion enables horizontal movement only while jump, double jump, Attack and Dash remain disabled. Dagger pickup swaps the unarmed story art for the existing armed gameplay `VisualRoot`; no movement or combat tuning changed.
+- Added E interaction for dagger recovery, five optional observations and the stone door. Story plus dagger prerequisites raise the Warden lantern, light runes, lift the door, disable its World collider on completion, and leave Player control active until voluntary exit.
+- Exit fades for 0.55 seconds and loads unchanged Main. Renamed the initial Main marker to `Main/World/DarkForestTutorialSpawn` at the same `(320,612)` coordinate and bound PlayerRespawnController to it. The existing 11-step tutorial then starts normally. Main checkpoint death remains local and never reloads the catacomb.
+- Added a small transient objective presentation and the current Chapter objective state without building a quest log. Added six 1280×720 F5-route QA captures covering corpse, soul descent, sit, Warden dialogue, open door and Dark Forest arrival.
+
+### Commands and actual results
+
+1. Exact engine import and parse:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit`: exit 0; new global classes/resources/autoload registered without parse or resource errors.
+2. Focused startup/flow:
+   - `Godot --headless --path . --script tests/level/test_veilbound_catacomb_flow.gd`: PASS for F5 route, all 30 bilingual entries, scene composition, no enemies, control lock/skip, dagger swap, door/collision and Main spawn.
+   - `Godot --headless --path . --script tests/level/test_veilbound_scene_transitions.gd`: PASS using real SceneTree changes for Opening skip -> Catacomb skip -> Main tutorial, including all ChapterSession flags and no leak warning after timer cleanup.
+   - `Godot --path . --quit-after 180`: exit 0 on GL Compatibility / Apple M4; configured F5 Opening launched without error or warning.
+3. Full regression:
+   - Sequential execution of all `tests/**/*.gd`: 39/39 PASS, 0 failures. Existing Player movement/action/stamina/Hurt/death/respawn, HUD, 34-enemy roster, platform routes, environment, Boss and gate tests remained green.
+   - Stable movement metrics remained 153.59 px single-jump range, 281.92 px debug-double-jump range and 344.00 px four-Air-Dash action travel; no tuning value changed.
+4. Graphical QA:
+   - `Godot --path . --script scripts/tools/capture_veilbound_catacomb_qa.gd`: exit 0, `VEILBOUND_CATACOMB_QA: PASS`; saved six images under `docs/qa/veilbound_catacomb_*.png` and direct inspection confirmed sharp scene art, readable bottom subtitles and the open forest threshold.
+5. Final hygiene:
+   - `git diff --check`: PASS.
+
+### Manual acceptance still required
+
+- Play the natural approximately 68.9-second revival once and judge the pause rhythm, body-pose readability, lantern visibility and whether manual line advance feels responsive.
+- Verify A/D-only control after dialogue, E priority near overlapping optional observations, the visual handoff from unarmed proxy to armed Player, and door collision timing at normal play speed.
+- Confirm later Main death at every checkpoint keeps the current fast body/ghost respawn and never returns to the catacomb. This is covered automatically but still benefits from a full human F5 playthrough.
+
 ## Current authoritative status
 
 - Last audited: 2026-07-24

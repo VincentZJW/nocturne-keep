@@ -7,7 +7,7 @@ signal shot_changed(shot_index: int)
 signal cinematic_finished(skipped: bool)
 
 @export var timeline: OpeningCinematicTimeline
-@export_file("*.tscn") var target_scene_path: String = "res://scenes/main/main.tscn"
+@export_file("*.tscn") var target_scene_path: String = "res://scenes/levels/veilbound_catacomb.tscn"
 @export_range(0.2, 1.2, 0.05) var transition_duration: float = 0.6
 @export_range(0.5, 2.0, 0.1) var skip_unlock_delay: float = 1.5
 @export_range(0.3, 1.5, 0.05) var skip_hold_duration: float = 0.75
@@ -130,6 +130,9 @@ func _show_shot(index: int) -> void:
 
 func _complete_transition(skipped: bool) -> void:
 	cinematic_finished.emit(skipped)
+	var chapter_session: Node = get_node_or_null("/root/ChapterSession")
+	if chapter_session != null and chapter_session.has_method("mark_opening_completed"):
+		chapter_session.call("mark_opening_completed")
 	if not scene_change_enabled:
 		_finishing = false
 		return

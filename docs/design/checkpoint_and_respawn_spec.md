@@ -4,7 +4,7 @@ The existing `PlayerRespawnController` remains the single respawn authority. New
 
 | Checkpoint | Main node path | Approx. x |
 |---|---|---:|
-| Initial awakening | `World/SpawnPoint` | 320 |
+| Dark Forest arrival | `World/DarkForestTutorialSpawn` | 320 |
 | After tutorial | `World/Checkpoints/AfterTutorial` | 2580 |
 | After Dark Forest | `World/Checkpoints/AfterForest` | 3780 |
 | After Castle Outskirts | `World/Checkpoints/AfterOutskirts` | 4780 |

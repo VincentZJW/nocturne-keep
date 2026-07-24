@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一章叙事开场、嵌入式教程与34敌人路线 · Chapter I Graybox 4.0`
+当前版本：`第一章开场、暮帷墓窟复苏、嵌入式教程与34敌人路线 · Chapter I Graybox 4.1`
 
 ## 当前范围
 
-F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入正式Main。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人（Guard 14、Shield 5、Spearman 6、Crossbowman 5、Gargoyle 4），其中27只在主路线、7只在可选高台路线。视觉路线从`Ravenmourn Outskirts`经Dark Forest、Castle Outskirts和Castle Approach抵达木桥Boss区；四个中途/战前检查点复用现有死亡、幽灵与重生流程。Fallen Gate Knight死亡时只显示一句“钟……认得你。 / The bell… remembers you.”，随后保留1.20秒重门和无文字阈厅过渡。当前没有第二关正式玩法、掉落、经验、装备、存档或新能力树。
+F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人（Guard 14、Shield 5、Spearman 6、Crossbowman 5、Gargoyle 4），其中27只在主路线、7只在可选高台路线。后续普通死亡仍只执行既有快速幽灵/检查点重生，不会重播墓窟。当前没有第二关正式玩法、掉落、经验、装备、磁盘存档或新能力树。
 
 ## 环境要求
 
@@ -36,7 +36,7 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/cinematics/opening_cinematic.tscn
 ```
 
-自然播放或跳过后加载`res://scenes/main/main.tscn`。Main包含Player、Health/Stamina HUD、教程提示、死亡/重生、18个手工遭遇组和`World/CastleEntranceArea`木桥Boss区。Player出生于`(320,612)`；教程、森林、郊区和城堡接近区分别配置8/10/9/7只普通敌人。Boss检查点位于`(5480,612)`；木桥延伸至x=6360且顶面y=640，Boss出生于`(6120,596)`。走下河岸跌入`MoatHazard`继续复用既有完整死亡流程。
+自然播放或跳过后加载`res://scenes/levels/veilbound_catacomb.tscn`。墓窟剧情可长按ESC/Enter跳过；获得控制后使用A/D移动、E互动，拾取`World/Interactions/DaggerPickup`后可开启石门并自行进入出口。出口淡出并加载`res://scenes/main/main.tscn`，Player出生于`World/DarkForestTutorialSpawn (320,612)`，随后既有教程、HUD、死亡/重生、18组遭遇和木桥Boss流程继续运行。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -92,6 +92,8 @@ res://scenes/tools/boss_test_room.tscn
 | 普通双匕首前刺 | J；对古堡守卫造成1点伤害 |
 | Dash Attack | Shift后在Dash的0.18秒窗口内按J；同帧Shift+J也可直接触发；造成2点伤害 |
 | Air Dash Attack | 空中Shift后在Dash中按J |
+| 墓窟互动 | E：拾取匕首、观察环境、开启石门 |
+| 跳过Opening/复苏剧情 | 长按 ESC 或 Enter |
 
 Main开发调试快捷键：
 
@@ -114,6 +116,10 @@ Main开发调试快捷键：
 - [世界观](docs/narrative/world_bible.md)
 - [开场分镜](docs/narrative/opening_cinematic_script.md)
 - [第一章叙事](docs/narrative/chapter_01_story_spec.md)
+- [暮帷墓窟复苏场景](docs/narrative/veilbound_catacomb_scene.md)
+- [守烛人角色规格](docs/narrative/candle_warden_character_spec.md)
+- [墓窟复苏完整对话](docs/narrative/catacomb_revival_dialogue.md)
+- [场景切换规格](docs/design/scene_transition_spec.md)
 - [主角叙事规格](docs/narrative/character_protagonist_spec.md)
 - [嵌入式教程规格](docs/design/tutorial_spec.md)
 - [第一关34敌人编排](docs/design/first_level_encounter_spec.md)

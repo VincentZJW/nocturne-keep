@@ -25,7 +25,7 @@ func _test_delayed_respawn_contract() -> void:
 	await _wait_physics_frames(5)
 	var player: Player = main.get_node("World/Player") as Player
 	var death_sequence: PlayerDeathSequence = player.get_node("DeathSequence") as PlayerDeathSequence
-	var spawn_point: Marker2D = main.get_node("World/SpawnPoint") as Marker2D
+	var spawn_point: Marker2D = main.get_node("World/DarkForestTutorialSpawn") as Marker2D
 	var respawn_controller: PlayerRespawnController = main.get_node(
 		"PlayerRespawnController"
 	) as PlayerRespawnController
@@ -38,7 +38,7 @@ func _test_delayed_respawn_contract() -> void:
 	var stamina_value: Label = main.get_node("HUD/StaminaContainer/StaminaValue") as Label
 	var camera: Camera2D = player.get_node("Camera2D") as Camera2D
 	respawn_controller.player_respawned.connect(_on_player_respawned)
-	_expect(spawn_point != null, "Main is missing its single SpawnPoint")
+	_expect(spawn_point != null, "Main is missing DarkForestTutorialSpawn")
 	_expect(camera != null and camera.get_parent() == player, "Camera no longer follows the Player instance")
 	player.global_position = spawn_point.global_position + Vector2(420.0, -80.0)
 	_expect(stamina.try_consume_dash(), "Pre-death Stamina setup failed")

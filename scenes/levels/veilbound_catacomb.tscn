@@ -1,0 +1,457 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="Script" path="res://scripts/levels/veilbound_catacomb_controller.gd" id="1_controller"]
+[ext_resource type="Script" path="res://scripts/world/veilbound_catacomb_art.gd" id="2_art"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="3_player"]
+[ext_resource type="Script" path="res://scripts/narrative/revival_player_art.gd" id="4_revival"]
+[ext_resource type="PackedScene" path="res://scenes/npcs/candle_warden.tscn" id="5_warden"]
+[ext_resource type="Script" path="res://scripts/world/catacomb_stone_door.gd" id="6_door"]
+[ext_resource type="Resource" path="res://resources/dialogue/catacomb_revival_monologue_zh.tres" id="7_mono_zh"]
+[ext_resource type="Resource" path="res://resources/dialogue/catacomb_revival_monologue_en.tres" id="8_mono_en"]
+[ext_resource type="Resource" path="res://resources/dialogue/catacomb_revival_dialogue_zh.tres" id="9_dialogue_zh"]
+[ext_resource type="Resource" path="res://resources/dialogue/catacomb_revival_dialogue_en.tres" id="10_dialogue_en"]
+[ext_resource type="Script" path="res://scripts/ui/catacomb_dialogue_ui.gd" id="11_dialogue_ui"]
+[ext_resource type="Script" path="res://scripts/ui/chapter_objective_ui.gd" id="12_objective_ui"]
+[ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="13_stamina_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="14_health_hud"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(1600, 60)
+
+[sub_resource type="RectangleShape2D" id="AltarShape"]
+size = Vector2(296, 28)
+
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(40, 720)
+
+[sub_resource type="RectangleShape2D" id="DoorShape"]
+size = Vector2(152, 248)
+
+[sub_resource type="RectangleShape2D" id="InteractionShape"]
+size = Vector2(120, 110)
+
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(100, 220)
+
+[sub_resource type="StyleBoxFlat" id="HudBackground"]
+bg_color = Color(0.025, 0.035, 0.055, 0.82)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.48, 0.56, 0.7)
+
+[sub_resource type="StyleBoxFlat" id="BarBackground"]
+bg_color = Color(0.04, 0.055, 0.075, 1)
+
+[sub_resource type="StyleBoxFlat" id="HealthFill"]
+bg_color = Color(0.58, 0.16, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="StaminaFill"]
+bg_color = Color(0.67, 0.54, 0.21, 1)
+
+[sub_resource type="StyleBoxFlat" id="DialogueBackground"]
+bg_color = Color(0.008, 0.012, 0.02, 0.88)
+border_width_top = 1
+border_color = Color(0.48, 0.62, 0.7, 0.65)
+
+[node name="VeilboundCatacomb" type="Node2D"]
+script = ExtResource("1_controller")
+monologue_zh = ExtResource("7_mono_zh")
+monologue_en = ExtResource("8_mono_en")
+dialogue_zh = ExtResource("9_dialogue_zh")
+dialogue_en = ExtResource("10_dialogue_en")
+
+[node name="Backdrop" type="ColorRect" parent="."]
+offset_right = 1600.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.005, 0.008, 0.014, 1)
+
+[node name="World" type="Node2D" parent="."]
+
+[node name="CatacombArt" type="Node2D" parent="World"]
+script = ExtResource("2_art")
+
+[node name="Floor" type="StaticBody2D" parent="World"]
+position = Vector2(800, 690)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Floor"]
+shape = SubResource("FloorShape")
+
+[node name="SeveredAltar" type="StaticBody2D" parent="World"]
+position = Vector2(500, 559)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/SeveredAltar"]
+shape = SubResource("AltarShape")
+
+[node name="LeftWall" type="StaticBody2D" parent="World"]
+position = Vector2(-20, 360)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/LeftWall"]
+shape = SubResource("WallShape")
+
+[node name="RightWall" type="StaticBody2D" parent="World"]
+position = Vector2(1608, 360)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/RightWall"]
+shape = SubResource("WallShape")
+
+[node name="Player" parent="World" instance=ExtResource("3_player")]
+position = Vector2(500, 531)
+
+[node name="Camera2D" parent="World/Player"]
+limit_left = 0
+limit_top = 0
+limit_right = 1600
+limit_bottom = 720
+
+[node name="RevivalPlayerArt" type="Node2D" parent="World/Player"]
+z_index = 4
+script = ExtResource("4_revival")
+
+[node name="CandleWarden" parent="World" instance=ExtResource("5_warden")]
+position = Vector2(840, 649)
+z_index = 3
+
+[node name="StoneDoorBody" type="StaticBody2D" parent="World"]
+position = Vector2(1370, 654)
+collision_layer = 1
+collision_mask = 0
+
+[node name="StoneDoorVisual" type="Node2D" parent="World/StoneDoorBody"]
+z_index = 2
+script = ExtResource("6_door")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/StoneDoorBody"]
+position = Vector2(0, -124)
+shape = SubResource("DoorShape")
+
+[node name="Interactions" type="Node2D" parent="World"]
+
+[node name="DaggerPickup" type="Area2D" parent="World/Interactions"]
+position = Vector2(612, 512)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/DaggerPickup"]
+shape = SubResource("InteractionShape")
+
+[node name="DaggerVisuals" type="Node2D" parent="World/Interactions/DaggerPickup"]
+z_index = 5
+
+[node name="MainDagger" type="Polygon2D" parent="World/Interactions/DaggerPickup/DaggerVisuals"]
+polygon = PackedVector2Array(-38, 9, 12, -8, 20, -4, -29, 16)
+color = Color(0.835, 0.871, 0.89, 1)
+
+[node name="MainGrip" type="Polygon2D" parent="World/Interactions/DaggerPickup/DaggerVisuals"]
+polygon = PackedVector2Array(12, -8, 29, -14, 33, -8, 20, -4)
+color = Color(0.094, 0.169, 0.239, 1)
+
+[node name="OffhandDagger" type="Polygon2D" parent="World/Interactions/DaggerPickup/DaggerVisuals"]
+polygon = PackedVector2Array(-26, -10, 8, -22, 15, -18, -18, -5)
+color = Color(0.73, 0.79, 0.82, 1)
+
+[node name="StoneDoorInteraction" type="Area2D" parent="World/Interactions"]
+position = Vector2(1250, 600)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/StoneDoorInteraction"]
+shape = SubResource("InteractionShape")
+
+[node name="CatacombExitTrigger" type="Area2D" parent="World/Interactions"]
+position = Vector2(1450, 540)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/CatacombExitTrigger"]
+shape = SubResource("ExitShape")
+
+[node name="Observations" type="Node2D" parent="World/Interactions"]
+
+[node name="VeiledCrest" type="Area2D" parent="World/Interactions/Observations"]
+position = Vector2(500, 380)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/Observations/VeiledCrest"]
+shape = SubResource("InteractionShape")
+
+[node name="FallenVeilbound" type="Area2D" parent="World/Interactions/Observations"]
+position = Vector2(820, 610)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/Observations/FallenVeilbound"]
+shape = SubResource("InteractionShape")
+
+[node name="SoulFragment" type="Area2D" parent="World/Interactions/Observations"]
+position = Vector2(980, 600)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/Observations/SoulFragment"]
+shape = SubResource("InteractionShape")
+
+[node name="BrokenSarcophagus" type="Area2D" parent="World/Interactions/Observations"]
+position = Vector2(1080, 540)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/Observations/BrokenSarcophagus"]
+shape = SubResource("InteractionShape")
+
+[node name="BrokenDagger" type="Area2D" parent="World/Interactions/Observations"]
+position = Vector2(370, 610)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Interactions/Observations/BrokenDagger"]
+shape = SubResource("InteractionShape")
+
+[node name="BellPlayer" type="AudioStreamPlayer" parent="."]
+volume_db = -8.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+layer = 6
+script = ExtResource("13_stamina_hud")
+
+[node name="GameplayHudRoot" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="HealthContainer" type="PanelContainer" parent="HUD/GameplayHudRoot"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -208.0
+offset_top = 12.0
+offset_right = -12.0
+offset_bottom = 62.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("HudBackground")
+script = ExtResource("14_health_hud")
+health_component_path = NodePath("../../../World/Player/HealthComponent")
+
+[node name="HealthValue" type="Label" parent="HUD/GameplayHudRoot/HealthContainer"]
+unique_name_in_owner = true
+offset_left = 92.0
+offset_top = 4.0
+offset_right = 184.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 10
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/GameplayHudRoot/HealthContainer"]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 24.0
+offset_right = 184.0
+offset_bottom = 42.0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("HealthFill")
+value = 100.0
+show_percentage = false
+
+[node name="StaminaContainer" type="PanelContainer" parent="HUD/GameplayHudRoot"]
+unique_name_in_owner = true
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -208.0
+offset_top = 68.0
+offset_right = -12.0
+offset_bottom = 118.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("HudBackground")
+
+[node name="StaminaValue" type="Label" parent="HUD/GameplayHudRoot/StaminaContainer"]
+unique_name_in_owner = true
+offset_left = 92.0
+offset_top = 4.0
+offset_right = 184.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 10
+text = "100 / 100"
+horizontal_alignment = 2
+
+[node name="StaminaBar" type="ProgressBar" parent="HUD/GameplayHudRoot/StaminaContainer"]
+unique_name_in_owner = true
+offset_left = 10.0
+offset_top = 24.0
+offset_right = 184.0
+offset_bottom = 42.0
+theme_override_styles/background = SubResource("BarBackground")
+theme_override_styles/fill = SubResource("StaminaFill")
+value = 100.0
+show_percentage = false
+
+[node name="NarrativeUI" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="DialogueUI" type="Control" parent="NarrativeUI"]
+anchors_preset = 12
+anchor_right = 1.0
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -142.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+script = ExtResource("11_dialogue_ui")
+
+[node name="Panel" type="PanelContainer" parent="NarrativeUI/DialogueUI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 110.0
+offset_right = -110.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("DialogueBackground")
+
+[node name="Margin" type="MarginContainer" parent="NarrativeUI/DialogueUI/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 8
+
+[node name="Rows" type="VBoxContainer" parent="NarrativeUI/DialogueUI/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 3
+
+[node name="Speaker" type="Label" parent="NarrativeUI/DialogueUI/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.52, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 12
+text = "守烛人 / CANDLE WARDEN"
+
+[node name="Chinese" type="Label" parent="NarrativeUI/DialogueUI/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.92, 0.93, 1)
+theme_override_font_sizes/font_size = 18
+text = "中文字幕"
+horizontal_alignment = 1
+
+[node name="English" type="Label" parent="NarrativeUI/DialogueUI/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.68, 0.74, 0.78, 1)
+theme_override_font_sizes/font_size = 13
+text = "English subtitle"
+horizontal_alignment = 1
+
+[node name="ObjectiveUI" type="Control" parent="NarrativeUI"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 44.0
+offset_bottom = 126.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("12_objective_ui")
+
+[node name="Panel" type="PanelContainer" parent="NarrativeUI/ObjectiveUI"]
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -190.0
+offset_right = 190.0
+offset_bottom = 80.0
+theme_override_styles/panel = SubResource("DialogueBackground")
+
+[node name="Margin" type="MarginContainer" parent="NarrativeUI/ObjectiveUI/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 7
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 7
+
+[node name="Rows" type="VBoxContainer" parent="NarrativeUI/ObjectiveUI/Panel/Margin"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="NarrativeUI/ObjectiveUI/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.52, 0.72, 0.82, 1)
+theme_override_font_sizes/font_size = 10
+text = "MAIN OBJECTIVE / 主线目标"
+horizontal_alignment = 1
+
+[node name="Body" type="Label" parent="NarrativeUI/ObjectiveUI/Panel/Margin/Rows"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 13
+text = "离开暮帷墓窟\nLeave the Veilbound Catacomb"
+horizontal_alignment = 1
+
+[node name="InteractionPrompt" type="Label" parent="NarrativeUI"]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -202.0
+offset_right = 210.0
+offset_bottom = -168.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.83, 0.87, 0.89, 1)
+theme_override_colors/font_outline_color = Color(0.01, 0.015, 0.025, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 14
+text = "E  互动 / INTERACT"
+horizontal_alignment = 1
+
+[node name="SkipPanel" type="Control" parent="NarrativeUI"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -292.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 58.0
+grow_horizontal = 0
+mouse_filter = 2
+
+[node name="SkipLabel" type="Label" parent="NarrativeUI/SkipPanel"]
+offset_right = 274.0
+offset_bottom = 18.0
+theme_override_font_sizes/font_size = 10
+text = "按住 ESC / ENTER 跳过复苏  ·  HOLD TO SKIP"
+horizontal_alignment = 2
+
+[node name="SkipProgress" type="ProgressBar" parent="NarrativeUI/SkipPanel"]
+offset_top = 22.0
+offset_right = 274.0
+offset_bottom = 32.0
+show_percentage = false
+
+[node name="FadeRect" type="ColorRect" parent="NarrativeUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0, 0, 0, 1)
