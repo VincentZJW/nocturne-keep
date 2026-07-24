@@ -42,7 +42,10 @@ func _run_tests() -> void:
 	for index: int in range(PLATFORM_PATHS.size()):
 		var platform: StaticBody2D = main.get_node_or_null(PLATFORM_PATHS[index]) as StaticBody2D
 		if platform != null:
-			await _test_double_jump_landing(player, platform, EXPECTED_TOPS[index])
+			await _test_solid_ceiling_and_landing(player, platform, EXPECTED_TOPS[index])
+	var dash_platform: StaticBody2D = main.get_node_or_null("World/PlatformA") as StaticBody2D
+	if dash_platform != null:
+		await _test_high_speed_side_blocking(player, dash_platform)
 	_finish(main)
 
 
@@ -66,7 +69,7 @@ func _test_saved_platform_geometry(main: Node2D) -> void:
 		_expect(is_equal_approx(top_y, EXPECTED_TOPS[index]), "%s top surface mismatch" % platform.name)
 		_expect(rise <= CHALLENGE_LIMIT, "%s exceeds the 90%% stable double-jump limit" % platform.name)
 		_expect(shape.size.x >= MINIMUM_SAFE_WIDTH, "%s is narrower than the safe landing width" % platform.name)
-		_expect(collision.one_way_collision, "%s is not a downward-facing one-way surface" % platform.name)
+		_expect(not collision.one_way_collision, "%s is not a full solid surface" % platform.name)
 
 
 func _test_enemy_platform_alignment(main: Node2D) -> void:
@@ -100,30 +103,67 @@ func _test_enemy_platform_alignment(main: Node2D) -> void:
 			_expect(gargoyle.global_position.y < _surface_top(perch) - 48.0, "%s lacks dive clearance" % gargoyle.name)
 
 
-func _test_double_jump_landing(player: Player, platform: StaticBody2D, top_y: float) -> void:
+func _test_solid_ceiling_and_landing(player: Player, platform: StaticBody2D, top_y: float) -> void:
 	player.action_controller.cancel_all_actions()
 	player.velocity = Vector2.ZERO
 	player.global_position = Vector2(platform.global_position.x, 612.0)
 	player.debug_enable_double_jump = true
 	await _wait_physics_frames(5)
 	await _tap_action(Player.JUMP_ACTION)
-	var left_floor: bool = false
-	var second_jump_sent: bool = false
-	var landed_on_target: bool = false
-	for frame_index: int in range(240):
+	var first_ceiling_hit: bool = false
+	var minimum_root_y: float = player.global_position.y
+	for frame_index: int in range(120):
 		await physics_frame
-		left_floor = left_floor or not player.is_on_floor()
-		if left_floor and not second_jump_sent and player.velocity.y >= -10.0:
-			second_jump_sent = true
-			await _tap_action(Player.JUMP_ACTION)
-		if left_floor and player.is_on_floor():
-			var foot_y: float = _player_foot_y(player)
-			if absf(foot_y - top_y) <= 1.5:
-				landed_on_target = true
+		minimum_root_y = minf(minimum_root_y, player.global_position.y)
+		if player.is_on_ceiling():
+			first_ceiling_hit = true
 			break
-	_expect(second_jump_sent, "%s double jump was not triggered" % platform.name)
-	_expect(landed_on_target, "%s was not landed on through real Player physics" % platform.name)
+	var expected_ceiling_root_y: float = top_y + 24.0 + 24.0
+	_expect(first_ceiling_hit, "%s underside did not report a ceiling collision" % platform.name)
+	_expect(minimum_root_y >= expected_ceiling_root_y - 1.5, "%s single jump penetrated the underside" % platform.name)
+	_expect(player.velocity.y >= 0.0, "%s retained upward velocity after ceiling impact" % platform.name)
+	await _tap_action(Player.JUMP_ACTION)
+	for frame_index: int in range(8):
+		await physics_frame
+		minimum_root_y = minf(minimum_root_y, player.global_position.y)
+	_expect(minimum_root_y >= expected_ceiling_root_y - 1.5, "%s double jump penetrated the underside" % platform.name)
+	player.action_controller.cancel_all_actions()
+	player.velocity = Vector2.ZERO
+	player.global_position = Vector2(platform.global_position.x, top_y - 100.0)
+	for frame_index: int in range(120):
+		await physics_frame
+		if player.is_on_floor():
+			break
+	_expect(player.is_on_floor(), "%s top did not support the Player" % platform.name)
+	_expect(absf(_player_foot_y(player) - top_y) <= 1.5, "%s top landing baseline is misaligned" % platform.name)
 	Input.action_release(Player.JUMP_ACTION)
+
+
+func _test_high_speed_side_blocking(player: Player, platform: StaticBody2D) -> void:
+	var shape: RectangleShape2D = _surface_shape(platform)
+	var platform_left: float = platform.global_position.x - shape.size.x * 0.5
+	var maximum_root_x: float = platform_left - 12.0
+	for use_attack: bool in [false, true]:
+		player.action_controller.cancel_all_actions()
+		player.stamina_component.reset_to_full()
+		player.velocity = Vector2.ZERO
+		player.global_position = Vector2(platform_left - 76.0, platform.global_position.y)
+		Input.action_press(Player.MOVE_RIGHT_ACTION)
+		Input.action_press(Player.DASH_ACTION)
+		if use_attack:
+			Input.action_press(Player.ATTACK_ACTION)
+		await physics_frame
+		Input.action_release(Player.DASH_ACTION)
+		Input.action_release(Player.ATTACK_ACTION)
+		var furthest_x: float = player.global_position.x
+		for frame_index: int in range(16):
+			await physics_frame
+			furthest_x = maxf(furthest_x, player.global_position.x)
+		Input.action_release(Player.MOVE_RIGHT_ACTION)
+		_expect(
+			furthest_x <= maximum_root_x + 1.5,
+			"%s crossed PlatformA solid side" % ("Dash Attack" if use_attack else "Air Dash")
+		)
 
 
 func _disable_encounters(main: Node2D) -> void:
@@ -173,7 +213,7 @@ func _expect(condition: bool, message: String) -> void:
 func _finish(main: Node2D) -> void:
 	main.queue_free()
 	if _failures.is_empty():
-		print("MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 surfaces, one-way collision, enemies aligned, real double-jump landings)")
+		print("MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 solid surfaces, jump/double-jump underside blocking, Dash side blocking, top landings)")
 		quit(0)
 		return
 	for failure: String in _failures:

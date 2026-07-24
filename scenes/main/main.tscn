@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3]
+[gd_scene load_steps=47 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -19,9 +19,11 @@
 [ext_resource type="Script" path="res://scripts/bosses/boss_room_controller.gd" id="17_boss_room"]
 [ext_resource type="Script" path="res://scripts/bosses/boss_health_hud.gd" id="18_boss_hud"]
 [ext_resource type="Script" path="res://scripts/tools/level_traversal_debug_overlay.gd" id="19_traversal_debug"]
+[ext_resource type="Script" path="res://scripts/world/castle_gate_controller.gd" id="20_castle_gate"]
+[ext_resource type="Script" path="res://scripts/world/moat_hazard.gd" id="21_moat_hazard"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
-size = Vector2(6700, 96)
+size = Vector2(5620, 96)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_a"]
 size = Vector2(220, 24)
@@ -65,11 +67,32 @@ size = Vector2(360, 420)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_boss_trigger"]
 size = Vector2(120, 420)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_exit_trigger"]
-size = Vector2(110, 420)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
-size = Vector2(28, 320)
+size = Vector2(48, 260)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_floor"]
+size = Vector2(264, 96)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bridge"]
+size = Vector2(800, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_moat_hazard"]
+size = Vector2(840, 104)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint_trigger"]
+size = Vector2(120, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rear_barrier"]
+size = Vector2(28, 260)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_entrance"]
+size = Vector2(40, 260)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_upper"]
+size = Vector2(264, 210)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_tower"]
+size = Vector2(184, 260)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_background"]
 bg_color = Color(0.025, 0.035, 0.055, 1)
@@ -122,15 +145,15 @@ collision_layer = 1
 collision_mask = 1
 
 [node name="Visual" type="Polygon2D" parent="World/Floor"]
-polygon = PackedVector2Array(-100, 640, 6600, 640, 6600, 736, -100, 736)
+polygon = PackedVector2Array(-100, 640, 5520, 640, 5520, 736, -100, 736)
 color = Color(0.105, 0.105, 0.145, 1)
 
 [node name="TopLine" type="Polygon2D" parent="World/Floor"]
-polygon = PackedVector2Array(-100, 640, 6600, 640, 6600, 646, -100, 646)
+polygon = PackedVector2Array(-100, 640, 5520, 640, 5520, 646, -100, 646)
 color = Color(0.376, 0.478, 0.565, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Floor"]
-position = Vector2(3250, 688)
+position = Vector2(2710, 688)
 shape = SubResource("RectangleShape2D_floor")
 
 [node name="PlatformA" type="StaticBody2D" parent="World"]
@@ -143,7 +166,6 @@ polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, -110, 12)
 color = Color(0.19, 0.18, 0.25, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformA"]
-one_way_collision = true
 shape = SubResource("RectangleShape2D_platform_a")
 
 [node name="PlatformB" type="StaticBody2D" parent="World"]
@@ -156,7 +178,6 @@ polygon = PackedVector2Array(-95, -12, 95, -12, 95, 11, 72, 11, 64, 15, 20, 12, 
 color = Color(0.19, 0.18, 0.25, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformB"]
-one_way_collision = true
 shape = SubResource("RectangleShape2D_platform_b")
 
 [node name="PlatformC" type="StaticBody2D" parent="World"]
@@ -169,7 +190,6 @@ polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, 84, 12, 74, 16, 30, 1
 color = Color(0.19, 0.18, 0.25, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformC"]
-one_way_collision = true
 shape = SubResource("RectangleShape2D_platform_c")
 
 [node name="PlatformD" type="StaticBody2D" parent="World"]
@@ -182,7 +202,6 @@ polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, 92, 12, 78, 15, 36, 1
 color = Color(0.19, 0.18, 0.25, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformD"]
-one_way_collision = true
 shape = SubResource("RectangleShape2D_platform_d")
 
 [node name="GargoylePerch" type="StaticBody2D" parent="World"]
@@ -195,7 +214,6 @@ polygon = PackedVector2Array(-120, -12, 120, -12, 120, 12, 94, 12, 82, 17, 38, 1
 color = Color(0.16, 0.15, 0.22, 1)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/GargoylePerch"]
-one_way_collision = true
 shape = SubResource("RectangleShape2D_platform_e")
 
 [node name="LeftWall" type="StaticBody2D" parent="World"]
@@ -389,60 +407,178 @@ position = Vector2(5380, 610)
 [node name="FallenCrossbowman03" parent="World/Encounters/EncounterGroup07/Enemies" instance=ExtResource("13_crossbow")]
 position = Vector2(5160, 478)
 
-[node name="BossRoom" type="Node2D" parent="World"]
+[node name="CastleEntranceArea" type="Node2D" parent="World"]
 
-[node name="BossCheckpoint" type="Marker2D" parent="World/BossRoom"]
-position = Vector2(5480, 612)
+[node name="NearBank" type="Polygon2D" parent="World/CastleEntranceArea"]
+polygon = PackedVector2Array(5440, 620, 5520, 620, 5520, 640, 5440, 640)
+color = Color(0.22, 0.21, 0.28, 1)
 
-[node name="EntryTrigger" type="Area2D" parent="World/BossRoom"]
-position = Vector2(5600, 430)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
+[node name="Moat" type="Node2D" parent="World/CastleEntranceArea"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BossRoom/EntryTrigger"]
-shape = SubResource("RectangleShape2D_boss_trigger")
-
-[node name="ExitTrigger" type="Area2D" parent="World/BossRoom"]
-position = Vector2(6540, 430)
-collision_layer = 0
-collision_mask = 2
-monitorable = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BossRoom/ExitTrigger"]
-shape = SubResource("RectangleShape2D_exit_trigger")
-
-[node name="EntranceGate" type="StaticBody2D" parent="World/BossRoom"]
-position = Vector2(5630, 480)
-collision_layer = 1
-collision_mask = 1
-
-[node name="Visual" type="Polygon2D" parent="World/BossRoom/EntranceGate"]
-polygon = PackedVector2Array(-14, -160, 14, -160, 14, 160, -14, 160)
-color = Color(0.22, 0.2, 0.28, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BossRoom/EntranceGate"]
-shape = SubResource("RectangleShape2D_gate")
-
-[node name="ExitGate" type="StaticBody2D" parent="World/BossRoom"]
-position = Vector2(6480, 480)
-collision_layer = 1
-collision_mask = 1
-
-[node name="Visual" type="Polygon2D" parent="World/BossRoom/ExitGate"]
-polygon = PackedVector2Array(-14, -160, 14, -160, 14, 160, -14, 160)
-color = Color(0.22, 0.2, 0.28, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/BossRoom/ExitGate"]
-shape = SubResource("RectangleShape2D_gate")
-
-[node name="ArenaBackdrop" type="Polygon2D" parent="World/BossRoom"]
-polygon = PackedVector2Array(5630, 200, 6480, 200, 6480, 640, 5630, 640)
-color = Color(0.08, 0.065, 0.105, 0.45)
+[node name="WaterVisual" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 736, 5520, 736)
+color = Color(0.03, 0.11, 0.16, 1)
 z_index = -1
 
-[node name="FallenGateKnight" parent="World/BossRoom" instance=ExtResource("16_boss")]
+[node name="WaterReflection" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 681, 5520, 681)
+color = Color(0.32, 0.5, 0.6, 0.62)
+z_index = -1
+
+[node name="MoatHazard" type="Area2D" parent="World/CastleEntranceArea/Moat"]
+position = Vector2(5940, 708)
+collision_layer = 0
+collision_mask = 6
+monitorable = false
+script = ExtResource("21_moat_hazard")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/Moat/MoatHazard"]
+shape = SubResource("RectangleShape2D_moat_hazard")
+
+[node name="WoodenBridge" type="StaticBody2D" parent="World/CastleEntranceArea"]
+position = Vector2(5960, 650)
+collision_layer = 1
+collision_mask = 1
+
+[node name="BridgeVisual" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge"]
+polygon = PackedVector2Array(-400, -10, 400, -10, 400, 10, -400, 10)
+color = Color(0.24, 0.15, 0.105, 1)
+
+[node name="TopEdge" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge"]
+polygon = PackedVector2Array(-400, -10, 400, -10, 400, -6, -400, -6)
+color = Color(0.55, 0.38, 0.23, 1)
+
+[node name="BridgeCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/WoodenBridge"]
+shape = SubResource("RectangleShape2D_bridge")
+
+[node name="BridgeDecorations" type="Node2D" parent="World/CastleEntranceArea/WoodenBridge"]
+
+[node name="LeftChainPost" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge/BridgeDecorations"]
+polygon = PackedVector2Array(-388, -10, -376, -10, -376, -76, -388, -76)
+color = Color(0.18, 0.18, 0.21, 1)
+
+[node name="RightChainPost" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge/BridgeDecorations"]
+polygon = PackedVector2Array(376, -10, 388, -10, 388, -76, 376, -76)
+color = Color(0.18, 0.18, 0.21, 1)
+
+[node name="BossCheckpoint" type="Marker2D" parent="World/CastleEntranceArea"]
+position = Vector2(5480, 612)
+
+[node name="BossCheckpointTrigger" type="Area2D" parent="World/CastleEntranceArea"]
+position = Vector2(5480, 560)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/BossCheckpointTrigger"]
+shape = SubResource("RectangleShape2D_checkpoint_trigger")
+
+[node name="BossEntryTrigger" type="Area2D" parent="World/CastleEntranceArea"]
+position = Vector2(5780, 430)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/BossEntryTrigger"]
+shape = SubResource("RectangleShape2D_boss_trigger")
+
+[node name="RearBattleBarrier" type="StaticBody2D" parent="World/CastleEntranceArea"]
+position = Vector2(5420, 510)
+collision_layer = 0
+collision_mask = 1
+
+[node name="BarrierVisual" type="Polygon2D" parent="World/CastleEntranceArea/RearBattleBarrier"]
+polygon = PackedVector2Array(-14, -130, 14, -130, 14, 130, -14, 130)
+color = Color(0.33, 0.22, 0.42, 0.82)
+
+[node name="ChainCross" type="Polygon2D" parent="World/CastleEntranceArea/RearBattleBarrier"]
+polygon = PackedVector2Array(-14, -100, 14, -84, 14, -66, -14, -82, -14, 66, 14, 82, 14, 100, -14, 84)
+color = Color(0.58, 0.46, 0.64, 0.9)
+
+[node name="BarrierCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/RearBattleBarrier"]
+disabled = true
+shape = SubResource("RectangleShape2D_rear_barrier")
+
+[node name="BossSpawnPoint" type="Marker2D" parent="World/CastleEntranceArea"]
 position = Vector2(6120, 596)
+
+[node name="ArenaBackdrop" type="Polygon2D" parent="World/CastleEntranceArea"]
+polygon = PackedVector2Array(5520, 190, 6400, 190, 6400, 676, 5520, 676)
+color = Color(0.065, 0.052, 0.09, 0.5)
+z_index = -2
+
+[node name="FallenGateKnight" parent="World/CastleEntranceArea" instance=ExtResource("16_boss")]
+position = Vector2(6120, 596)
+bridge_bounds_enabled = true
+bridge_min_x = 5650.0
+bridge_max_x = 6320.0
+
+[node name="CastleFloor" type="StaticBody2D" parent="World/CastleEntranceArea"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Visual" type="Polygon2D" parent="World/CastleEntranceArea/CastleFloor"]
+polygon = PackedVector2Array(6360, 640, 6624, 640, 6624, 736, 6360, 736)
+color = Color(0.105, 0.105, 0.145, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFloor"]
+position = Vector2(6492, 688)
+shape = SubResource("RectangleShape2D_castle_floor")
+
+[node name="CastleFacade" type="StaticBody2D" parent="World/CastleEntranceArea"]
+collision_layer = 1
+collision_mask = 1
+
+[node name="Tower" type="Polygon2D" parent="World/CastleEntranceArea/CastleFacade"]
+polygon = PackedVector2Array(6360, 170, 6624, 170, 6624, 640, 6440, 640, 6440, 380, 6360, 380)
+color = Color(0.095, 0.085, 0.125, 1)
+z_index = -1
+
+[node name="Arch" type="Polygon2D" parent="World/CastleEntranceArea/CastleFacade"]
+polygon = PackedVector2Array(6360, 350, 6440, 350, 6440, 380, 6360, 380)
+color = Color(0.19, 0.18, 0.24, 1)
+z_index = -1
+
+[node name="UpperCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFacade"]
+position = Vector2(6492, 275)
+shape = SubResource("RectangleShape2D_castle_upper")
+
+[node name="TowerCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFacade"]
+position = Vector2(6532, 510)
+shape = SubResource("RectangleShape2D_castle_tower")
+
+[node name="CastleGate" type="StaticBody2D" parent="World/CastleEntranceArea"]
+position = Vector2(6400, 510)
+collision_layer = 1
+collision_mask = 1
+
+[node name="GateVisual" type="Node2D" parent="World/CastleEntranceArea/CastleGate"]
+
+[node name="GateSlab" type="Polygon2D" parent="World/CastleEntranceArea/CastleGate/GateVisual"]
+polygon = PackedVector2Array(-24, -130, 24, -130, 24, 130, -24, 130)
+color = Color(0.24, 0.22, 0.28, 1)
+
+[node name="IronBars" type="Polygon2D" parent="World/CastleEntranceArea/CastleGate/GateVisual"]
+polygon = PackedVector2Array(-18, -130, -12, -130, -12, 130, -18, 130, -3, -130, 3, -130, 3, 130, -3, 130, 12, -130, 18, -130, 18, 130, 12, 130)
+color = Color(0.11, 0.11, 0.14, 1)
+
+[node name="GateCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleGate"]
+shape = SubResource("RectangleShape2D_gate")
+
+[node name="GateAudio" type="AudioStreamPlayer2D" parent="World/CastleEntranceArea/CastleGate"]
+volume_db = -18.0
+
+[node name="GateAnimationPlayer" type="AnimationPlayer" parent="World/CastleEntranceArea/CastleGate"]
+script = ExtResource("20_castle_gate")
+
+[node name="CastleEntranceTrigger" type="Area2D" parent="World/CastleEntranceArea"]
+position = Vector2(6428, 510)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleEntranceTrigger"]
+shape = SubResource("RectangleShape2D_castle_entrance")
 
 [node name="PlayerRespawnController" type="Node" parent="."]
 script = ExtResource("7_respawn")
@@ -554,7 +690,7 @@ theme_override_font_sizes/font_size = 11
 text = "ENC 01 | ALIVE 2 | ENGAGED 0 | ATK 0/2\nGuard ×1 | Shield Guard ×1"
 script = ExtResource("9_enemy_debug")
 encounters_root_path = NodePath("../../../../../../World/Encounters")
-boss_path = NodePath("../../../../../../World/BossRoom/FallenGateKnight")
+boss_path = NodePath("../../../../../../World/CastleEntranceArea/FallenGateKnight")
 
 [node name="EnemyDebugToggle" type="Button" parent="Interface/DebugHudRoot/EnemyDebugPanel"]
 layout_mode = 0

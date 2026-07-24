@@ -3008,3 +3008,73 @@ Status: complete — all elevated Main combat surfaces reachable, three spawn-or
 - The first-level Floor remains a continuous gray-box mainline. Lowering the combat surfaces makes them accessible but does not convert this milestone into a finished environmental-art or multi-route level-design pass.
 - Traversal classification is based on the current measured Player resource. If Player movement is deliberately retuned later, rerun the measurement and update the overlay thresholds/spec together.
 - No intermediate platforms were added because direct lowering and one-way collision fully solved the invalid surfaces with the smallest Main diff.
+
+## 2026-07-24 — Solid platform collision and castle-bridge Boss arena redesign (preflight)
+
+Status: complete — solid collision, configured-Main castle bridge flow, 34-script regression and graphical QA passed; manual feel acceptance pending
+
+### Goal
+
+- Replace the first-level elevated one-way surfaces with real solid world collision so the Player lands from above and is stopped by the underside from below during jump, double jump, Air Dash, and Dash Attack traversal.
+- Replace the current flat-floor two-rectangle Boss room with a saved F5 Main route of checkpoint → near bank → moat → continuous old wooden bridge → Fallen Gate Knight battle → closed castle gate → animated gate opening → Chapter I completion trigger.
+- Keep Player movement/jump/Dash/Stamina/attack tuning, all enemy and Boss health/damage/attack profiles, enemy AI, and HUD sizes unchanged.
+
+### Read-only audit
+
+- `project.godot` resolves F5 to `res://scenes/main/main.tscn`; Git started clean on `master` at `1f4ab5f` and synchronized with `origin/master`.
+- Main authors collision directly under `Main/World`. `PlatformA`, `PlatformB`, `PlatformC`, `PlatformD`, and `GargoylePerch` are `StaticBody2D` nodes whose `CollisionShape2D.one_way_collision` is still `true`; this is the direct cause of underside penetration.
+- The shipping Player uses a 24×52 rectangular `CharacterBody2D` collider and `move_and_slide()` for normal movement and action movement. No alternate Dash collider or position teleport was found. The body script does not yet explicitly clear upward velocity after a ceiling collision.
+- The current `World/BossRoom` is drawn over the same continuous Floor: checkpoint x=5480, entry trigger x=5600, a narrow `EntranceGate` x=5630, Boss x=6120, narrow `ExitGate` x=6480, and exit trigger x=6540. There is no moat, bridge body, water hazard, visible rear battle barrier, castle facade, animated gate, bridge bounds, or Boss-camera lock.
+- `BossRoomController` instantly hides/disables gates. Boss death completion already emits only after the death animation finishes, and Player respawn already resets an uncleared Boss while retaining a cleared Boss; these behaviors will be preserved and extended rather than duplicated.
+- Existing traversal and Boss tests explicitly assert the obsolete one-way/two-gate design and must be rewritten against the saved Main composition.
+
+### Planned files, tests, and scope check
+
+- Update `scenes/main/main.tscn`, `scripts/player/player.gd`, `scripts/bosses/fallen_gate_knight.gd`, and `scripts/bosses/boss_room_controller.gd`; add small composed gate and moat controllers rather than embedding the complete sequence in Player or Boss code.
+- Rewrite the platform collision tests for underside blocking plus top landing, retain spawn-origin route tests with edge approaches suitable for solid platforms, and extend Boss integration tests for checkpoint, visible rear barrier, bridge bounds, moat death, delayed gate collision release, reset, and completion.
+- Add/update the requested traversal, Boss room, encounter, collision-layer, and level-metrics documentation and capture three configured-Main QA frames: underside collision, bridge battle, and opened castle gate.
+- Scope excludes new enemies, new Boss attacks/phases, second level, rewards, combat tuning, Player ability changes, and unrelated visual/UI redesign.
+
+### Delivered implementation
+
+- Removed `one_way_collision` from `Main/World/PlatformA`, `PlatformB`, `PlatformC`, `PlatformD`, and `GargoylePerch`. All retain their saved 190–240×24 visual/collision dimensions and now block from top, bottom and sides. Floor, walls, bridge, castle floor/facade, rear barrier and closed gate are also full World bodies.
+- Kept the shipping Player 24×52 rectangle at local y=2 for Standing, Hurt, Dash, Dash Attack, Death and Respawn. All action movement still reaches `move_and_slide()`; no action changes `global_position`. A focused post-slide ceiling resolver now guarantees `velocity.y >= 0` on `is_on_ceiling()` and returns unlocked locomotion to Fall without restoring jumps, Stamina or land state.
+- Replaced the saved `World/BossRoom/EntranceGate/ExitGate` composition. Main now owns `World/CastleEntranceArea`: checkpoint `(5480,612)`, Floor bank edge x=5520, a marked 40-pixel ordinary-jump moat opening, dark-water hazard x=5520..6360, continuous 800×20 WoodenBridge x=5560..6360, castle floor x=6360..6624, and solid castle facade/80-pixel doorway.
+- Moved encounter entry to `(5780,430)` (27.5% into the bridge) and saved a visible chain/curse `RearBattleBarrier` at x=5420 behind the checkpoint. Entry restores HP/Stamina, closes that barrier, retains the visible closed castle gate, activates Boss/HUD and sets Camera limits x=5340..6620. Death or Boss clear releases the limits.
+- Kept Fallen Gate Knight at `(6120,596)` with unchanged Body 18, Shield 6, phases, damage and attacks. Main enables logical x bounds 5650..6320; approach, charge and knockback cannot carry it off the bridge, while no boundary collider blocks Player motion.
+- Added `CastleGateController`: the visible 48×260 gate remains on World during a 1.00-second vertical lift, plays a quiet runtime-synthesized chain/stone placeholder, and disables collision/enables `CastleEntranceTrigger` only after animation completion. Crossing `(6428,510)` then shows `CHAPTER I COMPLETE / 第一章完成`; no second scene loads.
+- Added `MoatHazard`: one trigger per Player life invokes the existing Health → Dead → five-frame body collapse → dagger drop → ghost rise → 0.50-second pause → checkpoint respawn flow. An uncleared encounter resets Boss Body/Shield/phase/position, rear barrier, gate, HUD and Camera. A cleared Boss remains dead and the gate remains open after later Player death. Non-Boss enemies receive one lethal component hit; the bounded Boss is ignored.
+- Rewrote the saved-Main traversal contracts for solid geometry. Platform tests now prove single/double-jump underside blocking, non-negative ceiling velocity, Air Dash/Dash Attack side blocking and top landings. Spawn-origin routes approach elevated edges and use a normal jump over the 40-pixel bridge-entry gap. The new castle-flow suite verifies solid bridge underside, live-encounter moat death, complete ghost/respawn, Boss reset and post-clear persistence.
+- Added/updated the requested README, traversal, Boss room, encounter, collision-layer and metrics specifications. Original-resolution configured-Main QA capture is reproducible through `scripts/tools/capture_castle_bridge_qa.gd`.
+
+### Commands and actual results
+
+1. Exact engine/import:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb` (confirmed during preflight).
+   - `Godot --headless --path . --import --quit-after 120`: exit 0; new global classes and Main scene loaded without resource/script diagnostics.
+2. Focused saved-Main collision and flow:
+   - `tests/level/test_main_platform_reachability.gd`: PASS — five solid platforms, single/double-jump underside blocking, Air Dash/Dash Attack side blocking, top landings and enemy alignment.
+   - `tests/level/test_main_traversal_routes.gd`: PASS — spawn-origin mainline with ordinary bridge-entry jump, solid edge approaches to Crossbow surfaces, and delayed Gargoyle route; no post-spawn teleport.
+   - `tests/combat/test_first_level_boss.gd`: PASS — saved castle composition, 800×20 bridge, 5650..6320 Boss bounds, unchanged combat profiles, visible rear lock, Camera lock/release, gate collision timing/audio, reset and Chapter I trigger.
+   - `tests/level/test_castle_bridge_flow.gd`: PASS — bridge underside, actual physics fall into moat, full death/ghost/respawn, uncleared Boss reset and cleared-Boss persistence.
+3. Regression:
+   - Exact Godot serial execution of every `.gd` under `tests/`: `FINAL_TESTS count=34 failures=0`. The runner treated nonzero exit, `SCRIPT ERROR`, `ERROR:` and explicit failure summaries as failures; none were present.
+   - Existing `boss_test_room.tscn` and `combat_test_room.tscn` each ran independently for 180 headless frames with exit 0, confirming the Main-specific bridge bounds/controller did not break reusable Boss/enemy scenes.
+4. Configured F5 Main:
+   - `Godot --headless --path . --quit-after 600 --log-file docs/qa/castle_bridge_f5_headless.log`: exit 0, no Script Error/Error/Warning lines.
+   - `Godot --path . --quit-after 300 --log-file docs/qa/castle_bridge_f5_graphical.log`: exit 0, GL Compatibility on Apple M4, no Script Error/Error/Warning lines.
+   - Graphical configured-Main capture: exit 0 and `CASTLE_BRIDGE_QA: ceiling=true rear_open=true gate_open=true boss_bounds=(5650.0, 6320.0)`.
+
+### Configured-Main QA evidence
+
+- `docs/qa/solid_platform_ceiling_collision.png`: 1280×720, 24,276 bytes, SHA-256 `76f4eff3bd6cac80573ea781937e2383ce311f81bde802e5f72f0bec77def905`.
+- `docs/qa/castle_bridge_boss_fight.png`: 1280×720, 29,103 bytes, SHA-256 `8ba583dc57fed814f78facdb51df963e3e2ea7f040d1b13c55ba75dde9d0400a`.
+- `docs/qa/castle_gate_open.png`: 1280×720, 29,829 bytes, SHA-256 `4f9e0fba44416a5a91f84ca4a5e1b3f80283558b3307cdca6813f2168e7b3718`.
+- Original-resolution inspection confirms Player/PlatformA underside contact, visible rear barrier + closed castle gate + both combatants on the continuous timber bridge, and the raised-gate/open-doorway state with the bilingual message. Computer-use Remote Scene Tree control was unavailable; saved-tree paths were instead instantiated and asserted through exact-Godot Main tests, then rendered graphically from the same configured PackedScene.
+
+### Manual acceptance and known limitations
+
+- Manually judge the 40-pixel near-bank jump readability, bridge combat spacing, Camera framing during every Boss attack, synthesized gate placeholder loudness and the perceived timing between Boss collapse and the 1.00-second gate lift. Automation proves collision/state/timing contracts, not subjective feel.
+- The bridge is intentionally continuous across its 800-pixel combat span. The moat is naturally reachable at the marked bank-to-bridge opening and through forced test placement; no hidden gap was inserted into the combat floor.
+- Environmental art remains gray-box native Godot polygons. The dark water, old timber, chain posts, barrier and castle facade establish readable function but are not a final tile/art/audio pass.
+- No Player tuning, enemy/Boss balance, enemy AI, HUD dimensions, new enemy, Boss skill, equipment or second-level content was changed.

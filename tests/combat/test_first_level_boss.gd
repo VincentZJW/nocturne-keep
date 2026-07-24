@@ -16,7 +16,7 @@ func _run_tests() -> void:
 	get_root().add_child(main)
 	await _wait_physics_frames(4)
 	var player: Player = main.get_node("World/Player") as Player
-	var boss: FallenGateKnight = main.get_node("World/BossRoom/FallenGateKnight") as FallenGateKnight
+	var boss: FallenGateKnight = main.get_node("World/CastleEntranceArea/FallenGateKnight") as FallenGateKnight
 	var room: BossRoomController = main.get_node("BossRoomController") as BossRoomController
 	var respawn: PlayerRespawnController = main.get_node("PlayerRespawnController") as PlayerRespawnController
 	var hud: BossHealthHud = main.get_node("HUD/BossHealthHud") as BossHealthHud
@@ -24,7 +24,7 @@ func _run_tests() -> void:
 	_test_room_entry(player, boss, room, respawn, hud)
 	_test_boss_shield_and_phase(player, boss)
 	_test_boss_attack_profiles(main, boss)
-	_test_boss_death_and_exit(main, boss, room)
+	_test_boss_death_and_exit(main, player, boss, room)
 	_test_room_reset(player, boss, room, respawn)
 	main.queue_free()
 	await process_frame
@@ -33,12 +33,34 @@ func _run_tests() -> void:
 
 func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomController, hud: BossHealthHud) -> void:
 	_expect(boss != null and room != null and hud != null, "Main Boss composition is incomplete")
-	_expect(main.has_node("World/BossRoom/BossCheckpoint"), "Main lacks pre-Boss checkpoint")
-	_expect(main.has_node("World/BossRoom/EntranceGate"), "Main lacks entrance gate")
-	_expect(main.has_node("World/BossRoom/ExitGate"), "Main lacks exit gate")
-	_expect(main.has_node("World/BossRoom/ExitTrigger"), "Main lacks level exit")
+	_expect(main.has_node("World/CastleEntranceArea/BossCheckpoint"), "Main lacks pre-Boss checkpoint")
+	_expect(main.has_node("World/CastleEntranceArea/Moat/MoatHazard"), "Main lacks moat hazard")
+	_expect(main.has_node("World/CastleEntranceArea/WoodenBridge"), "Main lacks solid wooden bridge")
+	_expect(main.has_node("World/CastleEntranceArea/RearBattleBarrier"), "Main lacks visible rear barrier")
+	_expect(main.has_node("World/CastleEntranceArea/CastleGate"), "Main lacks castle gate")
+	_expect(main.has_node("World/CastleEntranceArea/CastleEntranceTrigger"), "Main lacks castle entrance trigger")
 	_expect(boss.global_position == Vector2(6120, 596), "Main Boss spawn coordinate changed")
 	_expect(room.checkpoint.global_position == Vector2(5480, 612), "Main Boss checkpoint coordinate changed")
+	_expect(boss.bridge_bounds_enabled, "Main Boss bridge bounds are not enabled")
+	_expect(boss.get_bridge_bounds() == Vector2(5650, 6320), "Main Boss bridge bounds mismatch")
+	var initial_boss_position: Vector2 = boss.global_position
+	boss.global_position.x = 5600.0
+	boss.velocity.x = -200.0
+	boss._enforce_bridge_bounds()
+	_expect(is_equal_approx(boss.global_position.x, 5650.0), "Boss crossed the left bridge bound")
+	boss.global_position.x = 6380.0
+	boss.velocity.x = 200.0
+	boss._enforce_bridge_bounds()
+	_expect(is_equal_approx(boss.global_position.x, 6320.0), "Boss crossed the right bridge bound")
+	boss.global_position = initial_boss_position
+	boss.velocity = Vector2.ZERO
+	var bridge_collision: CollisionShape2D = main.get_node(
+		"World/CastleEntranceArea/WoodenBridge/BridgeCollision"
+	) as CollisionShape2D
+	var bridge_shape: RectangleShape2D = bridge_collision.shape as RectangleShape2D
+	_expect(not bridge_collision.one_way_collision, "Boss bridge is not solid")
+	_expect(bridge_shape.size == Vector2(800, 20), "Boss bridge dimensions mismatch")
+	_expect(room.castle_gate_controller.gate_audio.stream != null, "Castle gate placeholder audio was not built")
 	var required_animations: Array[StringName] = [
 		&"idle_shielded", &"walk_shielded", &"shield_block", &"shield_bash",
 		&"sword_slash", &"heavy_overhead", &"hurt_shielded", &"shield_break",
@@ -66,7 +88,9 @@ func _test_room_entry(player: Player, boss: FallenGateKnight, room: BossRoomCont
 	_expect(is_equal_approx(player.stamina_component.current_stamina, 100.0), "Boss entry did not restore Stamina")
 	_expect(respawn.spawn_point == room.checkpoint, "Boss checkpoint did not become active respawn")
 	_expect(hud.visible, "Boss HUD did not appear on combat start")
-	_expect(room.entrance_gate.collision_layer == 1, "Boss entrance gate did not close")
+	_expect(room.rear_barrier.collision_layer == 1 and room.rear_barrier.visible, "Visible rear barrier did not close")
+	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Castle gate is not closed")
+	_expect(player.player_camera.limit_left == 5340 and player.player_camera.limit_right == 6620, "Boss camera limits were not applied")
 
 
 func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight) -> void:
@@ -99,16 +123,27 @@ func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight) -> void
 	_expect(boss.health_component.current_health == 17, "Post-break Boss Body did not take damage")
 
 
-func _test_boss_death_and_exit(main: Node2D, boss: FallenGateKnight, room: BossRoomController) -> void:
+func _test_boss_death_and_exit(
+	main: Node2D,
+	player: Player,
+	boss: FallenGateKnight,
+	room: BossRoomController
+) -> void:
 	boss.health_component.take_damage(boss.health_component.current_health)
 	_expect(boss.is_dead(), "Boss did not enter Death")
 	_expect(boss.animated_sprite.animation == &"death", "Boss death animation did not play")
 	_expect(boss.find_child("*Ghost*", true, false) == null, "Boss death incorrectly created a ghost")
 	boss.animated_sprite.animation_finished.emit()
 	_expect(room.room_is_cleared and not room.room_is_locked, "Boss defeat did not clear room")
-	_expect(room.exit_gate.collision_layer == 0, "Boss exit gate did not open")
+	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Castle gate collision released before animation clearance")
+	room.castle_gate_controller.advance(1.1)
+	_expect(room.castle_gate_controller.gate_body.collision_layer == 0, "Castle gate collision did not release after opening")
+	_expect(room.gate_open_complete, "Castle gate completion state was not recorded")
+	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 6600, "Boss camera limits did not release")
 	var message: Label = main.get_node("HUD/LevelCompletePanel/Message") as Label
-	_expect(message.text.contains("The gate is open"), "Boss clear message missing")
+	_expect(message.text.contains("castle gate is open"), "Boss clear message missing")
+	room._on_castle_entrance_body_entered(room.player)
+	_expect(message.text.contains("CHAPTER I COMPLETE"), "Castle entrance did not complete Chapter I")
 
 
 func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
@@ -162,7 +197,9 @@ func _test_room_reset(player: Player, boss: FallenGateKnight, room: BossRoomCont
 	_expect(boss.health_component.current_health == 18, "Boss reset did not restore Body Health")
 	_expect(boss.shield_component.shield_current_health == 6, "Boss reset did not restore Shield")
 	_expect(not boss.is_ai_active(), "Boss reset left AI active")
-	_expect(room.entrance_gate.collision_layer == 0, "Boss reset did not reopen entrance")
+	_expect(room.rear_barrier.collision_layer == 0, "Boss reset did not reopen rear barrier")
+	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Boss reset did not close castle gate")
+	_expect(not room.gate_open_complete, "Boss reset retained gate completion")
 
 
 func _wait_physics_frames(count: int) -> void:

@@ -5,7 +5,7 @@ Last updated: 2026-07-24
 
 ## Contract
 
-The F5 source of truth is `res://scenes/main/main.tscn`. Main progression must remain possible on the continuous Floor with single/double jump and cannot require chained Air Dash, enemy collision, remote teleport, or frame-perfect input.
+The F5 source of truth is `res://scenes/main/main.tscn`. Main progression must remain possible across the continuous Floor-to-WoodenBridge route with single/double jump and cannot require chained Air Dash, enemy collision, remote teleport, or frame-perfect input.
 
 Measured production envelope:
 
@@ -22,9 +22,9 @@ Main-route surfaces are limited to 80% of double-jump rise (133.68 px). Challeng
 
 ### Main route
 
-`SpawnPoint (320,612) → EncounterGroup01..07 → BossCheckpoint (5480,612) → Boss Entry`
+`SpawnPoint (320,612) → EncounterGroup01..07 → BossCheckpoint (5480,612) → NearBank → WoodenBridge → Boss Entry`
 
-This route stays on `Main/World/Floor`, requires no Air Dash, and crosses every ActivationArea. Elevated Crossbowmen can be approached without blocking forward progression.
+This route stays on solid Main geometry, requires no Air Dash, and crosses every ActivationArea. Floor ends at x=5520; a clearly visible 40-pixel moat opening requires one ordinary jump onto the 800-pixel bridge at x=5560. `CastleFloor` continues flush from x=6360. Walking deliberately off the bank reaches the moat hazard, while the normal jump is far inside the measured single-jump envelope.
 
 ### Mobility route
 
@@ -46,7 +46,7 @@ No hidden route currently carries required first-level content.
 | `Main/World/PlatformD` | `(5160,450)` | `(5160,520)` | 132 | 0 | double jump | main-safe |
 | `Main/World/GargoylePerch` | `(3560,340)` | `(3560,504)` | 148 | 0 | stable/delayed double jump | challenge |
 
-All five now use one-way collision. Top surfaces remain visually aligned with collision; widths are 190–240 px and exceed the 48 px production minimum.
+All five now use full solid collision. Top/bottom/side surfaces remain visually aligned with their 24-pixel collision thickness; widths are 190–240 px and exceed the 48 px production minimum. The intended access route approaches from a platform edge, rises above the solid top, then lands; jumping vertically through the stone from below is no longer valid.
 
 ## Enemy spawn changes
 
@@ -63,8 +63,8 @@ F4 toggles a default-off, read-only Level Traversal overlay. It displays collisi
 
 ## Acceptance routes
 
-1. No-Air-Dash mainline: actual spawn to Boss entry, Floor only; all seven ActivationAreas entered.
-2. Mobility route: actual spawn to PlatformB, double jump + one Air Dash onto PlatformC, then PlatformD.
+1. No-Air-Dash mainline: actual spawn to bridge Boss entry over continuous solid Floor/Bridge; all seven ActivationAreas entered.
+2. Mobility route: actual spawn, edge approach to PlatformB, double jump + one Air Dash edge approach onto PlatformC, then PlatformD.
 3. New-player timing: actual spawn to GargoylePerch; second jump intentionally delayed until downward velocity reaches 50 px/s.
 
-All automated routes issue real Input actions and never change Player position after scene spawn. Manual F5 should still judge subjective readability and comfort.
+All spawn-to-route tests issue real Input actions and never change Player position after scene spawn. Focused collision tests additionally place the shipping Player under each saved platform to prove single/double-jump ceiling contact, non-negative post-impact vertical velocity, Air Dash/Dash Attack side blocking, and top landing. Manual F5 should still judge subjective readability and comfort.

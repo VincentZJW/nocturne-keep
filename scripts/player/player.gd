@@ -126,6 +126,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.y += movement_config.gravity * delta
 		move_and_slide()
+		_resolve_ceiling_collision()
 		return
 	if is_hurt():
 		_process_hurt_motion(delta)
@@ -165,6 +166,7 @@ func _physics_process(delta: float) -> void:
 	if not action_controller.is_action_active():
 		jumped_before_move = _try_consume_jump()
 	move_and_slide()
+	_resolve_ceiling_collision()
 	var landed_this_frame: bool = not was_on_floor and is_on_floor()
 	if landed_this_frame and not jumped_before_move:
 		_restore_air_jumps()
@@ -237,8 +239,18 @@ func _process_hurt_motion(delta: float) -> void:
 	else:
 		velocity.y = 0.0
 	move_and_slide()
+	_resolve_ceiling_collision()
 	if not was_on_floor and is_on_floor():
 		_restore_air_jumps()
+
+
+func _resolve_ceiling_collision() -> void:
+	if not is_on_ceiling():
+		return
+	velocity.y = maxf(0.0, velocity.y)
+	if not is_dead() and not is_hurt() and not action_controller.is_action_active():
+		_reset_animation_lock_to_idle()
+		_enter_state(MovementState.FALL)
 
 
 func _update_jump_assist_timers(delta: float, was_on_floor: bool, jump_pressed: bool) -> void:

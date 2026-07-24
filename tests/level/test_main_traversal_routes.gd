@@ -22,12 +22,22 @@ func _test_mainline_without_air_dash() -> void:
 	var main: Node2D = await _spawn_main_for_traversal()
 	var player: Player = main.get_node("World/Player") as Player
 	Input.action_press(Player.MOVE_RIGHT_ACTION)
+	var bridge_jump_started: bool = false
+	var bridge_jump_released: bool = false
 	for frame_index: int in range(2200):
 		await physics_frame
-		if player.global_position.x >= 5570.0:
+		if not bridge_jump_started and player.global_position.x >= 5470.0:
+			Input.action_press(Player.JUMP_ACTION)
+			bridge_jump_started = true
+		elif bridge_jump_started and not bridge_jump_released:
+			Input.action_release(Player.JUMP_ACTION)
+			bridge_jump_released = true
+		if player.global_position.x >= 5740.0:
 			break
 	Input.action_release(Player.MOVE_RIGHT_ACTION)
-	_expect(player.global_position.x >= 5570.0, "No-Air-Dash mainline did not reach the Boss entry")
+	Input.action_release(Player.JUMP_ACTION)
+	_expect(player.global_position.x >= 5740.0, "No-Air-Dash mainline did not reach the bridge Boss entry")
+	_expect(bridge_jump_started, "Mainline did not issue the near-bank bridge-entry jump")
 	var groups: Array[Node] = main.get_node("World/Encounters").get_children()
 	for group_node: Node in groups:
 		var group: EncounterGroup = group_node as EncounterGroup
@@ -39,14 +49,14 @@ func _test_mainline_without_air_dash() -> void:
 func _test_mobility_crossbow_route() -> void:
 	var main: Node2D = await _spawn_main_for_traversal()
 	var player: Player = main.get_node("World/Player") as Player
-	await _move_to_floor_x(player, 2780.0)
-	await _perform_double_jump_to_surface(player, 500.0, 0.0, false)
+	await _move_to_floor_x(player, 2650.0)
+	await _perform_double_jump_to_surface(player, 2780.0, 500.0, 0.0, false)
 	_expect(absf(_player_foot_y(player) - 500.0) <= 1.5, "Route 2 did not land on PlatformB")
-	await _move_to_floor_x(player, 4100.0)
-	await _perform_double_jump_to_surface(player, 504.0, 0.0, true)
+	await _move_to_floor_x(player, 4280.0)
+	await _perform_double_jump_to_surface(player, 4420.0, 504.0, 0.0, true)
 	_expect(absf(_player_foot_y(player) - 504.0) <= 1.5, "Route 2 double-jump + Air Dash did not land on PlatformC")
-	await _move_to_floor_x(player, 5160.0)
-	await _perform_double_jump_to_surface(player, 508.0, 0.0, false)
+	await _move_to_floor_x(player, 5020.0)
+	await _perform_double_jump_to_surface(player, 5160.0, 508.0, 0.0, false)
 	_expect(absf(_player_foot_y(player) - 508.0) <= 1.5, "Route 2 did not land on PlatformD")
 	_cleanup_main(main)
 
@@ -54,8 +64,8 @@ func _test_mobility_crossbow_route() -> void:
 func _test_novice_timing_gargoyle_route() -> void:
 	var main: Node2D = await _spawn_main_for_traversal()
 	var player: Player = main.get_node("World/Player") as Player
-	await _move_to_floor_x(player, 3560.0)
-	await _perform_double_jump_to_surface(player, 492.0, 50.0, false)
+	await _move_to_floor_x(player, 3410.0)
+	await _perform_double_jump_to_surface(player, 3560.0, 492.0, 50.0, false)
 	_expect(absf(_player_foot_y(player) - 492.0) <= 1.5, "Delayed novice double jump did not land on GargoylePerch")
 	_cleanup_main(main)
 
@@ -107,27 +117,38 @@ func _move_to_floor_x(player: Player, target_x: float) -> void:
 
 func _perform_double_jump_to_surface(
 	player: Player,
+	target_x: float,
 	target_top_y: float,
 	second_jump_fall_velocity: float,
 	use_air_dash: bool
 ) -> void:
 	var start_x: float = player.global_position.x
-	if use_air_dash:
-		Input.action_press(Player.MOVE_RIGHT_ACTION)
 	await _tap_action(Player.JUMP_ACTION)
 	var second_jump_sent: bool = false
 	var dash_sent: bool = false
 	var left_floor: bool = false
+	var cleared_platform_top: bool = false
 	for frame_index: int in range(360):
 		await physics_frame
+		cleared_platform_top = cleared_platform_top or _player_foot_y(player) <= target_top_y - 8.0
+		if cleared_platform_top:
+			var horizontal_error: float = target_x - player.global_position.x
+			if horizontal_error > 10.0:
+				Input.action_release(Player.MOVE_LEFT_ACTION)
+				Input.action_press(Player.MOVE_RIGHT_ACTION)
+			elif horizontal_error < -10.0:
+				Input.action_release(Player.MOVE_RIGHT_ACTION)
+				Input.action_press(Player.MOVE_LEFT_ACTION)
+			else:
+				Input.action_release(Player.MOVE_LEFT_ACTION)
+				Input.action_release(Player.MOVE_RIGHT_ACTION)
 		left_floor = left_floor or not player.is_on_floor()
 		if left_floor and not second_jump_sent and player.velocity.y >= second_jump_fall_velocity:
 			second_jump_sent = true
 			await _tap_action(Player.JUMP_ACTION)
-		elif use_air_dash and second_jump_sent and not dash_sent and player.velocity.y >= -10.0:
+		elif use_air_dash and cleared_platform_top and second_jump_sent and not dash_sent and player.velocity.y >= -10.0:
 			dash_sent = true
 			await _tap_action(Player.DASH_ACTION)
-			Input.action_release(Player.MOVE_RIGHT_ACTION)
 		if left_floor and player.is_on_floor():
 			if absf(_player_foot_y(player) - target_top_y) <= 1.5:
 				break
@@ -135,6 +156,7 @@ func _perform_double_jump_to_surface(
 	_expect(not use_air_dash or dash_sent, "Route Air Dash was not accepted")
 	_expect(absf(_player_foot_y(player) - target_top_y) <= 1.5, "Route missed target surface y=%.0f from x=%.0f" % [target_top_y, start_x])
 	Input.action_release(Player.MOVE_RIGHT_ACTION)
+	Input.action_release(Player.MOVE_LEFT_ACTION)
 	Input.action_release(Player.JUMP_ACTION)
 	Input.action_release(Player.DASH_ACTION)
 

@@ -75,14 +75,27 @@ All platforms are direct `StaticBody2D` children of `Main/World`; no TileMap, ne
 
 | Node path | Width | Before center/top | After center/top | Rise from Floor | Class / required ability | Content |
 | --- | ---: | --- | --- | ---: | --- | --- |
-| `Main/World/Floor` | 6700 | center `(3250,688)`, top 640 | unchanged | 0 | main route | all encounters, checkpoint, Boss entry |
-| `Main/World/PlatformA` | 220 | `(870,520)`, top 508 | unchanged; one-way enabled | 132 | 79.0%, main-safe double jump | no required content |
+| `Main/World/Floor` | 5620 | center `(2710,688)`, top 640 | ends at near-bank edge x=5520 | 0 | main route | seven encounters and near-bank checkpoint |
+| `Main/World/PlatformA` | 220 | `(870,520)`, top 508 | unchanged; full solid | 132 | 79.0%, main-safe edge double jump | no required content |
 | `Main/World/PlatformB` | 190 | `(2780,438)`, top 426 | `(2780,512)`, top 500 | 140 | 83.8%, Challenge double jump | Group04 Crossbowman |
 | `Main/World/PlatformC` | 220 | `(4420,470)`, top 458 | `(4420,516)`, top 504 | 136 | 81.4%, Challenge double jump | Group06 Crossbowman |
 | `Main/World/PlatformD` | 220 | `(5160,450)`, top 438 | `(5160,520)`, top 508 | 132 | 79.0%, main-safe double jump | Group07 Crossbowman |
 | `Main/World/GargoylePerch` | 240 | `(3560,340)`, top 328 | `(3560,504)`, top 492 | 148 | 88.6%, Challenge double jump | Group05 dive landing/counter surface |
 
-Because the Floor runs beneath every elevated surface and those surfaces are now downward-facing one-way collisions, the reasonable departure point is directly below the target: horizontal platform gap is 0. The actual movement challenge is vertical timing and landing margin, not an artificial center-to-center horizontal gap.
+Because elevated surfaces are now solid, the valid route starts just beyond an edge, clears the top, and steers onto the platform. The unchanged 167.10-pixel double-jump rise remains sufficient for all 132–148-pixel rises; deterministic route tests use real air control and no teleport after spawn. Jumping from directly below intentionally produces a ceiling collision instead of access.
+
+### Castle bridge metrics
+
+| Surface / bound | Saved value | Purpose |
+| --- | --- | --- |
+| Near-bank Floor end | x=5520, top y=640 | checkpoint approach; 40-pixel jump to bridge |
+| WoodenBridge | x=5560..6360, 800×20, top y=640 | continuous solid Boss arena |
+| CastleFloor | x=6360..6624, top y=640 | post-gate completion area |
+| Boss logical bounds | x=5650..6320 | keeps 38-pixel Boss body away from bridge ends/gate |
+| Boss entry | x=5780 | 27.5% into bridge |
+| CastleGate | center x=6400, 48×260 | visible closure; 1.00-second lift |
+
+Bridge and castle floor meet flush at x=6360. The near bank intentionally ends 40 pixels before the bridge at x=5560: a forgiving single jump crosses it, while walking off allows the existing moat death flow to be tested. Moat water/hazard occupies x=5520..6360 below the bridge.
 
 ### Enemy alignment after repair
 
@@ -98,9 +111,9 @@ The Crossbowmen remain centered with at least 79 px platform edge clearance. The
 
 ## Collision and route findings
 
-- All five elevated collision shapes are one-way downward surfaces. Player upward motion passes through; falling Player and diving Gargoyles collide with the top.
+- All five elevated collision shapes are full solid World surfaces. Player upward motion hits the bottom, side movement hits the edge, and falling Player/enemies land on top.
 - Visual top and collision top share the same `-12` local Y. Irregular lower stone edges are visual only and do not create hidden collision.
-- Boss checkpoint `(5480,612)`, Boss entry, gates, Camera 0..6600, and arena Floor are unchanged and remain reachable through the Floor mainline.
+- Boss checkpoint remains `(5480,612)`, but the former flat `BossRoom/EntranceGate/ExitGate` was replaced by `CastleEntranceArea`, moat, 800-pixel bridge, visible rear barrier, animated castle gate and completion trigger. Normal Camera limits remain 0..6600; live Boss limits are 5340..6620.
 - No intermediate platform was necessary: lowering the invalid authored surfaces was the least invasive correction.
 - Player jump, gravity, Dash, Stamina, collision size, and Camera tuning were not changed.
 
@@ -116,6 +129,7 @@ Expected summaries:
 
 ```text
 PLAYER_LEVEL_METRICS: PASS ... standing_single_rise=83.77 standing_double_rise=167.10 ... single_plus_air_dash=196.59 double_plus_air_dash=321.26 ...
-MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 surfaces, one-way collision, enemies aligned, real double-jump landings)
+MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 solid surfaces, jump/double-jump underside blocking, Dash side blocking, top landings)
 MAIN_TRAVERSAL_ROUTES_TEST: PASS (mainline no Air Dash, mobility Crossbow route, novice-timing Gargoyle route; no teleport)
+CASTLE_BRIDGE_FLOW_TEST: PASS (solid underside, moat death/respawn, Boss reset/persistence)
 ```

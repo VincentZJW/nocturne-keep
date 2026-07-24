@@ -42,6 +42,9 @@ const ATTACK_STATES: Array[StringName] = [
 @export_node_path("HurtboxComponent") var hurtbox_path: NodePath = NodePath("Hurtbox")
 @export_node_path("HitboxComponent") var melee_hitbox_path: NodePath = NodePath("FacingRoot/MeleeHitbox")
 @export_node_path("HitboxComponent") var shockwave_hitbox_path: NodePath = NodePath("FacingRoot/ShockwaveHitbox")
+@export var bridge_bounds_enabled: bool = false
+@export var bridge_min_x: float = 0.0
+@export var bridge_max_x: float = 0.0
 
 @onready var animated_sprite: AnimatedSprite2D = get_node_or_null(animated_sprite_path) as AnimatedSprite2D
 @onready var facing_root: Node2D = get_node_or_null(facing_root_path) as Node2D
@@ -107,6 +110,7 @@ func _physics_process(delta: float) -> void:
 		SHIELD_BASH, SWORD_SLASH, HEAVY_OVERHEAD, COMBO_SLASH, JUMP_SMASH, CHARGE_THRUST, SHOCKWAVE_STRIKE:
 			_process_attack_motion(delta)
 	move_and_slide()
+	_enforce_bridge_bounds()
 
 
 func activate(new_target: Player) -> void:
@@ -221,6 +225,10 @@ func get_debug_summary() -> String:
 	]
 
 
+func get_bridge_bounds() -> Vector2:
+	return Vector2(bridge_min_x, bridge_max_x)
+
+
 func transition_state(next_state: StringName) -> bool:
 	if next_state == current_state or current_state == DEATH:
 		return false
@@ -298,6 +306,18 @@ func _process_attack_motion(delta: float) -> void:
 		velocity.x = facing_direction * 80.0
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+
+
+func _enforce_bridge_bounds() -> void:
+	if not bridge_bounds_enabled or bridge_max_x <= bridge_min_x:
+		return
+	var clamped_x: float = clampf(global_position.x, bridge_min_x, bridge_max_x)
+	if not is_equal_approx(clamped_x, global_position.x):
+		global_position.x = clamped_x
+	if global_position.x <= bridge_min_x and velocity.x < 0.0:
+		velocity.x = 0.0
+	elif global_position.x >= bridge_max_x and velocity.x > 0.0:
+		velocity.x = 0.0
 
 
 func _update_turn(desired_direction: float, delta: float) -> void:

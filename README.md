@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一关平台可达性修复 · Traversal Graybox 2.0`
+当前版本：`第一关实体平台与城堡木桥Boss区 · Castle Bridge Graybox 3.0`
 
 ## 当前范围
 
-当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后进入独立Boss房迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。新增石像鬼拥有0.45秒俯冲前摇、7点单次伤害、世界碰撞后的0.65秒地面反击窗口以及倒地碎裂死亡。Boss拥有18点本体、6点独立盾量、五类伤害动作、永久破盾Phase 2、信号驱动Boss HUD、房门锁定、战前检查点、死亡后完整Boss重置以及关卡完成出口。玩家普通/Dash Attack仍为1/2点，既有普通敌人数值与玩家能力均未改动。当前没有精英、第二Boss、掉落、经验、装备、存档或第二关。
+当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后从Boss检查点踏上护城河旧木桥迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。五座主线石台均为有厚度的Solid碰撞：从下方跳跃会撞击底面，Air Dash与Dash Attack不能穿过侧面，仍可从边缘起跳后落在顶部。Boss桥宽800像素，入口后方使用可见锁链屏障，Boss逻辑活动范围为x=5650..6320；死亡动画完成后，城堡闸门用1.00秒上升动画打开，随后才解除碰撞并允许触发“第一章完成”。玩家、普通敌人和Boss战斗数值均未改动。当前没有第二关、掉落、经验、装备或存档。
 
 ## 环境要求
 
@@ -36,7 +36,7 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/main/main.tscn
 ```
 
-该场景包含Player、Health/Stamina HUD、死亡/重生流程、7个手工普通遭遇组和一个Boss房。Player出生于`(320,612)`；普通组规模为2/3/2/2/2/3/4，逐步教学基础剑卫、长矛、盾牌、弩箭、石像鬼，再进行混合检验。三个弩手台顶部现为y=500/504/508，石像鬼落点顶部为y=492，全部可用稳定二段跳抵达且无需连续Air Dash。Boss检查点位于`(5480,612)`，Boss出生于`(6120,596)`；进入后恢复Player Health/Stamina并锁门。Boss死亡后出口开放并显示第一关完成信息。
+该场景包含Player、Health/Stamina HUD、死亡/重生流程、7个手工普通遭遇组和保存于`World/CastleEntranceArea`的城堡木桥Boss区。Player出生于`(320,612)`；普通组规模为2/3/2/2/2/3/4。三个弩手台顶部为y=500/504/508，石像鬼落点顶部为y=492；Solid化后需从平台边缘起跳并落在顶部，不能再从正下方穿过。Boss检查点位于`(5480,612)`；河岸x=5520与木桥x=5560之间是一个40像素、普通单跳即可跨越的护城河入口，木桥延伸至x=6360且顶面y=640，Boss出生于`(6120,596)`。走下河岸跌入`MoatHazard`会复用玩家倒地、幽灵、0.50秒停顿与检查点重生；未击败Boss会完整重置，已击败Boss不会复活。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -73,9 +73,9 @@ res://scenes/tools/gargoyle_test_room.tscn
 res://scenes/tools/boss_test_room.tscn
 ```
 
-它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5 Main的七组实际遭遇和Boss房流程为准。
+它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5 Main的七组实际遭遇和城堡木桥流程为准。
 
-建议Main人工测试顺序：Group01验证两只基础剑卫；Group02验证长矛兵最后0.15秒锁向；Group03观察盾卫`SH 3/3 → 2/3 → 1/3 → 0/3`、绕后和永久破盾；Group04验证弩手最后0.18秒瞄准锁定；Group05在石像鬼俯冲撞地后的0.65秒窗口反击；Group06/07验证三到四只混合敌人的可读性。最后进入Boss房，确认入场恢复/关门、6点盾量、永久破盾Phase 2、死亡后开门，以及Player死亡重生会完整重置Boss。
+建议Main人工测试顺序：先在PlatformA下方验证单跳/二段跳撞底和Air Dash/Dash Attack撞侧，再从边缘登上PlatformB/C/D与GargoylePerch；随后完成Group01..07。到达`(5480,612)`检查点后踏上木桥，确认可见后方屏障关闭、城门保持关闭、Boss无法越过桥端、6点盾量与Phase 2正常。分别验证Boss/护城河死亡会重置未完成遭遇；击败Boss后等待完整1.00秒开门，再走入城堡入口触发第一章完成。
 
 当前灰盒击杀次数：剑卫普通/Dash为3/2；盾卫从背后或破盾后击杀本体为5/3，纯正面总输入为普通8次或Dash 5次（前3/2次只削减盾量且破盾伤害不溢出）；长矛兵为5/3；弩手为4/2。满血Player分别在剑卫第20、盾卫第13、长矛兵第10、弩箭第17次命中时死亡。
 
@@ -127,6 +127,7 @@ Main开发调试快捷键：
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)
 - [第一关移动与平台规范](docs/design/level_traversal_spec.md)
+- [碰撞层与实体几何规范](docs/design/collision_layers_spec.md)
 - [已知问题](docs/known_issues.md)
 
 ## 原创与素材
