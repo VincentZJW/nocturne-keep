@@ -22,7 +22,6 @@ func _ready() -> void:
 		return
 	body_entered.connect(_on_body_entered)
 	hitbox.hit_confirmed.connect(_on_hit_confirmed)
-	hitbox.begin_attack(get_instance_id(), hitbox.damage)
 
 
 func initialize(
@@ -37,6 +36,7 @@ func initialize(
 	scale.x = direction
 	if hitbox != null:
 		hitbox.damage = damage
+		hitbox.begin_attack(get_instance_id(), damage)
 
 
 func _physics_process(delta: float) -> void:

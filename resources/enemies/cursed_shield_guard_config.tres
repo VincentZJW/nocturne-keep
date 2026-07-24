@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_config")
 display_name = &"CursedShieldGuard"
-max_health = 20
+max_health = 7
 attack_damage = 8
 patrol_speed = 35.0
 chase_speed = 52.0

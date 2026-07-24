@@ -1,6 +1,6 @@
 # Cursed Shield Guard / 诅咒盾卫
 
-Version: 1.0 · 2026-07-23
+Version: 1.1 · 2026-07-24
 
 ## Identity and role
 
@@ -10,7 +10,7 @@ A broad closed-helmet knight with old iron shield, short mace, dark plate, and a
 
 - Scene: `res://scenes/enemies/cursed_shield_guard.tscn`
 - Script/config: `cursed_shield_guard.gd` / `cursed_shield_guard_config.tres`
-- Health 20; patrol/chase 35/52 px/s; weapon damage 8.
+- Health 7; patrol/chase 35/52 px/s; weapon damage 8.
 - Frontal normal Attack: consumed by Block, no Health loss, no ordinary Hurt.
 - Frontal Dash Attack: consumed and enters 0.60-second GuardBreak. Blocking is disabled during the punish window.
 - Back attacks and GuardBreak attacks damage normally. Direction is computed from source x-position versus `FacingRoot.scale.x`; there is no all-direction block.
@@ -31,4 +31,4 @@ Source art: `assets/sprites/enemies/cursed_shield_guard/`.
 
 ## Manual checks
 
-Verify both facings, Block readability, Dash GuardBreak feedback, enough space to circle behind, and whether 20 Health is too durable for the short Main route.
+Verify both facings, Block readability, Dash GuardBreak feedback, enough space to circle behind, and whether seven post-break normal hits/four Dash hits preserve the heavy-defense role without excessive durability.

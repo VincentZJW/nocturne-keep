@@ -42,7 +42,6 @@ shape = SubResource("RectangleShape2D_body")
 [node name="HealthComponent" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_health")
-max_health = 10
 
 [node name="Hurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true
@@ -67,7 +66,6 @@ collision_mask = 8
 monitoring = false
 monitorable = false
 script = ExtResource("6_hitbox")
-damage = 10
 faction = &"enemy"
 attack_kind = &"enemy_melee"
 

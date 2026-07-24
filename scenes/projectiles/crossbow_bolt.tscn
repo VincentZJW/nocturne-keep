@@ -30,7 +30,6 @@ collision_mask = 8
 monitoring = false
 monitorable = false
 script = ExtResource("2_hitbox")
-damage = 4
 faction = &"enemy"
 attack_kind = &"projectile"
 

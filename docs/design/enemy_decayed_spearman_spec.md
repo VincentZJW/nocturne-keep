@@ -1,6 +1,6 @@
 # Decayed Spearman / 腐朽长矛兵
 
-Version: 1.0 · 2026-07-23
+Version: 1.1 · 2026-07-24
 
 ## Identity and role
 
@@ -9,7 +9,7 @@ A tall, narrow soldier in ruined mail and nasal helmet carrying a readable long 
 ## Runtime contract
 
 - Scene: `res://scenes/enemies/decayed_spearman.tscn`
-- Health 10; patrol/chase 42/64 px/s; damage 10; attack range 76 px.
+- Health 5; patrol/chase 42/64 px/s; damage 10; attack range 76 px.
 - The forward Hitbox is narrow and long. `attack_thrust_04/05` are the only active frames.
 - Windup/active/recovery are 0.45/0.10/0.60 seconds.
 - Below 34 pixels it retreats at 32 px/s instead of allowing a misleading point-blank shaft hit.

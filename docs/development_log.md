@@ -2415,3 +2415,96 @@ Status: in progress — read-only audit complete; implementation and verificatio
 - Current controls use Godot's engine font, not a final licensed pixel UI font. The text remains vector-rendered and is independent of nearest-neighbor sprite filtering.
 - Enemy Compact selection follows the latest activated authored group in scene order; encounters are currently one-shot and sequential. A future non-linear encounter system may require an explicit focus authority.
 - No debug field, combat value, Player ability, enemy AI/state, encounter member, Health/Stamina rule, animation, collision, or death/respawn behavior was removed or retuned.
+
+## 2026-07-24 — First normal-enemy gray-box rebalance (preflight)
+
+Status: complete — centralized balance, F5 Main synchronization, regression, and graphical verification passed; manual feel approval pending
+
+### Goal
+
+- Preserve the Cursed Castle Guard at 3 HP / 5 damage.
+- Reduce the Cursed Shield Guard to 7 HP while preserving 8 damage, directional Block, and GuardBreak.
+- Reduce the Decayed Spearman to 5 HP while preserving 10 damage, 76 range, and its current windup/active/recovery cadence.
+- Reduce the Fallen Crossbowman to 4 HP and raise its bolt to 6 damage while preserving detection, Aim, Reload, movement, projectile speed, and AI behavior.
+- Keep Player Health and normal/Dash Attack damage fixed at 100 / 1 / 2.
+
+### Read-only audit
+
+- F5 remains `res://scenes/main/main.tscn`; Main instances all enemy types from their current PackedScenes, and those scenes reference the shared `resources/enemies/*_config.tres` resources rather than Main-local overrides.
+- Runtime Health authority is each enemy Config: `CastleGuard._ready()` and `GroundEnemyBase._ready()` copy `config.max_health` into the composed HealthComponent and reset it before combat.
+- Runtime melee damage authority is each enemy Config: attack windows call `begin_attack(..., config.attack_damage)`; the scene's saved Hitbox damage is only a redundant prototype copy.
+- Crossbow runtime damage authority is `FallenCrossbowmanConfig.projectile_damage`; `_spawn_bolt()` passes it to `CrossbowBolt.initialize()`. The bolt scene nevertheless retains a redundant four-damage prototype default and activates before initialization.
+- Saved enemy scenes also retain redundant old HealthComponent maxima (3/20/10/5), and Shield/Spear Hitboxes retain 8/10. They match current runtime values but can conflict after balancing, so this milestone will remove those scene-local copies.
+- Existing tests cover factions, one-hit-per-attack memory, Block/GuardBreak, timing, damage, death, Main composition, and Debug summaries, but do not yet assert all requested kill counts from current Main resources.
+
+### Planned files and responsibilities
+
+- Enemy Config resources: apply only the requested HP/bolt changes and preserve all timing/range fields byte-for-byte.
+- Enemy/projectile scenes and `crossbow_bolt.gd`: remove redundant saved HP/damage values and make explicit initialization the only way a bolt opens its Hitbox.
+- Enemy damage/profile/Main integration tests plus a focused balance test: assert 3/2, 7/4, 5/3, and 4/2 kill counts, six-point one-hit bolts, Player 100/1/2, unchanged cadence, current Main instances, Debug text, and death entry.
+- `README.md`, `docs/design/enemy_roster_spec.md`, and this log: record the revised gray-box table and the distinction between mathematical lethal-hit counts and Player survivable hits.
+
+### Verification plan
+
+1. Run exact Godot 4.7.1 import/parse and focused balance/damage/Main tests.
+2. Run every repository test serially and scan output for errors or warnings.
+3. Start all four enemy scenes, the bolt, both combat test rooms, and configured Main independently.
+4. Run configured F5 Main graphically with Expanded Enemy Debug and inspect current HP/damage values plus live death behavior.
+
+### Scope guard
+
+- No Player Health/damage, enemy range/timing/movement/AI, Block/GuardBreak, encounter composition, animation, collision shape, projectile speed, Hurt, death presentation, drop, or new enemy changes are authorized.
+- The values will be changed in shared Config resources used by both independent scenes and every F5 Main instance; Main will not receive divergent local overrides.
+
+### Delivered balance
+
+| Enemy | Before HP / damage | Current HP / damage | Normal / Dash hits | Player survives / lethal hit |
+| --- | --- | --- | --- | --- |
+| Cursed Castle Guard | 3 / 5 | 3 / 5 | 3 / 2 | 19 / 20 |
+| Cursed Shield Guard | 20 / 8 | 7 / 8 | 7 / 4 after break/back access | 12 / 13 |
+| Decayed Spearman | 10 / 10 | 5 / 10 | 5 / 3 | 9 / 10 |
+| Fallen Crossbowman | 5 / 4 bolt | 4 / 6 bolt | 4 / 2 | 16 / 17 |
+
+- Preserved every requested role/timing value: Castle 46 range and 0.35/0.10/0.45 cadence; Shield 46 range, 0.40/0.10/0.55 cadence, directional Block, and 0.60 GuardBreak; Spear 76 range and 0.45/0.10/0.60 cadence; Crossbow 280 detection, 0.60 Aim, 1.50 Reload, 260 projectile speed, and three-second lifetime.
+- Preserved Player 100 Health, one-point normal Attack, and two-point Dash Attack.
+- Removed saved `HealthComponent.max_health` copies from all four enemy PackedScenes and saved `Hitbox.damage` copies from Shield, Spear, and CrossbowBolt scenes. Shared enemy Config resources are now the only authored balance source.
+- CrossbowBolt no longer opens its Hitbox from a scene-local default during `_ready()`. It remains inactive until the shooter passes `FallenCrossbowmanConfig.projectile_damage` to `initialize()`, which assigns six damage and starts the one-hit attack id.
+- Kept the inherited Crossbow `attack_damage` equal to `projectile_damage` inside the same Config so generic inspector/debug consumers cannot report a contradictory value; runtime bolt damage continues to use the explicit projectile field.
+
+### F5 Main synchronization
+
+- `run/main_scene` remains `res://scenes/main/main.tscn`.
+- Main's 3 Castle Guards, 2 Shield Guards, 2 Spearmen, and 2 Crossbowmen all instance the current enemy PackedScenes; those scenes reference the updated shared Config resources, with no Main-local HP/damage overrides.
+- The Main integration test read every live instance and confirmed the expected type profile. It then used the actual Main Player normal/Dash Hitboxes against paired live instances of every enemy type, confirmed 3/2, 7/4, 5/3, and 4/2 hit counts, verified each Death animation, emitted completion, confirmed dissolve/hide cleanup, and confirmed no enemy ghost. The extra third Castle Guard also follows the same Config and is used for a direct lethal-path assertion.
+- Expanded Main Enemy Debug reported `HP 3/3 DMG 5`, `HP 7/7 DMG 8`, `HP 5/5 DMG 10`, and `HP 4/4 DMG 6` on the live F5 instances.
+
+### Commands and actual results
+
+1. Exact Godot `4.7.1.stable.official.a13da4feb` editor import/parse: exit 0 without matched errors or warnings.
+2. Focused balance checks:
+   - `ENEMY_BALANCE_TEST`: PASS — Player 100/1/2, centralized Config values, unchanged ranges/cadences, no scene-local duplicates, kill counts 3/2, 7/4, 5/3, 4/2, and same-attack deduplication on every type.
+   - `ENEMY_VARIETY_TEST`: PASS — Shield Block/GuardBreak, Spear reach, Crossbow Aim/Reload, current HP, Player damage totals, Hurt, and non-ghost Death.
+   - `ENEMY_VARIETY_DAMAGE_TEST`: PASS — Shield 8, Spear 10, Bolt 6, and Player Hurt entry.
+   - `CROSSBOW_BOLT_TEST`: PASS — six damage, single-hit memory, World collision cleanup.
+   - `MAIN_ENEMY_INTEGRATION_TEST`: PASS — four groups/nine current Main enemies, latest Debug values, activation, actual Main Player Hitbox kill counts for all four roles, Death animation/dissolve, HUD/respawn, and projectile layer.
+   - `PLAYER_ATTACK_DAMAGE_TEST`: PASS — Player Attack remains one, Dash Attack remains two, active windows/dedup/facing unchanged.
+3. Complete regression: all 28 test scripts exited 0; combined logs contained no `SCRIPT ERROR`, `ERROR:`, or `WARNING:`. Existing movement metrics remained 153.59 single-jump range, 281.92 double-jump range, 344.00 four-Air-Dash range, and 360.33 pixels through landing.
+4. Independent startup: Castle Guard, Shield Guard, Spearman, Crossbowman, CrossbowBolt, combat test room, enemy variety room, and configured Main all exited 0 under bounded headless runs with no matched diagnostics.
+5. Graphical configured-Main run:
+   - `Godot --path . --write-movie docs/qa/enemy_balance_f5_main.png --fixed-fps 1 --quit-after 1 --audio-driver Dummy -- --debug-expanded`: exit 0 using GL Compatibility on Apple M4.
+   - Original-resolution inspection shows the live Player at 100/100 and all nine Main enemies with the current HP/damage values in Expanded Enemy Debug.
+6. `git diff --check`: PASS.
+
+### QA evidence and manual acceptance
+
+- `docs/qa/enemy_balance_f5_main00000000.png`: configured F5 Main, current encounter instances, current Expanded Enemy Debug HP/damage, formal Player HUD.
+- Manually confirm the seven-hit post-break Shield window feels brief enough before Block returns; the automated kill-count check intentionally disables Block to measure pure post-break/back damage math.
+- Manually judge whether six-point bolts plus 0.60 Aim/1.50 Reload create enough pressure without making Group03/04 oppressive.
+- The practical all-frontal Shield Dash sequence is five inputs, not four: one Dash Attack is consumed by GuardBreak, followed by four damaging Dash Attacks if the punish opportunities are maintained.
+
+### Known limitations and handoff
+
+- These are deterministic gray-box damage counts, not a final difficulty curve. Enemy group composition and Player invulnerability can materially change encounter time-to-kill and time-to-death.
+- Enemy Debug shows the current configured damage source, not predicted DPS or blocked damage.
+- Historical development-log entries retain the values that were true when those milestones shipped; this dated section and the current roster/specification supersede them.
+- No Player stat, enemy timing/range/AI, encounter placement, animation, collision, Hurt/Death behavior, or new content was changed.

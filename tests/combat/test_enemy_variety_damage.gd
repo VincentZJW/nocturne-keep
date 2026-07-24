@@ -49,10 +49,10 @@ func _test_bolt_damage() -> void:
 	await process_frame
 	player.set_physics_process(false)
 	bolt.set_physics_process(false)
-	bolt.initialize(1.0, 260.0, 4, 3.0)
+	bolt.initialize(1.0, 260.0, 6, 3.0)
 	var before: int = player.health_component.current_health
 	_expect(bolt.hitbox.try_hit(player.hurtbox), "Crossbow bolt did not hit Player")
-	_expect(player.health_component.current_health == before - 4, "Crossbow bolt damage mismatch")
+	_expect(player.health_component.current_health == before - 6, "Crossbow bolt damage mismatch")
 	_expect(player.get_life_state_name() == &"Hurt", "Crossbow bolt did not trigger Player Hurt")
 	player.queue_free()
 	await process_frame
@@ -65,7 +65,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("ENEMY_VARIETY_DAMAGE_TEST: PASS (Shield 8, Spear 10, Bolt 4, Player Hurt)")
+		print("ENEMY_VARIETY_DAMAGE_TEST: PASS (Shield 8, Spear 10, Bolt 6, Player Hurt)")
 		quit(0)
 		return
 	for failure: String in _failures:

@@ -1,7 +1,7 @@
 # Combat System Specification
 
-Version: 1.4 — mixed grounded enemies, shield policy, and projectile channel
-Last updated: 2026-07-23
+Version: 1.5 — centralized first-roster gray-box balance
+Last updated: 2026-07-24
 
 ## Ownership
 
@@ -42,9 +42,11 @@ Player Hurtbox mask is `320` (`EnemyHitbox + Projectile`). Enemy Hurtboxes accep
 | Castle Guard sword | 5 | `attack_03/04`; 0.35 / 0.10 / 0.45 s |
 | Shield Guard weapon | 8 | `attack_03/04`; 0.40 / 0.10 / 0.55 s |
 | Spearman thrust | 10 | `attack_thrust_04/05`; 0.45 / 0.10 / 0.60 s |
-| Crossbow bolt | 4 | one hit after 0.60 s Aim; 1.50 s Reload |
+| Crossbow bolt | 6 | one hit after 0.60 s Aim; 1.50 s Reload |
 
 Every accepted attack receives an id and can hit one target once. Hurt/death/action cancellation closes attack windows. Hitbox monitoring changes are deferred when required by PhysicsServer, while logical activation changes immediately.
+
+Enemy Health and damage are authored only in the shared Config resources. Saved enemy scenes do not duplicate Health maxima or attack damage on their composed components. Runtime attack windows pass the current Config value into `HitboxComponent.begin_attack()`; CrossbowBolt remains inactive until initialized from its shooter's Config.
 
 ## Enemy-specific rules
 

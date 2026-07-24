@@ -40,7 +40,7 @@ func _run_tests() -> void:
 	_test_saved_roster(groups, enemies)
 	_test_main_system_wiring(main, player)
 	await _test_encounter_activation(player, groups)
-	_test_combat_wiring(enemies)
+	_test_combat_wiring(enemies, player)
 	main.queue_free()
 	await process_frame
 	_finish()
@@ -55,6 +55,7 @@ func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyComba
 		_expect(enemy.scene_file_path.begins_with("res://scenes/enemies/"), "%s is not an enemy PackedScene" % enemy.name)
 		_expect(enemy.get_health_component() != null, "%s lacks HealthComponent" % enemy.name)
 		_expect(enemy.get_node_or_null("Hurtbox") is HurtboxComponent, "%s lacks HurtboxComponent" % enemy.name)
+		_test_enemy_balance_profile(enemy)
 	_expect(counts.get(&"CursedCastleGuard", 0) == 3, "Main Castle Guard count mismatch")
 	_expect(counts.get(&"CursedShieldGuard", 0) == 2, "Main Shield Guard count mismatch")
 	_expect(counts.get(&"DecayedSpearman", 0) == 2, "Main Spearman count mismatch")
@@ -95,6 +96,12 @@ func _test_main_system_wiring(main: Node2D, player: Player) -> void:
 		debug_controller.set_debug_hud_visible(false)
 		_expect(not enemy_debug.visible and not enemy_debug.is_processing(), "Main enemy debug cannot be disabled")
 		debug_controller.set_debug_hud_visible(true)
+		debug_controller.set_compact_mode(false)
+		_expect(_debug_contains_profile(enemy_debug.text, "CursedCastleGuard", "HP 3/3", "DMG 5"), "Main Debug omits current Castle Guard balance")
+		_expect(_debug_contains_profile(enemy_debug.text, "CursedShieldGuard", "HP 7/7", "DMG 8"), "Main Debug omits current Shield Guard balance")
+		_expect(_debug_contains_profile(enemy_debug.text, "DecayedSpearman", "HP 5/5", "DMG 10"), "Main Debug omits current Spearman balance")
+		_expect(_debug_contains_profile(enemy_debug.text, "FallenCrossbowman", "HP 4/4", "DMG 6"), "Main Debug omits current Crossbowman balance")
+		debug_controller.set_compact_mode(true)
 	player.health_component.take_damage(7)
 	player.stamina_component.try_consume_dash()
 	_expect(health_hud.health_bar.value == 93.0, "Main Health HUD did not update")
@@ -119,16 +126,114 @@ func _test_encounter_activation(player: Player, groups: Array[EncounterGroup]) -
 	_expect(max_alive <= 3, "A Main encounter exceeds the three-enemy cap")
 
 
-func _test_combat_wiring(enemies: Array[EnemyCombatant]) -> void:
+func _test_combat_wiring(enemies: Array[EnemyCombatant], player: Player) -> void:
+	var type_occurrences: Dictionary[StringName, int] = {}
 	for enemy: EnemyCombatant in enemies:
 		var hitbox: HitboxComponent = enemy.get_node_or_null("FacingRoot/AttackHitbox") as HitboxComponent
 		if enemy is FallenCrossbowman:
 			_expect((enemy as FallenCrossbowman).projectile_scene != null, "Crossbowman lacks bolt PackedScene")
-			_expect(enemy.get_attack_damage() == 4, "Crossbow bolt damage is not four")
+			_expect(enemy.get_attack_damage() == 6, "Crossbow bolt damage is not six")
 		else:
 			_expect(hitbox != null, "%s lacks a melee AttackHitbox" % enemy.name)
 			_expect(hitbox.faction == &"enemy", "%s melee Hitbox faction mismatch" % enemy.name)
 		_expect((enemy.get_node("Hurtbox") as HurtboxComponent).faction == &"enemy", "%s Hurtbox faction mismatch" % enemy.name)
+		var enemy_type: StringName = enemy.get_enemy_type_name()
+		var occurrence: int = type_occurrences.get(enemy_type, 0)
+		type_occurrences[enemy_type] = occurrence + 1
+		if occurrence < 2:
+			var use_dash: bool = occurrence == 1
+			_kill_main_enemy_with_player_hitbox(enemy, player, use_dash)
+		else:
+			enemy.get_health_component().take_damage(enemy.get_health_component().current_health)
+		_expect(enemy.is_dead(), "%s did not enter Death in Main" % enemy.name)
+		_expect(enemy.find_child("*Ghost*", true, false) == null, "%s Main death created a ghost" % enemy.name)
+		var sprite: AnimatedSprite2D = enemy.get_node_or_null(
+			"VisualRoot/AnimatedSprite2D"
+		) as AnimatedSprite2D
+		_expect(sprite != null and sprite.animation == &"death", "%s did not play Main Death animation" % enemy.name)
+		if sprite != null:
+			sprite.animation_finished.emit()
+			_expect(not enemy.visible, "%s did not complete Main death dissolve cleanup" % enemy.name)
+
+
+func _kill_main_enemy_with_player_hitbox(
+	enemy: EnemyCombatant,
+	player: Player,
+	use_dash: bool
+) -> void:
+	if enemy is CursedShieldGuard:
+		(enemy as CursedShieldGuard).shield_policy.set_blocking(false)
+	var hitbox: HitboxComponent = (
+		player.action_controller.dash_attack_hitbox
+		if use_dash
+		else player.action_controller.attack_hitbox
+	)
+	var expected_hits: int = _get_expected_main_kill_count(enemy.get_enemy_type_name(), use_dash)
+	var damage: int = 2 if use_dash else 1
+	var hit_count: int = 0
+	while enemy.get_health_component().current_health > 0 and hit_count < 32:
+		hitbox.begin_attack(20_000 + enemy.get_instance_id() + hit_count, damage)
+		_expect(
+			hitbox.try_hit(enemy.get_node("Hurtbox") as HurtboxComponent),
+			"%s Main Player hit %d was rejected" % [enemy.name, hit_count + 1]
+		)
+		hitbox.end_attack()
+		hit_count += 1
+	_expect(
+		hit_count == expected_hits,
+		"%s Main required %d %s hits instead of %d" % [
+			enemy.name, hit_count, "Dash" if use_dash else "normal", expected_hits,
+		]
+	)
+
+
+func _get_expected_main_kill_count(enemy_type: StringName, use_dash: bool) -> int:
+	match enemy_type:
+		&"CursedCastleGuard":
+			return 2 if use_dash else 3
+		&"CursedShieldGuard":
+			return 4 if use_dash else 7
+		&"DecayedSpearman":
+			return 3 if use_dash else 5
+		&"FallenCrossbowman":
+			return 2 if use_dash else 4
+		_:
+			return 0
+
+
+func _test_enemy_balance_profile(enemy: EnemyCombatant) -> void:
+	var expected_health: int = 0
+	var expected_damage: int = 0
+	match enemy.get_enemy_type_name():
+		&"CursedCastleGuard":
+			expected_health = 3
+			expected_damage = 5
+		&"CursedShieldGuard":
+			expected_health = 7
+			expected_damage = 8
+		&"DecayedSpearman":
+			expected_health = 5
+			expected_damage = 10
+		&"FallenCrossbowman":
+			expected_health = 4
+			expected_damage = 6
+		_:
+			_expect(false, "Unknown Main enemy type %s" % enemy.get_enemy_type_name())
+			return
+	_expect(enemy.get_health_component().max_health == expected_health, "%s Main HP mismatch" % enemy.name)
+	_expect(enemy.get_attack_damage() == expected_damage, "%s Main damage mismatch" % enemy.name)
+
+
+func _debug_contains_profile(
+	debug_text: String,
+	enemy_type: String,
+	health_text: String,
+	damage_text: String
+) -> bool:
+	for line: String in debug_text.split("\n"):
+		if line.contains(enemy_type):
+			return line.contains(health_text) and line.contains(damage_text)
+	return false
 
 
 func _collect_groups(root: Node2D) -> Array[EncounterGroup]:

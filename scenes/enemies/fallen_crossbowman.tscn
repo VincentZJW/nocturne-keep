@@ -40,7 +40,6 @@ shape = SubResource("RectangleShape2D_body")
 [node name="HealthComponent" type="Node" parent="."]
 unique_name_in_owner = true
 script = ExtResource("4_health")
-max_health = 5
 
 [node name="Hurtbox" type="Area2D" parent="."]
 unique_name_in_owner = true

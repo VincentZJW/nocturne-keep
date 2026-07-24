@@ -5,8 +5,8 @@
 [resource]
 script = ExtResource("1_config")
 display_name = &"FallenCrossbowman"
-max_health = 5
-attack_damage = 4
+max_health = 4
+attack_damage = 6
 patrol_speed = 38.0
 chase_speed = 48.0
 ground_acceleration = 380.0
@@ -27,7 +27,7 @@ patrol_turn_pause = 0.25
 aim_duration = 0.6
 reload_duration = 1.5
 projectile_speed = 260.0
-projectile_damage = 4
+projectile_damage = 6
 minimum_safe_distance = 70.0
 retreat_distance = 105.0
 projectile_lifetime = 3.0

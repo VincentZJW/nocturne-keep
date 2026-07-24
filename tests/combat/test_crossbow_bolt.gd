@@ -26,10 +26,10 @@ func _test_player_hit_once() -> void:
 	await process_frame
 	player.set_physics_process(false)
 	bolt.set_physics_process(false)
-	bolt.initialize(1.0, 260.0, 4, 3.0)
+	bolt.initialize(1.0, 260.0, 6, 3.0)
 	var health_before: int = player.health_component.current_health
 	_expect(bolt.hitbox.try_hit(player.hurtbox), "Bolt did not hit Player Hurtbox")
-	_expect(player.health_component.current_health == health_before - 4, "Bolt did not deal four damage")
+	_expect(player.health_component.current_health == health_before - 6, "Bolt did not deal six damage")
 	_expect(not bolt.hitbox.try_hit(player.hurtbox), "Same bolt hit Player twice")
 	await process_frame
 	_expect(not is_instance_valid(bolt), "Resolved bolt was not freed")
@@ -50,7 +50,7 @@ func _test_world_collision() -> void:
 	var bolt: CrossbowBolt = BOLT_SCENE.instantiate() as CrossbowBolt
 	get_root().add_child(bolt)
 	bolt.global_position = Vector2.ZERO
-	bolt.initialize(1.0, 260.0, 4, 3.0)
+	bolt.initialize(1.0, 260.0, 6, 3.0)
 	for _index: int in range(20):
 		if not is_instance_valid(bolt):
 			break
@@ -67,7 +67,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CROSSBOW_BOLT_TEST: PASS (four damage, one hit, World collision cleanup)")
+		print("CROSSBOW_BOLT_TEST: PASS (six damage, one hit, World collision cleanup)")
 		quit(0)
 		return
 	for failure: String in _failures:

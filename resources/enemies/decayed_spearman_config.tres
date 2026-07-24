@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_config")
 display_name = &"DecayedSpearman"
-max_health = 10
+max_health = 5
 attack_damage = 10
 patrol_speed = 42.0
 chase_speed = 64.0
