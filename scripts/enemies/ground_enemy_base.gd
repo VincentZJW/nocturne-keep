@@ -242,6 +242,10 @@ func _on_enemy_animation_finished(_animation_name: StringName) -> void:
 	pass
 
 
+func _is_death_animation(animation_name: StringName) -> bool:
+	return animation_name == &"death"
+
+
 func _recover_from_hurt() -> void:
 	if has_valid_target():
 		transition_state(CHASE)
@@ -284,7 +288,7 @@ func _on_animation_frame_changed() -> void:
 
 func _on_animation_finished() -> void:
 	var animation_name: StringName = animated_sprite.animation
-	if animation_name == &"death" and is_dead():
+	if _is_death_animation(animation_name) and is_dead():
 		death_presentation_complete = true
 		visible = false
 		set_physics_process(false)

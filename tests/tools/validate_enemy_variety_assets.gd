@@ -4,8 +4,11 @@ const ROOT: String = "res://assets/sprites/enemies"
 const DEFINITIONS: Dictionary[String, Dictionary] = {
 	"cursed_shield_guard": {
 		"idle": [4, 4.0, true], "walk": [6, 7.0, true], "block": [3, 12.0, false],
-		"attack": [5, 10.0, false], "guard_break": [3, 8.0, false],
+		"attack": [5, 10.0, false], "guard_break": [4, 10.0, false],
 		"hurt": [3, 16.666667, false], "death": [6, 8.0, false],
+		"idle_unshielded": [4, 4.0, true], "walk_unshielded": [6, 7.0, true],
+		"attack_unshielded": [5, 10.0, false],
+		"hurt_unshielded": [3, 16.666667, false], "death_unshielded": [6, 8.0, false],
 	},
 	"decayed_spearman": {
 		"idle": [4, 4.0, true], "walk": [6, 8.0, true],
@@ -30,6 +33,7 @@ func _initialize() -> void:
 func _run_tests() -> void:
 	for enemy_name: String in DEFINITIONS:
 		_validate_enemy(enemy_name, DEFINITIONS[enemy_name])
+	_validate_shield_break_effect()
 	_validate_bolt()
 	_finish()
 
@@ -52,6 +56,17 @@ func _validate_enemy(enemy_name: String, definitions: Dictionary) -> void:
 		_expect(sprite_frames.get_animation_loop(animation) == looping, "%s/%s loop mismatch" % [enemy_name, animation_name])
 		for frame_index: int in range(count):
 			_validate_png(enemy_name, animation_name, frame_index + 1)
+	if enemy_name == "cursed_shield_guard":
+		var guard_break_duration: float = 0.0
+		var guard_break_speed: float = sprite_frames.get_animation_speed(&"guard_break")
+		for frame_index: int in range(sprite_frames.get_frame_count(&"guard_break")):
+			guard_break_duration += (
+				sprite_frames.get_frame_duration(&"guard_break", frame_index) / guard_break_speed
+			)
+		_expect(
+			is_equal_approx(guard_break_duration, 0.70),
+			"Shield GuardBreak animation duration is not 0.70 seconds"
+		)
 
 
 func _validate_png(enemy_name: String, animation_name: String, frame_number: int) -> void:
@@ -89,6 +104,20 @@ func _validate_bolt() -> void:
 	if error == OK:
 		_expect(image.get_size() == Vector2i(24, 8), "Crossbow bolt size mismatch")
 		_expect(_has_transparency(image), "Crossbow bolt lacks transparency")
+
+
+func _validate_shield_break_effect() -> void:
+	var frames_path: String = (
+		"res://resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres"
+	)
+	var frames: SpriteFrames = load(frames_path) as SpriteFrames
+	_expect(frames != null, "Cannot load Shield Guard break effect SpriteFrames")
+	if frames != null:
+		_expect(frames.has_animation(&"shield_break"), "Shield break effect animation is missing")
+		_expect(frames.get_frame_count(&"shield_break") == 4, "Shield break effect is not four frames")
+		_expect(not frames.get_animation_loop(&"shield_break"), "Shield break effect unexpectedly loops")
+	for frame_number: int in range(1, 5):
+		_validate_png("cursed_shield_guard", "shield_break_fx", frame_number)
 
 
 func _visible_pixel_count(image: Image) -> int:

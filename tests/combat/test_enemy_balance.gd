@@ -59,7 +59,7 @@ func _test_config_values_and_unchanged_cadence() -> void:
 	_expect(_cadence_matches(castle, 46.0, 0.35, 0.10, 0.45), "Castle cadence changed")
 	_expect(shield.max_health == 7 and shield.attack_damage == 8, "Shield Config balance mismatch")
 	_expect(_cadence_matches(shield, 46.0, 0.40, 0.10, 0.55), "Shield cadence changed")
-	_expect(is_equal_approx(shield.guard_break_duration, 0.60), "Shield GuardBreak duration changed")
+	_expect(is_equal_approx(shield.guard_break_duration, 0.70), "Shield GuardBreak duration is not 0.70")
 	_expect(spear.max_health == 5 and spear.attack_damage == 10, "Spear Config balance mismatch")
 	_expect(_cadence_matches(spear, 76.0, 0.45, 0.10, 0.60), "Spear cadence or range changed")
 	_expect(crossbow.max_health == 4, "Crossbow Config Health mismatch")

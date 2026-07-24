@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=13 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/cursed_shield_guard.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/cursed_shield_guard_config.tres" id="2_config"]
@@ -7,6 +7,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/combat/shield_block_component.gd" id="7_shield"]
+[ext_resource type="SpriteFrames" path="res://resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres" id="8_break_fx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(34, 54)
@@ -63,6 +64,14 @@ shape = SubResource("RectangleShape2D_hurtbox")
 
 [node name="FacingRoot" type="Node2D" parent="."]
 unique_name_in_owner = true
+
+[node name="ShieldBreakEffect" type="AnimatedSprite2D" parent="FacingRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 2
+texture_filter = 1
+sprite_frames = ExtResource("8_break_fx")
+animation = &"shield_break"
 
 [node name="AttackHitbox" type="Area2D" parent="FacingRoot"]
 unique_name_in_owner = true

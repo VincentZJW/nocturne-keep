@@ -14,6 +14,9 @@ const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 @export_node_path("ShieldBlockComponent") var shield_policy_path: NodePath = NodePath(
 	"ShieldBlockComponent"
 )
+@export_node_path("AnimatedSprite2D") var shield_break_effect_path: NodePath = NodePath(
+	"FacingRoot/ShieldBreakEffect"
+)
 
 @onready var attack_hitbox: HitboxComponent = get_node_or_null(
 	attack_hitbox_path
@@ -21,18 +24,23 @@ const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 @onready var shield_policy: ShieldBlockComponent = get_node_or_null(
 	shield_policy_path
 ) as ShieldBlockComponent
+@onready var shield_break_effect: AnimatedSprite2D = get_node_or_null(
+	shield_break_effect_path
+) as AnimatedSprite2D
 
 var next_attack_id: int = 1
 var current_attack_id: int = 0
 
 
 func _on_common_ready() -> void:
-	if attack_hitbox == null or shield_policy == null:
+	if attack_hitbox == null or shield_policy == null or shield_break_effect == null:
 		push_error("CursedShieldGuard scene composition is incomplete")
 		set_physics_process(false)
 		return
 	attack_hitbox.damage = config.attack_damage
 	attack_hitbox.end_attack()
+	shield_break_effect.visible = false
+	shield_break_effect.animation_finished.connect(_on_shield_break_effect_finished)
 	shield_policy.block_successful.connect(_on_block_successful)
 	shield_policy.guard_broken.connect(_on_guard_broken)
 	_set_blocking(true)
@@ -94,7 +102,7 @@ func _process_reaction(delta: float) -> void:
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer > 0.0:
 		return
-	_set_blocking(true)
+	_set_blocking(not is_shield_broken())
 	if has_valid_target():
 		_enter_chase()
 	else:
@@ -102,10 +110,14 @@ func _process_reaction(delta: float) -> void:
 
 
 func _on_target_acquired() -> void:
+	if _is_guard_break_locked():
+		return
 	_enter_chase()
 
 
 func _enter_idle(duration: float = -1.0) -> void:
+	if _is_guard_break_locked():
+		return
 	transition_state(IDLE)
 	state_timer = config.initial_idle_duration if duration < 0.0 else duration
 	_set_blocking(true)
@@ -113,18 +125,24 @@ func _enter_idle(duration: float = -1.0) -> void:
 
 
 func _enter_patrol() -> void:
+	if _is_guard_break_locked():
+		return
 	transition_state(PATROL)
 	_set_blocking(true)
 	play_animation(&"walk")
 
 
 func _enter_chase() -> void:
+	if _is_guard_break_locked():
+		return
 	transition_state(CHASE)
 	_set_blocking(true)
 	play_animation(&"walk")
 
 
 func _enter_attack() -> void:
+	if _is_guard_break_locked():
+		return
 	if not transition_state(ATTACK):
 		return
 	velocity.x = 0.0
@@ -136,7 +154,7 @@ func _enter_attack() -> void:
 
 
 func _on_block_successful(_hitbox: HitboxComponent) -> void:
-	if is_dead() or current_state == GUARD_BREAK:
+	if is_dead() or current_state == GUARD_BREAK or is_shield_broken():
 		return
 	_on_attack_cancelled()
 	transition_state(BLOCK)
@@ -152,7 +170,15 @@ func _on_guard_broken(_hitbox: HitboxComponent) -> void:
 	transition_state(GUARD_BREAK)
 	state_timer = (config as CursedShieldGuardConfig).guard_break_duration
 	_set_blocking(false)
+	_play_shield_break_effect()
 	play_animation(&"guard_break", true)
+
+
+func enter_hurt(source_position: Vector2) -> void:
+	if current_state == GUARD_BREAK:
+		velocity.x = 0.0
+		return
+	super.enter_hurt(source_position)
 
 
 func _on_attack_cancelled() -> void:
@@ -178,7 +204,9 @@ func _on_enemy_animation_frame_changed() -> void:
 
 
 func _on_enemy_animation_finished(animation_name: StringName) -> void:
-	if animation_name == &"attack" and current_state == ATTACK:
+	if (
+		animation_name == &"attack" or animation_name == &"attack_unshielded"
+	) and current_state == ATTACK:
 		_on_attack_cancelled()
 		if has_valid_target():
 			_enter_chase()
@@ -186,8 +214,12 @@ func _on_enemy_animation_finished(animation_name: StringName) -> void:
 			_enter_patrol()
 
 
+func _is_death_animation(animation_name: StringName) -> bool:
+	return animation_name == &"death" or animation_name == &"death_unshielded"
+
+
 func _recover_from_hurt() -> void:
-	_set_blocking(true)
+	_set_blocking(not is_shield_broken())
 	if has_valid_target():
 		_enter_chase()
 	else:
@@ -202,6 +234,10 @@ func is_blocking() -> bool:
 	return shield_policy != null and shield_policy.is_blocking
 
 
+func is_shield_broken() -> bool:
+	return shield_policy != null and shield_policy.is_shield_broken()
+
+
 func get_attack_phase_name() -> StringName:
 	if current_state == GUARD_BREAK:
 		return &"GuardBreak"
@@ -213,16 +249,43 @@ func get_attack_phase_name() -> StringName:
 
 
 func get_debug_summary() -> String:
-	return "%s  %s  HP %d/%d  ANIM %s  DMG %d  BLOCK %s  HIT %s" % [
+	return "%s  STATE %s  HP %d/%d  ANIM %s  DMG %d  BLOCK %s  SHIELD BROKEN %s  HIT %s" % [
 		get_enemy_type_name(), current_state, health_component.current_health,
 		health_component.max_health, animated_sprite.animation, config.attack_damage,
-		"ON" if is_blocking() else "off", "ON" if is_attack_window_active() else "off",
+		"ON" if is_blocking() else "OFF", "true" if is_shield_broken() else "false",
+		"ON" if is_attack_window_active() else "OFF",
 	]
+
+
+func play_animation(animation_name: StringName, restart: bool = false) -> void:
+	var resolved_name: StringName = animation_name
+	if is_shield_broken():
+		var unshielded_name: StringName = StringName("%s_unshielded" % animation_name)
+		if animated_sprite != null and animated_sprite.sprite_frames.has_animation(unshielded_name):
+			resolved_name = unshielded_name
+	super.play_animation(resolved_name, restart)
 
 
 func _set_blocking(enabled: bool) -> void:
 	if shield_policy != null:
 		shield_policy.set_blocking(enabled)
+
+
+func _play_shield_break_effect() -> void:
+	if shield_break_effect == null:
+		return
+	shield_break_effect.visible = true
+	shield_break_effect.stop()
+	shield_break_effect.frame = 0
+	shield_break_effect.play(&"shield_break")
+
+
+func _on_shield_break_effect_finished() -> void:
+	shield_break_effect.visible = false
+
+
+func _is_guard_break_locked() -> bool:
+	return current_state == GUARD_BREAK and state_timer > 0.0
 
 
 func _validate_target_distance() -> bool:

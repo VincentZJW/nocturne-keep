@@ -2,8 +2,8 @@
 
 ## Current authoritative status
 
-- Last audited: 2026-07-23
-- Implementation baseline before this revision: `master` at `04c8769 fix: defer hurtbox physics state changes`
+- Last audited: 2026-07-24
+- Implementation baseline before this revision: `master` at `b62b7a2 fix: rebalance first enemy roster`
 - Engine verified in this audit: `4.7.1.stable.official.a13da4feb`
 
 This section is the current project snapshot. The dated entries below are retained as historical records of what was planned, implemented, tested, and still awaiting approval at each point in time. A historical plan or an earlier test result is not, by itself, evidence that a later feature exists or still passes.
@@ -30,13 +30,13 @@ This section is the current project snapshot. The dated entries below are retain
 | Player death state | Implemented and re-verified; manual visual acceptance pending | `Player` enters one explicit `LifeState.DEAD`, cancels action/input/Stamina processing, and delegates a five-frame flat-body fall plus detached daggers and hooded ghost rise/pause to `PlayerDeathSequence`. |
 | Player respawn | Implemented and re-verified; single test spawn only | After the approximately 1.30-second presentation completes, Main's typed coordinator returns the same Player instance to one `Marker2D`, restores Health/Stamina and control state, hides the prompt, and retains Camera2D following. No checkpoint/session selection exists. |
 | Combat foundation | Implemented minimum; manual feedback acceptance pending | Typed Health/Hitbox/Hurtbox responsibilities, named layers, faction/dedup rejection, Player 1/2-point attacks, and one five-point sword source are tested. Player non-lethal Hurt now cancels actions, uses source-derived collision-safe knockback, and grants a 0.50-second multi-source grace window. Attributes, armor, and game-over flow do not exist. |
-| Enemies and boss | Four normal enemy prototypes implemented in Main; manual acceptance pending | Castle Guard plus Shield Guard, Spearman, and Crossbowman have original art, typed configs/scenes/AI, shared combat contracts, Hurt/Death, 9 staged Main instances, and mixed test-room coverage. Flying, elite, and Boss enemies remain unimplemented. |
+| Enemies and boss | Four normal enemy prototypes implemented in Main; manual acceptance pending | Castle Guard plus Shield Guard, Spearman, and Crossbowman have original art, typed configs/scenes/AI, shared combat contracts, Hurt/Death, 9 staged Main instances, and mixed test-room coverage. Shield Guard now has a permanent frontal Dash shield break, 0.70-second GuardBreak, readable fragments/flash, and persistent unshielded actions. Flying, elite, and Boss enemies remain unimplemented. |
 | Level and game flow | Mixed Main combat laboratory implemented; formal rooms planned | Main has floor, two platforms, walls, one respawn marker, Player/HUD, and nine mixed enemies in four one-shot groups (2/2/2/3). The planned three rooms, checkpoint selection, elite unlock, boss arena, victory flow, menu, and save/session state do not exist. |
 | Export/release | Pending verification / not configured | No `export_presets.cfg` was found during the audit. |
 
 ### Current validation baseline
 
-On 2026-07-23, the exact Godot 4.7.1 executable completed a fresh import, started all three new enemies, the projectile, both combat rooms, and configured Main, and passed all 26 repository test scripts without `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. Coverage retains the Health/HUD/death/respawn/movement/action/assets/Hurt baseline and adds directional Block/back damage/GuardBreak, long spear geometry/timing, Crossbow Aim/Shoot/Reload, projectile one-hit/World cleanup, three enemy damage values, 85 production enemy frames, mixed encounter activation, nine saved Main enemies, live HUD/respawn, and closable debug presentation. Main runtime evidence records groups sized 2/2/2/3 with three Castle Guards, two Shield Guards, two Spearmen, and two Crossbowmen; Group01 is active and later groups are paused at startup.
+On 2026-07-24, the exact Godot 4.7.1 executable completed a fresh import, started the updated Shield Guard independently and configured Main, and passed all 28 repository test scripts without final `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output. Coverage retains the Health/HUD/death/respawn/movement/action/assets/Hurt baseline plus all four enemy roles, centralized current balance, encounter activation, and Main Debug behavior. Shield-specific coverage now proves front Block, back damage, one-time frontal Dash break, 0.70-second state lock, permanent post-break vulnerability, unshielded action/death presentation, live Main instances, and truthful Debug fields. Main still records groups sized 2/2/2/3 with three Castle Guards, two Shield Guards, two Spearmen, and two Crossbowmen; Group01 is active and later groups are paused at startup.
 
 The stable measured envelopes are 153.59 px single-jump horizontal range / 83.77 px rise, 281.92 px debug-double-jump range / 167.10 px rise, and 344.00 px of four-Air-Dash action travel. The total takeoff-to-landing Air-Dash measurement alternated between 360.33 px and 362.22 px across three consecutive audit runs; this approximately one-physics-frame variation is recorded as a test determinism issue rather than a changed movement parameter.
 
@@ -2508,3 +2508,88 @@ Status: complete — centralized balance, F5 Main synchronization, regression, a
 - Enemy Debug shows the current configured damage source, not predicted DPS or blocked damage.
 - Historical development-log entries retain the values that were true when those milestones shipped; this dated section and the current roster/specification supersede them.
 - No Player stat, enemy timing/range/AI, encounter placement, animation, collision, Hurt/Death behavior, or new content was changed.
+## 2026-07-24 — Shield Guard permanent break feedback (preflight)
+
+Status: complete — implementation, 28-script regression, standalone/F5 startup, and graphical Main evidence passed; manual feel/readability approval pending
+
+### Goal
+
+- Make a frontal Player Dash Attack permanently destroy the Cursed Shield Guard's shield.
+- Hold a distinct 0.70-second GuardBreak state with no blocking, attacking, or chasing.
+- Replace the intact-shield recovery with readable pixel fragments/flash and persistent unshielded movement, attack, Hurt, and Death presentation.
+- Expose `BLOCK ON/OFF`, `SHIELD BROKEN true/false`, and state through the existing Main Enemy Debug detail view.
+
+### Read-only audit
+
+- F5 remains `res://scenes/main/main.tscn`; its `World/Encounters/EncounterGroup01/Enemies/CursedShieldGuard01` and `EncounterGroup04/Enemies/CursedShieldGuard02` both instance `res://scenes/enemies/cursed_shield_guard.tscn` without local shield overrides.
+- `ShieldBlockComponent` currently owns only transient `is_blocking`. A frontal Dash Attack emits `guard_broken`, but no permanent broken flag is recorded.
+- `CursedShieldGuard._process_reaction()` currently re-enables blocking after the 0.60-second timer, and every Idle/Patrol/Chase/Hurt recovery also requests blocking.
+- The current three-frame `guard_break` shifts an intact shield downward. Subsequent `idle`, `walk`, `attack`, `hurt`, and `death` frames all render the full shield again.
+- Expanded Main Enemy Debug receives `CursedShieldGuard.get_debug_summary()`, but that summary currently reports only the transient Block and Hitbox flags.
+
+### Planned files and responsibilities
+
+- `shield_block_component.gd`: own the one-way broken state and make all post-break block requests ineffective.
+- Shield Guard script/config/scene: enforce GuardBreak priority and duration, drive the break effect, select persistent unshielded animations, and expose truthful Debug fields.
+- Shield Guard pixel generator, SpriteFrames builder, assets, and resources: author four GuardBreak poses, a short fragment/flash overlay, and unshielded Idle/Walk/Attack/Hurt/Death variants.
+- Shield Guard asset/behavior/Main tests: assert one-time break, 0.70 seconds, permanent frontal vulnerability, visual disappearance, state lock, both facings, and live Main instances.
+- Shield Guard, combat, roster, and development documents: record the permanent-break contract without changing 7 HP or 8 damage.
+
+### Verification plan
+
+1. Run exact Godot 4.7.1 asset generation/import and SpriteFrames build.
+2. Run focused Shield Guard behavior, asset, combat-damage, balance, and Main integration tests.
+3. Run every repository test serially and scan for errors/warnings.
+4. Start the Shield Guard scene independently and run configured F5 Main graphically, preserving a QA capture of the live broken state.
+
+### Scope guard
+
+- No other enemy, Player ability/stat, combat damage, encounter composition, HUD layout, Boss, hit-stop, camera shake, or new system is authorized.
+- Shield Guard balance remains 7 Health and 8 attack damage. Only the explicitly requested GuardBreak duration changes from 0.60 to 0.70 seconds.
+
+### Delivered implementation
+
+- Added permanent `shield_broken` authority to `ShieldBlockComponent`. The first intact frontal Dash Attack changes it once, emits one break event, consumes that Dash damage, and forces all future block requests off. Back Dash Attacks and every post-break attack resolve as ordinary damage.
+- Kept GuardBreak as a dedicated state for 0.70 seconds. Attack, chase, and target-acquisition transitions are rejected while locked; punish damage is accepted without replacing the larger GuardBreak silhouette with ordinary Hurt. Death retains higher priority.
+- Re-authored GuardBreak as four 64×64 frames: cracked/white-flashed shield, two fragment/recoil stages, then an unshielded hard-stun hold. Added a separate four-frame 12 FPS pale flash/iron-fragment overlay at `FacingRoot/ShieldBreakEffect`; it hides after completion.
+- Added persistent unshielded Idle (4), Walk (6), Attack (5), Hurt (3), and Death (6) production frames. The Shield Guard dynamically resolves only its own post-break presentation to these animations, so the shield cannot reappear during action, damage, AI reset, or death cleanup.
+- Added a narrow death-animation hook to `GroundEnemyBase` so the Shield Guard's `death_unshielded` variant completes the existing dissolve/free lifecycle without changing other enemy behavior.
+- Expanded Shield Guard debug summary fields to include explicit `STATE`, uppercase `BLOCK ON/OFF`, and `SHIELD BROKEN true/false`. Existing Main Enemy Debug renders the same live string in Expanded mode.
+- Preserved 7 Health, 8 attack damage, all attack timing/range/movement values, both authored Main instances, Player values, encounter composition, and every other enemy.
+
+### Commands and actual results
+
+1. Exact engine and resource production:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Pixel generator: `ENEMY_VARIETY_PIXEL_BUILD: OK (115 files)`.
+   - Fresh headless editor import: exit 0; all new PNGs imported losslessly without mipmaps.
+   - SpriteFrames builder: `ENEMY_VARIETY_SPRITE_FRAMES_BUILD: OK`.
+2. Focused verification:
+   - `ENEMY_VARIETY_TEST`: PASS for front Block, back damage, one-time break, 0.70-second lock, no Attack transition, permanent frontal vulnerability, unshielded Idle/Walk/Attack/Hurt/Death, effect cleanup, and non-ghost Death.
+   - `ENEMY_VARIETY_ASSET_TEST`: PASS for 114 64×64 enemy/effect frames plus bolt, transparency, lossless/no-mipmap import, 48×48 readability floor, and exact 0.70-second GuardBreak animation duration.
+   - `ENEMY_BALANCE_TEST`: PASS; requested 3/2, 7/4, 5/3, 4/2 kill counts and centralized values remain unchanged.
+   - `ENEMY_VARIETY_DAMAGE_TEST`: PASS; Shield damage remains 8.
+   - `MAIN_ENEMY_INTEGRATION_TEST`: PASS using both live Main Shield Guards for frontal Block, frontal Dash break, 0.70-second lock, post-break frontal damage, back damage, Debug fields, correct shielded/unshielded Death, and cleanup.
+   - The first asset-test run exposed a test-only `frames`/`sprite_frames` identifier typo. It was corrected; the final asset test and subsequent regression are clean.
+3. Complete regression:
+   - All 28 scripts under `tests/` passed serially. No final run contained `SCRIPT ERROR`, `ERROR:`, or `WARNING:`.
+   - Movement metrics remained 153.59-pixel single-jump range, 281.92-pixel debug-double-jump range, 344.00-pixel four-Air-Dash action range, and 360.33 pixels through landing.
+4. Runtime startup and graphical Main:
+   - Shield Guard standalone startup (`--quit-after 60`): exit 0.
+   - Configured F5 Main startup (`Godot --headless --path . --quit-after 120`): exit 0.
+   - GL Compatibility Main QA capture on Apple M4: 19 frames at 1280×720/30 FPS, exit 0. It used `Main/World/Player`'s real Dash Hitbox against `EncounterGroup01/Enemies/CursedShieldGuard01` and exposed the broken state in Expanded Enemy Debug.
+5. Final `git diff --check`: PASS.
+
+### F5 Main synchronization and QA evidence
+
+- `application/run/main_scene` remains `res://scenes/main/main.tscn`.
+- Main nodes `World/Encounters/EncounterGroup01/Enemies/CursedShieldGuard01` and `EncounterGroup04/Enemies/CursedShieldGuard02` both instance the updated `res://scenes/enemies/cursed_shield_guard.tscn`; neither has local behavior, config, SpriteFrames, or shield-state overrides.
+- The shared scene now owns `FacingRoot/ShieldBreakEffect` and loads `cursed_shield_guard_sprite_frames.tres` plus `cursed_shield_guard_shield_break_fx_sprite_frames.tres`. Saving/reopening therefore retains the implementation without editing Main-local instance data.
+- `docs/qa/shield_guard_break_f5_main.png` is the inspected 1280×720 Main frame. It shows the live break flash, recoiling shield enemy, and Expanded row `STATE GuardBreak ... BLOCK OFF SHIELD BROKEN true`.
+
+### Manual acceptance and known limitations
+
+- Manually test both facings at normal game speed and judge whether the pale flash/fragments remain readable against future brighter rooms; automated and original-resolution inspection establish presence, not subjective impact.
+- Confirm the permanent-defense loss makes the seven-Health enemy appropriately vulnerable for the remainder of the encounter. No HP/damage compensation was introduced.
+- The break effect is intentionally lightweight: embedded pixel cracks/fragments plus a short overlay. Hit-stop, camera shake, audio, particles, shield physics, shield regeneration, and additional combat systems remain excluded.
+- GuardBreak preserves its large recoil animation while accepting punish damage. It does not play the smaller ordinary Hurt animation until after the 0.70-second lock ends.
