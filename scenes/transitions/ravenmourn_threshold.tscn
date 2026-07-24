@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[node name="RavenmournThreshold" type="Node2D"]
+
+[node name="NightInterior" type="ColorRect" parent="."]
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.012, 0.016, 0.03, 1)
+
+[node name="DistantVault" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 720, 0, 210, 170, 210, 170, 150, 250, 68, 330, 150, 330, 230, 950, 230, 950, 150, 1030, 68, 1110, 150, 1110, 210, 1280, 210, 1280, 720)
+color = Color(0.055, 0.06, 0.085, 1)
+
+[node name="InnerDark" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(328, 720, 328, 270, 640, 102, 952, 270, 952, 720)
+color = Color(0.018, 0.024, 0.042, 1)
+
+[node name="MoonlitFloor" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 590, 1280, 590, 1280, 720, 0, 720)
+color = Color(0.09, 0.095, 0.125, 1)
+
+[node name="FloorLight" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(570, 590, 710, 590, 830, 720, 450, 720)
+color = Color(0.16, 0.2, 0.27, 0.28)
+
+[node name="LeftColumn" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(180, 170, 288, 170, 288, 590, 154, 590, 154, 560, 176, 560)
+color = Color(0.13, 0.135, 0.17, 1)
+
+[node name="RightColumn" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(992, 170, 1100, 170, 1104, 560, 1126, 560, 1126, 590, 992, 590)
+color = Color(0.13, 0.135, 0.17, 1)
+
+[node name="LeftSconce" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(235, 300, 244, 282, 253, 300, 250, 326, 238, 326)
+color = Color(0.58, 0.31, 0.13, 0.72)
+
+[node name="RightSconce" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(1027, 300, 1036, 282, 1045, 300, 1042, 326, 1030, 326)
+color = Color(0.58, 0.31, 0.13, 0.72)
+

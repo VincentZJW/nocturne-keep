@@ -90,7 +90,7 @@ func _test_cleared_boss_persists(
 	room._on_entry_body_entered(player)
 	boss.health_component.take_damage(boss.health_component.current_health)
 	boss.animated_sprite.animation_finished.emit()
-	room.castle_gate_controller.advance(1.1)
+	room.castle_gate_controller.advance(1.3)
 	_expect(room.room_is_cleared and boss.is_dead(), "Boss clear setup failed")
 	player.global_position = Vector2(6320, 612)
 	player.velocity = Vector2.ZERO

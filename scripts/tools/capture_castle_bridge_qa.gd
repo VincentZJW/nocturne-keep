@@ -28,7 +28,7 @@ func _capture() -> void:
 	_save_viewport("res://docs/qa/castle_bridge_boss_fight.png")
 	room.boss.health_component.take_damage(room.boss.health_component.current_health)
 	room.boss.animated_sprite.animation_finished.emit()
-	await create_timer(1.10, true, false, true).timeout
+	await create_timer(1.30, true, false, true).timeout
 	player.global_position = Vector2(6310, 612)
 	player.velocity = Vector2.ZERO
 	player.player_camera.reset_smoothing()

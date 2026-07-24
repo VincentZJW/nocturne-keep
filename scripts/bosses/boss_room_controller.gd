@@ -34,7 +34,9 @@ signal level_completed
 	"../PlayerRespawnController"
 )
 @export_node_path("BossHealthHud") var boss_hud_path: NodePath = NodePath("../HUD/BossHealthHud")
-@export_node_path("Control") var victory_panel_path: NodePath = NodePath("../HUD/LevelCompletePanel")
+@export_node_path("CastleEntranceTransition") var entrance_transition_path: NodePath = NodePath(
+	"../CastleEntranceTransition"
+)
 @export var boss_camera_limit_left: int = 5340
 @export var boss_camera_limit_right: int = 6620
 
@@ -54,7 +56,9 @@ signal level_completed
 	respawn_controller_path
 ) as PlayerRespawnController
 @onready var boss_hud: BossHealthHud = get_node_or_null(boss_hud_path) as BossHealthHud
-@onready var victory_panel: Control = get_node_or_null(victory_panel_path) as Control
+@onready var entrance_transition: CastleEntranceTransition = get_node_or_null(
+	entrance_transition_path
+) as CastleEntranceTransition
 
 var room_is_locked: bool = false
 var room_is_cleared: bool = false
@@ -74,7 +78,6 @@ func _ready() -> void:
 	respawn_controller.player_respawned.connect(_on_player_respawned)
 	castle_gate_controller.gate_opened.connect(_on_castle_gate_opened)
 	boss_hud.bind_boss(boss)
-	victory_panel.visible = false
 	_default_camera_left = player.player_camera.limit_left
 	_default_camera_right = player.player_camera.limit_right
 	_set_rear_barrier_closed(false)
@@ -115,8 +118,6 @@ func _on_boss_defeated() -> void:
 	gate_open_complete = false
 	_set_rear_barrier_closed(false)
 	_release_camera_limits()
-	victory_panel.visible = true
-	_set_message("The castle gate is opening. / 城堡大门正在开启。")
 	castle_gate_controller.open_gate()
 	room_cleared.emit()
 
@@ -124,7 +125,6 @@ func _on_boss_defeated() -> void:
 func _on_castle_gate_opened() -> void:
 	gate_open_complete = true
 	castle_entrance_trigger.set_deferred("monitoring", true)
-	_set_message("The castle gate is open. / 城堡大门已经开启。")
 
 
 func _on_player_respawned(_spawn_position: Vector2) -> void:
@@ -140,16 +140,14 @@ func _on_player_respawned(_spawn_position: Vector2) -> void:
 	castle_entrance_trigger.set_deferred("monitoring", false)
 	_release_camera_limits()
 	boss_hud.hide_immediately()
-	victory_panel.visible = false
 	room_reset.emit()
 
 
 func _on_castle_entrance_body_entered(body: Node2D) -> void:
 	if body != player or not room_is_cleared or not gate_open_complete:
 		return
-	_set_message("CHAPTER I COMPLETE / 第一章完成")
-	victory_panel.visible = true
 	level_completed.emit()
+	entrance_transition.begin_transition()
 
 
 func _set_rear_barrier_closed(closed: bool) -> void:
@@ -174,12 +172,6 @@ func _release_camera_limits() -> void:
 	player.player_camera.reset_smoothing()
 
 
-func _set_message(text_value: String) -> void:
-	var label: Label = victory_panel.get_node_or_null("Message") as Label
-	if label != null:
-		label.text = text_value
-
-
 func _validate_dependencies() -> bool:
 	if (
 		player == null
@@ -192,7 +184,7 @@ func _validate_dependencies() -> bool:
 		or checkpoint == null
 		or respawn_controller == null
 		or boss_hud == null
-		or victory_panel == null
+		or entrance_transition == null
 	):
 		push_error("BossRoomController scene composition is incomplete")
 		return false

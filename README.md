@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一关Boss与石像鬼表现强化 · Castle Bridge Graybox 3.1`
+当前版本：`Ravenmourn Castle环境与开门演出强化 · Castle Bridge Graybox 3.2`
 
 ## 当前范围
 
-当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后从Boss检查点踏上深青蓝护城河上的旧木桥迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。三只Gargoyle共用重绘后的哥特石兽资源：厚重石躯、角、蝠翼、爪足和铜绿裂纹，不再使用旧飞虫式轮廓。Boss现有攻击动画前摇约缩短8–10%、统一恢复由0.48秒缩至0.42秒，但伤害、血量、技能和有效帧均未改变；转身延长到实测0.2333秒，保留一次可靠绕后普通攻击窗口。当前没有第二关、掉落、经验、装备或存档。
+当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后穿过标记`RAVENMOURN CASTLE`的非阻挡哥特铁拱门，从Boss检查点踏上深青蓝护城河上的加固旧木桥迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。后段现有分层尖塔、断墙、石砌平台、链条与稀疏灯火；桥后保存一座原创16-bit-inspired宏伟城堡背景和厚重木铁升降门。Boss死亡后不再弹出章节/开门文字：大门用1.20秒缓慢升起，碰撞清空后玩家自行进入门洞，经0.55秒无文字淡出抵达极简`RavenmournThreshold`占位过渡场景。当前没有第二关正式玩法、掉落、经验、装备或存档。
 
 ## 环境要求
 
@@ -75,7 +75,7 @@ res://scenes/tools/boss_test_room.tscn
 
 它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5 Main的七组实际遭遇和城堡木桥流程为准。
 
-建议Main人工测试顺序：先在PlatformA下方验证单跳/二段跳撞底和Air Dash/Dash Attack撞侧，再从边缘登上PlatformB/C/D与GargoylePerch；随后完成Group01..07并观察三只石像鬼的Dormant、Hover、Dive、GroundStun与碎裂轮廓。到达`(5480,612)`检查点后踏上木桥，确认深青蓝水面/波纹/桥影、可见后方屏障、10点Boss盾量与Phase 2正常。跳过Boss背后应稳定获得约一次普通攻击，但不应能长期背刺；分别验证Boss/护城河死亡会重置未完成遭遇；击败Boss后等待完整1.00秒开门，再走入城堡入口触发第一章完成。
+建议Main人工测试顺序：先在PlatformA下方验证单跳/二段跳撞底和Air Dash/Dash Attack撞侧，再从边缘登上PlatformB/C/D与GargoylePerch；在Group06/07留意后段分层城堡远景、石砖、碎石、杂草和链条是否保持敌人可读性。到达`(5480,612)`前应看到`RAVENMOURN CASTLE`铁拱门且可自由通行；踏上木桥后确认深青蓝水面/倒影/桥影、完整城堡主体、厚重大门、10点Boss盾量与Phase 2正常。击败Boss后等待完整1.20秒升门，确认没有章节/开门大字、Player控制保留，然后自行进入`CastleEntranceTrigger`并无文字淡出到阈厅占位场景。
 
 当前灰盒击杀次数：剑卫普通/Dash为3/2；盾卫从背后或破盾后击杀本体为5/3，纯正面总输入为普通8次或Dash 5次（前3/2次只削减盾量且破盾伤害不溢出）；长矛兵为5/3；弩手为4/2。满血Player分别在剑卫第20、盾卫第13、长矛兵第10、弩箭第17次命中时死亡。
 
@@ -122,6 +122,7 @@ Main开发调试快捷键：
 - [Fallen Gate Knight Boss规格](docs/design/boss_fallen_gate_knight_spec.md)
 - [第一关遭遇规格](docs/design/first_level_encounter_spec.md)
 - [Boss房与重生规格](docs/design/boss_room_spec.md)
+- [第一关环境美术规格](docs/design/environment_art_spec.md)
 - [灰盒遭遇设计规格](docs/design/encounter_design_spec.md)
 - [Debug HUD规格](docs/design/debug_hud_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)

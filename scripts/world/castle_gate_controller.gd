@@ -9,7 +9,7 @@ signal gate_closed
 
 const OPEN_ANIMATION: StringName = &"open"
 
-@export_range(0.8, 1.2, 0.05) var gate_open_duration: float = 1.0
+@export_range(0.8, 1.5, 0.05) var gate_open_duration: float = 1.2
 @export_range(160.0, 320.0, 8.0) var gate_raise_distance: float = 240.0
 @export_node_path("StaticBody2D") var gate_body_path: NodePath = NodePath("..")
 @export_node_path("Node2D") var gate_visual_path: NodePath = NodePath("../GateVisual")
@@ -77,6 +77,7 @@ func _build_animation() -> void:
 		gate_open_duration,
 		_closed_visual_position + Vector2.UP * gate_raise_distance
 	)
+	animation.track_set_interpolation_type(position_track, Animation.INTERPOLATION_CUBIC)
 	animation.value_track_set_update_mode(position_track, Animation.UPDATE_CONTINUOUS)
 	var library: AnimationLibrary = AnimationLibrary.new()
 	library.add_animation(OPEN_ANIMATION, animation)

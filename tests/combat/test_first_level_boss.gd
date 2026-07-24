@@ -56,6 +56,28 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 	_expect(main.has_node("World/CastleEntranceArea/RearBattleBarrier"), "Main lacks visible rear barrier")
 	_expect(main.has_node("World/CastleEntranceArea/CastleGate"), "Main lacks castle gate")
 	_expect(main.has_node("World/CastleEntranceArea/CastleEntranceTrigger"), "Main lacks castle entrance trigger")
+	_expect(main.has_node("World/LateLevelApproachArt"), "Main lacks late-level Gothic approach art")
+	_expect(main.has_node("World/LateLevelSurfaceDetails"), "Main lacks late-level surface details")
+	_expect(main.has_node("World/BossCastleBackdrop"), "Main lacks monumental Boss castle backdrop")
+	_expect(main.has_node("World/RavenmournArchway"), "Main lacks Ravenmourn approach archway")
+	_expect(
+		main.has_node("World/CastleEntranceArea/WoodenBridge/DetailedBridgeArt"),
+		"Main lacks detailed bridge presentation"
+	)
+	_expect(
+		main.has_node("World/CastleEntranceArea/CastleGate/GateVisual/DetailedGateArt"),
+		"Main lacks detailed moving gate presentation"
+	)
+	var castle_name: Label = main.get_node("World/RavenmournArchway/CastleName") as Label
+	_expect(castle_name.text == "RAVENMOURN CASTLE", "Approach archway castle name mismatch")
+	_expect(not main.has_node("HUD/LevelCompletePanel"), "Obsolete chapter-complete panel still ships in Main")
+	var transition: CastleEntranceTransition = main.get_node(
+		"CastleEntranceTransition"
+	) as CastleEntranceTransition
+	_expect(
+		transition.target_scene_path == "res://scenes/transitions/ravenmourn_threshold.tscn",
+		"Castle entrance transition target mismatch"
+	)
 	_expect(boss.global_position == Vector2(6120, 596), "Main Boss spawn coordinate changed")
 	_expect(room.checkpoint.global_position == Vector2(5480, 612), "Main Boss checkpoint coordinate changed")
 	_expect(boss.bridge_bounds_enabled, "Main Boss bridge bounds are not enabled")
@@ -292,14 +314,19 @@ func _test_boss_death_and_exit(
 	boss.animated_sprite.animation_finished.emit()
 	_expect(room.room_is_cleared and not room.room_is_locked, "Boss defeat did not clear room")
 	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Castle gate collision released before animation clearance")
-	room.castle_gate_controller.advance(1.1)
+	room.castle_gate_controller.advance(1.3)
 	_expect(room.castle_gate_controller.gate_body.collision_layer == 0, "Castle gate collision did not release after opening")
 	_expect(room.gate_open_complete, "Castle gate completion state was not recorded")
 	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 6600, "Boss camera limits did not release")
-	var message: Label = main.get_node("HUD/LevelCompletePanel/Message") as Label
-	_expect(message.text.contains("castle gate is open"), "Boss clear message missing")
+	var transition: CastleEntranceTransition = main.get_node(
+		"CastleEntranceTransition"
+	) as CastleEntranceTransition
+	transition.scene_change_enabled = false
+	var level_completion_count: Array[int] = [0]
+	room.level_completed.connect(func() -> void: level_completion_count[0] += 1)
 	room._on_castle_entrance_body_entered(room.player)
-	_expect(message.text.contains("CHAPTER I COMPLETE"), "Castle entrance did not complete Chapter I")
+	_expect(level_completion_count[0] == 1, "Castle entrance did not emit completion once")
+	_expect(transition.is_transition_in_progress(), "Castle entrance did not start text-free transition")
 
 
 func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:

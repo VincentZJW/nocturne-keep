@@ -3227,3 +3227,73 @@ Status: complete — implementation, 34-script regression and configured-Main gr
 - Gargoyle art is a procedural 64×64 gray-box production pass, not final hand-polished pixel art. In particular, inspect the side-view Dive at motion speed and confirm the swept wing/tail reads as a stone predator rather than a projectile or insect.
 - Water is layered native Polygon2D gray-box art with static ripples; it has no shader, particles or downloaded texture. This intentionally avoids changing hazard/collision logic.
 - No Player/Boss damage or Health/Stamina value, Boss skill/phase, Gargoyle AI, enemy count/type, encounter activation, Moat death, gate completion, second level, reward or equipment system was added or changed.
+
+## 2026-07-24 — Ravenmourn Castle approach and Boss bridge environment pass
+
+Status: complete — implementation, 35-script regression, configured-Main graphical QA and text-free scene transition passed; manual visual/play acceptance pending
+
+### Goal
+
+- Replace the empty late-level black space with an original 16-bit-inspired Gothic castle approach: layered towers, broken walls, stonework, sparse vegetation, chains, rubble and restrained moon/fire accents while preserving every gameplay surface and encounter.
+- Replace the meaningless pre-bridge slab presentation with a non-blocking iron Gothic arch carrying the name `RAVENMOURN CASTLE`; retain only the existing battle-lock collision/seal behavior required by the live Boss encounter.
+- Make the saved F5 Boss bridge read as a complete moat crossing toward a monumental fortress, with a detailed castle silhouette, readable central gate, reinforced timber bridge and deeper blue water presentation.
+- Remove all visible chapter/gate-complete messaging. After the existing Boss death and weighted 1.20-second gate opening, keep Player control and enable the existing entrance trigger to fade into a minimal, text-free Ravenmourn threshold scene rather than implementing a second level.
+
+### Read-only audit
+
+- Git began on `master` at `5c4eeb4`, three commits ahead of `origin/master`, with a clean worktree. `project.godot` resolves F5 to `res://scenes/main/main.tscn`.
+- The late approach is the saved Main span around `World/Encounters/EncounterGroup06`, `EncounterGroup07`, `PlatformC`, `PlatformD`, `GargoylePerch` and the near bank at x≈3900..5520. It currently renders against the root near-black `Backdrop` with only flat platform/floor polygons.
+- The Boss bridge composition is `Main/World/CastleEntranceArea`: `WoodenBridge`, `Moat` and unchanged `MoatHazard`, `FallenGateKnight`, `CastleFacade`, `CastleGate`, `CastleEntranceTrigger`, and the live battle lock `RearBattleBarrier` at x=5420. The current castle is one simple right-edge tower; the gate is a 48×260 slab/bars visual raised by `scripts/world/castle_gate_controller.gd`.
+- `scripts/bosses/boss_room_controller.gd` currently shows `Main/HUD/LevelCompletePanel` with opening/open text, then replaces it with `CHAPTER I COMPLETE / 第一章完成` at the entrance. The entrance only emits `level_completed`; it does not change scene.
+- Main Camera is `Main/World/Player/Camera2D`; the Boss controller temporarily uses horizontal limits 5340..6620 and releases to 0..6600. Baseline exact-Godot 4.7.1 import and 180-frame configured F5 both exited 0 with no Script Error/Error/Warning diagnostics.
+
+### Planned files, tests, and scope check
+
+- Add narrowly scoped, typed native-2D presentation scripts/scenes for the castle approach, iron arch, bridge/moat decoration, fortress backdrop, moving portcullis art and text-free threshold transition; instance them directly in `res://scenes/main/main.tscn`.
+- Update `BossRoomController` only at its completion boundary: remove the visible message dependency, retain the existing signals and gate/trigger authority, and delegate fade/scene change to a composed transition node. Preserve Boss reset, checkpoint, camera lock, bridge bounds and respawn behavior.
+- Update focused Boss/bridge/Main tests to assert saved environment nodes, no completion panel/text, weighted opening with collision held until completion, and the enabled entrance transition. Capture three original-resolution configured-Main images for the approach, live Boss bridge/castle and opened gate.
+- Run exact Godot 4.7.1 import, focused tests, full serial tests, configured headless/graphical F5 and graphical QA capture; preserve commands and actual results here.
+- Scope excludes Boss values/AI/attacks/phases, Player movement/combat, enemy count/config/AI, encounter activation, HUD data, world collision geometry, Moat death behavior, a playable second level, rewards and save systems.
+
+### Delivered implementation
+
+- Added `LateLevelApproachArt` and `LateLevelSurfaceDetails` directly to the saved Main World. Original native-2D layers now cover x≈3560..5600 with navy sky bands, clouds, five distant spired towers, battlements, broken outer walls, arched openings, restrained cold/amber windows, stone courses, platform joints, rubble, weeds and hanging chains. All Floor/Platform shapes and all seven encounters are untouched.
+- Replaced the permanent visual meaning of the x=5420 slab with non-blocking `Main/World/RavenmournArchway`: a black-iron pointed arch, spikes, brass-edged timber nameplate and the final approved destination name `RAVENMOURN CASTLE`. It has no collision child. The existing `RearBattleBarrier` remains a separate narrow curse line/crossed-chain battle seal only while Boss lock is active, preserving reset/arena authority without presenting as a wooden board.
+- Added `Main/World/BossCastleBackdrop`, deliberately starting left of the physical gate so the existing Boss Camera limits frame a visible fortress rather than a clipped right-edge rectangle. It draws far towers, a high central keep, spired roof/finial, battlements, buttresses, masonry courses, cold and sparse warm Gothic windows, a fixed gatehouse, crest and threshold stairs behind Player/Boss silhouettes.
+- Rebuilt bridge/gate presentation without changing physics. `DetailedBridgeArt` adds twenty worn planks, rivets, cracks, underside supports, low pointed posts and sagging chains over the same 800×20 full-solid bridge. `MoatAtmosphere` adds castle reflections, varied ripples and bank foam over the same 840×104 `MoatHazard`. `DetailedGateArt` replaces the simple slab/bars with a 68-pixel oak-and-iron portcullis, bands, five bars, rivets, teeth and crest.
+- Lengthened only the gate presentation from 1.00 to 1.20 seconds and changed its value track to cubic interpolation for visible weight. Gate collision still remains enabled until the full 240-pixel rise completes; only then does `gate_opened` enable the unchanged entrance trigger. No Boss/Player/enemy tuning or collision geometry changed.
+- Removed `Main/HUD/LevelCompletePanel` and all `BossRoomController` dependencies/calls that showed gate-opening, gate-open or chapter-complete text. `level_completed` remains as a logic signal. Crossing the enabled trigger now delegates to composed `Main/CastleEntranceTransition`, preserving Player control until contact, fading to black for the production 0.55 seconds and loading the new text-free `res://scenes/transitions/ravenmourn_threshold.tscn` art placeholder.
+- The threshold scene is an intentionally minimal interior vault with dark masonry, columns, floor light and two restrained sconces. It contains no Label and no Player/combat/second-level content. The graphical QA driver shortened only its local capture-instance fade to 0.20 seconds and confirmed the real Main trigger changed `current_scene` to `RavenmournThreshold`.
+- Camera limits remain 5340..6620 during the Boss and 0..6600 outside it. Rather than changing gameplay framing, the fortress was composed across x≈5420..6720; the 1280×720 configured-Main capture confirms Player, Boss, bridge, moat, keep and physical gate share the live frame, and the opening remains visible from the right bridge approach.
+
+### Commands and actual results
+
+1. Baseline before edits:
+   - Exact `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Exact 4.7.1 import and 180-frame configured F5: both exit 0 with no Script Error/Error/Warning.
+2. Focused contracts:
+   - `tests/combat/test_first_level_boss.gd`: PASS — unchanged Body/Shield/damage/attacks/turn timing, saved art nodes, no completion panel, 1.20-second gate, transition start and Boss reset.
+   - `tests/level/test_castle_bridge_flow.gd`: PASS — unchanged solid bridge underside, moat death/ghost/respawn, uncleared reset and cleared persistence.
+   - `tests/level/test_ravenmourn_environment.gd`: PASS without diagnostics — required Main art paths/nameplate, non-blocking arch, unchanged bridge/hazard shapes, collision held during opening, transition target and no duplicate gameplay authority.
+3. Complete regression:
+   - Exact-Godot serial execution of all 35 scripts under `tests/`, split into deterministic ranges 1..12, 13..24 and 25..35 to accommodate the long traversal test: final `35/35`, zero nonzero exits and zero Script Error/Error/Warning/FAIL matches.
+   - The first middle-range run observed the existing `test_m15_player_actions.gd` preview assertion miss `dash_start` once. No Player/preview file changed; immediate standalone rerun passed, and the final complete 13..24 range passed without diagnostics. This timing-only observation is retained rather than hidden.
+4. Configured Main and transition runtime:
+   - Final exact 4.7.1 `--import --quit-after 120`: exit 0, no diagnostics (`docs/qa/ravenmourn_import.log`).
+   - Headless configured F5 for 600 frames: exit 0, no diagnostics (`docs/qa/ravenmourn_f5_headless.log`).
+   - Graphical configured F5 for 300 frames: exit 0, GL Compatibility on Apple M4, no diagnostics (`docs/qa/ravenmourn_f5_graphical.log`).
+   - Text-free threshold standalone for 120 frames: exit 0, no diagnostics (`docs/qa/ravenmourn_threshold_headless.log`).
+   - Graphical configured-Main QA captured all three requested views, then invoked the live `CastleEntranceTrigger` path; output reports `gate_open=true` and `RAVENMOURN_THRESHOLD_QA: loaded=true` (`docs/qa/ravenmourn_environment_capture.log`).
+
+### Configured-Main QA evidence
+
+- `docs/qa/ravenmourn_approach_main.png`: 1280×720, SHA-256 `0630c71ddf13425d7c0432586f153b8c4f512500c5a22a1fbf1805f974d30446` — Group06/07 approach, masonry/platform detail and readable arch nameplate.
+- `docs/qa/ravenmourn_boss_bridge_main.png`: 1280×720, SHA-256 `4d1d4a514a9aac541e068184fcff03ea265eacd331514ca0fadc100fe0b8f578` — live Boss, reinforced bridge, deep-blue moat, fortress keep and closed portcullis in one configured-Main frame.
+- `docs/qa/ravenmourn_gate_open_main.png`: 1280×720, SHA-256 `1c19731085cb4baf2efa230fb56c16e9fddfff3b8b82712677d816df7bfeee75` — defeated Boss state, raised portcullis and unobstructed dark threshold with no completion message.
+
+### Manual acceptance and known limitations
+
+- Manually traverse Group06/07 at combat speed and confirm the denser masonry does not hide Crossbow bolts, Gargoyle Dive silhouettes or platform edges. Automation proves node/collision separation, not subjective contrast during play.
+- Manually defeat the Boss normally and judge the 1.20-second cubic portcullis weight, doorway visibility and 0.55-second fade cadence. The QA path exercised the identical saved Main flow but accelerated its capture-only fade after the required gate-open screenshot.
+- Environment art is authored native-2D gray-box presentation with clean vector/pixel-like edges, not final hand-painted tile art, dynamic parallax, water shader or licensed audio. The visual layering is static world-space depth so it cannot perturb Camera/physics.
+- No Boss value/mechanic, Player ability, normal-enemy/stone-Gargoyle AI, encounter count, platform/floor/bridge geometry, MoatHazard, respawn, HUD authority or second-level gameplay changed.

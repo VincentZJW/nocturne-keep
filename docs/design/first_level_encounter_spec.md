@@ -1,6 +1,6 @@
 # First Level Encounter Specification
 
-Version: 1.0
+Version: 1.1
 Last updated: 2026-07-24
 
 F5 Main uses seven one-shot ActivationAreas and exactly eighteen normal enemies before the separate castle-bridge Boss encounter.
@@ -20,3 +20,5 @@ Counts: Guard 8, Shield 2, Spear 2, Crossbow 3, Gargoyle 3. Groups are separated
 First appearances isolate each new mechanic before combinations. PlatformB/C/D top surfaces are y=500/504/508 and `GargoylePerch` is y=492; all are now full solid 24-pixel stone bodies, reached from their edges rather than passed through from below. Crossbowmen retain centered edge margins and clear horizontal sightlines. Shield Guards still have room to circle, Spearmen retain a full thrust length, and the solid Floor-to-Bridge route remains the no-Air-Dash route into every encounter and the Boss fight.
 
 The Boss segment is saved at `World/CastleEntranceArea`: checkpoint `(5480,612)`, continuous bridge x=5560..6360, trigger x=5780, Boss `(6120,596)`, visible rear barrier x=5420, and castle gate x=6400. Only the Boss occupies the bridge; its logical movement range is x=5650..6320. The barrier leaves the checkpoint and marked 40-pixel moat entry gap inside the live arena so the moat death/reset path remains testable.
+
+The Group06/07 approach now shares two visual-only saved Main renderers: `World/LateLevelApproachArt` supplies layered sky, clouds, far towers, broken walls and cold/warm Gothic windows, while `World/LateLevelSurfaceDetails` adds stone courses, platform joints, rubble, sparse weeds and chains. No ActivationArea, enemy instance, platform/floor collider, sightline, camera bound or encounter count changed. The non-blocking `World/RavenmournArchway` at `(5420,640)` names the destination and provides a clear pre-Boss landmark without narrowing the route.
