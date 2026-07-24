@@ -1,51 +1,50 @@
 # Cursed Shield Guard / 诅咒盾卫
 
-Version: 1.3 · 2026-07-24
+Version: 2.0 · 2026-07-24
 
 ## Identity and role
 
-A broad closed-helmet knight with old iron shield, short mace, dark plate, and a restrained red eye slit. It is slower and wider than the Player and converts frontal pressure into a facing/positioning decision.
+A broad closed-helmet knight with a separate old-iron shield, short mace, dark plate, and restrained red eye slit. It is slower and wider than the Player. Its three-point shield is a readable positional resource rather than extra body Health.
 
 ## Runtime contract
 
-- Scene: `res://scenes/enemies/cursed_shield_guard.tscn`
-- Script/config: `cursed_shield_guard.gd` / `cursed_shield_guard_config.tres`
-- Health 7; patrol/chase 35/52 px/s; weapon damage 8.
-- Frontal normal Attack: consumed by Block, no Health loss, no ordinary Hurt.
-- Frontal Dash Attack while the shield is intact: consumed, permanently marks the shield broken, and enters a 0.70-second GuardBreak. GuardBreak cannot chase, attack, or block; damaging punish hits do not cancel its hard-stun state.
-- Back attacks damage normally and a back Dash Attack does not break the shield. After the one-time break, attacks from every direction damage normally and no later state transition can restore Block.
-- Direction is computed from source x-position versus `FacingRoot.scale.x`; there is no all-direction block.
-- Hurt interrupts Attack. An intact enemy collapses with the shield; a broken enemy uses the shieldless Death variant. Both dissolve and free without a ghost.
+- Main scene: `res://scenes/main/main.tscn`.
+- Enemy scene: `res://scenes/enemies/cursed_shield_guard.tscn`.
+- Behavior/config: `scripts/enemies/cursed_shield_guard.gd` and `resources/enemies/cursed_shield_guard_config.tres`.
+- Body Health 5; Shield Health 3; weapon damage 8; GuardBreak 0.65 s; target-side turn delay 0.22 s.
+- One shared `HurtboxComponent` delegates exactly once to `ShieldComponent`; there are no overlapping Shield/Body damage areas.
+- Front normal/Dash hits reduce Shield by 1/2 and deal zero Body damage. The breaking hit discards overflow.
+- Rear normal/Dash hits reduce Body by 1/2 and leave Shield unchanged.
+- A source within 8 pixels of the enemy center is treated as a Body hit, preventing the shield from covering vertical/overlap attacks.
+- Once Shield reaches zero it never regenerates. GuardBreak prevents movement, chase, attack, blocking, and turning while still accepting Body damage. Death remains higher priority.
 
-## Break feedback and persistent state
+## Direction and turning
 
-- `ShieldBlockComponent.shield_broken` is the logical authority. `set_blocking(true)` is ignored after break, so presentation and AI recovery cannot accidentally restore defense.
-- `guard_break_01` shows the intact shield flashing/cracking; frames 02–03 separate it into readable iron/rust fragments; frame 04 holds a larger recoil silhouette with no shield.
-- `FacingRoot/ShieldBreakEffect` adds a four-frame pale-steel/amber impact flash and fragment overlay at integer 2× scale. Its four equal frames span the complete 0.70-second GuardBreak window instead of ending after the former 0.33-second flash.
-- `VisualRoot/GuardBreakMarker` shows a compact cracked-shield pixel icon above the enemy for the complete hard-stun window. A 0.12-second body highlight reinforces the exact break instant; both cues are hidden on recovery or Death.
-- Recovery selects persistent `idle_unshielded`, `walk_unshielded`, `attack_unshielded`, `hurt_unshielded`, and `death_unshielded` frames. The shield therefore never visually reappears before cleanup.
-- Expanded Main Enemy Debug reports `STATE`, `BLOCK ON/OFF`, and `SHIELD BROKEN true/false` from the same runtime policy.
+`ShieldComponent` classifies the Hitbox source position against the enemy body and signed `FacingRoot.scale.x`. The Hitbox also carries attack kind, id, faction, and attack direction for audit/debug context. A target crossing behind enters `Turn`; the facing remains unchanged for 0.22 seconds and only flips if the target stays on that side. Attack, ShieldHit/Block, GuardBreak, Hurt, and Death do not turn.
 
-## Animation resource
+## Independent presentation
 
-`resources/enemies/cursed_shield_guard_sprite_frames.tres`
+- `VisualRoot/AnimatedSprite2D` contains shield-free body art for every action.
+- `FacingRoot/ShieldVisual` owns `intact`, `cracked`, `critical`, and four-frame `shield_break` animations.
+- 3/3 is intact, 2/3 has a readable light crack, 1/3 has a larger split/missing edge, and 0/3 plays break then hides permanently.
+- `FacingRoot/ShieldHitEffect` adds three brief metal spark/flash frames and a restrained 2-pixel shield shake on accepted front hits.
+- `FacingRoot/ShieldBreakEffect` and `VisualRoot/GuardBreakMarker` reinforce the one-time break across the 0.65-second hard stun.
+- Body actions resolve to `idle_unshielded`, `walk_unshielded`, `attack_unshielded`, `hurt_unshielded`, and `death_unshielded` after break. The body and shield are therefore never visually reassembled.
 
-| Animation | Frames | FPS | Loop |
-| --- | ---: | ---: | --- |
-| idle / walk | 4 / 6 | 4 / 7 | yes |
-| block / guard_break | 3 / 4 | 12 / 10 with a 0.70 s authored hold | no |
-| attack | 5 | 10 with configured duration ratios | no |
-| hurt / death | 3 / 6 | 16.667 / 8 | no |
-| idle_unshielded / walk_unshielded | 4 / 6 | 4 / 7 | yes |
-| attack_unshielded | 5 | 10 with configured duration ratios | no |
-| hurt_unshielded / death_unshielded | 3 / 6 | 16.667 / 8 | no |
+## Resources
 
-Break overlay: `resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres` (4 frames, 5.714 FPS, 0.70 seconds, non-looping, displayed at 2×).
+- Body frames: `resources/enemies/cursed_shield_guard_sprite_frames.tres`.
+- Shield states/break: `resources/enemies/cursed_shield_guard_shield_sprite_frames.tres`.
+- Shield hit sparks: `resources/enemies/cursed_shield_guard_shield_hit_fx_sprite_frames.tres`.
+- GuardBreak overlay: `resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres`.
+- Original transparent pixel assets: `assets/sprites/enemies/cursed_shield_guard/`.
 
-Break marker: `assets/sprites/enemies/cursed_shield_guard/shield_break_fx/broken_shield_marker.png` (20×20, transparent, nearest-neighbor).
+All resources are nearest-neighbor, lossless, no-mipmap pixel art. Body and shield use the same 64×64 canvas and foot anchor; runtime left/right display uses the existing horizontal facing roots.
 
-Source art: `assets/sprites/enemies/cursed_shield_guard/`.
+## Debug contract
 
-## Manual checks
+Compact Main Enemy Debug exposes Body, Shield, visual shield state, source side, state, and turn timer. Expanded output additionally exposes attack kind, source position, attack direction, attack id, applied Shield/Body damage, discarded overflow, Hitbox state, and GuardBreak remaining time.
 
-Verify both facings, Block readability, one-time Dash GuardBreak feedback, permanent shield absence in every post-break action, enough space to circle behind, and whether seven post-break normal hits/four Dash hits preserve the heavy-defense role without excessive durability.
+## Main acceptance
+
+Group01 places `CursedShieldGuard01` at `(500, 610)` before the Castle Guard at `(690, 610)`, providing immediate isolated space. Verify three front normal hits or two front Dash hits break Shield without changing Body 5/5; rear normal/Dash hits change Body to 4/5 or 3/5 without changing Shield; the 0.22-second rear window is playable; the 0.65-second GuardBreak accepts punish damage; and Death dissolves without a ghost.

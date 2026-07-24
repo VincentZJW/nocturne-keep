@@ -43,6 +43,20 @@ func _initialize() -> void:
 	if effect_error != OK:
 		push_error("Cannot save Shield Guard break effect SpriteFrames")
 		failures += 1
+	var shield_visual_error: Error = ResourceSaver.save(
+		_build_shield_visual(),
+		OUTPUT_ROOT.path_join("cursed_shield_guard_shield_sprite_frames.tres")
+	)
+	if shield_visual_error != OK:
+		push_error("Cannot save Shield Guard ShieldVisual SpriteFrames")
+		failures += 1
+	var shield_hit_error: Error = ResourceSaver.save(
+		_build_shield_hit_effect(),
+		OUTPUT_ROOT.path_join("cursed_shield_guard_shield_hit_fx_sprite_frames.tres")
+	)
+	if shield_hit_error != OK:
+		push_error("Cannot save Shield Guard hit effect SpriteFrames")
+		failures += 1
 	print("ENEMY_VARIETY_SPRITE_FRAMES_BUILD: %s" % ("OK" if failures == 0 else "FAIL"))
 	quit(0 if failures == 0 else 1)
 
@@ -74,8 +88,11 @@ func _build_enemy(enemy_name: String, animations: Dictionary) -> SpriteFrames:
 func _build_shield_break_effect() -> SpriteFrames:
 	var frames: SpriteFrames = SpriteFrames.new()
 	frames.rename_animation(&"default", &"shield_break")
-	# Four equal frames span the complete 0.70-second GuardBreak readability window.
-	frames.set_animation_speed(&"shield_break", 4.0 / 0.70)
+	# Four equal frames span the complete configured GuardBreak readability window.
+	var config: CursedShieldGuardConfig = load(
+		"res://resources/enemies/cursed_shield_guard_config.tres"
+	) as CursedShieldGuardConfig
+	frames.set_animation_speed(&"shield_break", 4.0 / config.guard_break_duration)
 	frames.set_animation_loop(&"shield_break", false)
 	for frame_index: int in range(4):
 		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(
@@ -86,6 +103,54 @@ func _build_shield_break_effect() -> SpriteFrames:
 			push_error("Missing imported Shield Guard break effect %s" % texture_path)
 			continue
 		frames.add_frame(&"shield_break", texture)
+	return frames
+
+
+func _build_shield_visual() -> SpriteFrames:
+	var frames: SpriteFrames = SpriteFrames.new()
+	frames.remove_animation(&"default")
+	for state_name: String in ["intact", "cracked", "critical"]:
+		var animation_name: StringName = StringName(state_name)
+		frames.add_animation(animation_name)
+		frames.set_animation_speed(animation_name, 1.0)
+		frames.set_animation_loop(animation_name, true)
+		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+			"shield_visual"
+		).path_join("%s.png" % state_name)
+		var texture: Texture2D = load(texture_path) as Texture2D
+		if texture == null:
+			push_error("Missing ShieldVisual texture %s" % texture_path)
+			continue
+		frames.add_frame(animation_name, texture)
+	frames.add_animation(&"shield_break")
+	frames.set_animation_speed(&"shield_break", 8.0)
+	frames.set_animation_loop(&"shield_break", false)
+	for frame_index: int in range(4):
+		var break_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+			"shield_visual"
+		).path_join("shield_break_%02d.png" % (frame_index + 1))
+		var break_texture: Texture2D = load(break_path) as Texture2D
+		if break_texture == null:
+			push_error("Missing ShieldVisual break texture %s" % break_path)
+			continue
+		frames.add_frame(&"shield_break", break_texture)
+	return frames
+
+
+func _build_shield_hit_effect() -> SpriteFrames:
+	var frames: SpriteFrames = SpriteFrames.new()
+	frames.rename_animation(&"default", &"shield_hit")
+	frames.set_animation_speed(&"shield_hit", 18.0)
+	frames.set_animation_loop(&"shield_hit", false)
+	for frame_index: int in range(3):
+		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+			"shield_hit_fx"
+		).path_join("shield_hit_fx_%02d.png" % (frame_index + 1))
+		var texture: Texture2D = load(texture_path) as Texture2D
+		if texture == null:
+			push_error("Missing Shield hit texture %s" % texture_path)
+			continue
+		frames.add_frame(&"shield_hit", texture)
 	return frames
 
 

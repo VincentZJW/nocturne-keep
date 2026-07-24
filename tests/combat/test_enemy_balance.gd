@@ -19,14 +19,16 @@ func _run_tests() -> void:
 	await _test_player_invariants()
 	_test_config_values_and_unchanged_cadence()
 	_test_scene_value_authority()
-	await _expect_kill_count(CASTLE_SCENE, &"normal_attack", 1, 3, false, "Castle normal")
-	await _expect_kill_count(CASTLE_SCENE, &"dash_attack", 2, 2, false, "Castle Dash")
-	await _expect_kill_count(SHIELD_SCENE, &"normal_attack", 1, 7, true, "Shield broken normal")
-	await _expect_kill_count(SHIELD_SCENE, &"dash_attack", 2, 4, true, "Shield broken Dash")
-	await _expect_kill_count(SPEAR_SCENE, &"normal_attack", 1, 5, false, "Spear normal")
-	await _expect_kill_count(SPEAR_SCENE, &"dash_attack", 2, 3, false, "Spear Dash")
-	await _expect_kill_count(CROSSBOW_SCENE, &"normal_attack", 1, 4, false, "Crossbow normal")
-	await _expect_kill_count(CROSSBOW_SCENE, &"dash_attack", 2, 2, false, "Crossbow Dash")
+	await _expect_kill_count(CASTLE_SCENE, &"normal_attack", 1, 3, "Castle normal")
+	await _expect_kill_count(CASTLE_SCENE, &"dash_attack", 2, 2, "Castle Dash")
+	await _expect_shield_kill_count(&"normal_attack", 1, 8, true, "Shield front normal")
+	await _expect_shield_kill_count(&"dash_attack", 2, 5, true, "Shield front Dash")
+	await _expect_shield_kill_count(&"normal_attack", 1, 5, false, "Shield rear normal")
+	await _expect_shield_kill_count(&"dash_attack", 2, 3, false, "Shield rear Dash")
+	await _expect_kill_count(SPEAR_SCENE, &"normal_attack", 1, 5, "Spear normal")
+	await _expect_kill_count(SPEAR_SCENE, &"dash_attack", 2, 3, "Spear Dash")
+	await _expect_kill_count(CROSSBOW_SCENE, &"normal_attack", 1, 4, "Crossbow normal")
+	await _expect_kill_count(CROSSBOW_SCENE, &"dash_attack", 2, 2, "Crossbow Dash")
 	_finish()
 
 
@@ -57,9 +59,13 @@ func _test_config_values_and_unchanged_cadence() -> void:
 	) as FallenCrossbowmanConfig
 	_expect(castle.max_health == 3 and castle.attack_damage == 5, "Castle Config balance mismatch")
 	_expect(_cadence_matches(castle, 46.0, 0.35, 0.10, 0.45), "Castle cadence changed")
-	_expect(shield.max_health == 7 and shield.attack_damage == 8, "Shield Config balance mismatch")
+	_expect(
+		shield.max_health == 5 and shield.shield_max_health == 3 and shield.attack_damage == 8,
+		"Shield Config body/shield balance mismatch"
+	)
 	_expect(_cadence_matches(shield, 46.0, 0.40, 0.10, 0.55), "Shield cadence changed")
-	_expect(is_equal_approx(shield.guard_break_duration, 0.70), "Shield GuardBreak duration is not 0.70")
+	_expect(is_equal_approx(shield.guard_break_duration, 0.65), "Shield GuardBreak duration is not 0.65")
+	_expect(is_equal_approx(shield.turn_delay, 0.22), "Shield turn delay is not 0.22")
 	_expect(spear.max_health == 5 and spear.attack_damage == 10, "Spear Config balance mismatch")
 	_expect(_cadence_matches(spear, 76.0, 0.45, 0.10, 0.60), "Spear cadence or range changed")
 	_expect(crossbow.max_health == 4, "Crossbow Config Health mismatch")
@@ -104,16 +110,12 @@ func _expect_kill_count(
 	attack_kind: StringName,
 	damage: int,
 	expected_hits: int,
-	disable_shield: bool,
 	label: String
 ) -> void:
 	var enemy: EnemyCombatant = scene.instantiate() as EnemyCombatant
 	get_root().add_child(enemy)
 	await process_frame
 	enemy.set_ai_active(false)
-	if disable_shield:
-		var shield: CursedShieldGuard = enemy as CursedShieldGuard
-		shield.shield_policy.set_blocking(false)
 	var hitbox: HitboxComponent = HitboxComponent.new()
 	hitbox.faction = &"player"
 	hitbox.attack_kind = attack_kind
@@ -135,6 +137,49 @@ func _expect_kill_count(
 	_expect(enemy.is_dead(), "%s did not enter Death at zero Health" % label)
 	hitbox.queue_free()
 	enemy.queue_free()
+	await process_frame
+
+
+func _expect_shield_kill_count(
+	attack_kind: StringName,
+	damage: int,
+	expected_hits: int,
+	from_front: bool,
+	label: String
+) -> void:
+	var shield: CursedShieldGuard = SHIELD_SCENE.instantiate() as CursedShieldGuard
+	get_root().add_child(shield)
+	await process_frame
+	shield.set_ai_active(false)
+	shield.set_facing_direction(-1.0)
+	var hitbox: HitboxComponent = HitboxComponent.new()
+	hitbox.faction = &"player"
+	hitbox.attack_kind = attack_kind
+	hitbox.damage = damage
+	get_root().add_child(hitbox)
+	hitbox.global_position = shield.global_position + Vector2(-30.0 if from_front else 30.0, 0.0)
+	var hit_count: int = 0
+	while shield.health_component.current_health > 0 and hit_count < 32:
+		hitbox.begin_attack(12_000 + hit_count, damage, 1.0 if from_front else -1.0)
+		_expect(hitbox.try_hit(shield.hurtbox), "%s hit %d was rejected" % [label, hit_count + 1])
+		var body_after: int = shield.health_component.current_health
+		var shield_after: int = shield.get_shield_current_health()
+		_expect(not hitbox.try_hit(shield.hurtbox), "%s attack hit twice" % label)
+		_expect(
+			shield.health_component.current_health == body_after
+			and shield.get_shield_current_health() == shield_after,
+			"%s duplicate hit changed body or shield" % label
+		)
+		hitbox.end_attack()
+		hit_count += 1
+	_expect(hit_count == expected_hits, "%s required %d hits instead of %d" % [label, hit_count, expected_hits])
+	_expect(shield.is_dead(), "%s did not enter Death at zero body Health" % label)
+	_expect(
+		shield.is_shield_broken() == from_front,
+		"%s ended with incorrect shield state" % label
+	)
+	hitbox.queue_free()
+	shield.queue_free()
 	await process_frame
 
 
@@ -160,7 +205,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("ENEMY_BALANCE_TEST: PASS (3/2, 7/4, 5/3, 4/2; bolt 6; centralized Config)")
+		print("ENEMY_BALANCE_TEST: PASS (Shield front 8/5, rear 5/3; others unchanged)")
 		quit(0)
 		return
 	for failure: String in _failures:

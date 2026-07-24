@@ -64,15 +64,23 @@ func _validate_enemy(enemy_name: String, definitions: Dictionary) -> void:
 				sprite_frames.get_frame_duration(&"guard_break", frame_index) / guard_break_speed
 			)
 		_expect(
-			is_equal_approx(guard_break_duration, 0.70),
-			"Shield GuardBreak animation duration is not 0.70 seconds"
+			is_equal_approx(guard_break_duration, 0.65),
+			"Shield GuardBreak animation duration is not 0.65 seconds"
 		)
 
 
-func _validate_png(enemy_name: String, animation_name: String, frame_number: int) -> void:
-	var path: String = ROOT.path_join(enemy_name).path_join(animation_name).path_join(
-		"%s_%02d.png" % [animation_name, frame_number]
+func _validate_png(
+	enemy_name: String,
+	animation_name: String,
+	frame_number: int,
+	filename_override: String = ""
+) -> void:
+	var filename: String = (
+		filename_override
+		if not filename_override.is_empty()
+		else "%s_%02d.png" % [animation_name, frame_number]
 	)
+	var path: String = ROOT.path_join(enemy_name).path_join(animation_name).path_join(filename)
 	_expect(FileAccess.file_exists(path), "Missing %s" % path)
 	if not FileAccess.file_exists(path):
 		return
@@ -107,6 +115,8 @@ func _validate_bolt() -> void:
 
 
 func _validate_shield_break_effect() -> void:
+	_validate_shield_visuals()
+	_validate_shield_hit_effect()
 	var frames_path: String = (
 		"res://resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres"
 	)
@@ -120,7 +130,7 @@ func _validate_shield_break_effect() -> void:
 		var effect_speed: float = frames.get_animation_speed(&"shield_break")
 		for frame_index: int in range(frames.get_frame_count(&"shield_break")):
 			effect_duration += frames.get_frame_duration(&"shield_break", frame_index) / effect_speed
-		_expect(is_equal_approx(effect_duration, 0.70), "Shield break effect does not span 0.70 seconds")
+		_expect(is_equal_approx(effect_duration, 0.65), "Shield break effect does not span 0.65 seconds")
 	for frame_number: int in range(1, 5):
 		_validate_png("cursed_shield_guard", "shield_break_fx", frame_number)
 	var marker_path: String = ROOT.path_join("cursed_shield_guard").path_join(
@@ -135,6 +145,40 @@ func _validate_shield_break_effect() -> void:
 			_expect(marker.get_size() == Vector2i(20, 20), "Broken shield marker is not 20x20")
 			_expect(_visible_pixel_count(marker) >= 50, "Broken shield marker is unreadable")
 			_expect(_has_transparency(marker), "Broken shield marker lacks transparency")
+
+
+func _validate_shield_visuals() -> void:
+	var frames_path: String = (
+		"res://resources/enemies/cursed_shield_guard_shield_sprite_frames.tres"
+	)
+	var frames: SpriteFrames = load(frames_path) as SpriteFrames
+	_expect(frames != null, "Cannot load independent ShieldVisual SpriteFrames")
+	if frames == null:
+		return
+	for state: StringName in [&"intact", &"cracked", &"critical"]:
+		_expect(frames.has_animation(state), "ShieldVisual lacks %s" % state)
+		_expect(frames.get_frame_count(state) == 1, "ShieldVisual %s is not one frame" % state)
+	_expect(frames.has_animation(&"shield_break"), "ShieldVisual lacks shield_break")
+	_expect(frames.get_frame_count(&"shield_break") == 4, "ShieldVisual break is not four frames")
+	_expect(not frames.get_animation_loop(&"shield_break"), "ShieldVisual break unexpectedly loops")
+	for state_name: String in ["intact", "cracked", "critical"]:
+		_validate_png("cursed_shield_guard", "shield_visual", 1, "%s.png" % state_name)
+	for frame_number: int in range(1, 5):
+		_validate_png("cursed_shield_guard", "shield_visual", frame_number, "shield_break_%02d.png" % frame_number)
+
+
+func _validate_shield_hit_effect() -> void:
+	var frames_path: String = (
+		"res://resources/enemies/cursed_shield_guard_shield_hit_fx_sprite_frames.tres"
+	)
+	var frames: SpriteFrames = load(frames_path) as SpriteFrames
+	_expect(frames != null, "Cannot load ShieldHit SpriteFrames")
+	if frames != null:
+		_expect(frames.has_animation(&"shield_hit"), "ShieldHit animation is missing")
+		_expect(frames.get_frame_count(&"shield_hit") == 3, "ShieldHit animation is not three frames")
+		_expect(not frames.get_animation_loop(&"shield_hit"), "ShieldHit animation unexpectedly loops")
+	for frame_number: int in range(1, 4):
+		_validate_png("cursed_shield_guard", "shield_hit_fx", frame_number)
 
 
 func _visible_pixel_count(image: Image) -> int:

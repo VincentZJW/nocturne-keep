@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_config")
 display_name = &"CursedShieldGuard"
-max_health = 7
+max_health = 5
 attack_damage = 8
 patrol_speed = 35.0
 chase_speed = 52.0
@@ -24,5 +24,8 @@ hurt_duration = 0.18
 knockback_speed = 90.0
 initial_idle_duration = 0.65
 patrol_turn_pause = 0.3
-guard_break_duration = 0.7
+shield_max_health = 3
+shield_center_tolerance = 8.0
+guard_break_duration = 0.65
 block_reaction_duration = 0.24
+turn_delay = 0.22

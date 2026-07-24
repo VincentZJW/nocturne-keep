@@ -168,7 +168,7 @@ animations = [{
 "duration": 2.0,
 "texture": ExtResource("28_lihhy")
 }, {
-"duration": 3.0,
+"duration": 2.5,
 "texture": ExtResource("29_e7xb6")
 }],
 "loop": 0,

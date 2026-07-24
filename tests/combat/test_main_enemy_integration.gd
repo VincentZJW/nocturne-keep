@@ -57,6 +57,18 @@ func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyComba
 		_expect(enemy.get_node_or_null("Hurtbox") is HurtboxComponent, "%s lacks HurtboxComponent" % enemy.name)
 		if enemy is CursedShieldGuard:
 			_expect(
+				enemy.get_node_or_null("ShieldComponent") is ShieldComponent,
+				"%s lacks the independent ShieldComponent" % enemy.name
+			)
+			_expect(
+				enemy.get_node_or_null("FacingRoot/ShieldVisual") is AnimatedSprite2D,
+				"%s lacks the independent ShieldVisual" % enemy.name
+			)
+			_expect(
+				enemy.get_node_or_null("FacingRoot/ShieldHitEffect") is AnimatedSprite2D,
+				"%s lacks the live ShieldHitEffect" % enemy.name
+			)
+			_expect(
 				enemy.get_node_or_null("FacingRoot/ShieldBreakEffect") is AnimatedSprite2D,
 				"%s lacks the live ShieldBreakEffect" % enemy.name
 			)
@@ -107,12 +119,12 @@ func _test_main_system_wiring(main: Node2D, player: Player) -> void:
 		debug_controller.set_debug_hud_visible(true)
 		debug_controller.set_compact_mode(false)
 		_expect(_debug_contains_profile(enemy_debug.text, "CursedCastleGuard", "HP 3/3", "DMG 5"), "Main Debug omits current Castle Guard balance")
-		_expect(_debug_contains_profile(enemy_debug.text, "CursedShieldGuard", "HP 7/7", "DMG 8"), "Main Debug omits current Shield Guard balance")
+		_expect(_debug_contains_profile(enemy_debug.text, "CursedShieldGuard", "BODY 5/5", "DMG 8"), "Main Debug omits current Shield Guard body balance")
 		_expect(
 			_debug_contains_profile(
-				enemy_debug.text, "CursedShieldGuard", "BLOCK ON", "SHIELD BROKEN false"
+				enemy_debug.text, "CursedShieldGuard", "SH 3/3", "SHIELD intact"
 			),
-			"Main Debug omits Shield Guard block/broken fields"
+			"Main Debug omits Shield Guard shield-health fields"
 		)
 		_expect(_debug_contains_profile(enemy_debug.text, "DecayedSpearman", "HP 5/5", "DMG 10"), "Main Debug omits current Spearman balance")
 		_expect(_debug_contains_profile(enemy_debug.text, "FallenCrossbowman", "HP 4/4", "DMG 6"), "Main Debug omits current Crossbowman balance")
@@ -188,29 +200,49 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	shield.set_facing_direction(-1.0)
 	var normal_hitbox: HitboxComponent = player.action_controller.attack_hitbox
 	normal_hitbox.global_position = shield.global_position + Vector2(-30.0, 0.0)
-	normal_hitbox.begin_attack(18_000 + shield.get_instance_id(), 1)
-	_expect(normal_hitbox.try_hit(shield.hurtbox), "Main frontal normal Attack did not reach Shield Guard")
-	normal_hitbox.end_attack()
-	_expect(shield.health_component.current_health == 7, "Main frontal normal Attack bypassed Block")
-	_expect(shield.get_state_name() == &"Block", "Main frontal normal Attack did not enter Block")
+	for hit_index: int in range(3):
+		normal_hitbox.begin_attack(18_000 + shield.get_instance_id() + hit_index, 1, 1.0)
+		_expect(normal_hitbox.try_hit(shield.hurtbox), "Main frontal normal Attack did not reach Shield Guard")
+		normal_hitbox.end_attack()
+		_expect(shield.health_component.current_health == 5, "Main frontal normal Attack damaged body")
+		_expect(
+			shield.get_shield_current_health() == 2 - hit_index,
+			"Main frontal normal Attack did not reduce Shield by one"
+		)
+		if hit_index < 2:
+			_expect(shield.get_state_name() == &"Block", "Main frontal normal Attack did not enter Block")
+			shield._process_enemy_state(0.25)
+	_expect(shield.is_shield_broken(), "Three Main normal Attacks did not break Shield")
+	_expect(shield.get_state_name() == &"GuardBreak", "Main normal shield break did not enter GuardBreak")
+	shield._process_enemy_state(0.66)
+	shield.shield_component.reset_shield()
+	shield._recover_from_hurt()
+	_expect(shield.get_shield_current_health() == 3, "Main Shield reset did not restore 3/3 for Dash route test")
 	var dash_hitbox: HitboxComponent = player.action_controller.dash_attack_hitbox
 	dash_hitbox.global_position = shield.global_position + Vector2(-32.0, 0.0)
-	dash_hitbox.begin_attack(19_000 + shield.get_instance_id(), 2)
-	_expect(dash_hitbox.try_hit(shield.hurtbox), "Main frontal Dash Attack did not reach Shield Guard")
-	dash_hitbox.end_attack()
-	_expect(shield.is_shield_broken(), "Main frontal Dash Attack did not permanently break the shield")
+	for hit_index: int in range(2):
+		dash_hitbox.begin_attack(19_000 + shield.get_instance_id() + hit_index, 2, 1.0)
+		_expect(dash_hitbox.try_hit(shield.hurtbox), "Main frontal Dash Attack did not reach Shield Guard")
+		dash_hitbox.end_attack()
+		_expect(shield.health_component.current_health == 5, "Main frontal Dash Attack damaged body")
+		if hit_index == 0:
+			_expect(shield.get_shield_current_health() == 1, "First Main Dash did not reduce Shield 3 to 1")
+			shield._process_enemy_state(0.25)
+	_expect(shield.is_shield_broken(), "Two Main Dash Attacks did not permanently break the shield")
 	_expect(shield.get_state_name() == &"GuardBreak", "Main Shield Guard did not enter GuardBreak")
+	_expect(not shield.shield_visual.visible or shield.shield_visual.animation == &"shield_break", "Main ShieldVisual did not begin break presentation")
 	_expect(shield.shield_break_effect.visible, "Main Shield Guard break effect did not become visible")
 	_expect(shield.guard_break_marker.visible, "Main Shield Guard break marker did not become visible")
 	_expect(shield.shield_break_effect.scale == Vector2(2.0, 2.0), "Main break effect is not enlarged")
-	_expect(shield.health_component.current_health == 7, "Main GuardBreak incorrectly dealt Dash damage")
+	_expect(shield.health_component.current_health == 5, "Main GuardBreak incorrectly dealt Dash overflow damage")
 	_expect(
 		shield.get_debug_summary().contains("BLOCK OFF")
-		and shield.get_debug_summary().contains("SHIELD BROKEN true"),
-		"Main Shield Guard Debug did not expose the broken state"
+		and shield.get_debug_summary().contains("SH 0/3")
+		and shield.get_debug_summary().contains("SHIELD broken"),
+		"Main Shield Guard Debug did not expose zero/broken Shield"
 	)
-	shield._process_enemy_state(0.69)
-	_expect(shield.get_state_name() == &"GuardBreak", "Main GuardBreak ended before 0.70 seconds")
+	shield._process_enemy_state(0.64)
+	_expect(shield.get_state_name() == &"GuardBreak", "Main GuardBreak ended before 0.65 seconds")
 	_expect(shield.guard_break_marker.visible, "Main break marker vanished before GuardBreak ended")
 	shield._process_enemy_state(0.02)
 	_expect(not shield.is_blocking(), "Main Shield Guard restored Block after GuardBreak")
@@ -222,7 +254,7 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	normal_hitbox.begin_attack(19_100 + shield.get_instance_id(), 1)
 	_expect(normal_hitbox.try_hit(shield.hurtbox), "Main post-break frontal normal Attack was rejected")
 	normal_hitbox.end_attack()
-	_expect(shield.health_component.current_health == 6, "Main post-break frontal normal Attack did not deal damage")
+	_expect(shield.health_component.current_health == 4, "Main post-break frontal normal Attack did not deal damage")
 	shield.health_component.reset_to_full()
 	shield._recover_from_hurt()
 
@@ -235,7 +267,8 @@ func _test_main_shield_back_hit(shield: CursedShieldGuard, player: Player) -> vo
 	normal_hitbox.begin_attack(19_200 + shield.get_instance_id(), 1)
 	_expect(normal_hitbox.try_hit(shield.hurtbox), "Main Shield Guard back Attack was rejected")
 	normal_hitbox.end_attack()
-	_expect(shield.health_component.current_health == 6, "Main Shield Guard back Attack was blocked")
+	_expect(shield.health_component.current_health == 4, "Main Shield Guard back Attack was blocked")
+	_expect(shield.get_shield_current_health() == 3, "Main back Attack incorrectly damaged Shield")
 	_expect(not shield.is_shield_broken(), "Main back Attack incorrectly broke the shield")
 	shield.health_component.reset_to_full()
 	shield._recover_from_hurt()
@@ -246,8 +279,6 @@ func _kill_main_enemy_with_player_hitbox(
 	player: Player,
 	use_dash: bool
 ) -> void:
-	if enemy is CursedShieldGuard:
-		(enemy as CursedShieldGuard).shield_policy.set_blocking(false)
 	var hitbox: HitboxComponent = (
 		player.action_controller.dash_attack_hitbox
 		if use_dash
@@ -255,6 +286,10 @@ func _kill_main_enemy_with_player_hitbox(
 	)
 	var expected_hits: int = _get_expected_main_kill_count(enemy.get_enemy_type_name(), use_dash)
 	var damage: int = 2 if use_dash else 1
+	if enemy is CursedShieldGuard:
+		var shield_enemy: CursedShieldGuard = enemy as CursedShieldGuard
+		shield_enemy.set_facing_direction(-1.0)
+		hitbox.global_position = shield_enemy.global_position + Vector2(30.0, 0.0)
 	var hit_count: int = 0
 	while enemy.get_health_component().current_health > 0 and hit_count < 32:
 		hitbox.begin_attack(20_000 + enemy.get_instance_id() + hit_count, damage)
@@ -277,7 +312,7 @@ func _get_expected_main_kill_count(enemy_type: StringName, use_dash: bool) -> in
 		&"CursedCastleGuard":
 			return 2 if use_dash else 3
 		&"CursedShieldGuard":
-			return 4 if use_dash else 7
+			return 3 if use_dash else 5
 		&"DecayedSpearman":
 			return 3 if use_dash else 5
 		&"FallenCrossbowman":
@@ -294,7 +329,7 @@ func _test_enemy_balance_profile(enemy: EnemyCombatant) -> void:
 			expected_health = 3
 			expected_damage = 5
 		&"CursedShieldGuard":
-			expected_health = 7
+			expected_health = 5
 			expected_damage = 8
 		&"DecayedSpearman":
 			expected_health = 5

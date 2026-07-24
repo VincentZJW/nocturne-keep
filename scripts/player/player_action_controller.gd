@@ -538,12 +538,12 @@ func _sync_attack_hitboxes() -> void:
 		return
 	if _action_state == ActionState.ATTACK and animation_controller.is_attack_hit_window():
 		if not attack_hitbox.is_active:
-			attack_hitbox.begin_attack(_current_attack_id, 1)
+			attack_hitbox.begin_attack(_current_attack_id, 1, combat_root.scale.x)
 		dash_attack_hitbox.end_attack()
 		return
 	if _action_state == ActionState.DASH_ATTACK and animation_controller.is_dash_attack_hit_window():
 		if not dash_attack_hitbox.is_active:
-			dash_attack_hitbox.begin_attack(_current_attack_id, 2)
+			dash_attack_hitbox.begin_attack(_current_attack_id, 2, _dash_direction)
 		attack_hitbox.end_attack()
 		return
 	_deactivate_attack_hitboxes()

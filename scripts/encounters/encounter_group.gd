@@ -82,7 +82,7 @@ func get_engaged_enemy_count() -> int:
 			continue
 		if enemy.get_state_name() in [
 			&"Chase", &"Attack", &"Aim", &"Shoot", &"Reload", &"Retreat",
-			&"Block", &"GuardBreak", &"Hurt",
+			&"Block", &"Turn", &"GuardBreak", &"Hurt",
 		]:
 			count += 1
 	return count

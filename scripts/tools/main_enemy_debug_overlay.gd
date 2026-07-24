@@ -64,16 +64,20 @@ func _build_compact_text() -> String:
 		return "ENC -- | ALIVE 0 | ENGAGED 0 | ATK 0/0\nNO AUTHORED ENEMIES"
 	var short_name: String = String(encounter.encounter_name).replace("EncounterGroup", "")
 	var type_counts: Dictionary[String, int] = {}
+	var shield_summaries: PackedStringArray = []
 	for enemy: EnemyCombatant in encounter.get_enemies():
 		if not is_instance_valid(enemy) or enemy.is_dead():
 			continue
 		var type_name: String = _get_short_enemy_name(enemy.get_enemy_type_name())
 		type_counts[type_name] = type_counts.get(type_name, 0) + 1
+		var shield_guard: CursedShieldGuard = enemy as CursedShieldGuard
+		if shield_guard != null:
+			shield_summaries.append(shield_guard.get_compact_debug_summary())
 	var type_parts: PackedStringArray = []
 	for type_name: String in type_counts:
 		type_parts.append("%s ×%d" % [type_name, type_counts[type_name]])
 	var roster_text: String = "NO LIVING ENEMIES" if type_parts.is_empty() else " | ".join(type_parts)
-	return (
+	var summary: String = (
 		"ENC %s | ALIVE %d | ENGAGED %d | ATK %d/%d\n%s"
 	) % [
 		short_name,
@@ -83,6 +87,9 @@ func _build_compact_text() -> String:
 		encounter.simultaneous_attack_limit,
 		roster_text,
 	]
+	if not shield_summaries.is_empty():
+		summary += "\n" + "\n".join(shield_summaries)
+	return summary
 
 
 func _build_expanded_text() -> String:

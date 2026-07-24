@@ -159,10 +159,10 @@ shape = SubResource("RectangleShape2D_encounter_01")
 [node name="Enemies" type="Node2D" parent="World/Encounters/EncounterGroup01"]
 
 [node name="CursedGuard01" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("8_guard")]
-position = Vector2(500, 610)
+position = Vector2(690, 610)
 
 [node name="CursedShieldGuard01" parent="World/Encounters/EncounterGroup01/Enemies" instance=ExtResource("11_shield")]
-position = Vector2(690, 610)
+position = Vector2(500, 610)
 
 [node name="EncounterGroup02" type="Node2D" parent="World/Encounters"]
 script = ExtResource("10_encounter")

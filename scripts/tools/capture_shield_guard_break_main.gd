@@ -33,14 +33,18 @@ func _capture() -> void:
 		await physics_frame
 	var dash_hitbox: HitboxComponent = player.action_controller.dash_attack_hitbox
 	dash_hitbox.global_position = shield.global_position + Vector2(-30.0, 0.0)
-	dash_hitbox.begin_attack(91_001, 2)
-	if not dash_hitbox.try_hit(shield.hurtbox):
-		push_error("Shield Guard Main QA capture Dash Attack was rejected")
-		quit(1)
-		return
-	dash_hitbox.end_attack()
 	# Preserve the default F5 compact HUD so the break cue is judged in real play space.
 	debug_controller.set_compact_mode(true)
-	for _frame: int in range(14):
+	for hit_index: int in range(2):
+		dash_hitbox.begin_attack(91_001 + hit_index, 2, 1.0)
+		if not dash_hitbox.try_hit(shield.hurtbox):
+			push_error("Shield Guard Main QA capture Dash Attack %d was rejected" % (hit_index + 1))
+			quit(1)
+			return
+		dash_hitbox.end_attack()
+		# First impact proves the 3 -> 1 critical ShieldVisual. The second proves break.
+		for _frame: int in range(10):
+			await process_frame
+	for _frame: int in range(12):
 		await process_frame
 	quit(0)

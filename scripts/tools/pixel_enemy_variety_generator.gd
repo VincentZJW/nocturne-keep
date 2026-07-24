@@ -58,6 +58,27 @@ func _initialize() -> void:
 		).path_join("shield_break_fx_%02d.png" % (frame_index + 1))
 		failures += 0 if _save_png(shield_fx, shield_fx_path) == OK else 1
 		total += 1
+	for shield_state: String in ["intact", "cracked", "critical"]:
+		var shield_state_image: Image = _draw_shield_visual_state(shield_state)
+		var shield_state_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+			"shield_visual"
+		).path_join("%s.png" % shield_state)
+		failures += 0 if _save_png(shield_state_image, shield_state_path) == OK else 1
+		total += 1
+	for frame_index: int in range(4):
+		var shield_break_image: Image = _draw_shield_visual_break(frame_index)
+		var shield_break_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+			"shield_visual"
+		).path_join("shield_break_%02d.png" % (frame_index + 1))
+		failures += 0 if _save_png(shield_break_image, shield_break_path) == OK else 1
+		total += 1
+	for frame_index: int in range(3):
+		var shield_hit_image: Image = _draw_shield_hit_fx(frame_index)
+		var shield_hit_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+			"shield_hit_fx"
+		).path_join("shield_hit_fx_%02d.png" % (frame_index + 1))
+		failures += 0 if _save_png(shield_hit_image, shield_hit_path) == OK else 1
+		total += 1
 	var broken_shield_marker: Image = _draw_broken_shield_marker()
 	var marker_path: String = ROOT.path_join("cursed_shield_guard").path_join(
 		"shield_break_fx"
@@ -86,10 +107,9 @@ func _draw_frame(enemy_name: String, animation_name: String, frame: int, count: 
 
 func _draw_shield(animation_name: String, frame: int, count: int) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
-	var unshielded: bool = animation_name.ends_with("_unshielded")
 	var base_animation: String = animation_name.trim_suffix("_unshielded")
 	if base_animation == "death":
-		_draw_fallen_armored(image, frame, count, not unshielded)
+		_draw_fallen_armored(image, frame, count, false)
 		return image
 	var bob: int = 1 if base_animation == "idle" and frame in [1, 2] else 0
 	var lean: int = -frame * 2 if base_animation == "hurt" else 0
@@ -115,23 +135,10 @@ func _draw_shield(animation_name: String, frame: int, count: int) -> Image:
 	PixelCanvas.draw_line(image, Vector2i(cx + 5, top + 37), Vector2i(cx + 8 + walk_phase, 59), IRON, 6)
 	PixelCanvas.fill_rect(image, Rect2i(cx - 12 - walk_phase, 58, 11, 3), DARK)
 	PixelCanvas.fill_rect(image, Rect2i(cx + 2 + walk_phase, 58, 12, 3), DARK)
-	var shield_x: int = cx + 10
-	var shield_y: int = top + 18
-	if base_animation == "block":
-		shield_x += 4
-		shield_y -= 2
-	if not unshielded and base_animation != "guard_break":
-		_draw_shield_shape(image, Vector2i(shield_x, shield_y))
-	elif base_animation == "guard_break":
-		if frame == 0:
-			_draw_shield_shape(image, Vector2i(shield_x, shield_y))
-			_draw_shield_cracks(image, Vector2i(shield_x, shield_y))
-		elif frame < 3:
-			_draw_shield_fragments(image, Vector2i(shield_x, shield_y), frame)
-	else:
-		PixelCanvas.draw_line(
-			image, Vector2i(cx + 8, top + 21), Vector2i(cx + 12, top + 33), IRON, 4
-		)
+	# Shield is intentionally absent from body art. FacingRoot/ShieldVisual owns it.
+	PixelCanvas.draw_line(
+		image, Vector2i(cx + 8, top + 21), Vector2i(cx + 12, top + 33), IRON, 4
+	)
 	var weapon_start: Vector2i = Vector2i(cx - 6, top + 24)
 	var weapon_end: Vector2i = Vector2i(cx - 15, top + 38)
 	if base_animation == "attack":
@@ -186,6 +193,61 @@ func _draw_shield_break_fx(frame: int) -> Image:
 		PixelCanvas.fill_rect(image, Rect2i(center.x - 19, center.y - 12, 4, 4), FX_FADE)
 		PixelCanvas.fill_rect(image, Rect2i(center.x + 19, center.y - 8, 4, 5), FX_FADE)
 		PixelCanvas.fill_rect(image, Rect2i(center.x - 7, center.y + 18, 5, 4), FX_FADE)
+	return image
+
+
+func _draw_shield_visual_state(state: String) -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
+	var center: Vector2i = Vector2i(39, 36)
+	_draw_shield_shape(image, center)
+	if state == "cracked" or state == "critical":
+		_draw_shield_cracks(image, center)
+	if state == "critical":
+		PixelCanvas.draw_line(
+			image, center + Vector2i(3, -7), center + Vector2i(0, 1), PALE_FLASH, 2
+		)
+		PixelCanvas.draw_line(
+			image, center + Vector2i(0, 1), center + Vector2i(6, 7), PALE_FLASH, 2
+		)
+		PixelCanvas.fill_rect(image, Rect2i(center.x + 7, center.y - 10, 4, 5), Color.TRANSPARENT)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 10, center.y + 7, 4, 4), Color.TRANSPARENT)
+	return image
+
+
+func _draw_shield_visual_break(frame: int) -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
+	var center: Vector2i = Vector2i(39, 36)
+	if frame == 0:
+		image = _draw_shield_visual_state("critical")
+		PixelCanvas.draw_line(
+			image, center + Vector2i(-12, 0), center + Vector2i(12, 0), PALE_FLASH, 2
+		)
+	elif frame < 3:
+		_draw_shield_fragments(image, center, frame)
+	else:
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 18, center.y - 10, 3, 3), FX_FADE)
+		PixelCanvas.fill_rect(image, Rect2i(center.x + 17, center.y - 7, 3, 4), FX_FADE)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 5, center.y + 17, 4, 3), FX_FADE)
+	return image
+
+
+func _draw_shield_hit_fx(frame: int) -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
+	var center: Vector2i = Vector2i(39, 36)
+	var spread: int = frame * 3
+	PixelCanvas.fill_rect(
+		image, Rect2i(center.x - 2 - spread, center.y - 12 - spread, 3, 3), PALE_FLASH
+	)
+	PixelCanvas.fill_rect(
+		image, Rect2i(center.x + 7 + spread, center.y - 5, 3, 2), PALE_FLASH
+	)
+	PixelCanvas.fill_rect(
+		image, Rect2i(center.x - 7 - spread, center.y + 7 + spread, 2, 3), RUST
+	)
+	if frame == 0:
+		PixelCanvas.draw_line(
+			image, center + Vector2i(-7, 0), center + Vector2i(7, 0), PALE_FLASH, 2
+		)
 	return image
 
 

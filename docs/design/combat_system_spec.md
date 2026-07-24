@@ -1,6 +1,6 @@
 # Combat System Specification
 
-Version: 1.6 — permanent Shield Guard break feedback
+Version: 1.7 — independent Shield Guard durability and hit routing
 Last updated: 2026-07-24
 
 ## Ownership
@@ -14,7 +14,7 @@ Actor
 
 - Health remains the sole data authority; HUD only observes signals.
 - Hitbox/Hurtbox components do not select AI states or animations.
-- `EnemyHitPolicyComponent` is an optional pre-damage hook. `ShieldBlockComponent` consumes frontal normal hits and converts the first frontal Dash Attack into a permanent shield break plus GuardBreak.
+- `EnemyHitPolicyComponent` is an optional pre-damage hook. `ShieldComponent` owns independent Shield Health and routes one accepted Shield Guard hit to either Shield or Body before `HurtboxComponent` mutates Body Health.
 - `EnemyCombatant` is the narrow encounter/debug contract. The three new actors share `GroundEnemyBase`; Castle Guard retains its stable AI implementation.
 
 ## Collision layers
@@ -50,7 +50,7 @@ Enemy Health and damage are authored only in the shared Config resources. Saved 
 
 ## Enemy-specific rules
 
-- **Shield Guard:** while intact, frontal normal Attack is blocked with feedback and no Hurt. The first frontal Dash Attack is consumed, permanently destroys the shield, and triggers a 0.70-second GuardBreak. A 2× flash/fragment overlay, brief body highlight, and cracked-shield marker persistently expose the break window at Main camera distance. GuardBreak cannot block/attack/chase and remains readable even while punish damage is accepted. Recovery uses shieldless Idle/Walk/Attack/Hurt/Death presentation; all later hits from every direction deal normal damage. Back hits never engage the shield policy. Blocking is directional, derived from facing and source position.
+- **Shield Guard:** Body Health is 5 and independent Shield Health is 3. While intact, frontal normal/Dash Attack applies 1/2 only to Shield; rear or center-overlap attacks apply 1/2 only to Body. The breaking hit never overflows to Body. A single shared Hurtbox and Hitbox attack-id memory prevent dual routing or repeated active-frame damage. Shield states progress intact→cracked→critical→broken with independent art, metal hit feedback, and a one-time four-frame break. Zero Shield starts a 0.65-second GuardBreak, then permanently uses shieldless Idle/Walk/Attack/Hurt/Death. Target-side crossing starts a 0.22-second Turn instead of flipping immediately, creating a real rear punish window.
 - **Spearman:** long narrow forward Hitbox and 76-pixel attack range. Below a 34-pixel minimum distance it retreats rather than producing a misleading rear/point-blank hit.
 - **Crossbowman:** Aim→Shoot→Reload; it retreats inside 70 pixels and has no melee attack. Bolts persist if the shooter dies, damage once, collide with World, and expire after 3 seconds.
 - **All enemies:** Hurt interrupts ordinary attacks and applies short knockback. Death stops AI, closes attack/detection/Hurtbox, plays fall/dissolve frames, emits presentation completion, and frees the node. Enemy death never creates the Player ghost.

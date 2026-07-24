@@ -9,6 +9,7 @@ signal active_changed(active: bool)
 @export_range(1, 9999, 1) var damage: int = 1
 @export var faction: StringName = &"neutral"
 @export var attack_kind: StringName = &"generic"
+@export_range(-1.0, 1.0, 1.0) var attack_direction: float = 0.0
 @export var start_enabled: bool = false
 
 var attack_id: int = 0
@@ -24,10 +25,16 @@ func _ready() -> void:
 	_set_active_internal(start_enabled)
 
 
-func begin_attack(new_attack_id: int, damage_override: int = -1) -> void:
+func begin_attack(
+	new_attack_id: int,
+	damage_override: int = -1,
+	direction_override: float = 0.0
+) -> void:
 	attack_id = new_attack_id
 	if damage_override > 0:
 		damage = damage_override
+	if not is_zero_approx(direction_override):
+		attack_direction = signf(direction_override)
 	_hit_target_ids.clear()
 	_set_active_internal(true)
 	call_deferred("_scan_existing_overlaps")

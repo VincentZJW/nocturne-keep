@@ -22,5 +22,5 @@ animations = [{
 }],
 "loop": 0,
 "name": &"shield_break",
-"speed": 5.714285714285714
+"speed": 6.153846153846153
 }]

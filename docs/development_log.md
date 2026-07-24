@@ -2664,3 +2664,97 @@ Status: complete — Main readability fix, 28-script regression, standalone/F5 s
 - The break requires a **frontal Dash Attack while the shield is still intact**. A rear Dash Attack is ordinary damage by design and intentionally does not trigger the break cue.
 - Manually confirm both facings in the normal F5 encounter and judge whether the new cue is sufficiently strong on the target display. Automated evidence establishes timing and visibility, not personal visual preference.
 - The cracked-shield marker communicates the 0.70-second punish window only; it disappears when hard stun ends. The permanent missing shield on every subsequent animation communicates the lasting defense loss.
+
+## 2026-07-24 — Shield Guard independent shield-health redesign (preflight)
+
+Status: complete — independent Shield routing, Main integration, 28-script regression, and visual QA passed; manual feel acceptance pending
+
+### Goal
+
+- Replace the one-input frontal Dash break with an independent three-point shield-health component.
+- Route one-point normal and two-point Dash attacks exclusively to the intact shield from the front, while rear/center-overlap attacks bypass it and damage the five-point body.
+- Separate the shield from body art, expose intact/cracked/critical/broken states, preserve a 0.65-second GuardBreak, and add a 0.22-second target-side turn delay so rear attacks are practically achievable.
+- Deliver the same behavior through both shared Shield Guard instances in configured F5 Main.
+
+### Read-only audit
+
+- `project.godot` sets `run/main_scene="res://scenes/main/main.tscn"`.
+- Main instances `World/Encounters/EncounterGroup01/Enemies/CursedShieldGuard01` and `EncounterGroup04/Enemies/CursedShieldGuard02` both instance `res://scenes/enemies/cursed_shield_guard.tscn` without local script/config/art overrides.
+- Body Health is currently authored as 7 in `cursed_shield_guard_config.tres`; damage is 8 and Player attack values remain centralized at 1/2.
+- `ShieldBlockComponent` owns only transient `is_blocking` plus permanent `shield_broken`; it has no maximum/current shield Health or Health-change signal.
+- One shared Hurtbox delegates to `ShieldBlockComponent.resolve_damage()`. Source x-position versus `FacingRoot.scale.x` determines front/back with no center tolerance. A frontal Dash Attack immediately calls `break_shield()`; a frontal normal Attack is consumed without changing persistent state.
+- The same shared Hurtbox prevents separate Shield/Body Area overlap, and `HitboxComponent` already remembers one target per attack id. This is the correct single routing boundary to retain.
+- Shield pixels are baked into intact Idle/Walk/Block/Attack/Hurt/Death body frames. There is no separate ShieldVisual. Existing `_unshielded` frames and GuardBreak/break-effect resources provide a safe body-only and VFX baseline for the refactor.
+- Chase calls `set_facing_direction()` as soon as target x changes side, including again on Attack entry. There is no turn timer or turn state, so a player crossing behind can be mirrored within one physics frame.
+- Compact Main Enemy Debug currently reports encounter aggregates only; Expanded Shield summary exposes Block/broken state but not shield Health, side routing, damage split, attack id, overflow, or turn timer.
+
+### Planned files and responsibilities
+
+- New `ShieldComponent`: own max/current/broken state, typed signals, center-tolerant side classification, one-path damage routing, last-hit audit data, zero clamp, and no-overflow break contract.
+- Shield Guard config/script/scene: set body 5, shield 3, GuardBreak 0.65, turn delay 0.22; arbitrate ShieldHit/Turn/GuardBreak/Death; drive separated ShieldVisual and feedback.
+- Pixel generator/SpriteFrames/assets: convert Shield Guard body animations to shield-free art and author independent intact/cracked/critical/break plus small metal-hit assets.
+- Main debug overlay and tests: surface compact shield state and expanded routing details without creating new HUD authority.
+- README, Shield/combat/roster/encounter specifications, and this log: replace the superseded one-Dash-break contract.
+
+### Verification plan
+
+1. Generate/import/build assets with exact Godot 4.7.1 and validate transparency, nearest/lossless/no-mipmap imports, cracks, break, and foot baseline.
+2. Test front normal 3→2→1→0 with body 5, front Dash 3→1→0 without overflow, rear 1/2 body damage with unchanged shield, center-overlap body routing, deduplication, 0.22-second turn window, 0.65-second GuardBreak, permanent unshielded recovery, and non-ghost Death.
+3. Test both live Main instances, compact/expanded Debug, Player/HUD/Hurt/respawn regressions, all independent scenes, and the complete repository test suite.
+4. Run configured Main graphically and retain original-resolution QA evidence for intact, cracked/critical, and broken states.
+
+### Scope guard
+
+- No other enemy, Player Health/damage/ability, attack timing, encounter count, Boss, item, drop, equipment, camera shake, hit-stop, audio, or unrelated system change.
+
+### Delivered implementation
+
+- Replaced the boolean-only `ShieldBlockComponent` with a typed `ShieldComponent` that owns `shield_max_health=3`, current Shield Health, broken state, change/hit/break signals, source-side classification, zero clamping, and last-hit audit data.
+- Retained one shared enemy Hurtbox. Its policy resolves each accepted Player hit to exactly one destination: front normal/Dash attacks apply 1/2 Shield damage; rear or ±8-pixel center-overlap attacks apply 1/2 Body damage. The breaking hit discards overflow and never starts ordinary Body Hurt.
+- Changed Shield Guard Body Health from 7 to 5 while retaining damage 8 and all existing move/attack cadence values. GuardBreak is 0.65 seconds and target-side turning is delayed 0.22 seconds.
+- Added an explicit `Turn` state. Chase starts the timer when the target crosses behind, keeps the old facing during the window, and flips only after the delay. Attack, Block/ShieldHit, GuardBreak, Hurt, and Death do not turn.
+- Separated body and shield presentation. All 31 shielded body source frames were regenerated without shield pixels; `FacingRoot/ShieldVisual` now owns intact, cracked, critical, and four-frame break art. A three-frame metal-hit flash, two-pixel shield shake, existing large fragment overlay, body flash, and GuardBreak marker provide distinct shield feedback.
+- Kept the named shieldless action set for post-break Idle/Walk/Attack/Hurt/Death. Zero Shield immediately disables routing, the break runs once, ShieldVisual hides, and no recovery path restores it.
+- Added attack-direction context to `HitboxComponent.begin_attack()` and supplied the actual Player/Shield Guard attack facing without changing damage, windows, movement, or input behavior.
+- Compact Main Enemy Debug now adds a third shield summary line with Body, Shield, visual state, side, state, and turn timer while preserving the existing 380×68 panel. Expanded Debug additionally reports attack kind/source/direction/id, Shield/Body applied damage, discarded overflow, and GuardBreak remaining time.
+- Moved Main Group01 Shield Guard to `(500, 610)` and Castle Guard to `(690, 610)`. This preserves the same roster/count while making the shield mechanic the first isolated encounter target.
+
+### Commands and actual results
+
+1. Exact engine/resource production:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Pixel generator: `ENEMY_VARIETY_PIXEL_BUILD: OK (126 files)`.
+   - `Godot --headless --path . --import`: exit 0; new/changed transparent PNGs imported without script or resource diagnostics.
+   - SpriteFrames builder: `ENEMY_VARIETY_SPRITE_FRAMES_BUILD: OK`.
+2. Focused tests:
+   - `ENEMY_VARIETY_TEST`: PASS — 3→2→1→0 normal route, 3→1→0 Dash route, no overflow, rear/center Body routing, single-hit memory, Shield states/VFX, 0.22-second turn, 0.65-second GuardBreak, punish window, permanent unshielded Death, and no ghost.
+   - `ENEMY_BALANCE_TEST`: PASS — frontal totals 8 normal / 5 Dash; rear totals 5 normal / 3 Dash; other enemies and Player invariants unchanged.
+   - `ENEMY_VARIETY_ASSET_TEST`: PASS — 124 64×64 frames/effects plus bolt; transparent, lossless/no-mipmap imports and 48×48 readability floor.
+   - `MAIN_ENEMY_INTEGRATION_TEST`: PASS — both saved Main instances own ShieldComponent/ShieldVisual, use Body 5 and Shield 3, execute both frontal break routes, rear bypass, post-break damage, correct debug, Death, and cleanup.
+3. Full regression:
+   - First pass stopped at `test_main_debug_hud.gd` because an interim 420×84 panel exceeded the existing compact contract. The panel was restored to 380×68 without dropping fields.
+   - Final serial run: all 28 scripts under `tests/` exited 0 with no final `SCRIPT ERROR`, `ERROR:`, or `WARNING:` output.
+   - Player level metrics remain 153.59 single-jump range, 281.92 debug-double-jump range, 344.00 four-Air-Dash action range, and 360.33 pixels through landing.
+4. Runtime startup:
+   - `Godot --headless --path . res://scenes/enemies/cursed_shield_guard.tscn --quit-after 120`: exit 0.
+   - `Godot --headless --path . --quit-after 120`: configured F5 Main exit 0.
+5. Graphical Main QA:
+   - `Godot --path . --script res://scripts/tools/capture_shield_guard_break_main.gd --write-movie docs/qa/shield_guard_independent_main.png --fixed-fps 30 --audio-driver Dummy --log-file docs/qa/shield_guard_independent_main.log`: exit 0 under GL Compatibility on Apple M4; 37 frames at 1280×720.
+   - The capture uses the real Main Player Dash Hitbox twice against `EncounterGroup01/Enemies/CursedShieldGuard01`. Selected frames were inspected at original resolution.
+6. Final `git diff --check`: PASS.
+
+### F5 Main synchronization and QA evidence
+
+- `application/run/main_scene` remains `res://scenes/main/main.tscn`.
+- `World/Encounters/EncounterGroup01/Enemies/CursedShieldGuard01` and `World/Encounters/EncounterGroup04/Enemies/CursedShieldGuard02` both reference the current `res://scenes/enemies/cursed_shield_guard.tscn` with no local script/config/resource override.
+- The shared scene owns `ShieldComponent`, one `Hurtbox`, `FacingRoot/ShieldVisual`, `ShieldHitEffect`, `ShieldBreakEffect`, body-only SpriteFrames, and the existing GuardBreak marker. Main therefore cannot retain the removed boolean policy or shield-baked art after reload.
+- `docs/qa/shield_guard_critical_f5_main.png` (SHA-256 `2dc545143e9f0a336e5300fd2dff3c2923cae42b630fd3b189bda6b3117e1150`) shows live Main at Body 5/5, Shield 1/3, `critical`, front-side Block.
+- `docs/qa/shield_guard_break_f5_main_v2.png` (SHA-256 `62e11d0bacaf02477ae6027d9706f7637e1102a3920f215d2dc6b80f2758ef9f`) shows the second Dash impact, Shield 0/3, `broken`, GuardBreak, flash/fragments, marker, and absent shield body art.
+- Main integration and the full suite also preserve live Health/Stamina binding, Player Hurt/invulnerability, death ghost/respawn, encounters, other enemy damage/Death, camera, and movement behavior.
+
+### Manual acceptance and known limitations
+
+- Manually judge the light/severe crack shapes at the user's display scale and test both facings with actual inputs. Automated image inspection establishes that distinct art and state transitions are rendered, not subjective readability on every monitor.
+- The 0.22-second turn uses the existing idle body pose rather than new bespoke turn frames. Logic and facing remain truthful throughout the rear window.
+- No always-on in-world Shield bar was added; the required visual cracks are authoritative, while Compact/Expanded Debug provides numeric development confirmation.
+- Hit-stop, camera shake, audio, rigid shield fragments, shield regeneration, new attacks, and all unrelated enemy/Player systems remain intentionally excluded.
