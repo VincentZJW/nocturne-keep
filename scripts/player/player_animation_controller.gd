@@ -95,6 +95,24 @@ func restart_locked_one_shot(animation_name: StringName) -> bool:
 	return true
 
 
+func replay_one_shot(animation_name: StringName) -> bool:
+	if (
+		animated_sprite == null
+		or animated_sprite.sprite_frames == null
+		or animation_name not in ONE_SHOT_ANIMATIONS
+		or not animated_sprite.sprite_frames.has_animation(animation_name)
+	):
+		return false
+	animated_sprite.stop()
+	animated_sprite.set_frame_and_progress(0, 0.0)
+	animated_sprite.play(animation_name)
+	_animation_locked = true
+	_locked_animation = animation_name
+	_facing_locked = animation_name in FACING_LOCK_ANIMATIONS
+	animation_changed.emit(animation_name)
+	return true
+
+
 func transition_locked_animation(animation_name: StringName) -> bool:
 	if animated_sprite == null or animated_sprite.sprite_frames == null:
 		return false

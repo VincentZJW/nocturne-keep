@@ -48,7 +48,7 @@ Action values in `resources/player/player_action_prototype_config.tres`:
 - Dash speed 480 px/s; motion duration 0.18 s per paid segment;
 - one-entry Dash input buffer 0.10 s; minimum segment interval 0.03 s;
 - Dash Attack combination window 0.18 s;
-- normal Attack buffer 0.10 s;
+- normal Attack chain window 0.15–0.20 s, buffer 0.06 s, minimum recovery 0.06 s;
 - Dash Attack 320 px/s for 0.15 s plus 0.10 s linear recovery.
 
 The removed 0.45-second Dash cooldown is not used. Stamina is the chain limiter.

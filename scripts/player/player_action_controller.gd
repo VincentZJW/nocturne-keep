@@ -12,6 +12,7 @@ enum ActionState {
 	GROUND_DASH,
 	AIR_DASH,
 	ATTACK,
+	ATTACK_RECOVERY,
 	DASH_ATTACK,
 }
 
@@ -69,6 +70,9 @@ var _current_dash_number: int = 0
 var _latest_is_grounded: bool = true
 var _attack_buffer_timer: float = 0.0
 var _attack_buffered: bool = false
+var _attack_elapsed: float = 0.0
+var _attack_recovery_timer: float = 0.0
+var _attack_chain_queued: bool = false
 var _last_attack_input_to_hit_time: float = -1.0
 var _attack_hit_time_recorded: bool = false
 var _next_attack_id: int = 1
@@ -105,6 +109,12 @@ func advance(delta: float) -> void:
 		_dash_segment_elapsed += delta
 	elif is_dash_attack_active():
 		_dash_attack_elapsed += delta
+	elif _action_state == ActionState.ATTACK:
+		_attack_elapsed += delta
+	elif _action_state == ActionState.ATTACK_RECOVERY:
+		_attack_recovery_timer = maxf(0.0, _attack_recovery_timer - delta)
+		if _attack_recovery_timer <= 0.0:
+			_finish_attack_recovery()
 	if _dash_buffered and not is_dash_attack_active():
 		_dash_buffer_timer = maxf(0.0, _dash_buffer_timer - delta)
 		if _dash_buffer_timer <= 0.0:
@@ -128,13 +138,13 @@ func try_start_actions(
 			_buffer_dash(horizontal_input, facing_left)
 		return false
 	if _action_state == ActionState.ATTACK:
-		if attack_pressed and not _attack_buffered:
+		if attack_pressed and can_chain_attack() and not _attack_buffered:
 			_attack_buffered = true
 			_attack_buffer_timer = action_config.attack_buffer_time
-		if _attack_buffered and can_chain_attack():
-			return _chain_attack()
 		if _attack_buffered and _attack_buffer_timer <= 0.0:
 			_clear_attack_buffer()
+		return false
+	if _action_state == ActionState.ATTACK_RECOVERY:
 		return false
 	if is_dash_active():
 		if attack_pressed and is_dash_attack_input_window_open():
@@ -174,6 +184,9 @@ func cancel_all_actions() -> void:
 	_dash_segment_elapsed = 0.0
 	_dash_ending = false
 	_current_dash_number = 0
+	_attack_elapsed = 0.0
+	_attack_recovery_timer = 0.0
+	_attack_chain_queued = false
 	_reset_attack_response_measurement()
 	_deactivate_attack_hitboxes()
 
@@ -230,6 +243,8 @@ func get_action_name() -> StringName:
 			return AIR_DASH_ACTION
 		ActionState.ATTACK:
 			return ATTACK_ANIMATION
+		ActionState.ATTACK_RECOVERY:
+			return ATTACK_ANIMATION
 		ActionState.DASH_ATTACK:
 			return DASH_ATTACK_ANIMATION
 	return &""
@@ -243,6 +258,8 @@ func get_action_state_name() -> StringName:
 			return &"AirDash"
 		ActionState.ATTACK:
 			return &"Attack"
+		ActionState.ATTACK_RECOVERY:
+			return &"AttackRecovery"
 		ActionState.DASH_ATTACK:
 			return &"DashAttack"
 	return &"None"
@@ -309,10 +326,13 @@ func get_current_attack_frame() -> int:
 func can_chain_attack() -> bool:
 	return (
 		_action_state == ActionState.ATTACK
-		and animation_controller != null
-		and animation_controller.animated_sprite.animation == ATTACK_ANIMATION
-		and animation_controller.animated_sprite.frame >= 2
+		and _attack_elapsed >= action_config.attack_chain_window_start
+		and _attack_elapsed < action_config.attack_chain_window_end
 	)
+
+
+func get_attack_recovery_remaining() -> float:
+	return _attack_recovery_timer
 
 
 func get_attack_input_to_hit_time() -> float:
@@ -424,21 +444,39 @@ func _start_attack() -> bool:
 	_clear_attack_buffer()
 	if not _start_action(ActionState.ATTACK, ATTACK_ANIMATION):
 		return false
+	_attack_elapsed = 0.0
+	_attack_recovery_timer = 0.0
+	_attack_chain_queued = false
 	_prepare_new_attack_id()
 	_deactivate_attack_hitboxes()
 	_reset_attack_response_measurement()
 	return true
 
 
-func _chain_attack() -> bool:
-	if not animation_controller.restart_locked_one_shot(ATTACK_ANIMATION):
-		return false
+func _begin_attack_recovery() -> void:
+	_attack_chain_queued = _attack_buffered and _attack_buffer_timer > 0.0
 	_clear_attack_buffer()
-	_prepare_new_attack_id()
 	_deactivate_attack_hitboxes()
-	_reset_attack_response_measurement()
-	action_started.emit(ATTACK_ANIMATION)
-	return true
+	_action_state = ActionState.ATTACK_RECOVERY
+	_attack_recovery_timer = action_config.attack_chain_recovery_duration
+
+
+func _finish_attack_recovery() -> void:
+	var should_chain: bool = _attack_chain_queued
+	_attack_chain_queued = false
+	_attack_recovery_timer = 0.0
+	if should_chain:
+		if not animation_controller.replay_one_shot(ATTACK_ANIMATION):
+			_finish_action(ATTACK_ANIMATION)
+			return
+		_action_state = ActionState.ATTACK
+		_attack_elapsed = 0.0
+		_prepare_new_attack_id()
+		_deactivate_attack_hitboxes()
+		_reset_attack_response_measurement()
+		action_started.emit(ATTACK_ANIMATION)
+		return
+	_finish_action(ATTACK_ANIMATION)
 
 
 func _transition_dash_to_dash_attack() -> bool:
@@ -510,6 +548,9 @@ func _finish_action(finished_action: StringName) -> void:
 	_dash_attack_elapsed = 0.0
 	_dash_ending = false
 	_current_dash_number = 0
+	_attack_elapsed = 0.0
+	_attack_recovery_timer = 0.0
+	_attack_chain_queued = false
 	_deactivate_attack_hitboxes()
 	action_finished.emit(finished_action)
 
@@ -579,10 +620,8 @@ func _on_one_shot_finished(animation_name: StringName) -> void:
 		return
 	if animation_name != get_action_name():
 		return
-	if animation_name == ATTACK_ANIMATION and _attack_buffered and _attack_buffer_timer > 0.0:
-		_action_state = ActionState.NONE
-		_clear_attack_buffer()
-		_start_attack()
+	if animation_name == ATTACK_ANIMATION:
+		_begin_attack_recovery()
 		return
 	if animation_name == DASH_ATTACK_ANIMATION and _continue_after_dash_attack():
 		return

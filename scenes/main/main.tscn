@@ -417,13 +417,48 @@ color = Color(0.22, 0.21, 0.28, 1)
 
 [node name="WaterVisual" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
 polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 736, 5520, 736)
-color = Color(0.03, 0.11, 0.16, 1)
-z_index = -1
+color = Color(0.025, 0.145, 0.235, 1)
+z_index = 0
+
+[node name="WaterDepth" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5520, 694, 6360, 694, 6360, 736, 5520, 736)
+color = Color(0.018, 0.075, 0.135, 1)
+z_index = 1
+
+[node name="WaterSurfaceBand" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 684, 5520, 684)
+color = Color(0.075, 0.29, 0.4, 1)
+z_index = 2
 
 [node name="WaterReflection" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 681, 5520, 681)
-color = Color(0.32, 0.5, 0.6, 0.62)
-z_index = -1
+polygon = PackedVector2Array(5550, 679, 5712, 679, 5712, 681, 5550, 681, 5550, 679, 5780, 679, 5780, 681, 5654, 681, 5654, 683, 5550, 683)
+color = Color(0.38, 0.68, 0.76, 0.72)
+z_index = 2
+
+[node name="WaterRippleMid" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5810, 687, 5968, 687, 5968, 689, 5810, 689, 5810, 687, 6028, 687, 6028, 689, 5914, 689, 5914, 691, 5810, 691)
+color = Color(0.19, 0.47, 0.58, 0.7)
+z_index = 2
+
+[node name="WaterRippleFar" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(6110, 698, 6248, 698, 6248, 700, 6110, 700, 6110, 698, 6318, 698, 6318, 700, 6192, 700, 6192, 702, 6110, 702)
+color = Color(0.12, 0.36, 0.49, 0.64)
+z_index = 2
+
+[node name="BridgeShadow" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5560, 660, 6360, 660, 6360, 676, 5560, 676)
+color = Color(0.008, 0.018, 0.032, 0.78)
+z_index = 1
+
+[node name="NearStoneBank" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(5508, 664, 5520, 664, 5520, 724, 5508, 724)
+color = Color(0.24, 0.29, 0.32, 1)
+z_index = 2
+
+[node name="FarStoneBank" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+polygon = PackedVector2Array(6360, 664, 6372, 664, 6372, 724, 6360, 724)
+color = Color(0.24, 0.29, 0.32, 1)
+z_index = 2
 
 [node name="MoatHazard" type="Area2D" parent="World/CastleEntranceArea/Moat"]
 position = Vector2(5940, 708)

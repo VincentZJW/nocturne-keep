@@ -36,6 +36,22 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 	_expect(boss != null and room != null and hud != null, "Main Boss composition is incomplete")
 	_expect(main.has_node("World/CastleEntranceArea/BossCheckpoint"), "Main lacks pre-Boss checkpoint")
 	_expect(main.has_node("World/CastleEntranceArea/Moat/MoatHazard"), "Main lacks moat hazard")
+	for water_node_name: String in [
+		"WaterVisual", "WaterDepth", "WaterSurfaceBand", "WaterReflection",
+		"WaterRippleMid", "WaterRippleFar", "BridgeShadow", "NearStoneBank", "FarStoneBank",
+	]:
+		_expect(
+			main.has_node("World/CastleEntranceArea/Moat/%s" % water_node_name),
+			"Main moat lacks presentation layer %s" % water_node_name
+		)
+	var water_visual: Polygon2D = main.get_node(
+		"World/CastleEntranceArea/Moat/WaterVisual"
+	) as Polygon2D
+	_expect(
+		water_visual.color.b > water_visual.color.r * 3.0
+		and water_visual.color.g > water_visual.color.r * 3.0,
+		"Main moat no longer reads as blue/teal water"
+	)
 	_expect(main.has_node("World/CastleEntranceArea/WoodenBridge"), "Main lacks solid wooden bridge")
 	_expect(main.has_node("World/CastleEntranceArea/RearBattleBarrier"), "Main lacks visible rear barrier")
 	_expect(main.has_node("World/CastleEntranceArea/CastleGate"), "Main lacks castle gate")
@@ -76,15 +92,36 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 		boss.config.max_health == 18 and boss.config.boss_shield_max_health == 10,
 		"Boss Body/Shield balance mismatch"
 	)
-	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.07), "Boss turn reaction mismatch")
-	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.10), "Boss turn animation mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.10), "Boss turn reaction mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.13), "Boss turn animation mismatch")
 	_expect(is_equal_approx(boss.config.boss_turn_cooldown, 0.12), "Boss turn cooldown mismatch")
 	_expect(is_equal_approx(boss.config.turn_side_threshold, 12.0), "Boss turn threshold mismatch")
+	_expect(is_equal_approx(boss.config.attack_recovery, 0.42), "Boss attack recovery mismatch")
 	_expect(boss.config.shield_bash_damage == 8, "Boss Shield Bash damage mismatch")
 	_expect(boss.config.sword_slash_damage == 10, "Boss Slash damage mismatch")
 	_expect(boss.config.heavy_overhead_damage == 15, "Boss Heavy damage mismatch")
 	_expect(boss.config.charge_thrust_damage == 12, "Boss Charge damage mismatch")
 	_expect(boss.config.shockwave_damage == 8, "Boss Shockwave damage mismatch")
+	var expected_speeds: Dictionary[StringName, float] = {
+		&"shield_bash": 9.8,
+		&"sword_slash": 9.8,
+		&"heavy_overhead": 8.8,
+		&"combo_slash_1": 12.0,
+		&"combo_slash_2": 12.0,
+		&"jump_smash": 9.8,
+		&"charge_thrust": 11.0,
+		&"shockwave_strike": 8.8,
+		&"turn_shielded": 23.076923,
+		&"turn_unshielded": 23.076923,
+	}
+	for animation_name: StringName in expected_speeds:
+		_expect(
+			is_equal_approx(
+				boss.animated_sprite.sprite_frames.get_animation_speed(animation_name),
+				expected_speeds[animation_name]
+			),
+			"Boss animation cadence mismatch: %s" % animation_name
+		)
 
 
 func _test_room_entry(player: Player, boss: FallenGateKnight, room: BossRoomController, respawn: PlayerRespawnController, hud: BossHealthHud) -> void:
@@ -124,8 +161,8 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 		elapsed += step
 	_expect(saw_turn_animation, "Boss did not enter authored Turn state")
 	_expect(
-		elapsed >= 0.16 and elapsed <= 0.20,
-		"Boss turn completed outside 0.16-0.20 seconds: %.4f" % elapsed
+		elapsed >= 0.22 and elapsed <= 0.26,
+		"Boss turn completed outside 0.22-0.26 seconds: %.4f" % elapsed
 	)
 	_expect(boss.facing_direction < 0.0, "Boss flipped before the contact frame completed")
 	_expect(
@@ -180,7 +217,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 		recovery_elapsed += step
 	boss._commit_turn()
 	_expect(boss.facing_direction > 0.0, "Boss did not turn during GuardRecovery")
-	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.16..0.20" % [elapsed, recovery_elapsed])
+	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.22..0.26" % [elapsed, recovery_elapsed])
 
 
 func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight, hud: BossHealthHud) -> void:

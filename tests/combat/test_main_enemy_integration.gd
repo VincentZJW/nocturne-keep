@@ -48,6 +48,9 @@ func _run_tests() -> void:
 
 
 func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyCombatant]) -> void:
+	var shared_gargoyle_frames: SpriteFrames = load(
+		"res://resources/enemies/gargoyle_sentinel_sprite_frames.tres"
+	) as SpriteFrames
 	for index: int in range(groups.size()):
 		_expect(groups[index].get_enemies().size() == GROUP_SIZES[index], "Encounter group size mismatch")
 	var counts: Dictionary[StringName, int] = {}
@@ -76,6 +79,14 @@ func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyComba
 			_expect(
 				enemy.get_node_or_null("VisualRoot/GuardBreakMarker") is Sprite2D,
 				"%s lacks the live GuardBreakMarker" % enemy.name
+			)
+		elif enemy is GargoyleSentinel:
+			var gargoyle_sprite: AnimatedSprite2D = enemy.get_node_or_null(
+				"VisualRoot/AnimatedSprite2D"
+			) as AnimatedSprite2D
+			_expect(
+				gargoyle_sprite != null and gargoyle_sprite.sprite_frames == shared_gargoyle_frames,
+				"%s does not use the latest shared Gargoyle SpriteFrames" % enemy.name
 			)
 		_test_enemy_balance_profile(enemy)
 	_expect(counts.get(&"CursedCastleGuard", 0) == 8, "Main Castle Guard count mismatch")

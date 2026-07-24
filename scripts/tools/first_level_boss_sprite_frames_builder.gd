@@ -13,15 +13,15 @@ const GARGOYLE: Dictionary[String, Array] = {
 }
 const BOSS: Dictionary[String, Array] = {
 	"idle_shielded": [4, 4.0, true], "walk_shielded": [6, 7.0, true],
-	"turn_shielded": [3, 30.0, false],
-	"shield_block": [4, 8.0, false], "shield_bash": [5, 9.0, false],
-	"sword_slash": [5, 9.0, false], "heavy_overhead": [6, 8.0, false],
+	"turn_shielded": [3, 23.076923, false],
+	"shield_block": [4, 8.0, false], "shield_bash": [5, 9.8, false],
+	"sword_slash": [5, 9.8, false], "heavy_overhead": [6, 8.8, false],
 	"hurt_shielded": [3, 12.0, false], "shield_break": [5, 5.555556, false],
 	"phase_transition": [5, 4.545455, false], "idle_unshielded": [4, 5.0, true],
-	"walk_unshielded": [6, 8.0, true], "turn_unshielded": [3, 30.0, false],
-	"combo_slash_1": [5, 11.0, false],
-	"combo_slash_2": [5, 11.0, false], "jump_smash": [6, 9.0, false],
-	"charge_thrust": [5, 10.0, false], "shockwave_strike": [6, 8.0, false],
+	"walk_unshielded": [6, 8.0, true], "turn_unshielded": [3, 23.076923, false],
+	"combo_slash_1": [5, 12.0, false],
+	"combo_slash_2": [5, 12.0, false], "jump_smash": [6, 9.8, false],
+	"charge_thrust": [5, 11.0, false], "shockwave_strike": [6, 8.8, false],
 	"hurt_unshielded": [3, 14.0, false], "death": [7, 7.0, false],
 }
 const BOSS_SHIELD_DAMAGE: Dictionary[String, Array] = {

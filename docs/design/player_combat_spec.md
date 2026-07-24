@@ -1,7 +1,7 @@
 # Player Action/Combat Interface Specification
 
-Version: 0.5 — Player Hurt reaction and invulnerability
-Date: 2026-07-23
+Version: 0.6 — deliberate basic-Attack cadence
+Date: 2026-07-24
 Status: Player Attack/Dash Attack and non-lethal Hurt integrated; no combo tree
 
 ## Scope boundary
@@ -22,14 +22,15 @@ This document defines the Player-facing action interface and its narrow integrat
 
 ## Repeat input buffer
 
-`PlayerActionPrototypeConfig.attack_buffer_time` is `0.10` seconds. `PlayerActionController` owns:
+`PlayerActionPrototypeConfig` centralizes a `0.15..0.20` second chain-input window, a `0.06` second single-entry buffer, and a `0.06` second minimum recovery beat. `PlayerActionController` owns:
 
 - `attack_buffered`: a single-entry boolean request;
 - `attack_buffer_timer`: remaining lifetime;
-- `can_chain_attack()`: true from `attack_03` onward;
+- `can_chain_attack()`: true only during the final 0.05 seconds of the four-frame Attack;
+- `AttackRecovery`: an exclusive 0.06-second beat between completed thrusts;
 - measured time from accepted input to the first effective frame.
 
-An initial J is consumed immediately and is never also stored as a repeat. One later J during Attack fills the empty buffer; further J edges cannot add entries or extend the timer. The request does not restart the current frame. At `attack_03` or natural completion, a live entry is consumed once and authorizes `restart_locked_one_shot("attack")`. Stopping J lets the final complete Attack finish normally.
+An initial J is consumed immediately and is never also stored as a repeat. Early repeat edges before 0.15 seconds are intentionally ignored. One J edge inside the 0.15–0.20 window fills the empty buffer; further edges cannot add entries or extend the timer. The current Attack always reaches `attack_04`, then holds one short recovery beat before a live request replays the same one-shot with a fresh attack id. No input can restart frame one from the active window, and no Attack-to-Attack transition can skip the recovery beat. Stopping J lets the final complete Attack and recovery finish normally.
 
 This is repetition of one basic Attack, not a formal combo tree: there are no branches, damage multipliers, different animations, or target-dependent transitions.
 

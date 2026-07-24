@@ -11,7 +11,7 @@ The only shipping source is `res://scenes/main/main.tscn` under `Main/World/Cast
 | --- | --- | --- |
 | Boss checkpoint | `BossCheckpoint` `(5480,612)` | near bank, before bridge |
 | Checkpoint trigger | `BossCheckpointTrigger` `(5480,560)` | selects respawn; restores HP/Stamina before an uncleared encounter |
-| Moat | `Moat` x=5520..6360 | dark water; 40-pixel exposed entry gap plus hazard below bridge |
+| Moat | `Moat` x=5520..6360 | deep blue/teal Gothic water; 40-pixel exposed entry gap plus unchanged hazard below bridge |
 | Bridge | `WoodenBridge` center `(5960,650)`, 800×20 | continuous full-solid World collider; top y=640 |
 | Boss trigger | `BossEntryTrigger` `(5780,430)` | about 27.5% into bridge |
 | Rear barrier | `RearBattleBarrier` x=5420 | visible chain/curse slab behind the checkpoint/near bank; only closed during live encounter |
@@ -36,10 +36,12 @@ Boss completion is persistent for the current Main instance: a later Player deat
 
 `Main/World/CastleEntranceArea/Moat/MoatHazard` is an `Area2D` with no solid layer and a PlayerBody/EnemyBody mask. It deals exactly the Player's remaining health once, then disarms until the existing respawn signal. A non-Boss enemy receives lethal component damage once; the Boss is ignored because its independent bridge bounds prevent entry. The hazard does not block attacks or act as floor collision. The continuous bridge provides the intended combat surface; the hazard remains below it for falls/forced test placement.
 
+Presentation remains separate from hazard authority. `WaterVisual`, `WaterDepth`, `WaterSurfaceBand`, `WaterReflection`, `WaterRippleMid`, `WaterRippleFar`, `BridgeShadow`, `NearStoneBank`, and `FarStoneBank` are saved Polygon2D layers under the same `Moat` node. They provide readable blue depth, cold reflections, restrained horizontal ripples, stone edges and a timber shadow without changing the Area2D shape, masks, bridge body or route geometry.
+
 ## Presentation limits
 
 - Bridge art is gray-box old timber with a bright top edge, end chain posts, and continuous collision—decorative damage never creates hidden holes.
 - Castle gate is a visible iron-barred slab, not an invisible wall. The facade is also solid and leaves a readable 80-pixel doorway; the completion trigger sits inside that doorway before the right tower collision.
 - Gate opening plays a quiet, deterministic synthesized chain/stone placeholder from `GateAudio`; it uses no downloaded asset and remains replaceable by a licensed final sound.
 - Boss HUD observes Body/Shield signals only and never mutates combat data.
-- The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 10-point Shield and 0.07/0.10/0.12-second reaction/animation/cooldown resource values directly.
+- The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 10-point Shield and 0.10/0.13/0.12-second reaction/animation/cooldown resource values directly.

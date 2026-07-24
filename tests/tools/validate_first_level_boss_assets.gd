@@ -28,6 +28,8 @@ func _collect_pngs(root_path: String) -> PackedStringArray:
 		_expect(false, "Missing asset root %s" % root_path)
 		return results
 	for entry: String in directory.get_directories():
+		if entry in ["reference", "deprecated"]:
+			continue
 		results.append_array(_collect_pngs(root_path.path_join(entry)))
 	for entry: String in directory.get_files():
 		if entry.ends_with(".png"):

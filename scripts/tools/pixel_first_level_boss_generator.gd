@@ -13,6 +13,11 @@ const EYE: Color = Color("b34b58")
 const CURSE: Color = Color("738fa3")
 const GOLD: Color = Color("a17a45")
 const FADE: Color = Color(0.34, 0.42, 0.49, 0.48)
+const STONE_DARK: Color = Color("242c30")
+const STONE_MID: Color = Color("53615d")
+const STONE_LIGHT: Color = Color("919b94")
+const VERDIGRIS: Color = Color("405f59")
+const STONE_CRACK: Color = Color("9bb4ad")
 
 const GARGOYLE: Dictionary[String, int] = {
 	"dormant": 4, "wake": 4, "hover": 4, "dive_windup": 4, "dive": 4,
@@ -62,45 +67,191 @@ func _draw_gargoyle(animation_name: String, frame: int) -> Image:
 	if animation_name == "death_shatter":
 		_draw_gargoyle_shatter(image, frame)
 		return image
-	var hover_bob: int = [0, -1, 0, 1][frame % 4] if animation_name == "hover" else 0
-	var center: Vector2i = Vector2i(31, 31 + hover_bob)
-	var horizontal: bool = animation_name == "dive"
-	var crouched: bool = animation_name in ["dive_windup", "ground_stun"]
-	var fall: int = frame * 5 if animation_name == "death_fall" else 0
-	center.y += fall
-	var body_color: Color = FADE if animation_name == "death_fall" and frame >= 4 else IRON
-	if horizontal:
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 12, center.y - 6, 25, 13), body_color)
-		PixelCanvas.fill_rect(image, Rect2i(center.x + 9, center.y - 7, 10, 10), VOID)
-		PixelCanvas.fill_rect(image, Rect2i(center.x + 14, center.y - 4, 3, 2), EYE)
-		PixelCanvas.draw_line(image, center + Vector2i(-8, 5), center + Vector2i(-20, 13), MID, 4)
-		PixelCanvas.draw_line(image, center + Vector2i(2, 5), center + Vector2i(-7, 16), MID, 4)
-		PixelCanvas.draw_line(image, center + Vector2i(-7, -4), center + Vector2i(-22, -11), CURSE, 4)
+	if animation_name == "dive":
+		_draw_gargoyle_dive(image, frame)
 		return image
-	var body_top: int = center.y - (5 if crouched else 10)
-	PixelCanvas.fill_rect(image, Rect2i(center.x - 8, body_top, 17, 20), body_color)
-	PixelCanvas.fill_rect(image, Rect2i(center.x - 7, body_top - 11, 15, 12), VOID)
-	PixelCanvas.fill_rect(image, Rect2i(center.x + 3, body_top - 5, 3, 2), EYE)
-	# Angular stone wings keep the airborne silhouette separate from grounded soldiers.
-	var wing_spread: int = 4 + (frame % 2) * 3 if animation_name in ["wake", "hover", "return_to_air"] else 2
-	PixelCanvas.draw_line(image, Vector2i(center.x - 7, body_top + 4), Vector2i(center.x - 21 - wing_spread, body_top - 7), CURSE, 5)
-	PixelCanvas.draw_line(image, Vector2i(center.x + 7, body_top + 4), Vector2i(center.x + 20 + wing_spread, body_top - 8), CURSE, 5)
-	PixelCanvas.draw_line(image, Vector2i(center.x - 5, body_top + 18), Vector2i(center.x - 11, center.y + 17), MID, 5)
-	PixelCanvas.draw_line(image, Vector2i(center.x + 5, body_top + 18), Vector2i(center.x + 10, center.y + 17), MID, 5)
-	PixelCanvas.fill_rect(image, Rect2i(center.x - 15, center.y + 14, 9, 3), VOID)
-	PixelCanvas.fill_rect(image, Rect2i(center.x + 5, center.y + 14, 10, 3), VOID)
+	if animation_name == "ground_stun":
+		_draw_gargoyle_ground_stun(image, frame)
+		return image
+	var bob: int = [0, -1, 0, 1][frame % 4] if animation_name == "hover" else 0
+	var fall: int = frame * 5 if animation_name == "death_fall" else 0
+	var center: Vector2i = Vector2i(32, 33 + bob + fall)
+	var wing_lift: int = 0
+	var wing_spread: int = 14
+	var folded: bool = animation_name == "dormant"
+	if animation_name == "wake":
+		wing_lift = [0, 3, 7, 10][frame]
+		wing_spread = [10, 13, 17, 20][frame]
+	elif animation_name == "hover":
+		wing_lift = [11, 5, -1, 5][frame]
+		wing_spread = [20, 19, 17, 19][frame]
+	elif animation_name == "dive_windup":
+		wing_lift = [4, 8, 12, 14][frame]
+		wing_spread = [17, 19, 21, 22][frame]
+	elif animation_name == "return_to_air":
+		wing_lift = [0, 7, 12, 6][frame]
+		wing_spread = [15, 19, 21, 19][frame]
+	elif animation_name == "hurt":
+		wing_lift = [7, -2, 4][frame]
+		wing_spread = [18, 15, 17][frame]
+	elif animation_name == "death_fall":
+		wing_lift = 2 - frame
+		wing_spread = maxi(8, 16 - frame * 2)
+	var body_color: Color = STONE_DARK
+	if animation_name == "death_fall" and frame >= 3:
+		body_color = Color(STONE_DARK.r, STONE_DARK.g, STONE_DARK.b, 0.72 - 0.12 * (frame - 3))
+	_draw_gargoyle_wings(image, center, wing_spread, wing_lift, folded, body_color.a)
+	_draw_gargoyle_tail(image, center, body_color)
+	_draw_gargoyle_body(image, center, animation_name, frame, body_color)
 	if animation_name == "hurt":
-		PixelCanvas.draw_line(image, center + Vector2i(-15, -13), center + Vector2i(14, 13), STEEL, 2)
+		PixelCanvas.draw_line(image, center + Vector2i(-10, -16), center + Vector2i(13, 10), STEEL, 2)
 	return image
 
 
 func _draw_gargoyle_shatter(image: Image, frame: int) -> void:
 	var spread: int = frame * 3
-	var color: Color = Color(FADE.r, FADE.g, FADE.b, 0.75 - frame * 0.12)
-	PixelCanvas.fill_rect(image, Rect2i(26 - spread, 46 - spread, 7, 6), color)
-	PixelCanvas.fill_rect(image, Rect2i(35 + spread, 43 - spread, 6, 8), color)
-	PixelCanvas.fill_rect(image, Rect2i(22 - spread, 54, 5, 4), color)
-	PixelCanvas.fill_rect(image, Rect2i(39 + spread, 55, 6, 4), color)
+	var alpha: float = maxf(0.18, 0.86 - frame * 0.16)
+	var color: Color = Color(STONE_MID.r, STONE_MID.g, STONE_MID.b, alpha)
+	PixelCanvas.fill_rect(image, Rect2i(25 - spread, 39 - spread, 8, 7), color)
+	PixelCanvas.fill_rect(image, Rect2i(36 + spread, 38 - spread, 7, 9), color)
+	PixelCanvas.draw_line(image, Vector2i(23 - spread, 43), Vector2i(15 - spread, 35), color, 3)
+	PixelCanvas.draw_line(image, Vector2i(43 + spread, 44), Vector2i(52 + spread, 38), color, 3)
+	PixelCanvas.fill_rect(image, Rect2i(19 - spread, 53, 6, 4), color)
+	PixelCanvas.fill_rect(image, Rect2i(43 + spread, 54, 7, 4), color)
+	PixelCanvas.fill_rect(image, Rect2i(31, 49 + spread, 4, 4), Color(VERDIGRIS.r, VERDIGRIS.g, VERDIGRIS.b, alpha))
+
+
+func _draw_gargoyle_wings(
+	image: Image,
+	center: Vector2i,
+	spread: int,
+	lift: int,
+	folded: bool,
+	alpha: float
+) -> void:
+	var membrane: Color = Color(VERDIGRIS.r, VERDIGRIS.g, VERDIGRIS.b, alpha)
+	var bone: Color = Color(STONE_MID.r, STONE_MID.g, STONE_MID.b, alpha)
+	var rear_root: Vector2i = center + Vector2i(-5, -5)
+	var rear_tip: Vector2i = center + Vector2i(-spread, -12 - lift)
+	var rear_low: Vector2i = center + Vector2i(-spread + 4, 8)
+	if folded:
+		rear_tip = center + Vector2i(-12, -15)
+		rear_low = center + Vector2i(-10, 13)
+	_fill_triangle(image, rear_root, rear_tip, rear_low, membrane)
+	PixelCanvas.draw_line(image, rear_root, rear_tip, bone, 3)
+	PixelCanvas.draw_line(image, rear_tip, rear_low, bone, 2)
+	PixelCanvas.draw_line(image, rear_root, rear_low, bone, 2)
+	if folded:
+		return
+	var front_root: Vector2i = center + Vector2i(4, -5)
+	var front_tip: Vector2i = center + Vector2i(spread, -11 - lift)
+	var front_low: Vector2i = center + Vector2i(spread - 3, 7)
+	_fill_triangle(image, front_root, front_tip, front_low, membrane)
+	PixelCanvas.draw_line(image, front_root, front_tip, bone, 3)
+	PixelCanvas.draw_line(image, front_tip, front_low, bone, 2)
+	PixelCanvas.draw_line(image, front_root, front_low, bone, 2)
+
+
+func _draw_gargoyle_tail(image: Image, center: Vector2i, color: Color) -> void:
+	PixelCanvas.draw_line(image, center + Vector2i(-6, 7), center + Vector2i(-16, 14), color, 3)
+	PixelCanvas.draw_line(image, center + Vector2i(-16, 14), center + Vector2i(-20, 9), STONE_MID, 2)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 22, center.y + 6, 4, 4), STONE_LIGHT)
+
+
+func _draw_gargoyle_body(
+	image: Image,
+	center: Vector2i,
+	animation_name: String,
+	frame: int,
+	body_color: Color
+) -> void:
+	var crouch: int = 3 if animation_name in ["dormant", "dive_windup"] else 0
+	var torso_top: int = center.y - 8 + crouch
+	# Hunched masonry torso and layered shoulders replace the old rectangular flying-insect read.
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 9, torso_top, 18, 19 - crouch), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 7, torso_top + 2, 14, 15 - crouch), body_color)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 12, torso_top + 1, 6, 7), STONE_MID)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 6, torso_top + 1, 6, 7), STONE_MID)
+	var head: Vector2i = Vector2i(center.x + 3, torso_top - 11)
+	PixelCanvas.fill_rect(image, Rect2i(head.x - 6, head.y - 2, 16, 13), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(head.x - 4, head.y, 13, 9), STONE_DARK)
+	PixelCanvas.fill_rect(image, Rect2i(head.x + 7, head.y + 4, 7, 6), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(head.x + 7, head.y + 3, 5, 4), STONE_MID)
+	# Back horn, pointed ear, heavy brow and one restrained cursed eye.
+	PixelCanvas.draw_line(image, head + Vector2i(-3, 0), head + Vector2i(-8, -8), STONE_LIGHT, 3)
+	PixelCanvas.draw_line(image, head + Vector2i(2, 0), head + Vector2i(5, -7), STONE_MID, 2)
+	PixelCanvas.fill_rect(image, Rect2i(head.x + 2, head.y + 3, 8, 2), STONE_LIGHT)
+	PixelCanvas.fill_rect(image, Rect2i(head.x + 6, head.y + 5, 3, 2), EYE)
+	PixelCanvas.fill_rect(image, Rect2i(head.x + 8, head.y + 8, 4, 2), STONE_LIGHT)
+	# Bent arms end in three-pixel claws; legs stay clearly separate under the body.
+	PixelCanvas.draw_line(image, center + Vector2i(7, -2 + crouch), center + Vector2i(15, 6 + crouch), STONE_MID, 4)
+	PixelCanvas.draw_line(image, center + Vector2i(15, 6 + crouch), center + Vector2i(19, 3 + crouch), STONE_LIGHT, 2)
+	PixelCanvas.draw_line(image, center + Vector2i(-5, 7), center + Vector2i(-11, 17), body_color, 5)
+	PixelCanvas.draw_line(image, center + Vector2i(5, 7), center + Vector2i(10, 17), body_color, 5)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 16, center.y + 15, 9, 3), STONE_LIGHT)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 7, center.y + 15, 9, 3), STONE_LIGHT)
+	# Sparse authored cracks and verdigris separate stone planes without pixel noise.
+	PixelCanvas.draw_line(image, center + Vector2i(-2, -4 + crouch), center + Vector2i(2, 2 + crouch), STONE_CRACK, 1)
+	PixelCanvas.draw_line(image, center + Vector2i(2, 2 + crouch), center + Vector2i(0, 6 + crouch), VERDIGRIS, 1)
+	if animation_name == "dormant" and frame in [1, 2]:
+		PixelCanvas.fill_rect(image, Rect2i(head.x + 6, head.y + 5, 3, 1), Color(EYE.r, EYE.g, EYE.b, 0.45))
+
+
+func _draw_gargoyle_dive(image: Image, frame: int) -> void:
+	var center: Vector2i = Vector2i(31 + frame, 32)
+	var body_shift: int = [0, 1, 2, 1][frame]
+	# Horizontal hunched torso, swept bat wings, horned face and forward claws read as a stone predator.
+	_fill_triangle(
+		image,
+		center + Vector2i(-3, -3),
+		center + Vector2i(-25, -13 + body_shift),
+		center + Vector2i(-22, 5),
+		VERDIGRIS
+	)
+	PixelCanvas.draw_line(image, center + Vector2i(-3, -3), center + Vector2i(-25, -13 + body_shift), STONE_MID, 3)
+	PixelCanvas.draw_line(image, center + Vector2i(-25, -13 + body_shift), center + Vector2i(-22, 5), STONE_MID, 2)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 9, center.y - 7, 22, 14), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 7, center.y - 5, 19, 10), STONE_DARK)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 8, center.y - 9, 12, 11), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 10, center.y - 7, 10, 7), STONE_MID)
+	PixelCanvas.draw_line(image, center + Vector2i(11, -7), center + Vector2i(8, -14), STONE_LIGHT, 2)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 16, center.y - 4, 3, 2), EYE)
+	PixelCanvas.draw_line(image, center + Vector2i(5, 4), center + Vector2i(22, 8), STONE_MID, 3)
+	PixelCanvas.draw_line(image, center + Vector2i(2, 6), center + Vector2i(19, 13), STONE_MID, 3)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 21, center.y + 6, 5, 2), STONE_LIGHT)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 18, center.y + 11, 5, 2), STONE_LIGHT)
+	PixelCanvas.draw_line(image, center + Vector2i(-7, 3), center + Vector2i(-22, 11), STONE_DARK, 3)
+
+
+func _draw_gargoyle_ground_stun(image: Image, frame: int) -> void:
+	var drop: int = [0, 2, 1, 0][frame]
+	var center: Vector2i = Vector2i(32, 45 + drop)
+	_fill_triangle(image, center + Vector2i(-4, -3), center + Vector2i(-24, -8), center + Vector2i(-19, 7), VERDIGRIS)
+	PixelCanvas.draw_line(image, center + Vector2i(-4, -3), center + Vector2i(-24, -8), STONE_MID, 3)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 10, center.y - 7, 22, 12), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 8, center.y - 5, 18, 8), STONE_DARK)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 8, center.y - 10, 12, 10), VOID)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 10, center.y - 8, 9, 6), STONE_MID)
+	PixelCanvas.draw_line(image, center + Vector2i(11, -8), center + Vector2i(8, -14), STONE_LIGHT, 2)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 16, center.y - 6, 3, 2), EYE)
+	PixelCanvas.draw_line(image, center + Vector2i(-3, 3), center + Vector2i(-12, 11), STONE_MID, 4)
+	PixelCanvas.draw_line(image, center + Vector2i(6, 2), center + Vector2i(14, 10), STONE_MID, 4)
+	PixelCanvas.fill_rect(image, Rect2i(center.x - 16, center.y + 9, 8, 3), STONE_LIGHT)
+	PixelCanvas.fill_rect(image, Rect2i(center.x + 11, center.y + 8, 8, 3), STONE_LIGHT)
+
+
+func _fill_triangle(image: Image, a: Vector2i, b: Vector2i, c: Vector2i, color: Color) -> void:
+	for step: int in range(13):
+		var ratio: float = float(step) / 12.0
+		var edge_b: Vector2i = Vector2i(
+			roundi(lerpf(float(a.x), float(b.x), ratio)),
+			roundi(lerpf(float(a.y), float(b.y), ratio))
+		)
+		var edge_c: Vector2i = Vector2i(
+			roundi(lerpf(float(a.x), float(c.x), ratio)),
+			roundi(lerpf(float(a.y), float(c.y), ratio))
+		)
+		PixelCanvas.draw_line(image, edge_b, edge_c, color, 1)
 
 
 func _draw_boss(animation_name: String, frame: int) -> Image:

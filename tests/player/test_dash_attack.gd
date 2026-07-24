@@ -38,7 +38,7 @@ func _validate_configuration_and_art() -> void:
 	_expect(config != null, "Action prototype configuration is missing")
 	if config != null:
 		_expect(is_equal_approx(config.dash_attack_input_window, 0.18), "Combination window is not 0.18 seconds")
-		_expect(is_equal_approx(config.attack_buffer_time, 0.10), "Attack buffer is not 0.10 seconds")
+		_expect(is_equal_approx(config.attack_buffer_time, 0.06), "Attack buffer is not 0.06 seconds")
 		_expect(is_equal_approx(config.dash_attack_speed, 320.0), "Dash Attack speed is not centralized")
 		_expect(
 			is_equal_approx(config.dash_attack_move_duration + config.dash_attack_recovery_duration, 0.25),

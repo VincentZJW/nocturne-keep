@@ -3152,3 +3152,78 @@ Status: complete — configured-Main implementation, 34-script regression and gr
 - Manually record several complete Phase 1/2 durations and rear-hit counts. They depend on human movement/attack choice and are intentionally marked pending instead of inferred from deterministic damage counts.
 - The turn is a compact three-frame 96×96 pixel twist rather than skeletal interpolation. The damage overlay uses three visible durability levels plus the existing broken animation; it does not create ten unique Shield sprites.
 - No Player value, Boss Body/damage/movement/skill, normal-enemy behavior, bridge/moat/gate geometry, HUD placement or chapter-completion flow changed.
+
+## 2026-07-24 — Boss pressure, Player attack cadence, moat and Gargoyle presentation
+
+Status: complete — implementation, 34-script regression and configured-Main graphical QA passed; manual feel acceptance pending
+
+### Goal
+
+- Increase Fallen Gate Knight pressure through modestly faster existing attack anticipation/recovery only, while preserving every damage value, Body 18, Shield 10, current skills, phases, bounds and encounter flow.
+- Replace the Player's frame-three immediate Attack restart with a short, explicit chain-input window plus a minimum recovery beat; retain the same four-frame 20 FPS dual-dagger thrust, damage, range, Stamina and Dash Attack behavior.
+- Lengthen the Boss's authored rear-cross turn from the measured 0.1833 seconds to a nominal 0.23 seconds so a clean jump-behind creates one readable Normal Attack opportunity without allowing sustained rear pressure.
+- Make the saved F5 Main moat visibly read as deep blue Gothic water without changing `MoatHazard`, bridge collision or castle-flow logic, and redraw the existing three shared Gargoyle Sentinel instances as stone medieval gargoyles without changing their AI/combat contract.
+
+### Read-only audit
+
+- `project.godot` resolves F5 to `res://scenes/main/main.tscn`. Git began on `master` at `ca6c8e9`, two commits ahead of `origin/master`; the only pre-existing untracked path is `scripts/tools/capture_fallen_gate_knight_turn_shield_qa.gd.uid`.
+- The live Boss is `Main/World/CastleEntranceArea/FallenGateKnight`, instanced from `res://scenes/bosses/fallen_gate_knight.tscn`. Central config currently owns Body 18, Shield 10, shared `attack_recovery=0.48`, and turn reaction/animation/cooldown values `0.07/0.10/0.12`; recent deterministic measurement is 0.1833 seconds total at 60 Hz.
+- Existing Boss attacks use their authored SpriteFrames timing rather than separate per-attack windup variables. First active-frame delays range from 0.1818 to 0.375 seconds; reducing those animation timings by about 8–10% and shared recovery by 12.5% stays inside the requested limited pressure pass without hiding tells.
+- The Player Attack is four frames at 20 FPS. `player_action_controller.gd` currently stores one 0.10-second repeat-J input and immediately calls `restart_locked_one_shot()` as soon as frame index 2 (`attack_03`) is reached, so repeated input can skip the last recovery frame and has no minimum gap.
+- Main's moat nodes are `Main/World/CastleEntranceArea/Moat/WaterVisual`, `WaterReflection` and unchanged `MoatHazard`; the first two use only one near-black blue rectangle and a five-pixel surface strip. The continuous bridge is the separate `Main/World/CastleEntranceArea/WoodenBridge` body.
+- All three saved Main Gargoyles (`EncounterGroup05/.../GargoyleSentinel01`, `...02`, and `EncounterGroup07/.../GargoyleSentinel03`) instance the same `res://scenes/enemies/gargoyle_sentinel.tscn`, SpriteFrames and 64×64 PNG tree. Their state loop and combat parameters are already functional; the current thin line wings and rectangular torso are the presentation defect.
+
+### Planned files, tests, and scope check
+
+- Update centralized Boss/Player action Resources and typed controllers, Boss SpriteFrames timing, Main moat presentation nodes, the deterministic Gargoyle generator, shared Gargoyle PNG/SpriteFrames resources, and focused tests for timing/chain contracts.
+- Archive the replaced Gargoyle presentation under its `reference/deprecated_v1` tree while keeping runtime validation limited to production animation folders. Preserve all three Main instance paths and the existing enemy count.
+- Run exact Godot 4.7.1 generation/import/build, focused Player/Boss/Gargoyle/Main tests, all repository tests, configured headless and graphical F5 Main, and capture configured-Main Boss bridge, moat and new-Gargoyle QA images under `docs/qa/`.
+- Update README plus Boss, combat, Gargoyle and Boss-room specifications. Scope excludes new attacks/phases/enemies, Player or Boss damage/HP/Stamina changes, Dash Attack redesign, MoatHazard/collision changes, encounter-count changes, second-level content and rewards.
+
+### Delivered implementation
+
+- Increased pressure only through existing timing. Shield Bash/Sword Slash are 9.0→9.8 FPS, Heavy Overhead/Shockwave 8.0→8.8, both Combo steps 11.0→12.0, Jump Smash 9.0→9.8 and Charge Thrust 10.0→11.0. Their first active-frame delays are about 8–10% shorter while every authored anticipation and active frame remains. Shared post-attack Recovery is 0.48→0.42 seconds. Body 18, Shield 10, all damage values, movement, bounds, phases and skill selection are unchanged.
+- Lengthened the authored Boss cross-up response from 0.07+0.10 seconds to 0.10+0.13 seconds. The three-frame turn now plays at 23.076923 FPS; deterministic 60 Hz measurement is 0.2333 seconds versus the previous 0.1833 seconds. The 12-pixel threshold, 0.12-second cooldown, reaction cancellation, attack direction locks and contact-frame routing remain intact.
+- Replaced immediate frame-three Player Attack restart. The first J still starts the same four-frame 20 FPS thrust immediately and reaches `attack_02` in about 0.05 seconds. Only a J edge during 0.15–0.20 seconds can fill one shortened 0.06-second buffer. The current attack always reaches `attack_04`, then holds an exclusive 0.06-second `AttackRecovery` before a valid repeat receives a fresh attack id. Early/out-of-window spam cannot restart frame one; Dash Attack, damage 1/2, range, Stamina and cancellation rules are unchanged.
+- Saved nine presentation-only nodes under `Main/World/CastleEntranceArea/Moat`: blue/teal base and depth bands, surface highlight, two cold ripple/reflection layers, bridge shadow and two stone banks. The first capture exposed negative-Z concealment behind the root Backdrop; the final saved Z order renders water above Backdrop and below/around bridge art. `MoatHazard`, its shape/masks/death behavior, `WoodenBridge/BridgeCollision`, route geometry and castle flow were not changed.
+- Rebuilt all 41 production Gargoyle frames across `dormant`, `wake`, `hover`, `dive_windup`, `dive`, `ground_stun`, `return_to_air`, `hurt`, `death_fall` and `death_shatter`. The new silhouette uses a hunched stone torso, horn/brow/muzzle, broad membrane bat wings, separate claws, tail, gray/verdigris planes and sparse cracks. AI config, Health 3, Dive damage 7 and all state timings remain unchanged.
+- Archived the 41 replaced PNGs under `assets/sprites/enemies/gargoyle_sentinel/reference/deprecated_v1/`; `.gdignore` keeps them out of runtime import and production asset counts. All runtime frames remain under the original animation paths and rebuild the existing shared `gargoyle_sentinel_sprite_frames.tres`.
+
+### Configured F5 Main synchronization
+
+- `run/main_scene` remains `res://scenes/main/main.tscn`. Boss path remains `Main/World/CastleEntranceArea/FallenGateKnight`, using `res://scenes/bosses/fallen_gate_knight.tscn`, `fallen_gate_knight_config.tres` and the rebuilt Boss SpriteFrames timing.
+- Gargoyle paths remain `Main/World/Encounters/EncounterGroup05/Enemies/GargoyleSentinel01`, `.../GargoyleSentinel02`, and `Main/World/Encounters/EncounterGroup07/Enemies/GargoyleSentinel03`. Main integration asserts all three use `res://scenes/enemies/gargoyle_sentinel.tscn` plus the same latest `res://resources/enemies/gargoyle_sentinel_sprite_frames.tres`; enemy count remains 18 and no legacy runtime copy exists.
+- Moat presentation path is `Main/World/CastleEntranceArea/Moat`; hazard authority remains `Main/World/CastleEntranceArea/Moat/MoatHazard`, and the solid bridge remains `Main/World/CastleEntranceArea/WoodenBridge`.
+
+### Commands and actual results
+
+1. Original assets and resources:
+   - Exact 4.7.1 `--script scripts/tools/pixel_first_level_boss_generator.gd`: PASS, 141 production Gargoyle/Boss PNGs generated.
+   - Exact 4.7.1 `--import --quit-after 120`: exit 0 without Script Error/Error/Warning diagnostics.
+   - Exact 4.7.1 `--script scripts/tools/first_level_boss_sprite_frames_builder.gd`: PASS.
+2. Focused contracts:
+   - `tests/player/test_fast_attack.gd`: PASS — immediate 0.05-second effective pose, strict final input window, one buffer, complete frame four and 0.06-second recovery across four deliberate repeats.
+   - `tests/player/test_dash_attack.gd`: PASS — unchanged Ground/Air Dash Attack behavior.
+   - `tests/combat/test_first_level_boss.gd`: PASS and `BOSS_TURN_TIMING: free=0.2333 recovery=0.2333 target=0.22..0.26`; timings, damage, Shield, bridge, moat presentation nodes and room flow passed.
+   - `tests/combat/test_gargoyle_sentinel.gd`, `test_main_enemy_integration.gd`, and `validate_first_level_boss_assets.gd`: PASS — unchanged AI/damage/death, all three shared Main instances and 141 transparent lossless/no-mipmap production frames.
+3. Complete regression:
+   - Serial exact-Godot execution of all test scripts: final `FULL_TESTS count=34 failures=0`. One earlier full run observed the existing death-flow total-duration assertion cross its approximately-one-frame lower bound; the isolated rerun passed and the final complete rerun passed 34/34. No death/respawn implementation or assertion was changed.
+4. Configured Main runtime:
+   - Exact Godot headless F5 target for 600 frames: exit 0, no Script Error/Error/Warning.
+   - Exact Godot graphical F5 target for 300 frames: exit 0, GL Compatibility on Apple M4, no Script Error/Error/Warning.
+   - Configured-Main graphical capture script: exit 0 and saved all three required frames from the same Main PackedScene.
+
+### Configured-Main QA evidence
+
+- `docs/qa/fallen_gate_knight_pressure_main.png`: 1280×720, 16,456 bytes, SHA-256 `f773ed8f955957d1af0d6f92c1ed34af74016650f3e6c57e07ddf41864d1bd1c`.
+- `docs/qa/gothic_moat_main.png`: 1280×720, 9,603 bytes, SHA-256 `7265ca337a1746d255f60e81b69d1c57ebda10c14791282bc0a705e8a8cdb8b1`.
+- `docs/qa/gargoyle_stone_redesign_main.png`: 1280×720, 10,049 bytes, SHA-256 `95bbcc2ae229da073161f99757d5d04fd692a39b2f49874736f03eae31612189`.
+- Original-resolution inspection confirms visible deep-teal water and surface bands below the bridge, sharp nearest-neighbor horned stone Gargoyles in Main Group05, and the unchanged Boss/HUD/bridge composition.
+
+### Manual acceptance and known limitations
+
+- Manually judge whether the 8–10% shorter Boss tells plus 0.42-second Recovery feel more pressuring without becoming visually unfair, and whether the 0.2333-second cross-up consistently grants one satisfying normal hit but not sustained rear output.
+- Manually compare deliberate J rhythm against random high-frequency spam. Automation proves no active-frame restart and a mandatory 0.06-second gap; subjective cadence still requires play feel approval.
+- Gargoyle art is a procedural 64×64 gray-box production pass, not final hand-polished pixel art. In particular, inspect the side-view Dive at motion speed and confirm the swept wing/tail reads as a stone predator rather than a projectile or insect.
+- Water is layered native Polygon2D gray-box art with static ripples; it has no shader, particles or downloaded texture. This intentionally avoids changing hazard/collision logic.
+- No Player/Boss damage or Health/Stamina value, Boss skill/phase, Gargoyle AI, enemy count/type, encounter activation, Moat death, gate completion, second level, reward or equipment system was added or changed.

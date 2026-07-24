@@ -117,7 +117,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"charge_thrust",
-"speed": 10.0
+"speed": 11.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -137,7 +137,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"combo_slash_1",
-"speed": 11.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -157,7 +157,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"combo_slash_2",
-"speed": 11.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -206,7 +206,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"heavy_overhead",
-"speed": 8.0
+"speed": 8.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -291,7 +291,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"jump_smash",
-"speed": 9.0
+"speed": 9.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -331,7 +331,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"shield_bash",
-"speed": 9.0
+"speed": 9.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -391,7 +391,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"shockwave_strike",
-"speed": 8.0
+"speed": 8.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -411,7 +411,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"sword_slash",
-"speed": 9.0
+"speed": 9.8
 }, {
 "frames": [{
 "duration": 1.0,
@@ -425,7 +425,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"turn_shielded",
-"speed": 30.0
+"speed": 23.076923
 }, {
 "frames": [{
 "duration": 1.0,
@@ -439,7 +439,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"turn_unshielded",
-"speed": 30.0
+"speed": 23.076923
 }, {
 "frames": [{
 "duration": 1.0,

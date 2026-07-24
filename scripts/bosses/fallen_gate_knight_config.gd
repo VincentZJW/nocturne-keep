@@ -31,10 +31,10 @@ extends Resource
 @export_category("Cadence")
 @export var shield_break_stun: float = 0.90
 @export var phase_transition_duration: float = 1.10
-@export var boss_turn_reaction_delay: float = 0.07
-@export var boss_turn_animation_duration: float = 0.10
+@export var boss_turn_reaction_delay: float = 0.10
+@export var boss_turn_animation_duration: float = 0.13
 @export var boss_turn_cooldown: float = 0.12
 @export_range(0.0, 32.0, 1.0) var turn_side_threshold: float = 12.0
-@export var attack_recovery: float = 0.48
+@export var attack_recovery: float = 0.42
 @export var shield_break_flash_duration: float = 0.07
 @export_range(0.0, 1.0, 0.05) var shield_break_flash_alpha: float = 0.35

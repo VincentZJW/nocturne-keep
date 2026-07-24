@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一关实体平台与城堡木桥Boss区 · Castle Bridge Graybox 3.0`
+当前版本：`第一关Boss与石像鬼表现强化 · Castle Bridge Graybox 3.1`
 
 ## 当前范围
 
-当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后从Boss检查点踏上护城河旧木桥迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。五座主线石台均为有厚度的Solid碰撞：从下方跳跃会撞击底面，Air Dash与Dash Attack不能穿过侧面，仍可从边缘起跳后落在顶部。Boss桥宽800像素，入口后方使用可见锁链屏障，Boss逻辑活动范围为x=5650..6320；死亡动画完成后，城堡闸门用1.00秒上升动画打开，随后才解除碰撞并允许触发“第一章完成”。玩家、普通敌人和Boss战斗数值均未改动。当前没有第二关、掉落、经验、装备或存档。
+当前F5 Main已形成第一关完整灰盒路线：7个分段ActivationArea、18只普通敌人（Guard 8、Shield 2、Spearman 2、Crossbowman 3、Gargoyle 3），随后从Boss检查点踏上深青蓝护城河上的旧木桥迎战两阶段`Fallen Gate Knight / 堕落门卫骑士`。三只Gargoyle共用重绘后的哥特石兽资源：厚重石躯、角、蝠翼、爪足和铜绿裂纹，不再使用旧飞虫式轮廓。Boss现有攻击动画前摇约缩短8–10%、统一恢复由0.48秒缩至0.42秒，但伤害、血量、技能和有效帧均未改变；转身延长到实测0.2333秒，保留一次可靠绕后普通攻击窗口。当前没有第二关、掉落、经验、装备或存档。
 
 ## 环境要求
 
@@ -75,7 +75,7 @@ res://scenes/tools/boss_test_room.tscn
 
 它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5 Main的七组实际遭遇和城堡木桥流程为准。
 
-建议Main人工测试顺序：先在PlatformA下方验证单跳/二段跳撞底和Air Dash/Dash Attack撞侧，再从边缘登上PlatformB/C/D与GargoylePerch；随后完成Group01..07。到达`(5480,612)`检查点后踏上木桥，确认可见后方屏障关闭、城门保持关闭、Boss无法越过桥端、6点盾量与Phase 2正常。分别验证Boss/护城河死亡会重置未完成遭遇；击败Boss后等待完整1.00秒开门，再走入城堡入口触发第一章完成。
+建议Main人工测试顺序：先在PlatformA下方验证单跳/二段跳撞底和Air Dash/Dash Attack撞侧，再从边缘登上PlatformB/C/D与GargoylePerch；随后完成Group01..07并观察三只石像鬼的Dormant、Hover、Dive、GroundStun与碎裂轮廓。到达`(5480,612)`检查点后踏上木桥，确认深青蓝水面/波纹/桥影、可见后方屏障、10点Boss盾量与Phase 2正常。跳过Boss背后应稳定获得约一次普通攻击，但不应能长期背刺；分别验证Boss/护城河死亡会重置未完成遭遇；击败Boss后等待完整1.00秒开门，再走入城堡入口触发第一章完成。
 
 当前灰盒击杀次数：剑卫普通/Dash为3/2；盾卫从背后或破盾后击杀本体为5/3，纯正面总输入为普通8次或Dash 5次（前3/2次只削减盾量且破盾伤害不溢出）；长矛兵为5/3；弩手为4/2。满血Player分别在剑卫第20、盾卫第13、长矛兵第10、弩箭第17次命中时死亡。
 
@@ -104,7 +104,7 @@ Main开发调试快捷键：
 
 正式Health/Stamina始终显示，不受F1影响。左下`TAKE 25 DMG`仅用于开发死亡/重生验证，并会随Debug HUD一起隐藏。F4的Traversal覆盖层默认关闭，只读显示脚底高度、起跳点、相对上升、位移、最近平台和Reachable评级；它属于同一Debug根节点，因此F1仍可统一隐藏。Main的调试面板使用锚点与容器布局；Enemy文本最多每0.15秒更新一次，隐藏时停止拼接。完整结构与字段契约见[Debug HUD规格](docs/design/debug_hud_spec.md)。
 
-连续按J时，当前Attack进入第3帧后会消费至多一条0.10秒缓存并重新播放同一基础突刺；这不是多段连招树。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。当前没有连招树或复杂伤害公式。
+连续按J仍重复同一个四帧基础突刺，而不是多段连招树。首个J立即响应并约0.05秒进入有效帧；只有0.15–0.20秒的末段窗口接受一次0.06秒缓存，完整`attack_04`之后必须经过0.06秒`AttackRecovery`才能接续。过早或窗口外连按不会重置第1帧，也不能跳过最小收招节拍。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。当前没有连招树或复杂伤害公式。
 
 ## 文档
 

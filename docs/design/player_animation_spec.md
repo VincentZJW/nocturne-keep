@@ -172,7 +172,7 @@ Dedicated inputs extend the M1 map:
 
 - J requests the four-frame, 20 FPS non-looping dual-dagger thrust immediately; it does not wait for key release or for a Dash pairing timer.
 - It locks facing and suppresses locomotion animation requests until completion.
-- A J edge during Attack stores at most one next-Attack request for 0.10 seconds. It never restarts frame one at input time.
+- A J edge only during the 0.15–0.20-second final input window stores at most one next-Attack request for 0.06 seconds. It never restarts frame one at input time; the complete animation is followed by a 0.06-second minimum recovery beat before replay.
 - From `attack_03` onward, a live buffer authorizes `restart_locked_one_shot("attack")`, consumes the buffer once, and starts the same basic Attack again. This is repeat chaining of one action, not a combo tree.
 - Completion returns to Idle/Run on the ground or the appropriate air loop if the action finished airborne.
 - `attack_02` and `attack_03` remain queryable future hit-window metadata only; they have no Gameplay effect.
