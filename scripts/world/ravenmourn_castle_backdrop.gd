@@ -22,6 +22,7 @@ func _draw() -> void:
 	_draw_clouds()
 	_draw_far_towers()
 	_draw_main_fortress()
+	_draw_spire_crown()
 	_draw_gatehouse()
 	_draw_stone_courses()
 
@@ -36,9 +37,11 @@ func _draw_clouds() -> void:
 
 
 func _draw_far_towers() -> void:
-	_draw_spired_tower(Vector2(5420.0, 286.0), Vector2(140.0, 390.0), 72.0, FAR_KEEP, false)
-	_draw_spired_tower(Vector2(5660.0, 236.0), Vector2(176.0, 440.0), 96.0, FAR_KEEP, false)
-	_draw_spired_tower(Vector2(6570.0, 248.0), Vector2(142.0, 428.0), 82.0, FAR_KEEP, false)
+	_draw_spired_tower(Vector2(5385.0, 308.0), Vector2(126.0, 368.0), 74.0, FAR_KEEP, false)
+	_draw_spired_tower(Vector2(5550.0, 264.0), Vector2(146.0, 412.0), 92.0, FAR_KEEP, false)
+	_draw_spired_tower(Vector2(5702.0, 224.0), Vector2(164.0, 452.0), 108.0, FAR_KEEP, false)
+	_draw_spired_tower(Vector2(6538.0, 232.0), Vector2(148.0, 444.0), 100.0, FAR_KEEP, false)
+	_draw_spired_tower(Vector2(6670.0, 300.0), Vector2(112.0, 376.0), 68.0, FAR_KEEP, false)
 	draw_rect(Rect2(5400.0, 488.0, 1320.0, 188.0), FAR_KEEP)
 	for merlon_x: int in range(5410, 6720, 58):
 		draw_rect(Rect2(float(merlon_x), 466.0, 28.0, 24.0), FAR_KEEP)
@@ -48,16 +51,11 @@ func _draw_main_fortress() -> void:
 	# Left bastion anchors the castle inside the Boss camera even before Player reaches mid-bridge.
 	_draw_spired_tower(Vector2(5710.0, 286.0), Vector2(176.0, 390.0), 82.0, CASTLE_SHADOW, true)
 	draw_rect(Rect2(5840.0, 332.0, 820.0, 344.0), CASTLE_SHADOW)
-	draw_rect(Rect2(5940.0, 272.0, 600.0, 404.0), CASTLE_MID)
+	draw_rect(Rect2(5930.0, 282.0, 620.0, 394.0), CASTLE_MID)
 	var keep_roof: PackedVector2Array = PackedVector2Array([
-		Vector2(5900.0, 272.0), Vector2(6240.0, 122.0), Vector2(6580.0, 272.0),
+		Vector2(5890.0, 282.0), Vector2(6240.0, 146.0), Vector2(6590.0, 282.0),
 	])
 	draw_colored_polygon(keep_roof, Color(0.075, 0.08, 0.12, 1.0))
-	draw_rect(Rect2(6235.0, 82.0, 10.0, 80.0), CASTLE_SHADOW)
-	var finial: PackedVector2Array = PackedVector2Array([
-		Vector2(6222.0, 84.0), Vector2(6240.0, 56.0), Vector2(6258.0, 84.0),
-	])
-	draw_colored_polygon(finial, CASTLE_EDGE)
 	for buttress_x: float in [5882.0, 5960.0, 6520.0, 6600.0]:
 		var buttress: PackedVector2Array = PackedVector2Array([
 			Vector2(buttress_x, 372.0), Vector2(buttress_x + 24.0, 350.0),
@@ -68,24 +66,39 @@ func _draw_main_fortress() -> void:
 	_draw_gothic_window(Vector2(6160.0, 334.0), true)
 	_draw_gothic_window(Vector2(6290.0, 334.0), true)
 	_draw_gothic_window(Vector2(6510.0, 374.0), false)
+	for merlon_x: float in range(5890, 6600, 58):
+		draw_rect(Rect2(merlon_x, 304.0, 28.0, 24.0), CASTLE_SHADOW)
+
+
+func _draw_spire_crown() -> void:
+	# A stepped central tower cluster creates the required vertical Gothic hierarchy.
+	_draw_spired_tower(Vector2(5990.0, 222.0), Vector2(112.0, 454.0), 96.0, CASTLE_SHADOW, true)
+	_draw_spired_tower(Vector2(6110.0, 162.0), Vector2(146.0, 514.0), 126.0, CASTLE_MID, true)
+	_draw_spired_tower(Vector2(6268.0, 204.0), Vector2(116.0, 472.0), 102.0, CASTLE_SHADOW, true)
+	_draw_spired_tower(Vector2(6400.0, 246.0), Vector2(96.0, 430.0), 82.0, CASTLE_SHADOW, false)
+	draw_rect(Rect2(6178.0, 18.0, 10.0, 62.0), CASTLE_SHADOW)
+	var finial: PackedVector2Array = PackedVector2Array([
+		Vector2(6166.0, 20.0), Vector2(6183.0, -8.0), Vector2(6200.0, 20.0),
+	])
+	draw_colored_polygon(finial, CASTLE_EDGE)
 
 
 func _draw_gatehouse() -> void:
 	# The moving foreground portcullis is centered at x=6400; this is its fixed stone frame.
-	draw_rect(Rect2(6336.0, 346.0, 128.0, 330.0), Color(0.16, 0.16, 0.205, 1.0))
+	draw_rect(Rect2(6310.0, 346.0, 180.0, 330.0), Color(0.16, 0.16, 0.205, 1.0))
 	var outer_arch: PackedVector2Array = PackedVector2Array([
-		Vector2(6320.0, 382.0), Vector2(6400.0, 286.0), Vector2(6480.0, 382.0),
-		Vector2(6464.0, 404.0), Vector2(6400.0, 326.0), Vector2(6336.0, 404.0),
+		Vector2(6296.0, 388.0), Vector2(6400.0, 270.0), Vector2(6504.0, 388.0),
+		Vector2(6486.0, 414.0), Vector2(6400.0, 316.0), Vector2(6314.0, 414.0),
 	])
 	draw_colored_polygon(outer_arch, CASTLE_MID)
-	draw_rect(Rect2(6364.0, 386.0, 72.0, 290.0), Color(0.018, 0.022, 0.04, 1.0))
+	draw_rect(Rect2(6356.0, 386.0, 88.0, 290.0), Color(0.018, 0.022, 0.04, 1.0))
 	var inner_arch: PackedVector2Array = PackedVector2Array([
-		Vector2(6364.0, 388.0), Vector2(6400.0, 338.0), Vector2(6436.0, 388.0),
+		Vector2(6356.0, 388.0), Vector2(6400.0, 326.0), Vector2(6444.0, 388.0),
 	])
 	draw_colored_polygon(inner_arch, Color(0.018, 0.022, 0.04, 1.0))
-	draw_rect(Rect2(6314.0, 566.0, 172.0, 24.0), Color(0.22, 0.22, 0.27, 1.0))
-	draw_rect(Rect2(6296.0, 606.0, 208.0, 18.0), Color(0.19, 0.19, 0.235, 1.0))
-	draw_rect(Rect2(6280.0, 640.0, 240.0, 36.0), Color(0.15, 0.15, 0.19, 1.0))
+	draw_rect(Rect2(6294.0, 560.0, 212.0, 26.0), Color(0.22, 0.22, 0.27, 1.0))
+	draw_rect(Rect2(6278.0, 604.0, 244.0, 20.0), Color(0.19, 0.19, 0.235, 1.0))
+	draw_rect(Rect2(6260.0, 640.0, 280.0, 36.0), Color(0.15, 0.15, 0.19, 1.0))
 	var crest: PackedVector2Array = PackedVector2Array([
 		Vector2(6378.0, 292.0), Vector2(6400.0, 272.0), Vector2(6422.0, 292.0),
 		Vector2(6414.0, 322.0), Vector2(6400.0, 334.0), Vector2(6386.0, 322.0),

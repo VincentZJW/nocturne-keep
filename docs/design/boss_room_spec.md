@@ -1,6 +1,6 @@
 # Castle Bridge Boss Room Specification
 
-Version: 2.1
+Version: 2.2
 Last updated: 2026-07-24
 
 ## Saved F5 Main composition
@@ -16,7 +16,7 @@ The only shipping source is `res://scenes/main/main.tscn` under `Main/World/Cast
 | Boss trigger | `BossEntryTrigger` `(5780,430)` | about 27.5% into bridge |
 | Rear barrier | `RearBattleBarrier` x=5420 | narrow chain/curse battle seal behind the checkpoint/near bank; only closed during live encounter |
 | Boss | `FallenGateKnight` `(6120,596)` | bridge bounds x=5650..6320 |
-| Castle gate | `CastleGate` `(6400,510)` | visible 48×260 closed World collider |
+| Castle gate | `CastleGate` `(6400,510)` | unchanged 48×260 closed World collider inside an 88×260 moving main-gate visual |
 | Entrance trigger | `CastleEntranceTrigger` `(6428,510)` | enabled only after gate animation completion, just behind the opened gate |
 | Transition | `Main/CastleEntranceTransition` | 0.55-second text-free fade to `ravenmourn_threshold.tscn` |
 
@@ -44,8 +44,8 @@ Presentation remains separate from hazard authority. `WaterVisual`, `WaterDepth`
 ## Presentation limits
 
 - `DetailedBridgeArt` builds twenty worn planks, rivets, cracked boards, underside supports, low iron posts and sagging chains over the unchanged continuous collision—decorative damage never creates hidden holes.
-- `BossCastleBackdrop` draws a multi-tower fortress, high keep, spires, buttresses, Gothic windows, wall courses, gatehouse, stone threshold and restrained cold/warm windows behind the playable silhouettes. The fixed `CastleFacade` collision still leaves the same readable doorway.
-- `CastleGate/GateVisual/DetailedGateArt` is a moving oak-and-iron portcullis with reinforcement bands, rivets, five vertical bars, pointed lower teeth and a crest. It is visually distinct from the dark open doorway and remains a World collider until fully clear.
+- `BossCastleBackdrop` draws a multi-layer fortress with unequal far towers, a high central four-tower spire crown, pointed roofs/finial, buttresses, Gothic windows, wall courses, a widened stone gatehouse and threshold behind the playable silhouettes. Its clear high-tower/central-keep/entrance hierarchy is structurally castle-like but remains an original dark Ravenmourn composition. The fixed `CastleFacade` collision still leaves the same readable doorway.
+- `CastleGate/GateVisual/DetailedGateArt` is a moving 88×260 oak-and-iron portcullis with five planks/bars, heavier reinforcement bands, side chains, rivets, pointed lower teeth, crest and ring. Its collision authority deliberately remains the saved 48×260 `GateCollision`; opening distance/duration/clearance are unchanged.
 - Gate opening plays a quiet, deterministic synthesized chain/stone placeholder from `GateAudio`; it uses no downloaded asset and remains replaceable by a licensed final sound.
 - Boss HUD observes Body/Shield signals only and never mutates combat data.
 - The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 10-point Shield and 0.10/0.13/0.12-second reaction/animation/cooldown resource values directly.

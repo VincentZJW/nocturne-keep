@@ -3297,3 +3297,74 @@ Status: complete — implementation, 35-script regression, configured-Main graph
 - Manually defeat the Boss normally and judge the 1.20-second cubic portcullis weight, doorway visibility and 0.55-second fade cadence. The QA path exercised the identical saved Main flow but accelerated its capture-only fade after the required gate-open screenshot.
 - Environment art is authored native-2D gray-box presentation with clean vector/pixel-like edges, not final hand-painted tile art, dynamic parallax, water shader or licensed audio. The visual layering is static world-space depth so it cannot perturb Camera/physics.
 - No Boss value/mechanic, Player ability, normal-enemy/stone-Gargoyle AI, encounter count, platform/floor/bridge geometry, MoatHazard, respawn, HUD authority or second-level gameplay changed.
+## 2026-07-24 — First-level environment unity and Gothic castle reinforcement (preflight)
+
+Status: in progress — read-only Main audit complete; implementation and configured-Main visual acceptance pending
+
+### Goal
+
+- Unify the configured F5 first level as one continuous journey from `Dark Forest Outskirts` through a ruined castle frontier and fortified approach to the Ravenmourn moat, bridge, gate and pointed Gothic Boss fortress.
+- Replace the visually empty early/middle route with layered, original Godot-native sky, far forest, twisted trees, roadside ruins, vegetation and surface detail while preserving all gameplay silhouettes and collision authority.
+- Increase the saved Boss fortress silhouette hierarchy and make the moving main gate visibly wider/heavier without changing its physical blocker, opening authority or post-Boss flow.
+
+### Read-only audit
+
+- Git began clean on `master` at `04256d1`, four commits ahead of `origin/master`. `project.godot` resolves F5 to `res://scenes/main/main.tscn`.
+- The early route is the saved Main span x≈0..2100 around `World/Encounters/EncounterGroup01..03` and `World/PlatformA`; it currently has only the root `Backdrop`, `MoonGlow`, `Moon` and a single coarse `FarKeep` polygon, with no forest, roadside, foreground or surface-detail renderer.
+- The middle transition is x≈2100..3900 around `EncounterGroup03..05`, `PlatformB` and `GargoylePerch`; it has no dedicated environment layer. The late approach starts abruptly at x≈3560 through `World/LateLevelApproachArt` and `World/LateLevelSurfaceDetails`.
+- The Boss composition is `World/CastleEntranceArea`, while its fortress art is the visual-only `World/BossCastleBackdrop`; bridge detail is `CastleEntranceArea/WoodenBridge/DetailedBridgeArt`, moat authority/detail is under `CastleEntranceArea/Moat`, and the moving gate is `CastleEntranceArea/CastleGate/GateVisual/DetailedGateArt`.
+- Main contains no `TileMap`, `TileMapLayer`, `Parallax2D`, `ParallaxBackground`, or dedicated foreground layer. Its environment is saved native-2D nodes plus typed custom-draw renderers. Camera authority remains `World/Player/Camera2D` with the existing Boss-room limit controller.
+
+### Planned files, tests, and scope check
+
+- Add narrowly scoped typed environment renderers for early forest depth, middle frontier transition and early/middle surface/foreground detail; instance them directly in `scenes/main/main.tscn` and retire only the obsolete coarse root `FarKeep` visual.
+- Extend `ravenmourn_castle_backdrop.gd` and `ravenmourn_gate_art.gd` for a more vertical multi-spire keep and a wider, heavier visual gate while leaving every `StaticBody2D`, `CollisionShape2D`, hazard, encounter, Player, enemy, Boss and HUD value unchanged.
+- Add a configured-Main environment contract test and a graphical capture driver for early, transition and Boss views. Run exact Godot 4.7.1 import/parse, focused tests, all repository tests, headless/graphical configured Main and original-resolution screenshot inspection.
+- Update README plus environment, Boss-room and first-level encounter specifications. Scope excludes Player abilities, combat tuning, Boss/enemy values or mechanics, enemy counts, HUD behavior, world/platform/bridge collision, MoatHazard, second-level gameplay and licensed/external art.
+
+### Delivered implementation
+
+- Replaced the isolated root `MoonGlow`, `Moon` and coarse `FarKeep` polygons with saved `Main/World/DarkForestOutskirtsArt`. The typed visual renderer covers x=-100..2420 with a deep navy/gray-green sky, restrained moon/glow, cloud bands, layered forest boundary, repeated distant pines, five twisted leafless trees, low mist and a roadside ruin. It owns no collision or gameplay state.
+- Added saved `Main/World/OutskirtsSurfaceDetails` behind actors. It overlays the unchanged Floor/PlatformA/B geometry with brown-gray earth, dirt-road patches, cobbles, weeds, brambles, platform joints, a broken fence, directional sign, cart wheel wreck and two grave markers. Props were placed outside primary attack silhouettes; no prop is a CollisionObject2D.
+- Added overlapping `Main/World/CastleFrontierTransitionArt` across x≈2100..3740. The forest silhouette visibly thins while a broken watch post, low wall, Gothic arch opening, iron gate remnants and three increasingly tall distant spires introduce the fortress language before the existing late approach begins at x≈3560.
+- Preserved `LateLevelApproachArt`/`LateLevelSurfaceDetails` as the masonry-dominant third act, producing a continuous forest → ruin → outer wall → moat visual progression across the same seven encounter coordinates.
+- Re-composed `Main/World/BossCastleBackdrop` with five uneven far towers and a four-tower central pointed crown over the broad fortress body. The tallest central spire/finial, stepped roofs, battlements, buttresses, narrow Gothic windows and wider fixed gatehouse give the Boss bridge a clear side-towers/central-keep/main-door hierarchy rather than a large rectangular block.
+- Widened only the moving main-gate presentation from 68 to 88 pixels and added a fifth timber plank, wider iron bands, side chains, rivets, door ring and heavier stone frame. The authoritative `GateCollision` remains exactly 48×260; rise distance, 1.20-second cubic opening, collision release timing and entrance transition are unchanged.
+- Added `test_first_level_environment_unity.gd`, which fails if any saved progression layer is missing/owns collision, if the obsolete coarse silhouette returns, or if encounter count, normal-enemy count, platform geometry, Camera limits, gate collider or opening duration changes. Added a configured-Main graphical capture driver for the three requested regions.
+
+### Configured F5 Main synchronization
+
+- `run/main_scene` remains `res://scenes/main/main.tscn`. Early paths are `Main/World/DarkForestOutskirtsArt` and `Main/World/OutskirtsSurfaceDetails`; middle is `Main/World/CastleFrontierTransitionArt`; late remains `Main/World/LateLevelApproachArt` plus `LateLevelSurfaceDetails`.
+- Boss authority remains `Main/World/CastleEntranceArea`; fortress art remains `Main/World/BossCastleBackdrop`; bridge, moat and moving gate art remain below the same live `CastleEntranceArea` nodes. Camera remains `Main/World/Player/Camera2D`.
+- All seven ActivationAreas, eighteen normal-enemy instances, Player/Boss scenes and values, Floor/Platform/bridge/gate colliders, MoatHazard, HUD and post-Boss transition persist from the serialized Main. No test/preview scene substitutes for this integration.
+
+### Commands and actual results
+
+1. Baseline and exact engine:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Pre-edit exact 4.7.1 import and configured F5 for 180 frames: both exit 0 without Script Error/Error/Warning diagnostics.
+2. Final import and focused contracts:
+   - Exact 4.7.1 `--headless --path . --import --quit-after 120`: exit 0; all new typed classes registered without diagnostics.
+   - `tests/level/test_first_level_environment_unity.gd`: PASS for forest/frontier/approach/fortress paths, visual-only ownership and gameplay-geometry preservation.
+   - `tests/level/test_ravenmourn_environment.gd`: PASS for bridge/hazard preservation, 1.20-second gate and text-free transition.
+   - `tests/combat/test_first_level_boss.gd`, `test_main_enemy_integration.gd`, `test_main_platform_reachability.gd` and `test_main_traversal_routes.gd` passed inside the complete run.
+3. Complete regression:
+   - Serial exact-Godot execution of all repository test scripts: `FULL_TESTS count=36 failures=0`. No movement, combat, Health/Stamina, enemy, Boss, asset, traversal or Debug HUD regression was observed.
+4. Configured Main runtime:
+   - Exact headless configured F5 for 600 frames: exit 0, no Script Error/Error/Warning.
+   - Exact graphical configured F5 for 300 frames: exit 0, GL Compatibility on Apple M4, no Script Error/Error/Warning.
+   - Configured-Main graphical QA capture: exit 0 and reports the project run scene plus all three authored regions.
+
+### Configured-Main QA evidence
+
+- `docs/qa/dark_forest_outskirts_main.png`: 1280×720, 20,829 bytes, SHA-256 `c5b823f7043ae83808fc7e50272a5326d5730aad9a8137bf7690d67d6cf04481` — moonlit forest layers, twisted trunks, mist, vegetation, road/fence/sign and live Player/enemy silhouettes.
+- `docs/qa/castle_frontier_transition_main.png`: 1280×720, 16,221 bytes, SHA-256 `5f8d4fe7cc2a359d7435d71611504b559a4f12ed4b45afc3f34f44cc6bbf7f15` — thinning forest, ruined watch post/wall/gate and distant spire transition around live Main encounters/platforms.
+- `docs/qa/gothic_spired_castle_boss_main.png`: 1280×720, 39,396 bytes, SHA-256 `783053322d6697a3301d0aad8b9d208d7184333919fca2aaddc96275c0101679` — live Boss/HUD, complete bridge/moat composition, layered pointed castle and wider closed main gate.
+- Original-resolution inspection confirms all three images come from the configured Main PackedScene, foreground props stay behind combatants, platform edges remain readable and the Boss bridge frames Player/Boss/gate without decorative overlap.
+
+### Manual acceptance and known limitations
+
+- Manually traverse each encounter at combat speed and judge whether the early tree mass, middle ruin shapes and late masonry maintain bolt, shield, spear and Gargoyle readability under motion. Automated visual/collision separation cannot decide subjective contrast.
+- Manually defeat the Boss and judge the wider gate's perceived weight during the unchanged 1.20-second rise. Automated gate coverage proves the physical blocker remains until full clearance and the transition still works.
+- Environment art remains an original Godot-native gray-box presentation pass, not final hand-painted TileSet/parallax/shader production art. It intentionally uses static world-space layers and clean low-detail shapes so it cannot change physics or camera behavior.
+- No Player mechanic, enemy/Boss value or AI, encounter count, collision, hazard, HUD behavior, second-level gameplay or external asset was introduced.
