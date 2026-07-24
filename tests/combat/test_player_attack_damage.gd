@@ -67,10 +67,20 @@ func _test_dash_attack(player: Player, guard: CastleGuard) -> void:
 	sprite.frame_changed.emit()
 	_expect(actions.dash_attack_hitbox.is_active, "dash_attack_03 did not open Dash Attack Hitbox")
 	_expect(actions.dash_attack_hitbox.damage == 2, "Dash Attack damage is not two")
+	var stable_attack_id: int = actions.dash_attack_hitbox.attack_id
+	_expect(actions.dash_attack_hitbox.attacker == player, "Dash Attack did not retain Player as source")
+	_expect(
+		actions.dash_attack_hitbox.get_source_position().is_equal_approx(player.global_position),
+		"Dash Attack source position did not resolve to Player root"
+	)
 	_expect(actions.dash_attack_hitbox.try_hit(guard.hurtbox), "Dash Attack did not hit Castle Guard")
 	_expect(guard.health_component.current_health == 1, "Dash Attack did not remove two Guard Health")
 	sprite.frame = 3
 	sprite.frame_changed.emit()
+	_expect(
+		actions.dash_attack_hitbox.attack_id == stable_attack_id,
+		"Dash Attack generated a new attack id on its second active frame"
+	)
 	_expect(not actions.dash_attack_hitbox.try_hit(guard.hurtbox), "Same Dash Attack hit twice")
 	sprite.frame = 4
 	sprite.frame_changed.emit()

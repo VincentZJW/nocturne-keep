@@ -15,6 +15,7 @@ func _initialize() -> void:
 
 func _run_tests() -> void:
 	await _test_shield_directional_policy()
+	await _test_real_player_dash_shield_routing()
 	await _test_spear_profile()
 	await _test_crossbow_profile()
 	_finish()
@@ -61,6 +62,15 @@ func _test_shield_directional_policy() -> void:
 	_expect(shield.shield_break_effect.visible, "Shield break flash/fragments did not start")
 	_expect(shield.guard_break_marker.visible, "GuardBreak marker did not become visible")
 	_expect(shield.shield_break_effect.scale == Vector2(2.0, 2.0), "Shield break effect is not enlarged")
+	_expect(
+		shield.animated_sprite.modulate.is_equal_approx(Color.WHITE),
+		"Shield break flash still brightens the whole enemy body"
+	)
+	_expect(
+		shield.shield_hit_effect.visible
+		and is_equal_approx(shield.shield_hit_effect.modulate.a, 0.30),
+		"Shield-local break flash did not start at alpha 0.30"
+	)
 	_expect(
 		shield.get_debug_summary().contains("BODY 5/5")
 		and shield.get_debug_summary().contains("SH 0/3")
@@ -170,6 +180,146 @@ func _test_shield_directional_policy() -> void:
 
 func _on_test_shield_broken(_hitbox: HitboxComponent) -> void:
 	_shield_break_events += 1
+
+
+func _test_real_player_dash_shield_routing() -> void:
+	var shield: CursedShieldGuard = SHIELD_SCENE.instantiate() as CursedShieldGuard
+	var player: Player = PLAYER_SCENE.instantiate() as Player
+	get_root().add_child(shield)
+	get_root().add_child(player)
+	await process_frame
+	shield.set_ai_active(false)
+	player.set_physics_process(false)
+	shield.global_position = Vector2(300.0, 300.0)
+	shield.set_facing_direction(-1.0)
+	player.global_position = shield.global_position + Vector2(-34.0, 0.0)
+	player.animation_controller.set_facing_left(false)
+	var actions: PlayerActionController = player.action_controller
+	var sprite: AnimatedSprite2D = player.animation_controller.animated_sprite
+	_expect(
+		actions.try_start_actions(true, true, true, 1.0, false),
+		"Real Player front Dash Attack did not start"
+	)
+	sprite.frame = 2
+	sprite.frame_changed.emit()
+	var dash: HitboxComponent = actions.dash_attack_hitbox
+	var first_attack_id: int = dash.attack_id
+	_expect(
+		absf(dash.global_position.x - shield.global_position.x) <= 8.0,
+		"Regression fixture no longer reproduces the forward Hitbox-center ambiguity"
+	)
+	_expect(dash.try_hit(shield.hurtbox), "Real Player front Dash did not reach shield")
+	_expect(shield.health_component.current_health == 5, "Real Player front Dash pierced body")
+	_expect(shield.get_shield_current_health() == 1, "Real Player front Dash did not deal two to shield")
+	var front_hit_one_body: int = shield.health_component.current_health
+	var front_hit_one_shield: int = shield.get_shield_current_health()
+	_expect(shield.shield_component.last_hit_side == &"front", "Player-root source was not classified front")
+	_expect(shield.shield_component.last_route == &"shield", "Front Dash route was not shield")
+	dash.end_attack()
+	dash.begin_attack(first_attack_id, 2, 1.0, player)
+	_expect(not dash.try_hit(shield.hurtbox), "Same Dash id reactivation bypassed Hitbox dedup")
+	_expect(shield.health_component.current_health == 5, "Same Dash id reactivation damaged body")
+	_expect(shield.get_shield_current_health() == 1, "Same Dash id reactivation damaged shield")
+	actions.cancel_all_actions()
+	player.animation_controller.reset_to_idle()
+	shield._process_enemy_state(0.25)
+
+	_expect(
+		actions.try_start_actions(true, true, true, 1.0, false),
+		"Second real Player front Dash Attack did not start"
+	)
+	sprite.frame = 2
+	sprite.frame_changed.emit()
+	var breaking_attack_id: int = dash.attack_id
+	_expect(breaking_attack_id != first_attack_id, "New Dash did not generate a new attack id")
+	_expect(dash.try_hit(shield.hurtbox), "Breaking front Dash did not reach shield")
+	_expect(shield.is_shield_broken(), "Breaking front Dash did not break shield")
+	_expect(shield.health_component.current_health == 5, "Breaking front Dash overflow pierced body")
+	_expect(shield.get_shield_current_health() == 0, "Breaking front Dash did not reach zero shield")
+	var front_hit_two_body: int = shield.health_component.current_health
+	var front_hit_two_shield: int = shield.get_shield_current_health()
+	_expect(shield.shield_component.last_overflow_discarded == 1, "Breaking overflow was not discarded")
+	var duplicate_result: int = shield.shield_component.resolve_damage(dash)
+	_expect(duplicate_result == 0, "Shield ledger accepted the breaking Dash id twice")
+	_expect(shield.shield_component.last_duplicate_blocked, "Shield ledger did not report duplicate block")
+	_expect(shield.health_component.current_health == 5, "Breaking Dash later frame damaged body")
+
+	actions.cancel_all_actions()
+	player.animation_controller.reset_to_idle()
+	_expect(
+		actions.try_start_actions(true, false, true, 1.0, false),
+		"Post-break new normal Attack did not start"
+	)
+	sprite.frame = 1
+	sprite.frame_changed.emit()
+	_expect(actions.attack_hitbox.try_hit(shield.hurtbox), "Post-break new normal Attack was rejected")
+	_expect(shield.health_component.current_health == 4, "Post-break normal Attack did not deal one")
+	actions.cancel_all_actions()
+	player.animation_controller.reset_to_idle()
+	player.stamina_component.reset_to_full()
+	_expect(
+		actions.try_start_actions(true, true, true, 1.0, false),
+		"Post-break new Dash Attack did not start"
+	)
+	sprite.frame = 2
+	sprite.frame_changed.emit()
+	_expect(dash.try_hit(shield.hurtbox), "Post-break new Dash Attack was rejected")
+	_expect(shield.health_component.current_health == 2, "Post-break new Dash Attack did not deal two")
+
+	var mirrored_shield: CursedShieldGuard = SHIELD_SCENE.instantiate() as CursedShieldGuard
+	get_root().add_child(mirrored_shield)
+	await process_frame
+	mirrored_shield.set_ai_active(false)
+	mirrored_shield.global_position = Vector2(500.0, 300.0)
+	mirrored_shield.set_facing_direction(1.0)
+	player.global_position = mirrored_shield.global_position + Vector2(34.0, 0.0)
+	player.animation_controller.set_facing_left(true)
+	actions.cancel_all_actions()
+	player.animation_controller.reset_to_idle()
+	player.stamina_component.reset_to_full()
+	_expect(actions.try_start_actions(true, true, true, -1.0, false), "Mirrored front Dash did not start")
+	sprite.frame = 2
+	sprite.frame_changed.emit()
+	_expect(dash.try_hit(mirrored_shield.hurtbox), "Mirrored front Dash did not reach shield")
+	_expect(mirrored_shield.health_component.current_health == 5, "Mirrored front Dash pierced body")
+	_expect(mirrored_shield.get_shield_current_health() == 1, "Mirrored front Dash shield damage mismatch")
+
+	var rear_shield: CursedShieldGuard = SHIELD_SCENE.instantiate() as CursedShieldGuard
+	get_root().add_child(rear_shield)
+	await process_frame
+	rear_shield.set_ai_active(false)
+	rear_shield.global_position = Vector2(700.0, 300.0)
+	rear_shield.set_facing_direction(-1.0)
+	player.global_position = rear_shield.global_position + Vector2(34.0, 0.0)
+	player.animation_controller.set_facing_left(true)
+	actions.cancel_all_actions()
+	player.animation_controller.reset_to_idle()
+	player.stamina_component.reset_to_full()
+	_expect(actions.try_start_actions(true, true, true, -1.0, false), "Rear Dash did not start")
+	sprite.frame = 2
+	sprite.frame_changed.emit()
+	_expect(dash.try_hit(rear_shield.hurtbox), "Rear Dash did not reach body")
+	_expect(rear_shield.health_component.current_health == 3, "Rear Dash did not deal two to body")
+	_expect(rear_shield.get_shield_current_health() == 3, "Rear Dash changed shield")
+	print(
+		(
+			"SHIELD_DASH_MATRIX: before B5 SH3; front1 B%d SH%d; front2 B%d SH%d; "
+			+ "rear B%d SH%d; post-break normal/dash B4/B2"
+		) % [
+			front_hit_one_body,
+			front_hit_one_shield,
+			front_hit_two_body,
+			front_hit_two_shield,
+			rear_shield.health_component.current_health,
+			rear_shield.get_shield_current_health(),
+		]
+	)
+
+	shield.queue_free()
+	mirrored_shield.queue_free()
+	rear_shield.queue_free()
+	player.queue_free()
+	await process_frame
 
 
 func _test_spear_profile() -> void:

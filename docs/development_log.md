@@ -2758,3 +2758,85 @@ Status: complete — independent Shield routing, Main integration, 28-script reg
 - The 0.22-second turn uses the existing idle body pose rather than new bespoke turn frames. Logic and facing remain truthful throughout the rear window.
 - No always-on in-world Shield bar was added; the required visual cracks are authoritative, while Compact/Expanded Debug provides numeric development confirmation.
 - Hit-stop, camera shake, audio, rigid shield fragments, shield regeneration, new attacks, and all unrelated enemy/Player systems remain intentionally excluded.
+
+## 2026-07-24 — Shield Guard Dash penetration and break-flash correction (preflight)
+
+Status: complete — unified source routing, two-layer attack-id deduplication, softer shield-local flash, 28-script regression, and configured-Main graphical QA passed; manual feel acceptance pending
+
+### Goal
+
+- Stop one frontal Dash Attack from reaching Shield and Body during the same action, including the frame after a breaking hit.
+- Keep rear routing and no-overflow behavior unchanged.
+- Replace the current whole-body/high-intensity break flash with a 0.05-second, 0.30-alpha shield-local cue while retaining cracks, fragments, disappearance, and GuardBreak.
+
+### Read-only audit and root cause
+
+- `project.godot` still resolves F5 to `res://scenes/main/main.tscn`; both saved Main Shield Guards instance the current shared `cursed_shield_guard.tscn` without local overrides.
+- Shield Guard has exactly one `HurtboxComponent`, which delegates to exactly one `ShieldComponent`; there are no overlapping Shield/Body Hurtboxes and no Area signal-order race between two Health writers.
+- Player normal and Dash attacks use separate Hitbox nodes. A Dash Attack action creates one `_current_attack_id`, opens the Dash Hitbox across consecutive frames 03–04, and `HitboxComponent` normally remembers the one target for that active window.
+- `ShieldComponent` nevertheless classifies side using `hitbox.global_position`. At body-contact distance the Player remains in front while the 37-pixel-forward Dash Hitbox center reaches the Shield Guard center/other side, so the unified policy can misclassify a visually frontal Dash as Body. Tests previously placed the Hitbox center 30–32 pixels in front and did not reproduce real scene geometry.
+- `ShieldComponent` also has no independent consumed-attack ledger. If the same Dash Hitbox is re-enabled/re-scanned with the same `attack_id` after Shield reaches zero, its local target set may be cleared and the now-broken policy can route that continuing action to Body.
+- The current break presentation combines a 2× overlay containing a pure-white 9×9 core with whole-body `Color(1.8, 1.65, 1.25)` modulation lasting 0.12 seconds. This makes the auxiliary flash visually dominate the authored cracks/fragments.
+
+### Planned files and scope
+
+- `HitboxComponent` and Player action wiring: carry the typed attacker/root source position while preserving the same stable action id and all animation/input/damage values.
+- `ShieldComponent`: classify against attacker position, record the last consumed id per attacker, reject repeated submissions even after break, and expose route/dedup/overflow audit fields.
+- Shield Guard config/presentation/generator: configure 0.05/0.30, localize the flash to the shield, soften the overlay core, and keep all existing fragment/GuardBreak timing.
+- Shield/Main tests: reproduce actual Player/DashHitbox offsets, both facings, same-id re-entry after break, new-id post-break damage, unchanged rear damage, and saved Main instances.
+- Only `development_log.md`, `combat_system_spec.md`, and `enemy_cursed_shield_guard_spec.md` will be updated. No balance, animation timing, Player movement/action, encounter-count, other-enemy, or new-feature changes are in scope.
+
+### Delivered correction
+
+- Extended `HitboxComponent` with a typed attacker reference. Player normal and Dash active windows now retain the Player root as their source, while all existing callers fall back to the Hitbox position. The Shield policy therefore classifies the actor's side rather than the forward weapon volume's center.
+- Kept one shared Shield Guard Hurtbox and one `ShieldComponent` decision boundary. A received attack is marked consumed before the policy selects exactly one route: intact/front Player weapon attacks go to Shield; rear, center-source, non-Player-weapon, or already-broken cases go to Body.
+- Added a bounded Shield-side ledger keyed by `attacker instance id + attack_id`. It survives shield break and rejects a later active frame or a second detector submission from the same action. `HitboxComponent` also no longer clears its local target memory when the same attack id is merely reopened.
+- Retained no-overflow semantics. A two-damage Dash against Shield 1/3 produces Shield 0/3, records one discarded point, enters GuardBreak, and leaves Body 5/5.
+- Replaced the 0.12-second whole-body `Color(1.8, 1.65, 1.25)` break highlight with a shield-local 0.05-second alpha-0.30 pale-steel flash. The 9×9 pure-white core and long thick rays were removed from the first two overlay frames; cracks, metal fragments, shield disappearance, marker, and 0.65-second GuardBreak remain.
+- Ordinary shield-hit feedback is now lower priority than break: local spark alpha 0.18 and mild ShieldVisual modulation `Color(1.08, 1.06, 0.98)`; the body is never flashed.
+- Compact Shield Debug remains inside the existing panel contract and reports Body/Shield, side, route, type/id, broken, and state. Expanded output adds shield/body detector route flags, consumed, duplicate blocked, and discarded overflow.
+
+### Actual route matrix
+
+- Front normal from Shield 3/3: Body remains 5/5 while Shield progresses 2/3 → 1/3 → 0/3.
+- Front real-geometry Dash: before `BODY 5 SH 3`; hit 1 `BODY 5 SH 1`; hit 2 `BODY 5 SH 0`.
+- Shield 1/3 + front Dash 2: `BODY 5 SH 0`, overflow discarded 1.
+- Rear Dash: `BODY 3 SH 3`.
+- After break, new ids route normally: new normal changes Body 5→4; the following new Dash changes Body 4→2.
+- The regression fixture explicitly places the Player 34 pixels in front while the authored Dash Hitbox center reaches the Shield Guard's ±8-pixel center tolerance. It therefore reproduces the old false Body route and verifies the Player-root correction rather than hiding it by shrinking the Hitbox.
+
+### Commands and actual results
+
+1. Exact Godot 4.7.1 asset production/import:
+   - `Godot --headless --path . --script scripts/tools/pixel_enemy_variety_generator.gd`: exit 0; `ENEMY_VARIETY_PIXEL_BUILD: OK (126 files)`.
+   - `Godot --headless --path . --editor --quit`: exit 0; two revised break-overlay PNGs reimported without diagnostics.
+2. Focused tests:
+   - `test_hitbox_hurtbox_components.gd`: PASS, including same-id active-window reopen deduplication.
+   - `test_player_attack_damage.gd`: PASS, including stable Dash id across both active frames and Player-root source context.
+   - `test_enemy_variety.gd`: PASS and printed `SHIELD_DASH_MATRIX: before B5 SH3; front1 B5 SH1; front2 B5 SH0; rear B3 SH3; post-break normal/dash B4/B2`.
+   - `test_enemy_balance.gd`: PASS; Body 5, Shield 3, damage 8, GuardBreak 0.65, turn 0.22, Player 1/2, and all other enemy values remain unchanged.
+   - `test_main_enemy_integration.gd`: PASS using the live Main Player/Shield Guard geometry and the shared Main instances.
+   - `validate_enemy_variety_assets.gd`: PASS for 124 64×64 frames/effects plus bolt, transparency, lossless/no-mipmap imports, and 48-pixel readability floor.
+3. Full serial regression: all 28 scripts under `tests/` exited 0; no captured output contained final `SCRIPT ERROR`, `ERROR:`, or `WARNING:` diagnostics.
+4. Runtime startup:
+   - Standalone `cursed_shield_guard.tscn --quit-after 120`: exit 0.
+   - Configured F5 Main `--quit-after 120`: exit 0.
+5. Graphical configured-Main run:
+   - `capture_shield_guard_break_main.gd` with `--write-movie`, 1280×720, fixed 30 FPS, GL Compatibility on Apple M4: exit 0, 37 frames.
+   - Runtime output: `SHIELD_MAIN_QA: BODY 5 SH 0 ROUTE shield SIDE front DUP false`.
+   - Original-resolution inspection confirms Shield 1/3 critical feedback, Shield 0/3 GuardBreak, missing shield, fragments/marker, and no whole-body white flash.
+
+### F5 Main synchronization and QA evidence
+
+- `application/run/main_scene` remains `res://scenes/main/main.tscn`.
+- `World/Encounters/EncounterGroup01/Enemies/CursedShieldGuard01` and `World/Encounters/EncounterGroup04/Enemies/CursedShieldGuard02` still instance the updated shared `res://scenes/enemies/cursed_shield_guard.tscn` without local script/config/resource overrides.
+- The Player instance `World/Player` uses the revised shared `player.tscn` controller and both Player Hitboxes now submit `World/Player` as attacker. Both Shield Guard instances use the revised shared `ShieldComponent` and flash Config, so no Main-local reauthoring is required or stale.
+- Group01 remains the isolated first Shield Guard encounter and the encounter roster/count is unchanged.
+- `docs/qa/shield_guard_dash_route_soft_flash_f5_main.png` (SHA-256 `82fbadf79d015a556bd5a0515ef72ee3668db0f84b9febe051ff4286ab3e93c3`) is the inspected configured-Main frame. Its Compact row shows Body 5/5, Shield 0/3, front, shield route, Dash id, broken, and GuardBreak while the body remains normally lit.
+- `docs/qa/shield_guard_dash_route_soft_flash_f5_main.log` preserves the graphical run output.
+
+### Manual acceptance and known limitations
+
+- Manually repeat the front Dash test from both sides at normal input speed and judge the reduced flash on the target display. Automated geometry, routing, state, and original-resolution rendering are verified; subjective brightness still requires user acceptance.
+- The shared Shield Guard scene intentionally has one Hurtbox detector rather than separate physical Shield/Body Areas. Expanded `SH_DETECT/BODY_DETECT` fields describe the final unified route, not two independent damage writers.
+- The consumed-key ledger retains the latest 64 attack keys per Shield Guard, which is ample for the encounter and bounded against unbounded growth. Shield reset clears it; shield break does not.

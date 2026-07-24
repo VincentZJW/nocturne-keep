@@ -14,6 +14,7 @@ signal active_changed(active: bool)
 
 var attack_id: int = 0
 var is_active: bool = false
+var attacker: Node2D
 var _hit_target_ids: Dictionary[int, bool] = {}
 
 
@@ -28,14 +29,29 @@ func _ready() -> void:
 func begin_attack(
 	new_attack_id: int,
 	damage_override: int = -1,
-	direction_override: float = 0.0
+	direction_override: float = 0.0,
+	attacker_override: Node2D = null
 ) -> void:
+	var previous_source_id: int = get_attack_source_instance_id()
+	var next_source_id: int = (
+		attacker_override.get_instance_id()
+		if attacker_override != null and is_instance_valid(attacker_override)
+		else get_instance_id()
+	)
+	var starts_new_attack: bool = (
+		attack_id != new_attack_id or previous_source_id != next_source_id
+	)
 	attack_id = new_attack_id
+	attacker = attacker_override
 	if damage_override > 0:
 		damage = damage_override
 	if not is_zero_approx(direction_override):
 		attack_direction = signf(direction_override)
-	_hit_target_ids.clear()
+	# Re-opening another active frame with the same action id must not forget a
+	# target already consumed by that action. Only a genuinely new action clears
+	# the local target ledger.
+	if starts_new_attack:
+		_hit_target_ids.clear()
 	_set_active_internal(true)
 	call_deferred("_scan_existing_overlaps")
 
@@ -48,6 +64,18 @@ func has_hit_target(target: HurtboxComponent) -> bool:
 	if target == null:
 		return false
 	return _hit_target_ids.has(target.get_instance_id())
+
+
+func get_source_position() -> Vector2:
+	if attacker != null and is_instance_valid(attacker):
+		return attacker.global_position
+	return global_position
+
+
+func get_attack_source_instance_id() -> int:
+	if attacker != null and is_instance_valid(attacker):
+		return attacker.get_instance_id()
+	return get_instance_id()
 
 
 func try_hit(target: HurtboxComponent) -> bool:

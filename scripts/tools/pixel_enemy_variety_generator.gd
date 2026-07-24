@@ -175,17 +175,16 @@ func _draw_shield_fragments(image: Image, center: Vector2i, frame: int) -> void:
 func _draw_shield_break_fx(frame: int) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	var center: Vector2i = Vector2i(39, 36)
+	var soft_flash: Color = Color(PALE_FLASH.r, PALE_FLASH.g, PALE_FLASH.b, 0.30)
 	if frame == 0:
-		PixelCanvas.draw_line(image, center + Vector2i(-15, 0), center + Vector2i(15, 0), PALE_FLASH, 3)
-		PixelCanvas.draw_line(image, center + Vector2i(0, -16), center + Vector2i(0, 16), PALE_FLASH, 3)
-		PixelCanvas.draw_line(image, center + Vector2i(-10, -10), center + Vector2i(10, 10), PALE_FLASH, 2)
-		PixelCanvas.draw_line(image, center + Vector2i(-10, 10), center + Vector2i(10, -10), PALE_FLASH, 2)
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 4, center.y - 4, 9, 9), Color.WHITE)
+		_draw_shield_fragments(image, center, 0)
+		PixelCanvas.draw_line(image, center + Vector2i(-6, 0), center + Vector2i(6, 0), soft_flash, 1)
+		PixelCanvas.draw_line(image, center + Vector2i(0, -7), center + Vector2i(0, 7), soft_flash, 1)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 1, center.y - 1, 3, 3), soft_flash)
 	elif frame == 1:
 		_draw_shield_fragments(image, center, 1)
-		PixelCanvas.draw_line(image, center + Vector2i(-10, 0), center + Vector2i(10, 0), PALE_FLASH, 2)
-		PixelCanvas.draw_line(image, center + Vector2i(0, -11), center + Vector2i(0, 11), PALE_FLASH, 2)
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 3, center.y - 3, 7, 7), PALE_FLASH)
+		PixelCanvas.draw_line(image, center + Vector2i(-4, 0), center + Vector2i(4, 0), soft_flash, 1)
+		PixelCanvas.draw_line(image, center + Vector2i(0, -4), center + Vector2i(0, 4), soft_flash, 1)
 	elif frame == 2:
 		_draw_shield_fragments(image, center, 2)
 		PixelCanvas.draw_line(image, center + Vector2i(-6, -5), center + Vector2i(6, 5), FX_FADE, 2)

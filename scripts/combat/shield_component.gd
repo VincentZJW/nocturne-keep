@@ -10,6 +10,10 @@ signal shield_broken(hitbox: HitboxComponent)
 const SIDE_FRONT: StringName = &"front"
 const SIDE_BACK: StringName = &"back"
 const SIDE_BODY: StringName = &"body"
+const ROUTE_SHIELD: StringName = &"shield"
+const ROUTE_BODY: StringName = &"body"
+const ROUTE_DUPLICATE: StringName = &"duplicate_blocked"
+const MAX_CONSUMED_ATTACK_KEYS: int = 64
 
 @export_range(1, 99, 1) var shield_max_health: int = 3
 @export_range(0.0, 16.0, 1.0) var center_tolerance: float = 8.0
@@ -26,11 +30,18 @@ var last_attacker_faction: StringName = &"none"
 var last_source_position: Vector2 = Vector2.ZERO
 var last_attack_direction: float = 0.0
 var last_hit_side: StringName = &"none"
+var last_route: StringName = &"none"
 var last_shield_damage: int = 0
 var last_body_damage: int = 0
 var last_overflow_discarded: int = 0
+var last_attack_consumed: bool = false
+var last_duplicate_blocked: bool = false
+var last_shield_hurtbox_detected: bool = false
+var last_body_hurtbox_detected: bool = false
 
 var _shield_broken: bool = false
+var _consumed_attack_keys: Dictionary[String, bool] = {}
+var _consumed_attack_order: Array[String] = []
 
 
 func _ready() -> void:
@@ -44,10 +55,22 @@ func resolve_damage(hitbox: HitboxComponent) -> int:
 	_reset_last_resolution(hitbox)
 	if hitbox == null:
 		return 0
-	last_hit_side = classify_source_side(hitbox.global_position)
+	last_hit_side = classify_source_side(hitbox.get_source_position())
+	var attack_key: String = _make_attack_key(hitbox)
+	if _consumed_attack_keys.has(attack_key):
+		last_route = ROUTE_DUPLICATE
+		last_attack_consumed = true
+		last_duplicate_blocked = true
+		return 0
+	_consume_attack_key(attack_key)
+	last_attack_consumed = true
 	if _shield_broken or last_hit_side != SIDE_FRONT or not _is_player_weapon_attack(hitbox):
+		last_route = ROUTE_BODY
+		last_body_hurtbox_detected = true
 		last_body_damage = hitbox.damage
 		return hitbox.damage
+	last_route = ROUTE_SHIELD
+	last_shield_hurtbox_detected = true
 	take_shield_damage(hitbox.damage, hitbox)
 	return 0
 
@@ -72,6 +95,8 @@ func reset_shield() -> void:
 	shield_max_health = maxi(1, shield_max_health)
 	shield_current_health = shield_max_health
 	_shield_broken = false
+	_consumed_attack_keys.clear()
+	_consumed_attack_order.clear()
 	_reset_last_resolution(null)
 	shield_health_changed.emit(shield_current_health, shield_max_health)
 
@@ -104,16 +129,36 @@ func get_visual_state() -> StringName:
 
 
 func _is_player_weapon_attack(hitbox: HitboxComponent) -> bool:
-	return hitbox.attack_kind == &"normal_attack" or hitbox.attack_kind == &"dash_attack"
+	return hitbox.attack_kind in [
+		&"normal_attack", &"dash_attack", &"ground_dash_attack", &"air_dash_attack",
+	]
+
+
+func _make_attack_key(hitbox: HitboxComponent) -> String:
+	return "%d:%d" % [hitbox.get_attack_source_instance_id(), hitbox.attack_id]
+
+
+func _consume_attack_key(attack_key: String) -> void:
+	_consumed_attack_keys[attack_key] = true
+	_consumed_attack_order.append(attack_key)
+	if _consumed_attack_order.size() <= MAX_CONSUMED_ATTACK_KEYS:
+		return
+	var oldest_key: String = _consumed_attack_order.pop_front()
+	_consumed_attack_keys.erase(oldest_key)
 
 
 func _reset_last_resolution(hitbox: HitboxComponent) -> void:
 	last_attack_kind = hitbox.attack_kind if hitbox != null else &"none"
 	last_attack_id = hitbox.attack_id if hitbox != null else 0
 	last_attacker_faction = hitbox.faction if hitbox != null else &"none"
-	last_source_position = hitbox.global_position if hitbox != null else Vector2.ZERO
+	last_source_position = hitbox.get_source_position() if hitbox != null else Vector2.ZERO
 	last_attack_direction = hitbox.attack_direction if hitbox != null else 0.0
 	last_hit_side = &"none"
+	last_route = &"none"
 	last_shield_damage = 0
 	last_body_damage = 0
 	last_overflow_discarded = 0
+	last_attack_consumed = false
+	last_duplicate_blocked = false
+	last_shield_hurtbox_detected = false
+	last_body_hurtbox_detected = false

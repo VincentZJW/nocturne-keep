@@ -30,6 +30,7 @@ const DASH_ATTACK_ANIMATION: StringName = &"dash_attack"
 @export_node_path("PlayerAnimationController") var animation_controller_path: NodePath = NodePath("../AnimationController")
 @export_node_path("PlayerStaminaComponent") var stamina_component_path: NodePath = NodePath("../StaminaComponent")
 @export_node_path("Node2D") var combat_root_path: NodePath = NodePath("../CombatRoot")
+@export_node_path("Node2D") var attack_owner_path: NodePath = NodePath("..")
 @export_node_path("HitboxComponent") var attack_hitbox_path: NodePath = NodePath(
 	"../CombatRoot/AttackHitbox"
 )
@@ -44,6 +45,7 @@ const DASH_ATTACK_ANIMATION: StringName = &"dash_attack"
 	stamina_component_path
 ) as PlayerStaminaComponent
 @onready var combat_root: Node2D = get_node_or_null(combat_root_path) as Node2D
+@onready var attack_owner: Node2D = get_node_or_null(attack_owner_path) as Node2D
 @onready var attack_hitbox: HitboxComponent = get_node_or_null(
 	attack_hitbox_path
 ) as HitboxComponent
@@ -83,8 +85,11 @@ func _ready() -> void:
 	if stamina_component == null:
 		push_error("PlayerActionController requires a PlayerStaminaComponent")
 		return
-	if combat_root == null or attack_hitbox == null or dash_attack_hitbox == null:
-		push_error("PlayerActionController requires CombatRoot and both Player attack hitboxes")
+	if (
+		combat_root == null or attack_owner == null
+		or attack_hitbox == null or dash_attack_hitbox == null
+	):
+		push_error("PlayerActionController requires attack owner, CombatRoot, and both Hitboxes")
 		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
 	animation_controller.animated_sprite.frame_changed.connect(_on_animation_frame_changed)
@@ -538,12 +543,12 @@ func _sync_attack_hitboxes() -> void:
 		return
 	if _action_state == ActionState.ATTACK and animation_controller.is_attack_hit_window():
 		if not attack_hitbox.is_active:
-			attack_hitbox.begin_attack(_current_attack_id, 1, combat_root.scale.x)
+			attack_hitbox.begin_attack(_current_attack_id, 1, combat_root.scale.x, attack_owner)
 		dash_attack_hitbox.end_attack()
 		return
 	if _action_state == ActionState.DASH_ATTACK and animation_controller.is_dash_attack_hit_window():
 		if not dash_attack_hitbox.is_active:
-			dash_attack_hitbox.begin_attack(_current_attack_id, 2, _dash_direction)
+			dash_attack_hitbox.begin_attack(_current_attack_id, 2, _dash_direction, attack_owner)
 		attack_hitbox.end_attack()
 		return
 	_deactivate_attack_hitboxes()

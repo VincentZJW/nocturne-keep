@@ -374,15 +374,21 @@ func get_attack_phase_name() -> StringName:
 
 
 func get_compact_debug_summary() -> String:
-	return "SG BODY %d/%d | SH %d/%d %s | SIDE %s | %s | TURN %.2f" % [
+	var debug_side: StringName = shield_component.last_hit_side
+	if debug_side == &"none":
+		debug_side = get_current_side_name()
+	return "SG B%d/%d SH%d/%d %s | %s | R:%s %s#%d | BRK:%s | %s" % [
 		health_component.current_health,
 		health_component.max_health,
 		get_shield_current_health(),
 		get_shield_max_health(),
 		shield_component.get_visual_state(),
-		get_current_side_name(),
+		debug_side,
+		shield_component.last_route,
+		shield_component.last_attack_kind,
+		shield_component.last_attack_id,
+		"Y" if is_shield_broken() else "N",
 		current_state,
-		get_turn_remaining(),
 	]
 
 
@@ -390,6 +396,7 @@ func get_debug_summary() -> String:
 	return (
 		"%s STATE %s BODY %d/%d SH %d/%d SHIELD %s BLOCK %s SIDE %s TURN %.2f "
 		+ "ANIM %s DMG %d HIT %s | LAST %s SRC(%.0f,%.0f) DIR %.0f ID %d "
+		+ "ROUTE %s SH_DETECT %s BODY_DETECT %s CONSUMED %s DEDUP %s "
 		+ "SHDMG %d BODYDMG %d OVERFLOW %s GB %.2f"
 	) % [
 		get_enemy_type_name(), current_state,
@@ -402,6 +409,11 @@ func get_debug_summary() -> String:
 		shield_component.last_attack_kind,
 		shield_component.last_source_position.x, shield_component.last_source_position.y,
 		shield_component.last_attack_direction, shield_component.last_attack_id,
+		shield_component.last_route,
+		"yes" if shield_component.last_shield_hurtbox_detected else "no",
+		"yes" if shield_component.last_body_hurtbox_detected else "no",
+		"yes" if shield_component.last_attack_consumed else "no",
+		"blocked" if shield_component.last_duplicate_blocked else "no",
 		shield_component.last_shield_damage, shield_component.last_body_damage,
 		"discard %d" % shield_component.last_overflow_discarded
 		if shield_component.last_overflow_discarded > 0 else "none",
@@ -423,11 +435,12 @@ func _play_shield_hit_feedback() -> void:
 		shield_hit_effect.visible = true
 		shield_hit_effect.stop()
 		shield_hit_effect.frame = 0
+		shield_hit_effect.modulate = Color(0.86, 0.90, 0.94, 0.18)
 		shield_hit_effect.play(&"shield_hit")
 	if shield_hit_tween != null and shield_hit_tween.is_valid():
 		shield_hit_tween.kill()
 	shield_visual.position = Vector2.ZERO
-	shield_visual.modulate = Color(1.8, 1.65, 1.25, 1.0)
+	shield_visual.modulate = Color(1.08, 1.06, 0.98, 1.0)
 	shield_hit_tween = create_tween()
 	shield_hit_tween.tween_property(shield_visual, "position", Vector2(2.0, 0.0), 0.035)
 	shield_hit_tween.tween_property(shield_visual, "position", Vector2(-2.0, 0.0), 0.035)
@@ -439,6 +452,7 @@ func _finish_shield_hit_feedback() -> void:
 	if shield_hit_effect != null:
 		shield_hit_effect.stop()
 		shield_hit_effect.visible = false
+		shield_hit_effect.modulate = Color.WHITE
 	if shield_hit_tween != null and shield_hit_tween.is_valid():
 		shield_hit_tween.kill()
 	if shield_visual != null:
@@ -448,6 +462,7 @@ func _finish_shield_hit_feedback() -> void:
 
 func _on_shield_hit_effect_finished() -> void:
 	shield_hit_effect.visible = false
+	shield_hit_effect.modulate = Color.WHITE
 
 
 func _play_shield_break_effect() -> void:
@@ -471,9 +486,29 @@ func _on_shield_visual_animation_finished() -> void:
 func _play_shield_break_flash() -> void:
 	if shield_break_flash_tween != null and shield_break_flash_tween.is_valid():
 		shield_break_flash_tween.kill()
-	animated_sprite.modulate = Color(1.8, 1.65, 1.25, 1.0)
+	var shield_config: CursedShieldGuardConfig = config as CursedShieldGuardConfig
+	shield_hit_effect.stop()
+	shield_hit_effect.frame = 0
+	shield_hit_effect.visible = true
+	shield_hit_effect.modulate = Color(
+		0.86, 0.90, 0.94, shield_config.shield_break_flash_alpha
+	)
 	shield_break_flash_tween = create_tween()
-	shield_break_flash_tween.tween_property(animated_sprite, "modulate", Color.WHITE, 0.12)
+	shield_break_flash_tween.tween_property(
+		shield_hit_effect,
+		"modulate:a",
+		0.0,
+		shield_config.shield_break_flash_duration
+	)
+	shield_break_flash_tween.tween_callback(_finish_shield_break_flash)
+
+
+func _finish_shield_break_flash() -> void:
+	if shield_hit_effect == null:
+		return
+	shield_hit_effect.stop()
+	shield_hit_effect.visible = false
+	shield_hit_effect.modulate = Color.WHITE
 
 
 func _finish_guard_break_feedback() -> void:
@@ -484,8 +519,7 @@ func _finish_guard_break_feedback() -> void:
 		guard_break_marker.visible = false
 	if shield_break_flash_tween != null and shield_break_flash_tween.is_valid():
 		shield_break_flash_tween.kill()
-	if animated_sprite != null:
-		animated_sprite.modulate = Color.WHITE
+	_finish_shield_break_flash()
 	if shield_visual != null and is_shield_broken():
 		shield_visual.visible = false
 

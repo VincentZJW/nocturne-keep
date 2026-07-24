@@ -52,7 +52,7 @@ func receive_hit(hitbox: HitboxComponent) -> bool:
 	health_component.take_damage(resolved_damage)
 	if health_component.current_health >= health_before:
 		return false
-	hit_received.emit(resolved_damage, hitbox.global_position, hitbox.attack_id)
+	hit_received.emit(resolved_damage, hitbox.get_source_position(), hitbox.attack_id)
 	return true
 
 

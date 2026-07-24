@@ -1,6 +1,6 @@
 # Combat System Specification
 
-Version: 1.7 — independent Shield Guard durability and hit routing
+Version: 1.8 — attacker-source routing and stable attack-id consumption
 Last updated: 2026-07-24
 
 ## Ownership
@@ -9,7 +9,7 @@ Last updated: 2026-07-24
 Actor
 ├── HealthComponent       bounded Health and guarded died signal
 ├── HurtboxComponent      faction/invulnerability acceptance and Health forwarding
-└── HitboxComponent       active damage, attack kind/id, one-hit target memory
+└── HitboxComponent       active damage, attacker source, stable kind/id, one-hit memory
 ```
 
 - Health remains the sole data authority; HUD only observes signals.
@@ -44,13 +44,13 @@ Player Hurtbox mask is `320` (`EnemyHitbox + Projectile`). Enemy Hurtboxes accep
 | Spearman thrust | 10 | `attack_thrust_04/05`; 0.45 / 0.10 / 0.60 s |
 | Crossbow bolt | 6 | one hit after 0.60 s Aim; 1.50 s Reload |
 
-Every accepted attack receives an id and can hit one target once. Hurt/death/action cancellation closes attack windows. Hitbox monitoring changes are deferred when required by PhysicsServer, while logical activation changes immediately.
+Every accepted attack receives an id and can hit one target once. Reopening another active frame with the same id preserves the Hitbox target ledger; only a genuinely new attacker/id pair clears it. Player attacks carry the Player root as `attacker`, so positional policies classify the actor rather than the forward weapon volume. Hurt/death/action cancellation closes attack windows. Hitbox monitoring changes are deferred when required by PhysicsServer, while logical activation changes immediately.
 
 Enemy Health and damage are authored only in the shared Config resources. Saved enemy scenes do not duplicate Health maxima or attack damage on their composed components. Runtime attack windows pass the current Config value into `HitboxComponent.begin_attack()`; CrossbowBolt remains inactive until initialized from its shooter's Config.
 
 ## Enemy-specific rules
 
-- **Shield Guard:** Body Health is 5 and independent Shield Health is 3. While intact, frontal normal/Dash Attack applies 1/2 only to Shield; rear or center-overlap attacks apply 1/2 only to Body. The breaking hit never overflows to Body. A single shared Hurtbox and Hitbox attack-id memory prevent dual routing or repeated active-frame damage. Shield states progress intact→cracked→critical→broken with independent art, metal hit feedback, and a one-time four-frame break. Zero Shield starts a 0.65-second GuardBreak, then permanently uses shieldless Idle/Walk/Attack/Hurt/Death. Target-side crossing starts a 0.22-second Turn instead of flipping immediately, creating a real rear punish window.
+- **Shield Guard:** Body Health is 5 and independent Shield Health is 3. While intact, frontal normal/Dash Attack applies 1/2 only to Shield; rear or true actor-center attacks apply 1/2 only to Body. The breaking hit never overflows to Body. One shared Hurtbox routes through `ShieldComponent`, which marks the `attacker instance id + attack_id` consumed before selecting Shield or Body. This Shield-side ledger survives break and complements the Hitbox ledger, so a later active frame cannot damage newly exposed Body. Shield states progress intact→cracked→critical→broken with independent art, metal hit feedback, and a one-time four-frame break. The break flash is shield-local at 0.05 seconds / alpha 0.30; it never modulates the whole body. Zero Shield starts a 0.65-second GuardBreak, then permanently uses shieldless Idle/Walk/Attack/Hurt/Death. Target-side crossing starts a 0.22-second Turn instead of flipping immediately, creating a real rear punish window.
 - **Spearman:** long narrow forward Hitbox and 76-pixel attack range. Below a 34-pixel minimum distance it retreats rather than producing a misleading rear/point-blank hit.
 - **Crossbowman:** Aim→Shoot→Reload; it retreats inside 70 pixels and has no melee attack. Bolts persist if the shooter dies, damage once, collide with World, and expire after 3 seconds.
 - **All enemies:** Hurt interrupts ordinary attacks and applies short knockback. Death stops AI, closes attack/detection/Hurtbox, plays fall/dissolve frames, emits presentation completion, and frees the node. Enemy death never creates the Player ghost.

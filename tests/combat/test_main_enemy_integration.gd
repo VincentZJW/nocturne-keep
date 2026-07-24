@@ -198,10 +198,13 @@ func _test_combat_wiring(enemies: Array[EnemyCombatant], player: Player) -> void
 func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	shield.set_ai_active(false)
 	shield.set_facing_direction(-1.0)
+	player.global_position = shield.global_position + Vector2(-34.0, 0.0)
+	player.animation_controller.set_facing_left(false)
 	var normal_hitbox: HitboxComponent = player.action_controller.attack_hitbox
-	normal_hitbox.global_position = shield.global_position + Vector2(-30.0, 0.0)
 	for hit_index: int in range(3):
-		normal_hitbox.begin_attack(18_000 + shield.get_instance_id() + hit_index, 1, 1.0)
+		normal_hitbox.begin_attack(
+			18_000 + shield.get_instance_id() + hit_index, 1, 1.0, player
+		)
 		_expect(normal_hitbox.try_hit(shield.hurtbox), "Main frontal normal Attack did not reach Shield Guard")
 		normal_hitbox.end_attack()
 		_expect(shield.health_component.current_health == 5, "Main frontal normal Attack damaged body")
@@ -219,9 +222,10 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	shield._recover_from_hurt()
 	_expect(shield.get_shield_current_health() == 3, "Main Shield reset did not restore 3/3 for Dash route test")
 	var dash_hitbox: HitboxComponent = player.action_controller.dash_attack_hitbox
-	dash_hitbox.global_position = shield.global_position + Vector2(-32.0, 0.0)
 	for hit_index: int in range(2):
-		dash_hitbox.begin_attack(19_000 + shield.get_instance_id() + hit_index, 2, 1.0)
+		dash_hitbox.begin_attack(
+			19_000 + shield.get_instance_id() + hit_index, 2, 1.0, player
+		)
 		_expect(dash_hitbox.try_hit(shield.hurtbox), "Main frontal Dash Attack did not reach Shield Guard")
 		dash_hitbox.end_attack()
 		_expect(shield.health_component.current_health == 5, "Main frontal Dash Attack damaged body")
@@ -235,6 +239,14 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	_expect(shield.guard_break_marker.visible, "Main Shield Guard break marker did not become visible")
 	_expect(shield.shield_break_effect.scale == Vector2(2.0, 2.0), "Main break effect is not enlarged")
 	_expect(shield.health_component.current_health == 5, "Main GuardBreak incorrectly dealt Dash overflow damage")
+	var breaking_attack_id: int = dash_hitbox.attack_id
+	_expect(
+		shield.shield_component.resolve_damage(dash_hitbox) == 0,
+		"Main breaking Dash id was accepted again after shield removal"
+	)
+	_expect(shield.shield_component.last_duplicate_blocked, "Main duplicate Dash was not reported")
+	_expect(shield.health_component.current_health == 5, "Main duplicate breaking Dash damaged body")
+	_expect(dash_hitbox.attack_id == breaking_attack_id, "Main breaking Dash id changed unexpectedly")
 	_expect(
 		shield.get_debug_summary().contains("BLOCK OFF")
 		and shield.get_debug_summary().contains("SH 0/3")
@@ -251,7 +263,7 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 		shield.animated_sprite.animation == &"walk_unshielded",
 		"Main Shield Guard did not recover into the unshielded visual state"
 	)
-	normal_hitbox.begin_attack(19_100 + shield.get_instance_id(), 1)
+	normal_hitbox.begin_attack(19_100 + shield.get_instance_id(), 1, 1.0, player)
 	_expect(normal_hitbox.try_hit(shield.hurtbox), "Main post-break frontal normal Attack was rejected")
 	normal_hitbox.end_attack()
 	_expect(shield.health_component.current_health == 4, "Main post-break frontal normal Attack did not deal damage")
@@ -262,9 +274,10 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 func _test_main_shield_back_hit(shield: CursedShieldGuard, player: Player) -> void:
 	shield.set_ai_active(false)
 	shield.set_facing_direction(-1.0)
+	player.global_position = shield.global_position + Vector2(34.0, 0.0)
+	player.animation_controller.set_facing_left(true)
 	var normal_hitbox: HitboxComponent = player.action_controller.attack_hitbox
-	normal_hitbox.global_position = shield.global_position + Vector2(30.0, 0.0)
-	normal_hitbox.begin_attack(19_200 + shield.get_instance_id(), 1)
+	normal_hitbox.begin_attack(19_200 + shield.get_instance_id(), 1, -1.0, player)
 	_expect(normal_hitbox.try_hit(shield.hurtbox), "Main Shield Guard back Attack was rejected")
 	normal_hitbox.end_attack()
 	_expect(shield.health_component.current_health == 4, "Main Shield Guard back Attack was blocked")
@@ -289,10 +302,16 @@ func _kill_main_enemy_with_player_hitbox(
 	if enemy is CursedShieldGuard:
 		var shield_enemy: CursedShieldGuard = enemy as CursedShieldGuard
 		shield_enemy.set_facing_direction(-1.0)
-		hitbox.global_position = shield_enemy.global_position + Vector2(30.0, 0.0)
+		player.global_position = shield_enemy.global_position + Vector2(34.0, 0.0)
+		player.animation_controller.set_facing_left(true)
 	var hit_count: int = 0
 	while enemy.get_health_component().current_health > 0 and hit_count < 32:
-		hitbox.begin_attack(20_000 + enemy.get_instance_id() + hit_count, damage)
+		hitbox.begin_attack(
+			20_000 + enemy.get_instance_id() + hit_count,
+			damage,
+			-1.0 if enemy is CursedShieldGuard else 0.0,
+			player
+		)
 		_expect(
 			hitbox.try_hit(enemy.get_node("Hurtbox") as HurtboxComponent),
 			"%s Main Player hit %d was rejected" % [enemy.name, hit_count + 1]

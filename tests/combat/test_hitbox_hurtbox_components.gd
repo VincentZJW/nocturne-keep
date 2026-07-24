@@ -36,6 +36,13 @@ func _test_damage_activation_and_deduplication() -> void:
 	_expect(health.current_health == 3, "Hitbox damage did not reach HealthComponent")
 	_expect(not hitbox.try_hit(hurtbox), "One attack damaged the same Hurtbox twice")
 	_expect(health.current_health == 3, "Duplicate attack changed Health")
+	hitbox.end_attack()
+	hitbox.begin_attack(1001)
+	_expect(
+		not hitbox.try_hit(hurtbox),
+		"Re-opening a later active frame forgot the same attack id target"
+	)
+	_expect(health.current_health == 3, "Same-id reactivation changed Health")
 	hitbox.begin_attack(1002)
 	_expect(hitbox.try_hit(hurtbox), "New attack id could not damage the same target")
 	_expect(health.current_health == 1, "New attack did not apply its damage")

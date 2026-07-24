@@ -27,16 +27,19 @@ func _capture() -> void:
 		return
 	shield.set_ai_active(false)
 	shield.set_facing_direction(-1.0)
-	player.global_position = shield.global_position + Vector2(-54.0, 0.0)
+	# This is the real forward-Dash geometry: the Player remains 34 px in front,
+	# while the authored Dash Hitbox center reaches the guard center. Side routing
+	# must therefore use the Player source, not the Hitbox center.
+	player.global_position = shield.global_position + Vector2(-34.0, 0.0)
+	player.animation_controller.set_facing_left(false)
 	player.velocity = Vector2.ZERO
 	for _frame: int in range(4):
 		await physics_frame
 	var dash_hitbox: HitboxComponent = player.action_controller.dash_attack_hitbox
-	dash_hitbox.global_position = shield.global_position + Vector2(-30.0, 0.0)
 	# Preserve the default F5 compact HUD so the break cue is judged in real play space.
 	debug_controller.set_compact_mode(true)
 	for hit_index: int in range(2):
-		dash_hitbox.begin_attack(91_001 + hit_index, 2, 1.0)
+		dash_hitbox.begin_attack(91_001 + hit_index, 2, 1.0, player)
 		if not dash_hitbox.try_hit(shield.hurtbox):
 			push_error("Shield Guard Main QA capture Dash Attack %d was rejected" % (hit_index + 1))
 			quit(1)
@@ -45,6 +48,15 @@ func _capture() -> void:
 		# First impact proves the 3 -> 1 critical ShieldVisual. The second proves break.
 		for _frame: int in range(10):
 			await process_frame
+	print(
+		"SHIELD_MAIN_QA: BODY %d SH %d ROUTE %s SIDE %s DUP %s" % [
+			shield.health_component.current_health,
+			shield.get_shield_current_health(),
+			shield.shield_component.last_route,
+			shield.shield_component.last_hit_side,
+			shield.shield_component.last_duplicate_blocked,
+		]
+	)
 	for _frame: int in range(12):
 		await process_frame
 	quit(0)
