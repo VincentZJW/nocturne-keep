@@ -41,5 +41,5 @@ The Dive Hitbox opens once per attack id and deals at most one hit to a target. 
 
 ## Main placement
 
-- Group05: `(3480,270)`, `(3680,270)` — isolated aerial teaching encounter.
+- Group05: `(3500,402)`, `(3620,402)` — isolated aerial teaching encounter, 90 px above the repaired y=492 reachable perch.
 - Group07: `(4960,300)` — mixed final normal encounter.

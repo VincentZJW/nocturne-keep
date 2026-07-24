@@ -39,6 +39,9 @@ func _run_tests() -> void:
 	var damage_button: Button = main.get_node_or_null(
 		"Interface/DebugHudRoot/DamageTestButton"
 	) as Button
+	var traversal_debug: LevelTraversalDebugOverlay = main.get_node_or_null(
+		"Interface/DebugHudRoot/LevelTraversalDebug"
+	) as LevelTraversalDebugOverlay
 	var health_container: Control = main.get_node_or_null("HUD/HealthContainer") as Control
 	var stamina_container: Control = main.get_node_or_null("HUD/StaminaContainer") as Control
 	_expect(
@@ -49,6 +52,7 @@ func _run_tests() -> void:
 		and enemy_panel != null
 		and enemy_debug != null
 		and damage_button != null
+		and traversal_debug != null
 		and health_container != null
 		and stamina_container != null,
 		"Main compact HUD node contract is incomplete"
@@ -61,10 +65,11 @@ func _run_tests() -> void:
 
 	_test_default_compact_state(
 		controller, debug_root, action_panel, action_debug,
-		enemy_panel, enemy_debug, damage_button, health_container, stamina_container
+		enemy_panel, enemy_debug, damage_button, traversal_debug,
+		health_container, stamina_container
 	)
 	await _test_expanded_and_hidden_states(
-		controller, debug_root, action_debug, enemy_debug, health_container
+		controller, debug_root, action_debug, enemy_debug, traversal_debug, health_container
 	)
 	await _test_responsive_layout(
 		controller, action_panel, enemy_panel, damage_button, health_container, stamina_container
@@ -80,6 +85,7 @@ func _test_input_map() -> void:
 		&"debug_toggle_hud": KEY_F1,
 		&"debug_toggle_compact": KEY_F2,
 		&"debug_toggle_enemy_details": KEY_F3,
+		&"debug_toggle_level_traversal": KEY_F4,
 	}
 	for action: StringName in bindings:
 		_expect(InputMap.has_action(action), "%s is missing from Input Map" % action)
@@ -99,6 +105,7 @@ func _test_default_compact_state(
 	enemy_panel: Control,
 	enemy_debug: MainEnemyDebugOverlay,
 	damage_button: Button,
+	traversal_debug: LevelTraversalDebugOverlay,
 	health_container: Control,
 	stamina_container: Control
 ) -> void:
@@ -117,6 +124,7 @@ func _test_default_compact_state(
 	_expect(is_equal_approx(health_container.size.x, 196.0), "Health HUD is not 196 pixels wide")
 	_expect(is_equal_approx(stamina_container.size.x, 196.0), "Stamina HUD is not 196 pixels wide")
 	_expect(damage_button.size.x <= 120.5 and damage_button.size.y <= 28.5, "Damage test button is not compact")
+	_expect(not traversal_debug.visible and not traversal_debug.debug_visible, "Traversal Debug is not default-off")
 
 
 func _test_expanded_and_hidden_states(
@@ -124,8 +132,12 @@ func _test_expanded_and_hidden_states(
 	debug_root: Control,
 	action_debug: PlayerActionDebugOverlay,
 	enemy_debug: MainEnemyDebugOverlay,
+	traversal_debug: LevelTraversalDebugOverlay,
 	health_container: Control
 ) -> void:
+	await _press_input_action(&"debug_toggle_level_traversal")
+	_expect(traversal_debug.visible and traversal_debug.debug_visible, "F4 did not enable Traversal Debug")
+	_expect(traversal_debug.text.contains("TRAVERSAL"), "Traversal Debug lacks its compact telemetry")
 	await _press_input_action(&"debug_toggle_compact")
 	_expect(not controller.debug_compact_mode, "F2 did not switch to Expanded mode")
 	for required: String in [
@@ -142,11 +154,14 @@ func _test_expanded_and_hidden_states(
 	await _press_input_action(&"debug_toggle_enemy_details")
 	await _press_input_action(&"debug_toggle_hud")
 	_expect(not debug_root.visible, "F1-style Debug hide did not hide the root")
+	_expect(not traversal_debug.is_visible_in_tree(), "F1-style Debug hide left Traversal Debug visible")
 	_expect(not action_debug.is_processing(), "Hidden Player Debug still processes")
 	_expect(not enemy_debug.is_processing(), "Hidden Enemy Debug still processes")
 	_expect(health_container.visible, "Debug visibility incorrectly controls formal Health HUD")
 	await _press_input_action(&"debug_toggle_hud")
 	_expect(debug_root.visible, "Second F1 press did not restore Debug HUD")
+	await _press_input_action(&"debug_toggle_level_traversal")
+	_expect(not traversal_debug.visible and not traversal_debug.debug_visible, "Second F4 did not hide Traversal Debug")
 
 
 func _press_input_action(action: StringName) -> void:
@@ -212,7 +227,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("MAIN_DEBUG_HUD_TEST: PASS (compact, expanded, hidden, F1/F2/F3, responsive layout)")
+		print("MAIN_DEBUG_HUD_TEST: PASS (compact, expanded, hidden, F1/F2/F3/F4, responsive layout)")
 		quit(0)
 		return
 	for failure: String in _failures:

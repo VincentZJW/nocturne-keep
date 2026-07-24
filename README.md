@@ -2,7 +2,7 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一关敌人阵容与Boss · Gargoyle Sentinel / Fallen Gate Knight`
+当前版本：`第一关平台可达性修复 · Traversal Graybox 2.0`
 
 ## 当前范围
 
@@ -36,7 +36,7 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/main/main.tscn
 ```
 
-该场景包含Player、Health/Stamina HUD、死亡/重生流程、7个手工普通遭遇组和一个Boss房。Player出生于`(320,612)`；普通组规模为2/3/2/2/2/3/4，逐步教学基础剑卫、长矛、盾牌、弩箭、石像鬼，再进行混合检验。Boss检查点位于`(5480,612)`，Boss出生于`(6120,596)`；进入后恢复Player Health/Stamina并锁门。Boss死亡后出口开放并显示第一关完成信息。
+该场景包含Player、Health/Stamina HUD、死亡/重生流程、7个手工普通遭遇组和一个Boss房。Player出生于`(320,612)`；普通组规模为2/3/2/2/2/3/4，逐步教学基础剑卫、长矛、盾牌、弩箭、石像鬼，再进行混合检验。三个弩手台顶部现为y=500/504/508，石像鬼落点顶部为y=492，全部可用稳定二段跳抵达且无需连续Air Dash。Boss检查点位于`(5480,612)`，Boss出生于`(6120,596)`；进入后恢复Player Health/Stamina并锁门。Boss死亡后出口开放并显示第一关完成信息。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -100,8 +100,9 @@ Main开发调试快捷键：
 | 显示/隐藏全部Debug HUD | F1 | 显示 |
 | Compact/Expanded切换 | F2 | Compact |
 | 单独展开/折叠Enemy详情 | F3 | 折叠 |
+| Level Traversal测量 | F4 | 关闭 |
 
-正式Health/Stamina始终显示，不受F1影响。左下`TAKE 25 DMG`仅用于开发死亡/重生验证，并会随Debug HUD一起隐藏。Main的调试面板使用锚点与容器布局；Enemy文本最多每0.15秒更新一次，隐藏时停止拼接。完整结构与字段契约见[Debug HUD规格](docs/design/debug_hud_spec.md)。
+正式Health/Stamina始终显示，不受F1影响。左下`TAKE 25 DMG`仅用于开发死亡/重生验证，并会随Debug HUD一起隐藏。F4的Traversal覆盖层默认关闭，只读显示脚底高度、起跳点、相对上升、位移、最近平台和Reachable评级；它属于同一Debug根节点，因此F1仍可统一隐藏。Main的调试面板使用锚点与容器布局；Enemy文本最多每0.15秒更新一次，隐藏时停止拼接。完整结构与字段契约见[Debug HUD规格](docs/design/debug_hud_spec.md)。
 
 连续按J时，当前Attack进入第3帧后会消费至多一条0.10秒缓存并重新播放同一基础突刺；这不是多段连招树。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。当前没有连招树或复杂伤害公式。
 
@@ -125,6 +126,7 @@ Main开发调试快捷键：
 - [Debug HUD规格](docs/design/debug_hud_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)
+- [第一关移动与平台规范](docs/design/level_traversal_spec.md)
 - [已知问题](docs/known_issues.md)
 
 ## 原创与素材

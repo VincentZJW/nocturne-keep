@@ -13,8 +13,12 @@ func _initialize() -> void:
 
 
 func _measure() -> void:
-	var single_jump: Dictionary = await _measure_jump(false)
-	var double_jump: Dictionary = await _measure_jump(true)
+	var standing_single_jump: Dictionary = await _measure_jump(false, false)
+	var standing_double_jump: Dictionary = await _measure_jump(true, false)
+	var single_jump: Dictionary = await _measure_jump(false, true)
+	var double_jump: Dictionary = await _measure_jump(true, true)
+	var single_air_dash: Dictionary = await _measure_jump_with_one_air_dash(false)
+	var double_air_dash: Dictionary = await _measure_jump_with_one_air_dash(true)
 	var air_dash: Dictionary = await _measure_four_air_dashes()
 	if not _failures.is_empty():
 		for failure: String in _failures:
@@ -23,30 +27,41 @@ func _measure() -> void:
 		quit(1)
 		return
 	var metrics_message: String = (
-		"PLAYER_LEVEL_METRICS: PASS physics_fps=%d single_jump_range=%.2f single_jump_rise=%.2f "
-		+ "double_jump_range=%.2f double_jump_rise=%.2f four_air_dash_range=%.2f "
-		+ "four_air_dash_total_to_landing=%.2f"
+		"PLAYER_LEVEL_METRICS: PASS physics_fps=%d standing_single_rise=%.2f "
+		+ "standing_double_rise=%.2f single_jump_range=%.2f single_jump_rise=%.2f "
+		+ "double_jump_range=%.2f double_jump_rise=%.2f single_plus_air_dash=%.2f "
+		+ "double_plus_air_dash=%.2f four_air_dash_range=%.2f "
+		+ "four_air_dash_total_to_landing=%.2f foot_offset=%.2f "
+		+ "platform_center_to_safe_edge=%.2f minimum_safe_landing_width=%.2f"
 	) % [
 			Engine.physics_ticks_per_second,
+			standing_single_jump["rise"],
+			standing_double_jump["rise"],
 			single_jump["range"],
 			single_jump["rise"],
 			double_jump["range"],
 			double_jump["rise"],
+			single_air_dash["range"],
+			double_air_dash["range"],
 			air_dash["dash_range"],
 			air_dash["landing_range"],
+			28.0,
+			98.0,
+			48.0,
 		]
 	print(metrics_message)
 	quit(0)
 
 
-func _measure_jump(use_double_jump: bool) -> Dictionary:
+func _measure_jump(use_double_jump: bool, move_forward: bool) -> Dictionary:
 	var world: Node2D = _create_world()
 	var player: Player = _spawn_player(world, use_double_jump)
 	await _wait_physics_frames(5)
 	var start_position: Vector2 = player.position
 	var minimum_y: float = start_position.y
 	var second_jump_sent: bool = false
-	Input.action_press(PlayerScript.MOVE_RIGHT_ACTION)
+	if move_forward:
+		Input.action_press(PlayerScript.MOVE_RIGHT_ACTION)
 	await _tap_action(PlayerScript.JUMP_ACTION)
 	var left_floor: bool = false
 	for frame_index: int in range(300):
@@ -63,11 +78,61 @@ func _measure_jump(use_double_jump: bool) -> Dictionary:
 			await _tap_action(PlayerScript.JUMP_ACTION)
 		if left_floor and player.is_on_floor():
 			break
-	Input.action_release(PlayerScript.MOVE_RIGHT_ACTION)
+	if move_forward:
+		Input.action_release(PlayerScript.MOVE_RIGHT_ACTION)
 	if not left_floor or not player.is_on_floor():
 		_failures.append("Jump measurement did not return to the floor")
 	if use_double_jump and not second_jump_sent:
 		_failures.append("Double-jump measurement did not trigger its air jump")
+	var result: Dictionary = {
+		"range": player.position.x - start_position.x,
+		"rise": start_position.y - minimum_y,
+	}
+	_cleanup_world(world)
+	await process_frame
+	return result
+
+
+func _measure_jump_with_one_air_dash(use_double_jump: bool) -> Dictionary:
+	var world: Node2D = _create_world()
+	var player: Player = _spawn_player(world, use_double_jump)
+	await _wait_physics_frames(5)
+	var start_position: Vector2 = player.position
+	var minimum_y: float = start_position.y
+	var second_jump_sent: bool = false
+	var dash_sent: bool = false
+	var left_floor: bool = false
+	Input.action_press(PlayerScript.MOVE_RIGHT_ACTION)
+	await _tap_action(PlayerScript.JUMP_ACTION)
+	for frame_index: int in range(360):
+		await physics_frame
+		left_floor = left_floor or not player.is_on_floor()
+		minimum_y = minf(minimum_y, player.position.y)
+		if (
+			use_double_jump
+			and left_floor
+			and not second_jump_sent
+			and player.velocity.y >= -10.0
+		):
+			second_jump_sent = true
+			await _tap_action(PlayerScript.JUMP_ACTION)
+		elif (
+			left_floor
+			and not dash_sent
+			and player.velocity.y >= -10.0
+			and (not use_double_jump or second_jump_sent)
+		):
+			dash_sent = true
+			await _tap_action(PlayerScript.DASH_ACTION)
+		if left_floor and player.is_on_floor():
+			break
+	Input.action_release(PlayerScript.MOVE_RIGHT_ACTION)
+	if not dash_sent:
+		_failures.append("One-Air-Dash measurement did not trigger Dash")
+	if use_double_jump and not second_jump_sent:
+		_failures.append("Double-jump plus Air Dash measurement missed air jump")
+	if not player.is_on_floor():
+		_failures.append("One-Air-Dash measurement did not return to the floor")
 	var result: Dictionary = {
 		"range": player.position.x - start_position.x,
 		"rise": start_position.y - minimum_y,

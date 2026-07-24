@@ -2933,3 +2933,78 @@ Status: in progress — implementation and acceptance evidence pending
 - Boss Phase 2 is a deterministic four-attack cycle for gray-box reproducibility. There is no behavior tree, random weighting, third phase, summon, elite, reward, or audio pass.
 - Boss reset currently occurs after the existing complete Player death/ghost sequence; normal enemies already defeated before the checkpoint remain removed. This is intentional for the one-checkpoint first-level gray box.
 - The level-complete exit displays a terminal overlay and does not load a second level, as scoped.
+
+## 2026-07-24 — First-level platform reachability audit and repair (preflight)
+
+Status: complete — all elevated Main combat surfaces reachable, three spawn-origin route runs and 33-script regression passed; manual feel acceptance pending
+
+### Goal
+
+- Measure the shipping Player scene through its real Input Map and `CharacterBody2D` path, then repair every unreachable standable surface in configured F5 Main.
+- Keep Player movement, stamina, combat, enemy balance/AI, Boss behavior, HUD sizing, and animation art unchanged.
+- Make all elevated Crossbow positions and the Gargoyle landing/counter window reachable by stable double jump without requiring chained Air Dash.
+
+### Read-only audit
+
+- `project.godot` resolves F5 to `res://scenes/main/main.tscn`; Main directly instances `res://scenes/player/player.tscn` at `World/Player` with no movement, double-jump, action, or stamina overrides.
+- First-level collision is authored directly under `Main/World` as one continuous `StaticBody2D` floor plus `PlatformA..D` and `GargoylePerch`; there is no TileMap or nested stale Level PackedScene.
+- Shipping tuning is `move_speed 220`, ground/air acceleration `1400/850`, jump velocity `-420`, gravity `1100`, coyote `0.10`, buffer `0.12`, Dash `480 × 0.18`, and Stamina `100/25`. There is no separate double-jump velocity, variable-height release cut, or maximum-fall clamp. Debug double jump is enabled in the shared Player scene and reuses `-420`.
+- Exact Godot 4.7.1 baseline measurement at 60 physics ticks/s: single jump `153.59` horizontal / `83.77` rise; apex-timed double jump `281.92` horizontal / `167.10` rise; four paid Air Dash segments `344.00` action-only range. Player collision is 24×52 at local y=2, so root-to-foot is 28 px.
+- Platform top-surface audit: Floor y=640; PlatformA y=508 (132 rise, safe); PlatformB y=426 (214 rise, unreachable); PlatformC y=458 (182 rise, unreachable); PlatformD y=438 (202 rise, unreachable); GargoylePerch y=328 (312 rise, unreachable). The three unreachable combat platforms each host a Crossbowman; the perch intercepts Gargoyle dives above the Player's reachable counter window.
+
+### Planned files, tests, and scope check
+
+- Extend the existing deterministic movement-envelope test to cover standing rise, forward jump/double-jump, one-Air-Dash combinations, full-stamina chain, collision-foot displacement, departure/landing margins, and minimum production landing width.
+- Add a focused Main traversal regression that reads saved top surfaces, widths, enemy offsets, and route classification from the actual F5 scene.
+- Move only the four invalid Main surfaces and their dependent Crossbow/Gargoyle spawn positions; keep Floor, PlatformA, encounter triggers, Camera limits, checkpoint, gates, Boss arena, and all gameplay tuning unchanged.
+- Add a small default-off Level Traversal Debug overlay that observes Player/platform state and shares existing F1 visibility without owning collision or gameplay.
+- Update `level_metrics.md`, `first_level_encounter_spec.md`, add `level_traversal_spec.md`, update README and this log; retain configured-Main QA evidence under `docs/qa/`.
+- Scope remains limited to first-level traversal repair: no new enemy, Boss skill, second level, equipment, combat tuning, or Player ability change.
+
+### Delivered repair
+
+- Kept the configured F5 source at `res://scenes/main/main.tscn` and changed its direct World geometry rather than creating a parallel level. PlatformB/C/D centers moved from y=438/470/450 to 512/516/520, producing top surfaces y=500/504/508. `GargoylePerch` moved from center y=340 to 504, producing top y=492.
+- PlatformA and all four moved surfaces now use downward-facing one-way collision. Their visual top remains exactly aligned with collision top; only the lower stone edge gained a restrained broken-stone silhouette. No invisible collider or TileMap layer was introduced.
+- Resulting rises from Floor top y=640 are 132/140/136/132/148 px for PlatformA/B/C/D/Perch: 79.0%/83.8%/81.4%/79.0%/88.6% of measured double-jump rise. Every surface is inside the main/challenge 90% ceiling and 190–240 px wide versus the 48 px production landing minimum.
+- Moved the Group04/06/07 Crossbowmen from y=396/428/408 to 470/474/478. Each root remains exactly 30 px above its new top and centered with at least 79 px edge clearance.
+- Moved Group05 Gargoyles from `(3480,270)/(3680,270)` to `(3500,402)/(3620,402)`. Both remain 90 px above the reachable perch with 44 px horizontal edge safety, so Dive can produce a reachable GroundStun counter window and ReturnToAir can recover to the saved home height.
+- Added a default-off read-only `LevelTraversalDebugOverlay` at `Main/Interface/DebugHudRoot/LevelTraversalDebug`. F4 toggles collision-foot Y, jump start/rise/distance, recorded peaks, nearest platform deltas, and reach rating; F1 still hides its parent Debug root. It creates no geometry and owns no gameplay state.
+- Added deterministic platform and route suites. The platform test performs real double-jump landings on all five surfaces. The three-route test starts at the saved spawn and never changes Player position: Floor-only/no-Air-Dash Boss approach, mobility Crossbow route including double jump + one Air Dash, and a novice Gargoyle route with the second jump deliberately delayed until downward velocity reaches 50 px/s.
+
+### Actual measurements and route standards
+
+- Standing/forward single jump: 83.77 px rise; forward range 153.59 px.
+- Standing/forward double jump: 167.10 px rise; forward range 281.92 px.
+- Single jump + one Air Dash: 192.92–196.59 px; double jump + one Air Dash: 321.26–324.92 px. The small interval is the accepted fixed-step boundary depending on which apex tick consumes input.
+- Four paid Air Dashes: 344.00 px action-only; 360.33–362.22 px from jump entry to landing. Full-Stamina chains remain shortcut capacity, not a normal-platform requirement.
+- Main safe ceiling is 133.68 px (80%); Challenge ceiling is 150.39 px (90%); Hidden/reward ceiling is 158.75 px (95%).
+
+### Commands and actual results
+
+1. Exact Godot 4.7.1 measurement:
+   - `Godot --headless --path . --script tests/player/measure_player_level_metrics.gd`: PASS with the values above, Player foot offset 28 px, 98 px center-to-safe-edge departure difference on a 220 px platform, and 48 px minimum safe landing width.
+2. Saved Main geometry/physics:
+   - `test_main_platform_reachability.gd`: PASS — five surfaces, one-way collision, aligned enemies, and five real double-jump landings.
+   - `test_main_traversal_routes.gd --log-file docs/qa/main_traversal_routes.log`: PASS — all three routes from actual spawn, no teleport.
+3. Focused regressions:
+   - Main enemy integration, Gargoyle Sentinel, first-level Boss, M1 movement, and Main Debug HUD including F4: all PASS.
+4. Complete repository regression:
+   - All 33 scripts under `tests/` ran serially through exact Godot 4.7.1 and passed. Captured outputs contained no final `SCRIPT ERROR`, `ERROR:`, or `WARNING:` diagnostics.
+5. Configured Main runtime:
+   - Headless `Godot --headless --path . --quit-after 300 --log-file docs/qa/main_traversal_f5_headless.log`: exit 0, no diagnostics.
+   - Graphical `Godot --path . --quit-after 300 --log-file docs/qa/main_traversal_f5_graphical.log`: exit 0, GL Compatibility on Apple M4, no diagnostics.
+   - Graphical Main QA capture script: exit 0 and `MAIN_TRAVERSAL_QA: PlatformB top=500 GargoylePerch top=492 PlatformC/D top=504/508`.
+
+### Configured-Main QA evidence
+
+- `docs/qa/main_traversal_crossbow_platform_b.png`: 1280×720, SHA-256 `6ecb6489f985954541bc89c4533dfd857f66ffe91db100896d1cd23365615346`.
+- `docs/qa/main_traversal_gargoyle_perch.png`: 1280×720, SHA-256 `d421ba23ecec23ee52fc2a07c740b2d76d141241032c5fe0b725db0bf2583c33`.
+- `docs/qa/main_traversal_platforms_c_d.png`: 1280×720, SHA-256 `3e011f2c96f5566a5caaf9a03b925135821785bb3c0d990129db76ba625f4272`.
+- Original-resolution inspection confirms Player/collision-foot alignment on PlatformB/Perch, centered Crossbow/Gargoyle positions, readable broken-stone edges, formal HUD, and compact Debug panels in the actual Main composition.
+
+### Manual acceptance and known limitations
+
+- Manually repeat PlatformB/C/D and GargoylePerch from Floor at normal input speed, including approaching from both directions. Automation proves physics reach and timing tolerance; it cannot decide subjective platform rhythm.
+- The first-level Floor remains a continuous gray-box mainline. Lowering the combat surfaces makes them accessible but does not convert this milestone into a finished environmental-art or multi-route level-design pass.
+- Traversal classification is based on the current measured Player resource. If Player movement is deliberately retuned later, rerun the measurement and update the overlay thresholds/spec together.
+- No intermediate platforms were added because direct lowering and one-way collision fully solved the invalid surfaces with the smallest Main diff.
