@@ -60,6 +60,10 @@ func _test_saved_roster(groups: Array[EncounterGroup], enemies: Array[EnemyComba
 				enemy.get_node_or_null("FacingRoot/ShieldBreakEffect") is AnimatedSprite2D,
 				"%s lacks the live ShieldBreakEffect" % enemy.name
 			)
+			_expect(
+				enemy.get_node_or_null("VisualRoot/GuardBreakMarker") is Sprite2D,
+				"%s lacks the live GuardBreakMarker" % enemy.name
+			)
 		_test_enemy_balance_profile(enemy)
 	_expect(counts.get(&"CursedCastleGuard", 0) == 3, "Main Castle Guard count mismatch")
 	_expect(counts.get(&"CursedShieldGuard", 0) == 2, "Main Shield Guard count mismatch")
@@ -197,6 +201,8 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	_expect(shield.is_shield_broken(), "Main frontal Dash Attack did not permanently break the shield")
 	_expect(shield.get_state_name() == &"GuardBreak", "Main Shield Guard did not enter GuardBreak")
 	_expect(shield.shield_break_effect.visible, "Main Shield Guard break effect did not become visible")
+	_expect(shield.guard_break_marker.visible, "Main Shield Guard break marker did not become visible")
+	_expect(shield.shield_break_effect.scale == Vector2(2.0, 2.0), "Main break effect is not enlarged")
 	_expect(shield.health_component.current_health == 7, "Main GuardBreak incorrectly dealt Dash damage")
 	_expect(
 		shield.get_debug_summary().contains("BLOCK OFF")
@@ -205,8 +211,10 @@ func _test_main_shield_break(shield: CursedShieldGuard, player: Player) -> void:
 	)
 	shield._process_enemy_state(0.69)
 	_expect(shield.get_state_name() == &"GuardBreak", "Main GuardBreak ended before 0.70 seconds")
+	_expect(shield.guard_break_marker.visible, "Main break marker vanished before GuardBreak ended")
 	shield._process_enemy_state(0.02)
 	_expect(not shield.is_blocking(), "Main Shield Guard restored Block after GuardBreak")
+	_expect(not shield.guard_break_marker.visible, "Main break marker remained after GuardBreak")
 	_expect(
 		shield.animated_sprite.animation == &"walk_unshielded",
 		"Main Shield Guard did not recover into the unshielded visual state"

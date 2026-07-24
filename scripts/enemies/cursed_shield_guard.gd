@@ -17,6 +17,9 @@ const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 @export_node_path("AnimatedSprite2D") var shield_break_effect_path: NodePath = NodePath(
 	"FacingRoot/ShieldBreakEffect"
 )
+@export_node_path("Sprite2D") var guard_break_marker_path: NodePath = NodePath(
+	"VisualRoot/GuardBreakMarker"
+)
 
 @onready var attack_hitbox: HitboxComponent = get_node_or_null(
 	attack_hitbox_path
@@ -27,19 +30,27 @@ const ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 @onready var shield_break_effect: AnimatedSprite2D = get_node_or_null(
 	shield_break_effect_path
 ) as AnimatedSprite2D
+@onready var guard_break_marker: Sprite2D = get_node_or_null(
+	guard_break_marker_path
+) as Sprite2D
 
 var next_attack_id: int = 1
 var current_attack_id: int = 0
+var shield_break_flash_tween: Tween
 
 
 func _on_common_ready() -> void:
-	if attack_hitbox == null or shield_policy == null or shield_break_effect == null:
+	if (
+		attack_hitbox == null or shield_policy == null
+		or shield_break_effect == null or guard_break_marker == null
+	):
 		push_error("CursedShieldGuard scene composition is incomplete")
 		set_physics_process(false)
 		return
 	attack_hitbox.damage = config.attack_damage
 	attack_hitbox.end_attack()
 	shield_break_effect.visible = false
+	guard_break_marker.visible = false
 	shield_break_effect.animation_finished.connect(_on_shield_break_effect_finished)
 	shield_policy.block_successful.connect(_on_block_successful)
 	shield_policy.guard_broken.connect(_on_guard_broken)
@@ -102,6 +113,8 @@ func _process_reaction(delta: float) -> void:
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer > 0.0:
 		return
+	if current_state == GUARD_BREAK:
+		_finish_guard_break_feedback()
 	_set_blocking(not is_shield_broken())
 	if has_valid_target():
 		_enter_chase()
@@ -171,7 +184,13 @@ func _on_guard_broken(_hitbox: HitboxComponent) -> void:
 	state_timer = (config as CursedShieldGuardConfig).guard_break_duration
 	_set_blocking(false)
 	_play_shield_break_effect()
+	_play_shield_break_flash()
 	play_animation(&"guard_break", true)
+
+
+func enter_death() -> void:
+	_finish_guard_break_feedback()
+	super.enter_death()
 
 
 func enter_hurt(source_position: Vector2) -> void:
@@ -275,6 +294,7 @@ func _play_shield_break_effect() -> void:
 	if shield_break_effect == null:
 		return
 	shield_break_effect.visible = true
+	guard_break_marker.visible = true
 	shield_break_effect.stop()
 	shield_break_effect.frame = 0
 	shield_break_effect.play(&"shield_break")
@@ -282,6 +302,30 @@ func _play_shield_break_effect() -> void:
 
 func _on_shield_break_effect_finished() -> void:
 	shield_break_effect.visible = false
+
+
+func _play_shield_break_flash() -> void:
+	if animated_sprite == null:
+		return
+	if shield_break_flash_tween != null and shield_break_flash_tween.is_valid():
+		shield_break_flash_tween.kill()
+	animated_sprite.modulate = Color(1.8, 1.65, 1.25, 1.0)
+	shield_break_flash_tween = create_tween()
+	shield_break_flash_tween.tween_property(
+		animated_sprite, "modulate", Color.WHITE, 0.12
+	)
+
+
+func _finish_guard_break_feedback() -> void:
+	if shield_break_effect != null:
+		shield_break_effect.stop()
+		shield_break_effect.visible = false
+	if guard_break_marker != null:
+		guard_break_marker.visible = false
+	if shield_break_flash_tween != null and shield_break_flash_tween.is_valid():
+		shield_break_flash_tween.kill()
+	if animated_sprite != null:
+		animated_sprite.modulate = Color.WHITE
 
 
 func _is_guard_break_locked() -> bool:

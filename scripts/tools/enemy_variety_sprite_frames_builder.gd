@@ -74,7 +74,8 @@ func _build_enemy(enemy_name: String, animations: Dictionary) -> SpriteFrames:
 func _build_shield_break_effect() -> SpriteFrames:
 	var frames: SpriteFrames = SpriteFrames.new()
 	frames.rename_animation(&"default", &"shield_break")
-	frames.set_animation_speed(&"shield_break", 12.0)
+	# Four equal frames span the complete 0.70-second GuardBreak readability window.
+	frames.set_animation_speed(&"shield_break", 4.0 / 0.70)
 	frames.set_animation_loop(&"shield_break", false)
 	for frame_index: int in range(4):
 		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(

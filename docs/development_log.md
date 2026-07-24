@@ -2593,3 +2593,74 @@ Status: complete — implementation, 28-script regression, standalone/F5 startup
 - Confirm the permanent-defense loss makes the seven-Health enemy appropriately vulnerable for the remainder of the encounter. No HP/damage compensation was introduced.
 - The break effect is intentionally lightweight: embedded pixel cracks/fragments plus a short overlay. Hit-stop, camera shake, audio, particles, shield physics, shield regeneration, and additional combat systems remain excluded.
 - GuardBreak preserves its large recoil animation while accepting punish damage. It does not play the smaller ordinary Hurt animation until after the 0.70-second lock ends.
+
+## 2026-07-24 — Shield break Main readability follow-up (preflight)
+
+Status: complete — Main readability fix, 28-script regression, standalone/F5 startup, and graphical evidence passed; manual approval pending
+
+### Goal
+
+- Make the existing one-time Shield Guard break unmistakable at normal F5 Main camera distance without changing combat balance or shield rules.
+- Keep the break flash/fragments readable for the full 0.70-second GuardBreak window and add a compact persistent broken-shield cue during that hard stun.
+- Preserve the permanent unshielded animation set after GuardBreak.
+
+### Read-only audit
+
+- F5 still resolves to `res://scenes/main/main.tscn`; both Main Shield Guard instances use the shared current `res://scenes/enemies/cursed_shield_guard.tscn` without local overrides.
+- The current `FacingRoot/ShieldBreakEffect` is a 64×64 four-frame overlay played at 12 FPS and 1× scale, so it lasts only about 0.33 seconds while GuardBreak itself lasts 0.70 seconds.
+- The previous QA frame proves `STATE GuardBreak`, `BLOCK OFF`, and `SHIELD BROKEN true`, but its only non-debug break cue is a very small pale cross. That is not sufficient visual acceptance evidence.
+- Permanent `idle_unshielded`, `walk_unshielded`, `attack_unshielded`, `hurt_unshielded`, and `death_unshielded` resources are already correct and must remain intact.
+
+### Planned files and responsibilities
+
+- Shield break pixel generator/assets/SpriteFrames: enlarge the authored flash/fragments, add a pixel broken-shield marker, and align overlay duration with the 0.70-second state.
+- Shield Guard scene/script: show the marker for the entire GuardBreak, apply a brief body flash, and guarantee cleanup on recovery or death.
+- Shield behavior/Main/asset tests: assert effect scale/duration, marker lifecycle, persistent broken state, and both live Main instances.
+- Shield/combat specs and this log: record the failed acceptance finding and the corrected presentation contract.
+
+### Verification plan
+
+1. Regenerate/import the focused pixel assets and rebuild SpriteFrames with exact Godot 4.7.1.
+2. Run focused asset, Shield behavior, and live Main integration tests, then all repository tests.
+3. Start the standalone enemy and configured Main, then capture and inspect a new original-resolution Main break frame.
+
+### Scope guard
+
+- No Health, damage, Block direction, GuardBreak duration, AI cadence, encounter placement, Player ability, other enemy, HUD, camera shake, hit-stop, audio, Boss, or unrelated system changes.
+
+### Delivered correction
+
+- Re-authored the four break-overlay frames with a larger eight-direction pale impact, brighter core, and more widely separated metal fragments. The scene displays the 64×64 overlay at integer 2× nearest-neighbor scale.
+- Changed the overlay from 12 FPS/about 0.33 seconds to 5.714 FPS/exactly 0.70 seconds so feedback spans the complete GuardBreak window.
+- Added `VisualRoot/GuardBreakMarker`, a 20×20 transparent cracked-shield pixel icon above the enemy. It remains visible for the complete hard stun and is removed on recovery or Death.
+- Added a restrained 0.12-second body highlight at the break instant. No camera shake, hit-stop, audio, particle system, or gameplay timing change was introduced.
+- Kept every permanent unshielded animation and the existing permanent `shield_broken` authority. Health remains 7 and attack damage remains 8.
+- Updated the graphical QA utility to preserve the default Compact Main HUD so the cue is judged in normal play space rather than behind Expanded diagnostics.
+
+### Commands and actual results
+
+1. Exact Godot `4.7.1.stable.official.a13da4feb` pixel generation/import/build:
+   - `ENEMY_VARIETY_PIXEL_BUILD: OK (116 files)`.
+   - `Godot --headless --path . --import`: exit 0; the new marker and four revised effect PNGs imported losslessly without mipmaps.
+   - `ENEMY_VARIETY_SPRITE_FRAMES_BUILD: OK`.
+2. Focused checks:
+   - `ENEMY_VARIETY_ASSET_TEST`: PASS — 64×64 effect frames, 20×20 marker, transparent/lossless imports, and exact 0.70-second overlay duration.
+   - `ENEMY_VARIETY_TEST`: PASS — enlarged effect, marker lifecycle, one-time break, 0.70-second lock, permanent unshielded recovery, and Death cleanup.
+   - `MAIN_ENEMY_INTEGRATION_TEST`: PASS — both shared live Main Shield instances own the latest effect/marker; frontal Player Dash Hitbox starts both cues and recovery clears them without restoring Block.
+3. Complete regression: all 28 repository test scripts exited 0 with no final `SCRIPT ERROR`, `ERROR:`, or `WARNING:`. Player movement metrics remain unchanged at 153.59 single-jump, 281.92 double-jump, 344.00 four-Air-Dash action range, and 360.33 pixels through landing.
+4. Runtime startup: standalone Shield Guard and configured F5 Main both exited 0 under bounded headless runs with no diagnostics.
+5. Graphical configured-Main capture: 19 frames at 1280×720/30 FPS under GL Compatibility on Apple M4, exit 0. The inspected frame uses the real `Main/World/Player` Dash Attack Hitbox against `EncounterGroup01/Enemies/CursedShieldGuard01` and retains the default Compact HUD.
+6. `git diff --check`: PASS.
+
+### F5 Main synchronization and QA evidence
+
+- `application/run/main_scene` remains `res://scenes/main/main.tscn`.
+- `World/Encounters/EncounterGroup01/Enemies/CursedShieldGuard01` and `EncounterGroup04/Enemies/CursedShieldGuard02` both instance the revised shared `cursed_shield_guard.tscn`; no Main-local override or stale PackedScene exists.
+- The shared scene now loads `FacingRoot/ShieldBreakEffect` at 2× and `VisualRoot/GuardBreakMarker`; saving and reopening Main retains both through the PackedScene reference.
+- `docs/qa/shield_guard_break_readable_f5_main.png` is the inspected original 1280×720 Compact-HUD frame. It visibly shows the enlarged break impact, shield fragments, cracked-shield marker, and the unshielded recoil pose.
+
+### Manual acceptance and known limitations
+
+- The break requires a **frontal Dash Attack while the shield is still intact**. A rear Dash Attack is ordinary damage by design and intentionally does not trigger the break cue.
+- Manually confirm both facings in the normal F5 encounter and judge whether the new cue is sufficiently strong on the target display. Automated evidence establishes timing and visibility, not personal visual preference.
+- The cracked-shield marker communicates the 0.70-second punish window only; it disappears when hard stun ends. The permanent missing shield on every subsequent animation communicates the lasting defense loss.

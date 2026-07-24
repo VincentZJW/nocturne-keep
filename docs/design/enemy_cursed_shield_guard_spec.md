@@ -1,6 +1,6 @@
 # Cursed Shield Guard / 诅咒盾卫
 
-Version: 1.2 · 2026-07-24
+Version: 1.3 · 2026-07-24
 
 ## Identity and role
 
@@ -21,7 +21,8 @@ A broad closed-helmet knight with old iron shield, short mace, dark plate, and a
 
 - `ShieldBlockComponent.shield_broken` is the logical authority. `set_blocking(true)` is ignored after break, so presentation and AI recovery cannot accidentally restore defense.
 - `guard_break_01` shows the intact shield flashing/cracking; frames 02–03 separate it into readable iron/rust fragments; frame 04 holds a larger recoil silhouette with no shield.
-- `FacingRoot/ShieldBreakEffect` adds a four-frame, 12 FPS pale-steel/amber impact flash and fragment overlay, then hides itself. No hit-stop or camera shake is used in this pass.
+- `FacingRoot/ShieldBreakEffect` adds a four-frame pale-steel/amber impact flash and fragment overlay at integer 2× scale. Its four equal frames span the complete 0.70-second GuardBreak window instead of ending after the former 0.33-second flash.
+- `VisualRoot/GuardBreakMarker` shows a compact cracked-shield pixel icon above the enemy for the complete hard-stun window. A 0.12-second body highlight reinforces the exact break instant; both cues are hidden on recovery or Death.
 - Recovery selects persistent `idle_unshielded`, `walk_unshielded`, `attack_unshielded`, `hurt_unshielded`, and `death_unshielded` frames. The shield therefore never visually reappears before cleanup.
 - Expanded Main Enemy Debug reports `STATE`, `BLOCK ON/OFF`, and `SHIELD BROKEN true/false` from the same runtime policy.
 
@@ -39,7 +40,9 @@ A broad closed-helmet knight with old iron shield, short mace, dark plate, and a
 | attack_unshielded | 5 | 10 with configured duration ratios | no |
 | hurt_unshielded / death_unshielded | 3 / 6 | 16.667 / 8 | no |
 
-Break overlay: `resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres` (4 frames, 12 FPS, non-looping).
+Break overlay: `resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres` (4 frames, 5.714 FPS, 0.70 seconds, non-looping, displayed at 2×).
+
+Break marker: `assets/sprites/enemies/cursed_shield_guard/shield_break_fx/broken_shield_marker.png` (20×20, transparent, nearest-neighbor).
 
 Source art: `assets/sprites/enemies/cursed_shield_guard/`.
 

@@ -58,6 +58,12 @@ func _initialize() -> void:
 		).path_join("shield_break_fx_%02d.png" % (frame_index + 1))
 		failures += 0 if _save_png(shield_fx, shield_fx_path) == OK else 1
 		total += 1
+	var broken_shield_marker: Image = _draw_broken_shield_marker()
+	var marker_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		"shield_break_fx"
+	).path_join("broken_shield_marker.png")
+	failures += 0 if _save_png(broken_shield_marker, marker_path) == OK else 1
+	total += 1
 	var bolt: Image = PixelCanvas.create_transparent(Vector2i(24, 8))
 	PixelCanvas.draw_line(bolt, Vector2i(2, 4), Vector2i(20, 4), STEEL, 2)
 	PixelCanvas.fill_rect(bolt, Rect2i(0, 2, 4, 5), RUST)
@@ -163,18 +169,40 @@ func _draw_shield_break_fx(frame: int) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	var center: Vector2i = Vector2i(39, 36)
 	if frame == 0:
-		PixelCanvas.draw_line(image, center + Vector2i(-10, 0), center + Vector2i(10, 0), PALE_FLASH, 2)
-		PixelCanvas.draw_line(image, center + Vector2i(0, -11), center + Vector2i(0, 11), PALE_FLASH, 2)
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 3, center.y - 3, 7, 7), Color.WHITE)
+		PixelCanvas.draw_line(image, center + Vector2i(-15, 0), center + Vector2i(15, 0), PALE_FLASH, 3)
+		PixelCanvas.draw_line(image, center + Vector2i(0, -16), center + Vector2i(0, 16), PALE_FLASH, 3)
+		PixelCanvas.draw_line(image, center + Vector2i(-10, -10), center + Vector2i(10, 10), PALE_FLASH, 2)
+		PixelCanvas.draw_line(image, center + Vector2i(-10, 10), center + Vector2i(10, -10), PALE_FLASH, 2)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 4, center.y - 4, 9, 9), Color.WHITE)
 	elif frame == 1:
 		_draw_shield_fragments(image, center, 1)
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 2, center.y - 2, 5, 5), PALE_FLASH)
+		PixelCanvas.draw_line(image, center + Vector2i(-10, 0), center + Vector2i(10, 0), PALE_FLASH, 2)
+		PixelCanvas.draw_line(image, center + Vector2i(0, -11), center + Vector2i(0, 11), PALE_FLASH, 2)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 3, center.y - 3, 7, 7), PALE_FLASH)
 	elif frame == 2:
 		_draw_shield_fragments(image, center, 2)
+		PixelCanvas.draw_line(image, center + Vector2i(-6, -5), center + Vector2i(6, 5), FX_FADE, 2)
 	else:
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 14, center.y - 9, 3, 3), FX_FADE)
-		PixelCanvas.fill_rect(image, Rect2i(center.x + 15, center.y - 5, 3, 4), FX_FADE)
-		PixelCanvas.fill_rect(image, Rect2i(center.x - 5, center.y + 14, 4, 3), FX_FADE)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 19, center.y - 12, 4, 4), FX_FADE)
+		PixelCanvas.fill_rect(image, Rect2i(center.x + 19, center.y - 8, 4, 5), FX_FADE)
+		PixelCanvas.fill_rect(image, Rect2i(center.x - 7, center.y + 18, 5, 4), FX_FADE)
+	return image
+
+
+func _draw_broken_shield_marker() -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(20, 20))
+	# Two visibly separated metal halves and a bright lightning-shaped fracture.
+	PixelCanvas.fill_rect(image, Rect2i(2, 2, 7, 12), DARK)
+	PixelCanvas.fill_rect(image, Rect2i(11, 2, 7, 12), DARK)
+	PixelCanvas.fill_rect(image, Rect2i(4, 4, 4, 9), MID_IRON)
+	PixelCanvas.fill_rect(image, Rect2i(12, 4, 4, 9), MID_IRON)
+	PixelCanvas.fill_rect(image, Rect2i(5, 13, 3, 3), DARK)
+	PixelCanvas.fill_rect(image, Rect2i(12, 13, 3, 3), DARK)
+	PixelCanvas.draw_line(image, Vector2i(9, 1), Vector2i(11, 6), PALE_FLASH, 2)
+	PixelCanvas.draw_line(image, Vector2i(11, 6), Vector2i(8, 10), PALE_FLASH, 2)
+	PixelCanvas.draw_line(image, Vector2i(8, 10), Vector2i(10, 17), PALE_FLASH, 2)
+	PixelCanvas.fill_rect(image, Rect2i(1, 7, 2, 3), RUST)
+	PixelCanvas.fill_rect(image, Rect2i(17, 6, 2, 3), RUST)
 	return image
 
 

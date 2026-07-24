@@ -116,8 +116,25 @@ func _validate_shield_break_effect() -> void:
 		_expect(frames.has_animation(&"shield_break"), "Shield break effect animation is missing")
 		_expect(frames.get_frame_count(&"shield_break") == 4, "Shield break effect is not four frames")
 		_expect(not frames.get_animation_loop(&"shield_break"), "Shield break effect unexpectedly loops")
+		var effect_duration: float = 0.0
+		var effect_speed: float = frames.get_animation_speed(&"shield_break")
+		for frame_index: int in range(frames.get_frame_count(&"shield_break")):
+			effect_duration += frames.get_frame_duration(&"shield_break", frame_index) / effect_speed
+		_expect(is_equal_approx(effect_duration, 0.70), "Shield break effect does not span 0.70 seconds")
 	for frame_number: int in range(1, 5):
 		_validate_png("cursed_shield_guard", "shield_break_fx", frame_number)
+	var marker_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		"shield_break_fx"
+	).path_join("broken_shield_marker.png")
+	_expect(FileAccess.file_exists(marker_path), "Broken shield marker is missing")
+	if FileAccess.file_exists(marker_path):
+		var marker: Image = Image.new()
+		var marker_error: Error = marker.load_png_from_buffer(FileAccess.get_file_as_bytes(marker_path))
+		_expect(marker_error == OK, "Cannot decode broken shield marker")
+		if marker_error == OK:
+			_expect(marker.get_size() == Vector2i(20, 20), "Broken shield marker is not 20x20")
+			_expect(_visible_pixel_count(marker) >= 50, "Broken shield marker is unreadable")
+			_expect(_has_transparency(marker), "Broken shield marker lacks transparency")
 
 
 func _visible_pixel_count(image: Image) -> int:

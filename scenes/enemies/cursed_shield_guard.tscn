@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/cursed_shield_guard.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/cursed_shield_guard_config.tres" id="2_config"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/combat/shield_block_component.gd" id="7_shield"]
 [ext_resource type="SpriteFrames" path="res://resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres" id="8_break_fx"]
+[ext_resource type="Texture2D" path="res://assets/sprites/enemies/cursed_shield_guard/shield_break_fx/broken_shield_marker.png" id="9_break_marker"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(34, 54)
@@ -36,6 +37,14 @@ texture_filter = 1
 sprite_frames = ExtResource("3_frames")
 animation = &"idle"
 autoplay = "idle"
+
+[node name="GuardBreakMarker" type="Sprite2D" parent="VisualRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 4
+position = Vector2(0, -42)
+texture_filter = 1
+texture = ExtResource("9_break_marker")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 3)
@@ -69,6 +78,7 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 visible = false
 z_index = 2
+scale = Vector2(2, 2)
 texture_filter = 1
 sprite_frames = ExtResource("8_break_fx")
 animation = &"shield_break"

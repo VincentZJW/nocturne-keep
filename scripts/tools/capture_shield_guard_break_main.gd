@@ -39,7 +39,8 @@ func _capture() -> void:
 		quit(1)
 		return
 	dash_hitbox.end_attack()
-	debug_controller.set_compact_mode(false)
+	# Preserve the default F5 compact HUD so the break cue is judged in real play space.
+	debug_controller.set_compact_mode(true)
 	for _frame: int in range(14):
 		await process_frame
 	quit(0)
