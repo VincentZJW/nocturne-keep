@@ -153,7 +153,7 @@ func _validate_scene() -> void:
 	if guard != null:
 		_expect(guard.texture_filter == CanvasItem.TEXTURE_FILTER_PARENT_NODE, "Unexpected root texture filter override")
 		_expect(guard.animated_sprite.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Guard sprite is not nearest-filtered")
-		_expect(guard.health_component.max_health == 3, "Guard max Health is not three")
+		_expect(guard.health_component.max_health == 30, "Guard max Health is not thirty")
 		_expect(guard.hurtbox != null, "Guard Hurtbox is missing")
 		_expect(guard.attack_hitbox != null, "Guard AttackHitbox is missing")
 		_expect(guard.state_machine != null, "Guard StateMachine is missing")

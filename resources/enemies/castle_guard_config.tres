@@ -4,7 +4,7 @@
 
 [resource]
 script = ExtResource("1_config")
-max_health = 3
+max_health = 30
 attack_damage = 5
 patrol_speed = 45.0
 chase_speed = 75.0

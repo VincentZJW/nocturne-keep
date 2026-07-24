@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/ui/items/veilbound_daggers.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_weapon")
+weapon_id = &"veilbound_daggers"
+display_name_zh = "暮帷双匕"
+display_name_en = "Veilbound Daggers"
+description_zh = "暮帷会夜誓者使用的制式双匕首。刀刃轻薄，适合快速而精准的突刺。"
+description_en = "Standard twin blades carried by the Veilbound. Light, narrow, and made for swift, precise thrusts."
+weapon_type = &"dual_daggers"
+tier = 1
+normal_attack_damage = 10
+dash_attack_damage = 20
+icon = ExtResource("2_icon")
+player_visual_id = &"veilbound"
+shop_value = 0
+can_sell = false
+is_story_reward = false

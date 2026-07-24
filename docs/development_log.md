@@ -3501,3 +3501,78 @@ Status: in progress — runtime audit and baseline exact-Godot verification comp
 - The opening uses original Godot-native 2D panel art rather than a pre-rendered film, licensed music or final hand-painted pixel illustrations. Environmental narrative props are deliberately visual-only.
 - Tutorial progress persists only for the current Main runtime because no save system exists. Encounter death persistence/checkpoint serialization is not introduced.
 - No second level, sixth normal enemy, second Boss, equipment, experience, drops, skill tree, or new combat tuning was added.
+## 2026-07-24 — Loot, currency and first weapon progression loop (preflight)
+
+Status: in progress — read-only architecture and value audit complete
+
+### Goal
+
+- Add deterministic, health-aware one-drop enemy loot, collectible coins and healing vials without changing movement, stamina, enemy AI or outgoing enemy/Boss damage.
+- Replace Player attack hitbox literals with equipped `WeaponData`, provide run-persistent currency/inventory/equipment state, and award Ravenfang Daggers plus 30 coins after the first Boss.
+- Scale the existing normal-enemy, shield and Boss health pools by 10× so the approved 10/20 and 12/24 weapon damage values preserve current time-to-kill.
+- Gate the existing castle threshold until the permanent Boss weapon pickup is collected, while retaining the existing Boss death, gate-opening and scene-transition responsibilities.
+
+### Read-only audit
+
+- Git began clean on `master` at `369dd1f`, one commit ahead of `origin/master`. Configured F5 starts `res://scenes/cinematics/opening_cinematic.tscn`, which loads `res://scenes/main/main.tscn`; Main Player is `Main/World/Player`, Boss is `Main/World/CastleEntranceArea/FallenGateKnight`, and the exit is `Main/World/CastleEntranceArea/CastleEntranceTrigger`.
+- Player damage is currently duplicated as literal overrides in `scripts/player/player_action_controller.gd`: normal Attack calls `begin_attack(..., 1, ...)` and Dash Attack calls `begin_attack(..., 2, ...)`; the saved Dash hitbox also stores `damage = 2`. No weapon Resource, weapon inventory or equipment authority exists.
+- `HealthComponent`, `HitboxComponent` and `HurtboxComponent` already provide bounded health, one-hit-per-attack ledgers and faction filtering. Ground enemies and the Boss emit `enemy_died` when entering Death, before their visual presentation queues the node for deletion. No loot, pickup, wallet or currency HUD exists.
+- Current centralized values are Guard 3 HP/5 damage, Shield Guard 5 body HP/3 shield HP/8 damage, Spearman 5 HP/10 damage, Crossbowman 4 HP/6 projectile damage, Gargoyle 3 HP/7 dive damage, Boss 18 body HP/10 shield HP. Player Health/Stamina are both 100. Enemy and Boss outgoing damage values are already Resource/config driven and will remain unchanged.
+- Main serializes one `first_level_encounters.tscn` instance containing 34 normal enemies. Reusable enemy PackedScenes and common base classes mean a composed loot component can be added once per enemy type instead of per Main instance. The current threshold scene has no run inventory summary.
+
+### Planned files, tests, and scope check
+
+- Add typed `WeaponData` resources plus focused `CurrencyManager`, `WeaponInventory` and `EquipmentManager` autoloads; wire Player damage to equipped weapon values and expose signal-driven HUD/read-only debug summaries.
+- Add a typed loot profile/component and three reusable pickup scenes (coin, small vial, large vial), with deterministic debug modes, source-classification rules, expiry/blink behavior and collision-safe pop motion.
+- Compose loot into all five normal-enemy PackedScenes, scale centralized health/shield resources, and add deterministic statistical/component tests rather than per-instance Main overrides.
+- Extend the existing Boss room/exit flow with one fixed reward controller and permanent Ravenfang pickup on the safe bridge; Boss reward state persists across Player death and prevents the gate trigger from transitioning before collection.
+- Add a compact threshold inventory summary, QA capture drivers/evidence, exact Godot 4.7.1 import/runtime/regression checks, required design documents and README instructions.
+- Scope excludes shop UI, second-level gameplay, weapon upgrades/affixes, consumable inventory, random Boss loot, enemy AI changes, new enemy types, Player HP/Stamina changes and changes to enemy/Boss outgoing damage.
+
+### Delivered implementation
+
+- Added typed `WeaponData` plus Veilbound Daggers (Tier 1, 10/20) and Ravenfang Daggers (Tier 2, 12/24). `WeaponInventory` owns unique ids; `EquipmentManager` owns the equipped id and is now the sole source for Player normal/Dash Attack damage. The old 1/2 Hitbox literals and saved Dash damage override were removed.
+- Added `Player/VisualRoot/WeaponVisual`, driven by `weapon_equipped`. Veilbound keeps the existing authored frame blades; Ravenfang overlays longer black-steel/pale-edge blades and restrained dark-red rune pixels across idle, run, jump, Ground/Air Dash, normal Attack and Dash Attack while retaining `flip_h` and unchanged combat geometry.
+- Scaled the centralized target pools to Guard 30, Shield Guard Body 50/Shield 30, Spearman 50, Crossbowman 40, Gargoyle 30 and Gate Knight Body 180/Shield 100. Enemy/Boss outgoing damage, Player HP 100, Stamina 100, action timings, movement and AI are unchanged. Shield/Boss damage-art thresholds now use ratios.
+- Added `LootDropProfile` and one `LootDropComponent` to each of the five reusable normal-enemy PackedScenes. All 34 Main instances inherit one health-aware roll: high HP 58/12/3/27, mid HP 52/16/5/27 and low HP 45/22/8/25 for coin/small/large/none. Player fatal Hitboxes are captured before Health mutation. Environment deaths never yield healing and retain only half of otherwise successful coin outcomes; debug deletion may suppress the roll. One resolved guard prevents duplicate drops.
+- Added original Godot-drawn `CoinPickup`, 10-HP Small Blood Vial and 20-HP Large Blood Vial. Pickups pop a restrained 14 pixels, do not block or enter combat layers, expire after 20 seconds and blink during the final 3. Full-health/dead Players leave vials intact; accepted healing clamps in `HealthComponent`, emits the existing HUD signal and shows a small `+HP` plus dark-red pixel feedback.
+- Added run-persistent `CurrencyManager`, signal-driven coin HUD and debug reset/grant helpers. Coin ranges are Guard 1–2, Shield 2–4, Spear 2–3, Crossbow 2–3 and Gargoyle 2–4. Failed spend leaves the balance unchanged and no operation can create a negative wallet.
+- Added a fixed `BossRewardController` at bridge world `(6210,592)`. The complete Boss death grants 30 coins once, plays a small coin-bag/text response and original procedural chime, and reveals a permanent Ravenfang pickup. E adds it once, auto-equips it, updates Player blades/HUD immediately and persists through Player death. The gate still opens on Boss death; `CastleEntranceTrigger` blocks only the scene transition until the story weapon is collected and shows a small return prompt.
+- Added the same compact coin/weapon HUD to `ravenmourn_threshold.tscn` under a CanvasLayer, proving wallet/equipment state survives Main → castle threshold. `ChapterSession` stores Boss reward spawned/collected flags for this run; no save file or shop was added.
+
+### F5 and Main synchronization
+
+- `project.godot` remains `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"`; the real path is Opening → `res://scenes/levels/veilbound_catacomb.tscn` → `res://scenes/main/main.tscn`.
+- Main authorities are `Main/World/Player`, `Main/World/Encounters` (18 groups / 34 normal enemies), `Main/World/CastleEntranceArea/FallenGateKnight`, `Main/World/CastleEntranceArea/BossReward/WeaponPickup`, `Main/World/CastleEntranceArea/CastleEntranceTrigger`, `Main/HUD/RunInventory`, `Main/Interface`, `Main/BossRoomController` and `Main/CastleEntranceTransition`.
+- The five normal PackedScenes each own one current LootDropComponent/Profile; Main contains no stale per-instance probability or HP override. The Player PackedScene owns the current equipment visual and current ActionController; Main does not override weapon damage.
+- Main Debug compact/expanded output now reports coins, equipped weapon tier/id and 10/20 or 12/24 damage. Enemy details report loot profile/result/roll/source; Boss details report Body/Shield and fixed reward/collection state. F1/F2/F3 behavior remains unchanged.
+
+### Commands and actual results
+
+1. Exact engine and import/runtime:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Exact 4.7.1 editor parse and headless `--import --quit-after 120`: exit 0, no Script Error/Error/Warning.
+   - Direct Main headless runtime for 600 frames: exit 0, no Script Error/Error/Warning.
+   - Configured graphical F5 for 300 frames with Dummy audio: exit 0 on GL Compatibility / Apple M4, no Script Error/Error/Warning.
+2. Deterministic loot/weapon progression:
+   - `tests/items/test_loot_weapon_progression.gd`: PASS for data resources, 10/20→12/24 auto-equip, Player visual switch, six scaled pools, all 34 loot components, coin/heal/full/dead/single-consume cases, wallet death persistence/no-negative spend, environment rule, Boss reward gating/dedup and threshold persistence.
+   - Seed 4242 / 100 rolls: high HP `{coin:63, small:9, large:3, none:25}`; mid HP `{59,12,5,24}`; low HP `{49,21,8,22}`. Every sample totals 100 and low-HP healing frequency is higher without becoming guaranteed.
+3. Complete regression:
+   - Serial exact-Godot execution of all repository test scripts: `FULL_TESTS count=40 failures=0 diagnostics=0`. This covers movement, Health/Stamina, death/respawn, Player attacks, five enemies, shield routing, Boss/reset/gate, 34-enemy Main, opening/revival/tutorial, traversal, assets and the new run progression.
+4. Graphical evidence:
+   - `scripts/tools/capture_loot_weapon_qa.gd`: exit 0 and reports `LOOT_WEAPON_QA: PASS` after capturing live Main pickups/Boss reward/equipment plus threshold persistence.
+
+### QA evidence
+
+- `docs/qa/loot_normal_enemy_coin_main.png`: 1280×720, 18,631 bytes, SHA-256 `4c07f6fde9b16e9079e0c72f1960d25f595f8b9f861973548a86fcdc10b185e3` — a real Castle Guard Death signal resolves forced coin through its composed Main-compatible LootDropComponent.
+- `docs/qa/loot_small_blood_vial_main.png`: 1280×720, 18,084 bytes, SHA-256 `c27771650c8020f2a7f159e7cbfe56489ee5a94353f6f96285683874435900f2`.
+- `docs/qa/loot_large_blood_vial_main.png`: 1280×720, 18,140 bytes, SHA-256 `19cce3041b422f97e388615b5224a39595b099de7d45ba176aaa9f589b7d5a26`.
+- `docs/qa/boss_ravenfang_reward_main.png`: 1280×720, 35,313 bytes, SHA-256 `522134073f306fcb129496ead6f378326cba823decbcf162152932ddae6dcda4` — safe bridge reward and +30 coin feedback after complete Boss defeat.
+- `docs/qa/ravenfang_equipped_main.png`: 1280×720, 45,882 bytes, SHA-256 `78c78fde16ab4af1c901e9fdcc82c37cd9d3d06a5c58f00f5d5afb7e29a92096` — acquisition prompt, Ravenfang Player presentation and WPN T2 12/24 HUD.
+- `docs/qa/threshold_inventory_persistence.png`: 1280×720, 11,037 bytes, SHA-256 `2ed65343557ce6f314acb363bac2de64880bb52c3006ce52a86d3c343826695a` — castle threshold CanvasLayer still shows 30 coins and WPN T2 12/24.
+
+### Acceptance status and known limitations
+
+- Automated tests verify one-roll/dedup, exact values, signal wiring, 34 inherited components, gate blocking and state persistence. A human should still play Opening → revival → several health bands → Boss, judge drop readability/frequency, listen to the restrained reward chime, and confirm Ravenfang overlays remain clear through all fast actions and both facings.
+- Pickups use a safe visual pop and fixed nearby settle point rather than RigidBody physics; this intentionally prevents wall/water launches and actor blocking. No navigation, enemy AI, movement, attack timing, Player HP/Stamina or incoming damage was changed.
+- Persistence is runtime-only. A future save system must serialize coins, owned ids, equipped id, reward flags and chapter; no complete save, NPC store, Chapter II scene, upgrades, affixes, elements, durability, consumable inventory, weapon hot-swap or third weapon exists.

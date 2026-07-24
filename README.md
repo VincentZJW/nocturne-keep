@@ -75,7 +75,7 @@ res://scenes/tools/boss_test_room.tscn
 
 它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5开场后Main的18组实际遭遇和城堡木桥流程为准。
 
-建议Main人工测试顺序：从出生点观察月亮、远景树海与前景枯树的层次，沿Group01..03确认泥石路、杂草、灌木、破栅栏、路标、车轮和墓石不会掩盖攻击；在Group03..05观察森林减少、废岗楼/断墙/铁门增加且远处尖塔逐渐放大。继续从边缘登上PlatformB/C/D与GargoylePerch，在Group06/07确认后段城墙、石砖、碎石、杂草和链条仍保持敌人可读性。到达`(5480,612)`前应看到`RAVENMOURN CASTLE`铁拱门且可自由通行；踏上木桥后确认深青蓝水面/倒影/桥影、多尖塔城堡主体、加宽重门、10点Boss盾量与Phase 2正常。击败Boss后等待完整1.20秒升门，确认没有章节/开门大字、Player控制保留，然后自行进入`CastleEntranceTrigger`并无文字淡出到阈厅占位场景。
+建议Main人工测试顺序：从出生点观察月亮、远景树海与前景枯树的层次，沿Group01..03确认泥石路、杂草、灌木、破栅栏、路标、车轮和墓石不会掩盖攻击；在Group03..05观察森林减少、废岗楼/断墙/铁门增加且远处尖塔逐渐放大。继续从边缘登上PlatformB/C/D与GargoylePerch，在Group06/07确认后段城墙、石砖、碎石、杂草和链条仍保持敌人可读性。到达`(5480,612)`前应看到`RAVENMOURN CASTLE`铁拱门且可自由通行；踏上木桥后确认深青蓝水面/倒影/桥影、多尖塔城堡主体、加宽重门、100点Boss盾量与Phase 2正常。击败Boss后等待完整1.20秒升门，拾取永久鸦牙双匕奖励，再进入`CastleEntranceTrigger`并无文字淡出到阈厅占位场景。
 
 当前灰盒击杀次数：剑卫普通/Dash为3/2；盾卫从背后或破盾后击杀本体为5/3，纯正面总输入为普通8次或Dash 5次（前3/2次只削减盾量且破盾伤害不溢出）；长矛兵为5/3；弩手为4/2。满血Player分别在剑卫第20、盾卫第13、长矛兵第10、弩箭第17次命中时死亡。
 
@@ -89,8 +89,8 @@ res://scenes/tools/boss_test_room.tscn
 | 跳跃 | Space；Debug开关启用时可二段跳 |
 | Dash / 冲刺 | Shift（Left Shift与Right Shift）；地面或空中均可 |
 | 连续Ground/Air Dash | 连续独立按下Shift；每段消耗共享耐力25点 |
-| 普通双匕首前刺 | J；对古堡守卫造成1点伤害 |
-| Dash Attack | Shift后在Dash的0.18秒窗口内按J；同帧Shift+J也可直接触发；造成2点伤害 |
+| 普通双匕首前刺 | J；暮帷/鸦牙当前造成10/12点伤害 |
+| Dash Attack | Shift后在Dash的0.18秒窗口内按J；同帧Shift+J也可直接触发；暮帷/鸦牙造成20/24点伤害 |
 | Air Dash Attack | 空中Shift后在Dash中按J |
 | 墓窟互动 | E：拾取匕首、观察环境、开启石门 |
 | 跳过Opening/复苏剧情 | 长按 ESC 或 Enter |
@@ -139,6 +139,12 @@ Main开发调试快捷键：
 - [第一关环境美术规格](docs/design/environment_art_spec.md)
 - [灰盒遭遇设计规格](docs/design/encounter_design_spec.md)
 - [Debug HUD规格](docs/design/debug_hud_spec.md)
+- [随机掉落系统](docs/design/loot_drop_system_spec.md)
+- [治疗拾取](docs/design/health_pickup_spec.md)
+- [金币系统](docs/design/currency_system_spec.md)
+- [武器与装备](docs/design/weapon_system_spec.md)
+- [第一章武器平衡](docs/design/weapon_balance_spec.md)
+- [第二章数值衔接边界](docs/design/chapter_02_combat_scaling_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
 - [移动范围与关卡尺度](docs/design/level_metrics.md)
 - [第一关移动与平台规范](docs/design/level_traversal_spec.md)
@@ -148,3 +154,10 @@ Main开发调试快捷键：
 ## 原创与素材
 
 当前角色与敌人像素图由项目内Godot `Image`工具原创生成，场景背景和灰盒几何使用Godot原生节点；没有下载或复制第三方素材。后续资产必须登记来源并满足项目的原创及许可要求。
+## Loot, currency and weapons
+
+Chapter I normal enemies now resolve one health-aware drop on Player kill: coin, 10-HP small vial, 20-HP large vial or none. Pickups use original Godot-drawn pixel shapes, expire after 20 seconds (blink for the final 3), do not block actors and never heal a dead/full-health Player. Coins and equipped weapon persist through Player death and the castle threshold; a fresh run resets them.
+
+Starting Veilbound Daggers deal 10 normal / 20 Dash damage. Enemy and Boss Health/shield pools are scaled 10× to preserve hit counts; enemy/Boss outgoing damage and Player 100 HP/100 Stamina did not change. The Gate Knight awards 30 coins and leaves Ravenfang Daggers (12/24) at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`. Press E to collect; the opened gate will not transition until the story weapon is taken.
+
+Compact HUD shows coin count and `WPN T# normal / dash`. Expanded Debug also shows enemy loot profile/result/roll/source and Boss reward state. Deterministic tests are under `tests/items/`; visual evidence is under `docs/qa/`.

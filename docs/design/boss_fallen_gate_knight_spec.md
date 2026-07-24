@@ -9,8 +9,8 @@ Last updated: 2026-07-24
 
 ## Shared combat authority
 
-- Body: `HealthComponent`, 18 Health.
-- Shield: shared corrected `ShieldComponent`, 10 Health, front-only Player weapon routing, no breaking-hit overflow, stable attacker/id ledger, permanent break. A future hard-mode experiment may test 15, but shipping Main remains 10.
+- Body: `HealthComponent`, 180 Health.
+- Shield: shared corrected `ShieldComponent`, 100 Health, front-only Player weapon routing, no breaking-hit overflow, stable attacker/id ledger, permanent break.
 - Damage: Bash 8, Slash 10, Heavy/Jump Smash 15, Charge 12, Shockwave 8.
 - Turn: 0.10 s reaction + 0.13 s authored animation, 12 px side threshold, 0.12 s post-turn cooldown. ShieldBreak: 0.90 s. PhaseTransition: 1.10 s.
 - Shared post-attack recovery: 0.42 s (previously 0.48 s). Attack damage, Body/Shield, skills, phases, movement and bridge bounds are unchanged.
@@ -21,7 +21,7 @@ Last updated: 2026-07-24
 
 Frontal normal/Dash attacks damage only Shield; rear/center or post-break attacks damage Body. Shield hits play `shield_block`. Shield zero enters `ShieldBreak`, then a one-way `PhaseTransition`.
 
-Shield presentation uses four states without duplicating combat authority: 10–8 intact, 7–5 damaged, 4–1 critical, and 0 broken. `ShieldDamageOverlay` listens to the same Shield signal as the HUD; it adds pixel cracks only, while the existing shield-break animation removes the shield. Five frontal Dash Attacks or ten frontal Normal Attacks break a full Shield. The breaking hit never overflows into Body.
+Shield presentation uses ratio bands without duplicating combat authority: above 80% intact, 51–80% damaged, 1–50% critical, and 0 broken. `ShieldDamageOverlay` listens to the same Shield signal as the HUD; it adds pixel cracks only, while the existing shield-break animation removes the shield. With Veilbound Daggers, five frontal Dash Attacks or ten frontal Normal Attacks break a full Shield. The breaking hit never overflows into Body.
 
 ## Phase 2 — unshielded
 
@@ -53,4 +53,9 @@ Shared Recovery is 0.48 → 0.42 seconds. No attack gains a new active frame or 
 
 ## Reset contract
 
-`reset_boss()` restores spawn `(6120,596)`, Body 18, Shield 10, intact Shield overlay, initial left facing, Phase 1, collision, Hurtbox, attack ids/windows, zeroed turn reaction/cooldown, and inactive AI. Player death/respawn invokes this through `BossRoomController`; the defeated instance is retained for deterministic reset rather than freed.
+`reset_boss()` restores spawn `(6120,596)`, Body 180, Shield 100, intact Shield overlay, initial left facing, Phase 1, collision, Hurtbox, attack ids/windows, zeroed turn reaction/cooldown, and inactive AI. Before final defeat, Player death/respawn invokes this through `BossRoomController`; after final defeat, reward/gate state persists and the Boss remains defeated.
+## Fixed Chapter I reward and scaled target pools
+
+Body/Shield are 180/100. Every outgoing Boss damage and attack timing remains unchanged. The complete Death animation emits `boss_defeated`; Main's independent `BossRewardController` then grants 30 coins once and reveals Ravenfang Daggers at `(6210,592)`. The pickup persists through Player death, auto-equips on E, and must be collected before `CastleEntranceTrigger` loads the threshold. The Boss never rolls the normal-enemy loot table.
+
+The fixed reward uses a restrained coin-bag/text presentation and an original 0.22-second procedural two-tone chime. Headless tests skip audio stream construction; graphical F5 creates it at runtime, so no external audio asset or leaked test playback is introduced.

@@ -96,10 +96,13 @@ func _build_compact_text() -> String:
 
 func _build_expanded_text() -> String:
 	var lines: PackedStringArray = []
+	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
 	if boss != null and is_instance_valid(boss):
-		lines.append("BOSS  %s  ROOM %s  DEAD %s" % [
+		lines.append("BOSS  %s  ROOM %s  DEAD %s  REWARD %s/%s" % [
 			boss.get_debug_summary(), "locked" if boss.room_engaged else "open",
 			"yes" if boss.is_dead() else "no",
+			"spawned" if session != null and session.boss_reward_spawned else "pending",
+			"collected" if session != null and session.boss_reward_collected else "uncollected",
 		])
 	for child: Node in encounters_root.get_children():
 		var encounter: EncounterGroup = child as EncounterGroup
@@ -121,6 +124,13 @@ func _build_expanded_text() -> String:
 			lines.append("  %s  %s  X %.0f" % [
 				enemy.name, enemy.get_debug_summary(), enemy.global_position.x,
 			])
+			var loot: LootDropComponent = enemy.get_node_or_null("LootDropComponent") as LootDropComponent
+			if loot != null:
+				lines.append("    LOOT %s  ROLL %d  PLAYER KILL %s  PROFILE %s" % [
+					loot.last_result, loot.last_roll,
+					"yes" if loot.killed_by_player else "no",
+					loot.profile.enemy_type,
+				])
 	return "\n".join(lines) if not lines.is_empty() else "NO AUTHORED ENEMIES"
 
 

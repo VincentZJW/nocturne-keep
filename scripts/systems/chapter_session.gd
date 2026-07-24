@@ -1,3 +1,4 @@
+class_name ChapterSessionState
 extends Node
 
 ## Runtime-only Chapter I flow flags shared across scene transitions.
@@ -17,6 +18,8 @@ var opening_completed: bool = false
 var revival_completed: bool = false
 var daggers_recovered: bool = false
 var catacomb_exited: bool = false
+var boss_reward_spawned: bool = false
+var boss_reward_collected: bool = false
 var current_objective: ObjectiveStep = ObjectiveStep.LEAVE_CATACOMB
 
 
@@ -49,7 +52,17 @@ func reset_revival_state() -> void:
 	revival_completed = false
 	daggers_recovered = false
 	catacomb_exited = false
+	boss_reward_spawned = false
+	boss_reward_collected = false
 	current_objective = ObjectiveStep.LEAVE_CATACOMB
+	var wallet: CurrencyWallet = get_node_or_null("/root/CurrencyManager") as CurrencyWallet
+	var equipment: PlayerEquipmentManager = get_node_or_null(
+		"/root/EquipmentManager"
+	) as PlayerEquipmentManager
+	if wallet != null:
+		wallet.reset_for_new_run()
+	if equipment != null:
+		equipment.reset_for_new_run()
 
 
 func replay_revival_scene() -> Error:

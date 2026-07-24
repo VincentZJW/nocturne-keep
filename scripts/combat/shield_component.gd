@@ -121,7 +121,7 @@ func classify_source_side(source_position: Vector2) -> StringName:
 func get_visual_state() -> StringName:
 	if _shield_broken or shield_current_health <= 0:
 		return &"broken"
-	if shield_current_health == 1:
+	if float(shield_current_health) / float(shield_max_health) <= (1.0 / 3.0):
 		return &"critical"
 	if shield_current_health < shield_max_health:
 		return &"cracked"

@@ -20,7 +20,7 @@ func _run_tests() -> void:
 	root.add_child(player)
 	root.add_child(gargoyle)
 	await physics_frame
-	_expect(gargoyle.config.max_health == 3 and gargoyle.config.dive_damage == 7, "Gargoyle balance mismatch")
+	_expect(gargoyle.config.max_health == 30 and gargoyle.config.dive_damage == 7, "Gargoyle balance mismatch")
 	_expect(is_equal_approx(gargoyle.config.dive_windup, 0.45), "Gargoyle windup mismatch")
 	_expect(is_equal_approx(gargoyle.config.dive_direction_lock_duration, 0.15), "Gargoyle direction lock mismatch")
 	_expect(is_equal_approx(gargoyle.config.ground_stun_duration, 0.65), "Gargoyle stun mismatch")
@@ -41,7 +41,7 @@ func _run_tests() -> void:
 	_expect(gargoyle.get_state_name() == &"GroundStun", "Gargoyle world impact did not stun")
 	gargoyle._process_ground_stun(0.66)
 	_expect(gargoyle.get_state_name() == &"ReturnToAir", "Gargoyle did not leave stun")
-	gargoyle.health_component.take_damage(3)
+	gargoyle.health_component.take_damage(30)
 	_expect(gargoyle.is_dead() and gargoyle.animated_sprite.animation == &"death_fall", "Gargoyle did not start death fall")
 	_expect(gargoyle.find_child("*Ghost*", true, false) == null, "Gargoyle death created a ghost")
 	gargoyle.animated_sprite.animation_finished.emit()

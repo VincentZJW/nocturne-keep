@@ -664,9 +664,10 @@ func _get_shield_visual_state(current: int = -1) -> StringName:
 	)
 	if shield_component.is_shield_broken() or shield_health <= 0:
 		return &"broken"
-	if shield_health >= 8:
+	var ratio: float = float(shield_health) / float(shield_component.shield_max_health)
+	if ratio >= 0.8:
 		return &"intact"
-	if shield_health >= 5:
+	if ratio >= 0.5:
 		return &"damaged"
 	return &"critical"
 

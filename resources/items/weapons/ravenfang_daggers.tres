@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://assets/ui/items/ravenfang_daggers.png" id="2_icon"]
+[ext_resource type="PackedScene" path="res://scenes/items/pickups/ravenfang_weapon_pickup.tscn" id="3_visual"]
+
+[resource]
+script = ExtResource("1_weapon")
+weapon_id = &"ravenfang_daggers"
+display_name_zh = "鸦牙双匕"
+display_name_en = "Ravenfang Daggers"
+description_zh = "守门骑士所守护的双刃。刀身刻有鸦泣城堡的旧纹章，似乎能切开比血肉更深的东西。"
+description_en = "Twin blades guarded by the fallen gate knight. Their steel bears Ravenmourn's old crest, and seems made to cut deeper than flesh."
+weapon_type = &"dual_daggers"
+tier = 2
+normal_attack_damage = 12
+dash_attack_damage = 24
+icon = ExtResource("2_icon")
+player_visual_id = &"ravenfang"
+world_pickup_visual = ExtResource("3_visual")
+shop_value = 120
+can_sell = false
+is_story_reward = true

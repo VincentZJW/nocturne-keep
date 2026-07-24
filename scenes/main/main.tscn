@@ -1,4 +1,4 @@
-[gd_scene load_steps=66 format=3]
+[gd_scene load_steps=68 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
@@ -32,6 +32,8 @@
 [ext_resource type="Script" path="res://scripts/systems/checkpoint_trigger.gd" id="36_checkpoint"]
 [ext_resource type="Script" path="res://scripts/world/chapter_one_storytelling_art.gd" id="37_story_art"]
 [ext_resource type="Script" path="res://scripts/ui/boss_last_words_presenter.gd" id="38_boss_words"]
+[ext_resource type="PackedScene" path="res://scenes/bosses/fallen_gate_knight_reward.tscn" id="39_boss_reward"]
+[ext_resource type="Script" path="res://scripts/ui/run_inventory_hud.gd" id="40_inventory_hud"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(5620, 96)
@@ -496,6 +498,9 @@ bridge_bounds_enabled = true
 bridge_min_x = 5650.0
 bridge_max_x = 6320.0
 
+[node name="BossReward" parent="World/CastleEntranceArea" instance=ExtResource("39_boss_reward")]
+position = Vector2(6210, 592)
+
 [node name="CastleFloor" type="StaticBody2D" parent="World/CastleEntranceArea"]
 collision_layer = 1
 collision_mask = 1
@@ -793,6 +798,37 @@ theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background"
 theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
+
+[node name="RunInventory" type="ColorRect" parent="HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -208.0
+offset_top = 136.0
+offset_right = -12.0
+offset_bottom = 168.0
+grow_horizontal = 0
+mouse_filter = 2
+color = Color(0.025, 0.035, 0.055, 0.82)
+script = ExtResource("40_inventory_hud")
+
+[node name="CoinLabel" type="Label" parent="HUD/RunInventory"]
+offset_left = 10.0
+offset_top = 6.0
+offset_right = 72.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.91, 0.75, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "◉ 0"
+
+[node name="WeaponLabel" type="Label" parent="HUD/RunInventory"]
+offset_left = 72.0
+offset_top = 6.0
+offset_right = 186.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.74, 0.82, 0.88, 1)
+theme_override_font_sizes/font_size = 11
+text = "WPN T1  10 / 20"
+horizontal_alignment = 2
 
 [node name="DeathOverlay" type="ColorRect" parent="HUD"]
 visible = false

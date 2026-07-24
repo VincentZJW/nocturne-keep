@@ -44,23 +44,33 @@ func _refresh_text() -> void:
 	var stamina: PlayerStaminaComponent = player.stamina_component
 	var hurt: PlayerHurtController = player.hurt_controller
 	var health: HealthComponent = player.health_component
+	var wallet: CurrencyWallet = get_node_or_null("/root/CurrencyManager") as CurrencyWallet
+	var equipment: PlayerEquipmentManager = get_node_or_null(
+		"/root/EquipmentManager"
+	) as PlayerEquipmentManager
+	if wallet == null or equipment == null:
+		return
 	if compact_mode:
 		var action_state: String = actions.get_action_state_name()
 		var display_state: String = player.get_movement_state_name() if action_state == "None" else action_state
 		text = (
-			"PLAYER  STATE %s | HP %d/%d | STA %d/%d\n"
-			+ "VX %.0f  VY %.0f | DASH %d | HURT %.2f | INV %.2f"
+			"PLAYER  STATE %s | HP %d/%d | STA %d/%d | COIN %d\n"
+			+ "VX %.0f  VY %.0f | DASH %d | HURT %.2f | INV %.2f | WPN %s %d/%d"
 		) % [
 			display_state,
 			health.current_health,
 			health.max_health,
 			roundi(stamina.current_stamina),
 			roundi(stamina.max_stamina),
+			wallet.current_coins,
 			player.velocity.x,
 			player.velocity.y,
 			actions.get_current_dash_number(),
 			hurt.get_hurt_stun_remaining(),
 			hurt.get_invulnerability_remaining(),
+			equipment.get_equipped_weapon().weapon_id,
+			equipment.get_normal_attack_damage(),
+			equipment.get_dash_attack_damage(),
 		]
 		return
 	var response_time: float = actions.get_attack_input_to_hit_time()
@@ -77,7 +87,8 @@ func _refresh_text() -> void:
 		+ "ANIM %s   STAMINA %.1f/%.1f   REGEN %s %.2fs   DASH BUFFER %s (%.2fs)\n"
 		+ "COMBO WINDOW %s   USED %s   ATTACK FRAME %d/4   BUFFERED %s   TIMER %.3fs   CHAIN %s   INPUT→HIT %s\n"
 		+ "HEALTH %d/%d   LIFE %s   INVULN %.3fs   HURT STUN %.3fs   LAST DAMAGE %d\n"
-		+ "LAST SOURCE (%.1f, %.1f)   KNOCKBACK (%.1f, %.1f)"
+		+ "LAST SOURCE (%.1f, %.1f)   KNOCKBACK (%.1f, %.1f)\n"
+		+ "COINS %d   WEAPON %s   DAMAGE %d/%d"
 	) % [
 		"true" if player.is_on_floor() else "false",
 		actions.get_action_state_name(),
@@ -111,4 +122,8 @@ func _refresh_text() -> void:
 		hurt.get_last_source_position().y,
 		hurt.get_last_knockback_velocity().x,
 		hurt.get_last_knockback_velocity().y,
+		wallet.current_coins,
+		equipment.get_equipped_weapon().weapon_id,
+		equipment.get_normal_attack_damage(),
+		equipment.get_dash_attack_damage(),
 	]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/gargoyle_sentinel.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/gargoyle_sentinel_config.tres" id="2_config"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="7_loot"]
+[ext_resource type="Resource" path="res://resources/items/loot/gargoyle_loot.tres" id="8_loot_profile"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(30, 32)
@@ -77,3 +79,7 @@ monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
 shape = SubResource("CircleShape2D_detection")
+
+[node name="LootDropComponent" type="Node" parent="."]
+script = ExtResource("7_loot")
+profile = ExtResource("8_loot_profile")

@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_config")
 display_name = &"FallenCrossbowman"
-max_health = 4
+max_health = 40
 attack_damage = 6
 patrol_speed = 38.0
 chase_speed = 48.0

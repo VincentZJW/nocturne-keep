@@ -4,6 +4,7 @@ extends Area2D
 ## Receives hostile HitboxComponent contacts and forwards accepted damage to Health.
 
 signal hit_received(damage: int, source_position: Vector2, attack_id: int)
+signal hit_resolving(hitbox: HitboxComponent)
 signal enabled_changed(enabled: bool)
 signal invulnerability_changed(invulnerable: bool)
 
@@ -48,6 +49,7 @@ func receive_hit(hitbox: HitboxComponent) -> bool:
 		resolved_damage = hit_policy.resolve_damage(hitbox)
 	if resolved_damage <= 0:
 		return true
+	hit_resolving.emit(hitbox)
 	var health_before: int = health_component.current_health
 	health_component.take_damage(resolved_damage)
 	if health_component.current_health >= health_before:

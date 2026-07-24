@@ -1,4 +1,6 @@
-[gd_scene format=3]
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/run_inventory_hud.gd" id="1_inventory_hud"]
 
 [node name="RavenmournThreshold" type="Node2D"]
 
@@ -40,3 +42,33 @@ color = Color(0.58, 0.31, 0.13, 0.72)
 polygon = PackedVector2Array(1027, 300, 1036, 282, 1045, 300, 1042, 326, 1030, 326)
 color = Color(0.58, 0.31, 0.13, 0.72)
 
+[node name="HUD" type="CanvasLayer" parent="."]
+
+[node name="RunInventory" type="ColorRect" parent="HUD"]
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -214.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 52.0
+color = Color(0.025, 0.035, 0.055, 0.82)
+script = ExtResource("1_inventory_hud")
+
+[node name="CoinLabel" type="Label" parent="HUD/RunInventory"]
+offset_left = 10.0
+offset_top = 7.0
+offset_right = 72.0
+offset_bottom = 27.0
+theme_override_colors/font_color = Color(0.91, 0.75, 0.4, 1)
+theme_override_font_sizes/font_size = 11
+text = "◉ 0"
+
+[node name="WeaponLabel" type="Label" parent="HUD/RunInventory"]
+offset_left = 72.0
+offset_top = 7.0
+offset_right = 186.0
+offset_bottom = 27.0
+theme_override_colors/font_color = Color(0.74, 0.82, 0.88, 1)
+theme_override_font_sizes/font_size = 11
+text = "WPN T1  10 / 20"
+horizontal_alignment = 2

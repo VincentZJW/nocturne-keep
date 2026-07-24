@@ -20,6 +20,9 @@ config/features=PackedStringArray("4.7", "GL Compatibility")
 [autoload]
 
 ChapterSession="*res://scripts/systems/chapter_session.gd"
+CurrencyManager="*res://scripts/systems/currency_manager.gd"
+WeaponInventory="*res://scripts/items/weapon_inventory.gd"
+EquipmentManager="*res://scripts/items/equipment_manager.gd"
 
 [display]
 

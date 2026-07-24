@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_config")
 display_name = &"GargoyleSentinel"
-max_health = 3
+max_health = 30
 dive_damage = 7
 detection_range = 220.0
 lose_target_range = 310.0

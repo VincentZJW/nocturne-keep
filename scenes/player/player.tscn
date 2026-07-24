@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://ilk7wlpsv544"]
+[gd_scene load_steps=20 format=3 uid="uid://ilk7wlpsv544"]
 
 [ext_resource type="Script" uid="uid://b67b3qhsr1bvs" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/player/player_movement_config.tres" id="2_config"]
@@ -14,6 +14,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="12_hitbox"]
 [ext_resource type="Script" path="res://scripts/player/player_hurt_controller.gd" id="13_hurt_controller"]
 [ext_resource type="Resource" path="res://resources/player/player_hurt_config.tres" id="14_hurt_config"]
+[ext_resource type="Script" path="res://scripts/player/player_weapon_visual.gd" id="15_weapon_visual"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 52)
@@ -27,7 +28,7 @@ size = Vector2(42, 14)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dash_attack_hitbox"]
 size = Vector2(58, 16)
 
-[node name="Player" type="CharacterBody2D" unique_id=335625318]
+[node name="Player" type="CharacterBody2D" unique_id=335625318 groups=["player"]]
 floor_snap_length = 6.0
 collision_layer = 2
 collision_mask = 5
@@ -42,6 +43,10 @@ texture_filter = 1
 sprite_frames = ExtResource("3_frames")
 animation = &"idle"
 autoplay = "idle"
+
+[node name="WeaponVisual" type="Node2D" parent="VisualRoot"]
+z_index = 1
+script = ExtResource("15_weapon_visual")
 
 [node name="DeathEffects" type="Node2D" parent="VisualRoot"]
 z_index = 2
@@ -93,7 +98,6 @@ collision_mask = 16
 monitoring = false
 monitorable = false
 script = ExtResource("12_hitbox")
-damage = 2
 faction = &"player"
 attack_kind = &"dash_attack"
 

@@ -37,6 +37,9 @@ signal level_completed
 @export_node_path("CastleEntranceTransition") var entrance_transition_path: NodePath = NodePath(
 	"../CastleEntranceTransition"
 )
+@export_node_path("BossRewardController") var reward_controller_path: NodePath = NodePath(
+	"../World/CastleEntranceArea/BossReward"
+)
 @export var boss_camera_limit_left: int = 5340
 @export var boss_camera_limit_right: int = 6620
 
@@ -59,6 +62,9 @@ signal level_completed
 @onready var entrance_transition: CastleEntranceTransition = get_node_or_null(
 	entrance_transition_path
 ) as CastleEntranceTransition
+@onready var reward_controller: BossRewardController = get_node_or_null(
+	reward_controller_path
+) as BossRewardController
 
 var room_is_locked: bool = false
 var room_is_cleared: bool = false
@@ -146,6 +152,9 @@ func _on_player_respawned(_spawn_position: Vector2) -> void:
 func _on_castle_entrance_body_entered(body: Node2D) -> void:
 	if body != player or not room_is_cleared or not gate_open_complete:
 		return
+	if not reward_controller.is_reward_collected():
+		reward_controller.show_gate_prompt()
+		return
 	level_completed.emit()
 	entrance_transition.begin_transition()
 
@@ -185,6 +194,7 @@ func _validate_dependencies() -> bool:
 		or respawn_controller == null
 		or boss_hud == null
 		or entrance_transition == null
+		or reward_controller == null
 	):
 		push_error("BossRoomController scene composition is incomplete")
 		return false

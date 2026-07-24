@@ -41,13 +41,13 @@ func _test_normal_attack(player: Player, guard: CastleGuard) -> void:
 	sprite.frame = 1
 	sprite.frame_changed.emit()
 	_expect(actions.attack_hitbox.is_active, "attack_02 did not open normal Attack Hitbox")
-	_expect(actions.attack_hitbox.damage == 1, "Normal Attack damage is not one")
+	_expect(actions.attack_hitbox.damage == 10, "Normal Attack damage is not ten")
 	_expect(actions.attack_hitbox.try_hit(guard.hurtbox), "Normal Attack did not hit Castle Guard")
-	_expect(guard.health_component.current_health == 2, "Normal Attack did not remove one Guard Health")
+	_expect(guard.health_component.current_health == 20, "Normal Attack did not remove ten Guard Health")
 	sprite.frame = 2
 	sprite.frame_changed.emit()
 	_expect(not actions.attack_hitbox.try_hit(guard.hurtbox), "Same normal Attack hit twice")
-	_expect(guard.health_component.current_health == 2, "Normal Attack duplicate changed Health")
+	_expect(guard.health_component.current_health == 20, "Normal Attack duplicate changed Health")
 	sprite.frame = 3
 	sprite.frame_changed.emit()
 	_expect(not actions.attack_hitbox.is_active, "attack_04 recovery retained normal Hitbox")
@@ -66,7 +66,7 @@ func _test_dash_attack(player: Player, guard: CastleGuard) -> void:
 	sprite.frame = 2
 	sprite.frame_changed.emit()
 	_expect(actions.dash_attack_hitbox.is_active, "dash_attack_03 did not open Dash Attack Hitbox")
-	_expect(actions.dash_attack_hitbox.damage == 2, "Dash Attack damage is not two")
+	_expect(actions.dash_attack_hitbox.damage == 20, "Dash Attack damage is not twenty")
 	var stable_attack_id: int = actions.dash_attack_hitbox.attack_id
 	_expect(actions.dash_attack_hitbox.attacker == player, "Dash Attack did not retain Player as source")
 	_expect(
@@ -74,7 +74,7 @@ func _test_dash_attack(player: Player, guard: CastleGuard) -> void:
 		"Dash Attack source position did not resolve to Player root"
 	)
 	_expect(actions.dash_attack_hitbox.try_hit(guard.hurtbox), "Dash Attack did not hit Castle Guard")
-	_expect(guard.health_component.current_health == 1, "Dash Attack did not remove two Guard Health")
+	_expect(guard.health_component.current_health == 10, "Dash Attack did not remove twenty Guard Health")
 	sprite.frame = 3
 	sprite.frame_changed.emit()
 	_expect(
@@ -109,7 +109,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("PLAYER_ATTACK_DAMAGE_TEST: PASS (Attack 1, Dash Attack 2, windows, dedup, facing)")
+		print("PLAYER_ATTACK_DAMAGE_TEST: PASS (Attack 10, Dash Attack 20, windows, dedup, facing)")
 		quit(0)
 		return
 	for failure: String in _failures:

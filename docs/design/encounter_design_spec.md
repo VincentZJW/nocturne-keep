@@ -38,4 +38,4 @@ Main's closable enemy panel reports group activation, engaged/alive/attacking co
 
 ## Exclusions
 
-No elite, second Boss, drop, experience, equipment, random encounter, group tactics, formation, or second level is included.
+No elite, second Boss, experience, random encounter, group tactics, formation, shop or second level is included. Chapter I regular-enemy loot and the fixed first-Boss weapon reward are documented separately in `loot_drop_system_spec.md` and `weapon_system_spec.md`.

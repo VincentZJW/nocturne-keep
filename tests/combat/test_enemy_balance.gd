@@ -19,16 +19,16 @@ func _run_tests() -> void:
 	await _test_player_invariants()
 	_test_config_values_and_unchanged_cadence()
 	_test_scene_value_authority()
-	await _expect_kill_count(CASTLE_SCENE, &"normal_attack", 1, 3, "Castle normal")
-	await _expect_kill_count(CASTLE_SCENE, &"dash_attack", 2, 2, "Castle Dash")
-	await _expect_shield_kill_count(&"normal_attack", 1, 8, true, "Shield front normal")
-	await _expect_shield_kill_count(&"dash_attack", 2, 5, true, "Shield front Dash")
-	await _expect_shield_kill_count(&"normal_attack", 1, 5, false, "Shield rear normal")
-	await _expect_shield_kill_count(&"dash_attack", 2, 3, false, "Shield rear Dash")
-	await _expect_kill_count(SPEAR_SCENE, &"normal_attack", 1, 5, "Spear normal")
-	await _expect_kill_count(SPEAR_SCENE, &"dash_attack", 2, 3, "Spear Dash")
-	await _expect_kill_count(CROSSBOW_SCENE, &"normal_attack", 1, 4, "Crossbow normal")
-	await _expect_kill_count(CROSSBOW_SCENE, &"dash_attack", 2, 2, "Crossbow Dash")
+	await _expect_kill_count(CASTLE_SCENE, &"normal_attack", 10, 3, "Castle normal")
+	await _expect_kill_count(CASTLE_SCENE, &"dash_attack", 20, 2, "Castle Dash")
+	await _expect_shield_kill_count(&"normal_attack", 10, 8, true, "Shield front normal")
+	await _expect_shield_kill_count(&"dash_attack", 20, 5, true, "Shield front Dash")
+	await _expect_shield_kill_count(&"normal_attack", 10, 5, false, "Shield rear normal")
+	await _expect_shield_kill_count(&"dash_attack", 20, 3, false, "Shield rear Dash")
+	await _expect_kill_count(SPEAR_SCENE, &"normal_attack", 10, 5, "Spear normal")
+	await _expect_kill_count(SPEAR_SCENE, &"dash_attack", 20, 3, "Spear Dash")
+	await _expect_kill_count(CROSSBOW_SCENE, &"normal_attack", 10, 4, "Crossbow normal")
+	await _expect_kill_count(CROSSBOW_SCENE, &"dash_attack", 20, 2, "Crossbow Dash")
 	_finish()
 
 
@@ -38,8 +38,9 @@ func _test_player_invariants() -> void:
 	await process_frame
 	player.set_physics_process(false)
 	_expect(player.health_component.max_health == 100, "Player max Health changed from 100")
-	_expect(player.action_controller.attack_hitbox.damage == 1, "Player normal Attack changed from one")
-	_expect(player.action_controller.dash_attack_hitbox.damage == 2, "Player Dash Attack changed from two")
+	var equipment: PlayerEquipmentManager = get_root().get_node("EquipmentManager") as PlayerEquipmentManager
+	_expect(equipment.get_normal_attack_damage() == 10, "Equipped normal Attack is not ten")
+	_expect(equipment.get_dash_attack_damage() == 20, "Equipped Dash Attack is not twenty")
 	player.queue_free()
 	await process_frame
 
@@ -57,10 +58,10 @@ func _test_config_values_and_unchanged_cadence() -> void:
 	var crossbow: FallenCrossbowmanConfig = load(
 		"res://resources/enemies/fallen_crossbowman_config.tres"
 	) as FallenCrossbowmanConfig
-	_expect(castle.max_health == 3 and castle.attack_damage == 5, "Castle Config balance mismatch")
+	_expect(castle.max_health == 30 and castle.attack_damage == 5, "Castle Config balance mismatch")
 	_expect(_cadence_matches(castle, 46.0, 0.35, 0.10, 0.45), "Castle cadence changed")
 	_expect(
-		shield.max_health == 5 and shield.shield_max_health == 3 and shield.attack_damage == 8,
+		shield.max_health == 50 and shield.shield_max_health == 30 and shield.attack_damage == 8,
 		"Shield Config body/shield balance mismatch"
 	)
 	_expect(_cadence_matches(shield, 46.0, 0.40, 0.10, 0.55), "Shield cadence changed")
@@ -74,9 +75,9 @@ func _test_config_values_and_unchanged_cadence() -> void:
 		is_equal_approx(shield.shield_break_flash_alpha, 0.30),
 		"Shield break flash alpha is not 0.30"
 	)
-	_expect(spear.max_health == 5 and spear.attack_damage == 10, "Spear Config balance mismatch")
+	_expect(spear.max_health == 50 and spear.attack_damage == 10, "Spear Config balance mismatch")
 	_expect(_cadence_matches(spear, 76.0, 0.45, 0.10, 0.60), "Spear cadence or range changed")
-	_expect(crossbow.max_health == 4, "Crossbow Config Health mismatch")
+	_expect(crossbow.max_health == 40, "Crossbow Config Health mismatch")
 	_expect(crossbow.projectile_damage == 6, "Crossbow projectile damage is not six")
 	_expect(crossbow.attack_damage == crossbow.projectile_damage, "Crossbow Config damage fields conflict")
 	_expect(is_equal_approx(crossbow.detection_range, 280.0), "Crossbow detection range changed")

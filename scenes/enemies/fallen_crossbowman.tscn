@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/fallen_crossbowman.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/fallen_crossbowman_config.tres" id="2_config"]
@@ -6,6 +6,8 @@
 [ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="PackedScene" path="res://scenes/projectiles/crossbow_bolt.tscn" id="6_bolt"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="7_loot"]
+[ext_resource type="Resource" path="res://resources/items/loot/crossbowman_loot.tres" id="8_loot_profile"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(24, 52)
@@ -78,3 +80,7 @@ position = Vector2(-18, 18)
 target_position = Vector2(0, 24)
 collision_mask = 1
 enabled = true
+
+[node name="LootDropComponent" type="Node" parent="."]
+script = ExtResource("7_loot")
+profile = ExtResource("8_loot_profile")

@@ -1,0 +1,166 @@
+=== tests/combat/test_combat_test_room.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+COMBAT_TEST_ROOM_TEST: PASS (composition, no contact damage, enemy damage, death, respawn)
+=== tests/combat/test_crossbow_bolt.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CROSSBOW_BOLT_TEST: PASS (six damage, one hit, World collision cleanup)
+=== tests/combat/test_enemy_balance.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ENEMY_BALANCE_TEST: PASS (Shield front 8/5, rear 5/3; others unchanged)
+=== tests/combat/test_enemy_variety_damage.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ENEMY_VARIETY_DAMAGE_TEST: PASS (Shield 8, Spear 10, Bolt 6, Player Hurt)
+=== tests/combat/test_first_level_boss.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+BOSS_TURN_TIMING: free=0.2333 recovery=0.2333 target=0.22..0.26
+FIRST_LEVEL_BOSS_TEST: PASS (shield routing, phase, room lock/reset, death/exit)
+=== tests/combat/test_gargoyle_sentinel.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+GARGOYLE_SENTINEL_TEST: PASS (wake, dive 7 once, stun 0.65, return, shatter)
+=== tests/combat/test_health_component.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HEALTH_COMPONENT_TEST: PASS (health, damage, healing, death guard, Player composition)
+=== tests/combat/test_hitbox_hurtbox_components.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HITBOX_HURTBOX_TEST: PASS (activation, faction, deduplication, deferred physics disable)
+=== tests/combat/test_main_enemy_integration.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_ENEMY_INTEGRATION_TEST: PASS (18 groups, 34 mixed enemies, Boss room, HUD/respawn)
+=== tests/combat/test_player_attack_damage.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_ATTACK_DAMAGE_TEST: PASS (Attack 10, Dash Attack 20, windows, dedup, facing)
+=== tests/enemies/test_castle_guard.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CASTLE_GUARD_TEST: PASS (patrol, edge, chase, fair attack, Hurt, Death)
+=== tests/enemies/test_enemy_variety.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SHIELD_DASH_MATRIX: before B50 SH30; front1 B50 SH10; front2 B50 SH0; rear B30 SH30; post-break normal/dash B40/B20
+ENEMY_VARIETY_TEST: PASS (shield facing/break, spear reach, crossbow cadence)
+=== tests/items/test_loot_weapon_progression.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+LOOT_100_ROLL_HIGH: { &"coin": 63, &"small_health": 9, &"large_health": 3, &"none": 25 }
+LOOT_100_ROLL_MID: { &"coin": 59, &"small_health": 12, &"large_health": 5, &"none": 24 }
+LOOT_100_ROLL_LOW: { &"coin": 49, &"small_health": 21, &"large_health": 8, &"none": 22 }
+LOOT_WEAPON_PROGRESSION_TEST: PASS
+=== tests/level/test_castle_bridge_flow.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CASTLE_BRIDGE_FLOW_TEST: PASS (solid underside, moat death/respawn, Boss reset/persistence)
+=== tests/level/test_chapter_one_flow.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHAPTER_ONE_FLOW_TEST: PASS (8-shot opening, 11-step tutorial, 18 groups, 34 enemies, checkpoints, Boss epilogue)
+=== tests/level/test_first_level_environment_unity.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+FIRST_LEVEL_ENVIRONMENT_UNITY_TEST: PASS (forest, frontier, approach, fortress, geometry preservation)
+=== tests/level/test_main_platform_reachability.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 solid surfaces, jump/double-jump underside blocking, Dash side blocking, top landings)
+=== tests/level/test_main_traversal_routes.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_TRAVERSAL_ROUTES_TEST: PASS (mainline no Air Dash, mobility Crossbow route, novice-timing Gargoyle route; no teleport)
+=== tests/level/test_ravenmourn_environment.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+RAVENMOURN_ENVIRONMENT_TEST: PASS (Main art, collision preservation, gate, text-free transition)
+=== tests/level/test_veilbound_catacomb_flow.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+VEILBOUND_CATACOMB_FLOW_TEST: PASS (F5 route, 30 bilingual lines, skip, daggers, door, Main spawn)
+=== tests/level/test_veilbound_scene_transitions.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+VEILBOUND_SCENE_TRANSITIONS_TEST: PASS (Opening skip -> Catacomb skip -> Main tutorial)
+=== tests/player/measure_player_level_metrics.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_LEVEL_METRICS: PASS physics_fps=60 standing_single_rise=83.77 standing_double_rise=167.10 single_jump_range=153.59 single_jump_rise=83.77 double_jump_range=281.92 double_jump_rise=167.10 single_plus_air_dash=196.59 double_plus_air_dash=321.26 four_air_dash_range=344.00 four_air_dash_total_to_landing=362.22 foot_offset=28.00 platform_center_to_safe_edge=98.00 minimum_safe_landing_width=48.00
+=== tests/player/test_chain_dash_stamina.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHAIN_DASH_STAMINA_TEST: PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)
+=== tests/player/test_continuous_air_dash.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CONTINUOUS_AIR_DASH_TEST: PASS (four Air segments, mixed pool, direction, gravity, collision)
+=== tests/player/test_dash_attack.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+DASH_ATTACK_TEST: PASS (immediate J, transitions, air recovery, collision, debug HUD)
+=== tests/player/test_fast_attack.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+FAST_ATTACK_TEST: PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)
+=== tests/player/test_m15_player_actions.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+M15_PLAYER_ACTION_TEST: PASS (split Ground Dash, chained Air Dash, thrust Attack)
+=== tests/player/test_m1_player_movement.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)
+=== tests/player/test_player_animation_system.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_ANIMATION_SYSTEM_TEST: PASS (16 animations, segmented Ground/Air Dash verified)
+=== tests/player/test_player_death_presentation.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_DEATH_PRESENTATION_TEST: PASS (flat body, released daggers, ghost rise/pause, cleanup)
+=== tests/player/test_player_death_state.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_DEATH_STATE_TEST: PASS (single entry, lockout, full presentation, no respawn)
+=== tests/player/test_player_hurt_reaction.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_HURT_TEST: PASS (art, interruption, collision knockback, invulnerability, air, Death precedence)
+=== tests/player/test_player_respawn.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_RESPAWN_TEST: PASS (delay, reset, HUD, repeat cycle, input recovery)
+=== tests/tools/validate_castle_guard_assets.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CASTLE_GUARD_ASSET_TEST: PASS (24 frames + reference, heavy cut, dissolve, timing, scene)
+=== tests/tools/validate_enemy_variety_assets.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ENEMY_VARIETY_ASSET_TEST: PASS (124 64x64 frames + bolt, lossless/no mipmaps, 48px floor)
+=== tests/tools/validate_first_level_boss_assets.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+FIRST_LEVEL_BOSS_ASSET_TEST: PASS (141 transparent lossless/no-mipmap frames)
+=== tests/tools/validate_pixel_character_assets.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PIXEL_CHARACTER_VALIDATION: PASS (11 assets + board)
+=== tests/tools/validate_player_animation_assets.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_ANIMATION_VALIDATION: PASS (38 frames + ghost + 4 byte-identical references)
+=== tests/ui/test_main_debug_hud.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_DEBUG_HUD_TEST: PASS (compact, expanded, hidden, F1/F2/F3/F4, responsive layout)
+=== tests/ui/test_player_health_hud.gd ===
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_HEALTH_HUD_TEST: PASS (initial, signals, reset, rebind, Stamina regression)
+FULL_TESTS count=40 failures=0 diagnostics=0
