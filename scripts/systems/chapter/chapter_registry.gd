@@ -17,6 +17,9 @@ const CHAPTER_01_SCENE_PATH: String = "res://scenes/main/main.tscn"
 const CHAPTER_02_SCENE_PATH: String = (
 	"res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn"
 )
+const CHAPTER_02_PROFILE_PATH: String = (
+	"res://chapters/chapter_02_silent_court/resources/chapter/chapter_02_start_profile.tres"
+)
 const CHAPTER_03_SCENE_PATH: String = (
 	"res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/"
 	+ "chapel_of_thirteen_echoes.tscn"
@@ -94,26 +97,11 @@ static func _ensure_initialized() -> void:
 		100.0,
 		true
 	))
-	_register(_make_profile(
-		CHAPTER_02_SILENT_COURT,
-		"第二章 · 沉寂王庭 / Chapter II · The Silent Court",
-		CHAPTER_02_SCENE_PATH,
-		&"chapter_02_cp01",
-		&"chapter_02_cp01",
-		[
-			&"chapter_02_cp01",
-			&"chapter_02_banquet_cp02",
-			&"chapter_02_chapel",
-			&"chapter_02_armory_cp04",
-			&"chapter_02_boss_cp05",
-		],
-		[CHAPTER_PROLOGUE, CHAPTER_01_RAVENMOURN_OUTSKIRTS],
-		[&"veilbound_daggers", &"ravenfang_daggers"],
-		&"ravenfang_daggers",
-		30,
-		100.0,
-		false
-	))
+	var chapter_two_profile: ChapterStartProfile = ResourceLoader.load(
+		CHAPTER_02_PROFILE_PATH, "ChapterStartProfile"
+	) as ChapterStartProfile
+	assert(chapter_two_profile != null, "Chapter II start profile failed to load")
+	_register(chapter_two_profile)
 	_register(_make_planned_profile(
 		CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES,
 		"第三章 · 十三回声礼拜堂 / Chapter III · Chapel of Thirteen Echoes",

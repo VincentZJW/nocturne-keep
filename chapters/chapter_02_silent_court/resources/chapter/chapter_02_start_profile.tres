@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ChapterStartProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/chapter/chapter_start_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"CHAPTER_02_SILENT_COURT_DEFAULT"
+chapter_id = &"CHAPTER_02_SILENT_COURT"
+bilingual_name = "第二章 · 沉寂王庭 / Chapter II · The Silent Court"
+main_scene_path = "res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn"
+default_spawn_id = &"CH2_START"
+default_checkpoint_id = &"Chapter02CP01"
+available_spawn_ids = Array[StringName]([&"CH2_START", &"CH2_BANQUET", &"CH2_GALLERY", &"CH2_CHAPEL", &"CH2_ARMORY", &"CH2_BOSS"])
+previous_chapters_completed = Array[StringName]([&"CHAPTER_PROLOGUE", &"CHAPTER_01_RAVENMOURN_OUTSKIRTS"])
+required_weapons = Array[StringName]([&"veilbound_daggers", &"ravenfang_daggers"])
+equipped_weapon = &"ravenfang_daggers"
+starting_currency = 30
+starting_hp = 100.0
+start_full_health = true
+chapter_boss_defeated = false
+chapter_shortcuts = {}
+chapter_story_flags = {}
+debug_ready = true

@@ -1,0 +1,149 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="2_respawn"]
+[ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="3_stamina_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="4_health_hud"]
+[ext_resource type="Script" path="res://scripts/ui/run_inventory_hud.gd" id="5_inventory_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
+bg_color = Color(0.035, 0.045, 0.075, 0.82)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.34, 0.42, 0.54, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_health"]
+bg_color = Color(0.46, 0.11, 0.16, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBox_stamina"]
+bg_color = Color(0.17, 0.52, 0.46, 1)
+
+[node name="ChapterRuntime" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("1_player")]
+
+[node name="InitialSpawn" type="Marker2D" parent="."]
+
+[node name="PlayerRespawnController" type="Node" parent="."]
+script = ExtResource("2_respawn")
+player_path = NodePath("../Player")
+spawn_point_path = NodePath("../InitialSpawn")
+death_sequence_path = NodePath("../Player/DeathSequence")
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("3_stamina_hud")
+stamina_component_path = NodePath("../Player/StaminaComponent")
+
+[node name="HealthContainer" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_top = 18.0
+offset_right = -18.0
+offset_bottom = 50.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBox_panel")
+script = ExtResource("4_health_hud")
+health_component_path = NodePath("../../Player/HealthComponent")
+
+[node name="HealthBar" type="ProgressBar" parent="HUD/HealthContainer"]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 15.0
+offset_right = 188.0
+offset_bottom = 27.0
+show_percentage = false
+theme_override_styles/fill = SubResource("StyleBox_health")
+
+[node name="HealthValue" type="Label" parent="HUD/HealthContainer"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = -1.0
+offset_right = 188.0
+offset_bottom = 17.0
+theme_override_font_sizes/font_size = 11
+text = "100 / 100"
+
+[node name="StaminaContainer" type="Control" parent="HUD"]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_top = 54.0
+offset_right = -18.0
+offset_bottom = 86.0
+grow_horizontal = 0
+
+[node name="Panel" type="Panel" parent="HUD/StaminaContainer"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBox_panel")
+
+[node name="StaminaBar" type="ProgressBar" parent="HUD/StaminaContainer"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = 15.0
+offset_right = 188.0
+offset_bottom = 27.0
+show_percentage = false
+theme_override_styles/fill = SubResource("StyleBox_stamina")
+
+[node name="StaminaValue" type="Label" parent="HUD/StaminaContainer"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = -1.0
+offset_right = 188.0
+offset_bottom = 17.0
+theme_override_font_sizes/font_size = 11
+text = "100 / 100"
+
+[node name="RunInventoryHud" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_top = 91.0
+offset_right = -18.0
+offset_bottom = 130.0
+grow_horizontal = 0
+script = ExtResource("5_inventory_hud")
+
+[node name="CoinLabel" type="Label" parent="HUD/RunInventoryHud"]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 11
+text = "COIN 30"
+
+[node name="WeaponLabel" type="Label" parent="HUD/RunInventoryHud"]
+layout_mode = 0
+offset_top = 18.0
+offset_right = 194.0
+offset_bottom = 38.0
+theme_override_font_sizes/font_size = 11
+text = "WPN T2  12 / 24"
+
+[node name="RoomName" type="Label" parent="HUD"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 16.0
+offset_bottom = 40.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.9)
+theme_override_font_sizes/font_size = 12
+text = "CHAPTER II  ·  CASTLE GATE INTERIOR"
+horizontal_alignment = 1

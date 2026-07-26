@@ -1,11 +1,11 @@
 # 第二章路线与流程
 
-Status: Stage 1 route authority
+Status: Stage 2 graybox implemented and verified
 
 ## Critical route map
 
 ```text
-F5 Debug Bootstrap (planned Stage 2)
+F5 Debug ChapterStartRouter (implemented Stage 2)
   ↓ CH2_START / CP01 (x=384)
 [01 Castle Gate Interior 0..2304] SAFE
   ↓ D01
@@ -76,15 +76,13 @@ Each E01–E15 owns left/right gate anchors at the exact zone bounds in `chapter
 
 All memory triggers are one-shot per disposable chapter session and must not mutate a future formal save during debug starts.
 
-## Transition and startup plan
+## Transition and startup implementation
 
-Current F5 does not enter Chapter II. Stage 2 must implement the minimum route promised by the prior chapter-start foundation:
-
-1. Keep `project.godot` on the Opening.
-2. Add one debug-aware Bootstrap/routing authority before formal flow continuation.
-3. Create a saved `chapter_02_start_profile.tres` and valid `silent_court.tscn` before setting `debug_ready=true`.
-4. In debug builds, validate selector, scene and spawn; reset disposable session; equip Ravenfang; set 30 coins/full health; then enter Silent Court.
-5. In release or on validation failure, fall back to the authored Opening without partial state mutation.
+1. `project.godot` still stores `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"`.
+2. The narrow `ChapterStartRouter` Autoload waits for the configured Opening, validates the debug-only target, and changes to Silent Court. It does nothing in release, when disabled, for invalid targets, or inside `--script` test processes.
+3. The saved `chapter_02_start_profile.tres` is now the registry authority. It is `debug_ready=true`, defaults to `CH2_START`, exposes six legal selectors, equips Ravenfang, grants 30 disposable coins and starts full.
+4. `SilentCourt/ChapterRuntime` instances one shared Player, one Camera2D, one respawn controller and one signal-driven HUD. No Player or HUD is copied into a room.
+5. Normal authored startup remains recoverable by disabling `DebugRunConfig.debug_chapter_start_enabled`; the first-level threshold remains unchanged and no formal cross-chapter transition is claimed.
 
 The first-level `ravenmourn_threshold.tscn` remains a visual threshold until a separately approved cross-chapter transition pass. Stage 1 does not change it.
 
@@ -94,15 +92,22 @@ Stage 2 creates exactly these level/room scenes before any formal enemy AI is ad
 
 ```text
 res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/01_castle_gate_interior.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/02_grey_banner_corridor.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/03_last_banquet_hall.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/04_royal_portrait_gallery.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/05_blood_candle_chapel.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/06_servant_passage.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/07_old_armory_safe_room.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/08_silent_ballroom_antechamber.tscn
-res://chapters/chapter_02_silent_court/scenes/rooms/09_silent_ballroom.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/castle_gate_interior.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/grey_banner_corridor.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/last_banquet_hall.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/royal_portrait_gallery.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/blood_candle_chapel.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/servant_passage.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/old_armory_safe_room.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom_antechamber.tscn
+res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom.tscn
 ```
 
-The main scene instances the nine rooms and the shared Player/HUD services. Door, encounter, checkpoint, spawn and narrative items remain named anchors/placeholders in Stage 2; their functional scenes belong to Stages 3 and 4.
+The main scene instances the nine rooms at global X `0, 2304, 6912, 11520, 15616, 19456, 22784, 24832, 27520`. Every room has the agreed Background, Geometry, Props, Door, Checkpoint, Encounter, EnemySpawn, Narrative, CameraBounds, Entry, Exit and DebugLabel structure. Door, encounter, checkpoint and narrative objects remain named anchors/placeholders; enemies are intentionally absent.
+
+## Stage 2 traversal result
+
+- One uninterrupted fully solid floor uses top `y=612` from global X `0..32128`; outer walls close only the chapter ends. Room joints have no vertical step or collision gap.
+- Final graphical F5 traversal used ordinary right movement plus Input Map jump/double-jump/Ground Dash/Air Dash actions, with 25 seconds of inspection per room and no teleport/flying. It completed in `362.05 s` (`6:02.05`). A one-second-stop preflight of the same final geometry completed in `146.09 s`.
+- Main-route traversal needs no extreme jump. Optional room platforms remain 280–360 px wide and 36–132 px above adjacent footing; Chapel's five-platform arc uses 132 px vertical tiers, inside the measured 167.10 px double-jump rise.
+- Fifteen Encounter anchors and thirty matching `E##_Spawn_01/02` markers exist, but no enemy, activation gate or encounter controller is instantiated in this stage.

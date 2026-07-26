@@ -1,6 +1,6 @@
 # 第二章房间尺寸与移动指标
 
-Status: authoritative Stage 1 graybox measurements
+Status: Stage 2 implemented dimensions and collision audit
 
 ## Live measurement baseline
 
@@ -49,47 +49,62 @@ Room PackedScenes use local X from zero. The common main-route floor baseline is
 
 Total authored horizontal extent is 32,128 px (25.1 viewport widths). Direct held-right travel is not the chapter pacing measure; Stage 2 acceptance times the critical traversal with stairs, vertical crossings, doors, branches and camera transitions. Target no-combat human traversal remains 6–9 minutes; a pure movement speedrun is expected to be substantially shorter and will be recorded separately.
 
-## Platform coordinate plan
+## Implemented platform coordinates
 
-| Room | Required surfaces (local coordinates) | Optional surfaces |
+All coordinates are `(left, top, width, thickness)` in room-local pixels. The uninterrupted main floor is authoritative; these are optional movement-test surfaces rather than mandatory route blockers.
+
+| Room | Implemented full-solid platforms | Branch/anchor |
 | --- | --- | --- |
-| Corridor | steps `(880,556)`, `(1160,500)`; low platform `(2380,540)` | high ledge `(2860,484)`, reached through 128 px cumulative rise |
-| Banquet | tables centered `(980,560)`, `(1420,560)`, `(3300,560)` | balcony floor `y=480`, access via two 66 px tiers |
-| Gallery | long floor and 420 px clear overhead | portrait branch platforms `y=548 → 484`, 160 px minimum width |
-| Chapel | side platforms `y=540`, `468`, `396`; central altar `y=560` | upper relic perch `y=332`, approached by 64 px tier |
-| Passage | stairs `y=556 → 500` and return to 612 | kitchen branch gap 176 px maximum |
-| Armory | flat protected floor | shortcut landing 128 px wide minimum |
-| Antechamber | final arena flat floor | CP05 platform remains full solid, not one-way |
-| Ballroom | uninterrupted `y=612` floor | no gameplay platform in first Boss pass |
+| Gate Interior | `(920,498,280,20)`, `(1560,450,320,20)` | `GateUpperLookout` |
+| Corridor | solid stair ramp `(700,612)→(1100,500)→(1300,500)→(1700,612)`; platforms `(2240,456,320,20)`, `(3520,490,300,20)` | `CorridorUpperRoute` |
+| Banquet | four jumpable tables `(560/1840/3120/3800,548,520,18)`; balcony `(2140,398,360,20)` | `BanquetServiceBranch`, `BanquetBalconyBranch`, `ChandelierAnchor`; final table ends before CP02 safety margin |
+| Gallery | `(760,490,300,20)`, `(1780,442,300,20)`, `(2920,490,300,20)` | `GalleryCeilingAnchor` |
+| Chapel | side arc `(720,486)→(1280,354)→(1840,222)→(2400,354)→(2960,486)`, all 300×20; altar `(1660,560,520,52)` | `ChapelCeilingAnchor`, `BloodCandleAnchor` |
+| Passage | ramp `(420,612)→(760,520)→(1040,520)→(1380,612)`; center platform `(1760,442,300,20)`; second ramp `(1900,612)→(2240,520)→(2480,520)→(2820,612)` | `KitchenBranch` |
+| Armory | `(690,492,300,20)`, `(1270,456,300,20)` | `ArmoryMerchantPlaceholder` |
+| Antechamber | `(720,492,300,20)`, `(1640,452,320,20)` | Boss approach buffer |
+| Ballroom | none | `BossLaneCenter`; 3968 px clear floor lane |
 
 Large platforms are fully solid including their undersides. Only small platforms explicitly named `OneWayPlatform_*` may use one-way collision in Stage 3.
 
-## Camera plan
+## Implemented Camera plan
 
 The shared `Player/Camera2D` remains the camera. Stage 2 may set room limits through a narrow room-boundary component; it must not duplicate Player or permanently modify its Resource.
 
-| Room | Planned Camera2D limits `(left, top, right, bottom)` |
+The one existing `Player/Camera2D` uses continuous horizontal limits `(0,32128)` in every room to prevent boundary snapping. Each room-owned `CameraBounds` Area only changes vertical limits and calls `reset_smoothing()` once. This is the intentional Stage 2 refinement of the Stage 1 per-room horizontal clamp proposal.
+
+| Room | Active Camera2D limits `(left, top, right, bottom)` |
 | --- | --- |
-| 01 | `(0, 0, 2304, 720)` |
-| 02 | `(2304, -180, 6912, 720)` |
-| 03 | `(6912, -360, 11520, 720)` |
-| 04 | `(11520, -180, 15616, 720)` |
-| 05 | `(15616, -720, 19456, 720)` |
-| 06 | `(19456, -180, 22784, 720)` |
-| 07 | `(22784, 0, 24832, 720)` |
-| 08 | `(24832, -180, 27520, 720)` |
-| 09 | `(27520, -180, 32128, 720)` |
+| 01 | `(0, 0, 32128, 720)` |
+| 02 | `(0, -180, 32128, 720)` |
+| 03 | `(0, -360, 32128, 720)` |
+| 04 | `(0, -180, 32128, 720)` |
+| 05 | `(0, -720, 32128, 720)` |
+| 06 | `(0, -180, 32128, 720)` |
+| 07 | `(0, 0, 32128, 720)` |
+| 08 | `(0, -180, 32128, 720)` |
+| 09 | `(0, -180, 32128, 720)` |
 
 Room-limit changes call `reset_smoothing()` once. Camera never zooms to compensate for invalid geometry. The Ballroom uses a locked range only after the Boss trigger; the Player and placeholder Boss must remain visible at opposite points in the 3968 px usable lane through normal camera following rather than a full-arena zoom-out.
 
 ## Checkpoint and spawn coordinates
 
-| Selector | Saved ID | Global position | Safety contract |
-| --- | --- | --- | --- |
-| `CH2_START` | `chapter_02_cp01` | `(384,612)` | Castle Gate Interior; no enemies in detection range |
-| `CH2_BANQUET` | `chapter_02_banquet_cp02` | `(11320,612)` | after E06, before Gallery connector |
-| `CH2_CHAPEL` | `chapter_02_chapel_cp03` | `(19216,612)` | after E11, outside projectile/ember coverage |
-| `CH2_ARMORY` | `chapter_02_armory_cp04` | `(23424,612)` | protected Armory center; enemies cannot enter |
-| `CH2_BOSS` | `chapter_02_boss_cp05` | `(27032,612)` | after E15 and 488 px before Boss door trigger |
+Debug markers store the Player origin at `y=584`, placing its measured 28 px foot offset exactly on floor `y=612`. Checkpoint anchors themselves remain floor-location placeholders at `y=612`.
 
-The existing registry aliases must be expanded in Stage 2 to include CP03 and the six selectors without breaking the Stage 2A IDs.
+| Selector | Checkpoint association | Global Player origin | Safety contract |
+| --- | --- | --- | --- |
+| `CH2_START` | `Chapter02CP01` | `(384,584)` | Castle Gate Interior; no enemies instantiated |
+| `CH2_BANQUET` | `Chapter02CP02` | `(11320,584)` | post-Banquet / Gallery approach |
+| `CH2_GALLERY` | inspection selector | `(11840,584)` | Gallery entry |
+| `CH2_CHAPEL` | `Chapter02CP03` | `(15776,584)` | Chapel entry |
+| `CH2_ARMORY` | `Chapter02CP04` | `(23424,584)` | protected Armory center |
+| `CH2_BOSS` | `Chapter02CP05` | `(27032,584)` | Antechamber, before Boss door |
+
+The saved Start Profile exposes exactly these six selectors. Respawn binds to the selected marker for this graybox; activating CP01–CP05 is deferred to the next stage.
+
+## Stage 2 collision findings
+
+- All nine room floors are full-solid `StaticBody2D` rectangles on World layer 1. Their edges meet at the exact room global bounds; a real F5 traversal crossed all eight joints without a step, fall or narrow seam.
+- Optional platforms, banquet tables and the Chapel altar are full solid. Corridor and Servant Passage use solid shallow-slope stair polygons, and every room owns a solid ceiling boundary at its authored vertical minimum. No one-way collision, moving platform or door collision is introduced in Stage 2.
+- The full 32,128 px route is bounded by 64 px outer walls. Boss-room activation is an inert Area placeholder; `BossSpawn`, `PlayerBossEntry`, `BossCameraBounds`, rear door and exit door are named anchors only.
+- Known limitation: platform underside, edge comfort, staircase feel, Chapel vertical framing and all four door collision modes still require the approved next-stage collision pass.

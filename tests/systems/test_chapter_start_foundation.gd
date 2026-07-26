@@ -1,6 +1,7 @@
 extends SceneTree
 
-## Stage 2A contract: registry/profile/config exist without changing F5 routing.
+## Chapter-start contract: Opening remains configured while debug routing targets
+## the now-loadable Chapter II profile.
 
 const EXPECTED_F5_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
 
@@ -48,12 +49,12 @@ func _test_chapter_two_metadata() -> void:
 		ChapterRegistry.CHAPTER_02_SILENT_COURT
 	)
 	_expect(profile.main_scene_path == ChapterRegistry.CHAPTER_02_SCENE_PATH, "Chapter II path mismatch")
-	_expect(profile.default_spawn_id == &"chapter_02_cp01", "Chapter II default spawn mismatch")
-	_expect(profile.default_checkpoint_id == &"chapter_02_cp01", "Chapter II checkpoint mismatch")
+	_expect(profile.default_spawn_id == &"CH2_START", "Chapter II default spawn mismatch")
+	_expect(profile.default_checkpoint_id == &"Chapter02CP01", "Chapter II checkpoint mismatch")
 	_expect(profile.starting_currency == 30, "Chapter II test currency metadata mismatch")
 	_expect(profile.equipped_weapon == &"ravenfang_daggers", "Chapter II weapon metadata mismatch")
-	_expect(not profile.debug_ready, "Chapter II was marked ready before its scene/profile exists")
-	_expect(not profile.is_valid_debug_target(), "Missing Chapter II scene was accepted as a debug target")
+	_expect(profile.debug_ready, "Chapter II is not marked debug-ready")
+	_expect(profile.is_valid_debug_target(), "Chapter II profile is not a valid debug target")
 	for planned_id: StringName in [
 		ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES,
 		ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP,
@@ -73,7 +74,7 @@ func _test_debug_run_config() -> void:
 		config.debug_start_chapter_id == ChapterRegistry.CHAPTER_02_SILENT_COURT,
 		"Debug target does not default to Chapter II"
 	)
-	_expect(config.debug_start_spawn_id == &"chapter_02_cp01", "Debug spawn default mismatch")
+	_expect(config.debug_start_spawn_id == &"CH2_START", "Debug spawn default mismatch")
 	_expect(config.debug_reset_chapter_state_on_run, "Debug reset default mismatch")
 	_expect(config.debug_use_test_currency and config.debug_test_currency == 30, "Debug currency defaults mismatch")
 	_expect(config.debug_start_full_health, "Full-health debug default mismatch")
@@ -95,7 +96,7 @@ func _test_formal_flow_is_unchanged() -> void:
 		ProjectSettings.get_setting("application/run/main_scene", "") == EXPECTED_F5_PATH,
 		"Stage 2A changed the formal F5 entry scene"
 	)
-	_expect(current_scene == null, "DebugRunConfig routed to a scene during Stage 2A")
+	_expect(current_scene == null, "ChapterStartRouter routed a script-only test")
 
 
 func _expect(condition: bool, message: String) -> void:
@@ -105,7 +106,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapter II default, no routing)")
+		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapter II ready, Opening preserved)")
 		quit(0)
 		return
 	for failure: String in _failures:

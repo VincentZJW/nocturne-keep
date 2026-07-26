@@ -2,7 +2,7 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一章开场、暮帷墓窟复苏、嵌入式教程与34敌人路线 · Chapter I Graybox 4.1`
+当前版本：`第二章九房间完整灰盒 · Chapter II Silent Court Stage 2`
 
 ## 当前范围
 
@@ -36,11 +36,13 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/cinematics/opening_cinematic.tscn
 ```
 
-章节化启动基础已完成阶段2A：项目现在拥有统一`ChapterRegistry`、类型化`ChapterStartProfile`和`DebugRunConfig`，默认开发目标登记为第二章《沉寂王庭》。本阶段尚未接入启动路由，且第二章场景仍未建立，因此F5行为保持不变；不要手工改写`run/main_scene`。路由、合法第二章启动档案和F5直达验收分别留待阶段2B、2C和2D。
+章节化启动阶段2现已完成：项目拥有统一`ChapterRegistry`、保存的`ChapterStartProfile`、`DebugRunConfig`和受Debug构建门控的`ChapterStartRouter`。`run/main_scene`仍然是Opening，但当前开发默认配置会在F5初始化后直接进入第二章《沉寂王庭》的`CH2_START`；Release、禁用Debug启动、非法目标以及脚本测试进程不会被路由。不要手工改写`run/main_scene`。
 
-第二章开发阶段1联合设计已完成：九个房间规划为总长32,128 px的线性主路加三条短支路，五种新敌人与15组Encounter合计34只普通敌人，无声舞会厅按4608×900 px规划。当前只有设计文档；`silent_court.tscn`、保存的Start Profile和Debug路由仍未创建，因此此时F5仍从Opening开始。下一阶段会先建立有效第二章入口，再制作九房间完整灰盒。
+第二章九房间灰盒已经落地为总长32,128 px的连续路线：城门内厅→灰旗长廊→末宴大厅→王室画像长廊→血烛礼拜堂→仆役通道→旧军械库安全室→无声舞厅前室→无声舞会厅。F5中只有一名共享Player与一套HUD，默认装备Ravenfang、30金币、满HP/耐力；15组Encounter、30个敌人出生点、5个检查点、10扇门、6个叙事触发和Boss空间目前只保存为命名Anchor，本阶段没有正式敌人或门/检查点逻辑。
 
-自然播放或跳过后加载`res://scenes/levels/veilbound_catacomb.tscn`。墓窟剧情可长按ESC/Enter跳过；获得控制后使用A/D移动、E互动，拾取`World/Interactions/DaggerPickup`后可开启石门并自行进入出口。出口淡出并加载`res://scenes/main/main.tscn`，Player出生于`World/DarkForestTutorialSpawn (320,612)`，随后既有教程、HUD、死亡/重生、18组遭遇和木桥Boss流程继续运行。
+若将`DebugRunConfig.debug_chapter_start_enabled`设为`false`，自然播放或跳过Opening后仍按原流程加载`res://scenes/levels/veilbound_catacomb.tscn`，再进入`res://scenes/main/main.tscn`；这条正式Opening→复苏→第一章路线未被第二章改写。
+
+第二章当前人工测试：按F5后直接位于城门内厅，使用A/D或方向键向右依次穿过九房；Space、二段Space、地面/空中Shift可检查可选平台与支路，最终到达无声舞会厅。六个Debug出生选择器为`CH2_START`、`CH2_BANQUET`、`CH2_GALLERY`、`CH2_CHAPEL`、`CH2_ARMORY`、`CH2_BOSS`，可在`DebugRunConfig.debug_start_spawn_id`中选择。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 

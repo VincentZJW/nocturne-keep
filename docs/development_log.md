@@ -4056,3 +4056,54 @@ Status: complete — documented, verified, and awaiting Stage 2 approval
 - Stage 1 is intentionally non-playable design. There is no Silent Court scene, saved Start Profile, Bootstrap/router, Chapter II Player/HUD instance or room geometry to inspect in-game.
 - Pressing F5 currently verifies only that the unchanged Opening still starts cleanly. The Debug config metadata can be inspected in `scripts/systems/debug_run_config.gd`; playable Castle Gate Interior acceptance begins in Stage 2.
 - No screenshot was generated because no visual/runtime content changed. The 20 pre-existing user-owned paths remain outside this milestone.
+
+## 2026-07-26 — Chapter II Stage 2: nine-room full graybox route
+
+Status: in progress — implementation authorized; no later Chapter II content stage is in scope
+
+### Goal
+
+- Build the complete nine-room Silent Court graybox as independently instantiable room scenes plus one chapter-owned level scene.
+- Make the existing debug Chapter Start configuration enter Chapter II from F5 while preserving the authored Opening as `run/main_scene` and preserving the normal non-debug flow.
+- Reuse exactly one shared Player, camera, respawn service and signal-driven HUD; provide six selectable debug spawns and all approved checkpoint, encounter, door, narrative, enemy-spawn and Boss-room anchors.
+
+### Pre-implementation audit
+
+- Work begins on `master` at `ef5471d`; `project.godot` still resolves `run/main_scene` to `res://scenes/cinematics/opening_cinematic.tscn`.
+- Stage 2A provides typed chapter metadata and a side-effect-free `DebugRunConfig`, but there is no router, saved Chapter II start profile, Silent Court PackedScene, room scene, Player/HUD runtime composition or Chapter II test.
+- The shared Player already owns Camera2D, health, stamina, combat presentation and the existing death sequence. Existing signal-driven Health, Stamina and run-inventory HUD scripts can be reused without copying gameplay data into UI.
+- Twenty pre-existing user-owned modified/untracked paths are present, including `scenes/main/main.tscn` and live Chapter I/Boss tuning. They will be preserved and excluded from this stage's commit.
+
+### Planned files, tests, and scope check
+
+- Add nine exact room scenes under `chapters/chapter_02_silent_court/scenes/rooms/`, their chapter-owned graybox presentation/camera scripts, the composed `silent_court.tscn`, a saved Chapter II Start Profile and one reusable shared chapter gameplay runtime.
+- Add a guarded debug-start router Autoload while leaving `run/main_scene` unchanged. Apply only disposable debug state: Ravenfang equipped, 30 coins, full health/stamina and the selected `CH2_*` spawn.
+- Add deterministic graybox/profile/router contracts; run exact Godot 4.7.1 import, focused tests, existing startup regressions, a real graphical F5 traversal, and capture at least one QA screenshot for every room.
+- Stage 2 contains solid traversal geometry and named future-system anchors only. It explicitly excludes enemy AI/instances, encounter activation, functional doors/checkpoints/narrative, final art, complete Boss/shop logic and Chapter III work.
+
+### Delivered implementation
+
+- Added the independently loadable `silent_court.tscn` and all nine required non-numbered room PackedScenes. They form a continuous 32,128 px route with a common full-solid floor at `y=612`, exact Stage 1 room widths, solid ceiling boundaries, two authored stair-ramp areas, jumpable banquet tables, a Chapel altar, optional movement-test platforms, distinct low-cost room presentation and one room-boundary Area each.
+- Added one reusable `chapter_gameplay_runtime.tscn` containing exactly one existing Player instance, its existing Camera2D, respawn controller and signal-driven Health/Stamina/inventory HUD. No room contains Player, HUD, enemies or gameplay managers.
+- Added the saved Chapter II Start Profile, six legal `CH2_*` selectors and guarded `ChapterStartRouter`. `run/main_scene` remains the Opening; Debug F5 validates and enters Silent Court, while release/disabled/invalid and `--script` test processes fall through.
+- Debug start resets disposable state, equips Ravenfang, grants 30 coins, restores 100 HP/100 Stamina, places Player origin at the selected safe marker and binds respawn to the same marker.
+- Added all five checkpoint, fifteen Encounter, thirty enemy-spawn, ten door, six narrative and required Boss-space anchors. They are inert by stage contract; no enemy, door, checkpoint, encounter, narrative or Boss logic is claimed.
+- The one Camera2D keeps continuous horizontal limits `0..32128` and switches only room vertical limits. This avoids horizontal snapping at room joints and deliberately refines the Stage 1 proposal for hard per-room horizontal clamps.
+
+### Commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`: exit 0; room, level, router, runtime, profile and test resources parsed/imported without red diagnostics.
+2. `... --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_silent_court_graybox.gd`: `PASS rooms=9 spawns=6 encounters=15 player=1 hud=1`.
+3. `tests/systems/test_chapter_start_foundation.gd`: PASS — seven entries, Chapter II ready and Opening still configured.
+4. `tests/player/measure_player_level_metrics.gd`: PASS — 83.77/167.10 px jump rises, 153.59/281.92 px normal ranges, 192.92/321.26 px with Air Dash, 48 px minimum safe landing width; Player tuning was unchanged.
+5. First formal transition regression exposed that the new Debug router intercepted a script-driven Opening test. Routing was narrowed to bypass all `--script` processes; rerun `tests/level/test_veilbound_scene_transitions.gd` then passed Opening skip → Catacomb skip → Main tutorial.
+6. Existing `test_chapter_one_flow.gd` and `test_veilbound_catacomb_flow.gd`: PASS. Ordered full deterministic suite including the new chapter test: `FULL_SUITE tests=45 failed=0`.
+7. Final graphical F5 command `... --path . -- --capture-ch2-graybox`: Player traversed through CharacterBody2D physics with no coordinate write or flight, triggered Ground Dash plus double-jump/Air Dash through Input Map, jumped solid table/altar obstacles when blocked, and stopped 25 seconds in each room; `PASS duration=362.05s screenshots=9`.
+8. Forced-render final-geometry preflight `... --path . -- --recapture-ch2-graybox-fast`: exit 0, `duration=146.09s`, all nine logged Player X coordinates within their rooms and nine unique 1280×720 screenshots. No Script Error, Error or debugger-red output occurred.
+
+### QA evidence and known limitations
+
+- Evidence and SHA-256 ledger: `docs/qa/chapter_02_graybox/stage_2_f5_report.md`; screenshots `room_01_castle_gate_interior_f5.png` through `room_09_silent_ballroom_f5.png` in the same directory.
+- Automated evidence proves saved paths, anchors, single Player/HUD composition, basic collision continuity, debug profile state, full route and camera-boundary switching. Jump/Dash metrics prove comfortable geometry envelopes; platform feel and optional-branch readability still require human F5 playtesting.
+- Platforms, banquet tables, altar and stair ramps use full-solid graybox collision. One-way behavior, staircase comfort, underside/edge polish, functional normal/encounter/shortcut/Boss doors and active CP01–CP05 are deliberately deferred.
+- The 20 pre-existing user-owned modified/untracked paths remain preserved and excluded. No Chapter I Main scene, existing enemy/Boss tuning, combat, Player movement Resource or art was modified by Stage 2.

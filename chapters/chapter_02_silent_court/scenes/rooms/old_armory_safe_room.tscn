@@ -1,0 +1,116 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_4j154"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_bcek7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rlhxi"]
+size = Vector2(2048, 108)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fih5e"]
+size = Vector2(2048, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hmpee"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tkbnm"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elebm"]
+size = Vector2(2048, 720)
+
+[node name="OldArmorySafeRoom" type="Node2D" unique_id=707456790]
+script = ExtResource("1_4j154")
+room_id = &"OLD_ARMORY_SAFE_ROOM"
+bilingual_name = "Old Armory Safe Room / 旧军械库安全室"
+room_index = 7
+room_size = Vector2i(2048, 720)
+accent_color = Color(0.4392157, 0.5019608, 0.54509807, 1)
+
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=757122322]
+
+[node name="Geometry" type="Node2D" parent="." unique_id=1465881891]
+
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=827134662]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=1051385276]
+position = Vector2(1024, 666)
+shape = SubResource("RectangleShape2D_rlhxi")
+
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=1418456836]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=445501416]
+position = Vector2(1024, -32)
+shape = SubResource("RectangleShape2D_fih5e")
+
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1155399333]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1015078528]
+position = Vector2(840, 502)
+shape = SubResource("RectangleShape2D_hmpee")
+
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=407205145]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=895709856]
+position = Vector2(1420, 466)
+shape = SubResource("RectangleShape2D_tkbnm")
+
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=519681232]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=338894904]
+
+[node name="ArmoryShortcutDoor" type="Marker2D" parent="DoorAnchors" unique_id=849839898]
+position = Vector2(1840, 612)
+
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=1147199405]
+
+[node name="Chapter02CP04" type="Marker2D" parent="CheckpointAnchors" unique_id=408271013]
+position = Vector2(640, 612)
+
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=2147349316]
+
+[node name="E14" type="Marker2D" parent="EncounterAnchors" unique_id=853124946]
+position = Vector2(896, 612)
+
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1141180425]
+
+[node name="E14_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=2085727440]
+position = Vector2(840, 612)
+
+[node name="E14_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=2060268828]
+position = Vector2(952, 612)
+
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=94930040]
+
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=1828707012]
+
+[node name="ArmoryMerchantPlaceholder" type="Marker2D" parent="RouteAnchors" unique_id=218221323]
+position = Vector2(1520, 612)
+
+[node name="CameraBounds" type="Area2D" parent="." unique_id=767057757]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_bcek7")
+room_id = &"OLD_ARMORY_SAFE_ROOM"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1360203348]
+position = Vector2(1024, 360)
+shape = SubResource("RectangleShape2D_elebm")
+
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=1398437834]
+position = Vector2(64, 612)
+
+[node name="RoomExit" type="Marker2D" parent="." unique_id=2045701854]
+position = Vector2(1984, 612)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=356190847]
+offset_left = 32.0
+offset_top = 28.0
+offset_right = 32.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
+text = "07 · Old Armory Safe Room / 旧军械库安全室"

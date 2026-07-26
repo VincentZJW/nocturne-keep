@@ -1,0 +1,126 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_e2ymq"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_5mlpe"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_t4eqc"]
+size = Vector2(3328, 108)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sog7o"]
+size = Vector2(3328, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6k034"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_js3km"]
+size = Vector2(3328, 900)
+
+[node name="ServantPassage" type="Node2D" unique_id=432646328]
+script = ExtResource("1_e2ymq")
+room_id = &"SERVANT_PASSAGE"
+bilingual_name = "Servant Passage / 仆役通道"
+room_index = 6
+room_size = Vector2i(3328, 720)
+vertical_minimum = -180
+accent_color = Color(0.38431373, 0.41960785, 0.39607844, 1)
+
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1055617838]
+
+[node name="Geometry" type="Node2D" parent="." unique_id=352338270]
+
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1919845083]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=478805470]
+position = Vector2(1664, 666)
+shape = SubResource("RectangleShape2D_t4eqc")
+
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=588977786]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1635563022]
+position = Vector2(1664, -212)
+shape = SubResource("RectangleShape2D_sog7o")
+
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=181880343]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1246571443]
+position = Vector2(1910, 452)
+shape = SubResource("RectangleShape2D_6k034")
+
+[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=1886942520]
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1741723358]
+polygon = PackedVector2Array(420, 612, 760, 520, 1040, 520, 1380, 612, 1380, 720, 420, 720)
+
+[node name="StairRamp02" type="StaticBody2D" parent="Geometry" unique_id=700099169]
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp02" unique_id=379381274]
+polygon = PackedVector2Array(1900, 612, 2240, 520, 2480, 520, 2820, 612, 2820, 720, 1900, 720)
+
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=572024158]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=1994653604]
+
+[node name="ServantConnectionDoor" type="Marker2D" parent="DoorAnchors" unique_id=478976368]
+position = Vector2(3250, 612)
+
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=1165596702]
+
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1874553206]
+
+[node name="E12" type="Marker2D" parent="EncounterAnchors" unique_id=1425089077]
+position = Vector2(448, 612)
+
+[node name="E13" type="Marker2D" parent="EncounterAnchors" unique_id=1489059080]
+position = Vector2(1664, 612)
+
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1531704000]
+
+[node name="E12_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1831901910]
+position = Vector2(392, 612)
+
+[node name="E12_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1575428601]
+position = Vector2(504, 612)
+
+[node name="E13_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=586286752]
+position = Vector2(1608, 612)
+
+[node name="E13_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1642444613]
+position = Vector2(1720, 612)
+
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=2095890947]
+
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=215596628]
+
+[node name="KitchenBranch" type="Marker2D" parent="RouteAnchors" unique_id=2014251254]
+position = Vector2(2180, 442)
+
+[node name="CameraBounds" type="Area2D" parent="." unique_id=1122096898]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_5mlpe")
+room_id = &"SERVANT_PASSAGE"
+vertical_limits = Vector2i(-180, 720)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=2065177266]
+position = Vector2(1664, 270)
+shape = SubResource("RectangleShape2D_js3km")
+
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=694265357]
+position = Vector2(64, 612)
+
+[node name="RoomExit" type="Marker2D" parent="." unique_id=1798116199]
+position = Vector2(3264, 612)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=1970850734]
+offset_left = 32.0
+offset_top = -152.0
+offset_right = 32.0
+offset_bottom = -152.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
+text = "06 · Servant Passage / 仆役通道"

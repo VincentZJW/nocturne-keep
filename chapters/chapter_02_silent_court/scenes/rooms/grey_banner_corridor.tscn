@@ -1,0 +1,139 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_cutjq"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_tpdka"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_somxb"]
+size = Vector2(4608, 108)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_quqqh"]
+size = Vector2(4608, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_35wpb"]
+size = Vector2(320, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0ahcu"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x7fs8"]
+size = Vector2(4608, 900)
+
+[node name="GreyBannerCorridor" type="Node2D" unique_id=1391541322]
+script = ExtResource("1_cutjq")
+room_id = &"GREY_BANNER_CORRIDOR"
+bilingual_name = "Grey Banner Corridor / 灰旗长廊"
+room_index = 2
+room_size = Vector2i(4608, 720)
+vertical_minimum = -180
+accent_color = Color(0.43529412, 0.47058824, 0.5372549, 1)
+
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1184764067]
+
+[node name="Geometry" type="Node2D" parent="." unique_id=305117600]
+
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=822147733]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=1837079292]
+position = Vector2(2304, 666)
+shape = SubResource("RectangleShape2D_somxb")
+
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=2039455019]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=176940755]
+position = Vector2(2304, -212)
+shape = SubResource("RectangleShape2D_quqqh")
+
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1737392306]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1939373526]
+position = Vector2(2400, 466)
+shape = SubResource("RectangleShape2D_35wpb")
+
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=411426935]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=874274044]
+position = Vector2(3670, 500)
+shape = SubResource("RectangleShape2D_0ahcu")
+
+[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=800448644]
+collision_mask = 0
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1098111361]
+polygon = PackedVector2Array(700, 612, 1100, 500, 1300, 500, 1700, 612, 1700, 720, 700, 720)
+
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=149882404]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=781232098]
+
+[node name="CorridorEncounterGate" type="Marker2D" parent="DoorAnchors" unique_id=1724056290]
+position = Vector2(1320, 612)
+
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=1863051334]
+
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=683953104]
+
+[node name="E01" type="Marker2D" parent="EncounterAnchors" unique_id=724256937]
+position = Vector2(448, 612)
+
+[node name="E02" type="Marker2D" parent="EncounterAnchors" unique_id=1830388233]
+position = Vector2(1664, 612)
+
+[node name="E03" type="Marker2D" parent="EncounterAnchors" unique_id=1379923078]
+position = Vector2(3264, 612)
+
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=19030449]
+
+[node name="E01_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1400727927]
+position = Vector2(392, 612)
+
+[node name="E01_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=2010795219]
+position = Vector2(504, 612)
+
+[node name="E02_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1971246957]
+position = Vector2(1608, 612)
+
+[node name="E02_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1682869346]
+position = Vector2(1720, 612)
+
+[node name="E03_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1347739929]
+position = Vector2(3208, 612)
+
+[node name="E03_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1264574435]
+position = Vector2(3320, 612)
+
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=759776273]
+
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=897741416]
+
+[node name="CorridorUpperRoute" type="Marker2D" parent="RouteAnchors" unique_id=665938802]
+position = Vector2(2380, 456)
+
+[node name="CameraBounds" type="Area2D" parent="." unique_id=1636594500]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_tpdka")
+room_id = &"GREY_BANNER_CORRIDOR"
+vertical_limits = Vector2i(-180, 720)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1393104948]
+position = Vector2(2304, 270)
+shape = SubResource("RectangleShape2D_x7fs8")
+
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=1548195298]
+position = Vector2(64, 612)
+
+[node name="RoomExit" type="Marker2D" parent="." unique_id=1705061751]
+position = Vector2(4544, 612)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=327966786]
+offset_left = 32.0
+offset_top = -152.0
+offset_right = 32.0
+offset_bottom = -152.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
+text = "02 · Grey Banner Corridor / 灰旗长廊"

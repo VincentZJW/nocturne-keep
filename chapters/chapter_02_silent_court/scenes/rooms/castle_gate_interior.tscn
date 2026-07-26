@@ -1,0 +1,108 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_jkvkd"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_w5u0h"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hqmv6"]
+size = Vector2(2304, 108)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f8pj3"]
+size = Vector2(2304, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fevi3"]
+size = Vector2(280, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ytpmg"]
+size = Vector2(320, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_kgbe0"]
+size = Vector2(2304, 720)
+
+[node name="CastleGateInterior" type="Node2D" unique_id=1574586977]
+script = ExtResource("1_jkvkd")
+room_id = &"CASTLE_GATE_INTERIOR"
+bilingual_name = "Castle Gate Interior / 王城门内"
+room_size = Vector2i(2304, 720)
+
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=704941870]
+
+[node name="Geometry" type="Node2D" parent="." unique_id=154147482]
+
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=579308843]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=783546410]
+position = Vector2(1152, 666)
+shape = SubResource("RectangleShape2D_hqmv6")
+
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=279282507]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1018638998]
+position = Vector2(1152, -32)
+shape = SubResource("RectangleShape2D_f8pj3")
+
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=767904990]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1563182988]
+position = Vector2(1060, 508)
+shape = SubResource("RectangleShape2D_fevi3")
+
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=1077106158]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=282336292]
+position = Vector2(1720, 460)
+shape = SubResource("RectangleShape2D_ytpmg")
+
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=522838392]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=231817714]
+
+[node name="GateInteriorExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1355480575]
+position = Vector2(2240, 612)
+
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=235682701]
+
+[node name="Chapter02CP01" type="Marker2D" parent="CheckpointAnchors" unique_id=1687807655]
+position = Vector2(384, 612)
+
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1691631999]
+
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=561016189]
+
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1344759311]
+
+[node name="Chapter02TitleTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1180630052]
+position = Vector2(640, 612)
+
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=2044118091]
+
+[node name="GateUpperLookout" type="Marker2D" parent="RouteAnchors" unique_id=1802963011]
+position = Vector2(1700, 450)
+
+[node name="CameraBounds" type="Area2D" parent="." unique_id=22382360]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_w5u0h")
+room_id = &"CASTLE_GATE_INTERIOR"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1238496022]
+position = Vector2(1152, 360)
+shape = SubResource("RectangleShape2D_kgbe0")
+
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=1875376609]
+position = Vector2(64, 612)
+
+[node name="RoomExit" type="Marker2D" parent="." unique_id=1925528614]
+position = Vector2(2240, 612)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=1395740624]
+offset_left = 32.0
+offset_top = 28.0
+offset_right = 32.0
+offset_bottom = 28.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
+text = "01 · Castle Gate Interior / 王城门内"

@@ -1,0 +1,144 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/castle_gate_interior.tscn" id="3_room_01"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/grey_banner_corridor.tscn" id="4_room_02"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/last_banquet_hall.tscn" id="5_room_03"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/royal_portrait_gallery.tscn" id="6_room_04"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/blood_candle_chapel.tscn" id="7_room_05"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/servant_passage.tscn" id="8_room_06"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/old_armory_safe_room.tscn" id="9_room_07"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom_antechamber.tscn" id="10_room_08"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom.tscn" id="11_room_09"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/tools/chapter_02_graybox_qa_runner.gd" id="12_qa"]
+
+[sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
+size = Vector2(64, 1728)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_boss_activation"]
+size = Vector2(320, 720)
+
+[node name="SilentCourt" type="Node2D"]
+script = ExtResource("1_level")
+
+[node name="Rooms" type="Node2D" parent="."]
+
+[node name="CastleGateInterior" parent="Rooms" instance=ExtResource("3_room_01")]
+
+[node name="GreyBannerCorridor" parent="Rooms" instance=ExtResource("4_room_02")]
+position = Vector2(2304, 0)
+
+[node name="LastBanquetHall" parent="Rooms" instance=ExtResource("5_room_03")]
+position = Vector2(6912, 0)
+
+[node name="RoyalPortraitGallery" parent="Rooms" instance=ExtResource("6_room_04")]
+position = Vector2(11520, 0)
+
+[node name="BloodCandleChapel" parent="Rooms" instance=ExtResource("7_room_05")]
+position = Vector2(15616, 0)
+
+[node name="ServantPassage" parent="Rooms" instance=ExtResource("8_room_06")]
+position = Vector2(19456, 0)
+
+[node name="OldArmorySafeRoom" parent="Rooms" instance=ExtResource("9_room_07")]
+position = Vector2(22784, 0)
+
+[node name="SilentBallroomAntechamber" parent="Rooms" instance=ExtResource("10_room_08")]
+position = Vector2(24832, 0)
+
+[node name="SilentBallroom" parent="Rooms" instance=ExtResource("11_room_09")]
+position = Vector2(27520, 0)
+
+[node name="ChapterRuntime" parent="." instance=ExtResource("2_runtime")]
+
+[node name="PlayerSpawnPoints" type="Node2D" parent="."]
+
+[node name="CH2_START" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(384, 584)
+
+[node name="CH2_BANQUET" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(11320, 584)
+
+[node name="CH2_GALLERY" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(11840, 584)
+
+[node name="CH2_CHAPEL" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(15776, 584)
+
+[node name="CH2_ARMORY" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(23424, 584)
+
+[node name="CH2_BOSS" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(27032, 584)
+
+[node name="ChapterSystems" type="Node" parent="."]
+
+[node name="DoorRuntimePlaceholder" type="Node" parent="ChapterSystems"]
+
+[node name="CheckpointRuntimePlaceholder" type="Node" parent="ChapterSystems"]
+
+[node name="EncounterRuntimePlaceholder" type="Node" parent="ChapterSystems"]
+
+[node name="NarrativeRuntimePlaceholder" type="Node" parent="ChapterSystems"]
+
+[node name="Doors" type="Node2D" parent="."]
+
+[node name="Checkpoints" type="Node2D" parent="."]
+
+[node name="EncounterGroups" type="Node2D" parent="."]
+
+[node name="NarrativeTriggers" type="Node2D" parent="."]
+
+[node name="CameraBounds" type="Node2D" parent="."]
+
+[node name="TransitionAreas" type="Node2D" parent="."]
+
+[node name="WorldBounds" type="Node2D" parent="."]
+
+[node name="LeftWall" type="StaticBody2D" parent="WorldBounds"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/LeftWall"]
+position = Vector2(-32, -72)
+shape = SubResource("Rectangle_left_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="WorldBounds"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WorldBounds/RightWall"]
+position = Vector2(32160, -72)
+shape = SubResource("Rectangle_left_wall")
+
+[node name="BossArea" type="Node2D" parent="."]
+
+[node name="BossSpawn" type="Marker2D" parent="BossArea"]
+position = Vector2(30820, 584)
+
+[node name="PlayerBossEntry" type="Marker2D" parent="BossArea"]
+position = Vector2(27920, 584)
+
+[node name="BossActivationArea" type="Area2D" parent="BossArea"]
+position = Vector2(28160, 252)
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossArea/BossActivationArea"]
+shape = SubResource("Rectangle_boss_activation")
+
+[node name="BossCameraBounds" type="Marker2D" parent="BossArea"]
+position = Vector2(29520, 180)
+
+[node name="BossDoorRear" type="Marker2D" parent="BossArea"]
+position = Vector2(27520, 612)
+
+[node name="BossExitDoor" type="Marker2D" parent="BossArea"]
+position = Vector2(32000, 612)
+
+[node name="Debug" type="Node" parent="."]
+
+[node name="GrayboxQaRunner" type="Node" parent="Debug"]
+script = ExtResource("12_qa")

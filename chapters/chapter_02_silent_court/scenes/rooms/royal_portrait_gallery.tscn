@@ -1,0 +1,140 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_tpqgv"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_cwgo2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5h5s7"]
+size = Vector2(4096, 108)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_85dv3"]
+size = Vector2(4096, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oq1dq"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yvanx"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_je1jp"]
+size = Vector2(300, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qiu1p"]
+size = Vector2(4096, 900)
+
+[node name="RoyalPortraitGallery" type="Node2D" unique_id=1829972650]
+script = ExtResource("1_tpqgv")
+room_id = &"ROYAL_PORTRAIT_GALLERY"
+bilingual_name = "Royal Portrait Gallery / 王室肖像长廊"
+room_index = 4
+room_size = Vector2i(4096, 720)
+vertical_minimum = -180
+accent_color = Color(0.45882353, 0.39215687, 0.49411765, 1)
+
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=481116995]
+
+[node name="Geometry" type="Node2D" parent="." unique_id=727543268]
+
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1777154785]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=36233580]
+position = Vector2(2048, 666)
+shape = SubResource("RectangleShape2D_5h5s7")
+
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=563648976]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1082595132]
+position = Vector2(2048, -212)
+shape = SubResource("RectangleShape2D_85dv3")
+
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=2137802147]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1466829383]
+position = Vector2(910, 500)
+shape = SubResource("RectangleShape2D_oq1dq")
+
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=516409640]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=620066852]
+position = Vector2(1930, 452)
+shape = SubResource("RectangleShape2D_yvanx")
+
+[node name="UpperPlatform03" type="StaticBody2D" parent="Geometry" unique_id=1417081872]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform03" unique_id=138847232]
+position = Vector2(3070, 500)
+shape = SubResource("RectangleShape2D_je1jp")
+
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=895923205]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=104234939]
+
+[node name="GalleryConnectionDoor" type="Marker2D" parent="DoorAnchors" unique_id=1430524219]
+position = Vector2(4016, 612)
+
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=2123052368]
+
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=307974566]
+
+[node name="E07" type="Marker2D" parent="EncounterAnchors" unique_id=1517517141]
+position = Vector2(640, 612)
+
+[node name="E08" type="Marker2D" parent="EncounterAnchors" unique_id=195947748]
+position = Vector2(2112, 612)
+
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1543741493]
+
+[node name="E07_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1030452321]
+position = Vector2(584, 612)
+
+[node name="E07_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=831605271]
+position = Vector2(696, 612)
+
+[node name="E08_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1002894534]
+position = Vector2(2056, 612)
+
+[node name="E08_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1119190539]
+position = Vector2(2168, 612)
+
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=267545433]
+
+[node name="ElowenPortraitTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=760211691]
+position = Vector2(1450, 612)
+
+[node name="RoyalKeyMemoryTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=403411446]
+position = Vector2(3200, 612)
+
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=1744091074]
+
+[node name="GalleryCeilingAnchor" type="Marker2D" parent="RouteAnchors" unique_id=1997167965]
+position = Vector2(2700, -80)
+
+[node name="CameraBounds" type="Area2D" parent="." unique_id=1308478812]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_cwgo2")
+room_id = &"ROYAL_PORTRAIT_GALLERY"
+vertical_limits = Vector2i(-180, 720)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1617945706]
+position = Vector2(2048, 270)
+shape = SubResource("RectangleShape2D_qiu1p")
+
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=877854331]
+position = Vector2(64, 612)
+
+[node name="RoomExit" type="Marker2D" parent="." unique_id=2090389531]
+position = Vector2(4032, 612)
+
+[node name="DebugLabel" type="Label" parent="." unique_id=2042945478]
+offset_left = 32.0
+offset_top = -152.0
+offset_right = 32.0
+offset_bottom = -152.0
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
+text = "04 · Royal Portrait Gallery / 王室肖像长廊"
