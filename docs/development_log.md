@@ -3842,3 +3842,80 @@ Status: in progress — latest requirements and live timing paths audited
 - Exact intervals quantize to 60 Hz, hence configured 0.98/1.12/1.16 values measure as 0.983/1.133/1.167 seconds. All remain inside the approved bands.
 - Automated checks prove deterministic timing, routing, state completion and bounded pressure. Final judgement of animation readability, ordinary-movement distance and full-fight difficulty still requires the user's human play-feel pass.
 - Ravenfang art, Player Normal/Dash timing and damage, Boss HP/Shield/damage/moves/phases, other enemies, loot and Chapter II were not modified. The pre-existing Godot scene/resource reserializations remain outside this milestone commit.
+
+## 2026-07-26 — Fallen Gate Knight attack geometry, Shield Bash, and turn-response revision (preflight)
+
+Status: complete — implemented, verified, documented, and awaiting human play-feel acceptance
+
+### Goal
+
+- Replace the shared oversized melee damage volume with attack-family geometry that matches the authored shield, slash and thrust silhouettes.
+- Slow Shield Bash to a readable 0.46-second windup / 0.10-second active / 0.68-second recovery, enforce a 2.70-second repeat cooldown, reduce its Phase-1 share and restrict it to true close range.
+- Supersede the 0.80–1.00-second turn target with a 1.00–1.30-second target, initially 0.32-second reaction plus 0.80-second animation, with facing committed no earlier than 70% of the authored turn.
+- Preserve the existing active-end Attack Gaps, anti-pressure rules, damage/Health/Shield, Player/weapon tuning, arena, loot and encounter content.
+
+### Read-only audit
+
+- Work began on `master` at `5bb811d`; F5 is `res://scenes/cinematics/opening_cinematic.tscn` and reaches `res://scenes/main/main.tscn`. The live Boss is `Main/World/CastleEntranceArea/FallenGateKnight`, instanced from `res://scenes/bosses/fallen_gate_knight.tscn` with `res://scripts/bosses/fallen_gate_knight.gd` and no Main-local attack/turn overrides.
+- The worktree already contained user-owned Godot scene/resource reserializations, regenerated legacy QA images and generated `.uid` files. They will be preserved and excluded from this milestone except for precise task-owned hunks.
+- The Boss currently composes one `FacingRoot/MeleeHitbox` Rectangle `100×42` at `(65,4)` for Shield Bash, Sword Slash, Heavy Overhead, both Combo steps, Jump Smash and Charge Thrust. Its local forward edge is x=115 although active-frame shield/sword tips are only about 20–34 pixels forward of the actor center. `FacingRoot/ShockwaveHitbox` is the only separate damage volume. The common melee rectangle starts at x=15, so it does not reach the true rear but overlaps the body front and extends far beyond every visible melee weapon.
+- Phase 1 is a deterministic equal cycle `[ShieldBash, SwordSlash, HeavyOverhead]`: effective Shield Bash share 33.3%, no explicit weight and no repeat cooldown. It does not directly repeat only because of this fixed cycle. Phase 2 owns ComboSlash, JumpSmash, ChargeThrust and ShockwaveStrike and cannot Shield Bash after shield loss.
+- Current five-frame Shield Bash at 9.8 FPS is approximately 0.204-second windup, 0.204-second active and 0.102-second visual recovery; frames 2–3 own the Hitbox. Its active-end Attack Gap is 0.983 seconds. Sword Slash uses the same timing; Heavy Overhead is about 0.341/0.227/0.114 seconds; Charge Thrust is about 0.182/0.182/0.091 seconds.
+- Current turn is 0.25 reaction + 0.65 animation = 0.9000 seconds at 60 Hz. Facing/Sprite/FacingRoot commit together at animation end. Light and heavy feedback do not interrupt Turn; every attack Hitbox is closed outside its active frames and Turn states cannot select an attack.
+- Exact Godot 4.7.1 editor/import baseline exited 0 without Script Error/Error/Warning. `tests/combat/test_first_level_boss.gd` passed with free and Recovery turns both measured at `0.9000s`.
+
+### Planned files, tests, and scope check
+
+- Update the centralized Boss config and exact saved resource values; add separate Shield Bash, Slash and Thrust hitbox nodes/shapes to the reusable Boss scene and route active windows by attack family.
+- Add close/mid/long distance eligibility, weighted Phase-1 selection, an explicit Shield Bash repeat timer, custom frame durations for the requested Shield Bash stages, and late-turn facing commit bookkeeping.
+- Extend Expanded Main debug with attack type/range/shape/cooldown/weight/distance and an optional geometry drawer; Compact remains unchanged.
+- Add Main-backed geometry, timing, selection-distribution, left/right, single-hit, turn and counter-window tests plus four QA captures. Run exact parse/import, focused tests, complete regression, configured F5 and direct-Main graphical smoke.
+- Update README, Boss/combat/room/metrics specifications and this log, create one isolated commit, then stop. Scope excludes every damage value, Body/Shield pool, Player/weapon parameter/art, other enemy, arena, loot, gate and Chapter II content.
+
+### Delivered implementation
+
+- Replaced `FacingRoot/MeleeHitbox` (`100×42 @ (65,4)`, local edge x=115) with three saved and runtime-configured Areas: `ShieldBashHitbox` `14×30 @ (19,4)`, `SlashHitbox` `26×22 @ (16,0)`, and `ThrustHitbox` `32×10 @ (20,-7)`. Their shape edges end at x=26/29/36, respectively 6/2/5 pixels inside the measured active shield/sword tips. With the current Player Hurtbox half-width, deterministic effective root ranges are 37/40/47 pixels. Heavy/Combo/Jump route through the slash volume; ChargeThrust uses the thrust volume; Shockwave retains its separate low long-range Area.
+- Phase 1 now uses seeded weighted selection rather than the fixed equal cycle. The authoritative weights are Shield Bash 22%, Sword Slash 43%, Heavy Overhead 35%; a 2.70-second timer and last-attack guard prevent Bash repetition. Bash enters the pool only at ≤37 px, Slash/Heavy at ≤40 px, and the Boss approaches when none is eligible. Phase 2 and its existing `ChargeThrust` remain unchanged; no Shield Bash is available after shield loss.
+- Authored Shield Bash as five frames at 10 FPS with duration units `2.3/2.3/0.5/0.5/6.8`, yielding exactly 0.46-second windup, 0.10-second active and 0.68-second recovery. Frames 2–3 remain the only active frames. Its active-end gap is 1.18 seconds (1.183 fixed-step), while every other approved gap and all damage values remain unchanged.
+- Superseded the prior 0.80–1.00-second turn with 0.33-second reaction plus 0.80-second authored animation. The 0.33 value, rather than 0.32, compensates the existing 60 Hz request boundary and produces a measured 1.1333-second complete response. Facing/Sprite/FacingRoot commit at 80% of the animation (0.9833 seconds from rear entry), while attacks remain closed until Turn ends and distance is reevaluated.
+- Expanded Enemy Debug retains Compact dimensions but adds live attack range, active family/width/offset, Bash cooldown/weight, turn commit and Player distance. Expanded/F3 detail also enables the real Boss collision rectangles, active fill, visual-tip reference lines and Player Hurtbox; Compact/F1-hidden modes disable drawing.
+
+### Main synchronization and unchanged scope
+
+- `project.godot` remains `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"`; the approved Opening → Veilbound Catacomb route reaches `res://scenes/main/main.tscn`. The live nodes are `Main/World/Player` and `Main/World/CastleEntranceArea/FallenGateKnight`.
+- Main's Boss instance has no local attack geometry, Bash cadence, selection or turn Inspector override. It inherits `res://scenes/bosses/fallen_gate_knight.tscn`, `res://resources/bosses/fallen_gate_knight_config.tres`, `res://resources/bosses/fallen_gate_knight_sprite_frames.tres` and `res://scripts/bosses/fallen_gate_knight.gd`; no edit to `main.tscn` was required.
+- Boss Body 180, Shield 100, Bash/Slash/Heavy/Charge/Shockwave damage 8/10/15/12/8, Player HP/Stamina/damage/movement, Ravenfang, all skills/phases, bridge bounds, gate, loot, enemies and Chapter content are unchanged.
+
+### Commands and actual results
+
+1. Exact engine/import and focused contracts:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`: exit 0; no Script Error/Error/Warning.
+   - `tests/combat/test_boss_attack_geometry.gd`: PASS. For Shield/Slash/Thrust, left and right each passed 10 inside/outside PhysicsServer shape-query trials plus a rear-safe check. Sampled 2,000 Phase-1 selections were Bash `20.9%`, Slash `43.0%`, Heavy `36.0%`; no direct/cooldown-bypassing Bash was selected.
+   - `tests/combat/test_first_level_boss.gd`: PASS; free and Recovery turns measured `1.1333s`, facing commit `0.9833s`, target `1.00..1.30`.
+   - `tests/combat/test_boss_counter_windows.gd`: PASS; Bash stages `0.46/0.10/0.68`, post-active gap `1.183`, and all approved counter/escape paths `5/5`.
+   - `tests/combat/test_ravenfang_boss_pressure.gd`: PASS; rear Normal first `20/20`, second `14/20`, third `0/20`; rear Dash `10/10`; pressure simulation completed all `6/6` Boss attacks.
+   - `tests/ui/test_main_debug_hud.gd`: PASS; Compact/Expanded/F3/F1 behavior and geometry-draw lifetime verified.
+2. Controlled Main-backed cadence runs:
+   - Fight 1 (12 Phase-1 choices): Bash 2, Slash 4, Heavy 6; shortest repeated Bash interval 4.80 s.
+   - Fight 2: Bash 3, Slash 6, Heavy 3; shortest repeated Bash interval 3.60 s.
+   - Fight 3: Bash 1, Slash 4, Heavy 7; no second Bash, so repeated interval is not applicable.
+   - Existing complete-fight state simulations finished in `28.46/26.98/33.54s` (mean `29.66s`). These are deterministic Main-backed simulations, not fabricated human input or a final play-feel judgement.
+3. Regression and runtime:
+   - Ordered execution of every `tests/**/*.gd` SceneTree test: `FULL_SUITE tests=43 failed=0`.
+   - Configured graphical F5 entry, 300 frames: exit 0 on Godot 4.7.1 GL Compatibility / Apple M4; no red diagnostics.
+   - Direct graphical `res://scenes/main/main.tscn`, 600 frames: exit 0; no red diagnostics.
+   - `scripts/tools/capture_boss_attack_geometry_qa.gd`: `BOSS_ATTACK_GEOMETRY_QA: PASS (4 Main-backed captures)`.
+
+### QA evidence and acceptance
+
+- `docs/qa/boss_thrust_hitbox_main.png`: 1280×720, 41,237 bytes, SHA-256 `7d5b18f27c50aa956b7e06e22be998f621c72d59823019ef0683c98e348a9014`.
+- `docs/qa/boss_slash_hitbox_main.png`: 1280×720, 41,108 bytes, SHA-256 `16e3303227a06ffd49c4d73695f5695613460546e0a70d6d70bc392510b7a272`.
+- `docs/qa/boss_shield_bash_hitbox_main.png`: 1280×720, 41,974 bytes, SHA-256 `0bb2210727d247e48e892b21dbd3bc31bf97cc96818dd0646b398ffb16d7b455`.
+- `docs/qa/boss_rear_turn_window_main.png`: 1280×720, 43,183 bytes, SHA-256 `509e6672525a0be119f8f5965ba44f877b229e6c7d5e94f983a941bb9af07dce`.
+- Human acceptance should traverse the real F5 Opening/Catacomb flow, reach the x≈5480 checkpoint, cross the x≈5780 bridge trigger and press F2 (or F3 for Enemy details) to show geometry. Stand beyond/inside each colored edge in both directions, then use jump/double-jump/Air Dash to cross behind and judge whether the 1.133-second response permits the intended one stable or timing-sensitive second Normal. F1 hides all Debug drawing.
+
+### Known limitations and scope
+
+- The user's three-name summary does not match the live seven-attack state machine: Phase 1 actually selects Shield Bash, Sword Slash and Heavy Overhead, while `ChargeThrust` belongs to the unchanged Phase-2 four-attack cycle. The implementation documents and tunes the real states instead of silently moving ChargeThrust between phases or adding a new move.
+- Physics/automation proves saved geometry, left/right/rear ranges, timing, one-hit ledgers, weighted selection and bounded rear pressure. Final visual contact feel, Bash tell strength and whether the second Normal is appropriately skill-dependent still require human F5 playtesting.
+- Pre-existing user-owned Main/resource reserializations and legacy QA changes remain unstaged. No weapon, loot, other enemy, Boss damage/Health/Shield, arena, second level or new attack was modified.

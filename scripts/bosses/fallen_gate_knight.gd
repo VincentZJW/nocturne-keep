@@ -45,8 +45,19 @@ const ATTACK_STATES: Array[StringName] = [
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("HealthComponent")
 @export_node_path("ShieldComponent") var shield_component_path: NodePath = NodePath("ShieldComponent")
 @export_node_path("HurtboxComponent") var hurtbox_path: NodePath = NodePath("Hurtbox")
-@export_node_path("HitboxComponent") var melee_hitbox_path: NodePath = NodePath("FacingRoot/MeleeHitbox")
+@export_node_path("HitboxComponent") var shield_bash_hitbox_path: NodePath = NodePath(
+	"FacingRoot/ShieldBashHitbox"
+)
+@export_node_path("HitboxComponent") var slash_hitbox_path: NodePath = NodePath(
+	"FacingRoot/SlashHitbox"
+)
+@export_node_path("HitboxComponent") var thrust_hitbox_path: NodePath = NodePath(
+	"FacingRoot/ThrustHitbox"
+)
 @export_node_path("HitboxComponent") var shockwave_hitbox_path: NodePath = NodePath("FacingRoot/ShockwaveHitbox")
+@export_node_path("BossAttackGeometryDebugDraw") var attack_geometry_debug_path: NodePath = NodePath(
+	"FacingRoot/AttackGeometryDebug"
+)
 @export var bridge_bounds_enabled: bool = false
 @export var bridge_min_x: float = 0.0
 @export var bridge_max_x: float = 0.0
@@ -59,8 +70,15 @@ const ATTACK_STATES: Array[StringName] = [
 @onready var health_component: HealthComponent = get_node_or_null(health_component_path) as HealthComponent
 @onready var shield_component: ShieldComponent = get_node_or_null(shield_component_path) as ShieldComponent
 @onready var hurtbox: HurtboxComponent = get_node_or_null(hurtbox_path) as HurtboxComponent
-@onready var melee_hitbox: HitboxComponent = get_node_or_null(melee_hitbox_path) as HitboxComponent
+@onready var shield_bash_hitbox: HitboxComponent = get_node_or_null(
+	shield_bash_hitbox_path
+) as HitboxComponent
+@onready var slash_hitbox: HitboxComponent = get_node_or_null(slash_hitbox_path) as HitboxComponent
+@onready var thrust_hitbox: HitboxComponent = get_node_or_null(thrust_hitbox_path) as HitboxComponent
 @onready var shockwave_hitbox: HitboxComponent = get_node_or_null(shockwave_hitbox_path) as HitboxComponent
+@onready var attack_geometry_debug: BossAttackGeometryDebugDraw = get_node_or_null(
+	attack_geometry_debug_path
+) as BossAttackGeometryDebugDraw
 
 var target: Player
 var current_state: StringName = BOSS_INTRO
@@ -78,6 +96,8 @@ var _pending_facing: float = 0.0
 var _turn_return_state: StringName = &""
 var _turn_return_timer: float = 0.0
 var _turn_commit_queued: bool = false
+var _turn_facing_committed: bool = false
+var _turn_animation_elapsed: float = 0.0
 var _initial_position: Vector2 = Vector2.ZERO
 var _defeat_emitted: bool = false
 var _combo_second_step: bool = false
@@ -93,6 +113,9 @@ var _measured_attack_gap: float = -1.0
 var _player_counter_action: StringName = &"none"
 var _player_escape_success: bool = false
 var _attack_gap_source_id: int = 0
+var _shield_bash_cooldown_remaining: float = 0.0
+var _last_selected_attack: StringName = &"None"
+var _attack_rng: RandomNumberGenerator = RandomNumberGenerator.new()
 
 
 func _ready() -> void:
@@ -104,6 +127,8 @@ func _ready() -> void:
 	health_component.reset_to_full()
 	shield_component.shield_max_health = config.boss_shield_max_health
 	shield_component.reset_shield()
+	_configure_attack_geometry()
+	_attack_rng.seed = config.attack_selection_seed
 	animated_sprite.animation_finished.connect(_on_animation_finished)
 	animated_sprite.frame_changed.connect(_on_animation_frame_changed)
 	health_component.died.connect(_on_health_died)
@@ -129,6 +154,7 @@ func _physics_process(delta: float) -> void:
 	_turn_cooldown_timer = maxf(0.0, _turn_cooldown_timer - delta)
 	_light_hit_reaction_cooldown = maxf(0.0, _light_hit_reaction_cooldown - delta)
 	_heavy_hit_reaction_cooldown = maxf(0.0, _heavy_hit_reaction_cooldown - delta)
+	_shield_bash_cooldown_remaining = maxf(0.0, _shield_bash_cooldown_remaining - delta)
 	_combat_clock += delta
 	_attack_gap_remaining = maxf(0.0, _attack_gap_remaining - delta)
 	match current_state:
@@ -187,6 +213,8 @@ func reset_boss() -> void:
 	_turn_return_state = &""
 	_turn_return_timer = 0.0
 	_turn_commit_queued = false
+	_turn_facing_committed = false
+	_turn_animation_elapsed = 0.0
 	_defeat_emitted = false
 	_light_hit_reaction_cooldown = 0.0
 	_heavy_hit_reaction_cooldown = 0.0
@@ -200,6 +228,9 @@ func reset_boss() -> void:
 	_player_counter_action = &"none"
 	_player_escape_success = false
 	_attack_gap_source_id = 0
+	_shield_bash_cooldown_remaining = 0.0
+	_last_selected_attack = &"None"
+	_attack_rng.seed = config.attack_selection_seed
 	room_engaged = false
 	ai_active = false
 	target = null
@@ -250,7 +281,8 @@ func get_detection_range() -> float:
 
 
 func get_attack_damage() -> int:
-	return melee_hitbox.damage if melee_hitbox != null else 0
+	var active_hitbox: HitboxComponent = _get_active_hitbox()
+	return active_hitbox.damage if active_hitbox != null else 0
 
 
 func get_health_component() -> HealthComponent:
@@ -266,25 +298,66 @@ func get_attack_phase_name() -> StringName:
 
 
 func is_attack_window_active() -> bool:
-	return (melee_hitbox != null and melee_hitbox.is_active) or (shockwave_hitbox != null and shockwave_hitbox.is_active)
+	return _get_active_hitbox() != null
 
 
 func get_debug_summary() -> String:
-	return "%s  P%d  STATE %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATTACK %s  HIT %s  ACTIVE END %.2f  GAP %.2f  NEXT %s  MEASURED %.3f  REACT %s L%.2f H%.2f  TURN %s R%.2f A%.2f T%.2f  FACE %+.0f  SIDE %s  COUNTER %s ESC %s" % [
+	var profile: Dictionary[StringName, Variant] = get_current_attack_geometry_profile()
+	return "%s  P%d  STATE %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATTACK %s  RANGE %.0f  HIT %s %s W%.0f OFF %.0f  BASH CD %.2f WT %.0f%%  ACTIVE END %.2f  GAP %.2f  NEXT %s  MEASURED %.3f  REACT %s L%.2f H%.2f  TURN %s R%.2f A%.2f T%.2f COMMIT %s  FACE %+.0f  SIDE %s  DIST %.0f  COUNTER %s ESC %s" % [
 		get_enemy_type_name(), current_phase, current_state,
 		health_component.current_health, health_component.max_health,
 		shield_component.shield_current_health, shield_component.shield_max_health,
 		_get_shield_visual_state().to_upper(), animated_sprite.animation,
-		get_attack_phase_name(), "ON" if is_attack_window_active() else "off",
+		get_attack_phase_name(), float(profile.get(&"effective_range", 0.0)),
+		"ON" if is_attack_window_active() else "off", String(profile.get(&"name", &"none")),
+		float(profile.get(&"width", 0.0)), float(profile.get(&"offset_x", 0.0)),
+		_shield_bash_cooldown_remaining, config.shield_bash_selection_weight * 100.0,
 		_last_attack_active_end_time, _attack_gap_remaining,
 		"YES" if _can_start_next_attack() else "no", _measured_attack_gap,
 		_last_hurt_reaction_type, _light_hit_reaction_cooldown, _heavy_hit_reaction_cooldown,
 		_get_turn_phase_name(),
 		config.boss_turn_reaction_delay if _get_turn_phase_name() == "REACT" else 0.0,
 		config.boss_turn_animation_duration if current_state in [TURN_SHIELDED, TURN_UNSHIELDED] else 0.0,
-		_get_current_turn_total_remaining(), facing_direction, shield_component.last_hit_side,
+		_get_current_turn_total_remaining(), "YES" if _turn_facing_committed else "no",
+		facing_direction, shield_component.last_hit_side, _get_player_distance(),
 		_player_counter_action, "YES" if _player_escape_success else "no",
 	]
+
+
+func get_shield_bash_cooldown_remaining() -> float:
+	return _shield_bash_cooldown_remaining
+
+
+func set_attack_geometry_debug_visible(enabled: bool) -> void:
+	if attack_geometry_debug != null:
+		attack_geometry_debug.set_debug_visible(enabled)
+
+
+func get_current_attack_geometry_profile() -> Dictionary[StringName, Variant]:
+	var hitbox: HitboxComponent = _get_hitbox_for_attack_state(current_state)
+	if hitbox == null:
+		return {
+			&"name": &"none", &"width": 0.0, &"height": 0.0,
+			&"offset_x": 0.0, &"effective_range": 0.0,
+		}
+	var collision: CollisionShape2D = hitbox.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	var rectangle: RectangleShape2D = collision.shape as RectangleShape2D if collision != null else null
+	var size: Vector2 = rectangle.size if rectangle != null else Vector2.ZERO
+	var target_half_width: float = 0.0
+	if _has_target():
+		var target_collision: CollisionShape2D = target.get_node_or_null(
+			"Hurtbox/CollisionShape2D"
+		) as CollisionShape2D
+		var target_rectangle: RectangleShape2D = (
+			target_collision.shape as RectangleShape2D if target_collision != null else null
+		)
+		if target_rectangle != null:
+			target_half_width = target_rectangle.size.x * 0.5
+	return {
+		&"name": hitbox.name, &"width": size.x, &"height": size.y,
+		&"offset_x": hitbox.position.x,
+		&"effective_range": hitbox.position.x + size.x * 0.5 + target_half_width,
+	}
 
 
 func get_attack_gap_remaining() -> float:
@@ -340,7 +413,10 @@ func _get_animation_duration(animation_name: StringName) -> float:
 	var speed: float = frames.get_animation_speed(animation_name)
 	if speed <= 0.0:
 		return 0.0
-	return float(frames.get_frame_count(animation_name)) / speed
+	var duration_units: float = 0.0
+	for frame_index: int in range(frames.get_frame_count(animation_name)):
+		duration_units += frames.get_frame_duration(animation_name, frame_index)
+	return duration_units / speed
 
 
 func set_facing_direction(direction: float) -> void:
@@ -401,8 +477,7 @@ func _process_post_attack_gap(delta: float) -> void:
 			velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 		return
 	velocity.x = 0.0
-	if absf(offset_x) <= config.attack_range:
-		_start_next_attack()
+	if absf(offset_x) <= _get_attack_engagement_range() and _start_next_attack():
 		return
 	transition_state(APPROACH_SHIELDED if current_phase == 1 else APPROACH_UNSHIELDED)
 	play_animation(&"walk_shielded" if current_phase == 1 else &"walk_unshielded")
@@ -432,10 +507,10 @@ func _process_approach(delta: float) -> void:
 	if _attack_gap_remaining > 0.0:
 		_enter_post_attack_gap()
 		return
-	if absf(offset.x) <= config.attack_range:
+	if absf(offset.x) <= _get_attack_engagement_range():
 		velocity.x = 0.0
-		_start_next_attack()
-		return
+		if _start_next_attack():
+			return
 	var speed: float = config.shielded_move_speed if current_phase == 1 else config.unshielded_move_speed
 	velocity.x = move_toward(velocity.x, facing_direction * speed, config.acceleration * delta)
 
@@ -490,6 +565,8 @@ func _start_turn_state() -> void:
 	var turn_state: StringName = TURN_SHIELDED if current_phase == 1 else TURN_UNSHIELDED
 	transition_state(turn_state)
 	_turn_timer = config.boss_turn_animation_duration
+	_turn_animation_elapsed = 0.0
+	_turn_facing_committed = false
 	velocity.x = 0.0
 	play_animation(&"turn_shielded" if current_phase == 1 else &"turn_unshielded", true)
 
@@ -498,23 +575,39 @@ func _process_turn_state(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 	if _turn_commit_queued:
 		return
-	if _turn_timer > delta + 0.000001:
-		_turn_timer -= delta
+	_turn_animation_elapsed = minf(
+		config.boss_turn_animation_duration,
+		_turn_animation_elapsed + delta
+	)
+	_turn_timer = maxf(0.0, config.boss_turn_animation_duration - _turn_animation_elapsed)
+	var facing_commit_time: float = (
+		config.boss_turn_animation_duration * config.boss_turn_facing_commit_ratio
+	)
+	if not _turn_facing_committed and _turn_animation_elapsed + 0.000001 >= facing_commit_time:
+		_commit_turn_facing()
+	if _turn_timer <= 0.0:
+		_turn_commit_queued = true
+		call_deferred("_commit_turn")
+
+
+func _commit_turn_facing() -> void:
+	if _turn_facing_committed or current_state not in [TURN_SHIELDED, TURN_UNSHIELDED]:
 		return
-	_turn_timer = 0.0
-	_turn_commit_queued = true
-	call_deferred("_commit_turn")
+	_turn_facing_committed = true
+	if not is_zero_approx(_pending_facing):
+		set_facing_direction(_pending_facing)
 
 
 func _commit_turn() -> void:
 	if not _turn_commit_queued or current_state not in [TURN_SHIELDED, TURN_UNSHIELDED]:
 		return
 	_turn_commit_queued = false
-	if not is_zero_approx(_pending_facing):
-		set_facing_direction(_pending_facing)
+	_commit_turn_facing()
 	_turn_cooldown_timer = config.boss_turn_cooldown
 	_pending_facing = 0.0
 	_turn_timer = 0.0
+	_turn_animation_elapsed = 0.0
+	_turn_facing_committed = false
 	_restore_state_after_turn()
 
 
@@ -540,6 +633,8 @@ func _cancel_turn_request() -> void:
 	_turn_return_state = &""
 	_turn_return_timer = 0.0
 	_turn_commit_queued = false
+	_turn_facing_committed = false
+	_turn_animation_elapsed = 0.0
 
 
 func _interrupt_turn() -> void:
@@ -548,11 +643,15 @@ func _interrupt_turn() -> void:
 	_turn_return_state = &""
 	_turn_return_timer = 0.0
 	_turn_commit_queued = false
+	_turn_facing_committed = false
+	_turn_animation_elapsed = 0.0
 
 
 func _get_turn_phase_name() -> String:
 	if current_state in [TURN_SHIELDED, TURN_UNSHIELDED]:
-		return "COMMIT" if _turn_commit_queued else "ANIM"
+		if _turn_commit_queued:
+			return "COMPLETE"
+		return "FACING" if _turn_facing_committed else "ANIM"
 	if not is_zero_approx(_pending_facing):
 		return "REACT"
 	return "OFF"
@@ -566,18 +665,55 @@ func _get_current_turn_total_remaining() -> float:
 	return 0.0
 
 
-func _start_next_attack() -> void:
+func _start_next_attack() -> bool:
 	if not _can_start_next_attack():
-		return
+		return false
 	var started: bool = false
 	if current_phase == 1:
-		var phase_one: Array[StringName] = [SHIELD_BASH, SWORD_SLASH, HEAVY_OVERHEAD]
-		started = _start_attack(phase_one[attack_cycle % phase_one.size()])
+		var selected: StringName = _select_phase_one_attack(_get_player_distance())
+		if not selected.is_empty():
+			started = _start_attack(selected)
 	else:
 		var phase_two: Array[StringName] = [COMBO_SLASH, JUMP_SMASH, CHARGE_THRUST, SHOCKWAVE_STRIKE]
 		started = _start_attack(phase_two[attack_cycle % phase_two.size()])
 	if started:
 		attack_cycle += 1
+	return started
+
+
+func _select_phase_one_attack(distance: float) -> StringName:
+	var candidates: Array[StringName] = []
+	var weights: Array[float] = []
+	if (
+		distance <= config.shield_bash_trigger_range
+		and _shield_bash_cooldown_remaining <= 0.0
+		and _last_selected_attack != SHIELD_BASH
+	):
+		candidates.append(SHIELD_BASH)
+		weights.append(config.shield_bash_selection_weight)
+	if distance <= config.sword_slash_trigger_range:
+		candidates.append(SWORD_SLASH)
+		weights.append(config.sword_slash_selection_weight)
+	if distance <= config.heavy_overhead_trigger_range:
+		candidates.append(HEAVY_OVERHEAD)
+		weights.append(config.heavy_overhead_selection_weight)
+	if candidates.is_empty():
+		return &""
+	var total_weight: float = 0.0
+	for weight: float in weights:
+		total_weight += weight
+	var roll: float = _attack_rng.randf() * total_weight
+	for candidate_index: int in range(candidates.size()):
+		roll -= weights[candidate_index]
+		if roll <= 0.0:
+			return candidates[candidate_index]
+	return candidates.back()
+
+
+func _get_attack_engagement_range() -> float:
+	if current_phase == 1:
+		return maxf(config.sword_slash_trigger_range, config.heavy_overhead_trigger_range)
+	return config.attack_range
 
 
 func _start_attack(attack_state: StringName) -> bool:
@@ -594,6 +730,9 @@ func _start_attack(attack_state: StringName) -> bool:
 		)
 	current_attack_id = _next_attack_id
 	_next_attack_id += 1
+	_last_selected_attack = attack_state
+	if attack_state == SHIELD_BASH:
+		_shield_bash_cooldown_remaining = config.shield_bash_repeat_cooldown
 	_combo_second_step = false
 	_end_attack_window()
 	match attack_state:
@@ -632,7 +771,6 @@ func _on_animation_frame_changed() -> void:
 		return
 	var active: bool = false
 	var damage: int = 1
-	var use_shockwave: bool = false
 	match current_state:
 		SHIELD_BASH:
 			active = animated_sprite.frame in [2, 3]
@@ -655,15 +793,17 @@ func _on_animation_frame_changed() -> void:
 		SHOCKWAVE_STRIKE:
 			active = animated_sprite.frame in [3, 4]
 			damage = config.shockwave_damage
-			use_shockwave = true
-	_set_attack_window(active, damage, use_shockwave)
+	_set_attack_window(active, damage)
 
 
-func _set_attack_window(active: bool, damage: int, use_shockwave: bool) -> void:
-	var selected: HitboxComponent = shockwave_hitbox if use_shockwave else melee_hitbox
-	var other: HitboxComponent = melee_hitbox if use_shockwave else shockwave_hitbox
-	if other.is_active:
-		other.end_attack()
+func _set_attack_window(active: bool, damage: int) -> void:
+	var selected: HitboxComponent = _get_hitbox_for_attack_state(current_state)
+	if selected == null:
+		_end_attack_window()
+		return
+	for hitbox: HitboxComponent in _get_attack_hitboxes():
+		if hitbox != selected and hitbox.is_active:
+			hitbox.end_attack()
 	if active and not selected.is_active:
 		selected.begin_attack(current_attack_id, damage, facing_direction, self)
 		attack_window_changed.emit(true)
@@ -671,6 +811,30 @@ func _set_attack_window(active: bool, damage: int, use_shockwave: bool) -> void:
 		selected.end_attack()
 		attack_window_changed.emit(false)
 		_record_natural_attack_active_end()
+
+
+func _get_hitbox_for_attack_state(attack_state: StringName) -> HitboxComponent:
+	match attack_state:
+		SHIELD_BASH:
+			return shield_bash_hitbox
+		SWORD_SLASH, HEAVY_OVERHEAD, COMBO_SLASH, JUMP_SMASH:
+			return slash_hitbox
+		CHARGE_THRUST:
+			return thrust_hitbox
+		SHOCKWAVE_STRIKE:
+			return shockwave_hitbox
+	return null
+
+
+func _get_attack_hitboxes() -> Array[HitboxComponent]:
+	return [shield_bash_hitbox, slash_hitbox, thrust_hitbox, shockwave_hitbox]
+
+
+func _get_active_hitbox() -> HitboxComponent:
+	for hitbox: HitboxComponent in _get_attack_hitboxes():
+		if hitbox != null and hitbox.is_active:
+			return hitbox
+	return null
 
 
 func _record_natural_attack_active_end() -> void:
@@ -708,12 +872,10 @@ func _get_attack_gap_for_state(attack_state: StringName) -> float:
 
 func _end_attack_window() -> void:
 	var changed: bool = false
-	if melee_hitbox != null and melee_hitbox.is_active:
-		melee_hitbox.end_attack()
-		changed = true
-	if shockwave_hitbox != null and shockwave_hitbox.is_active:
-		shockwave_hitbox.end_attack()
-		changed = true
+	for hitbox: HitboxComponent in _get_attack_hitboxes():
+		if hitbox != null and hitbox.is_active:
+			hitbox.end_attack()
+			changed = true
 	if changed:
 		attack_window_changed.emit(false)
 
@@ -893,6 +1055,34 @@ func _get_shield_visual_state(current: int = -1) -> StringName:
 	return &"critical"
 
 
+func _get_player_distance() -> float:
+	if not _has_target():
+		return INF
+	return absf(target.global_position.x - global_position.x)
+
+
+func _configure_attack_geometry() -> void:
+	_configure_rectangle_hitbox(
+		shield_bash_hitbox, config.shield_bash_hitbox_offset, config.shield_bash_hitbox_size
+	)
+	_configure_rectangle_hitbox(slash_hitbox, config.slash_hitbox_offset, config.slash_hitbox_size)
+	_configure_rectangle_hitbox(thrust_hitbox, config.thrust_hitbox_offset, config.thrust_hitbox_size)
+
+
+func _configure_rectangle_hitbox(
+	hitbox: HitboxComponent,
+	offset: Vector2,
+	size: Vector2
+) -> void:
+	if hitbox == null:
+		return
+	hitbox.position = offset
+	var collision: CollisionShape2D = hitbox.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	var rectangle: RectangleShape2D = collision.shape as RectangleShape2D if collision != null else null
+	if rectangle != null:
+		rectangle.size = size
+
+
 func _has_target() -> bool:
 	return target != null and is_instance_valid(target) and not target.is_dead()
 
@@ -901,7 +1091,7 @@ func _validate_dependencies() -> bool:
 	if config == null:
 		push_error("FallenGateKnight requires FallenGateKnightConfig")
 		return false
-	if animated_sprite == null or shield_damage_overlay == null or facing_root == null or health_component == null or shield_component == null or hurtbox == null or melee_hitbox == null or shockwave_hitbox == null:
+	if animated_sprite == null or shield_damage_overlay == null or facing_root == null or health_component == null or shield_component == null or hurtbox == null or shield_bash_hitbox == null or slash_hitbox == null or thrust_hitbox == null or shockwave_hitbox == null:
 		push_error("FallenGateKnight scene composition is incomplete")
 		return false
 	return true

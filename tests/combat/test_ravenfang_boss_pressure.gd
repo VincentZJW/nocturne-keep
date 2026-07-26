@@ -76,11 +76,13 @@ func _test_rear_normal_trials(player: Player, boss: FallenGateKnight) -> void:
 	var step: float = 1.0 / 60.0
 	for trial: int in range(20):
 		_prepare_rear_turn_trial(player, boss)
-		var second_time: float = 0.62 + float(trial) * 0.02
-		var attack_times: Array[float] = [0.05, second_time, second_time + 0.32]
+		# A realistic landing/recognition delay precedes the first punish. The
+		# second varies across a skilled-input band; the third starts after commit.
+		var second_time: float = 0.70 + float(trial) * 0.02
+		var attack_times: Array[float] = [0.35, second_time, second_time + 0.32]
 		var next_attack: int = 0
 		var elapsed: float = 0.0
-		while next_attack < attack_times.size() and elapsed < 1.0:
+		while next_attack < attack_times.size() and elapsed < 1.55:
 			_advance_turn_only(boss, step)
 			elapsed += step
 			if elapsed + 0.00001 < attack_times[next_attack]:

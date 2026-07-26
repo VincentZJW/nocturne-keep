@@ -224,7 +224,7 @@ func _measure_runtime_gap(
 	)
 	boss.set_facing_direction(1.0)
 	boss.set_target(player)
-	player.global_position = boss.global_position + Vector2(60.0, 0.0)
+	player.global_position = boss.global_position + Vector2(35.0 if phase == 1 else 60.0, 0.0)
 	boss._interrupt_turn()
 	boss._turn_cooldown_timer = 0.0
 	boss._attack_gap_remaining = boss._get_attack_gap_for_state(attack_state)
@@ -257,7 +257,7 @@ func _test_turn_is_not_reset_by_hits(player: Player, boss: FallenGateKnight) -> 
 	var elapsed: float = STEP
 	var next_normal: float = 0.12
 	var sent_dash: bool = false
-	while not boss._turn_commit_queued and elapsed < 1.10:
+	while not boss._turn_commit_queued and elapsed < 1.40:
 		if elapsed >= next_normal and next_normal < 0.80:
 			boss._apply_light_hit_feedback()
 			next_normal += 0.32
@@ -269,8 +269,8 @@ func _test_turn_is_not_reset_by_hits(player: Player, boss: FallenGateKnight) -> 
 		else:
 			boss._process_turn_request(STEP)
 		elapsed += STEP
-	_expect(initial_total >= 0.88 and initial_total <= 0.92, "Turn total did not initialize near 0.90s")
-	_expect(elapsed >= 0.80 and elapsed <= 1.00, "Hit feedback changed the complete turn duration")
+	_expect(initial_total >= 1.10 and initial_total <= 1.14, "Turn total did not initialize near 1.12s")
+	_expect(elapsed >= 1.00 and elapsed <= 1.30, "Hit feedback changed the complete turn duration")
 	_expect(boss.current_state == FallenGateKnight.TURN_SHIELDED, "Hit feedback canceled the Turn state")
 	boss._commit_turn()
 	_expect(boss.facing_direction > 0.0, "Boss did not commit facing after hit-resilient Turn")
@@ -315,7 +315,7 @@ func _attack_active_end_time(boss: FallenGateKnight, attack_state: StringName) -
 	var frames: SpriteFrames = boss.animated_sprite.sprite_frames
 	match attack_state:
 		FallenGateKnight.SHIELD_BASH:
-			return 4.0 / frames.get_animation_speed(&"shield_bash")
+			return _animation_time_through_frame(frames, &"shield_bash", 3)
 		FallenGateKnight.SWORD_SLASH:
 			return 4.0 / frames.get_animation_speed(&"sword_slash")
 		FallenGateKnight.HEAVY_OVERHEAD:
@@ -335,10 +335,20 @@ func _attack_active_end_time(boss: FallenGateKnight, attack_state: StringName) -
 
 
 func _animation_duration(frames: SpriteFrames, animation_name: StringName) -> float:
-	return (
-		float(frames.get_frame_count(animation_name))
-		/ frames.get_animation_speed(animation_name)
+	return _animation_time_through_frame(
+		frames, animation_name, frames.get_frame_count(animation_name) - 1
 	)
+
+
+func _animation_time_through_frame(
+	frames: SpriteFrames,
+	animation_name: StringName,
+	last_frame: int
+) -> float:
+	var duration_units: float = 0.0
+	for frame_index: int in range(last_frame + 1):
+		duration_units += frames.get_frame_duration(animation_name, frame_index)
+	return duration_units / frames.get_animation_speed(animation_name)
 
 
 func _print_metrics(

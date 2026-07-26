@@ -1,7 +1,7 @@
 # Castle Bridge Boss Room Specification
 
-Version: 2.2
-Last updated: 2026-07-24
+Version: 2.3
+Last updated: 2026-07-26
 
 ## Saved F5 Main composition
 
@@ -48,7 +48,7 @@ Presentation remains separate from hazard authority. `WaterVisual`, `WaterDepth`
 - `CastleGate/GateVisual/DetailedGateArt` is a moving 88×260 oak-and-iron portcullis with five planks/bars, heavier reinforcement bands, side chains, rivets, pointed lower teeth, crest and ring. Its collision authority deliberately remains the saved 48×260 `GateCollision`; opening distance/duration/clearance are unchanged.
 - Gate opening plays a quiet, deterministic synthesized chain/stone placeholder from `GateAudio`; it uses no downloaded asset and remains replaceable by a licensed final sound.
 - Boss HUD observes Body/Shield signals only and never mutates combat data.
-- The configured Main Boss has no local Shield/turn/Attack-Gap Inspector override. It uses the shared 100-point Shield and 0.25/0.65/0.14-second reaction/animation/cooldown resource values directly. Main's PackedScene also inherits the seven 0.98–1.20-second per-skill gaps plus the 0.32-second light and 0.50-second heavy reaction cooldowns.
+- The configured Main Boss has no local Shield/turn/Attack-Gap/attack-geometry Inspector override. It inherits the reusable Boss scene's separate `ShieldBashHitbox`, `SlashHitbox` and `ThrustHitbox`, shared 100-point Shield, 0.33/0.80/0.14-second reaction/animation/cooldown values, 80% facing commit, 2.70-second Bash repeat cooldown and 22/43/35 Phase-1 weights. Main also inherits the seven 1.05–1.20-second per-skill gaps (Shield Bash 1.18) plus the unchanged 0.32-second light and 0.50-second heavy reaction cooldowns. The bridge bounds, checkpoint, trigger, Camera lock, Boss spawn `(6120,596)` and arena collision are unchanged.
 
 ## Chapter I narrative epilogue addendum
 

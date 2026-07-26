@@ -38,6 +38,7 @@ func set_debug_visible(enabled: bool) -> void:
 	debug_visible = enabled
 	visible = enabled
 	set_process(enabled)
+	_sync_boss_geometry_debug()
 	if enabled:
 		_refresh_accumulator = 0.0
 		_refresh_text()
@@ -45,12 +46,21 @@ func set_debug_visible(enabled: bool) -> void:
 
 func set_compact_mode(enabled: bool) -> void:
 	compact_mode = enabled
+	_sync_boss_geometry_debug()
 	_refresh_text()
 
 
 func set_details_expanded(enabled: bool) -> void:
 	details_expanded = enabled
+	_sync_boss_geometry_debug()
 	_refresh_text()
+
+
+func _sync_boss_geometry_debug() -> void:
+	if boss != null and is_instance_valid(boss):
+		boss.set_attack_geometry_debug_visible(
+			debug_visible and (not compact_mode or details_expanded)
+		)
 
 
 func debug_set_player_health(value: int) -> bool:

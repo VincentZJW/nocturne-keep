@@ -14,7 +14,9 @@ const GARGOYLE: Dictionary[String, Array] = {
 const BOSS: Dictionary[String, Array] = {
 	"idle_shielded": [4, 4.0, true], "walk_shielded": [6, 7.0, true],
 	"turn_shielded": [3, 23.076923, false],
-	"shield_block": [4, 8.0, false], "shield_bash": [5, 9.8, false],
+	"shield_block": [4, 8.0, false],
+	# 10 FPS duration units: 0.46 windup, 0.10 active, 0.68 recovery.
+	"shield_bash": [5, 10.0, false, [2.3, 2.3, 0.5, 0.5, 6.8]],
 	"sword_slash": [5, 9.8, false], "heavy_overhead": [6, 8.8, false],
 	"hurt_shielded": [3, 12.0, false], "shield_break": [5, 5.555556, false],
 	"phase_transition": [5, 4.545455, false], "idle_unshielded": [4, 5.0, true],
@@ -58,6 +60,7 @@ func _save_set(asset_root: String, definitions: Dictionary[String, Array], outpu
 		frames.add_animation(animation_name)
 		frames.set_animation_speed(animation_name, metadata[1] as float)
 		frames.set_animation_loop(animation_name, metadata[2] as bool)
+		var frame_durations: Array = metadata[3] as Array if metadata.size() > 3 else []
 		for frame: int in range(count):
 			var texture_path: String = ROOT.path_join(asset_root).path_join(animation_key).path_join(
 				"%s_%02d.png" % [animation_key, frame + 1]
@@ -66,7 +69,10 @@ func _save_set(asset_root: String, definitions: Dictionary[String, Array], outpu
 			if texture == null:
 				push_error("Missing imported frame %s" % texture_path)
 				continue
-			frames.add_frame(animation_name, texture)
+			var frame_duration: float = (
+				frame_durations[frame] as float if frame < frame_durations.size() else 1.0
+			)
+			frames.add_frame(animation_name, texture, frame_duration)
 	var full_output: String = OUTPUT.path_join(output_path)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(full_output.get_base_dir()))
 	return 0 if ResourceSaver.save(frames, full_output) == OK else 1

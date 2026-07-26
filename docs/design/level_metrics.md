@@ -99,15 +99,25 @@ Because elevated surfaces are now solid, the valid route starts just beyond an e
 
 | Metric | Configured Main value | Fixed-step result / purpose |
 | --- | ---: | --- |
-| Body Health | 18 | unchanged |
-| Shield Health | 10 | 10 Normal or 5 Dash Attacks; 15 reserved as a future hard-mode candidate only |
-| Turn reaction | 0.25 s | cancellable while Player returns to front/center |
-| Turn animation | 0.65 s | three authored 96×96 frames runtime-scaled; no instantaneous mirror |
-| Total turn | 0.90 s authored | 0.9000 s measured at 60 physics ticks/s |
+| Body Health | 180 | unchanged |
+| Shield Health | 100 | unchanged; Ravenfang 12/24 damage remains authoritative |
+| Turn reaction | 0.33 s | cancellable while Player returns to front/center |
+| Turn animation | 0.80 s | three authored 96×96 frames runtime-scaled; facing commits at 80% |
+| Total turn | 1.13 s authored | 1.1333 s measured at 60 physics ticks/s; target 1.00–1.30 s |
 | Side threshold | 12 px | center-line hysteresis |
 | Turn cooldown | 0.14 s | prevents repeated left/right jitter |
+| Shield Bash timing | 0.46 / 0.10 / 0.68 s | windup / active / recovery |
+| Shield Bash selection | 22%, 2.70 s cooldown | close-only (≤37 px), no direct repeat |
 
-The old 0.44–0.56-second target is superseded. The Player now receives one stable rear Normal or Dash punish before the deferred facing commit, with a timing-dependent second Normal. In 20 deterministic rear-entry trials, the first hit routed rear 20/20, the second 14/20 and the third 0/20; rear Dash routed body 10/10. Attack windups/active frames remain direction-locked, while GuardRecovery and ordinary Recovery can begin the turn. Per-skill Attack Gaps are measured from active close—not animation finish—to next windup: Shield Bash 0.983, Sword Slash 1.050, Heavy Overhead 1.200, complete Combo Slash 1.050, Charge Thrust 1.133, Jump Smash 1.167 and Shockwave Strike 1.100 seconds at 60 Hz. Damage and active-frame indices are unchanged.
+The old 0.80–1.00-second target is superseded. The Player now receives one stable rear Normal or Dash punish before the late facing commit, with a timing-dependent second Normal. In 20 deterministic rear-entry trials, the first hit routed rear 20/20, the second 14/20 and the third 0/20; rear Dash routed body 10/10. Facing committed at 0.9833 seconds and the state completed at 1.1333 seconds without light/heavy hit feedback resetting the timer. Attack windups/active frames remain direction-locked, while GuardRecovery and ordinary Recovery can begin the turn. Per-skill Attack Gaps are measured from active close—not animation finish—to next windup: Shield Bash 1.183, Sword Slash 1.050, Heavy Overhead 1.200, complete Combo Slash 1.050, Charge Thrust 1.133, Jump Smash 1.167 and Shockwave Strike 1.100 seconds at 60 Hz. Damage and active-frame indices are unchanged.
+
+| Melee family | Before | After | Shape edge / effective Player-root distance | Visual tip |
+| --- | --- | --- | ---: | ---: |
+| Shield Bash | shared `100×42 @ (65,4)` | `14×30 @ (19,4)` | 26 / 37 px | 32 px |
+| Sword/Heavy/Combo/Jump Slash | shared `100×42 @ (65,4)` | `26×22 @ (16,0)` | 29 / 40 px | 31 px |
+| Charge Thrust | shared `100×42 @ (65,4)` | `32×10 @ (20,-7)` | 36 / 47 px | 41 px |
+
+The former shared volume had a 115 px local forward edge and about 126 px effective root reach after the Player Hurtbox half-width. The new shapes end inside their active visual tips, stay entirely forward of the Boss center and mirror through the same `FacingRoot` as the attack art.
 
 Bridge and castle floor meet flush at x=6360. The near bank intentionally ends 40 pixels before the bridge at x=5560: a forgiving single jump crosses it, while walking off allows the existing moat death flow to be tested. Moat water/hazard occupies x=5520..6360 below the bridge.
 

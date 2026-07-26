@@ -114,12 +114,13 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 		boss.config.max_health == 180 and boss.config.boss_shield_max_health == 100,
 		"Boss Body/Shield balance mismatch"
 	)
-	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.25), "Boss turn reaction mismatch")
-	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.65), "Boss turn animation mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.33), "Boss turn reaction mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.80), "Boss turn animation mismatch")
 	_expect(is_equal_approx(boss.config.boss_turn_cooldown, 0.14), "Boss turn cooldown mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_facing_commit_ratio, 0.80), "Boss turn commit ratio mismatch")
 	_expect(is_equal_approx(boss.config.turn_side_threshold, 12.0), "Boss turn threshold mismatch")
 	_expect(is_equal_approx(boss.config.attack_recovery, 0.42), "Boss attack recovery mismatch")
-	_expect(is_equal_approx(boss.config.shield_bash_attack_gap, 0.98), "Shield Bash gap mismatch")
+	_expect(is_equal_approx(boss.config.shield_bash_attack_gap, 1.18), "Shield Bash gap mismatch")
 	_expect(is_equal_approx(boss.config.sword_slash_attack_gap, 1.05), "Sword Slash gap mismatch")
 	_expect(is_equal_approx(boss.config.heavy_overhead_attack_gap, 1.20), "Heavy gap mismatch")
 	_expect(is_equal_approx(boss.config.combo_slash_attack_gap, 1.05), "Combo gap mismatch")
@@ -134,7 +135,7 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 	_expect(boss.config.charge_thrust_damage == 12, "Boss Charge damage mismatch")
 	_expect(boss.config.shockwave_damage == 8, "Boss Shockwave damage mismatch")
 	var expected_speeds: Dictionary[StringName, float] = {
-		&"shield_bash": 9.8,
+		&"shield_bash": 10.0,
 		&"sword_slash": 9.8,
 		&"heavy_overhead": 8.8,
 		&"combo_slash_1": 12.0,
@@ -182,24 +183,27 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 	player.global_position = boss.global_position + Vector2(120.0, 0.0)
 	var step: float = 1.0 / 60.0
 	var elapsed: float = 0.0
+	var facing_commit_elapsed: float = -1.0
 	var saw_turn_animation: bool = false
-	while not boss._turn_commit_queued and elapsed < 1.10:
+	while not boss._turn_commit_queued and elapsed < 1.40:
 		if boss.current_state in [FallenGateKnight.TURN_SHIELDED, FallenGateKnight.TURN_UNSHIELDED]:
 			saw_turn_animation = true
 			boss._process_turn_state(step)
 		else:
 			boss._process_approach(step)
 		elapsed += step
+		if facing_commit_elapsed < 0.0 and boss.facing_direction > 0.0:
+			facing_commit_elapsed = elapsed
 	_expect(saw_turn_animation, "Boss did not enter authored Turn state")
 	_expect(
-		elapsed >= 0.80 and elapsed <= 1.00,
-		"Boss turn completed outside 0.80-1.00 seconds: %.4f" % elapsed
+		elapsed >= 1.00 and elapsed <= 1.30,
+		"Boss turn completed outside 1.00-1.30 seconds: %.4f" % elapsed
 	)
-	_expect(boss.facing_direction < 0.0, "Boss flipped before the contact frame completed")
 	_expect(
-		boss.shield_component.classify_source_side(player.global_position) == ShieldComponent.SIDE_BACK,
-		"Turn-completion contact frame did not retain old rear routing"
+		facing_commit_elapsed >= boss.config.boss_turn_reaction_delay + boss.config.boss_turn_animation_duration * 0.70,
+		"Boss facing committed before 70%% of the turn animation: %.4f" % facing_commit_elapsed
 	)
+	_expect(boss.facing_direction > 0.0, "Boss did not commit facing near the end of Turn")
 	boss._commit_turn()
 	_expect(boss.facing_direction > 0.0, "Boss did not complete turn toward rear target")
 	_expect(
@@ -240,7 +244,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 	boss._on_animation_finished()
 	_expect(boss.current_state == FallenGateKnight.GUARD_RECOVERY, "Boss did not enter GuardRecovery")
 	var recovery_elapsed: float = 0.0
-	while not boss._turn_commit_queued and recovery_elapsed < 1.10:
+	while not boss._turn_commit_queued and recovery_elapsed < 1.40:
 		boss._combat_clock += step
 		boss._attack_gap_remaining = maxf(0.0, boss._attack_gap_remaining - step)
 		if boss.current_state == FallenGateKnight.TURN_SHIELDED:
@@ -250,7 +254,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 		recovery_elapsed += step
 	boss._commit_turn()
 	_expect(boss.facing_direction > 0.0, "Boss did not turn during GuardRecovery")
-	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.80..1.00" % [elapsed, recovery_elapsed])
+	print("BOSS_TURN_TIMING: free=%.4f facing=%.4f recovery=%.4f target=1.00..1.30" % [elapsed, facing_commit_elapsed, recovery_elapsed])
 
 
 func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight, hud: BossHealthHud) -> void:
@@ -361,13 +365,13 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 	target_root.add_child(target_hurtbox)
 	main.add_child(target_root)
 	var profiles: Array[Dictionary] = [
-		{"state": FallenGateKnight.SHIELD_BASH, "frame": 2, "damage": 8, "shock": false, "phase": 1},
-		{"state": FallenGateKnight.SWORD_SLASH, "frame": 2, "damage": 10, "shock": false, "phase": 1},
-		{"state": FallenGateKnight.HEAVY_OVERHEAD, "frame": 3, "damage": 15, "shock": false, "phase": 1},
-		{"state": FallenGateKnight.COMBO_SLASH, "frame": 2, "damage": 10, "shock": false, "phase": 2},
-		{"state": FallenGateKnight.JUMP_SMASH, "frame": 3, "damage": 15, "shock": false, "phase": 2},
-		{"state": FallenGateKnight.CHARGE_THRUST, "frame": 2, "damage": 12, "shock": false, "phase": 2},
-		{"state": FallenGateKnight.SHOCKWAVE_STRIKE, "frame": 3, "damage": 8, "shock": true, "phase": 2},
+		{"state": FallenGateKnight.SHIELD_BASH, "frame": 2, "damage": 8, "phase": 1},
+		{"state": FallenGateKnight.SWORD_SLASH, "frame": 2, "damage": 10, "phase": 1},
+		{"state": FallenGateKnight.HEAVY_OVERHEAD, "frame": 3, "damage": 15, "phase": 1},
+		{"state": FallenGateKnight.COMBO_SLASH, "frame": 2, "damage": 10, "phase": 2},
+		{"state": FallenGateKnight.JUMP_SMASH, "frame": 3, "damage": 15, "phase": 2},
+		{"state": FallenGateKnight.CHARGE_THRUST, "frame": 2, "damage": 12, "phase": 2},
+		{"state": FallenGateKnight.SHOCKWAVE_STRIKE, "frame": 3, "damage": 8, "phase": 2},
 	]
 	for profile: Dictionary in profiles:
 		target_health.reset_to_full()
@@ -376,9 +380,8 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 		boss._start_attack(profile["state"] as StringName)
 		boss.animated_sprite.frame = profile["frame"] as int
 		boss._on_animation_frame_changed()
-		var use_shockwave: bool = profile["shock"] as bool
 		var expected_damage: int = profile["damage"] as int
-		var hitbox: HitboxComponent = boss.shockwave_hitbox if use_shockwave else boss.melee_hitbox
+		var hitbox: HitboxComponent = boss._get_hitbox_for_attack_state(profile["state"] as StringName)
 		_expect(hitbox.is_active, "%s did not open its active frame" % profile["state"])
 		_expect(hitbox.try_hit(target_hurtbox), "%s did not hit target" % profile["state"])
 		_expect(target_health.current_health == 100 - expected_damage, "%s damage mismatch" % profile["state"])

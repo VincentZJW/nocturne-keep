@@ -146,12 +146,20 @@ func _test_expanded_and_hidden_states(
 		"LAST SOURCE", "KNOCKBACK",
 	]:
 		_expect(action_debug.text.contains(required), "Expanded Player details omit %s" % required)
-	for required: String in ["ACTIVATED", "ENGAGED", "ALIVE", "ATTACKING", "HP", "ANIM"]:
+	for required: String in [
+		"ACTIVATED", "ENGAGED", "ALIVE", "ATTACKING", "HP", "ANIM",
+		"RANGE", "HIT", "BASH CD", "TURN", "DIST",
+	]:
 		_expect(enemy_debug.text.contains(required), "Expanded Enemy details omit %s" % required)
+	_expect(
+		enemy_debug.boss != null and enemy_debug.boss.attack_geometry_debug.debug_visible,
+		"Expanded Enemy details did not enable Boss geometry drawing"
+	)
 	await _press_input_action(&"debug_toggle_compact")
 	await _press_input_action(&"debug_toggle_enemy_details")
 	_expect(controller.enemy_details_expanded, "F3 did not expand Enemy details")
 	_expect(enemy_debug.text.contains("ACTIVATED"), "F3-style Enemy-only expansion did not reveal details")
+	_expect(enemy_debug.boss.attack_geometry_debug.debug_visible, "F3 did not enable Boss geometry drawing")
 	_expect(not action_debug.text.contains("QUEUED"), "Enemy-only expansion also expanded Player details")
 	await _press_input_action(&"debug_toggle_enemy_details")
 	await _press_input_action(&"debug_toggle_hud")
@@ -159,6 +167,7 @@ func _test_expanded_and_hidden_states(
 	_expect(not traversal_debug.is_visible_in_tree(), "F1-style Debug hide left Traversal Debug visible")
 	_expect(not action_debug.is_processing(), "Hidden Player Debug still processes")
 	_expect(not enemy_debug.is_processing(), "Hidden Enemy Debug still processes")
+	_expect(not enemy_debug.boss.attack_geometry_debug.debug_visible, "F1 hide left Boss geometry drawing enabled")
 	_expect(health_container.visible, "Debug visibility incorrectly controls formal Health HUD")
 	await _press_input_action(&"debug_toggle_hud")
 	_expect(debug_root.visible, "Second F1 press did not restore Debug HUD")
