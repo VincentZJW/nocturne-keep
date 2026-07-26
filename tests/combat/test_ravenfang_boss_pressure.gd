@@ -76,7 +76,7 @@ func _test_rear_normal_trials(player: Player, boss: FallenGateKnight) -> void:
 	var step: float = 1.0 / 60.0
 	for trial: int in range(20):
 		_prepare_rear_turn_trial(player, boss)
-		var second_time: float = 0.37 + float(trial) * 0.015
+		var second_time: float = 0.62 + float(trial) * 0.02
 		var attack_times: Array[float] = [0.05, second_time, second_time + 0.32]
 		var next_attack: int = 0
 		var elapsed: float = 0.0
@@ -147,6 +147,8 @@ func _test_pressure_cadence(player: Player, boss: FallenGateKnight) -> void:
 	var attack_animation_remaining: float = 0.0
 	var tracked_animation: StringName = &""
 	while elapsed < 10.0:
+		boss._combat_clock += step
+		boss._attack_gap_remaining = maxf(0.0, boss._attack_gap_remaining - step)
 		var state_before: StringName = boss.current_state
 		if boss.current_state in FallenGateKnight.ATTACK_STATES:
 			if tracked_animation != boss.animated_sprite.animation:
@@ -159,12 +161,17 @@ func _test_pressure_cadence(player: Player, boss: FallenGateKnight) -> void:
 				if boss.current_state not in FallenGateKnight.ATTACK_STATES:
 					_pressure_attacks_completed += 1
 				tracked_animation = &""
+		elif boss.current_state in [FallenGateKnight.GUARD_RECOVERY, FallenGateKnight.RECOVERY]:
+			boss._process_post_attack_gap(step)
 		elif boss.current_state in [
-			FallenGateKnight.BOSS_INTRO, FallenGateKnight.GUARD_RECOVERY,
-			FallenGateKnight.RECOVERY, FallenGateKnight.HURT_SHIELDED,
+			FallenGateKnight.BOSS_INTRO, FallenGateKnight.HURT_SHIELDED,
 			FallenGateKnight.HURT_UNSHIELDED,
 		]:
 			boss._process_timed_state(step)
+		elif boss.current_state in [FallenGateKnight.TURN_SHIELDED, FallenGateKnight.TURN_UNSHIELDED]:
+			boss._process_turn_state(step)
+			if boss._turn_commit_queued:
+				boss._commit_turn()
 		elif boss.current_state in [FallenGateKnight.IDLE_SHIELDED, FallenGateKnight.IDLE_UNSHIELDED]:
 			boss._process_idle(step)
 		elif boss.current_state in [FallenGateKnight.APPROACH_SHIELDED, FallenGateKnight.APPROACH_UNSHIELDED]:
@@ -198,6 +205,9 @@ func _prepare_rear_turn_trial(player: Player, boss: FallenGateKnight) -> void:
 	boss._turn_cooldown_timer = 0.0
 	boss._light_hit_reaction_cooldown = 0.0
 	boss._heavy_hit_reaction_cooldown = 0.0
+	boss._attack_gap_remaining = 0.0
+	boss._attack_gap_source_id = 0
+	boss._combat_clock = 0.0
 	boss.set_target(player)
 	player.global_position = boss.global_position + Vector2(55.0, 0.0)
 

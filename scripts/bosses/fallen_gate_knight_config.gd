@@ -31,11 +31,21 @@ extends Resource
 @export_category("Cadence")
 @export var shield_break_stun: float = 0.90
 @export var phase_transition_duration: float = 1.10
-@export var boss_turn_reaction_delay: float = 0.18
-@export var boss_turn_animation_duration: float = 0.30
-@export var boss_turn_cooldown: float = 0.12
+@export var boss_turn_reaction_delay: float = 0.25
+@export var boss_turn_animation_duration: float = 0.65
+@export var boss_turn_cooldown: float = 0.14
 @export_range(0.0, 32.0, 1.0) var turn_side_threshold: float = 12.0
 @export var attack_recovery: float = 0.42
+@export_category("Post-attack gaps (active end to next windup)")
+@export var shield_bash_attack_gap: float = 0.98
+@export var sword_slash_attack_gap: float = 1.05
+@export var heavy_overhead_attack_gap: float = 1.20
+@export var combo_slash_attack_gap: float = 1.05
+@export var charge_thrust_attack_gap: float = 1.12
+@export var jump_smash_attack_gap: float = 1.16
+@export var shockwave_strike_attack_gap: float = 1.10
+@export_range(0.4, 0.65, 0.05) var post_attack_move_multiplier: float = 0.50
+@export_category("Hit feedback")
 @export var boss_light_hit_reaction_cooldown: float = 0.32
 @export var boss_heavy_hit_reaction_cooldown: float = 0.50
 @export var boss_heavy_hit_reaction_duration: float = 0.12

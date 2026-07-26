@@ -6,8 +6,12 @@ extends Label
 @export var debug_visible: bool = true
 @export var compact_mode: bool = true
 @export_node_path("Player") var player_path: NodePath = NodePath("../../../World/Player")
+@export_node_path("FallenGateKnight") var boss_path: NodePath = NodePath(
+	"../../../../../../World/CastleEntranceArea/FallenGateKnight"
+)
 
 @onready var player: Player = get_node_or_null(player_path) as Player
+@onready var boss: FallenGateKnight = get_node_or_null(boss_path) as FallenGateKnight
 
 
 func _ready() -> void:
@@ -82,13 +86,28 @@ func _refresh_text() -> void:
 		if player.is_on_floor()
 		else "AIR %.1f/s" % regeneration_rate
 	)
+	var can_dash: bool = (
+		not player.is_dead()
+		and not player.is_hurt()
+		and stamina.can_afford_dash()
+		and not actions.is_dash_attack_active()
+		and actions.get_action_state_name() not in [&"Attack", &"AttackRecovery"]
+	)
+	var can_move: bool = (
+		not player.is_dead() and not player.is_hurt() and not actions.is_dash_active()
+	)
+	var boss_distance: float = (
+		absf(boss.global_position.x - player.global_position.x)
+		if boss != null and is_instance_valid(boss) else -1.0
+	)
 	text = (
 		"FLOOR %s   STATE %s/%s   AIR DASH / GROUND DASH TYPE %s   DASH #%d   DIR %+.0f   VX %.1f   VY %.1f\n"
 		+ "ANIM %s   STAMINA %.1f/%.1f   REGEN %s %.2fs   DASH BUFFER %s (%.2fs)\n"
 		+ "COMBO %d/%d   WINDOW %s   USED %s   ATTACK FRAME %d/4   BUFFERED %s   QUEUED %s   ID %d   RECOVERY %.3fs   INPUT→HIT %s\n"
 		+ "HEALTH %d/%d   LIFE %s   INVULN %.3fs   HURT STUN %.3fs   LAST DAMAGE %d\n"
 		+ "LAST SOURCE (%.1f, %.1f)   KNOCKBACK (%.1f, %.1f)\n"
-		+ "COINS %d   WEAPON %s   DAMAGE %d/%d"
+		+ "COINS %d   WEAPON %s   DAMAGE %d/%d\n"
+		+ "CAN DASH %s   CAN MOVE %s   ACTION RECOVERY %.3fs   DISTANCE TO BOSS %s"
 	) % [
 		"true" if player.is_on_floor() else "false",
 		actions.get_action_state_name(),
@@ -129,4 +148,8 @@ func _refresh_text() -> void:
 		equipment.get_equipped_weapon().weapon_id,
 		equipment.get_normal_attack_damage(),
 		equipment.get_dash_attack_damage(),
+		"YES" if can_dash else "no",
+		"YES" if can_move else "no",
+		actions.get_attack_recovery_remaining(),
+		"--" if boss_distance < 0.0 else "%.1f" % boss_distance,
 	]

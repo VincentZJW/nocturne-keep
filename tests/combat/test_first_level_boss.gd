@@ -114,11 +114,18 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 		boss.config.max_health == 180 and boss.config.boss_shield_max_health == 100,
 		"Boss Body/Shield balance mismatch"
 	)
-	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.18), "Boss turn reaction mismatch")
-	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.30), "Boss turn animation mismatch")
-	_expect(is_equal_approx(boss.config.boss_turn_cooldown, 0.12), "Boss turn cooldown mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.25), "Boss turn reaction mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.65), "Boss turn animation mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_cooldown, 0.14), "Boss turn cooldown mismatch")
 	_expect(is_equal_approx(boss.config.turn_side_threshold, 12.0), "Boss turn threshold mismatch")
 	_expect(is_equal_approx(boss.config.attack_recovery, 0.42), "Boss attack recovery mismatch")
+	_expect(is_equal_approx(boss.config.shield_bash_attack_gap, 0.98), "Shield Bash gap mismatch")
+	_expect(is_equal_approx(boss.config.sword_slash_attack_gap, 1.05), "Sword Slash gap mismatch")
+	_expect(is_equal_approx(boss.config.heavy_overhead_attack_gap, 1.20), "Heavy gap mismatch")
+	_expect(is_equal_approx(boss.config.combo_slash_attack_gap, 1.05), "Combo gap mismatch")
+	_expect(is_equal_approx(boss.config.charge_thrust_attack_gap, 1.12), "Charge gap mismatch")
+	_expect(is_equal_approx(boss.config.jump_smash_attack_gap, 1.16), "Jump gap mismatch")
+	_expect(is_equal_approx(boss.config.shockwave_strike_attack_gap, 1.10), "Shockwave gap mismatch")
 	_expect(is_equal_approx(boss.config.boss_light_hit_reaction_cooldown, 0.32), "Boss light reaction cooldown mismatch")
 	_expect(is_equal_approx(boss.config.boss_heavy_hit_reaction_cooldown, 0.50), "Boss heavy reaction cooldown mismatch")
 	_expect(boss.config.shield_bash_damage == 8, "Boss Shield Bash damage mismatch")
@@ -176,7 +183,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 	var step: float = 1.0 / 60.0
 	var elapsed: float = 0.0
 	var saw_turn_animation: bool = false
-	while not boss._turn_commit_queued and elapsed < 0.60:
+	while not boss._turn_commit_queued and elapsed < 1.10:
 		if boss.current_state in [FallenGateKnight.TURN_SHIELDED, FallenGateKnight.TURN_UNSHIELDED]:
 			saw_turn_animation = true
 			boss._process_turn_state(step)
@@ -185,8 +192,8 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 		elapsed += step
 	_expect(saw_turn_animation, "Boss did not enter authored Turn state")
 	_expect(
-		elapsed >= 0.44 and elapsed <= 0.56,
-		"Boss turn completed outside 0.44-0.56 seconds: %.4f" % elapsed
+		elapsed >= 0.80 and elapsed <= 1.00,
+		"Boss turn completed outside 0.80-1.00 seconds: %.4f" % elapsed
 	)
 	_expect(boss.facing_direction < 0.0, "Boss flipped before the contact frame completed")
 	_expect(
@@ -233,15 +240,17 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 	boss._on_animation_finished()
 	_expect(boss.current_state == FallenGateKnight.GUARD_RECOVERY, "Boss did not enter GuardRecovery")
 	var recovery_elapsed: float = 0.0
-	while not boss._turn_commit_queued and recovery_elapsed < 0.60:
+	while not boss._turn_commit_queued and recovery_elapsed < 1.10:
+		boss._combat_clock += step
+		boss._attack_gap_remaining = maxf(0.0, boss._attack_gap_remaining - step)
 		if boss.current_state == FallenGateKnight.TURN_SHIELDED:
 			boss._process_turn_state(step)
 		else:
-			boss._process_timed_state(step)
+			boss._process_post_attack_gap(step)
 		recovery_elapsed += step
 	boss._commit_turn()
 	_expect(boss.facing_direction > 0.0, "Boss did not turn during GuardRecovery")
-	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.44..0.56" % [elapsed, recovery_elapsed])
+	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.80..1.00" % [elapsed, recovery_elapsed])
 
 
 func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight, hud: BossHealthHud) -> void:
@@ -401,6 +410,10 @@ func _test_room_reset(player: Player, boss: FallenGateKnight, room: BossRoomCont
 	_expect(is_zero_approx(boss._turn_cooldown_timer), "Boss reset retained turn cooldown")
 	_expect(is_zero_approx(boss._light_hit_reaction_cooldown), "Boss reset retained light reaction cooldown")
 	_expect(is_zero_approx(boss._heavy_hit_reaction_cooldown), "Boss reset retained heavy reaction cooldown")
+	_expect(is_zero_approx(boss._attack_gap_remaining), "Boss reset retained Attack Gap")
+	_expect(boss._last_attack_active_end_time < 0.0, "Boss reset retained active-end timestamp")
+	_expect(boss._next_attack_windup_start_time < 0.0, "Boss reset retained windup timestamp")
+	_expect(boss._measured_attack_gap < 0.0, "Boss reset retained measured Attack Gap")
 	_expect(not boss.is_ai_active(), "Boss reset left AI active")
 	_expect(room.rear_barrier.collision_layer == 0, "Boss reset did not reopen rear barrier")
 	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Boss reset did not close castle gate")

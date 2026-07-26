@@ -84,6 +84,15 @@ var _combo_second_step: bool = false
 var _light_hit_reaction_cooldown: float = 0.0
 var _heavy_hit_reaction_cooldown: float = 0.0
 var _last_hurt_reaction_type: StringName = &"none"
+var _attack_gap_remaining: float = 0.0
+var _last_completed_attack: StringName = &"None"
+var _combat_clock: float = 0.0
+var _last_attack_active_end_time: float = -1.0
+var _next_attack_windup_start_time: float = -1.0
+var _measured_attack_gap: float = -1.0
+var _player_counter_action: StringName = &"none"
+var _player_escape_success: bool = false
+var _attack_gap_source_id: int = 0
 
 
 func _ready() -> void:
@@ -120,9 +129,13 @@ func _physics_process(delta: float) -> void:
 	_turn_cooldown_timer = maxf(0.0, _turn_cooldown_timer - delta)
 	_light_hit_reaction_cooldown = maxf(0.0, _light_hit_reaction_cooldown - delta)
 	_heavy_hit_reaction_cooldown = maxf(0.0, _heavy_hit_reaction_cooldown - delta)
+	_combat_clock += delta
+	_attack_gap_remaining = maxf(0.0, _attack_gap_remaining - delta)
 	match current_state:
-		BOSS_INTRO, SHIELD_BLOCK, GUARD_RECOVERY, SHIELD_BREAK, PHASE_TRANSITION, RECOVERY, HURT_SHIELDED, HURT_UNSHIELDED:
+		BOSS_INTRO, SHIELD_BLOCK, SHIELD_BREAK, PHASE_TRANSITION, HURT_SHIELDED, HURT_UNSHIELDED:
 			_process_timed_state(delta)
+		GUARD_RECOVERY, RECOVERY:
+			_process_post_attack_gap(delta)
 		IDLE_SHIELDED, IDLE_UNSHIELDED:
 			_process_idle(delta)
 		APPROACH_SHIELDED, APPROACH_UNSHIELDED:
@@ -178,6 +191,15 @@ func reset_boss() -> void:
 	_light_hit_reaction_cooldown = 0.0
 	_heavy_hit_reaction_cooldown = 0.0
 	_last_hurt_reaction_type = &"none"
+	_attack_gap_remaining = 0.0
+	_last_completed_attack = &"None"
+	_combat_clock = 0.0
+	_last_attack_active_end_time = -1.0
+	_next_attack_windup_start_time = -1.0
+	_measured_attack_gap = -1.0
+	_player_counter_action = &"none"
+	_player_escape_success = false
+	_attack_gap_source_id = 0
 	room_engaged = false
 	ai_active = false
 	target = null
@@ -248,16 +270,42 @@ func is_attack_window_active() -> bool:
 
 
 func get_debug_summary() -> String:
-	return "%s  P%d  %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATK %s  HIT %s  REACT %s L%.2f H%.2f  TURN %s %.2f  FACE %+.0f  SIDE %s  CD %.2f" % [
+	return "%s  P%d  STATE %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATTACK %s  HIT %s  ACTIVE END %.2f  GAP %.2f  NEXT %s  MEASURED %.3f  REACT %s L%.2f H%.2f  TURN %s R%.2f A%.2f T%.2f  FACE %+.0f  SIDE %s  COUNTER %s ESC %s" % [
 		get_enemy_type_name(), current_phase, current_state,
 		health_component.current_health, health_component.max_health,
 		shield_component.shield_current_health, shield_component.shield_max_health,
 		_get_shield_visual_state().to_upper(), animated_sprite.animation,
 		get_attack_phase_name(), "ON" if is_attack_window_active() else "off",
+		_last_attack_active_end_time, _attack_gap_remaining,
+		"YES" if _can_start_next_attack() else "no", _measured_attack_gap,
 		_last_hurt_reaction_type, _light_hit_reaction_cooldown, _heavy_hit_reaction_cooldown,
-		_get_turn_phase_name(), _turn_timer, facing_direction, shield_component.last_hit_side,
-		_turn_cooldown_timer,
+		_get_turn_phase_name(),
+		config.boss_turn_reaction_delay if _get_turn_phase_name() == "REACT" else 0.0,
+		config.boss_turn_animation_duration if current_state in [TURN_SHIELDED, TURN_UNSHIELDED] else 0.0,
+		_get_current_turn_total_remaining(), facing_direction, shield_component.last_hit_side,
+		_player_counter_action, "YES" if _player_escape_success else "no",
 	]
+
+
+func get_attack_gap_remaining() -> float:
+	return _attack_gap_remaining
+
+
+func get_last_attack_active_end_time() -> float:
+	return _last_attack_active_end_time
+
+
+func get_next_attack_windup_start_time() -> float:
+	return _next_attack_windup_start_time
+
+
+func get_measured_attack_gap() -> float:
+	return _measured_attack_gap
+
+
+func record_counter_test(action_name: StringName, escape_success: bool) -> void:
+	_player_counter_action = action_name
+	_player_escape_success = escape_success
 
 
 func get_bridge_bounds() -> Vector2:
@@ -308,15 +356,18 @@ func set_facing_direction(direction: float) -> void:
 func _process_timed_state(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 	state_timer = maxf(0.0, state_timer - delta)
-	if current_state in [GUARD_RECOVERY, RECOVERY] and _process_turn_request(delta):
-		return
 	if state_timer > 0.0:
 		return
 	match current_state:
 		BOSS_INTRO:
 			_enter_idle()
-		SHIELD_BLOCK, HURT_SHIELDED:
+		SHIELD_BLOCK:
 			_enter_idle()
+		HURT_SHIELDED, HURT_UNSHIELDED:
+			if _attack_gap_remaining > 0.0:
+				_enter_post_attack_gap()
+			else:
+				_enter_idle()
 		SHIELD_BREAK:
 			transition_state(PHASE_TRANSITION)
 			state_timer = config.phase_transition_duration
@@ -325,8 +376,36 @@ func _process_timed_state(delta: float) -> void:
 			current_phase = 2
 			phase_changed.emit(current_phase)
 			_enter_idle()
-		GUARD_RECOVERY, RECOVERY, HURT_UNSHIELDED:
-			_enter_idle()
+
+
+func _process_post_attack_gap(delta: float) -> void:
+	if not _has_target():
+		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+		return
+	if _process_turn_request(delta):
+		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+		return
+	var offset_x: float = target.global_position.x - global_position.x
+	if _attack_gap_remaining > 0.0:
+		var phase_speed: float = (
+			config.shielded_move_speed if current_phase == 1 else config.unshielded_move_speed
+		)
+		var recovery_speed: float = phase_speed * config.post_attack_move_multiplier
+		if absf(offset_x) > config.attack_range * 0.75:
+			velocity.x = move_toward(
+				velocity.x,
+				facing_direction * recovery_speed,
+				config.acceleration * config.post_attack_move_multiplier * delta
+			)
+		else:
+			velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+		return
+	velocity.x = 0.0
+	if absf(offset_x) <= config.attack_range:
+		_start_next_attack()
+		return
+	transition_state(APPROACH_SHIELDED if current_phase == 1 else APPROACH_UNSHIELDED)
+	play_animation(&"walk_shielded" if current_phase == 1 else &"walk_unshielded")
 
 
 func _process_idle(delta: float) -> void:
@@ -334,6 +413,9 @@ func _process_idle(delta: float) -> void:
 	if not _has_target():
 		return
 	if _process_turn_request(delta):
+		return
+	if _attack_gap_remaining > 0.0:
+		_enter_post_attack_gap()
 		return
 	transition_state(APPROACH_SHIELDED if current_phase == 1 else APPROACH_UNSHIELDED)
 	play_animation(&"walk_shielded" if current_phase == 1 else &"walk_unshielded")
@@ -346,6 +428,9 @@ func _process_approach(delta: float) -> void:
 	var offset: Vector2 = target.global_position - global_position
 	if _process_turn_request(delta):
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+		return
+	if _attack_gap_remaining > 0.0:
+		_enter_post_attack_gap()
 		return
 	if absf(offset.x) <= config.attack_range:
 		velocity.x = 0.0
@@ -401,7 +486,7 @@ func _process_turn_request(delta: float) -> bool:
 
 func _start_turn_state() -> void:
 	_turn_return_state = current_state
-	_turn_return_timer = maxf(0.0, state_timer - config.boss_turn_animation_duration)
+	_turn_return_timer = _attack_gap_remaining
 	var turn_state: StringName = TURN_SHIELDED if current_phase == 1 else TURN_UNSHIELDED
 	transition_state(turn_state)
 	_turn_timer = config.boss_turn_animation_duration
@@ -435,13 +520,10 @@ func _commit_turn() -> void:
 
 func _restore_state_after_turn() -> void:
 	var return_state: StringName = _turn_return_state
-	var return_timer: float = _turn_return_timer
 	_turn_return_state = &""
 	_turn_return_timer = 0.0
-	if return_state in [GUARD_RECOVERY, RECOVERY] and return_timer > 0.0:
-		transition_state(return_state)
-		state_timer = return_timer
-		play_animation(&"idle_shielded" if current_phase == 1 else &"idle_unshielded", true)
+	if return_state in [GUARD_RECOVERY, RECOVERY] and _attack_gap_remaining > 0.0:
+		_enter_post_attack_gap()
 		return
 	if return_state in [APPROACH_SHIELDED, APPROACH_UNSHIELDED]:
 		transition_state(APPROACH_SHIELDED if current_phase == 1 else APPROACH_UNSHIELDED)
@@ -476,21 +558,40 @@ func _get_turn_phase_name() -> String:
 	return "OFF"
 
 
+func _get_current_turn_total_remaining() -> float:
+	if current_state in [TURN_SHIELDED, TURN_UNSHIELDED]:
+		return _turn_timer
+	if not is_zero_approx(_pending_facing):
+		return _turn_timer + config.boss_turn_animation_duration
+	return 0.0
+
+
 func _start_next_attack() -> void:
+	if not _can_start_next_attack():
+		return
+	var started: bool = false
 	if current_phase == 1:
 		var phase_one: Array[StringName] = [SHIELD_BASH, SWORD_SLASH, HEAVY_OVERHEAD]
-		_start_attack(phase_one[attack_cycle % phase_one.size()])
+		started = _start_attack(phase_one[attack_cycle % phase_one.size()])
 	else:
 		var phase_two: Array[StringName] = [COMBO_SLASH, JUMP_SMASH, CHARGE_THRUST, SHOCKWAVE_STRIKE]
-		_start_attack(phase_two[attack_cycle % phase_two.size()])
-	attack_cycle += 1
+		started = _start_attack(phase_two[attack_cycle % phase_two.size()])
+	if started:
+		attack_cycle += 1
 
 
-func _start_attack(attack_state: StringName) -> void:
+func _start_attack(attack_state: StringName) -> bool:
+	if not _can_start_next_attack():
+		return false
 	if not transition_state(attack_state):
-		return
+		return false
 	_interrupt_turn()
 	velocity.x = 0.0
+	_next_attack_windup_start_time = _combat_clock
+	if _last_attack_active_end_time >= 0.0:
+		_measured_attack_gap = maxf(
+			0.0, _next_attack_windup_start_time - _last_attack_active_end_time
+		)
 	current_attack_id = _next_attack_id
 	_next_attack_id += 1
 	_combo_second_step = false
@@ -511,6 +612,17 @@ func _start_attack(attack_state: StringName) -> void:
 			play_animation(&"charge_thrust", true)
 		SHOCKWAVE_STRIKE:
 			play_animation(&"shockwave_strike", true)
+	return true
+
+
+func _can_start_next_attack() -> bool:
+	return (
+		_attack_gap_remaining <= 0.0
+		and current_state in [
+			IDLE_SHIELDED, APPROACH_SHIELDED, GUARD_RECOVERY,
+			IDLE_UNSHIELDED, APPROACH_UNSHIELDED, RECOVERY,
+		]
+	)
 
 
 func _on_animation_frame_changed() -> void:
@@ -558,6 +670,40 @@ func _set_attack_window(active: bool, damage: int, use_shockwave: bool) -> void:
 	elif not active and selected.is_active:
 		selected.end_attack()
 		attack_window_changed.emit(false)
+		_record_natural_attack_active_end()
+
+
+func _record_natural_attack_active_end() -> void:
+	if current_state not in ATTACK_STATES or _attack_gap_source_id == current_attack_id:
+		return
+	if (
+		current_state == COMBO_SLASH
+		and animated_sprite.animation == &"combo_slash_1"
+	):
+		return
+	_attack_gap_source_id = current_attack_id
+	_last_completed_attack = current_state
+	_last_attack_active_end_time = _combat_clock
+	_attack_gap_remaining = _get_attack_gap_for_state(current_state)
+
+
+func _get_attack_gap_for_state(attack_state: StringName) -> float:
+	match attack_state:
+		SHIELD_BASH:
+			return config.shield_bash_attack_gap
+		SWORD_SLASH:
+			return config.sword_slash_attack_gap
+		HEAVY_OVERHEAD:
+			return config.heavy_overhead_attack_gap
+		COMBO_SLASH:
+			return config.combo_slash_attack_gap
+		CHARGE_THRUST:
+			return config.charge_thrust_attack_gap
+		JUMP_SMASH:
+			return config.jump_smash_attack_gap
+		SHOCKWAVE_STRIKE:
+			return config.shockwave_strike_attack_gap
+	return config.attack_recovery
 
 
 func _end_attack_window() -> void:
@@ -589,9 +735,14 @@ func _on_animation_finished() -> void:
 		return
 	if current_state in ATTACK_STATES:
 		_end_attack_window()
-		transition_state(GUARD_RECOVERY if current_phase == 1 else RECOVERY)
-		state_timer = config.attack_recovery
-		play_animation(&"idle_shielded" if current_phase == 1 else &"idle_unshielded")
+		if _attack_gap_source_id != current_attack_id:
+			# Defensive fallback for tests or skipped frame callbacks. Runtime normally
+			# records the exact close when the active frame advances.
+			_attack_gap_source_id = current_attack_id
+			_last_completed_attack = current_state
+			_last_attack_active_end_time = _combat_clock
+			_attack_gap_remaining = _get_attack_gap_for_state(current_state)
+		_enter_post_attack_gap()
 
 
 func _on_shield_hit(_hitbox: HitboxComponent, _damage: int, _remaining: int) -> void:
@@ -662,8 +813,8 @@ func _apply_heavy_hit_feedback(body_hit: bool, source_position: Vector2) -> void
 
 func _can_heavy_hit_interrupt() -> bool:
 	return current_state in [
-		IDLE_SHIELDED, APPROACH_SHIELDED, TURN_SHIELDED, GUARD_RECOVERY,
-		IDLE_UNSHIELDED, APPROACH_UNSHIELDED, TURN_UNSHIELDED, RECOVERY,
+		IDLE_SHIELDED, APPROACH_SHIELDED, GUARD_RECOVERY,
+		IDLE_UNSHIELDED, APPROACH_UNSHIELDED, RECOVERY,
 	]
 
 
@@ -693,6 +844,12 @@ func _enter_idle() -> void:
 	transition_state(IDLE_SHIELDED if current_phase == 1 else IDLE_UNSHIELDED)
 	velocity.x = 0.0
 	play_animation(&"idle_shielded" if current_phase == 1 else &"idle_unshielded")
+
+
+func _enter_post_attack_gap() -> void:
+	transition_state(GUARD_RECOVERY if current_phase == 1 else RECOVERY)
+	state_timer = 0.0
+	play_animation(&"idle_shielded" if current_phase == 1 else &"idle_unshielded", true)
 
 
 func _on_shield_health_changed(current: int, _maximum: int) -> void:

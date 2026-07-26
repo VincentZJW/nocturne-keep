@@ -3770,3 +3770,75 @@ Status: in progress — read-only audit and baseline verification complete
 - Ravenfang is a complete alternate frame set rather than a skeletal weapon layer; future pose additions must be generated for both weapon styles. This is intentional for crisp 64×64 silhouettes and prevents mixed weapons.
 - Boss normal-hit feedback is cooldown-gated rather than full super armor: damage always applies, Dash/heavy contact retains stronger neutral-state feedback, and shield/phase/death transitions remain authoritative.
 - The 13 scene/resource changes already present at preflight remain user-owned and are intentionally excluded from this milestone commit. No new weapon, enemy, Boss move, Chapter II content or combat-number rebalance was added.
+
+## 2026-07-26 — Fallen Gate Knight turn and post-attack gap revision (preflight)
+
+Status: in progress — latest requirements and live timing paths audited
+
+### Goal
+
+- Supersede the prior 0.44–0.56-second turn target with a readable 0.80–1.00-second complete turn, initially targeting 0.90 seconds without allowing hits to pause, restart or instantly finish the turn.
+- Measure the unchanged Player action timings, then establish per-skill intervals measured from the previous active Hitbox close to the next windup start so one Normal or one Dash Attack plus an escape is viable.
+- Preserve light-hit anti-lock behavior, contact-time front/back routing, all Player/weapon values, Boss HP/Shield/damage/moves/phases and the complete F5 flow.
+
+### Read-only audit
+
+- Current branch/commit is `master` at `6c5a0d8`; configured F5 is `res://scenes/cinematics/opening_cinematic.tscn` and reaches `res://scenes/main/main.tscn`. Live paths remain `Main/World/Player` and `Main/World/CastleEntranceArea/FallenGateKnight`.
+- Thirteen pre-existing Godot scene/resource reserializations plus one generated QA-script UID remain outside this milestone. Main has no local override for turn or attack-recovery timing; its Boss inherits `res://scenes/bosses/fallen_gate_knight.tscn` and `res://resources/bosses/fallen_gate_knight_config.tres`.
+- Current turn is `0.18 + 0.30 = 0.48s`, committed only after the authored Turn state. Light hits do not interrupt attacks, but heavy feedback currently lists Turn as interruptible and therefore can still cancel the turn.
+- Every attack currently enters a single `attack_recovery = 0.42s` after its complete animation. Because that timer begins at animation end rather than active-window close, there is no authoritative per-skill active-end-to-next-windup measurement or guaranteed counter window.
+- Player values are unchanged: Normal is 4 frames at 20 FPS (0.20s animation), active frames 2–3 (0.05–0.15s), and unlocks Dash/jump at 0.32s after its minimum-interval recovery. Horizontal movement remains available during Normal. Dash Attack is 5 frames at 20 FPS (0.25s; 0.2667s from a Dash press followed by next-frame J), active from 0.10–0.20s and can hand a buffered reverse Dash off at 0.25s. A Dash motion segment is 0.18s; a buffered reverse segment starts at that boundary, while an unbuffered Dash also plays a 0.10s end animation.
+
+### Planned files, tests, and scope check
+
+- Add exact turn and seven per-skill post-active gap values to `FallenGateKnightConfig`; update only Boss cadence/state bookkeeping and Expanded debug fields in the existing Boss script.
+- Count the gap concurrently with attack follow-through and turn animation, prevent attacks until both gap and facing are valid, and allow only reduced-speed repositioning during the remainder.
+- Extend Main-backed Boss tests with exact Player action measurements, 20 rear trials, five counter attempts after every major skill, phase cadence, reset behavior and three deterministic complete-fight cadence simulations.
+- Update README plus the combat, Boss, room and level-metrics specifications. Run Godot 4.7.1 parse/import, focused and complete tests, configured F5/direct-Main graphical smoke, then create one isolated commit.
+- Scope excludes Ravenfang art/values, Player action/movement timing, loot, other enemies, Boss HP/Shield/damage/moves/phases and Chapter II.
+
+### Delivered implementation
+
+- Revised the centralized Boss timing defaults to a 0.25-second reaction, 0.65-second authored turn and 0.14-second post-turn cooldown. Facing, sprite and directional combat roots still commit together only after the complete turn; normal hits cannot pause it, and heavy feedback can no longer cancel it.
+- Replaced the single animation-end recovery gate with seven skill-specific Attack Gaps measured from the natural close of the final active Hitbox to the next legal windup: Shield Bash 0.98, Sword Slash 1.05, Heavy Overhead 1.20, complete Combo Slash 1.05, Charge Thrust 1.12, Jump Smash 1.16 and Shockwave Strike 1.10 seconds. The timer runs concurrently with follow-through and turning rather than adding dead time after them.
+- Recovery movement is capped at 50% and used only when range adjustment is needed. A new attack cannot begin until both the Attack Gap and any required turn are complete. Hurt feedback preserves the running gap; reset clears every gap/measurement field.
+- Expanded-only debug now exposes active-end time, remaining Gap, next-windup time, measured interval, reaction/animation/total turn timing, counter action and escape result. The Main Player debug also reports action frame, Dash/movement availability and distance to the live Boss without expanding Compact HUD.
+- Player action timings and combat values were not edited. Main-backed measurement records Normal unlock at 0.320 seconds, Normal active at 0.050–0.150 seconds, standalone Dash Attack at 0.250 seconds, Dash-press-to-Dash-Attack completion at 0.267 seconds, earliest buffered reverse Dash at 0.267 seconds, Normal plus reverse-Dash escape at 0.500 seconds, Normal plus 48 px ordinary ground movement at 0.620 seconds and Dash Attack plus reverse-Dash escape at 0.447 seconds.
+
+### F5 Main synchronization
+
+- `project.godot` remains `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"`; the approved route transitions through Veilbound Catacomb to `res://scenes/main/main.tscn`.
+- The playable nodes remain `Main/World/Player` and `Main/World/CastleEntranceArea/FallenGateKnight`. Main has no local timing override and inherits the revised `res://resources/bosses/fallen_gate_knight_config.tres`, `res://scripts/bosses/fallen_gate_knight_config.gd` and `res://scripts/bosses/fallen_gate_knight.gd` through the existing Boss PackedScene.
+- Bridge checkpoint/trigger/Boss positions remain approximately x=5480 / 5780 / 6120. Encounter layout, camera, arena gates, Player equipment and Boss reward are unchanged.
+
+### Commands and actual results
+
+1. Exact engine/import and focused contracts:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Exact editor parse/headless import: exit 0; no Script Error/Error/Warning.
+   - `tests/combat/test_boss_counter_windows.gd`: PASS. Natural active-close measurements at 60 Hz were Bash `0.983`, Slash `1.050`, Heavy `1.200`, complete Combo `1.050`, Charge `1.133`, Jump `1.167` and Shockwave `1.100` seconds.
+   - `tests/combat/test_first_level_boss.gd`: PASS; free and Recovery turns both measured `0.9000s`; reset and all seven skill gaps matched centralized values.
+   - `tests/combat/test_ravenfang_boss_pressure.gd`: PASS; rear Normal first hit `20/20`, second `14/20`, third `0/20`; rear Dash `10/10`; ten-second pressure completed all `6/6` Boss attacks that started.
+   - `tests/ui/test_main_debug_hud.gd`: PASS for Compact/Expanded/hidden behavior plus the new Expanded timing fields.
+   - `tests/combat/test_main_enemy_integration.gd`: PASS for the unchanged Main Player/Boss/encounter integration.
+2. Counter-path and complete-fight simulation:
+   - Every one of the seven major attacks passed Dash Attack → reverse Dash `5/5` and Normal → reverse Dash `5/5` deterministic Main-backed attempts.
+   - Shield Bash, Sword Slash and Heavy Overhead also passed Normal → 48 px ordinary ground escape `5/5`. The test deliberately rejects a safe three-hit chain inside any configured gap.
+   - Three controlled Main-backed complete-fight cadence simulations finished in `27.76`, `26.27` and `32.48` seconds; arithmetic mean `28.84` seconds. These deterministic simulations validate state progression and counter opportunities, not subjective human difficulty.
+3. Regression/runtime/evidence:
+   - Ordered execution of all repository tests: `FULL_SUITE tests=42 failed=0`; no red diagnostics.
+   - Configured graphical F5 entry for 300 frames: exit 0 on Godot 4.7.1 GL Compatibility / Apple M4; no red diagnostics.
+   - Direct graphical `res://scenes/main/main.tscn` for 600 frames: exit 0; no red diagnostics.
+   - `scripts/tools/capture_ravenfang_boss_cadence_qa.gd`: `RAVENFANG_BOSS_CADENCE_QA: PASS (10 Main-backed captures)`.
+
+### QA evidence and acceptance
+
+- `docs/qa/boss_turn_reward_window_main.png`: 1280×720, 45,697 bytes, SHA-256 `549875e11dad3bad80016823fcc33ac2c1ffc94086c273ed297f374809ce49c1` — Main Boss turn evidence labelled `0.25 REACTION + 0.65 ANIMATION = 0.90`.
+- `docs/qa/boss_post_attack_gap_main.png`: 1280×720, 46,696 bytes, SHA-256 `f30018d0070e67f3fdd0bac2e35db2ef3e4af53731b4ca1cb1d9286d69870882` — Main bridge counter evidence showing one attack plus reverse Dash while the next windup remains locked.
+- Human F5 acceptance should reach the bridge from the x≈5480 checkpoint, cross the x≈5780 trigger, then test J→escape and Shift+J→reverse Shift after every major Boss attack. Jump/double-jump/Air Dash behind the Boss should expose the complete 0.90-second turn without allowing a safe third Normal. Expanded debug (F1/F2) exposes the measured Gap and turn fields.
+
+### Known limitations and scope
+
+- Exact intervals quantize to 60 Hz, hence configured 0.98/1.12/1.16 values measure as 0.983/1.133/1.167 seconds. All remain inside the approved bands.
+- Automated checks prove deterministic timing, routing, state completion and bounded pressure. Final judgement of animation readability, ordinary-movement distance and full-fight difficulty still requires the user's human play-feel pass.
+- Ravenfang art, Player Normal/Dash timing and damage, Boss HP/Shield/damage/moves/phases, other enemies, loot and Chapter II were not modified. The pre-existing Godot scene/resource reserializations remain outside this milestone commit.

@@ -70,6 +70,14 @@ func _capture() -> void:
 	_caption.text = "LIGHT HIT PRESSURE · BOSS KEEPS SWORD SLASH WINDUP"
 	await _save("res://docs/qa/boss_light_pressure_counter_main.png")
 
+	boss.current_state = FallenGateKnight.RECOVERY
+	boss._attack_gap_remaining = boss.config.sword_slash_attack_gap
+	boss.play_animation(&"idle_unshielded", true)
+	boss.animated_sprite.pause()
+	await _pose_player(player, &"dash_attack", 3)
+	_caption.text = "POST-ACTIVE GAP · 1 COUNTER + REVERSE DASH · NEXT WINDUP LOCKED"
+	await _save("res://docs/qa/boss_post_attack_gap_main.png")
+
 	boss.current_phase = 1
 	boss.current_state = FallenGateKnight.APPROACH_SHIELDED
 	boss.set_facing_direction(-1.0)
@@ -85,13 +93,13 @@ func _capture() -> void:
 	boss.animated_sprite.pause()
 	boss.animated_sprite.frame = 1
 	await _pose_player(player, &"idle", 0)
-	_caption.text = "AUTHORED TURN · 0.18s REACTION + 0.30s ANIMATION = 0.48s"
+	_caption.text = "AUTHORED TURN · 0.25s REACTION + 0.65s ANIMATION = 0.90s"
 	await _save("res://docs/qa/boss_turn_reward_window_main.png")
 
 	await _pose_player(player, &"death", 4)
 	_caption.text = "RAVENFANG DEATH FRAME · BOTH CURVED BLADES REMAIN CONSISTENT"
 	await _save("res://docs/qa/ravenfang_death_frame_main.png")
-	print("RAVENFANG_BOSS_CADENCE_QA: PASS (9 Main-backed captures)")
+	print("RAVENFANG_BOSS_CADENCE_QA: PASS (10 Main-backed captures)")
 	quit(0)
 
 

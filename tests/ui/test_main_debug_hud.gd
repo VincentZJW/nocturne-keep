@@ -142,6 +142,7 @@ func _test_expanded_and_hidden_states(
 	_expect(not controller.debug_compact_mode, "F2 did not switch to Expanded mode")
 	for required: String in [
 		"COMBO", "WINDOW", "ATTACK FRAME", "BUFFERED", "QUEUED", "RECOVERY",
+		"CAN DASH", "CAN MOVE", "ACTION RECOVERY", "DISTANCE TO BOSS",
 		"LAST SOURCE", "KNOCKBACK",
 	]:
 		_expect(action_debug.text.contains(required), "Expanded Player details omit %s" % required)
