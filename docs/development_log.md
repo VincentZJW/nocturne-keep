@@ -1,5 +1,47 @@
 # Development Log
 
+## 2026-07-26 — Chapter folder reorganization Stage 0 audit and migration plan
+
+Status: complete — audit, path manifest and pre-migration verification delivered; no runtime file moved or modified
+
+### Goal and scope
+
+- Audit the current Prologue, Chapter I and shared ownership boundaries before any path change.
+- Record the full F5 chain, Autoloads, PackedScene composition, hard-coded paths, UIDs/import sidecars, instance overrides, duplicates and working-tree risks.
+- Add `docs/migration/chapter_folder_reorganization_plan.md` and `docs/migration/chapter_01_path_manifest.md` as the sole Stage 1 execution contract.
+- Scope is documentation only. No `.gd`, `.tscn`, `.tres`, asset, `project.godot`, input, flow, scene, tuning or gameplay change is authorized in Stage 0.
+
+### Read-only findings
+
+- Created branch `chore/chapter-folder-reorganization` from `c934ed0`. The worktree already contained 20 user-owned modified/untracked paths, including Main, Enemy/Boss/Player resources, seven QA captures and two generated `.uid` files; they were preserved and excluded from this milestone.
+- Configured flow is `res://scenes/cinematics/opening_cinematic.tscn` → `res://scenes/levels/veilbound_catacomb.tscn` → `res://scenes/main/main.tscn` → `res://scenes/transitions/ravenmourn_threshold.tscn`.
+- `project.godot` has four Autoloads: `ChapterSession`, `CurrencyManager`, `WeaponInventory` and `EquipmentManager`. Stage 1 will keep their current neutral paths and update only moved target strings.
+- Current inventory is 26 scenes, 177 GDScript files, 34 Resources, 568 PNGs, 177 `.gd.uid` sidecars and 451 source `.import` sidecars. The repository contains 911 `res://` references, including 141 GDScript preloads, 12 loads, 5 scene-change calls, 587 external Resource declarations and 25 PackedScene references.
+- No inherited-scene root or runtime absolute local path was found. Most scenes have no saved scene UID, so textual paths remain authoritative. Main's Boss bridge bounds and authored encounter transforms are important local instance overrides that must survive the move.
+- All five normal enemies are classified shared because Chapter II is expected to reuse four of them and all five share the same reusable combat/configuration stack. Player, combat, HUD, items and Autoload systems remain at their current neutral paths in Stage 1 to avoid unrelated churn.
+- Byte-identical animation/reference frames exist by design in Player, Shield Guard, Crossbow/Spear, Gargoyle and Boss assets. The migration will not delete or deduplicate them.
+
+### Verification commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit`
+   - Exit 0 on Godot `4.7.1.stable.official.a13da4feb`; no parser or missing-resource error.
+2. Focused tests:
+   - `tests/level/test_chapter_one_flow.gd`: PASS.
+   - `tests/level/test_veilbound_catacomb_flow.gd`: PASS.
+   - `tests/level/test_veilbound_scene_transitions.gd`: PASS with real Opening → Catacomb → Main changes.
+   - `tests/combat/test_first_level_boss.gd`: PASS.
+3. Ordered execution of every `tests/**/*.gd` SceneTree test with the exact engine: `FULL_SUITE tests=43 failed=0`.
+   - The first shell harness attempt exited before the suite because zsh reserves `status`; the corrected harness used `test_exit`, after which all project tests passed. This was not a Godot error.
+4. Configured graphical startup: `Godot --path . --quit-after 300`: exit 0 on GL Compatibility / Apple M4; no red diagnostics.
+5. Direct Chapter I smoke: `Godot --path . --quit-after 600 res://scenes/main/main.tscn`: exit 0; no red diagnostics.
+
+### Delivered documentation and next gate
+
+- The migration plan records the current/target trees, ownership decisions, 10-risk register, reference mechanisms, leaf-to-root move order, rollback constraints and Stage 1 acceptance gates.
+- The manifest maps Prologue, Chapter I, shared enemy, retained shared/system and uncertain paths, including their reference sites and move decisions.
+- Stage 1 must not start until the overlapping pre-existing worktree changes have a recoverable, user-approved snapshot. It must use path-only moves/edits, preserve `.uid`/`.import` sidecars and Inspector overrides, then prove zero old runtime references and rerun the full baseline.
+
+
 ## 2026-07-24 — Veilbound Catacomb revival sequence (preflight)
 
 Status: complete — implementation, 39-script regression, real scene transitions, graphical QA and F5 startup passed; manual pacing/visual acceptance pending
