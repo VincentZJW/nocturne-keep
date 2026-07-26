@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/castle_guard.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/castle_guard_config.tres" id="2_config"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://scripts/enemies/castle_guard_state_machine.gd" id="7_state"]
 [ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="8_loot"]
 [ext_resource type="Resource" path="res://resources/items/loot/castle_guard_loot.tres" id="9_loot_profile"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="10_dynamic_loot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(30, 54)
@@ -103,3 +104,4 @@ script = ExtResource("7_state")
 [node name="LootDropComponent" type="Node" parent="."]
 script = ExtResource("8_loot")
 profile = ExtResource("9_loot_profile")
+dynamic_profile = ExtResource("10_dynamic_loot")

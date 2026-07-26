@@ -3576,3 +3576,71 @@ Status: in progress — read-only architecture and value audit complete
 - Automated tests verify one-roll/dedup, exact values, signal wiring, 34 inherited components, gate blocking and state persistence. A human should still play Opening → revival → several health bands → Boss, judge drop readability/frequency, listen to the restrained reward chime, and confirm Ravenfang overlays remain clear through all fast actions and both facings.
 - Pickups use a safe visual pop and fixed nearby settle point rather than RigidBody physics; this intentionally prevents wall/water launches and actor blocking. No navigation, enemy AI, movement, attack timing, Player HP/Stamina or incoming damage was changed.
 - Persistence is runtime-only. A future save system must serialize coins, owned ids, equipped id, reward flags and chapter; no complete save, NPC store, Chapter II scene, upgrades, affixes, elements, durability, consumable inventory, weapon hot-swap or third weapon exists.
+
+## 2026-07-26 — Dynamic normal-enemy loot by Player health (preflight)
+
+Status: in progress — read-only audit and baseline verification complete
+
+### Goal
+
+- Replace the hard-coded normal-enemy loot thresholds with one shared, data-driven four-tier profile keyed from the Player Health snapshot at enemy death.
+- Make full Health strongly favor coins and forbid blood vials; progressively favor healing at Light, Heavy and Critical damage without guaranteeing a drop.
+- Preserve one-roll resolution, existing per-enemy coin quantity ranges, environment-kill restrictions, Boss fixed rewards, Player/Enemy combat values and all 34 authored Main enemies.
+
+### Read-only audit
+
+- Git began clean on `master` at `78b66b5`; configured F5 remains `res://scenes/cinematics/opening_cinematic.tscn`, which reaches `res://scenes/main/main.tscn` through the approved opening/catacomb flow.
+- `scripts/items/loot_drop_component.gd` currently owns three hard-coded probability bands: high `58/12/3/27`, mid `52/16/5/27`, low `45/22/8/25` for coin/small/large/none. The component reads Player `current_health / max_health` when `enemy_died` fires, captures whether the last resolving Hitbox belonged to the Player and uses `_resolved` to prevent duplicate drops.
+- Environment deaths cannot produce healing and apply a second 50% gate to otherwise successful coin results. One roll selects exactly one result, so coin and healing cannot spawn together.
+- Each of the five normal-enemy PackedScenes owns exactly one `LootDropComponent` and its type-specific `LootDropProfile` for coin quantity. All 34 Main enemies inherit those five scenes; neither `first_level_encounters.tscn` nor `main.tscn` overrides probability data.
+- `FallenGateKnight` has no `LootDropComponent`. `BossRewardController` remains the separate fixed authority for 30 coins and Ravenfang, so Boss rewards are outside this change.
+- `MainEnemyDebugOverlay` currently reports result, integer roll, source and per-type quantity profile in Expanded mode, but not Health tier, ratio or active weights.
+- Exact Godot 4.7.1 baseline command `--headless --path . --script res://tests/items/test_loot_weapon_progression.gd` exited 0 with `LOOT_WEAPON_PROGRESSION_TEST: PASS` and no Error/Warning diagnostics.
+
+### Planned files, tests, and scope check
+
+- Add typed loot-weight and dynamic-profile Resources plus one shared `.tres` containing the exact Full/Light/Heavy/Critical 100-point tables.
+- Update only `LootDropComponent`, the five normal-enemy scene references and read-only Main Enemy Debug output; retain each enemy type's existing coin range profile.
+- Extend deterministic tests with exact boundary mapping, forced-roll routing, 1,000 samples per tier, one-result/dedup, environment restrictions, all-34 shared-profile inheritance and Boss exclusion.
+- Update README and the loot, healing and currency design documents; run exact import, complete tests and configured/direct-Main runtime checks before one milestone commit.
+- Scope excludes pickup behavior, healing amounts, coin ranges, Player/Enemy/Boss balance, weapon damage, Boss reward, shops, Chapter II and any new gameplay system.
+
+### Delivered implementation
+
+- Added typed `LootProbabilityWeights` and `DynamicLootProfile`. The shared `default_dynamic_loot_profile.tres` stores Full `72/0/0/28`, Light `50/28/7/15`, Heavy `35/35/15/15` and Critical `20/25/40/15`; every row is validated to total exactly 100 during component startup.
+- Replaced the three script literals with exact ratio boundaries: 100/100 Full; 99/51 Light; 50/21 Heavy; 20/1/0 Critical. Maximum Health remains read from `HealthComponent`; no fixed-100 gameplay decision was introduced.
+- Enemy Death now reads current/maximum Health once and stores `selected_health_tier`, `selected_drop_result`, `drop_roll` and `player_health_ratio_at_kill`. One floating-point `[0,100)` roll chooses exactly one result. `_resolved` still blocks repeated Death and `reset_drop_state()` restores an explicitly reused test actor.
+- Preserved environment rules without a second category roll: healing is impossible and coin uses half of the selected tier's coin interval; all remaining probability becomes none. Debug suppression still drops nothing.
+- Each of the five reusable normal-enemy scenes explicitly references the same dynamic profile while retaining its existing type-specific quantity profile. No Main/encounter instance overrides were introduced, so all 34 tutorial/mainline/optional enemies inherit the current tables.
+- Expanded Main Enemy Debug now retains the latest resolved drop and shows tier, death-time ratio, float roll, result, amount/source and active weights. Debug-build-only helpers provide exact Full/75%/50%/20% Health presets, one forced next roll and statistics reset without moving Health ownership into UI.
+- Boss composition remains separate: Fallen Gate Knight has no normal `LootDropComponent`; its fixed 30 coins, Ravenfang reward and gate flow are unchanged. Small/large vial healing remains 10/20 and all coin quantity ranges remain unchanged.
+
+### Main and data synchronization
+
+- `project.godot` remains `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"`; the approved flow reaches `res://scenes/main/main.tscn` through Veilbound Catacomb.
+- Main's `Main/World/Encounters` still contains 18 groups and 34 ordinary enemies: Guard 14, Shield 5, Spearman 6, Crossbowman 5 and Gargoyle 4. Their five PackedScenes all reference `res://resources/items/loot/default_dynamic_loot_profile.tres` and retain existing `resources/items/loot/*_loot.tres` quantity ranges.
+- Main's live debug path is `Main/Interface/DebugHudRoot/EnemyDebugPanel/Content/EnemyScroll/EnemyDebug`. Formal Health/Stamina/currency UI, enemy combat values, Player weapon damage and encounter placement were not changed.
+
+### Commands and actual results
+
+1. Exact engine/import/runtime:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version`: `4.7.1.stable.official.a13da4feb`.
+   - Exact editor parse plus headless import: exit 0; both new typed Resource classes registered; no Script Error/Error/Warning.
+   - Graphical configured entry for 300 frames with Dummy audio: exit 0 on GL Compatibility / Apple M4; no red diagnostics.
+   - Graphical direct `res://scenes/main/main.tscn` for 600 frames: exit 0; no red diagnostics.
+2. Dynamic loot and Main contracts:
+   - `tests/items/test_loot_weapon_progression.gd`: PASS for exact tables/boundaries, forced roll, one-result/dedup, death-time snapshot, reset, 34 shared profiles, unchanged coin ranges, environment restrictions, debug presets and fixed Boss reward.
+   - Seed 4242 / 1,000 Player-kill rolls: Full `{coin:708, small:0, large:0, none:292}`; Light `{513,267,69,151}`; Heavy `{350,345,164,141}`; Critical `{196,240,423,141}`.
+   - Seed 9102 / 1,000 Full-Health environment deaths: `{coin:360, small:0, large:0, none:640}`, matching half of the 72% coin chance with no healing.
+   - `tests/ui/test_main_debug_hud.gd`: PASS; Compact/Expanded/hidden and F1/F2/F3/F4 remain functional.
+   - `tests/combat/test_main_enemy_integration.gd`: PASS for 18 groups, 34 mixed enemies, Boss room, HUD and respawn.
+3. Complete regression:
+   - Standard 60 Hz ordered execution of all repository tests: `ORDERED_FULL_TESTS count=40 failures=0 diagnostics=0`.
+   - During an earlier high-load serial order, the existing death presentation lower-bound check crossed its approximately-one-frame threshold and the Shield test emitted one transient in/out-signal diagnostic. Both passed repeated isolation; running those time-sensitive tests first produced the clean complete result above. No death, shield, animation or combat code/test was changed.
+
+### Acceptance status and known limitations
+
+- Automated Main instances verify the exact health matrix, one-roll behavior, all 34 inherited components, unchanged quantity profiles and Boss exclusion. Graphical smoke verifies both configured startup and the direct Main PackedScene without parser/runtime diagnostics.
+- A human should still play the complete F5 flow and judge the perceived cadence across many real kills at Full, Light, Heavy and Critical Health. Statistical correctness does not replace subjective evaluation of whether 72% coins at Full and 40% large vials at Critical feel appropriately generous.
+- Debug Health presets are callable development helpers rather than new on-screen buttons, so Compact HUD remains small. They refuse to run when Debug HUD is hidden or in a non-debug build.
+- No pickup art/behavior, healing amount, coin quantity, Boss reward, shop, weapon/enemy balance, encounter count or Chapter II content was modified.

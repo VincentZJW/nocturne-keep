@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3]
+[gd_scene load_steps=14 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/decayed_spearman.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/decayed_spearman_config.tres" id="2_config"]
@@ -8,6 +8,7 @@
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="7_loot"]
 [ext_resource type="Resource" path="res://resources/items/loot/spearman_loot.tres" id="8_loot_profile"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="9_dynamic_loot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(24, 56)
@@ -98,3 +99,4 @@ enabled = true
 [node name="LootDropComponent" type="Node" parent="."]
 script = ExtResource("7_loot")
 profile = ExtResource("8_loot_profile")
+dynamic_profile = ExtResource("9_dynamic_loot")

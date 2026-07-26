@@ -6,7 +6,7 @@
 
 ## 当前范围
 
-F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人（Guard 14、Shield 5、Spearman 6、Crossbowman 5、Gargoyle 4），其中27只在主路线、7只在可选高台路线。后续普通死亡仍只执行既有快速幽灵/检查点重生，不会重播墓窟。当前没有第二关正式玩法、掉落、经验、装备、磁盘存档或新能力树。
+F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人（Guard 14、Shield 5、Spearman 6、Crossbowman 5、Gargoyle 4），其中27只在主路线、7只在可选高台路线。后续普通死亡仍只执行既有快速幽灵/检查点重生，不会重播墓窟。当前没有第二关正式玩法、经验系统、商店、磁盘存档或新能力树。
 
 ## 环境要求
 
@@ -156,8 +156,17 @@ Main开发调试快捷键：
 当前角色与敌人像素图由项目内Godot `Image`工具原创生成，场景背景和灰盒几何使用Godot原生节点；没有下载或复制第三方素材。后续资产必须登记来源并满足项目的原创及许可要求。
 ## Loot, currency and weapons
 
-Chapter I normal enemies now resolve one health-aware drop on Player kill: coin, 10-HP small vial, 20-HP large vial or none. Pickups use original Godot-drawn pixel shapes, expire after 20 seconds (blink for the final 3), do not block actors and never heal a dead/full-health Player. Coins and equipped weapon persist through Player death and the castle threshold; a fresh run resets them.
+Chapter I normal enemies resolve exactly one health-aware result on Player kill: coin, 10-HP small vial, 20-HP large vial or none. The Player Health snapshot at the enemy's death selects the shared table below; every row totals 100 and one roll cannot create both coin and healing.
+
+| Player Health | Coin | Small vial | Large vial | None |
+| --- | ---: | ---: | ---: | ---: |
+| Full (`HP = max`) | 72% | 0% | 0% | 28% |
+| Light damage (`50% < HP < 100%`) | 50% | 28% | 7% | 15% |
+| Heavy damage (`20% < HP ≤ 50%`) | 35% | 35% | 15% | 15% |
+| Critical (`HP ≤ 20%`) | 20% | 25% | 40% | 15% |
+
+Pickups use original Godot-drawn pixel shapes, expire after 20 seconds (blink for the final 3), do not block actors and never heal a dead/full-health Player. Environment deaths never create healing and use half of the selected tier's coin chance. Coins and equipped weapon persist through Player death and the castle threshold; a fresh run resets them.
 
 Starting Veilbound Daggers deal 10 normal / 20 Dash damage. Enemy and Boss Health/shield pools are scaled 10× to preserve hit counts; enemy/Boss outgoing damage and Player 100 HP/100 Stamina did not change. The Gate Knight awards 30 coins and leaves Ravenfang Daggers (12/24) at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`. Press E to collect; the opened gate will not transition until the story weapon is taken.
 
-Compact HUD shows coin count and `WPN T# normal / dash`. Expanded Debug also shows enemy loot profile/result/roll/source and Boss reward state. Deterministic tests are under `tests/items/`; visual evidence is under `docs/qa/`.
+Compact HUD shows coin count and `WPN T# normal / dash`. Expanded Debug also shows the latest drop, selected Health tier/ratio, roll, result, source, active weights and Boss reward state. Debug methods can set Player HP to 100/75/50/20, force one roll and reset statistics. Deterministic tests are under `tests/items/`; visual evidence is under `docs/qa/`.

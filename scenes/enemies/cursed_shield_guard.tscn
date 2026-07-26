@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://scripts/enemies/cursed_shield_guard.gd" id="1_enemy"]
 [ext_resource type="Resource" path="res://resources/enemies/cursed_shield_guard_config.tres" id="2_config"]
@@ -13,6 +13,7 @@
 [ext_resource type="SpriteFrames" path="res://resources/enemies/cursed_shield_guard_shield_hit_fx_sprite_frames.tres" id="11_shield_hit_fx"]
 [ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="12_loot"]
 [ext_resource type="Resource" path="res://resources/items/loot/shield_guard_loot.tres" id="13_loot_profile"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="14_dynamic_loot"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(34, 54)
@@ -141,3 +142,4 @@ enabled = true
 [node name="LootDropComponent" type="Node" parent="."]
 script = ExtResource("12_loot")
 profile = ExtResource("13_loot_profile")
+dynamic_profile = ExtResource("14_dynamic_loot")
