@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3]
+[gd_scene load_steps=21 format=3]
 
 [ext_resource type="Script" path="res://scripts/levels/veilbound_catacomb_controller.gd" id="1_controller"]
 [ext_resource type="Script" path="res://scripts/world/veilbound_catacomb_art.gd" id="2_art"]
@@ -14,6 +14,8 @@
 [ext_resource type="Script" path="res://scripts/ui/chapter_objective_ui.gd" id="12_objective_ui"]
 [ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="13_stamina_hud"]
 [ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="14_health_hud"]
+[ext_resource type="Script" path="res://scripts/world/catacomb_door_opening_backdrop.gd" id="15_door_backdrop"]
+[ext_resource type="Script" path="res://scripts/world/catacomb_door_frame_front.gd" id="16_door_frame"]
 
 [sub_resource type="RectangleShape2D" id="FloorShape"]
 size = Vector2(1600, 60)
@@ -70,7 +72,10 @@ color = Color(0.005, 0.008, 0.014, 1)
 
 [node name="World" type="Node2D" parent="."]
 
-[node name="CatacombArt" type="Node2D" parent="World"]
+[node name="ArchitectureFront" type="Node2D" parent="World"]
+z_index = 5
+
+[node name="WallAndPortraitFront" type="Node2D" parent="World/ArchitectureFront"]
 script = ExtResource("2_art")
 
 [node name="Floor" type="StaticBody2D" parent="World"]
@@ -107,6 +112,7 @@ shape = SubResource("WallShape")
 
 [node name="Player" parent="World" instance=ExtResource("3_player")]
 position = Vector2(500, 531)
+z_index = 10
 
 [node name="Camera2D" parent="World/Player"]
 limit_left = 0
@@ -120,16 +126,24 @@ script = ExtResource("4_revival")
 
 [node name="CandleWarden" parent="World" instance=ExtResource("5_warden")]
 position = Vector2(840, 649)
-z_index = 3
+z_index = 10
 
 [node name="StoneDoorBody" type="StaticBody2D" parent="World"]
 position = Vector2(1370, 654)
 collision_layer = 1
 collision_mask = 0
 
+[node name="DoorOpeningBackdrop" type="Node2D" parent="World/StoneDoorBody"]
+z_index = 0
+script = ExtResource("15_door_backdrop")
+
 [node name="StoneDoorVisual" type="Node2D" parent="World/StoneDoorBody"]
-z_index = 2
+z_index = 20
 script = ExtResource("6_door")
+
+[node name="DoorFrameFront" type="Node2D" parent="World/StoneDoorBody"]
+z_index = 25
+script = ExtResource("16_door_frame")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/StoneDoorBody"]
 position = Vector2(0, -124)

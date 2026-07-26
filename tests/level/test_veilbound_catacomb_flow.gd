@@ -57,7 +57,10 @@ func _test_catacomb_composition(catacomb: VeilboundCatacombController) -> void:
 		"World/Player/RevivalPlayerArt",
 		"World/CandleWarden",
 		"World/Interactions/DaggerPickup",
+		"World/ArchitectureFront/WallAndPortraitFront",
+		"World/StoneDoorBody/DoorOpeningBackdrop",
 		"World/StoneDoorBody/StoneDoorVisual",
+		"World/StoneDoorBody/DoorFrameFront",
 		"World/Interactions/CatacombExitTrigger",
 		"NarrativeUI/DialogueUI",
 		"NarrativeUI/ObjectiveUI",
@@ -66,6 +69,18 @@ func _test_catacomb_composition(catacomb: VeilboundCatacombController) -> void:
 	_expect(catacomb.get_tree().get_nodes_in_group("enemies").is_empty(), "Catacomb contains an enemy")
 	_expect(catacomb.dark_forest_scene_path == "res://scenes/main/main.tscn", "Catacomb exit does not target Main")
 	_expect(catacomb.player.get_input_profile() == Player.InputProfile.LOCKED, "Player is not locked during revival")
+	var facade: Node2D = catacomb.get_node("World/ArchitectureFront") as Node2D
+	var backdrop: Node2D = catacomb.get_node("World/StoneDoorBody/DoorOpeningBackdrop") as Node2D
+	var slab: Node2D = catacomb.get_node("World/StoneDoorBody/StoneDoorVisual") as Node2D
+	var frame: Node2D = catacomb.get_node("World/StoneDoorBody/DoorFrameFront") as Node2D
+	_expect(
+		backdrop.z_index < facade.z_index
+		and facade.z_index < catacomb.player.z_index
+		and catacomb.player.z_index < slab.z_index
+		and slab.z_index < frame.z_index,
+		"Catacomb door layering is not backdrop < facade < Player < slab < frame",
+	)
+	_expect(not catacomb.get_node("World").y_sort_enabled, "Fixed catacomb architecture incorrectly enables YSort")
 
 
 func _test_dialogue_data(catacomb: VeilboundCatacombController) -> void:

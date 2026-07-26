@@ -3644,3 +3644,56 @@ Status: in progress — read-only audit and baseline verification complete
 - A human should still play the complete F5 flow and judge the perceived cadence across many real kills at Full, Light, Heavy and Critical Health. Statistical correctness does not replace subjective evaluation of whether 72% coins at Full and 40% large vials at Critical feel appropriately generous.
 - Debug Health presets are callable development helpers rather than new on-screen buttons, so Compact HUD remains small. They refuse to run when Debug HUD is hidden or in a non-debug build.
 - No pickup art/behavior, healing amount, coin quantity, Boss reward, shop, weapon/enemy balance, encounter count or Chapter II content was modified.
+## 2026-07-26 — Veilbound Catacomb stone-door layering repair (preflight)
+
+Status: in progress — read-only scene/render audit complete
+
+### Goal
+
+- Repair the F5 revival-scene stone door so the exterior night is visible only through the aperture, behind the wall/portrait facade, door frame and Player.
+- Preserve the complete opening, revival dialogue, dagger recovery, door interaction/collision, exit fade and Main tutorial flow.
+
+### Read-only audit
+
+- Git began clean on `master` at `e0e8c96`, one local commit ahead of `origin/master`. `project.godot` resolves F5 to `res://scenes/cinematics/opening_cinematic.tscn`; the cinematic targets `res://scenes/levels/veilbound_catacomb.tscn`, whose exit targets `res://scenes/main/main.tscn`.
+- Stone-door body is `VeilboundCatacomb/World/StoneDoorBody`; moving presentation is `.../StoneDoorVisual`; Player is `VeilboundCatacomb/World/Player`. The complete chamber wall, Veiled Order portrait/crest and broad exit moonlight are all drawn by `VeilboundCatacomb/World/CatacombArt`.
+- `CatacombStoneDoor._draw()` currently owns four incompatible layers in one CanvasItem: opaque opening backing, rising stone slab/runes, exterior forest silhouette and moon. The entire item is `z_index=2`; Player root remains default z0. Consequently the exterior shapes render over a Player entering the doorway.
+- The facade and aperture are not separate nodes. `VeilboundCatacombArt` draws the stone wall continuously behind the door and draws a wide translucent exit-light polygon last, so no explicit clipped background/front-frame relationship exists.
+- World rendering uses neither YSort, Parallax nor top-level CanvasItems. Only formal HUD and narrative UI use CanvasLayers 6 and 20. No `show_behind_parent` override exists.
+- Exact baseline `tests/level/test_veilbound_catacomb_flow.gd` passed, and direct catacomb runtime for 240 frames exited 0 without Script Error/Error/Warning.
+
+### Planned files, tests, and scope check
+
+- Split the exterior into a clipped `DoorOpeningBackdrop`, retain the current controller-facing `StoneDoorVisual` for the moving slab only, and add a `DoorFrameFront` presentation layer.
+- Recompose the existing wall/portrait art under an explicit `ArchitectureFront/WallAndPortraitFront` node, carve the aperture from the wall renderer, place Player between backdrop and frame, and constrain moonlight to the threshold floor.
+- Extend the existing catacomb QA capture with open-door overview and Player-in-aperture evidence; update the catacomb narrative scene specification and development log.
+- Run exact Godot import, focused flow/transition tests, graphical configured F5 and direct catacomb runtime, visual inspection and complete regression before one commit.
+- Scope excludes dialogue, timing, inputs, collisions, movement, tutorial, Main combat, loot, economy and all other environment art.
+
+### Delivered implementation
+
+- Replaced the single mixed-purpose door renderer with three explicit presentation responsibilities under the existing `World/StoneDoorBody`: `DoorOpeningBackdrop` draws only the aperture-clipped exterior night, `StoneDoorVisual` draws only the rising rune slab, and `DoorFrameFront` draws the fixed front jamb/lintel mask. The body collision and controller-facing `StoneDoorVisual` path remain unchanged.
+- Reparented the existing chamber facade to `World/ArchitectureFront/WallAndPortraitFront`, carved the exact `(1298,406,144,248)` aperture out of the wall renderer and removed its full-screen opaque front-layer fill. This last fill was the second occlusion cause: it hid the correctly ordered night even after the nodes were separated.
+- Established and regression-tested the explicit World order: exterior night z0 → wall/portrait facade z5 → Player/Candle Warden z10 → moving slab z20 → fixed door frame z25. World YSort remains disabled; there is no Parallax, `top_level` or `show_behind_parent` override. HUD and Narrative UI retain CanvasLayer 6 and 20.
+- Restricted the former broad exit moonlight overlay to a low-opacity floor-threshold spill. The visible moon, stars and two forest silhouettes remain entirely inside the door aperture and therefore cannot cover the surrounding architecture or Player.
+- Extended the existing catacomb QA capture and scene test with a full open-door overview, Player-in-aperture evidence, required node paths and strict z-order/YSort assertions. Opening, revival art/dialogue, dagger pickup, door collision/opening and Main transition behavior were not changed.
+
+### Commands and actual results
+
+1. Exact engine/import and scene contracts:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit`: exit 0; both new typed presentation classes registered; no Script Error/Error/Warning.
+   - `tests/level/test_veilbound_catacomb_flow.gd`: PASS, including the new backdrop/facade/Player/slab/frame order and disabled YSort assertions.
+   - `tests/level/test_veilbound_scene_transitions.gd`: PASS for Opening skip → Catacomb skip → Main tutorial.
+   - `tests/level/test_chapter_one_flow.gd`: PASS for opening, tutorial, encounters, checkpoints and Boss epilogue contracts.
+   - All other level scripts passed: bridge flow, environment unity, platform reachability, traversal routes and Ravenmourn environment.
+2. Graphical runtime and evidence:
+   - Configured graphical F5 entry `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --audio-driver Dummy --quit-after 300`: exit 0 on GL Compatibility / Apple M4; no red diagnostics.
+   - `scripts/tools/capture_veilbound_catacomb_qa.gd`: exit 0 with `VEILBOUND_CATACOMB_QA: PASS (altar, soul, dialogue, layered door, player aperture, forest)`. This instantiates the exact F5-route Catacomb PackedScene, opens its real door presentation and captures both required spatial cases before checking the real Main PackedScene.
+3. Complete regression:
+   - Ordered execution reached `count=40`; 39 tests passed in the batch with zero unrelated diagnostics. The existing `test_player_death_presentation.gd` frame-count lower-bound assertion reproduced its documented one-frame timing fluctuation (`Full death flow completed too early`) in that batch, then passed immediately in isolation with its flat-body, dagger, ghost-pause and cleanup contract. No death, respawn or timing code was touched by this milestone.
+
+### QA evidence and acceptance
+
+- `docs/qa/veilbound_catacomb_door_layering_overview.png`: 1280×720, 18,473 bytes, SHA-256 `27f5b0e7510e554e2caf97b56004db6329fea085ca7cc4a9e414a3a7df6dafed` — open slab, facade/portrait masonry in front, and moon/forest restricted to the aperture.
+- `docs/qa/veilbound_catacomb_player_in_doorway.png`: 1280×720, 18,475 bytes, SHA-256 `cc14f27c2dee4572a84b136ff4f407afcbd30a6837492c8f8425f1dc23aad759` — the live Player is visible in front of the night while the fixed jamb/lintel remain in front of the aperture edge.
+- Automated and captured checks confirm no scene-parser/runtime errors and preserve the full F5 route. Human acceptance should still walk through the non-skipped revival, open the door with E and judge the final contrast while crossing the threshold on the user's display.

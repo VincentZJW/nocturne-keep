@@ -64,6 +64,12 @@ func _capture() -> void:
 	catacomb.player.player_camera.reset_smoothing()
 	await _wait_frames(8)
 	_save("res://docs/qa/veilbound_catacomb_05_stone_door_open.png")
+	_save("res://docs/qa/veilbound_catacomb_door_layering_overview.png")
+
+	catacomb.player.global_position = Vector2(1370, 626)
+	catacomb.player.player_camera.reset_smoothing()
+	await _wait_frames(8)
+	_save("res://docs/qa/veilbound_catacomb_player_in_doorway.png")
 	catacomb.queue_free()
 	await process_frame
 
@@ -79,7 +85,7 @@ func _capture() -> void:
 	_save("res://docs/qa/veilbound_catacomb_06_dark_forest_arrival.png")
 	main.queue_free()
 	await process_frame
-	print("VEILBOUND_CATACOMB_QA: PASS (altar, soul, sit, dialogue, door, forest)")
+	print("VEILBOUND_CATACOMB_QA: PASS (altar, soul, dialogue, layered door, player aperture, forest)")
 	quit(0)
 
 

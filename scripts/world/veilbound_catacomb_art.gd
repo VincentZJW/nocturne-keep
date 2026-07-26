@@ -8,6 +8,7 @@ const STONE: Color = Color("26303b")
 const STONE_LIGHT: Color = Color("465563")
 const SOUL_BLUE: Color = Color("86bad1")
 const SILVER: Color = Color("b7c7cf")
+const DOOR_OPENING: Rect2 = Rect2(1298.0, 406.0, 144.0, 248.0)
 
 var soul_pulse: float = 0.0
 
@@ -22,7 +23,6 @@ func _process(delta: float) -> void:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(0, 0, 1600, 720), Color("070b12"))
 	_draw_stone_wall()
 	_draw_columns()
 	_draw_sarcophagi()
@@ -34,13 +34,31 @@ func _draw() -> void:
 
 
 func _draw_stone_wall() -> void:
-	draw_rect(Rect2(0, 90, 1600, 570), STONE_DARK)
+	# The door opening is intentionally transparent so its sibling night backdrop
+	# remains physically behind this facade instead of being painted over it.
+	draw_rect(Rect2(0, 90, DOOR_OPENING.position.x, 570), STONE_DARK)
+	draw_rect(
+		Rect2(DOOR_OPENING.end.x, 90, 1600.0 - DOOR_OPENING.end.x, 570),
+		STONE_DARK
+	)
+	draw_rect(
+		Rect2(
+			DOOR_OPENING.position.x,
+			90.0,
+			DOOR_OPENING.size.x,
+			DOOR_OPENING.position.y - 90.0
+		),
+		STONE_DARK
+	)
 	for row: int in range(7):
 		var y: float = 112.0 + float(row) * 74.0
 		var offset: float = 0.0 if row % 2 == 0 else -58.0
 		for column: int in range(15):
 			var x: float = offset + float(column) * 118.0
-			draw_rect(Rect2(x, y, 112, 68), STONE, false, 2.0)
+			var brick_rect: Rect2 = Rect2(x, y, 112, 68)
+			if brick_rect.intersects(DOOR_OPENING):
+				continue
+			draw_rect(brick_rect, STONE, false, 2.0)
 			draw_line(Vector2(x + 8, y + 60), Vector2(x + 104, y + 60), Color("171f29"), 2.0)
 	draw_colored_polygon(PackedVector2Array([Vector2(0, 0), Vector2(1600, 0), Vector2(1500, 112), Vector2(100, 112)]), Color("04070d"))
 	draw_rect(Rect2(0, 654, 1600, 66), Color("171d25"))
@@ -117,9 +135,15 @@ func _draw_mist() -> void:
 
 
 func _draw_exit_moonlight() -> void:
-	draw_colored_polygon(PackedVector2Array([Vector2(1306, 244), Vector2(1458, 244), Vector2(1504, 654), Vector2(1256, 654)]), Color(0.35, 0.5, 0.65, 0.10))
-	for x: float in [1340.0, 1384.0, 1428.0]:
-		draw_line(Vector2(x, 300), Vector2(x - 14, 654), Color(0.48, 0.65, 0.76, 0.09), 12.0)
+	# Only a restrained threshold spill reaches the floor; the exterior itself is
+	# clipped by DoorOpeningBackdrop and never overlays the facade or Player.
+	draw_colored_polygon(
+		PackedVector2Array([
+			Vector2(1298.0, 654.0), Vector2(1442.0, 654.0),
+			Vector2(1518.0, 684.0), Vector2(1178.0, 684.0),
+		]),
+		Color(0.35, 0.5, 0.65, 0.065)
+	)
 
 
 func _draw_mist_ellipse(center: Vector2, radius: Vector2, color: Color) -> void:
