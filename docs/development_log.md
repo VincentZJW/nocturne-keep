@@ -3961,3 +3961,52 @@ Status: complete — implemented, verified, documented, and awaiting human play-
 - The user's three-name summary does not match the live seven-attack state machine: Phase 1 actually selects Shield Bash, Sword Slash and Heavy Overhead, while `ChargeThrust` belongs to the unchanged Phase-2 four-attack cycle. The implementation documents and tunes the real states instead of silently moving ChargeThrust between phases or adding a new move.
 - Physics/automation proves saved geometry, left/right/rear ranges, timing, one-hit ledgers, weighted selection and bounded rear pressure. Final visual contact feel, Bash tell strength and whether the second Normal is appropriately skill-dependent still require human F5 playtesting.
 - Pre-existing user-owned Main/resource reserializations and legacy QA changes remain unstaged. No weapon, loot, other enemy, Boss damage/Health/Shield, arena, second level or new attack was modified.
+
+## 2026-07-26 — Chapter start foundation Stage 2A
+
+Status: complete — implemented, verified, documented, and awaiting Stage 2B approval
+
+## Goal
+
+- Establish a reusable typed Chapter Registry and Chapter Start Profile without loading unfinished chapter scenes.
+- Add one centralized Debug Run Config whose default selection is Chapter II, while leaving the configured F5 Opening and the complete formal flow unchanged.
+- Register the prologue and Chapters I–VI, document debug/save isolation, and stop before Stage 2B routing.
+
+## Read-only audit
+
+- Work began on `master` at `fe57165`; `project.godot` resolves `run/main_scene` to `res://scenes/cinematics/opening_cinematic.tscn`.
+- Formal flow remains Opening → `res://scenes/levels/veilbound_catacomb.tscn` → `res://scenes/main/main.tscn`.
+- Existing `ChapterSession` is a narrow Chapter I runtime-only flag service. Currency, weapon inventory and equipment also persist only for the process; there is no disk save or generic chapter registry.
+- The worktree contained 20 user-owned modified/untracked paths before this milestone. They are preserved and excluded from this commit.
+
+## Planned files, tests, and scope check
+
+- Add `ChapterStartProfile`, `ChapterRegistry`, and side-effect-free `DebugRunConfig`; register the latter as a genuine pre-scene configuration Autoload.
+- Add a deterministic Stage 2A test for seven registry entries (prologue plus six chapters), Chapter II metadata/default selection, debug/release guard and unchanged F5 route.
+- Add chapter/debug/save/Chapter II planning specifications and update README.
+- Run exact Godot 4.7.1 import/parse, the focused Stage 2A test, existing formal-flow tests and a project startup smoke. Create one isolated commit.
+- Scope excludes routing, profile application, Chapter II scene/gameplay, any migration of Chapter I files, and all combat/content changes.
+
+## Delivered implementation
+
+- Added a typed `ChapterStartProfile` Resource contract for scene/spawn/checkpoint, prerequisites, weapon/equipment, currency/health, Boss/shortcut/story flags and readiness metadata. Planned scene paths are validated as metadata without loading them.
+- Added `ChapterRegistry` with the Prologue plus all six numbered chapter IDs. Prologue and Chapter I reference current scenes; Chapter II is registered at `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`; Chapters III–VI are planned entries. Unfinished chapters remain `debug_ready = false`.
+- Added the side-effect-free `/root/DebugRunConfig` Autoload. Its default target is `CHAPTER_02_SILENT_COURT` / `chapter_02_cp01`, with disposable 30-coin, full-health test preferences. Its gate requires `OS.is_debug_build()`; it never changes scenes.
+- Preserved `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"` and the complete authored Opening → Veilbound Catacomb → Main flow. Stage 2B routing, Stage 2C state application/real Chapter II scene and Stage 2D direct-F5 QA remain unimplemented by design.
+
+## Commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`: exit 0; all three new global classes and the Autoload parsed/imported without red diagnostics.
+2. `... --headless --path . --script res://tests/systems/test_chapter_start_foundation.gd`: `CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapter II default, no routing)`.
+3. Existing formal-flow contracts:
+   - `tests/level/test_chapter_one_flow.gd`: PASS.
+   - `tests/level/test_veilbound_scene_transitions.gd`: PASS.
+   - `tests/level/test_veilbound_catacomb_flow.gd`: PASS.
+4. `... --headless --path . --quit-after 120`: exit 0; configured Opening startup produced no Script Error or Error.
+5. Ordered execution of every `tests/**/*.gd` SceneTree test: `FULL_SUITE tests=44 failed=0`.
+
+## Known limitations and manual acceptance
+
+- Chapter II is deliberately selected but not runnable: its scene and saved legal start profile do not exist yet, so registry readiness remains false and no attempt is made to load it.
+- This data-only stage has no new visual result or screenshot requirement. F5 manual acceptance is simply that the existing Opening still appears and proceeds through the unchanged story flow.
+- The 20 user-owned preflight paths remain preserved and unstaged. No Main scene, combat, enemy, Player, HUD, art or chapter gameplay content was changed by Stage 2A.
