@@ -5,19 +5,20 @@ extends RefCounted
 
 const PixelCanvas: Script = preload("res://scripts/tools/pixel_art_canvas.gd")
 const Concept: Script = preload("res://scripts/tools/pixel_character_generator.gd")
+const Renderer: Script = preload("res://scripts/tools/pixel_assassin_renderer.gd")
 
 const OUTPUT_ROOT: String = "res://assets/sprites/player/assassin/death"
 const DEATH_FRAME_COUNT: int = 5
 const GHOST_FILE_NAME: String = "ghost_hooded_face.png"
 
 
-static func generate_death_frames() -> Array[Image]:
+static func generate_death_frames(weapon_style: StringName = &"veilbound") -> Array[Image]:
 	return [
-		_draw_death_01(),
-		_draw_death_02(),
-		_draw_death_03(),
-		_draw_death_04(),
-		_draw_death_05(),
+		_draw_death_01(weapon_style),
+		_draw_death_02(weapon_style),
+		_draw_death_03(weapon_style),
+		_draw_death_04(weapon_style),
+		_draw_death_05(weapon_style),
 	]
 
 
@@ -63,7 +64,7 @@ static func save_all() -> Dictionary[String, int]:
 	return results
 
 
-static func _draw_death_01() -> Image:
+static func _draw_death_01(weapon_style: StringName) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	_draw_vertical_hood(image, Vector2i(29, 22))
 	PixelCanvas.draw_line(image, Vector2i(30, 31), Vector2i(34, 47), Concept.MIDNIGHT_NAVY, 10)
@@ -76,12 +77,12 @@ static func _draw_death_01() -> Image:
 	PixelCanvas.fill_rect(image, Rect2i(21, 58, 9, 3), Concept.HOOD_BLACK)
 	PixelCanvas.fill_rect(image, Rect2i(39, 58, 9, 3), Concept.HOOD_BLACK)
 	PixelCanvas.draw_line(image, Vector2i(28, 32), Vector2i(20, 38), Concept.HOOD_BLACK, 5)
-	_draw_dagger(image, Vector2i(20, 43), Vector2i(10, 48), false)
-	_draw_dagger(image, Vector2i(42, 42), Vector2i(55, 38), true)
+	_draw_dagger(image, Vector2i(20, 43), Vector2i(10, 48), false, weapon_style)
+	_draw_dagger(image, Vector2i(42, 42), Vector2i(55, 38), true, weapon_style)
 	return image
 
 
-static func _draw_death_02() -> Image:
+static func _draw_death_02(weapon_style: StringName) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	_draw_vertical_hood(image, Vector2i(23, 34))
 	PixelCanvas.draw_line(image, Vector2i(28, 38), Vector2i(40, 49), Concept.MIDNIGHT_NAVY, 10)
@@ -94,12 +95,12 @@ static func _draw_death_02() -> Image:
 	PixelCanvas.fill_rect(image, Rect2i(35, 58, 9, 3), Concept.HOOD_BLACK)
 	PixelCanvas.fill_rect(image, Rect2i(48, 57, 9, 3), Concept.HOOD_BLACK)
 	PixelCanvas.draw_line(image, Vector2i(28, 38), Vector2i(18, 43), Concept.HOOD_BLACK, 5)
-	_draw_dagger(image, Vector2i(21, 48), Vector2i(10, 52), false)
-	_draw_dagger(image, Vector2i(44, 45), Vector2i(58, 42), true)
+	_draw_dagger(image, Vector2i(21, 48), Vector2i(10, 52), false, weapon_style)
+	_draw_dagger(image, Vector2i(44, 45), Vector2i(58, 42), true, weapon_style)
 	return image
 
 
-static func _draw_death_03() -> Image:
+static func _draw_death_03(weapon_style: StringName) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	_draw_horizontal_hood(image, Vector2i(18, 46))
 	PixelCanvas.draw_line(image, Vector2i(25, 47), Vector2i(43, 54), Concept.MIDNIGHT_NAVY, 9)
@@ -111,24 +112,24 @@ static func _draw_death_03() -> Image:
 	PixelCanvas.draw_line(image, Vector2i(43, 55), Vector2i(57, 58), Concept.MIDNIGHT_NAVY, 5)
 	PixelCanvas.fill_rect(image, Rect2i(44, 58, 9, 3), Concept.HOOD_BLACK)
 	PixelCanvas.fill_rect(image, Rect2i(54, 57, 8, 3), Concept.HOOD_BLACK)
-	_draw_dagger(image, Vector2i(14, 57), Vector2i(4, 55), false)
-	_draw_dagger(image, Vector2i(48, 47), Vector2i(62, 43), true)
+	_draw_dagger(image, Vector2i(14, 57), Vector2i(4, 55), false, weapon_style)
+	_draw_dagger(image, Vector2i(48, 47), Vector2i(62, 43), true, weapon_style)
 	return image
 
 
-static func _draw_death_04() -> Image:
+static func _draw_death_04(weapon_style: StringName) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	_draw_horizontal_corpse(image, false)
-	_draw_dagger(image, Vector2i(18, 57), Vector2i(5, 58), false)
-	_draw_dagger(image, Vector2i(48, 48), Vector2i(62, 45), true)
+	_draw_dagger(image, Vector2i(18, 57), Vector2i(5, 58), false, weapon_style)
+	_draw_dagger(image, Vector2i(48, 48), Vector2i(62, 45), true, weapon_style)
 	return image
 
 
-static func _draw_death_05() -> Image:
+static func _draw_death_05(weapon_style: StringName) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	_draw_horizontal_corpse(image, true)
-	_draw_dagger(image, Vector2i(18, 58), Vector2i(5, 59), false)
-	_draw_dagger(image, Vector2i(49, 50), Vector2i(63, 47), true)
+	_draw_dagger(image, Vector2i(18, 58), Vector2i(5, 59), false, weapon_style)
+	_draw_dagger(image, Vector2i(49, 50), Vector2i(63, 47), true, weapon_style)
 	return image
 
 
@@ -163,7 +164,13 @@ static func _draw_horizontal_corpse(image: Image, settled: bool) -> void:
 	PixelCanvas.draw_line(image, Vector2i(25, body_y - 2), Vector2i(14, body_y - 4), Concept.HOOD_BLACK, 4)
 
 
-static func _draw_dagger(image: Image, handle: Vector2i, tip: Vector2i, is_main: bool) -> void:
+static func _draw_dagger(
+		image: Image, handle: Vector2i, tip: Vector2i, is_main: bool,
+		weapon_style: StringName = &"veilbound"
+	) -> void:
+	if weapon_style == &"ravenfang":
+		Renderer.draw_ravenfang_dagger(image, handle, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - handle).normalized()
 	var blade_start: Vector2i = handle + Vector2i(
 		roundi(direction.x * 3.0), roundi(direction.y * 3.0)

@@ -9,7 +9,7 @@
 
 `WeaponInventory` owns unique ids. `EquipmentManager` owns the equipped id, resolves resources, exposes `get_normal_attack_damage()` / `get_dash_attack_damage()` and emits typed equipment/damage signals. Both persist across Player death and scenes; new-run reset restores Veilbound only. Player active frames query these getters, so action code and scenes no longer author damage.
 
-`Player/VisualRoot/WeaponVisual` observes `weapon_equipped`. Veilbound uses the existing authored frame blades; Ravenfang adds longer black-steel, pale-edge and restrained dark-red rune pixels to idle, run, jump, Dash, normal Attack and Dash Attack poses. It follows `flip_h` without changing Hitboxes, attack speed, reach or movement.
+`Player/VisualRoot/WeaponVisual` observes `weapon_equipped`. Veilbound retains its original SpriteFrames. Ravenfang atomically replaces the complete AnimatedSprite2D resource with `res://resources/player/ravenfang_player_sprite_frames.tres`: 49 dedicated frames cover all 16 locomotion, aerial, Dash, Attack, Hurt and Death animations. No overlay is drawn and no Veilbound blade remains in Ravenfang frames. The curved raven-claw silhouette, black grip and blue-gray wing guard follow `flip_h` without changing Hitboxes, attack speed, reach or movement.
 
 After the complete Gate Knight death, `BossRewardController` grants 30 coins once and reveals the permanent pickup at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`, world `(6210,592)`. E acquires and auto-equips it, showing `ATTACK 10 → 12`. The gate opens on death but the threshold transition waits for collection and otherwise shows a small return prompt.
 

@@ -81,6 +81,9 @@ var _turn_commit_queued: bool = false
 var _initial_position: Vector2 = Vector2.ZERO
 var _defeat_emitted: bool = false
 var _combo_second_step: bool = false
+var _light_hit_reaction_cooldown: float = 0.0
+var _heavy_hit_reaction_cooldown: float = 0.0
+var _last_hurt_reaction_type: StringName = &"none"
 
 
 func _ready() -> void:
@@ -115,6 +118,8 @@ func _physics_process(delta: float) -> void:
 	else:
 		velocity.y = 0.0
 	_turn_cooldown_timer = maxf(0.0, _turn_cooldown_timer - delta)
+	_light_hit_reaction_cooldown = maxf(0.0, _light_hit_reaction_cooldown - delta)
+	_heavy_hit_reaction_cooldown = maxf(0.0, _heavy_hit_reaction_cooldown - delta)
 	match current_state:
 		BOSS_INTRO, SHIELD_BLOCK, GUARD_RECOVERY, SHIELD_BREAK, PHASE_TRANSITION, RECOVERY, HURT_SHIELDED, HURT_UNSHIELDED:
 			_process_timed_state(delta)
@@ -170,6 +175,9 @@ func reset_boss() -> void:
 	_turn_return_timer = 0.0
 	_turn_commit_queued = false
 	_defeat_emitted = false
+	_light_hit_reaction_cooldown = 0.0
+	_heavy_hit_reaction_cooldown = 0.0
+	_last_hurt_reaction_type = &"none"
 	room_engaged = false
 	ai_active = false
 	target = null
@@ -240,12 +248,14 @@ func is_attack_window_active() -> bool:
 
 
 func get_debug_summary() -> String:
-	return "%s  P%d  %s  BODY %d/%d  SH %d/%d %s  ANIM %s  HIT %s  TURN %s %.2f  CD %.2f" % [
+	return "%s  P%d  %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATK %s  HIT %s  REACT %s L%.2f H%.2f  TURN %s %.2f  FACE %+.0f  SIDE %s  CD %.2f" % [
 		get_enemy_type_name(), current_phase, current_state,
 		health_component.current_health, health_component.max_health,
 		shield_component.shield_current_health, shield_component.shield_max_health,
 		_get_shield_visual_state().to_upper(), animated_sprite.animation,
-		"ON" if is_attack_window_active() else "off", _get_turn_phase_name(), _turn_timer,
+		get_attack_phase_name(), "ON" if is_attack_window_active() else "off",
+		_last_hurt_reaction_type, _light_hit_reaction_cooldown, _heavy_hit_reaction_cooldown,
+		_get_turn_phase_name(), _turn_timer, facing_direction, shield_component.last_hit_side,
 		_turn_cooldown_timer,
 	]
 
@@ -269,7 +279,20 @@ func play_animation(animation_name: StringName, restart: bool = false) -> void:
 		return
 	if animated_sprite.animation == animation_name and animated_sprite.is_playing() and not restart:
 		return
+	animated_sprite.speed_scale = 1.0
+	if animation_name in [&"turn_shielded", &"turn_unshielded"]:
+		var source_duration: float = _get_animation_duration(animation_name)
+		if source_duration > 0.0 and config.boss_turn_animation_duration > 0.0:
+			animated_sprite.speed_scale = source_duration / config.boss_turn_animation_duration
 	animated_sprite.play(animation_name)
+
+
+func _get_animation_duration(animation_name: StringName) -> float:
+	var frames: SpriteFrames = animated_sprite.sprite_frames
+	var speed: float = frames.get_animation_speed(animation_name)
+	if speed <= 0.0:
+		return 0.0
+	return float(frames.get_frame_count(animation_name)) / speed
 
 
 func set_facing_direction(direction: float) -> void:
@@ -574,12 +597,14 @@ func _on_animation_finished() -> void:
 func _on_shield_hit(_hitbox: HitboxComponent, _damage: int, _remaining: int) -> void:
 	if current_state in [DEATH, SHIELD_BREAK, PHASE_TRANSITION]:
 		return
-	_end_attack_window()
-	_interrupt_turn()
-	transition_state(SHIELD_BLOCK)
-	state_timer = 0.22
-	velocity.x = 0.0
-	play_animation(&"shield_block", true)
+	var attack_kind: StringName = shield_component.last_attack_kind
+	if attack_kind == &"normal_attack":
+		_apply_light_hit_feedback()
+		return
+	if attack_kind in [&"dash_attack", &"ground_dash_attack", &"air_dash_attack"]:
+		_apply_heavy_hit_feedback(false, shield_component.last_source_position)
+		return
+	_apply_light_hit_feedback()
 
 
 func _on_shield_broken(_hitbox: HitboxComponent) -> void:
@@ -600,13 +625,52 @@ func _on_shield_broken(_hitbox: HitboxComponent) -> void:
 func _on_hurtbox_hit_received(_damage: int, source_position: Vector2, _attack_id: int) -> void:
 	if current_state in [DEATH, SHIELD_BREAK, PHASE_TRANSITION]:
 		return
+	var attack_kind: StringName = shield_component.last_attack_kind
+	if attack_kind == &"normal_attack":
+		_apply_light_hit_feedback()
+		return
+	if attack_kind in [&"dash_attack", &"ground_dash_attack", &"air_dash_attack"]:
+		_apply_heavy_hit_feedback(true, source_position)
+		return
+	_apply_light_hit_feedback()
+
+
+func _apply_light_hit_feedback() -> void:
+	_last_hurt_reaction_type = &"light_ignored" if _light_hit_reaction_cooldown > 0.0 else &"light"
+	if _light_hit_reaction_cooldown > 0.0:
+		return
+	_light_hit_reaction_cooldown = config.boss_light_hit_reaction_cooldown
+	_flash_hit(Color(0.90, 0.94, 1.0, 1.0), 0.055)
+
+
+func _apply_heavy_hit_feedback(body_hit: bool, source_position: Vector2) -> void:
+	_last_hurt_reaction_type = &"heavy_ignored" if _heavy_hit_reaction_cooldown > 0.0 else &"heavy"
+	if _heavy_hit_reaction_cooldown > 0.0:
+		return
+	_heavy_hit_reaction_cooldown = config.boss_heavy_hit_reaction_cooldown
+	_flash_hit(Color(1.0, 0.92, 0.75, 1.0), 0.075)
+	if not body_hit or not _can_heavy_hit_interrupt():
+		return
 	_end_attack_window()
 	_interrupt_turn()
 	var hurt_state: StringName = HURT_SHIELDED if current_phase == 1 else HURT_UNSHIELDED
 	transition_state(hurt_state)
-	state_timer = 0.20
-	velocity.x = signf(global_position.x - source_position.x) * 70.0
+	state_timer = config.boss_heavy_hit_reaction_duration
+	velocity.x = signf(global_position.x - source_position.x) * 45.0
 	play_animation(&"hurt_shielded" if current_phase == 1 else &"hurt_unshielded", true)
+
+
+func _can_heavy_hit_interrupt() -> bool:
+	return current_state in [
+		IDLE_SHIELDED, APPROACH_SHIELDED, TURN_SHIELDED, GUARD_RECOVERY,
+		IDLE_UNSHIELDED, APPROACH_UNSHIELDED, TURN_UNSHIELDED, RECOVERY,
+	]
+
+
+func _flash_hit(color: Color, duration: float) -> void:
+	modulate = color
+	var tween: Tween = create_tween()
+	tween.tween_property(self, "modulate", Color.WHITE, duration)
 
 
 func _on_health_died() -> void:

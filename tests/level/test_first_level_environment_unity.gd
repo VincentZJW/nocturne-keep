@@ -94,7 +94,10 @@ func _test_gate_and_camera_contract(main: Node2D) -> void:
 	var room: BossRoomController = main.get_node("BossRoomController") as BossRoomController
 	_expect(is_equal_approx(room.castle_gate_controller.gate_open_duration, 1.2), "Gate opening weight changed")
 	var camera: Camera2D = main.get_node("World/Player/Camera2D") as Camera2D
-	_expect(camera.limit_left == 0 and camera.limit_right == 6600, "Main camera limits changed")
+	_expect(
+		camera.limit_left == 0 and camera.limit_right == 6600,
+		"Main camera limits changed: %d..%d" % [camera.limit_left, camera.limit_right]
+	)
 
 
 func _expect(condition: bool, message: String) -> void:

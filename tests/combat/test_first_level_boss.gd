@@ -114,11 +114,13 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 		boss.config.max_health == 180 and boss.config.boss_shield_max_health == 100,
 		"Boss Body/Shield balance mismatch"
 	)
-	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.10), "Boss turn reaction mismatch")
-	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.13), "Boss turn animation mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_reaction_delay, 0.18), "Boss turn reaction mismatch")
+	_expect(is_equal_approx(boss.config.boss_turn_animation_duration, 0.30), "Boss turn animation mismatch")
 	_expect(is_equal_approx(boss.config.boss_turn_cooldown, 0.12), "Boss turn cooldown mismatch")
 	_expect(is_equal_approx(boss.config.turn_side_threshold, 12.0), "Boss turn threshold mismatch")
 	_expect(is_equal_approx(boss.config.attack_recovery, 0.42), "Boss attack recovery mismatch")
+	_expect(is_equal_approx(boss.config.boss_light_hit_reaction_cooldown, 0.32), "Boss light reaction cooldown mismatch")
+	_expect(is_equal_approx(boss.config.boss_heavy_hit_reaction_cooldown, 0.50), "Boss heavy reaction cooldown mismatch")
 	_expect(boss.config.shield_bash_damage == 8, "Boss Shield Bash damage mismatch")
 	_expect(boss.config.sword_slash_damage == 10, "Boss Slash damage mismatch")
 	_expect(boss.config.heavy_overhead_damage == 15, "Boss Heavy damage mismatch")
@@ -174,7 +176,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 	var step: float = 1.0 / 60.0
 	var elapsed: float = 0.0
 	var saw_turn_animation: bool = false
-	while not boss._turn_commit_queued and elapsed < 0.50:
+	while not boss._turn_commit_queued and elapsed < 0.60:
 		if boss.current_state in [FallenGateKnight.TURN_SHIELDED, FallenGateKnight.TURN_UNSHIELDED]:
 			saw_turn_animation = true
 			boss._process_turn_state(step)
@@ -183,8 +185,8 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 		elapsed += step
 	_expect(saw_turn_animation, "Boss did not enter authored Turn state")
 	_expect(
-		elapsed >= 0.22 and elapsed <= 0.26,
-		"Boss turn completed outside 0.22-0.26 seconds: %.4f" % elapsed
+		elapsed >= 0.44 and elapsed <= 0.56,
+		"Boss turn completed outside 0.44-0.56 seconds: %.4f" % elapsed
 	)
 	_expect(boss.facing_direction < 0.0, "Boss flipped before the contact frame completed")
 	_expect(
@@ -231,7 +233,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 	boss._on_animation_finished()
 	_expect(boss.current_state == FallenGateKnight.GUARD_RECOVERY, "Boss did not enter GuardRecovery")
 	var recovery_elapsed: float = 0.0
-	while not boss._turn_commit_queued and recovery_elapsed < 0.30:
+	while not boss._turn_commit_queued and recovery_elapsed < 0.60:
 		if boss.current_state == FallenGateKnight.TURN_SHIELDED:
 			boss._process_turn_state(step)
 		else:
@@ -239,7 +241,7 @@ func _test_boss_turn_response(player: Player, boss: FallenGateKnight) -> void:
 		recovery_elapsed += step
 	boss._commit_turn()
 	_expect(boss.facing_direction > 0.0, "Boss did not turn during GuardRecovery")
-	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.22..0.26" % [elapsed, recovery_elapsed])
+	print("BOSS_TURN_TIMING: free=%.4f recovery=%.4f target=0.44..0.56" % [elapsed, recovery_elapsed])
 
 
 func _test_boss_shield_and_phase(player: Player, boss: FallenGateKnight, hud: BossHealthHud) -> void:
@@ -317,7 +319,12 @@ func _test_boss_death_and_exit(
 	room.castle_gate_controller.advance(1.3)
 	_expect(room.castle_gate_controller.gate_body.collision_layer == 0, "Castle gate collision did not release after opening")
 	_expect(room.gate_open_complete, "Castle gate completion state was not recorded")
-	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 6600, "Boss camera limits did not release")
+	_expect(
+		player.player_camera.limit_left == 0 and player.player_camera.limit_right == 6600,
+		"Boss camera limits did not release: %d..%d" % [
+			player.player_camera.limit_left, player.player_camera.limit_right,
+		]
+	)
 	var transition: CastleEntranceTransition = main.get_node(
 		"CastleEntranceTransition"
 	) as CastleEntranceTransition
@@ -367,6 +374,13 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 		_expect(hitbox.try_hit(target_hurtbox), "%s did not hit target" % profile["state"])
 		_expect(target_health.current_health == 100 - expected_damage, "%s damage mismatch" % profile["state"])
 		_expect(not hitbox.try_hit(target_hurtbox), "%s hit the same target twice" % profile["state"])
+		var locked_state: StringName = boss.current_state
+		boss.shield_component.last_attack_kind = &"normal_attack"
+		boss._on_hurtbox_hit_received(1, boss.global_position - Vector2(40.0, 0.0), 90_000)
+		_expect(
+			boss.current_state == locked_state,
+			"Normal Attack interrupted locked Boss state %s" % profile["state"]
+		)
 		boss._end_attack_window()
 	target_root.queue_free()
 
@@ -385,6 +399,8 @@ func _test_room_reset(player: Player, boss: FallenGateKnight, room: BossRoomCont
 	_expect(boss._get_shield_visual_state() == &"intact", "Boss reset did not restore intact Shield")
 	_expect(is_zero_approx(boss._turn_timer), "Boss reset retained turn timer")
 	_expect(is_zero_approx(boss._turn_cooldown_timer), "Boss reset retained turn cooldown")
+	_expect(is_zero_approx(boss._light_hit_reaction_cooldown), "Boss reset retained light reaction cooldown")
+	_expect(is_zero_approx(boss._heavy_hit_reaction_cooldown), "Boss reset retained heavy reaction cooldown")
 	_expect(not boss.is_ai_active(), "Boss reset left AI active")
 	_expect(room.rear_barrier.collision_layer == 0, "Boss reset did not reopen rear barrier")
 	_expect(room.castle_gate_controller.gate_body.collision_layer == 1, "Boss reset did not close castle gate")

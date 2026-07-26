@@ -7,7 +7,7 @@ func _init() -> void:
 	var output_dir: String = "res://assets/ui/items"
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_dir))
 	_save_daggers("%s/veilbound_daggers.png" % output_dir, Color("607a90"), Color("d5dee3"))
-	_save_daggers("%s/ravenfang_daggers.png" % output_dir, Color("6f8194"), Color("eef5f6"))
+	_save_ravenfang("%s/ravenfang_daggers.png" % output_dir)
 	quit()
 
 
@@ -23,3 +23,38 @@ func _save_daggers(path: String, grip: Color, blade: Color) -> void:
 	var error: Error = image.save_png(path)
 	if error != OK:
 		push_error("Unable to save item icon %s: %s" % [path, error_string(error)])
+
+
+func _save_ravenfang(path: String) -> void:
+	var image: Image = Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0, 0, 0, 0))
+	var dark_steel: Color = Color("405467")
+	var cold_edge: Color = Color("9bb1c0")
+	var pale_tip: Color = Color("d1dce3")
+	var grip: Color = Color("060b12")
+	var wing: Color = Color("51697a")
+	var upper: Array[Vector2i] = [Vector2i(1, 5), Vector2i(2, 3), Vector2i(4, 2), Vector2i(6, 2), Vector2i(8, 3), Vector2i(9, 5)]
+	var lower: Array[Vector2i] = [Vector2i(1, 10), Vector2i(2, 12), Vector2i(4, 13), Vector2i(6, 13), Vector2i(8, 12), Vector2i(9, 10)]
+	for points: Array[Vector2i] in [upper, lower]:
+		for index: int in range(points.size() - 1):
+			_draw_icon_line(image, points[index], points[index + 1], dark_steel)
+			if index >= 2:
+				image.set_pixelv(points[index], cold_edge)
+		image.set_pixelv(points[0], pale_tip)
+	var guards: Array[Vector2i] = [Vector2i(10, 5), Vector2i(10, 10)]
+	for guard: Vector2i in guards:
+		image.fill_rect(Rect2i(guard.x, guard.y - 1, 2, 3), wing)
+		image.fill_rect(Rect2i(11, guard.y, 3, 2), grip)
+		image.fill_rect(Rect2i(13, guard.y - 1, 2, 3), wing)
+		image.set_pixel(14, guard.y, grip)
+	var error: Error = image.save_png(path)
+	if error != OK:
+		push_error("Unable to save Ravenfang icon %s: %s" % [path, error_string(error)])
+
+
+func _draw_icon_line(image: Image, from: Vector2i, to: Vector2i, color: Color) -> void:
+	var delta: Vector2i = to - from
+	var steps: int = maxi(absi(delta.x), absi(delta.y))
+	for index: int in range(steps + 1):
+		var ratio: float = float(index) / float(maxi(1, steps))
+		image.set_pixel(roundi(lerpf(from.x, to.x, ratio)), roundi(lerpf(from.y, to.y, ratio)), color)

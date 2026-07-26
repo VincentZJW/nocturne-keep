@@ -77,6 +77,7 @@ var _last_attack_input_to_hit_time: float = -1.0
 var _attack_hit_time_recorded: bool = false
 var _next_attack_id: int = 1
 var _current_attack_id: int = 0
+var _normal_combo_step: int = 0
 
 
 func _ready() -> void:
@@ -138,7 +139,10 @@ func try_start_actions(
 			_buffer_dash(horizontal_input, facing_left)
 		return false
 	if _action_state == ActionState.ATTACK:
-		if attack_pressed and can_chain_attack() and not _attack_buffered:
+		if (
+			attack_pressed and can_chain_attack() and not _attack_buffered
+			and _normal_combo_step < action_config.maximum_normal_combo
+		):
 			_attack_buffered = true
 			_attack_buffer_timer = action_config.attack_buffer_time
 		if _attack_buffered and _attack_buffer_timer <= 0.0:
@@ -187,6 +191,7 @@ func cancel_all_actions() -> void:
 	_attack_elapsed = 0.0
 	_attack_recovery_timer = 0.0
 	_attack_chain_queued = false
+	_normal_combo_step = 0
 	_reset_attack_response_measurement()
 	_deactivate_attack_hitboxes()
 
@@ -326,6 +331,7 @@ func get_current_attack_frame() -> int:
 func can_chain_attack() -> bool:
 	return (
 		_action_state == ActionState.ATTACK
+		and _normal_combo_step < action_config.maximum_normal_combo
 		and _attack_elapsed >= action_config.attack_chain_window_start
 		and _attack_elapsed < action_config.attack_chain_window_end
 	)
@@ -333,6 +339,22 @@ func can_chain_attack() -> bool:
 
 func get_attack_recovery_remaining() -> float:
 	return _attack_recovery_timer
+
+
+func get_normal_combo_step() -> int:
+	return _normal_combo_step
+
+
+func get_maximum_normal_combo() -> int:
+	return action_config.maximum_normal_combo if action_config != null else 0
+
+
+func get_current_attack_id() -> int:
+	return _current_attack_id
+
+
+func is_attack_chain_queued() -> bool:
+	return _attack_chain_queued
 
 
 func get_attack_input_to_hit_time() -> float:
@@ -447,6 +469,7 @@ func _start_attack() -> bool:
 	_attack_elapsed = 0.0
 	_attack_recovery_timer = 0.0
 	_attack_chain_queued = false
+	_normal_combo_step = 1
 	_prepare_new_attack_id()
 	_deactivate_attack_hitboxes()
 	_reset_attack_response_measurement()
@@ -454,11 +477,19 @@ func _start_attack() -> bool:
 
 
 func _begin_attack_recovery() -> void:
-	_attack_chain_queued = _attack_buffered and _attack_buffer_timer > 0.0
+	var reached_combo_limit: bool = _normal_combo_step >= action_config.maximum_normal_combo
+	_attack_chain_queued = _attack_buffered and not reached_combo_limit
 	_clear_attack_buffer()
 	_deactivate_attack_hitboxes()
 	_action_state = ActionState.ATTACK_RECOVERY
-	_attack_recovery_timer = action_config.attack_chain_recovery_duration
+	_attack_recovery_timer = (
+		action_config.combo_end_recovery
+		if reached_combo_limit
+		else maxf(
+			action_config.attack_chain_recovery_duration,
+			action_config.minimum_attack_interval - _attack_elapsed
+		)
+	)
 
 
 func _finish_attack_recovery() -> void:
@@ -471,6 +502,7 @@ func _finish_attack_recovery() -> void:
 			return
 		_action_state = ActionState.ATTACK
 		_attack_elapsed = 0.0
+		_normal_combo_step += 1
 		_prepare_new_attack_id()
 		_deactivate_attack_hitboxes()
 		_reset_attack_response_measurement()
@@ -551,6 +583,7 @@ func _finish_action(finished_action: StringName) -> void:
 	_attack_elapsed = 0.0
 	_attack_recovery_timer = 0.0
 	_attack_chain_queued = false
+	_normal_combo_step = 0
 	_deactivate_attack_hitboxes()
 	action_finished.emit(finished_action)
 

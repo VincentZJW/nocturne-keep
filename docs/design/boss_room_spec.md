@@ -48,7 +48,7 @@ Presentation remains separate from hazard authority. `WaterVisual`, `WaterDepth`
 - `CastleGate/GateVisual/DetailedGateArt` is a moving 88×260 oak-and-iron portcullis with five planks/bars, heavier reinforcement bands, side chains, rivets, pointed lower teeth, crest and ring. Its collision authority deliberately remains the saved 48×260 `GateCollision`; opening distance/duration/clearance are unchanged.
 - Gate opening plays a quiet, deterministic synthesized chain/stone placeholder from `GateAudio`; it uses no downloaded asset and remains replaceable by a licensed final sound.
 - Boss HUD observes Body/Shield signals only and never mutates combat data.
-- The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 10-point Shield and 0.10/0.13/0.12-second reaction/animation/cooldown resource values directly.
+- The configured Main Boss has no local Shield/turn Inspector override. It uses the shared 100-point Shield and 0.18/0.30/0.12-second reaction/animation/cooldown resource values directly. Main's PackedScene also inherits the 0.32-second light and 0.50-second heavy reaction cooldowns.
 
 ## Chapter I narrative epilogue addendum
 

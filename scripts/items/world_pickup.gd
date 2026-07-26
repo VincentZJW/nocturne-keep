@@ -47,5 +47,6 @@ func _consume() -> void:
 	if _consumed:
 		return
 	_consumed = true
-	monitoring = false
+	# Consumption can occur inside Area2D's body_entered dispatch.
+	set_deferred("monitoring", false)
 	queue_free()

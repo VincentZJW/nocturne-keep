@@ -101,13 +101,14 @@ Because elevated surfaces are now solid, the valid route starts just beyond an e
 | --- | ---: | --- |
 | Body Health | 18 | unchanged |
 | Shield Health | 10 | 10 Normal or 5 Dash Attacks; 15 reserved as a future hard-mode candidate only |
-| Turn reaction | 0.10 s | cancellable while Player returns to front/center |
+| Turn reaction | 0.18 s | cancellable while Player returns to front/center |
 | Turn animation | 0.13 s | three authored 96×96 frames; no instantaneous mirror |
-| Total turn | 0.23 s authored | 0.2333 s measured at 60 physics ticks/s |
+| Turn animation | 0.30 s | existing three authored frames runtime-scaled |
+| Total turn | 0.48 s authored | 0.4833 s measured at 60 physics ticks/s |
 | Side threshold | 12 px | center-line hysteresis |
 | Turn cooldown | 0.12 s | prevents repeated left/right jitter |
 
-The Player retains a deliberate one-hit rear reward: Shield routing keeps the old facing until the turn's deferred contact-frame commit. Attack windups/active frames remain direction-locked, while GuardRecovery and ordinary Recovery can begin the turn. Existing attack animation tells are about 8–10% shorter and shared Recovery is 0.42 seconds; damage and active-frame indices are unchanged.
+The Player receives one stable rear Normal or Dash punish before the deferred facing commit. In 20 deterministic Normal trials, the first hit routed rear 20/20, timing-dependent second hits routed rear 7/20, and third hits routed rear 0/20; rear Dash routed body 10/10. Attack windups/active frames remain direction-locked, while GuardRecovery and ordinary Recovery can begin the turn. Shared Recovery stays 0.42 seconds; damage and active-frame indices are unchanged.
 
 Bridge and castle floor meet flush at x=6360. The near bank intentionally ends 40 pixels before the bridge at x=5560: a forgiving single jump crosses it, while walking off allows the existing moat death flow to be tested. Moat water/hazard occupies x=5520..6360 below the bridge.
 

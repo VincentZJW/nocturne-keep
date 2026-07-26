@@ -107,6 +107,8 @@ shape = SubResource("RectangleShape2D_dash_attack_hitbox")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=184384772]
 position = Vector2(0, -105)
+limit_left = 0
+limit_right = 6600
 position_smoothing_enabled = true
 position_smoothing_speed = 7.0
 

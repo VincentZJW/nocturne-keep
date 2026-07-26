@@ -141,7 +141,8 @@ func _test_expanded_and_hidden_states(
 	await _press_input_action(&"debug_toggle_compact")
 	_expect(not controller.debug_compact_mode, "F2 did not switch to Expanded mode")
 	for required: String in [
-		"COMBO WINDOW", "ATTACK FRAME", "BUFFERED", "LAST SOURCE", "KNOCKBACK",
+		"COMBO", "WINDOW", "ATTACK FRAME", "BUFFERED", "QUEUED", "RECOVERY",
+		"LAST SOURCE", "KNOCKBACK",
 	]:
 		_expect(action_debug.text.contains(required), "Expanded Player details omit %s" % required)
 	for required: String in ["ACTIVATED", "ENGAGED", "ALIVE", "ATTACKING", "HP", "ANIM"]:
@@ -150,7 +151,7 @@ func _test_expanded_and_hidden_states(
 	await _press_input_action(&"debug_toggle_enemy_details")
 	_expect(controller.enemy_details_expanded, "F3 did not expand Enemy details")
 	_expect(enemy_debug.text.contains("ACTIVATED"), "F3-style Enemy-only expansion did not reveal details")
-	_expect(not action_debug.text.contains("COMBO WINDOW"), "Enemy-only expansion also expanded Player details")
+	_expect(not action_debug.text.contains("QUEUED"), "Enemy-only expansion also expanded Player details")
 	await _press_input_action(&"debug_toggle_enemy_details")
 	await _press_input_action(&"debug_toggle_hud")
 	_expect(not debug_root.visible, "F1-style Debug hide did not hide the root")

@@ -43,6 +43,10 @@ const M1_PRODUCTION_ANIMATIONS: Array[StringName] = [&"jump_start", &"jump_loop"
 
 
 static func build() -> SpriteFrames:
+	return build_from_root(PRODUCTION_ROOT)
+
+
+static func build_from_root(root: String) -> SpriteFrames:
 	var sprite_frames: SpriteFrames = SpriteFrames.new()
 	sprite_frames.remove_animation(&"default")
 	for animation_name: StringName in ANIMATION_ORDER:
@@ -50,7 +54,7 @@ static func build() -> SpriteFrames:
 		sprite_frames.set_animation_speed(animation_name, SPEEDS[animation_name])
 		sprite_frames.set_animation_loop(animation_name, LOOPING[animation_name])
 		for frame_index: int in range(FRAME_COUNTS[animation_name]):
-			var path: String = frame_path(animation_name, frame_index)
+			var path: String = frame_path_from_root(root, animation_name, frame_index)
 			var texture: Texture2D = load(path) as Texture2D
 			if texture == null:
 				push_error("PlayerSpriteFramesBuilder: missing imported texture %s" % path)
@@ -69,9 +73,15 @@ static func save() -> Error:
 
 
 static func frame_path(animation_name: StringName, frame_index: int) -> String:
+	return frame_path_from_root(PRODUCTION_ROOT, animation_name, frame_index)
+
+
+static func frame_path_from_root(
+		root: String, animation_name: StringName, frame_index: int
+	) -> String:
 	var one_based_index: int = frame_index + 1
 	if animation_name in PRODUCTION_ANIMATIONS or animation_name in M1_PRODUCTION_ANIMATIONS:
-		return PRODUCTION_ROOT.path_join(str(animation_name)).path_join(
+		return root.path_join(str(animation_name)).path_join(
 			"%s_%02d.png" % [animation_name, one_based_index]
 		)
 	return PLACEHOLDER_ROOT.path_join(

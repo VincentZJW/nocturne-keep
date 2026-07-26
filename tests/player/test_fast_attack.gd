@@ -30,10 +30,13 @@ func _validate_configuration() -> void:
 	) as PlayerActionPrototypeConfig
 	_expect(config != null, "Player action configuration is missing")
 	if config != null:
-		_expect(is_equal_approx(config.attack_buffer_time, 0.06), "Attack buffer is not 0.06 seconds")
-		_expect(is_equal_approx(config.attack_chain_window_start, 0.15), "Attack chain window does not start at 0.15 seconds")
+		_expect(config.maximum_normal_combo == 3, "Normal Attack combo is not capped at three")
+		_expect(is_equal_approx(config.attack_buffer_time, 0.08), "Attack buffer is not 0.08 seconds")
+		_expect(is_equal_approx(config.attack_chain_window_start, 0.10), "Attack chain window does not start at 0.10 seconds")
 		_expect(is_equal_approx(config.attack_chain_window_end, 0.20), "Attack chain window does not end at 0.20 seconds")
-		_expect(is_equal_approx(config.attack_chain_recovery_duration, 0.06), "Attack chain recovery is not 0.06 seconds")
+		_expect(is_equal_approx(config.minimum_attack_interval, 0.32), "Minimum Attack interval is not 0.32 seconds")
+		_expect(is_equal_approx(config.attack_chain_recovery_duration, 0.12), "Attack chain recovery is not 0.12 seconds")
+		_expect(is_equal_approx(config.combo_end_recovery, 0.34), "Combo end recovery is not 0.34 seconds")
 		_expect(
 			is_equal_approx(config.dash_attack_move_duration + config.dash_attack_recovery_duration, 0.25),
 			"Dash Attack movement duration is not 0.25 seconds"
@@ -67,6 +70,7 @@ func _test_immediate_response_and_complete_frames() -> void:
 		sprite.frame_changed.emit()
 		_expect(actions.get_action_name() == &"attack", "Attack state ended before frame %02d" % (frame_index + 1))
 	_expect(sprite.frame == 3, "Single Attack did not reach attack_04")
+	actions.advance(0.20)
 	var measured_response: float = actions.get_attack_input_to_hit_time()
 	_expect(
 		measured_response >= 0.049 and measured_response <= 0.051,
@@ -74,10 +78,10 @@ func _test_immediate_response_and_complete_frames() -> void:
 	)
 	sprite.animation_finished.emit()
 	_expect(actions.get_action_state_name() == &"AttackRecovery", "Single Attack skipped its minimum recovery beat")
-	actions.advance(0.03)
+	actions.advance(0.06)
 	_expect(actions.is_action_active(), "Single Attack recovery ended too early")
-	actions.advance(0.031)
-	_expect(not actions.is_action_active(), "Single Attack did not end after the 0.06s recovery")
+	actions.advance(0.061)
+	_expect(not actions.is_action_active(), "Single Attack did not end after the 0.12s recovery")
 	_cleanup_world(world)
 	await process_frame
 
@@ -91,35 +95,36 @@ func _test_early_buffer_and_single_consumption() -> void:
 	await _wait_physics_frames(4)
 	actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(_attack_started_count == 1, "Initial Attack emitted the wrong start count")
-	# Pressing early is deliberately ignored; only the narrow final-frame window accepts a chain.
+	# Pressing before frame 03 is ignored; one legal input is latched once.
 	actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(not actions.is_attack_buffered(), "Early repeat J was incorrectly buffered")
 	_expect(_attack_started_count == 1, "Early repeat J restarted Attack")
 	var sprite: AnimatedSprite2D = player.animation_controller.animated_sprite
 	sprite.frame = 1
 	sprite.frame_changed.emit()
-	actions.advance(0.149)
-	_expect(not actions.can_chain_attack(), "Attack chain window opened before 0.15 seconds")
+	actions.advance(0.099)
+	_expect(not actions.can_chain_attack(), "Attack chain window opened before 0.10 seconds")
 	actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(not actions.is_attack_buffered(), "Pre-window J was retained")
 	actions.advance(0.001)
 	sprite.frame = 2
 	sprite.frame_changed.emit()
-	_expect(actions.can_chain_attack(), "Attack did not open its 0.15-0.20s chain window")
+	_expect(actions.can_chain_attack(), "Attack did not open its 0.10-0.20s chain window")
 	actions.try_start_actions(true, false, true, 0.0, false)
 	_expect(actions.is_attack_buffered(), "In-window J was not buffered")
 	_expect(_attack_started_count == 1, "In-window J restarted Attack before recovery")
+	actions.advance(0.10)
 	sprite.frame = 3
 	sprite.animation_finished.emit()
 	_expect(actions.get_action_state_name() == &"AttackRecovery", "Buffered Attack skipped recovery")
-	actions.advance(0.059)
-	_expect(_attack_started_count == 1, "Buffered Attack restarted before 0.06s recovery")
+	actions.advance(0.119)
+	_expect(_attack_started_count == 1, "Buffered Attack restarted before 0.12s interval recovery")
 	actions.advance(0.002)
 	_expect(_attack_started_count == 2, "Buffered Attack was not consumed after recovery")
 	_expect(not actions.is_attack_buffered(), "Consumed Attack buffer was not cleared")
 	sprite.frame = 3
 	sprite.animation_finished.emit()
-	actions.advance(0.061)
+	actions.advance(0.121)
 	_expect(_attack_started_count == 2, "One buffered press was consumed more than once")
 	_cleanup_world(world)
 	await process_frame
@@ -134,19 +139,20 @@ func _test_deliberate_repeated_chains() -> void:
 	actions.action_started.connect(_on_action_started)
 	await _wait_physics_frames(4)
 	actions.try_start_actions(true, false, true, 0.0, false)
-	for chain_index: int in range(3):
+	for chain_index: int in range(2):
 		sprite.frame = 1
 		sprite.frame_changed.emit()
 		_expect(sprite.frame >= 1, "Attack %d never reached attack_02" % (chain_index + 1))
 		sprite.frame = 2
 		sprite.frame_changed.emit()
-		actions.advance(0.15)
-		_expect(actions.can_chain_attack(), "Attack %d never opened its final-frame chain window" % (chain_index + 1))
+		actions.advance(0.10)
+		_expect(actions.can_chain_attack(), "Attack %d never opened its legal chain window" % (chain_index + 1))
 		actions.try_start_actions(true, false, true, 0.0, false)
 		_expect(_attack_started_count == chain_index + 1, "Chain restarted before current Attack completed")
+		actions.advance(0.10)
 		sprite.frame = 3
 		sprite.animation_finished.emit()
-		actions.advance(0.059)
+		actions.advance(0.119)
 		_expect(_attack_started_count == chain_index + 1, "Chain skipped the minimum recovery beat")
 		actions.advance(0.002)
 		_expect(
@@ -154,15 +160,21 @@ func _test_deliberate_repeated_chains() -> void:
 			"Chain %d did not restart exactly once after recovery" % (chain_index + 1)
 		)
 		_expect(sprite.animation == &"attack", "Chained Attack lost its animation")
-	sprite.frame = 1
-	sprite.frame_changed.emit()
+	_expect(actions.get_normal_combo_step() == 3, "Third Attack did not report combo step three")
 	sprite.frame = 2
 	sprite.frame_changed.emit()
+	actions.advance(0.10)
+	actions.try_start_actions(true, false, true, 0.0, false)
+	_expect(not actions.is_attack_buffered(), "Third Attack accepted an illegal fourth-chain buffer")
+	actions.advance(0.10)
 	sprite.frame = 3
 	sprite.animation_finished.emit()
-	actions.advance(0.061)
-	_expect(_attack_started_count == 4, "Rapid chain produced an unexpected Attack count")
-	_expect(not actions.is_action_active(), "Stopping J did not let the final Attack finish")
+	_expect(actions.get_action_state_name() == &"AttackRecovery", "Third Attack skipped mandatory recovery")
+	actions.advance(0.339)
+	_expect(actions.is_action_active(), "Mandatory combo-end recovery ended too early")
+	actions.advance(0.002)
+	_expect(_attack_started_count == 3, "Rapid chain escaped the three-Attack cap")
+	_expect(not actions.is_action_active(), "Third Attack did not finish after mandatory recovery")
 	_cleanup_world(world)
 	await process_frame
 
@@ -265,7 +277,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("FAST_ATTACK_TEST: PASS (immediate response, single buffer, four-repeat chain, 0.25s Dash Attack)")
+		print("FAST_ATTACK_TEST: PASS (immediate response, single buffer, three-hit cap, 0.34s forced recovery, 0.25s Dash Attack)")
 		quit(0)
 		return
 	for failure: String in _failures:

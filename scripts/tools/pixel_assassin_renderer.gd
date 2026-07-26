@@ -8,13 +8,13 @@ const Concept: Script = preload("res://scripts/tools/pixel_character_generator.g
 const Pose: Script = preload("res://scripts/tools/pixel_assassin_pose.gd")
 
 
-static func draw(pose: PixelAssassinPose) -> Image:
+static func draw(pose: PixelAssassinPose, weapon_style: StringName = &"veilbound") -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 64))
 	var rear_shoulder: Vector2i = pose.body + Vector2i(2, 6)
 	var front_shoulder: Vector2i = pose.body + Vector2i(13, 5)
 	var rear_hip: Vector2i = pose.body + Vector2i(4, 18)
 	var front_hip: Vector2i = pose.body + Vector2i(11, 18)
-	_draw_dagger(image, pose.rear_hand, pose.offhand_tip, false)
+	_draw_dagger(image, pose.rear_hand, pose.offhand_tip, false, weapon_style)
 	_draw_arm(image, rear_shoulder, pose.rear_hand, false)
 	_draw_mantle(image, pose)
 	_draw_leg(image, rear_hip, pose.rear_knee, pose.rear_foot, false)
@@ -22,7 +22,7 @@ static func draw(pose: PixelAssassinPose) -> Image:
 	_draw_body(image, pose.body)
 	_draw_hood(image, pose.body + pose.hood_shift)
 	_draw_arm(image, front_shoulder, pose.front_hand, true)
-	_draw_dagger(image, pose.front_hand, pose.main_tip, true)
+	_draw_dagger(image, pose.front_hand, pose.main_tip, true, weapon_style)
 	return image
 
 
@@ -75,7 +75,13 @@ static func _draw_leg(
 	PixelCanvas.fill_rect(image, Rect2i(boot_start_x, foot.y - 1, 7, 3), Concept.HOOD_BLACK)
 
 
-static func _draw_dagger(image: Image, hand: Vector2i, tip: Vector2i, is_main: bool) -> void:
+static func _draw_dagger(
+		image: Image, hand: Vector2i, tip: Vector2i, is_main: bool,
+		weapon_style: StringName = &"veilbound"
+	) -> void:
+	if weapon_style == &"ravenfang":
+		draw_ravenfang_dagger(image, hand, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - hand).normalized()
 	var blade_start: Vector2i = hand + Vector2i(roundi(direction.x * 3.0), roundi(direction.y * 3.0))
 	PixelCanvas.draw_line(image, blade_start, tip, Concept.PALE_STEEL, 2)
@@ -84,3 +90,41 @@ static func _draw_dagger(image: Image, hand: Vector2i, tip: Vector2i, is_main: b
 	PixelCanvas.fill_rect(image, Rect2i(hand - guard_size / 2, guard_size), Concept.MOONLIT_SLATE)
 	if is_main:
 		PixelCanvas.fill_rect(image, Rect2i(hand.x - 1, hand.y - 1, 2, 2), Concept.MUTED_AMBER)
+
+
+static func draw_ravenfang_dagger(
+		image: Image, hand: Vector2i, tip: Vector2i, is_main: bool
+	) -> void:
+	var delta: Vector2 = Vector2(tip - hand)
+	var length: float = maxf(1.0, delta.length())
+	var direction: Vector2 = delta / length
+	var normal: Vector2 = Vector2(-direction.y, direction.x)
+	var curve_sign: float = -1.0 if is_main else 1.0
+	var blade_start: Vector2 = Vector2(hand) + direction * 3.0
+	var shoulder: Vector2 = blade_start + direction * length * 0.36 + normal * 3.0 * curve_sign
+	var claw: Vector2 = blade_start + direction * length * 0.74 + normal * 5.0 * curve_sign
+	var inward_tip: Vector2 = Vector2(tip) - direction * 2.0 + normal * 2.0 * curve_sign
+	var p0: Vector2i = Vector2i(roundi(blade_start.x), roundi(blade_start.y))
+	var p1: Vector2i = Vector2i(roundi(shoulder.x), roundi(shoulder.y))
+	var p2: Vector2i = Vector2i(roundi(claw.x), roundi(claw.y))
+	var p3: Vector2i = Vector2i(roundi(inward_tip.x), roundi(inward_tip.y))
+	var dark_steel: Color = Color("405467")
+	var cold_edge: Color = Color("9bb1c0")
+	var pale_tip: Color = Color("d1dce3")
+	var grip_black: Color = Color("060b12")
+	var wing_blue: Color = Color("51697a")
+	PixelCanvas.draw_line(image, p0, p1, dark_steel, 3)
+	PixelCanvas.draw_line(image, p1, p2, dark_steel, 3)
+	PixelCanvas.draw_line(image, p2, p3, cold_edge, 2)
+	PixelCanvas.draw_line(image, p0, p2, cold_edge, 1)
+	PixelCanvas.fill_rect(image, Rect2i(p3.x, p3.y, 1, 1), pale_tip)
+	# A compact folded-wing guard and beak/ring pommel read at 48–64 px.
+	var guard_center: Vector2 = Vector2(hand) + direction
+	var guard_a: Vector2i = Vector2i(roundi(guard_center.x + normal.x * 3.0), roundi(guard_center.y + normal.y * 3.0))
+	var guard_b: Vector2i = Vector2i(roundi(guard_center.x - normal.x * 2.0), roundi(guard_center.y - normal.y * 2.0))
+	PixelCanvas.draw_line(image, guard_a, guard_b, wing_blue, 2)
+	var pommel: Vector2 = Vector2(hand) - direction * 3.0
+	var pommel_i: Vector2i = Vector2i(roundi(pommel.x), roundi(pommel.y))
+	PixelCanvas.draw_line(image, hand, pommel_i, grip_black, 3)
+	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x - 1, pommel_i.y - 1, 3, 3), wing_blue)
+	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x, pommel_i.y, 1, 1), grip_black)

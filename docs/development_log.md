@@ -3697,3 +3697,76 @@ Status: in progress — read-only scene/render audit complete
 - `docs/qa/veilbound_catacomb_door_layering_overview.png`: 1280×720, 18,473 bytes, SHA-256 `27f5b0e7510e554e2caf97b56004db6329fea085ca7cc4a9e414a3a7df6dafed` — open slab, facade/portrait masonry in front, and moon/forest restricted to the aperture.
 - `docs/qa/veilbound_catacomb_player_in_doorway.png`: 1280×720, 18,475 bytes, SHA-256 `cc14f27c2dee4572a84b136ff4f407afcbd30a6837492c8f8425f1dc23aad759` — the live Player is visible in front of the night while the fixed jamb/lintel remain in front of the aperture edge.
 - Automated and captured checks confirm no scene-parser/runtime errors and preserve the full F5 route. Human acceptance should still walk through the non-skipped revival, open the door with E and judge the final contrast while crossing the threshold on the user's display.
+
+## 2026-07-26 — Ravenfang visual rebuild and Boss pressure-cadence repair (preflight)
+
+Status: in progress — read-only audit and baseline verification complete
+
+### Goal
+
+- Replace the Ravenfang Daggers' straight overlay placeholder with one consistent, original curved raven-claw pixel design across inventory icon, Boss reward pickup and every equipped Player animation.
+- Bound normal J chaining to three complete attacks followed by a mandatory recovery; preserve one fresh attack ID per strike and the existing 12/24 Ravenfang damage values.
+- Prevent repeated normal hits from cancelling Fallen Gate Knight attacks indefinitely, while making rear-contact routing deterministic and lengthening the full turn response to a readable 0.48 seconds.
+
+### Read-only audit
+
+- Work began on `master` at `dc6496d`; `project.godot` still starts at `res://scenes/cinematics/opening_cinematic.tscn`, then reaches Catacomb and `res://scenes/main/main.tscn`. The live Boss instance is `Main/World/CastleEntranceArea/FallenGateKnight`; the live Player is `Main/World/Player`.
+- The worktree already contained 13 unrelated modified Godot scene/resource files before this milestone, including `main.tscn`, Boss/enemy SpriteFrames/config resources and the Player action `.tres`. They are preserved as user-owned changes and will not be staged in this milestone.
+- Ravenfang currently uses a 16×16 straight-bar icon and `PlayerWeaponVisual` draws a second straight blade overlay above base frames that already contain Veilbound daggers. This causes weapon silhouettes to mix, omits Hurt/Death and cannot provide one authoritative equipped design.
+- `PlayerActionController` currently permits the same four-frame, 20 FPS Attack to repeat indefinitely whenever one input is buffered inside each chain window. It assigns fresh attack IDs and does not restart an active strike, but has no chain length cap or mandatory combo-end recovery.
+- `FallenGateKnight._on_hurtbox_hit_received()` and `_on_shield_hit()` unconditionally terminate the active attack/turn and restart Hurt/Block on every accepted hit. This is the permanent-pressure root cause. Current turn defaults total about 0.23 seconds (`0.10 + 0.13`), below the requested readable response.
+- Baseline exact Godot 4.7.1 results: `test_fast_attack.gd` PASS; `test_loot_weapon_progression.gd` PASS. `test_first_level_boss.gd` reported its existing camera-release assertion only (`Boss camera limits did not release`); turn timing printed `0.2333s`. This baseline failure predates task edits and is retained for comparison.
+
+### Planned files, tests, and scope check
+
+- Extend the existing pixel generators with a Ravenfang weapon style, generate a separate Ravenfang Player SpriteFrames resource and switch the real `AnimatedSprite2D` frames on equip rather than drawing an overlay.
+- Update the existing item icon generator and pickup renderer; keep all equipment identity, reward, persistence, prompt and 12/24 combat data unchanged.
+- Add explicit three-hit combo counters/recovery to the Player action controller and expanded-only debug data. Add Boss light/heavy reaction cadence, uninterruptible attack windows, 0.18-second turn reaction plus 0.30-second turn animation, and contact-time routing diagnostics.
+- Add focused deterministic tests for resource coverage, three-hit termination, 20 rear normal trials, 10 rear Dash trials and a ten-second pressure simulation; capture at least six Main-backed QA images.
+- Run exact import/parse, focused tests, complete regressions and graphical configured-F5/direct-Main smoke before one clear commit. Scope excludes damage rebalance, new weapons, enemies, Boss attacks, Chapter II and unrelated gameplay or art.
+
+### Delivered implementation
+
+- Rebuilt Ravenfang as an original paired raven-claw silhouette: forward-curved dark-steel blades, cold blue-grey edge, pale tip, folded-wing guard and beak-ring pommel. The 16×16 icon, Boss reward pickup and equipped Player now share that grammar; no licensed or third-party art was introduced.
+- Generated a complete Ravenfang Player set at `assets/sprites/player/ravenfang/`: 49 transparent 64×64 PNG frames across all 16 existing animations. `PlayerWeaponVisual` now swaps the complete `SpriteFrames` resource atomically while preserving animation/frame/playback state, so base Veilbound blades never remain baked beneath a second overlay. Hurt and Death, including released death-frame daggers, use Ravenfang too.
+- Limited normal Attack to three complete strikes. One input may be buffered only in the configured 0.10–0.20 chain window; every strike receives a fresh attack ID; the third strike rejects a fourth queued restart and enters a mandatory 0.34-second recovery. Minimum inter-strike cadence remains centrally configured at 0.32 seconds. Expanded debug reports combo step/max, window, buffered/queued state, attack ID and recovery without enlarging Compact HUD.
+- Split Fallen Gate Knight feedback into light and heavy cadence. Normal hits always route damage but cannot cancel or restart any of the seven Boss attacks; a 0.32-second light-feedback cooldown prevents flash spam. Dash/heavy feedback uses a 0.50-second cooldown and may interrupt only neutral approach/turn/recovery states for 0.12 seconds. Shield break, phase transition and Death retain priority.
+- Added immutable contact-time shield routing data (attack id/kind, source, Boss position/facing and timestamp). Rear normal trials therefore preserve the attack's original contact side even if the Boss begins turning afterward. Turn response is now 0.18 seconds plus a speed-scaled 0.30-second turn animation, measured at 0.4833 seconds end to end.
+- Fixed two regression-support issues uncovered by the complete run: Player camera limits are explicit in the reusable Player scene, and pickup Area monitoring is disabled deferred so PhysicsServer state is never mutated while flushing overlap queries. No Main encounter, movement, HP/Stamina, damage value or Boss attack content was changed.
+
+### Main synchronization and balance invariants
+
+- Configured F5 remains `res://scenes/cinematics/opening_cinematic.tscn` and reaches `res://scenes/main/main.tscn` through the approved Catacomb flow. Main continues to instance `Main/World/Player` from `res://scenes/player/player.tscn` and `Main/World/CastleEntranceArea/FallenGateKnight` from `res://scenes/bosses/fallen_gate_knight.tscn`; their updated scripts/resources are therefore live without a Main-local override.
+- The fixed Boss reward still equips `res://resources/items/weapons/ravenfang_daggers.tres`. Ravenfang damage remains exactly 12 normal / 24 Dash Attack; no enemy, Player Health, Stamina or reward-economy value changed.
+- The complete Ravenfang frame resource is `res://resources/player/ravenfang_player_sprite_frames.tres`. Runtime equipment switches the real Player `VisualRoot/AnimatedSprite2D` to this resource, including idle, locomotion, air actions, every Dash/Attack variant, Hurt and Death.
+
+### Commands and actual results
+
+1. Exact engine and generation:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . -s res://scripts/tools/generate_ravenfang_player_assets.gd`: PASS, 16 animations / 49 transparent 64×64 frames.
+   - `... -s res://scripts/tools/build_ravenfang_sprite_frames.gd`: PASS, all 16 animations built.
+2. Deterministic gameplay verification:
+   - `tests/player/test_fast_attack.gd`: PASS (immediate response, one buffer, three-hit cap, 0.34-second forced recovery, 0.25-second Dash Attack).
+   - `tests/combat/test_ravenfang_boss_pressure.gd`: PASS. Twenty rear normal trials accepted first hits `20/20`, timing-dependent second hits `7/20`, and third hits `0/20`; ten rear Dash trials routed `10/10`; the ten-second J-pressure simulation recorded `9` Boss attacks started and `9` completed.
+   - `tests/combat/test_first_level_boss.gd`: PASS; free and recovery turns both measured `0.4833s`; all seven attacks resist normal-hit interruption.
+   - Ordered execution of every repository test: `FULL_SUITE tests=41 failed=0`, with no `SCRIPT ERROR`, `ERROR:` or failed assertion.
+3. Graphical runtime and evidence:
+   - Configured graphical F5 entry for 300 frames: exit 0 on Godot `4.7.1.stable.official.a13da4feb`, GL Compatibility / Apple M4, no red diagnostics.
+   - Direct graphical `res://scenes/main/main.tscn` for 600 frames: exit 0, no red diagnostics.
+   - `scripts/tools/capture_ravenfang_boss_cadence_qa.gd`: `RAVENFANG_BOSS_CADENCE_QA: PASS (9 Main-backed captures)`.
+
+### QA evidence and acceptance
+
+- `docs/qa/ravenfang_icon_main.png` — inventory icon and paired curved silhouette, SHA-256 `9b8787791914527e64d9c7ab1bf15e56b70e30fb382443ceb067bf05a7a6bb2b`.
+- `docs/qa/ravenfang_boss_pickup_main.png` — live safe-bridge Boss reward pickup, SHA-256 `42413557842a2940025305a25f43febc989baf55bb74aee0e2593eefcf6fe263`.
+- `docs/qa/ravenfang_equipped_idle_main.png` — complete equipped idle replacement and WPN 12/24 HUD, SHA-256 `e95bfc4735ac638682148c49ccc988a90f54192a26fe0df19264c9ce70677856`.
+- `docs/qa/ravenfang_normal_attack_main.png` and `docs/qa/ravenfang_dash_attack_main.png` — separate curved-blade thrust silhouettes, SHA-256 `23361fe79ad138f3779fb479d0689f1169420d9007dd7122adf1792b5b7de1f1` / `b7c4c2f7d6b203751dddbc31b6ca9c222a9a533317a3a239ea7a48b9b684638d`.
+- `docs/qa/ravenfang_death_frame_main.png` — Ravenfang-specific released death-frame daggers, SHA-256 `1997cde0bce4856f3a83f17bcb5f48f36fd6d3021daeda919e875b0a07d95d65`.
+- `docs/qa/boss_light_pressure_counter_main.png`, `docs/qa/boss_rear_normal_window_main.png` and `docs/qa/boss_turn_reward_window_main.png` — Boss counter cadence, rear routing and readable turn window, SHA-256 `f9db86237bb7fd3a5c53c1a7c80d235b4c940d42d9efbcf4ea989863ccb69e4b` / `244af9f5762a71bec1becc53c84a42691c993bc5bbaea097b9bdcb66c50c4f13` / `534bc1740d704faf4b28f1fff2f56f237a14acafd65731c6d3c3312c0d0b3cbd`.
+- Human acceptance should complete the full F5 route, collect Ravenfang after the bridge Boss, inspect both facings and all fast actions, then alternate frontal pressure and jump-behind attacks. The automated cadence is bounded and counter-capable; final subjective tuning of the three-hit rhythm and 0.48-second turn reward remains a play-feel decision.
+
+### Known limitations and scope
+
+- Ravenfang is a complete alternate frame set rather than a skeletal weapon layer; future pose additions must be generated for both weapon styles. This is intentional for crisp 64×64 silhouettes and prevents mixed weapons.
+- Boss normal-hit feedback is cooldown-gated rather than full super armor: damage always applies, Dash/heavy contact retains stronger neutral-state feedback, and shield/phase/death transitions remain authoritative.
+- The 13 scene/resource changes already present at preflight remain user-owned and are intentionally excluded from this milestone commit. No new weapon, enemy, Boss move, Chapter II content or combat-number rebalance was added.

@@ -29,6 +29,9 @@ var last_attack_id: int = 0
 var last_attacker_faction: StringName = &"none"
 var last_source_position: Vector2 = Vector2.ZERO
 var last_attack_direction: float = 0.0
+var boss_position_at_contact: Vector2 = Vector2.ZERO
+var boss_facing_at_contact: float = 0.0
+var contact_timestamp: float = 0.0
 var last_hit_side: StringName = &"none"
 var last_route: StringName = &"none"
 var last_shield_damage: int = 0
@@ -153,6 +156,9 @@ func _reset_last_resolution(hitbox: HitboxComponent) -> void:
 	last_attacker_faction = hitbox.faction if hitbox != null else &"none"
 	last_source_position = hitbox.get_source_position() if hitbox != null else Vector2.ZERO
 	last_attack_direction = hitbox.attack_direction if hitbox != null else 0.0
+	boss_position_at_contact = body.global_position if body != null else Vector2.ZERO
+	boss_facing_at_contact = signf(facing_root.scale.x) if facing_root != null else 0.0
+	contact_timestamp = Time.get_ticks_msec() / 1000.0 if hitbox != null else 0.0
 	last_hit_side = &"none"
 	last_route = &"none"
 	last_shield_damage = 0

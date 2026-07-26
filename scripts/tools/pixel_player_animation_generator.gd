@@ -32,18 +32,18 @@ const FRAME_COUNTS: Dictionary[String, int] = {
 }
 
 
-static func generate_all() -> Dictionary[String, Array]:
+static func generate_all(weapon_style: StringName = &"veilbound") -> Dictionary[String, Array]:
 	return {
-		"idle": _render_poses(_idle_poses()),
-		"run": _render_poses(_run_poses()),
-		"dash_start": _render_poses(_dash_start_poses()),
-		"dash_loop": _render_poses(_dash_loop_poses()),
-		"dash_end": _render_poses(_dash_end_poses()),
-		"air_dash_start": _render_poses(_air_dash_start_poses()),
-		"air_dash_loop": _render_poses(_air_dash_loop_poses()),
-		"air_dash_end": _render_poses(_air_dash_end_poses()),
-		"attack": _render_poses(_attack_poses()),
-		"dash_attack": _render_poses(_dash_attack_poses()),
+		"idle": _render_poses(_idle_poses(), weapon_style),
+		"run": _render_poses(_run_poses(), weapon_style),
+		"dash_start": _render_poses(_dash_start_poses(), weapon_style),
+		"dash_loop": _render_poses(_dash_loop_poses(), weapon_style),
+		"dash_end": _render_poses(_dash_end_poses(), weapon_style),
+		"air_dash_start": _render_poses(_air_dash_start_poses(), weapon_style),
+		"air_dash_loop": _render_poses(_air_dash_loop_poses(), weapon_style),
+		"air_dash_end": _render_poses(_air_dash_end_poses(), weapon_style),
+		"attack": _render_poses(_attack_poses(), weapon_style),
+		"dash_attack": _render_poses(_dash_attack_poses(), weapon_style),
 	}
 
 
@@ -244,10 +244,12 @@ static func _remove_obsolete_frames(directory: String, animation_name: String, f
 		next_index += 1
 
 
-static func _render_poses(poses: Array[PixelAssassinPose]) -> Array[Image]:
+static func _render_poses(
+		poses: Array[PixelAssassinPose], weapon_style: StringName = &"veilbound"
+	) -> Array[Image]:
 	var frames: Array[Image] = []
 	for pose: PixelAssassinPose in poses:
-		frames.append(Renderer.draw(pose))
+		frames.append(Renderer.draw(pose, weapon_style))
 	return frames
 
 

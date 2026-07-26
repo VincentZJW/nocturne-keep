@@ -12,7 +12,7 @@ Last updated: 2026-07-24
 - Body: `HealthComponent`, 180 Health.
 - Shield: shared corrected `ShieldComponent`, 100 Health, front-only Player weapon routing, no breaking-hit overflow, stable attacker/id ledger, permanent break.
 - Damage: Bash 8, Slash 10, Heavy/Jump Smash 15, Charge 12, Shockwave 8.
-- Turn: 0.10 s reaction + 0.13 s authored animation, 12 px side threshold, 0.12 s post-turn cooldown. ShieldBreak: 0.90 s. PhaseTransition: 1.10 s.
+- Turn: 0.18 s reaction + 0.30 s authored animation, 12 px side threshold, 0.12 s post-turn cooldown. ShieldBreak: 0.90 s. PhaseTransition: 1.10 s.
 - Shared post-attack recovery: 0.42 s (previously 0.48 s). Attack damage, Body/Shield, skills, phases, movement and bridge bounds are unchanged.
 
 ## Phase 1 — shielded
@@ -33,9 +33,11 @@ Phase 2 is faster, never restores Shield, and has no third phase or summons. Eac
 
 `idle_shielded`, `walk_shielded`, `turn_shielded`, `shield_block`, `shield_bash`, `sword_slash`, `heavy_overhead`, `hurt_shielded`, `shield_break`, `phase_transition`, `idle_unshielded`, `walk_unshielded`, `turn_unshielded`, `combo_slash_1`, `combo_slash_2`, `jump_smash`, `charge_thrust`, `shockwave_strike`, `hurt_unshielded`, `death`.
 
-At 60 physics ticks/s, the configured 0.10 + 0.13 sequence completes in 0.2333 s (previously 0.1833 s). The reaction cancels if the Player returns to the current front or center tolerance. The authored three-frame turn now plays at 23.076923 FPS to match the 0.13-second animation stage, narrows/twists the torso and draws shield/sword inward before the visual and `FacingRoot` commit together. Commit is deferred to the end of the contact frame, so a hit arriving on that frame still routes against the old facing; the next frame uses the new front.
+At 60 physics ticks/s, the configured 0.18 + 0.30 sequence completes in 0.4833 s. The reaction cancels if the Player returns to the current front or center tolerance. The existing three-frame authored turn is runtime-scaled to exactly the 0.30-second animation stage; it narrows/twists the torso and draws shield/sword inward before visual and `FacingRoot` commit together. Commit is deferred to the end of the contact frame. `ShieldComponent` also stores source/Boss position, facing and timestamp at resolution, so a same-frame hit keeps the old rear route and the next contact uses the new front.
 
-Turn requests are accepted from shielded/unshielded Idle and Approach plus GuardRecovery/Recovery. Attack windup/active/recovery animation direction is locked until its Recovery state, and ShieldBreak, PhaseTransition, Hurt and Death interrupt or reject turning. The 12 px threshold plus 0.12 s cooldown prevents center-line flip jitter without removing the intended single-hit rear punish window.
+Turn requests are accepted from shielded/unshielded Idle and Approach plus GuardRecovery/Recovery. Attack windup/active direction is locked until Recovery; ShieldBreak, PhaseTransition and Death reject turning. The 12 px threshold plus 0.12 s cooldown prevents center-line jitter while the 0.48-second response makes one rear Normal stable, a precisely timed second possible and a third unavailable in the deterministic 20-trial matrix.
+
+Normal Player hits use a 0.32-second lightweight feedback cooldown and never cancel AI, a chosen attack, windup or active frames. Dash hits use a 0.50-second heavy-feedback cooldown; only Idle, Approach, Turn and normal Recovery can become the 0.12-second Hurt reaction. Shield-side hits preserve the same routing/overflow rules and use feedback without body Hurt. The seven Boss attacks, ShieldBreak, PhaseTransition and Death are light/heavy uninterruptible. `reset_boss()` clears both reaction cooldowns and the last reaction label.
 
 ## Pressure pass
 

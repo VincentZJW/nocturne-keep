@@ -13,6 +13,13 @@ const ARCHIVE_ROOT: String = (
 )
 
 
+static func generate_frames(weapon_style: StringName = &"veilbound") -> Array[Image]:
+	var frames: Array[Image] = []
+	for pose: PixelAssassinPose in _hurt_poses():
+		frames.append(Renderer.draw(pose, weapon_style))
+	return frames
+
+
 static func save_all() -> Dictionary[String, int]:
 	var results: Dictionary[String, int] = {}
 	var output_error: Error = DirAccess.make_dir_recursive_absolute(
@@ -27,10 +34,10 @@ static func save_all() -> Dictionary[String, int]:
 	if archive_error != OK:
 		results[ARCHIVE_ROOT] = archive_error
 		return results
-	var poses: Array[PixelAssassinPose] = _hurt_poses()
-	for frame_index: int in range(poses.size()):
+	var frames: Array[Image] = generate_frames()
+	for frame_index: int in range(frames.size()):
 		var output_path: String = OUTPUT_ROOT.path_join("hurt_%02d.png" % (frame_index + 1))
-		results[output_path] = Renderer.draw(poses[frame_index]).save_png(output_path)
+		results[output_path] = frames[frame_index].save_png(output_path)
 		var placeholder_name: String = "placeholder_hurt_%02d.png" % (frame_index + 1)
 		var source_path: String = PLACEHOLDER_ROOT.path_join(placeholder_name)
 		var archive_path: String = ARCHIVE_ROOT.path_join(placeholder_name)

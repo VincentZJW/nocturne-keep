@@ -41,10 +41,22 @@ func _draw_vial(large: bool) -> void:
 
 
 func _draw_weapon() -> void:
-	for y_offset: float in [-4.0, 4.0]:
-		draw_rect(Rect2(-15, y_offset - 1, 22, 3), Color("d5dee3"))
-		draw_rect(Rect2(7, y_offset - 2, 7, 5), Color("607a90"))
-		draw_rect(Rect2(13, y_offset - 1, 5, 3), Color("b98243"))
+	var dark_steel: Color = Color("405467")
+	var cold_edge: Color = Color("9bb1c0")
+	var grip: Color = Color("060b12")
+	var wing: Color = Color("51697a")
+	for side: float in [-1.0, 1.0]:
+		var y: float = side * 5.0
+		var curve: PackedVector2Array = PackedVector2Array([
+			Vector2(-17, y), Vector2(-14, y - 3.0 * side), Vector2(-8, y - 5.0 * side),
+			Vector2(-1, y - 4.0 * side), Vector2(5, y),
+		])
+		draw_polyline(curve, dark_steel, 3.0, false)
+		draw_polyline(curve, cold_edge, 1.0, false)
+		draw_rect(Rect2(4, y - 3, 3, 6), wing)
+		draw_rect(Rect2(7, y - 1, 8, 3), grip)
+		draw_rect(Rect2(14, y - 3, 4, 6), wing)
+		draw_rect(Rect2(15, y - 1, 2, 2), grip)
 
 
 func _draw_coin_bag() -> void:

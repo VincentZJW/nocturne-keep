@@ -85,7 +85,7 @@ func _refresh_text() -> void:
 	text = (
 		"FLOOR %s   STATE %s/%s   AIR DASH / GROUND DASH TYPE %s   DASH #%d   DIR %+.0f   VX %.1f   VY %.1f\n"
 		+ "ANIM %s   STAMINA %.1f/%.1f   REGEN %s %.2fs   DASH BUFFER %s (%.2fs)\n"
-		+ "COMBO WINDOW %s   USED %s   ATTACK FRAME %d/4   BUFFERED %s   TIMER %.3fs   CHAIN %s   INPUT→HIT %s\n"
+		+ "COMBO %d/%d   WINDOW %s   USED %s   ATTACK FRAME %d/4   BUFFERED %s   QUEUED %s   ID %d   RECOVERY %.3fs   INPUT→HIT %s\n"
 		+ "HEALTH %d/%d   LIFE %s   INVULN %.3fs   HURT STUN %.3fs   LAST DAMAGE %d\n"
 		+ "LAST SOURCE (%.1f, %.1f)   KNOCKBACK (%.1f, %.1f)\n"
 		+ "COINS %d   WEAPON %s   DAMAGE %d/%d"
@@ -105,12 +105,15 @@ func _refresh_text() -> void:
 		stamina.stamina_regen_timer,
 		"true" if actions.is_dash_buffered() else "false",
 		actions.get_dash_buffer_remaining(),
-		"OPEN" if actions.is_dash_attack_input_window_open() else "closed",
+		actions.get_normal_combo_step(),
+		actions.get_maximum_normal_combo(),
+		"OPEN" if actions.can_chain_attack() else "closed",
 		"true" if actions.is_dash_attack_used() else "false",
 		actions.get_current_attack_frame(),
 		"true" if actions.is_attack_buffered() else "false",
-		actions.get_attack_buffer_remaining(),
-		"OPEN" if actions.can_chain_attack() else "closed",
+		"true" if actions.is_attack_chain_queued() else "false",
+		actions.get_current_attack_id(),
+		actions.get_attack_recovery_remaining(),
 		response_text,
 		health.current_health,
 		health.max_health,

@@ -38,7 +38,7 @@ func _validate_configuration_and_art() -> void:
 	_expect(config != null, "Action prototype configuration is missing")
 	if config != null:
 		_expect(is_equal_approx(config.dash_attack_input_window, 0.18), "Combination window is not 0.18 seconds")
-		_expect(is_equal_approx(config.attack_buffer_time, 0.06), "Attack buffer is not 0.06 seconds")
+		_expect(is_equal_approx(config.attack_buffer_time, 0.08), "Attack buffer is not 0.08 seconds")
 		_expect(is_equal_approx(config.dash_attack_speed, 320.0), "Dash Attack speed is not centralized")
 		_expect(
 			is_equal_approx(config.dash_attack_move_duration + config.dash_attack_recovery_duration, 0.25),
@@ -250,8 +250,8 @@ func _test_debug_overlay() -> void:
 	await process_frame
 	_expect(debug_label.visible, "Action debug overlay is not initially visible in the test scene")
 	for required_text: String in [
-		"STATE", "COMBO WINDOW", "USED", "AIR DASH", "VX", "ATTACK FRAME",
-		"BUFFERED", "TIMER", "CHAIN", "INPUT→HIT",
+		"STATE", "COMBO", "WINDOW", "USED", "AIR DASH", "VX", "ATTACK FRAME",
+		"BUFFERED", "QUEUED", "RECOVERY", "ID", "INPUT→HIT",
 	]:
 		_expect(debug_label.text.contains(required_text), "Debug overlay omits %s" % required_text)
 	controller.set_debug_hud_visible(false)

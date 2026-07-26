@@ -16,12 +16,12 @@ const FRAME_COUNTS: Dictionary[String, int] = {
 }
 
 
-static func generate_all() -> Dictionary[String, Array]:
+static func generate_all(weapon_style: StringName = &"veilbound") -> Dictionary[String, Array]:
 	return {
-		"jump_start": _render_poses(_jump_start_poses()),
-		"jump_loop": _render_poses(_jump_loop_poses()),
-		"fall": _render_poses(_fall_poses()),
-		"land": _render_poses(_land_poses()),
+		"jump_start": _render_poses(_jump_start_poses(), weapon_style),
+		"jump_loop": _render_poses(_jump_loop_poses(), weapon_style),
+		"fall": _render_poses(_fall_poses(), weapon_style),
+		"land": _render_poses(_land_poses(), weapon_style),
 	}
 
 
@@ -43,10 +43,12 @@ static func save_all(sequences: Dictionary[String, Array]) -> Dictionary[String,
 	return results
 
 
-static func _render_poses(poses: Array[PixelAssassinPose]) -> Array[Image]:
+static func _render_poses(
+		poses: Array[PixelAssassinPose], weapon_style: StringName = &"veilbound"
+	) -> Array[Image]:
 	var frames: Array[Image] = []
 	for pose: PixelAssassinPose in poses:
-		frames.append(Renderer.draw(pose))
+		frames.append(Renderer.draw(pose, weapon_style))
 	return frames
 
 
