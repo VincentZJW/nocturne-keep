@@ -4010,3 +4010,49 @@ Status: complete — implemented, verified, documented, and awaiting Stage 2B ap
 - Chapter II is deliberately selected but not runnable: its scene and saved legal start profile do not exist yet, so registry readiness remains false and no attempt is made to load it.
 - This data-only stage has no new visual result or screenshot requirement. F5 manual acceptance is simply that the existing Opening still appears and proceeds through the unchanged story flow.
 - The 20 user-owned preflight paths remain preserved and unstaged. No Main scene, combat, enemy, Player, HUD, art or chapter gameplay content was changed by Stage 2A.
+
+## 2026-07-26 — Chapter II joint scene/enemy design, Stage 1
+
+Status: complete — documented, verified, and awaiting Stage 2 approval
+
+### Goal
+
+- Convert the approved Silent Court narrative, nine-room route, five enemy roles, fifteen encounters and Ballroom Boss-space brief into build-ready dimensions and coordinates derived from the live Player metrics.
+- Audit the actual startup, shared systems, transitions, collisions and Inspector state instead of assuming Chapter II or its routing already exists.
+- Keep this stage documentation-only and stop before scenes, routing, enemies, encounters, doors or gameplay are created.
+
+### Read-only audit
+
+- Work began on `master` at `653671d`; F5 remains `res://scenes/cinematics/opening_cinematic.tscn`. Stage 2A registered Chapter II metadata and a default Debug selection, but no router consumes it.
+- `res://chapters/chapter_02_silent_court/`, the target `silent_court.tscn` and a saved Chapter II Start Profile do not exist. The first-level entrance currently changes only to the presentation-only `res://scenes/transitions/ravenmourn_threshold.tscn`.
+- The reusable Player, HUD, checkpoint, respawn, encounter, health, hitbox/hurtbox, enemy base and loot components remain at shared paths. There is no generic Door base, SceneTransitionManager, generic GameSession/RunState or `AttackContext` data class yet.
+- Exact Godot 4.7.1 import exited 0 without red diagnostics. Live metric measurement at 60 Hz reported 83.77 px single rise, 167.10 px double rise, 153.59/281.92 px horizontal single/double ranges, 196.59/321.26 px with one Air Dash, 86.40 px one Dash motion segment, 28 px foot offset and 48 px minimum safe landing width.
+- Twenty pre-existing user-owned modified/untracked paths remain present. They will be preserved and excluded from this documentation commit.
+
+### Planned files, tests, and scope check
+
+- Create the six requested documents under `chapters/chapter_02_silent_court/docs/`, with exact room/camera/door/checkpoint/spawn/encounter coordinates and the 34-enemy roster.
+- Update README and this log only. Do not edit `project.godot`, scripts, scenes, Resources, input, tuning, art or tests.
+- Re-run exact Godot import, Chapter foundation and metric contracts, then verify the Git diff contains only documentation owned by this stage and create one isolated commit.
+- Stage 2 will create the loadable Chapter II scene/profile, minimal debug route and nine-room graybox; none of that is claimed complete in Stage 1.
+
+### Delivered design
+
+- Created six build-ready Chapter II documents under the new chapter-owned `docs/` path. They define a 32,128 px / 25.1-screen route, exact room/global/camera bounds, safe traversal envelopes, five checkpoint positions, four door categories, ten narrative triggers and the complete Stage 2 PackedScene manifest.
+- Planned 15 bounded Encounter zones with 34 finite enemies: Retainer 11, Halberdier 6, Mourning Armor 4, Acolyte 5, Stalker 5 and three shared returning enemies. Every role has HP, damage, kill counts, state responsibilities, interruption rules and component ownership.
+- Planned the 4608×900 Silent Ballroom with a 3968 px clear combat lane, CP05 separation, Boss door/trigger, Camera contract and the Stage 8 Duchess placeholder boundary.
+- Preserved the narrative reveal limits and established one-shot trigger locations for the banquet echo, Elowen portrait/key memory, Crown/Veilbound seal, thirteen-toll inscription and required Boss final line.
+- Documented the actual startup gap rather than claiming a feature that does not exist: F5 still enters Opening; Stage 2 must create the valid target/profile and minimum debug router before the nine-room graybox can be entered.
+
+### Commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`: exit 0 after documentation; no Script Error or Error.
+2. `... --headless --path . --quit-after 120`: exit 0; configured Opening startup remains intact.
+3. `tests/systems/test_chapter_start_foundation.gd`: PASS — seven entries, Chapter II default metadata and no routing.
+4. `tests/player/measure_player_level_metrics.gd`: PASS — 83.77/167.10 px rises, 153.59/281.92 px single/double ranges, 196.59 px single+Air Dash, 324.92 px double+Air Dash on the final run, 48 px safe landing floor. Design uses the more conservative repeated 321.26 px double+Air-Dash measurement.
+
+### Known limitations and manual acceptance
+
+- Stage 1 is intentionally non-playable design. There is no Silent Court scene, saved Start Profile, Bootstrap/router, Chapter II Player/HUD instance or room geometry to inspect in-game.
+- Pressing F5 currently verifies only that the unchanged Opening still starts cleanly. The Debug config metadata can be inspected in `scripts/systems/debug_run_config.gd`; playable Castle Gate Interior acceptance begins in Stage 2.
+- No screenshot was generated because no visual/runtime content changed. The 20 pre-existing user-owned paths remain outside this milestone.

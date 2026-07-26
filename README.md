@@ -38,6 +38,8 @@ res://scenes/cinematics/opening_cinematic.tscn
 
 章节化启动基础已完成阶段2A：项目现在拥有统一`ChapterRegistry`、类型化`ChapterStartProfile`和`DebugRunConfig`，默认开发目标登记为第二章《沉寂王庭》。本阶段尚未接入启动路由，且第二章场景仍未建立，因此F5行为保持不变；不要手工改写`run/main_scene`。路由、合法第二章启动档案和F5直达验收分别留待阶段2B、2C和2D。
 
+第二章开发阶段1联合设计已完成：九个房间规划为总长32,128 px的线性主路加三条短支路，五种新敌人与15组Encounter合计34只普通敌人，无声舞会厅按4608×900 px规划。当前只有设计文档；`silent_court.tscn`、保存的Start Profile和Debug路由仍未创建，因此此时F5仍从Opening开始。下一阶段会先建立有效第二章入口，再制作九房间完整灰盒。
+
 自然播放或跳过后加载`res://scenes/levels/veilbound_catacomb.tscn`。墓窟剧情可长按ESC/Enter跳过；获得控制后使用A/D移动、E互动，拾取`World/Interactions/DaggerPickup`后可开启石门并自行进入出口。出口淡出并加载`res://scenes/main/main.tscn`，Player出生于`World/DarkForestTutorialSpawn (320,612)`，随后既有教程、HUD、死亡/重生、18组遭遇和木桥Boss流程继续运行。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
@@ -117,6 +119,12 @@ Main开发调试快捷键：
 - [Debug章节启动规格](docs/design/debug_chapter_start_spec.md)
 - [Session与存档边界](docs/design/save_and_session_spec.md)
 - [第二章实施计划](docs/design/chapter_02_implementation_plan.md)
+- [第二章场景与敌人联合设计](chapters/chapter_02_silent_court/docs/chapter_02_scene_enemy_design.md)
+- [第二章房间指标](chapters/chapter_02_silent_court/docs/chapter_02_room_metrics.md)
+- [第二章路线与流程](chapters/chapter_02_silent_court/docs/chapter_02_route_and_flow.md)
+- [第二章敌人名册](chapters/chapter_02_silent_court/docs/chapter_02_enemy_roster.md)
+- [第二章Encounter矩阵](chapters/chapter_02_silent_court/docs/chapter_02_encounter_matrix.md)
+- [第二章Boss房规划](chapters/chapter_02_silent_court/docs/chapter_02_boss_room_plan.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
 - [世界观](docs/narrative/world_bible.md)
