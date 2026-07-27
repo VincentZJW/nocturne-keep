@@ -43,8 +43,8 @@ func _run() -> void:
 func _test_f5_route() -> void:
 	_expect(
 		ProjectSettings.get_setting("application/run/main_scene", "")
-		== "res://scenes/cinematics/opening_cinematic.tscn",
-		"F5 no longer starts at Opening Cinematic"
+		== "res://scenes/bootstrap/main_bootstrap.tscn",
+		"F5 no longer starts at MainBootstrap"
 	)
 	var opening: OpeningCinematicController = OPENING.instantiate() as OpeningCinematicController
 	_expect(opening.target_scene_path == "res://scenes/levels/veilbound_catacomb.tscn", "Opening target is not Veilbound Catacomb")

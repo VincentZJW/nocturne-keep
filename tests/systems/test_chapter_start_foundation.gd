@@ -1,9 +1,9 @@
 extends SceneTree
 
-## Chapter-start contract: Opening remains configured while debug routing can
+## Chapter-start contract: Bootstrap remains configured while debug routing can
 ## target either loadable chapter profile.
 
-const EXPECTED_F5_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
+const EXPECTED_F5_PATH: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 
 var _failures: Array[String] = []
 
@@ -80,7 +80,7 @@ func _test_debug_run_config() -> void:
 	_expect(config != null, "DebugRunConfig Autoload is missing")
 	if config == null:
 		return
-	_expect(config.debug_chapter_start_enabled, "Debug chapter start is not enabled by default")
+	_expect(not config.debug_chapter_start_enabled, "Debug chapter start is not disabled by default")
 	_expect(
 		config.debug_start_chapter_id == ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS,
 		"Debug target does not default to Chapter I"
@@ -91,23 +91,21 @@ func _test_debug_run_config() -> void:
 	_expect(config.debug_start_full_health, "Full-health debug default mismatch")
 	_expect(not config.debug_skip_chapter_intro, "Chapter intro is unexpectedly skipped")
 	_expect(not config.debug_show_chapter_select, "Chapter selector is unexpectedly visible")
-	_expect(
-		config.is_chapter_start_allowed() == (OS.is_debug_build() and config.debug_chapter_start_enabled),
-		"Debug/release guard does not reflect the build type"
-	)
+	_expect(not config.is_chapter_start_allowed(), "Formal startup default unexpectedly allows Debug routing")
+	config.debug_chapter_start_enabled = true
+	_expect(config.is_chapter_start_allowed() == OS.is_debug_build(), "Debug/release guard does not reflect the build type")
 	var target: ChapterStartProfile = config.get_target_profile()
 	_expect(target != null and target.chapter_id == ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS, "Target profile lookup failed")
-	config.debug_chapter_start_enabled = false
-	_expect(not config.is_chapter_start_allowed(), "Disabled debug start was still allowed")
 	config.reset_to_defaults()
+	_expect(not config.debug_chapter_start_enabled, "Reset defaults re-enabled Debug chapter start")
 
 
 func _test_formal_flow_is_unchanged() -> void:
 	_expect(
 		ProjectSettings.get_setting("application/run/main_scene", "") == EXPECTED_F5_PATH,
-		"Stage 2A changed the formal F5 entry scene"
+		"Formal F5 entry is not MainBootstrap"
 	)
-	_expect(current_scene == null, "ChapterStartRouter routed a script-only test")
+	_expect(current_scene == null, "Side-effect-free ChapterStartRouter changed a script-only test scene")
 
 
 func _expect(condition: bool, message: String) -> void:
@@ -117,7 +115,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapters I/II ready, Opening preserved)")
+		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapters I/II ready, Bootstrap preserved)")
 		quit(0)
 		return
 	for failure: String in _failures:

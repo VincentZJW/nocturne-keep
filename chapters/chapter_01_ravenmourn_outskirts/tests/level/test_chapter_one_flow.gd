@@ -31,8 +31,8 @@ func _run() -> void:
 func _test_opening_contract() -> void:
 	_expect(
 		ProjectSettings.get_setting("application/run/main_scene", "")
-		== "res://scenes/cinematics/opening_cinematic.tscn",
-		"F5 does not begin with the opening cinematic"
+		== "res://scenes/bootstrap/main_bootstrap.tscn",
+		"F5 does not begin with MainBootstrap"
 	)
 	var opening: OpeningCinematicController = OPENING.instantiate() as OpeningCinematicController
 	root.add_child(opening)

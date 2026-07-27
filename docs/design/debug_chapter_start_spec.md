@@ -1,6 +1,6 @@
 # Debug Chapter Start Specification
 
-Status: Stage 2A configuration complete; Stage 2B routing not implemented
+Status: Bootstrap routing implemented and verified
 
 ## Central configuration
 
@@ -9,9 +9,9 @@ Status: Stage 2A configuration complete; Stage 2B routing not implemented
 Default values:
 
 ```text
-debug_chapter_start_enabled = true
-debug_start_chapter_id = CHAPTER_02_SILENT_COURT
-debug_start_spawn_id = chapter_02_cp01
+debug_chapter_start_enabled = false
+debug_start_chapter_id = CHAPTER_01_RAVENMOURN_OUTSKIRTS
+debug_start_spawn_id = dark_forest_tutorial_spawn
 debug_reset_chapter_state_on_run = true
 debug_use_test_currency = true
 debug_test_currency = 30
@@ -20,16 +20,24 @@ debug_skip_chapter_intro = false
 debug_show_chapter_select = false
 ```
 
-The default selection is intentionally Chapter II, but Stage 2A does not consume it. Chapter II remains `debug_ready = false` until its real scene and legal start profile exist.
+The shipped project default is `debug_chapter_start_enabled = false`; the block above shows the current selected profile values that become active only after a developer explicitly changes the flag to `true`. Both Chapter I and Chapter II now have valid saved profiles.
 
 ## Safety rules
 
 - `is_chapter_start_allowed()` requires both `OS.is_debug_build()` and the enable flag. Release builds therefore ignore the override.
-- A future router must also require `ChapterStartProfile.is_valid_debug_target()` before changing scenes.
+- `ChapterStartRouter.get_debug_target_profile()` requires `ChapterStartProfile.is_valid_debug_target()` before returning a target.
 - An invalid target must fall back to the formal flow with a clear diagnostic; it must never load a missing path.
 - Debug configuration must not be written into a formal save or mutate authored chapter defaults.
-- `project.godot` remains pointed at the Opening. Developers stop hand-editing `run/main_scene` between chapters.
+- `project.godot` remains pointed at `res://scenes/bootstrap/main_bootstrap.tscn`. Developers never hand-edit `run/main_scene` between chapters.
 
-## Stage boundary
+## Routing and diagnostics
 
-Stage 2B will add the sole routing authority and fallback behavior. Stage 2C will create the real Chapter II start profile and initialization bridge. Stage 2D will prove direct F5 entry with QA evidence. None of those behaviors are present in Stage 2A.
+`MainBootstrap` asks the router for a Debug profile exactly once. A valid target prints:
+
+```text
+DEBUG CHAPTER START ACTIVE | <chapter_id> | <scene_path>
+```
+
+and loads that PackedScene. Disabled Debug, a release build, or an invalid target follows the formal Opening route. The two routes return separately and cannot both continue. Chapter I/II controllers apply disposable Debug health/currency/spawn state only when `is_chapter_start_allowed()` is true.
+
+To test Chapter II, enable the flag, select `CHAPTER_02_SILENT_COURT`, set `CH2_START`, and press F5. To restore the formal route, disable the flag and press F5; Opening must appear automatically.

@@ -20,7 +20,18 @@ var daggers_recovered: bool = false
 var catacomb_exited: bool = false
 var boss_reward_spawned: bool = false
 var boss_reward_collected: bool = false
+var is_debug_run: bool = false
 var current_objective: ObjectiveStep = ObjectiveStep.LEAVE_CATACOMB
+
+
+func begin_formal_new_game() -> void:
+	is_debug_run = false
+	reset_revival_state()
+
+
+func begin_debug_run() -> void:
+	is_debug_run = true
+	reset_revival_state()
 
 
 func mark_opening_completed() -> void:

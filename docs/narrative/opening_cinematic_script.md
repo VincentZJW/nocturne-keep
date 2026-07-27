@@ -2,6 +2,7 @@
 
 Runtime source: `res://resources/narrative/opening_cinematic_timeline.tres`  
 Scene: `res://scenes/cinematics/opening_cinematic.tscn`  
+Formal entry: `res://scenes/bootstrap/main_bootstrap.tscn` → Opening
 Authored duration: 70.2 seconds including inter-shot fades.
 
 | Shot | Duration | Image direction | Narrative purpose |

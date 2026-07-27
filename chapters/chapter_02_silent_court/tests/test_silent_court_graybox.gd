@@ -1,7 +1,7 @@
 extends SceneTree
 
 const LEVEL_PATH: String = "res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn"
-const OPENING_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
+const BOOTSTRAP_PATH: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const ROOM_FILES: Array[String] = [
 	"castle_gate_interior", "grey_banner_corridor", "last_banquet_hall",
 	"royal_portrait_gallery", "blood_candle_chapel", "servant_passage",
@@ -27,6 +27,7 @@ func _initialize() -> void:
 func _run() -> void:
 	var config: DebugRunConfigState = root.get_node_or_null("DebugRunConfig") as DebugRunConfigState
 	if config != null:
+		config.debug_chapter_start_enabled = true
 		config.debug_start_chapter_id = ChapterRegistry.CHAPTER_02_SILENT_COURT
 		config.debug_start_spawn_id = &"CH2_START"
 	_test_resources_and_profile()
@@ -36,7 +37,7 @@ func _run() -> void:
 
 
 func _test_resources_and_profile() -> void:
-	_expect(ProjectSettings.get_setting("application/run/main_scene", "") == OPENING_PATH, "run/main_scene is not Opening")
+	_expect(ProjectSettings.get_setting("application/run/main_scene", "") == BOOTSTRAP_PATH, "run/main_scene is not MainBootstrap")
 	_expect(ResourceLoader.exists(LEVEL_PATH, "PackedScene"), "Silent Court level is missing")
 	for file_name: String in ROOM_FILES:
 		var path: String = "res://chapters/chapter_02_silent_court/scenes/rooms/%s.tscn" % file_name

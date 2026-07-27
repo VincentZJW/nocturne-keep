@@ -24,7 +24,10 @@ func get_spawn_marker(spawn_id: StringName) -> Marker2D:
 func _apply_debug_start_profile() -> void:
 	var config: DebugRunConfigState = get_node_or_null("/root/DebugRunConfig") as DebugRunConfigState
 	var spawn_id: StringName = DEFAULT_SPAWN_ID
-	if config != null and config.debug_start_chapter_id == ChapterRegistry.CHAPTER_02_SILENT_COURT:
+	if (
+		config != null and config.is_chapter_start_allowed()
+		and config.debug_start_chapter_id == ChapterRegistry.CHAPTER_02_SILENT_COURT
+	):
 		spawn_id = config.debug_start_spawn_id
 		if config.debug_reset_chapter_state_on_run:
 			_reset_disposable_debug_state(config)

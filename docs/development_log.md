@@ -1,5 +1,62 @@
 # Development Log
 
+## 2026-07-27 — Main / Bootstrap formal startup routing repair (preflight)
+
+Status: complete — Bootstrap routing, formal/Debug separation, regression and graphical QA passed; full-length pacing acceptance remains manual
+
+### Goal, files, tests, and scope
+
+- Replace the conflicting `OpeningCinematic`-as-main plus Autoload redirect sequence with one explicit Main/Bootstrap authority. Formal F5 must select Opening first; Debug Chapter Start may bypass it only when its debug-build gate and enable flag both pass.
+- Planned runtime changes are limited to `project.godot`, a new Bootstrap scene/script, the existing narrow ChapterStartRouter/DebugRunConfig, and the Chapter I/II debug-profile guards. Opening content, Catacomb dialogue, chapter gameplay, enemies, Bosses, weapons, tuning, art and migration layout remain out of scope.
+- Update startup contract tests and current README/chapter/debug specifications. Add three rendered QA checkpoints for Bootstrap → Opening, Opening → Veilbound Catacomb, and Bootstrap debug route → Chapter II.
+- Verify with the exact Godot 4.7.1 executable: import/parse, focused startup/transition tests, the complete SceneTree test suite, configured graphical F5 smoke, QA capture, runtime-path audit and `git diff --check`. Create one isolated commit without staging the pre-existing user-owned tuning, scene, QA image or generated UID changes.
+
+### Read-only findings
+
+- Preflight is `master` at `62a972895a03518c55c0bd4f8391d9063b557d26`, four commits ahead of `origin/master`, with the existing modified/untracked gameplay, tuning, QA and UID paths preserved.
+- `project.godot` incorrectly uses `res://scenes/cinematics/opening_cinematic.tscn` itself as `run/main_scene`. `/root/ChapterStartRouter` then runs an Autoload `_ready()` side effect and immediately replaces that Opening whenever the debug flag is enabled; `DebugRunConfig.debug_chapter_start_enabled` currently defaults to `true`. This is the direct cause of the missing formal Opening.
+- Opening and Catacomb paths are loadable and were not moved by the Chapter I migration. Opening uses `ShotTimer` plus Tweens, not an `AnimationPlayer`; its guarded `finish_cinematic()` already unifies natural completion and 0.75-second hold-to-skip, marks Opening complete once, and targets `res://scenes/levels/veilbound_catacomb.tscn`.
+- No `SceneTransitionManager` exists. Current authored transitions consistently use `SceneTree.change_scene_to_file`; the repair will retain that single engine mechanism behind Bootstrap loading validation rather than introduce a second global transition subsystem.
+- Chapter I and Chapter II scene controllers currently apply their selected debug profile by chapter ID alone. They do not also require `is_chapter_start_allowed()`, so a disabled Debug start can still apply disposable debug state after the formal Catacomb route. This is a second formal/debug separation defect within scope.
+
+### Delivered implementation
+
+- Added `res://scenes/bootstrap/main_bootstrap.tscn` and typed `MainBootstrap`. `project.godot` now points only at that formal entry. Bootstrap defers one startup decision, validates the selected PackedScene with `ResourceLoader`, initializes a formal or disposable Debug session, then uses `SceneTree.change_scene_to_packed` exactly once.
+- Removed the Autoload redirect side effect from `ChapterStartRouter`. It now only resolves a valid debug-build `ChapterStartProfile`; disabled Debug, release builds and invalid profiles return no target and therefore fall through to Opening. A valid Debug route prints `DEBUG CHAPTER START ACTIVE | <chapter> | <path>`.
+- Changed `DebugRunConfig.debug_chapter_start_enabled` and its reset default to `false`. Formal F5 therefore always selects Opening unless a developer explicitly enables a legal Debug profile. `run/main_scene` never needs to change for Chapter I or Chapter II work.
+- Added runtime-only `ChapterSession.is_debug_run`, `begin_formal_new_game()` and `begin_debug_run()`. Formal Bootstrap clears all Prologue flags before Opening; Opening still marks completion only through its guarded natural/skip exit. Chapter I and Chapter II now require `is_chapter_start_allowed()` before applying disposable Debug spawn/state, preventing a disabled profile ID from contaminating the formal route.
+- Preserved the existing Opening implementation and content. It has no `AnimationPlayer`; `OpeningCinematic/ShotTimer`, an eight-shot `OpeningCinematicTimeline`, and Tweens drive playback. Natural completion and the existing 1.5-second unlock plus 0.75-second ESC/Enter hold continue through the same `_finishing`-guarded exit to Veilbound Catacomb.
+- Updated current startup tests, asset-isolation validators, README, chapter/debug specifications and the Opening narrative path note. No invalid migrated Opening/Catacomb runtime path existed, so zero runtime old-path replacements were necessary; the actual repair changed the single F5 entry and startup ownership instead.
+
+### Verification commands and actual results
+
+1. Exact engine import/parse:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit`: exit 0 on `4.7.1.stable.official.a13da4feb`; Bootstrap, Router, session and chapter scripts registered without parser, missing-resource, invalid-UID or null-PackedScene errors.
+2. Focused startup contracts:
+   - `tests/systems/test_chapter_start_foundation.gd`: PASS for seven registry entries, formal Bootstrap entry, disabled Debug default and debug/release gate.
+   - `tests/systems/test_main_bootstrap_flow.gd`: PASS for real Bootstrap → Opening, accelerated natural eight-shot completion → Veilbound Catacomb, formal flag reset, and Debug Bootstrap → Chapter II. Output included the required Debug-active diagnostic.
+   - `tests/level/test_veilbound_scene_transitions.gd`: PASS for the existing legal Opening skip → Catacomb skip → Chapter I route and all four ChapterSession progress flags.
+   - `tests/level/test_veilbound_catacomb_flow.gd`, Chapter I flow/profile tests, and Chapter II graybox test: PASS.
+3. Full deterministic regression:
+   - Ordered run of 46 `tests/` and chapter-owned test scripts: `FULL_SUITE tests=46 failed=0`.
+   - `tests/player/measure_player_level_metrics.gd` verified separately: PASS with unchanged movement metrics. Total verified SceneTree scripts: 47.
+   - The first regression pass correctly exposed that the Chapter I start-profile fixture no longer explicitly enabled Debug routing; the fixture was fixed to exercise the new gate, then passed. No gameplay behavior was changed to satisfy it.
+4. Configured graphical F5-equivalent smoke:
+   - `Godot --path . --quit-after 240`: exit 0 on GL Compatibility / Apple M4; Output printed `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`, and no red diagnostic appeared.
+5. Graphical production-route QA:
+   - `Godot --path . --script scripts/tools/capture_main_bootstrap_qa.gd`: exit 0 and `MAIN_BOOTSTRAP_QA: PASS`.
+   - Evidence under `docs/qa/main_bootstrap_startup/`: `formal_01_opening_cinematic.png`, `formal_02_veilbound_catacomb.png`, and `debug_03_chapter_02_silent_court.png`. Direct inspection confirmed visible Opening subtitles/art, Catacomb arrival, and a single Player/HUD in Chapter II.
+6. Hygiene:
+   - Runtime search found no live `res://scenes/main/main.tscn`, planned `res://chapters/prologue` reference, or old Opening-as-`run/main_scene` setting outside historical documentation.
+   - `git diff --check`: PASS after removing the new trailing whitespace.
+   - Isolated staged tree `4f68f6a1c473f06bda98847d719a0d8daeba26b1`: exact-engine import exit 0 and all seven focused Bootstrap/Opening/Catacomb/Chapter I/Chapter II contracts passed, proving the commit does not rely on the preserved unstaged gameplay changes.
+
+### Known limitations and manual acceptance
+
+- The natural-completion contract uses the real timer/signal path with test-only accelerated shot durations; the graphical F5 smoke and QA capture verify presentation/start and legal skip. A human should still watch the full authored 70.2-second pacing once and complete the full Catacomb interaction sequence.
+- There is no `SceneTransitionManager` node or script to report. This milestone intentionally retains the project's existing SceneTree transition mechanism rather than invent a parallel manager.
+- Existing user-owned tuning, Chapter I scene serialization, QA images and generated UID changes remain outside this isolated startup commit and are not staged.
+
 ## 2026-07-26 — Chapter folder reorganization Stage 0 audit and migration plan
 
 Status: complete — audit, path manifest and pre-migration verification delivered; no runtime file moved or modified

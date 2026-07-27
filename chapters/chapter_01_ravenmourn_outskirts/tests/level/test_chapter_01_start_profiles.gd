@@ -24,6 +24,7 @@ func _run() -> void:
 	if config == null:
 		_finish()
 		return
+	config.debug_chapter_start_enabled = true
 	config.debug_start_chapter_id = ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS
 	for spawn_id: StringName in EXPECTED_SPAWNS:
 		config.debug_start_spawn_id = spawn_id

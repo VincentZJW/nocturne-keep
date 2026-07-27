@@ -2,7 +2,7 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第一章章节化整理 · Chapter I Reorganization`
+当前版本：`统一Main启动路由 · Main Bootstrap Startup`
 
 ## 当前范围
 
@@ -30,21 +30,21 @@ GODOT_BIN="/absolute/path/to/Godot"
 "$GODOT_BIN" --editor --path .
 ```
 
-按 `F5` 会先运行项目配置的开场场景：
+按 `F5` 会先运行唯一正式入口：
 
 ```text
-res://scenes/cinematics/opening_cinematic.tscn
+res://scenes/bootstrap/main_bootstrap.tscn
 ```
 
-章节化启动系统保留统一`ChapterRegistry`、保存的`ChapterStartProfile`、`DebugRunConfig`和受Debug构建门控的`ChapterStartRouter`。`run/main_scene`仍是Opening，但本次迁移后的开发默认配置会在F5初始化后直接进入第一章`dark_forest_tutorial_spawn`；Release、禁用Debug启动、非法目标以及脚本测试进程不会被路由。不要手工改写`run/main_scene`。
+`MainBootstrap`是唯一启动场景和路由执行者。默认`DebugRunConfig.debug_chapter_start_enabled = false`，所以F5自动选择`res://scenes/cinematics/opening_cinematic.tscn`，Opening自然结束或合法长按跳过后进入`res://scenes/levels/veilbound_catacomb.tscn`，墓窟流程完成后才进入第一章。`ChapterStartRouter`只解析经过校验的Debug目标，不再通过Autoload `_ready()`替换刚加载的Opening。Release构建始终忽略Debug章节启动；不要手工改写`run/main_scene`。
 
-第一章正式根目录是`res://chapters/chapter_01_ravenmourn_outskirts/`，主场景是`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`。若要快速验证Boss前流程，将`scripts/systems/debug_run_config.gd`中的`debug_start_spawn_id`临时设为`&"boss_checkpoint"`后按F5；完整章节测试使用默认`&"dark_forest_tutorial_spawn"`。两种配置都通过同一个保存的`chapter_01_start_profile.tres`校验，不需要改写`run/main_scene`。
+第一章正式根目录是`res://chapters/chapter_01_ravenmourn_outskirts/`，主场景是`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`。若要直接验证第一章，将`scripts/systems/debug_run_config.gd`中的`debug_chapter_start_enabled`临时设为`true`、章节设为`CHAPTER_01_RAVENMOURN_OUTSKIRTS`；Boss前流程再将`debug_start_spawn_id`设为`&"boss_checkpoint"`。完整章节直达测试使用`&"dark_forest_tutorial_spawn"`。完成后应把Debug开关恢复为`false`。
 
 第二章九房间灰盒文件保持现状，本次不继续开发第二章碰撞、敌人、Boss或玩法。第一章城门已从旧阈厅占位目标切换为现有`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`，用于验证章节边界资源引用。
 
-若将`DebugRunConfig.debug_chapter_start_enabled`设为`false`，自然播放或跳过Opening后仍按原流程加载`res://scenes/levels/veilbound_catacomb.tscn`，再进入`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`；这条正式Opening→复苏→第一章路线未被第二章改写。
+第二章开发直达：将Debug开关设为`true`、`debug_start_chapter_id`设为`CHAPTER_02_SILENT_COURT`、`debug_start_spawn_id`设为`&"CH2_START"`后按F5。Output必须打印`DEBUG CHAPTER START ACTIVE`并直接进入`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`；此模式不会播放Opening或进入墓窟。
 
-第一章当前人工测试：按F5后直接位于暗黑森林教程起点，完整通过森林、城郊、城堡前路和Boss桥。Boss快速测试改用`boss_checkpoint`；击败Boss、拾取鸦牙双匕并进入打开后的城门后，应加载第二章城门内厅。
+正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 

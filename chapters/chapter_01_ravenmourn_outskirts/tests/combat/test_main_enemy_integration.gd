@@ -3,7 +3,7 @@ extends SceneTree
 ## Saved F5 Main audit: mixed roster, authored activation, live HUD, and latest resources.
 
 const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
-const EXPECTED_MAIN_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
+const EXPECTED_MAIN_PATH: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const GROUP_SIZES: Array[int] = [1, 1, 2, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 3, 2, 2, 2, 3]
 const ACTIVATION_POSITIONS: Array[Vector2] = [
 	Vector2(930.0, 612.0), Vector2(1220.0, 612.0), Vector2(1480.0, 612.0),
@@ -24,7 +24,7 @@ func _initialize() -> void:
 func _run_tests() -> void:
 	_expect(
 		ProjectSettings.get_setting("application/run/main_scene", "") == EXPECTED_MAIN_PATH,
-		"F5 run/main_scene is not the authored opening cinematic"
+		"F5 run/main_scene is not MainBootstrap"
 	)
 	var main: Node2D = MAIN_SCENE.instantiate() as Node2D
 	get_root().add_child(main)

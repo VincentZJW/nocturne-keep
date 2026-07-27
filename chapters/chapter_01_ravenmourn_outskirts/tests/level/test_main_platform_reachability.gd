@@ -3,7 +3,7 @@ extends SceneTree
 ## Saved F5 Main traversal audit plus real Player/physics landing checks.
 
 const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
-const MAIN_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
+const MAIN_PATH: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const DOUBLE_JUMP_RISE: float = 167.10
 const CHALLENGE_LIMIT: float = DOUBLE_JUMP_RISE * 0.90
 const MINIMUM_SAFE_WIDTH: float = 48.0

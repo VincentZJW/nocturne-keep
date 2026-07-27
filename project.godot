@@ -14,7 +14,7 @@ config/name="Nocturne Keep"
 config/name_localized={
 "zh_CN": "夜幕古堡"
 }
-run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"
+run/main_scene="res://scenes/bootstrap/main_bootstrap.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
 
 [autoload]
