@@ -21,22 +21,22 @@ func _run() -> void:
 	for _frame: int in range(4):
 		await process_frame
 	var required_paths: Array[String] = [
-		"BossArea/HollowDuchess", "BossArea/BossActivationArea", "BossArea/BossDoorRear",
-		"BossArea/BossExitDoor", "BossArea/BallroomFx", "PlayerSpawnPoints/CH2_BOSS",
-		"ChapterSystems/HollowDuchessRoomController", "ChapterRuntime/HUD/HollowDuchessBossHud",
+		"GameplayWorld/BossArea/HollowDuchess", "GameplayWorld/BossArea/BossActivationArea", "GameplayWorld/BossArea/BossDoorRear",
+		"GameplayWorld/BossArea/BossExitDoor", "GameplayWorld/BossArea/BallroomFx", "PlayerSpawnPoints/CH2_BOSS",
+		"ChapterSystems/HollowDuchessRoomController", "GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/HollowDuchessBossHud",
 	]
 	for path: String in required_paths:
 		if level.get_node_or_null(path) == null:
 			_failures.append("Missing Main node %s" % path)
-	var boss: HollowDuchess = level.get_node_or_null("BossArea/HollowDuchess") as HollowDuchess
-	var player: Player = level.get_node_or_null("ChapterRuntime/Player") as Player
+	var boss: HollowDuchess = level.get_node_or_null("GameplayWorld/BossArea/HollowDuchess") as HollowDuchess
+	var player: Player = level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
 	var spawn: Marker2D = level.get_node_or_null("PlayerSpawnPoints/CH2_BOSS") as Marker2D
 	if boss != null:
 		_expect(boss.health_component.max_health == 220, "Main Boss HP mismatch")
-		_expect(boss.global_position.distance_to(Vector2(30820, 612)) < 1.0, "Main Boss spawn mismatch")
+		_expect(boss.global_position.distance_to(Vector2(6000, -1188)) < 1.0, "Main Boss spawn mismatch")
 	if player != null and spawn != null:
 		player.global_position = spawn.global_position
-		_expect(player.global_position == Vector2(27032, 584), "CH2_BOSS spawn mismatch")
+		_expect(player.global_position == Vector2(2500, -1216), "CH2_BOSS spawn mismatch")
 	_finish()
 
 

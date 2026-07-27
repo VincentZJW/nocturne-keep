@@ -6,7 +6,7 @@
 
 ## 当前范围
 
-F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人。第二章现有九房间立体灰盒、五种可战斗敌人原型，以及完整接入Silent Ballroom的两阶段Boss空心公爵夫人·瑟芙琳。15组正式Encounter、34敌人正式编排、商店和最终环境美术尚未开始。
+F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人。第二章现已重构为九房间、三楼层的蛇形古堡路线，包含15组正式Encounter、38只普通敌人、五种第二章敌人和完整接入Silent Ballroom的两阶段Boss空心公爵夫人·瑟芙琳；商店与最终环境精修仍未开始。
 
 ## 环境要求
 
@@ -42,7 +42,7 @@ res://scenes/bootstrap/main_bootstrap.tscn
 
 第二章主场景为`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`。它保留九房间灰盒和正式章节边界，并在`Phase2EnemyPrototypeShowcase`下放置五个独立验收实例；这些不是正式EncounterGroup，不代表最终数量或布阵。
 
-第二章开发直达：将Debug开关设为`true`、`debug_start_chapter_id`设为`CHAPTER_02_SILENT_COURT`、`debug_start_spawn_id`设为`&"CH2_START"`后按F5。Output必须打印`DEBUG CHAPTER START ACTIVE`并直接进入`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`；此模式不会播放Opening或进入墓窟。
+第二章开发直达：将Debug开关设为`true`、`debug_start_chapter_id`设为`CHAPTER_02_SILENT_COURT`、`debug_start_spawn_id`设为`&"CH2_FLOOR_1_START"`（兼容`&"CH2_START"`）后按F5。Output必须打印`DEBUG CHAPTER START ACTIVE`并直接进入`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`；此模式不会播放Opening或进入墓窟。新版路线为F1向右→宴会主楼梯→F2向左→仆役侧楼梯→F3向右→Silent Ballroom；楼层直达还可使用`CH2_FLOOR_2_START`、`CH2_FLOOR_2_CHAPEL`、`CH2_FLOOR_3_START`和`CH2_BOSS`。
 
 第二章五敌人独立验收房：
 

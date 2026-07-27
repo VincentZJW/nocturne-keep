@@ -12,12 +12,15 @@ const ROOM_NODES: Array[String] = [
 	"RoyalPortraitGallery", "BloodCandleChapel", "ServantPassage",
 	"OldArmorySafeRoom", "SilentBallroomAntechamber", "SilentBallroom",
 ]
-const ROOM_X: Array[float] = [0.0, 2304.0, 6912.0, 11520.0, 15616.0, 19456.0, 22784.0, 24832.0, 27520.0]
-const EXPECTED_PLATFORM_COUNTS: Array[int] = [2, 3, 7, 5, 6, 3, 2, 2, 0]
-const EXPECTED_STAIR_COUNTS: Array[int] = [1, 2, 1, 0, 1, 1, 1, 1, 0]
+const ROOM_X: Array[float] = [0.0, 1408.0, 4224.0, 3968.0, 1280.0, 0.0, 3200.0, 0.0, 2688.0]
+const ROOM_Y: Array[float] = [0.0, 0.0, 0.0, -900.0, -900.0, -900.0, 0.0, -1800.0, -1800.0]
+const EXPECTED_PLATFORM_COUNTS: Array[int] = [1, 1, 2, 4, 4, 0, 1, 2, 0]
+const EXPECTED_STAIR_COUNTS: Array[int] = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 const MAX_REQUIRED_TIER_RISE: float = 120.0
 const SPAWN_IDS: Array[StringName] = [
 	&"CH2_START", &"CH2_BANQUET", &"CH2_GALLERY", &"CH2_CHAPEL", &"CH2_ARMORY", &"CH2_BOSS",
+	&"CH2_FLOOR_1_START", &"CH2_FLOOR_1_BANQUET", &"CH2_FLOOR_2_START",
+	&"CH2_FLOOR_2_CHAPEL", &"CH2_FLOOR_3_START",
 ]
 
 var _failures: Array[String] = []
@@ -60,36 +63,28 @@ func _test_composed_level() -> void:
 	await process_frame
 	_expect(_count_players(level) == 1, "Level does not contain exactly one Player")
 	_expect(_count_stamina_huds(level) == 1, "Level does not contain exactly one stamina HUD")
-	_expect(level.get_node_or_null("ChapterRuntime/HUD/HealthContainer") is PlayerHealthHud, "Health HUD is missing")
-	_expect(level.get_node_or_null("ChapterRuntime/PlayerRespawnController") is PlayerRespawnController, "Respawn controller is missing")
+	_expect(level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/HealthContainer") is PlayerHealthHud, "Health HUD is missing")
+	_expect(level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/PlayerRespawnController") is PlayerRespawnController, "Respawn controller is missing")
 	for index: int in range(ROOM_NODES.size()):
-		var room: Node2D = level.get_node_or_null("Rooms/%s" % ROOM_NODES[index]) as Node2D
+		var room: Node2D = level.get_node_or_null("GameplayWorld/Geometry/Rooms/%s" % ROOM_NODES[index]) as Node2D
 		_expect(room != null, "Missing room instance: %s" % ROOM_NODES[index])
 		if room != null:
 			_expect(is_equal_approx(room.position.x, ROOM_X[index]), "Room x mismatch: %s" % ROOM_NODES[index])
+			_expect(is_equal_approx(room.position.y, ROOM_Y[index]), "Room y mismatch: %s" % ROOM_NODES[index])
+			_expect(room.z_index == -60 and not room.z_as_relative, "Room backdrop layer mismatch: %s" % ROOM_NODES[index])
 			_expect(room.get_node_or_null("Geometry/MainFloor/CollisionShape2D") is CollisionShape2D, "Missing floor: %s" % ROOM_NODES[index])
-			_expect(room.get_node_or_null("Geometry/CeilingBoundary/CollisionShape2D") is CollisionShape2D, "Missing ceiling: %s" % ROOM_NODES[index])
 			_expect(room.get_node_or_null("CameraBounds") is Chapter02CameraBounds, "Missing CameraBounds: %s" % ROOM_NODES[index])
 			_test_room_vertical_geometry(room as Chapter02RoomGraybox, index)
-	_expect(level.get_node_or_null("Rooms/GreyBannerCorridor/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Corridor stair ramp is missing")
-	_expect(level.get_node_or_null("Rooms/GreyBannerCorridor/Geometry/StairRamp02/CollisionPolygon2D") is CollisionPolygon2D, "Corridor descent stair is missing")
-	_expect(level.get_node_or_null("Rooms/LastBanquetHall/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Banquet continuous stair is missing")
-	_expect(level.get_node_or_null("Rooms/ServantPassage/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Passage undulating stair is missing")
-	_expect(level.get_node_or_null("Rooms/BloodCandleChapel/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Chapel three-tier stair is missing")
-	_expect(level.get_node_or_null("Rooms/LastBanquetHall/Geometry/UpperPlatform01/CollisionShape2D") is CollisionShape2D, "Banquet table collision is missing")
-	_expect(level.get_node_or_null("Rooms/BloodCandleChapel/Geometry/UpperPlatform06/CollisionShape2D") is CollisionShape2D, "Chapel altar collision is missing")
+	_expect(level.get_node_or_null("GameplayWorld/Geometry/GrandServiceStair/Geometry/CollisionPolygon2D") is CollisionPolygon2D, "Grand Service Stair collision is missing")
+	_expect(level.get_node_or_null("GameplayWorld/Geometry/ServantSideStair/Geometry/CollisionPolygon2D") is CollisionPolygon2D, "Servant Side Stair collision is missing")
+	_expect(level.get_node_or_null("GameplayWorld/Geometry/Rooms/LastBanquetHall/Geometry/UpperPlatform01/CollisionShape2D") is CollisionShape2D, "Banquet table collision is missing")
+	_expect(level.get_node_or_null("GameplayWorld/Geometry/Rooms/BloodCandleChapel/Geometry/UpperPlatform04/CollisionShape2D") is CollisionShape2D, "Chapel altar collision is missing")
 	_test_required_anchors(level)
-	_expect(_count_enemy_bodies(level) == 5, "Phase 2 showcase must contain exactly five prototype enemies")
-	for prototype_name: String in [
-		"HollowRetainerPrototype", "CourtHalberdierPrototype", "MourningArmorPrototype",
-		"BloodCandleAcolytePrototype", "HangingStalkerPrototype",
-	]:
-		_expect(
-			level.get_node_or_null("Phase2EnemyPrototypeShowcase/%s" % prototype_name) is EnemyCombatant,
-			"Missing Phase 2 Main prototype: %s" % prototype_name
-		)
-	var player: Player = level.get_node("ChapterRuntime/Player") as Player
-	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 32128, "Camera horizontal limits mismatch")
+	_expect(_count_enemy_bodies(level) == 38, "Chapter II must contain exactly 38 ordinary enemies")
+	_expect((level.get_node("GameplayWorld/Enemies") as Node2D).z_index == 10, "Enemy layer must be z=10")
+	var player: Player = level.get_node("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
+	_expect(player.z_index == 12 and not player.z_as_relative, "Player layer must be z=12")
+	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 7168, "Camera horizontal limits mismatch")
 	var wallet: CurrencyWallet = root.get_node_or_null("CurrencyManager") as CurrencyWallet
 	var equipment: PlayerEquipmentManager = root.get_node_or_null("EquipmentManager") as PlayerEquipmentManager
 	_expect(wallet != null and wallet.current_coins == 30, "Debug currency was not applied")
@@ -126,29 +121,18 @@ func _test_room_vertical_geometry(room: Chapter02RoomGraybox, room_index: int) -
 
 func _test_required_anchors(level: Node) -> void:
 	var paths: Array[String] = [
-		"Rooms/CastleGateInterior/DoorAnchors/GateInteriorExitDoor",
-		"Rooms/GreyBannerCorridor/DoorAnchors/CorridorEncounterGate",
-		"Rooms/LastBanquetHall/DoorAnchors/BanquetEncounterGate",
-		"Rooms/RoyalPortraitGallery/DoorAnchors/GalleryConnectionDoor",
-		"Rooms/BloodCandleChapel/DoorAnchors/ChapelEncounterGate",
-		"Rooms/ServantPassage/DoorAnchors/ServantConnectionDoor",
-		"Rooms/OldArmorySafeRoom/DoorAnchors/ArmoryShortcutDoor",
-		"Rooms/SilentBallroomAntechamber/DoorAnchors/BallroomAntechamberDoor",
-		"Rooms/SilentBallroomAntechamber/DoorAnchors/SilentBallroomBossDoor",
-		"Rooms/SilentBallroom/DoorAnchors/SilentBallroomExitDoor",
-		"Rooms/CastleGateInterior/CheckpointAnchors/Chapter02CP01",
-		"Rooms/LastBanquetHall/CheckpointAnchors/Chapter02CP02",
-		"Rooms/BloodCandleChapel/CheckpointAnchors/Chapter02CP03",
-		"Rooms/OldArmorySafeRoom/CheckpointAnchors/Chapter02CP04",
-		"Rooms/SilentBallroomAntechamber/CheckpointAnchors/Chapter02CP05",
-		"Rooms/CastleGateInterior/NarrativeAnchors/Chapter02TitleTrigger",
-		"Rooms/LastBanquetHall/NarrativeAnchors/BanquetMemoryTrigger",
-		"Rooms/RoyalPortraitGallery/NarrativeAnchors/ElowenPortraitTrigger",
-		"Rooms/RoyalPortraitGallery/NarrativeAnchors/RoyalKeyMemoryTrigger",
-		"Rooms/BloodCandleChapel/NarrativeAnchors/ChapelLoreTrigger",
-		"Rooms/SilentBallroomAntechamber/NarrativeAnchors/BossIntroTrigger",
-		"BossArea/BossSpawn", "BossArea/PlayerBossEntry", "BossArea/BossActivationArea",
-		"BossArea/BossCameraBounds", "BossArea/BossDoorRear", "BossArea/BossExitDoor",
+		"GameplayWorld/Geometry/Rooms/CastleGateInterior/DoorAnchors/GateInteriorExitDoor",
+		"GameplayWorld/Geometry/Rooms/GreyBannerCorridor/DoorAnchors/CorridorEncounterGate",
+		"GameplayWorld/Geometry/Rooms/LastBanquetHall/DoorAnchors/BanquetEncounterGate",
+		"GameplayWorld/Geometry/Rooms/RoyalPortraitGallery/DoorAnchors/GalleryConnectionDoor",
+		"GameplayWorld/Geometry/Rooms/BloodCandleChapel/DoorAnchors/ChapelEncounterGate",
+		"GameplayWorld/Geometry/Rooms/ServantPassage/DoorAnchors/ServantConnectionDoor",
+		"GameplayWorld/Geometry/Rooms/OldArmorySafeRoom/DoorAnchors/ArmoryShortcutDoor",
+		"GameplayWorld/Geometry/Rooms/SilentBallroomAntechamber/DoorAnchors/BallroomAntechamberDoor",
+		"GameplayWorld/Geometry/Rooms/SilentBallroomAntechamber/DoorAnchors/SilentBallroomBossDoor",
+		"GameplayWorld/Geometry/Rooms/SilentBallroom/DoorAnchors/SilentBallroomExitDoor",
+		"GameplayWorld/BossArea/BossSpawn", "GameplayWorld/BossArea/PlayerBossEntry", "GameplayWorld/BossArea/BossActivationArea",
+		"GameplayWorld/BossArea/BossCameraBounds", "GameplayWorld/BossArea/BossDoorRear", "GameplayWorld/BossArea/BossExitDoor",
 	]
 	for path: String in paths:
 		_expect(level.get_node_or_null(path) != null, "Missing required anchor: %s" % path)
@@ -156,7 +140,7 @@ func _test_required_anchors(level: Node) -> void:
 		var encounter_name: String = "E%02d" % encounter_index
 		var found: bool = false
 		for room_name: String in ROOM_NODES:
-			if level.get_node_or_null("Rooms/%s/EncounterAnchors/%s" % [room_name, encounter_name]) != null:
+			if level.get_node_or_null("GameplayWorld/Geometry/Rooms/%s/EncounterAnchors/%s" % [room_name, encounter_name]) != null:
 				found = true
 				break
 		_expect(found, "Missing encounter anchor: %s" % encounter_name)
@@ -178,7 +162,7 @@ func _test_all_debug_spawns() -> void:
 		root.add_child(level)
 		await process_frame
 		var marker: Marker2D = level.get_node("PlayerSpawnPoints/%s" % spawn_id) as Marker2D
-		var player: Player = level.get_node("ChapterRuntime/Player") as Player
+		var player: Player = level.get_node("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
 		_expect(player.global_position.distance_to(marker.global_position) < 1.0, "Debug spawn failed: %s" % spawn_id)
 		level.queue_free()
 		await process_frame
@@ -221,7 +205,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 spawns=6 encounters=15 prototypes=5 player=1 hud=1")
+		print("SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 floors=3 spawns=11 encounters=15 enemies=38 player=1 hud=1")
 		quit(0)
 		return
 	for failure: String in _failures:

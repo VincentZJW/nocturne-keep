@@ -1,18 +1,22 @@
 class_name SilentCourtLevel
 extends Node2D
 
-const CHAPTER_WIDTH: int = 32128
+const CHAPTER_WIDTH: int = 7168
 const DEFAULT_SPAWN_ID: StringName = &"CH2_START"
 
-@onready var player: Player = $ChapterRuntime/Player as Player
+@onready var player: Player = $GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player as Player
 @onready var respawn_controller: PlayerRespawnController = (
-	$ChapterRuntime/PlayerRespawnController as PlayerRespawnController
+	$GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/PlayerRespawnController as PlayerRespawnController
 )
 @onready var spawn_points: Node2D = $PlayerSpawnPoints as Node2D
-@onready var room_name_label: Label = $ChapterRuntime/HUD/RoomName as Label
+@onready var room_name_label: Label = (
+	$GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/RoomName as Label
+)
 
 
 func _ready() -> void:
+	player.z_index = 12
+	player.z_as_relative = false
 	_connect_camera_bounds()
 	_apply_debug_start_profile()
 
@@ -41,7 +45,8 @@ func _apply_debug_start_profile() -> void:
 	player.global_position = marker.global_position
 	player.velocity = Vector2.ZERO
 	respawn_controller.set_spawn_point(marker)
-	_configure_camera(0, 720)
+	var floor_limits: Vector2i = _floor_limits_for_y(marker.global_position.y)
+	_configure_camera(floor_limits.x, floor_limits.y)
 
 
 func _reset_disposable_debug_state(config: DebugRunConfigState) -> void:
@@ -60,7 +65,7 @@ func _reset_disposable_debug_state(config: DebugRunConfigState) -> void:
 
 
 func _connect_camera_bounds() -> void:
-	for child: Node in $Rooms.get_children():
+	for child: Node in $GameplayWorld/Geometry/Rooms.get_children():
 		var bounds: Chapter02CameraBounds = child.get_node_or_null("CameraBounds") as Chapter02CameraBounds
 		if bounds != null:
 			bounds.player_entered.connect(_on_room_entered)
@@ -79,3 +84,11 @@ func _configure_camera(top_limit: int, bottom_limit: int) -> void:
 	player.player_camera.limit_top = top_limit
 	player.player_camera.limit_bottom = bottom_limit
 	player.player_camera.reset_smoothing()
+
+
+func _floor_limits_for_y(world_y: float) -> Vector2i:
+	if world_y < -850.0:
+		return Vector2i(-1800, -1080)
+	if world_y < 50.0:
+		return Vector2i(-900, -180)
+	return Vector2i(0, 720)

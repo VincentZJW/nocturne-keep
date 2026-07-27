@@ -1,112 +1,100 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_jkvkd"]
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_w5u0h"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_hqmv6"]
-size = Vector2(2304, 108)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_f8pj3"]
-size = Vector2(2304, 64)
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_w5u0h"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_hqmv6"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_f8pj3"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fevi3"]
-size = Vector2(520, 24)
+size = Vector2(1408, 108)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ytpmg"]
-size = Vector2(420, 24)
+size = Vector2(384, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kgbe0"]
-size = Vector2(2304, 720)
+size = Vector2(1408, 720)
 
-[node name="CastleGateInterior" type="Node2D" unique_id=1590798351]
-script = ExtResource("1_jkvkd")
+[node name="CastleGateInterior" type="Node2D" unique_id=1189554758]
+z_index = -60
+z_as_relative = false
+script = ExtResource("1_w5u0h")
 room_id = &"CASTLE_GATE_INTERIOR"
 bilingual_name = "Castle Gate Interior / 王城门内"
-room_size = Vector2i(2304, 720)
-platform_rects = Array[Vector4]([Vector4(880, 520, 520, 24), Vector4(1540, 448, 420, 24)])
-stair_polygons = Array[PackedVector2Array]([PackedVector2Array(440, 612, 800, 520, 1420, 520, 1740, 612, 1740, 720, 440, 720)])
+room_size = Vector2i(1408, 720)
+accent_color = Color(0.32156864, 0.40392157, 0.49803922, 1)
+platform_rects = Array[Vector4]([Vector4(760, 508, 384, 24)])
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1972872310]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1019390057]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=1047944017]
+[node name="Geometry" type="Node2D" parent="." unique_id=757332914]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=667890569]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=958625767]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=425398150]
-position = Vector2(1152, 666)
-shape = SubResource("RectangleShape2D_hqmv6")
-
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=1461089173]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=97970987]
-position = Vector2(1152, -32)
-shape = SubResource("RectangleShape2D_f8pj3")
-
-[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1969624668]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=572710752]
-position = Vector2(1140, 532)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=1093490104]
+position = Vector2(704, 666)
 shape = SubResource("RectangleShape2D_fevi3")
+one_way_collision_margin = 8.0
 
-[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=2061934775]
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=911096756]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=1846378488]
-position = Vector2(1750, 460)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=853345156]
+position = Vector2(952, 520)
 shape = SubResource("RectangleShape2D_ytpmg")
 
-[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=562591371]
-collision_mask = 0
+[node name="WalkableSurfaceTrim" type="Node2D" parent="." unique_id=3538068]
+z_index = 20
+z_as_relative = false
+script = ExtResource("2_hqmv6")
+room_width = 1408.0
+trim_color = Color(0.37584314, 0.45160785, 0.5381961, 1)
+platform_rects = Array[Vector4]([Vector4(760, 508, 384, 24)])
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1598827698]
-polygon = PackedVector2Array(440, 612, 800, 520, 1420, 520, 1740, 612, 1740, 720, 440, 720)
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1903771052]
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=19326531]
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=1569425432]
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=477155257]
+[node name="GateInteriorExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1034913855]
+position = Vector2(1344, 612)
 
-[node name="GateInteriorExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1006543575]
-position = Vector2(2240, 612)
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=1571487586]
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=717745604]
-
-[node name="Chapter02CP01" type="Marker2D" parent="CheckpointAnchors" unique_id=710729144]
+[node name="Chapter02CP01" type="Marker2D" parent="CheckpointAnchors" unique_id=1953446037]
 position = Vector2(384, 612)
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1083514944]
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1387679797]
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1452032877]
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=2006455856]
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=693607285]
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=591313375]
 
-[node name="Chapter02TitleTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1066187673]
+[node name="Chapter02TitleTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1724699509]
 position = Vector2(640, 612)
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=79099173]
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=1231522817]
 
-[node name="GateUpperLookout" type="Marker2D" parent="RouteAnchors" unique_id=40419237]
-position = Vector2(1700, 450)
+[node name="GateUpperLookout" type="Marker2D" parent="RouteAnchors" unique_id=109704790]
+position = Vector2(920, 508)
 
-[node name="CameraBounds" type="Area2D" parent="." unique_id=14644950]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=1588508305]
 collision_layer = 0
 collision_mask = 2
-script = ExtResource("2_w5u0h")
+script = ExtResource("3_f8pj3")
 room_id = &"CASTLE_GATE_INTERIOR"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1069942568]
-position = Vector2(1152, 360)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1126381354]
+position = Vector2(704, 360)
 shape = SubResource("RectangleShape2D_kgbe0")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=989436793]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=1966107921]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=1279852876]
-position = Vector2(2240, 612)
+[node name="RoomExit" type="Marker2D" parent="." unique_id=1514380758]
+position = Vector2(1344, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=842509096]
+[node name="DebugLabel" type="Label" parent="." unique_id=1359318237]
+z_index = 100
+z_as_relative = false
 offset_left = 32.0
 offset_top = 28.0
 offset_right = 32.0

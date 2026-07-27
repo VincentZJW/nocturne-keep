@@ -83,10 +83,11 @@ func _draw_banners(top: float, width: float, count: int) -> void:
 
 func _draw_banquet(top: float, width: float) -> void:
 	_draw_banners(top, width, 6)
-	for x: float in [560.0, 1840.0, 3120.0, 3800.0]:
-		draw_rect(Rect2(x, 548.0, 520.0, 18.0), Color("4b3a35"))
+	for ratio: float in [0.10, 0.38, 0.66]:
+		var x: float = width * ratio
+		draw_rect(Rect2(x, 548.0, 440.0, 18.0), Color("4b3a35"))
 		draw_rect(Rect2(x + 32.0, 566.0, 12.0, 46.0), Color("302a2c"))
-		draw_rect(Rect2(x + 476.0, 566.0, 12.0, 46.0), Color("302a2c"))
+		draw_rect(Rect2(x + 396.0, 566.0, 12.0, 46.0), Color("302a2c"))
 
 
 func _draw_portraits(top: float, width: float, count: int) -> void:
@@ -98,10 +99,12 @@ func _draw_portraits(top: float, width: float, count: int) -> void:
 
 
 func _draw_chapel(top: float, width: float) -> void:
-	_draw_arches(top, width, 1440.0, 7)
-	draw_rect(Rect2(1660.0, 560.0, 520.0, 52.0), Color("4b4049"))
-	draw_rect(Rect2(1740.0, 536.0, 360.0, 24.0), accent_color.darkened(0.35))
-	for x: float in [480.0, 1120.0, 1920.0, 2720.0, 3440.0]:
+	_draw_arches(top, width, 840.0, 5)
+	var center_x: float = width * 0.5
+	draw_rect(Rect2(center_x - 260.0, 560.0, 520.0, 52.0), Color("4b4049"))
+	draw_rect(Rect2(center_x - 180.0, 536.0, 360.0, 24.0), accent_color.darkened(0.35))
+	for ratio: float in [0.14, 0.32, 0.50, 0.68, 0.86]:
+		var x: float = width * ratio
 		draw_line(Vector2(x, top + 190.0), Vector2(x, top + 420.0), Color("6e2634"), 5.0)
 		draw_circle(Vector2(x, top + 184.0), 8.0, Color("c58368"))
 
@@ -115,7 +118,8 @@ func _draw_servant_passage(top: float, width: float) -> void:
 
 func _draw_armory(top: float, width: float) -> void:
 	_draw_arches(top, width, 720.0, 4)
-	for x: float in [300.0, 780.0, 1260.0, 1740.0]:
+	for ratio: float in [0.16, 0.42, 0.68, 0.86]:
+		var x: float = width * ratio
 		draw_line(Vector2(x, 470.0), Vector2(x + 120.0, 560.0), Color("9aa7b3"), 5.0)
 		draw_line(Vector2(x + 120.0, 470.0), Vector2(x, 560.0), Color("657383"), 5.0)
 

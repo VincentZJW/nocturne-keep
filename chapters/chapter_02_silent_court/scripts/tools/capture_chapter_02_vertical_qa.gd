@@ -49,7 +49,7 @@ func _run() -> void:
 	if level == null:
 		_finish()
 		return
-	var player: Player = level.get_node_or_null("ChapterRuntime/Player") as Player
+	var player: Player = level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
 	if player == null:
 		_failures.append("Bootstrap Chapter II has no production Player")
 		_finish()

@@ -1,190 +1,168 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_h4is7"]
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_xkhuk"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_vyrhy"]
-size = Vector2(3840, 108)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_7nevq"]
-size = Vector2(3840, 64)
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_xkhuk"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_vyrhy"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_7nevq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b2dbe"]
-size = Vector2(480, 24)
+size = Vector2(2688, 108)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bbupp"]
-size = Vector2(480, 24)
+size = Vector2(440, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j3vaf"]
-size = Vector2(400, 24)
+size = Vector2(440, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kofnn"]
-size = Vector2(480, 24)
+size = Vector2(360, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_w7pkr"]
-size = Vector2(400, 24)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_xuen2"]
 size = Vector2(520, 52)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_ad5h8"]
-size = Vector2(3840, 1440)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xuen2"]
+size = Vector2(2688, 840)
 
-[node name="BloodCandleChapel" type="Node2D" unique_id=745453940]
-script = ExtResource("1_h4is7")
+[node name="BloodCandleChapel" type="Node2D" unique_id=818813675]
+z_index = -60
+z_as_relative = false
+script = ExtResource("1_xkhuk")
 room_id = &"BLOOD_CANDLE_CHAPEL"
 bilingual_name = "Blood Candle Chapel / 血烛礼拜堂"
 room_index = 5
-room_size = Vector2i(3840, 720)
-vertical_minimum = -720
+room_size = Vector2i(2688, 720)
+vertical_minimum = -120
 accent_color = Color(0.47843137, 0.2, 0.2627451, 1)
-platform_rects = Array[Vector4]([Vector4(560, 500, 480, 24), Vector4(1240, 380, 480, 24), Vector4(1920, 260, 400, 24), Vector4(2520, 380, 480, 24), Vector4(3200, 500, 400, 24), Vector4(1660, 560, 520, 52)])
-stair_polygons = Array[PackedVector2Array]([PackedVector2Array(240, 612, 560, 500, 1040, 500, 1240, 380, 1720, 380, 1920, 260, 2320, 260, 2520, 380, 3000, 380, 3200, 500, 3600, 500, 3760, 612, 3760, 720, 240, 720)])
+platform_rects = Array[Vector4]([Vector4(920, 400, 440, 24), Vector4(1480, 400, 440, 24), Vector4(2040, 500, 360, 24), Vector4(1080, 560, 520, 52)])
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1012723607]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1377113260]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=526800061]
+[node name="Geometry" type="Node2D" parent="." unique_id=2137046553]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=959125592]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=908875744]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=236229567]
-position = Vector2(1920, 666)
-shape = SubResource("RectangleShape2D_vyrhy")
-
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=499919682]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=517521319]
-position = Vector2(1920, -752)
-shape = SubResource("RectangleShape2D_7nevq")
-
-[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=904946576]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1123200476]
-position = Vector2(800, 512)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=172611123]
+position = Vector2(1344, 666)
 shape = SubResource("RectangleShape2D_b2dbe")
+one_way_collision = true
+one_way_collision_margin = 8.0
 
-[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=655754681]
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1994224513]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=1097673834]
-position = Vector2(1480, 392)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=936370667]
+position = Vector2(1140, 412)
 shape = SubResource("RectangleShape2D_bbupp")
 
-[node name="UpperPlatform03" type="StaticBody2D" parent="Geometry" unique_id=1856829445]
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=194457906]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform03" unique_id=1191981641]
-position = Vector2(2120, 272)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=2054756872]
+position = Vector2(1700, 412)
 shape = SubResource("RectangleShape2D_j3vaf")
 
-[node name="UpperPlatform04" type="StaticBody2D" parent="Geometry" unique_id=308471994]
+[node name="UpperPlatform03" type="StaticBody2D" parent="Geometry" unique_id=1122551140]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform04" unique_id=134261091]
-position = Vector2(2760, 392)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform03" unique_id=1769247175]
+position = Vector2(2220, 512)
 shape = SubResource("RectangleShape2D_kofnn")
 
-[node name="UpperPlatform05" type="StaticBody2D" parent="Geometry" unique_id=1113870062]
+[node name="UpperPlatform04" type="StaticBody2D" parent="Geometry" unique_id=1528454360]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform05" unique_id=2048824959]
-position = Vector2(3400, 512)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform04" unique_id=1488903753]
+position = Vector2(1340, 586)
 shape = SubResource("RectangleShape2D_w7pkr")
 
-[node name="UpperPlatform06" type="StaticBody2D" parent="Geometry" unique_id=834950194]
-collision_mask = 0
+[node name="WalkableSurfaceTrim" type="Node2D" parent="." unique_id=291472999]
+z_index = 20
+z_as_relative = false
+script = ExtResource("2_vyrhy")
+room_width = 2688.0
+trim_color = Color(0.52015686, 0.264, 0.3217255, 1)
+platform_rects = Array[Vector4]([Vector4(920, 400, 440, 24), Vector4(1480, 400, 440, 24), Vector4(2040, 500, 360, 24), Vector4(1080, 560, 520, 52)])
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform06" unique_id=1087617346]
-position = Vector2(1920, 586)
-shape = SubResource("RectangleShape2D_xuen2")
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=734646138]
 
-[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=1895841759]
-collision_mask = 0
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=234674364]
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1954686432]
-polygon = PackedVector2Array(240, 612, 560, 500, 1040, 500, 1240, 380, 1720, 380, 1920, 260, 2320, 260, 2520, 380, 3000, 380, 3200, 500, 3600, 500, 3760, 612, 3760, 720, 240, 720)
+[node name="ChapelEncounterGate" type="Marker2D" parent="DoorAnchors" unique_id=809055996]
+position = Vector2(80, 612)
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1645939008]
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=2147189123]
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=1951065019]
+[node name="Chapter02CP03" type="Marker2D" parent="CheckpointAnchors" unique_id=783683380]
+position = Vector2(220, 612)
 
-[node name="ChapelEncounterGate" type="Marker2D" parent="DoorAnchors" unique_id=268074587]
-position = Vector2(820, 612)
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1280924661]
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=2123573144]
+[node name="E09" type="Marker2D" parent="EncounterAnchors" unique_id=1152806831]
+position = Vector2(2200, 612)
 
-[node name="Chapter02CP03" type="Marker2D" parent="CheckpointAnchors" unique_id=225330121]
-position = Vector2(3600, 612)
+[node name="E10" type="Marker2D" parent="EncounterAnchors" unique_id=1685617408]
+position = Vector2(1400, 612)
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1138534267]
+[node name="E11" type="Marker2D" parent="EncounterAnchors" unique_id=1350598101]
+position = Vector2(640, 612)
 
-[node name="E09" type="Marker2D" parent="EncounterAnchors" unique_id=1164413674]
-position = Vector2(720, 500)
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=283902231]
 
-[node name="E10" type="Marker2D" parent="EncounterAnchors" unique_id=976654414]
-position = Vector2(1480, 380)
+[node name="E09_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=337338821]
+position = Vector2(2144, 612)
 
-[node name="E11" type="Marker2D" parent="EncounterAnchors" unique_id=698323796]
-position = Vector2(2760, 380)
+[node name="E09_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1629528217]
+position = Vector2(2256, 612)
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=486089198]
+[node name="E10_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=258565118]
+position = Vector2(1344, 612)
 
-[node name="E09_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=981724535]
-position = Vector2(664, 500)
+[node name="E10_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1733806475]
+position = Vector2(1456, 612)
 
-[node name="E09_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1989987642]
-position = Vector2(776, 500)
+[node name="E11_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1331396115]
+position = Vector2(584, 612)
 
-[node name="E10_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1358082866]
-position = Vector2(1424, 380)
+[node name="E11_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=775650745]
+position = Vector2(696, 612)
 
-[node name="E10_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1518307597]
-position = Vector2(1536, 380)
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1510284224]
 
-[node name="E11_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1471386388]
-position = Vector2(2704, 380)
+[node name="ChapelLoreTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1121801109]
+position = Vector2(1320, 612)
 
-[node name="E11_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=965704533]
-position = Vector2(2816, 380)
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=1755334353]
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=2076749182]
+[node name="ChapelCeilingAnchor" type="Marker2D" parent="RouteAnchors" unique_id=927268329]
+position = Vector2(1344, 70)
 
-[node name="ChapelLoreTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1595839895]
-position = Vector2(1940, 612)
+[node name="BloodCandleAnchor" type="Marker2D" parent="RouteAnchors" unique_id=1539976895]
+position = Vector2(1344, 510)
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=518110757]
-
-[node name="ChapelCeilingAnchor" type="Marker2D" parent="RouteAnchors" unique_id=504058859]
-position = Vector2(1920, -520)
-
-[node name="BloodCandleAnchor" type="Marker2D" parent="RouteAnchors" unique_id=1114733630]
-position = Vector2(1920, 222)
-
-[node name="CameraBounds" type="Area2D" parent="." unique_id=1769660431]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=558839410]
 collision_layer = 0
 collision_mask = 2
-script = ExtResource("2_xkhuk")
+script = ExtResource("3_7nevq")
 room_id = &"BLOOD_CANDLE_CHAPEL"
-vertical_limits = Vector2i(-720, 720)
+vertical_limits = Vector2i(-120, 720)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1229403254]
-position = Vector2(1920, 0)
-shape = SubResource("RectangleShape2D_ad5h8")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=457907892]
+position = Vector2(1344, 300)
+shape = SubResource("RectangleShape2D_xuen2")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=840157931]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=635511987]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=1137987181]
-position = Vector2(3776, 612)
+[node name="RoomExit" type="Marker2D" parent="." unique_id=2127186149]
+position = Vector2(2624, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=1348502646]
+[node name="DebugLabel" type="Label" parent="." unique_id=1307901555]
+z_index = 100
+z_as_relative = false
 offset_left = 32.0
-offset_top = -692.0
+offset_top = -92.0
 offset_right = 32.0
-offset_bottom = -692.0
+offset_bottom = -92.0
 theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
 text = "05 · Blood Candle Chapel / 血烛礼拜堂"

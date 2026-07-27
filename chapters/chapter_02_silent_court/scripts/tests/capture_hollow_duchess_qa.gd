@@ -30,8 +30,8 @@ func _run() -> void:
 	if level == null:
 		_fail("SilentCourt did not load through MainBootstrap")
 		return
-	var player: Player = level.get_node_or_null("ChapterRuntime/Player") as Player
-	var boss: HollowDuchess = level.get_node_or_null("BossArea/HollowDuchess") as HollowDuchess
+	var player: Player = level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
+	var boss: HollowDuchess = level.get_node_or_null("GameplayWorld/BossArea/HollowDuchess") as HollowDuchess
 	var controller: HollowDuchessRoomController = level.get_node_or_null(
 		"ChapterSystems/HollowDuchessRoomController"
 	) as HollowDuchessRoomController
@@ -40,12 +40,12 @@ func _run() -> void:
 		return
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
 	player.hurtbox.set_invulnerable(true)
-	player.global_position = Vector2(28160.0, 584.0)
+	player.global_position = Vector2(3100.0, -1216.0)
 	player.velocity = Vector2.ZERO
 	await _wait_physics_frames(4)
 	if not controller.encounter_started:
 		controller._on_activation_body_entered(player)
-	player.global_position = Vector2(30620.0, 584.0)
+	player.global_position = Vector2(5700.0, -1216.0)
 	player.player_camera.reset_smoothing()
 	await _wait_process_frames(8)
 	_save_viewport("01_intro_main.png")

@@ -14,7 +14,7 @@ const ROOM_SLUGS: Array[String] = [
 const INSPECTION_SECONDS_PER_ROOM: float = 25.0
 const MAX_TRAVERSAL_SECONDS_PER_ROOM: float = 40.0
 
-@export_node_path("Player") var player_path: NodePath = NodePath("../../ChapterRuntime/Player")
+@export_node_path("Player") var player_path: NodePath = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
 
 @onready var player: Player = get_node(player_path) as Player
 

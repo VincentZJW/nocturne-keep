@@ -4380,3 +4380,48 @@ Status: complete — implementation, Main integration, exact-engine regression a
 - Automated fights use the real damage component chain and real Boss AI while protecting the test Player from death. They prove state/cadence/victory completion, not subjective reaction comfort or player skill balance.
 - Manual F5 acceptance should judge Rapier/Fan silhouette clarity, Riposte/Side-Step punish windows, 0.58-second Turn readability, Phantom lane contrast, Final Waltz routing, camera extremes and whether one safe punish but not three greedy hits feels consistent.
 - The five Phase 2 enemy showcase instances and formal E01–E15 population remain unchanged. Chapter III, shop, final environment art and unrelated Chapter I/user-owned dirty paths remain outside this commit.
+
+## 2026-07-27 — Chapter II layering repair and three-floor rebuild
+
+Status: complete — Main integration, three-floor route, layer/collision evidence and exact-engine regression passed; human combat/pacing acceptance pending
+
+### Goal and scope
+
+- Repair the live Chapter II actor/terrain draw-order fault, normalize runtime enemy parenting and safe spawn placement, and rebuild the 32,128 px single-floor strip as a compact three-floor castle.
+- Preserve Player movement, Ravenfang damage, enemy/Boss tuning, loot/currency, Chapter I, save foundations and Chapter III scope. The existing Hollow Duchess remains the third-floor terminal Boss.
+- Deliver through the configured `MainBootstrap` F5 path with chapter debug selectors, exact Godot 4.7.1 tests, live collision/layer evidence and twelve rendered Main screenshots.
+
+### Pre-implementation audit and plan
+
+- Work begins on `master` at `5e9e83df076e8da9f87e24312d09645027ebd5b3`; `project.godot` resolves `run/main_scene` to `res://scenes/bootstrap/main_bootstrap.tscn`, and Chapter II Main is `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`.
+- The broken Banquet actor path is rooted at `SilentCourt/Phase2EnemyPrototypeShowcase/MourningArmorPrototype`; all five prototype enemies are chapter-root siblings of `Rooms`, remain at default `z_index=0`, and use manually authored old single-floor coordinates. The room root `Chapter02RoomGraybox` also draws background masonry, the complete 108 px ground fill, raised-route fill and surface edge in one default-z CanvasItem. Player visuals happen to use local z 1/2, explaining why Player is readable while default-z enemies merge with or fall behind the ground drawing.
+- No Chapter II room uses `CanvasLayer` or Y-sort; only the shared HUD is a CanvasLayer. Enemy Sprite/CharacterBody origins use the common 64 px centered-frame contract with a 28 px foot offset; old showcase instances were placed at player-origin y=584 without a formal spawn/snap service. Room `EnemySpawnAnchors` are inert children of offset room scenes, so using their local values as globals would double/miss room transforms.
+- Current Chapter II bounds are `0..32128`; Chapter I's real outer wall is at x=6624. The rebuild target is 7168 px (108.2% of Chapter I), with floor surfaces at y=612, -288 and -1188 and two continuous collision-backed stairs. Existing room widths total 32,128 px and repeat the same full-screen masonry/floor treatment.
+- Planned task-owned files: Chapter II level/room builder and presentation scripts, two stair scenes, runtime encounter/spawn composition, Chapter II Start Profile/spawns, focused tests/QA capture, five Chapter II specifications and this log. Existing user-owned Chapter I/shared tuning and QA changes will remain unstaged and untouched.
+
+### Delivered implementation
+
+- Replaced the 32,128 px one-floor strip with a 7,168 px-wide three-floor snake route: F1 moves right at surface y=612, F2 moves left at y=-288, and F3 moves right at y=-1188 into the existing Hollow Duchess room. This is 108.2% of Chapter I's measured 6,624 px width and removes 77.7% of Chapter II's former horizontal span.
+- Rebuilt the saved Main hierarchy around explicit absolute world layers: Far/Mid/Architecture/GroundBack at z=-100/-80/-60/-30, room art at z=-60, PropsBehind at z=-10, enemies/Boss at z=10, Player at z=12, pickups at z=14, projectiles/effects at z=16, three-pixel walkable trim at z=20, front props at z=25 and foreground at z=30. Y-sort remains disabled; the shared HUD remains the sole gameplay CanvasLayer.
+- Removed `Phase2EnemyPrototypeShowcase` and centralized 38 finite normal-enemy instances under `GameplayWorld/Enemies/EncounterE01..E15`. All ground definitions now store global foot coordinates and apply `Vector2(0,-28)` exactly once; ceiling and air actors use explicit anchor types. Vertical activation filtering prevents another floor at the same x coordinate from engaging.
+- Reauthored all nine room scenes with compact room widths, distinct F1/F2/F3 native-2D first-pass art and separated full ground fill from the three-pixel foreground surface trim. Added wide Grand Service and narrow Servant Side staircase scenes with continuous collision polygons and narrow structural beams; there is no large high-z ground or stair polygon covering actors.
+- Moved the production Boss area to the third-floor Ballroom, updated its activation/camera/door paths, and added the six requested floor selectors through the formal Chapter Start Profile: `CH2_FLOOR_1_START`, `CH2_FLOOR_1_BANQUET`, `CH2_FLOOR_2_START`, `CH2_FLOOR_2_CHAPEL`, `CH2_FLOOR_3_START`, `CH2_BOSS`.
+- Fixed room camera bounds to include the room root's world y offset. All floors share horizontal limits 0..7168; vertical limits are 0..720, -900..-180 and -1800..-1080, with a combined transition range while the Player is on either staircase.
+
+### Exact commands and actual results
+
+1. Exact-engine import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — exit 0, no parser/resource/import error.
+2. Saved-scene contract: `... --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_silent_court_graybox.gd` — `PASS rooms=9 floors=3 spawns=11 encounters=15 enemies=38 player=1 hud=1`.
+3. Boss/Main regression: `... test_hollow_duchess_main_integration.gd` — `PASS boss=1 doors=2 cp05=1 hud=1` after the third-floor relocation.
+4. Three physics/Input Map route passes: `... test_chapter_02_three_floor_route.gd` — all three reached `(5708.55,-1216.075)`, each logged 90.90 simulated seconds and `softlocks=0`.
+5. Chapter II focused suite: 7/7 passed. Full recursive deterministic suite: `FULL_SUITE tests=47 passed=47 failed=0`.
+6. Graphical MainBootstrap capture: `... --script res://chapters/chapter_02_silent_court/scripts/tools/capture_chapter_02_three_floor_qa.gd` — `PASS captures=12 encounters=15 enemies=38`; live tree printed Player z=12, Enemies z=10 and Y-sort off.
+7. Visible collision capture: `... capture_chapter_02_collision_audit.gd` — `PASS`; Banquet floor collision at y=612, authored Retainer foot `(4740,612)`, settled actor origin near `(4740,583.49)`.
+8. `git diff --check` — PASS after final documentation/staging review.
+
+### Scope, evidence and known limitations
+
+- QA ledger and 13 rendered 1280x720 images: `docs/qa/chapter_02_three_floor/chapter_02_three_floor_qa_report.md`. It covers all floors, both stairs, the Boss lane and visible collision shapes.
+- Automated traversal deliberately disables combat and uses real Player physics/Input Map. It proves three complete routes without softlock, but it does not substantiate the 25–35 minute first-play target; combat pacing, encounter fairness and stair feel remain human F5 acceptance items.
+- Environment art is an editable Godot-native first playable pass, not final tiles or independent painted concept art. Floor-owned folders contain honest replacement-slot README files and are not claimed as completed concept sheets.
+- No Chapter I, Player tuning, Ravenfang damage, Chapter II enemy/Boss balance, loot/currency, save foundation or Chapter III logic was changed. Pre-existing user-owned Chapter I/shared resource and QA changes remain preserved outside this commit.

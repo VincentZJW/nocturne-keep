@@ -13,4 +13,8 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node2D) -> void:
 	if body is Player:
-		player_entered.emit(room_id, vertical_limits)
+		var room_offset_y: int = int(round(get_parent().global_position.y))
+		player_entered.emit(
+			room_id,
+			Vector2i(vertical_limits.x + room_offset_y, vertical_limits.y + room_offset_y)
+		)

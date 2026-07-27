@@ -6,6 +6,9 @@ const ROOM_SCRIPT: Script = preload(
 const CAMERA_BOUNDS_SCRIPT: Script = preload(
 	"res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd"
 )
+const SURFACE_TRIM_SCRIPT: Script = preload(
+	"res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd"
+)
 const OUTPUT_DIRECTORY: String = "res://chapters/chapter_02_silent_court/scenes/rooms"
 
 var _failures: Array[String] = []
@@ -28,6 +31,8 @@ func _build_room(data: Dictionary) -> void:
 	var root: Node2D = Node2D.new()
 	root.name = String(data["node_name"])
 	root.set_script(ROOM_SCRIPT)
+	root.z_index = -60
+	root.z_as_relative = false
 	root.set("room_id", StringName(data["room_id"]))
 	root.set("bilingual_name", String(data["bilingual_name"]))
 	root.set("room_index", int(data["index"]))
@@ -45,12 +50,11 @@ func _build_room(data: Dictionary) -> void:
 	geometry.name = "Geometry"
 	root.add_child(geometry)
 	_add_static_rectangle(geometry, "MainFloor", Vector2(float(data["width"]) * 0.5, 666.0), Vector2(float(data["width"]), 108.0))
-	_add_static_rectangle(
-		geometry,
-		"CeilingBoundary",
-		Vector2(float(data["width"]) * 0.5, float(data["top"]) - 32.0),
-		Vector2(float(data["width"]), 64.0)
-	)
+	var main_floor_collision: CollisionShape2D = geometry.get_node(
+		"MainFloor/CollisionShape2D"
+	) as CollisionShape2D
+	main_floor_collision.one_way_collision = bool(data.get("upper_floor", false))
+	main_floor_collision.one_way_collision_margin = 8.0
 	var platforms: Array = data["platforms"] as Array
 	for platform_index: int in range(platforms.size()):
 		var platform: Vector4 = platforms[platform_index] as Vector4
@@ -63,6 +67,18 @@ func _build_room(data: Dictionary) -> void:
 	var ramps: Array = data["ramps"] as Array
 	for ramp_index: int in range(ramps.size()):
 		_add_static_polygon(geometry, "StairRamp%02d" % (ramp_index + 1), ramps[ramp_index] as PackedVector2Array)
+
+	var surface_trim: Node2D = Node2D.new()
+	surface_trim.name = "WalkableSurfaceTrim"
+	surface_trim.z_index = 20
+	surface_trim.z_as_relative = false
+	surface_trim.set_script(SURFACE_TRIM_SCRIPT)
+	surface_trim.set("room_width", float(data["width"]))
+	surface_trim.set("floor_y", 612.0)
+	surface_trim.set("trim_color", (data["accent"] as Color).lightened(0.08))
+	surface_trim.set("platform_rects", _typed_platforms(data["platforms"] as Array))
+	surface_trim.set("stair_polygons", _typed_ramps(data["ramps"] as Array))
+	root.add_child(surface_trim)
 
 	var props: Node2D = Node2D.new()
 	props.name = "PropsPlaceholder"
@@ -106,6 +122,8 @@ func _build_room(data: Dictionary) -> void:
 	label.text = "%02d · %s" % [int(data["index"]), String(data["bilingual_name"])]
 	label.add_theme_font_size_override("font_size", 18)
 	label.add_theme_color_override("font_color", Color(0.72, 0.77, 0.86, 0.82))
+	label.z_index = 100
+	label.z_as_relative = false
 	root.add_child(label)
 
 	_set_owner_recursive(root, root)
@@ -198,117 +216,93 @@ func _room_definitions() -> Array[Dictionary]:
 		{
 			"index": 1, "file_name": "castle_gate_interior", "node_name": "CastleGateInterior",
 			"room_id": "CASTLE_GATE_INTERIOR", "bilingual_name": "Castle Gate Interior / 王城门内",
-			"width": 2304, "top": 0, "bottom": 720, "accent": Color("64748a"),
-			"platforms": [Vector4(880, 520, 520, 24), Vector4(1540, 448, 420, 24)],
-			"ramps": [PackedVector2Array([Vector2(440,612), Vector2(800,520), Vector2(1420,520), Vector2(1740,612), Vector2(1740,720), Vector2(440,720)])],
-			"doors": {"GateInteriorExitDoor": Vector2(2240, 612)},
+			"width": 1408, "top": 0, "bottom": 720, "accent": Color("52677f"),
+			"platforms": [Vector4(760, 508, 384, 24)], "ramps": [],
+			"doors": {"GateInteriorExitDoor": Vector2(1344, 612)},
 			"checkpoints": {"Chapter02CP01": Vector2(384, 612)}, "encounters": {},
 			"narratives": {"Chapter02TitleTrigger": Vector2(640, 612)},
-			"routes": {"GateUpperLookout": Vector2(1700, 450)},
+			"routes": {"GateUpperLookout": Vector2(920, 508)},
 		},
 		{
 			"index": 2, "file_name": "grey_banner_corridor", "node_name": "GreyBannerCorridor",
 			"room_id": "GREY_BANNER_CORRIDOR", "bilingual_name": "Grey Banner Corridor / 灰旗长廊",
-			"width": 4608, "top": -180, "bottom": 720, "accent": Color("6f7889"),
-			"platforms": [Vector4(1040, 500, 800, 24), Vector4(1980, 410, 880, 24), Vector4(3020, 410, 880, 24)],
-			"ramps": [
-				PackedVector2Array([Vector2(520,612), Vector2(920,500), Vector2(1840,500), Vector2(1840,720), Vector2(520,720)]),
-				PackedVector2Array([Vector2(2700,612), Vector2(2940,500), Vector2(3180,410), Vector2(3900,410), Vector2(4200,500), Vector2(4540,612), Vector2(4540,720), Vector2(2700,720)]),
-			],
-			"doors": {"CorridorEncounterGate": Vector2(1320, 612)}, "checkpoints": {},
-			"encounters": {"E01": Vector2(448, 612), "E02": Vector2(2260, 410), "E03": Vector2(3440, 410)},
-			"narratives": {}, "routes": {"CorridorUpperRoute": Vector2(2380, 456)},
-		},
-		{
-			"index": 3, "file_name": "last_banquet_hall", "node_name": "LastBanquetHall",
-			"room_id": "LAST_BANQUET_HALL", "bilingual_name": "Last Banquet Hall / 末宴大厅",
-			"width": 4608, "top": -360, "bottom": 720, "accent": Color("805b62"),
-			"platforms": [
-				Vector4(560,548,520,18), Vector4(1840,548,520,18), Vector4(3120,548,520,18), Vector4(3800,548,520,18),
-				Vector4(720,480,760,24), Vector4(1640,388,1320,24), Vector4(3120,480,760,24),
-			],
-			"ramps": [
-				PackedVector2Array([
-					Vector2(160,612), Vector2(560,480), Vector2(1480,480), Vector2(1640,388), Vector2(2960,388),
-					Vector2(3120,480), Vector2(3880,480), Vector2(4300,612), Vector2(4300,720), Vector2(160,720),
-				]),
-			],
-			"doors": {"BanquetEncounterGate": Vector2(840, 612)},
-			"checkpoints": {"Chapter02CP02": Vector2(4408, 612)},
-			"encounters": {"E04": Vector2(320, 612), "E05": Vector2(1760, 612), "E06": Vector2(3200, 612)},
-			"narratives": {"BanquetMemoryTrigger": Vector2(2380, 612)},
-			"routes": {"BanquetServiceBranch": Vector2(980, 480), "BanquetBalconyBranch": Vector2(2320, 388), "ChandelierAnchor": Vector2(2340, -120)},
-		},
-		{
-			"index": 4, "file_name": "royal_portrait_gallery", "node_name": "RoyalPortraitGallery",
-			"room_id": "ROYAL_PORTRAIT_GALLERY", "bilingual_name": "Royal Portrait Gallery / 王室肖像长廊",
-			"width": 4096, "top": -180, "bottom": 720, "accent": Color("75647e"),
-			"platforms": [Vector4(480,500,440,24), Vector4(1100,420,360,24), Vector4(1640,340,360,24), Vector4(2180,420,360,24), Vector4(2720,500,440,24)], "ramps": [],
-			"doors": {"GalleryConnectionDoor": Vector2(4016, 612)}, "checkpoints": {},
-			"encounters": {"E07": Vector2(640, 612), "E08": Vector2(2112, 612)},
-			"narratives": {"ElowenPortraitTrigger": Vector2(1450, 612), "RoyalKeyMemoryTrigger": Vector2(3200, 612)},
-			"routes": {"GalleryCeilingAnchor": Vector2(2700, -80)},
-		},
-		{
-			"index": 5, "file_name": "blood_candle_chapel", "node_name": "BloodCandleChapel",
-			"room_id": "BLOOD_CANDLE_CHAPEL", "bilingual_name": "Blood Candle Chapel / 血烛礼拜堂",
-			"width": 3840, "top": -720, "bottom": 720, "accent": Color("7a3343"),
-			"platforms": [Vector4(560,500,480,24), Vector4(1240,380,480,24), Vector4(1920,260,400,24), Vector4(2520,380,480,24), Vector4(3200,500,400,24), Vector4(1660,560,520,52)],
-			"ramps": [PackedVector2Array([
-				Vector2(240,612), Vector2(560,500), Vector2(1040,500), Vector2(1240,380), Vector2(1720,380),
-				Vector2(1920,260), Vector2(2320,260), Vector2(2520,380), Vector2(3000,380), Vector2(3200,500),
-				Vector2(3600,500), Vector2(3760,612), Vector2(3760,720), Vector2(240,720),
-			])],
-			"doors": {"ChapelEncounterGate": Vector2(820, 612)},
-			"checkpoints": {"Chapter02CP03": Vector2(3600, 612)},
-			"encounters": {"E09": Vector2(720, 500), "E10": Vector2(1480, 380), "E11": Vector2(2760, 380)},
-			"narratives": {"ChapelLoreTrigger": Vector2(1940, 612)},
-			"routes": {"ChapelCeilingAnchor": Vector2(1920, -520), "BloodCandleAnchor": Vector2(1920, 222)},
-		},
-		{
-			"index": 6, "file_name": "servant_passage", "node_name": "ServantPassage",
-			"room_id": "SERVANT_PASSAGE", "bilingual_name": "Servant Passage / 仆役通道",
-			"width": 3328, "top": -180, "bottom": 720, "accent": Color("626b65"),
-			"platforms": [Vector4(620,520,420,24), Vector4(1380,440,500,24), Vector4(2220,520,440,24)],
-			"ramps": [PackedVector2Array([
-				Vector2(260,612), Vector2(620,520), Vector2(1040,520), Vector2(1380,440), Vector2(1880,440),
-				Vector2(2220,520), Vector2(2660,520), Vector2(3040,612), Vector2(3040,720), Vector2(260,720),
-			])],
-			"doors": {"ServantConnectionDoor": Vector2(3250, 612)}, "checkpoints": {},
-			"encounters": {"E12": Vector2(448, 612), "E13": Vector2(1664, 612)}, "narratives": {},
-			"routes": {"KitchenBranch": Vector2(2180, 442)},
+			"width": 1792, "top": 0, "bottom": 720, "accent": Color("687383"),
+			"platforms": [Vector4(760, 500, 480, 24)], "ramps": [],
+			"doors": {"CorridorEncounterGate": Vector2(1760, 612)}, "checkpoints": {},
+			"encounters": {"E01": Vector2(360, 612), "E02": Vector2(920, 612), "E03": Vector2(1480, 612)},
+			"narratives": {}, "routes": {"CorridorUpperRoute": Vector2(980, 500)},
 		},
 		{
 			"index": 7, "file_name": "old_armory_safe_room", "node_name": "OldArmorySafeRoom",
 			"room_id": "OLD_ARMORY_SAFE_ROOM", "bilingual_name": "Old Armory Safe Room / 旧军械库安全室",
-			"width": 2048, "top": 0, "bottom": 720, "accent": Color("70808b"),
-			"platforms": [Vector4(520,500,480,24), Vector4(1160,420,480,24)],
-			"ramps": [PackedVector2Array([Vector2(200,612), Vector2(520,500), Vector2(1000,500), Vector2(1200,612), Vector2(1200,720), Vector2(200,720)])],
-			"doors": {"ArmoryShortcutDoor": Vector2(1840, 612)},
-			"checkpoints": {"Chapter02CP04": Vector2(128, 612)},
-			"encounters": {"E14": Vector2(1400, 420)}, "narratives": {},
-			"routes": {"ArmoryMerchantPlaceholder": Vector2(1520, 420)},
+			"width": 1024, "top": 0, "bottom": 720, "accent": Color("70808b"),
+			"platforms": [Vector4(520, 500, 320, 24)], "ramps": [],
+			"doors": {"ArmoryShortcutDoor": Vector2(960, 612)},
+			"checkpoints": {"Chapter02CP04": Vector2(128, 612)}, "encounters": {}, "narratives": {},
+			"routes": {"ArmoryMerchantPlaceholder": Vector2(720, 500)},
+		},
+		{
+			"index": 3, "file_name": "last_banquet_hall", "node_name": "LastBanquetHall",
+			"room_id": "LAST_BANQUET_HALL", "bilingual_name": "Last Banquet Hall / 末宴大厅",
+			"width": 2944, "top": -120, "bottom": 720, "accent": Color("805b62"),
+			"platforms": [Vector4(360, 548, 480, 18), Vector4(680, 450, 320, 24)],
+			"ramps": [], "doors": {"BanquetEncounterGate": Vector2(260, 612)},
+			"checkpoints": {"Chapter02CP02": Vector2(2700, 612)},
+			"encounters": {"E04": Vector2(480, 612), "E05": Vector2(1320, 612), "E06": Vector2(2220, 612)},
+			"narratives": {"BanquetMemoryTrigger": Vector2(1450, 612)},
+			"routes": {"BanquetServiceBranch": Vector2(900, 450), "BanquetBalconyBranch": Vector2(1840, 420), "ChandelierAnchor": Vector2(1500, 40)},
+		},
+		{
+			"index": 6, "file_name": "servant_passage", "node_name": "ServantPassage",
+			"room_id": "SERVANT_PASSAGE", "bilingual_name": "Servant Upper Passage / 仆役上层通道",
+			"width": 1280, "top": 0, "bottom": 720, "accent": Color("626b65"),
+			"upper_floor": true,
+			"platforms": [], "ramps": [],
+			"doors": {"ServantConnectionDoor": Vector2(48, 612)}, "checkpoints": {},
+			"encounters": {"E12": Vector2(840, 612), "E13": Vector2(360, 612)}, "narratives": {},
+			"routes": {"KitchenBranch": Vector2(620, 510)},
+		},
+		{
+			"index": 5, "file_name": "blood_candle_chapel", "node_name": "BloodCandleChapel",
+			"room_id": "BLOOD_CANDLE_CHAPEL", "bilingual_name": "Blood Candle Chapel / 血烛礼拜堂",
+			"width": 2688, "top": -120, "bottom": 720, "accent": Color("7a3343"),
+			"upper_floor": true,
+			"platforms": [Vector4(920, 400, 440, 24), Vector4(1480, 400, 440, 24), Vector4(2040, 500, 360, 24), Vector4(1080, 560, 520, 52)],
+			"ramps": [], "doors": {"ChapelEncounterGate": Vector2(80, 612)},
+			"checkpoints": {"Chapter02CP03": Vector2(220, 612)},
+			"encounters": {"E09": Vector2(2200, 612), "E10": Vector2(1400, 612), "E11": Vector2(640, 612)},
+			"narratives": {"ChapelLoreTrigger": Vector2(1320, 612)},
+			"routes": {"ChapelCeilingAnchor": Vector2(1344, 70), "BloodCandleAnchor": Vector2(1344, 510)},
+		},
+		{
+			"index": 4, "file_name": "royal_portrait_gallery", "node_name": "RoyalPortraitGallery",
+			"room_id": "ROYAL_PORTRAIT_GALLERY", "bilingual_name": "Royal Portrait Gallery / 王室肖像长廊",
+			"width": 3200, "top": 0, "bottom": 720, "accent": Color("75647e"),
+			"upper_floor": true,
+			"platforms": [Vector4(420, 500, 420, 24), Vector4(1040, 420, 420, 24), Vector4(1720, 420, 420, 24), Vector4(2380, 500, 420, 24)], "ramps": [],
+			"doors": {"GalleryConnectionDoor": Vector2(3136, 612)}, "checkpoints": {},
+			"encounters": {"E07": Vector2(2460, 612), "E08": Vector2(1320, 612)},
+			"narratives": {"ElowenPortraitTrigger": Vector2(1850, 612), "RoyalKeyMemoryTrigger": Vector2(720, 612)},
+			"routes": {"GalleryCeilingAnchor": Vector2(2050, 120)},
 		},
 		{
 			"index": 8, "file_name": "silent_ballroom_antechamber", "node_name": "SilentBallroomAntechamber",
 			"room_id": "SILENT_BALLROOM_ANTECHAMBER", "bilingual_name": "Silent Ballroom Antechamber / 无声舞厅前室",
-			"width": 2688, "top": -180, "bottom": 720, "accent": Color("7f748e"),
-			"platforms": [Vector4(500,500,520,24), Vector4(1180,420,520,24)],
-			"ramps": [PackedVector2Array([
-				Vector2(200,612), Vector2(500,500), Vector2(1020,500), Vector2(1180,420), Vector2(1700,420),
-				Vector2(1900,500), Vector2(2100,612), Vector2(2100,720), Vector2(200,720),
-			])],
+			"width": 2688, "top": 0, "bottom": 720, "accent": Color("7f748e"),
+			"upper_floor": true,
+			"platforms": [Vector4(500, 500, 480, 24), Vector4(1180, 430, 480, 24)], "ramps": [],
 			"doors": {"BallroomAntechamberDoor": Vector2(160, 612), "SilentBallroomBossDoor": Vector2(2520, 612)},
-			"checkpoints": {"Chapter02CP05": Vector2(2200, 612)},
-			"encounters": {"E15": Vector2(320, 612)},
-			"narratives": {"BossIntroTrigger": Vector2(2320, 612)}, "routes": {},
+			"checkpoints": {"Chapter02CP05": Vector2(2340, 612)},
+			"encounters": {"E14": Vector2(760, 612), "E15": Vector2(1680, 612)},
+			"narratives": {"BossIntroTrigger": Vector2(2440, 612)}, "routes": {"UpperCourtGallery": Vector2(1280, 430)},
 		},
 		{
 			"index": 9, "file_name": "silent_ballroom", "node_name": "SilentBallroom",
 			"room_id": "SILENT_BALLROOM", "bilingual_name": "Silent Ballroom / 无声舞会厅",
-			"width": 4608, "top": -180, "bottom": 720, "accent": Color("8a7897"),
-			"platforms": [], "ramps": [], "doors": {"SilentBallroomExitDoor": Vector2(4500, 612)},
+			"width": 4480, "top": 0, "bottom": 720, "accent": Color("8a7897"),
+			"upper_floor": true,
+			"platforms": [], "ramps": [], "doors": {"SilentBallroomExitDoor": Vector2(4400, 612)},
 			"checkpoints": {}, "encounters": {}, "narratives": {},
-			"routes": {"BossLaneCenter": Vector2(2304, 612)},
+			"routes": {"BossLaneCenter": Vector2(2450, 612)},
 		},
 	]

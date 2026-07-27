@@ -35,7 +35,7 @@ func _run() -> void:
 		push_error("CH2_PHASE2_MAIN_QA: SilentCourt did not load through Bootstrap")
 		quit(1)
 		return
-	var player: Player = level.get_node_or_null("ChapterRuntime/Player") as Player
+	var player: Player = level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
 	if player == null:
 		push_error("CH2_PHASE2_MAIN_QA: Main Player missing")
 		quit(1)

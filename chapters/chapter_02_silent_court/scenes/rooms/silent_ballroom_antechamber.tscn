@@ -1,129 +1,137 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_jcgpy"]
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_sladw"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_cf041"]
-size = Vector2(2688, 108)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2tibl"]
-size = Vector2(2688, 64)
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_sladw"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_cf041"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_2tibl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p8av5"]
-size = Vector2(520, 24)
+size = Vector2(2688, 108)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4x2t"]
-size = Vector2(520, 24)
+size = Vector2(480, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvk6j"]
-size = Vector2(2688, 900)
+size = Vector2(480, 24)
 
-[node name="SilentBallroomAntechamber" type="Node2D" unique_id=2038360733]
-script = ExtResource("1_jcgpy")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pkn67"]
+size = Vector2(2688, 720)
+
+[node name="SilentBallroomAntechamber" type="Node2D" unique_id=229897506]
+z_index = -60
+z_as_relative = false
+script = ExtResource("1_sladw")
 room_id = &"SILENT_BALLROOM_ANTECHAMBER"
 bilingual_name = "Silent Ballroom Antechamber / 无声舞厅前室"
 room_index = 8
 room_size = Vector2i(2688, 720)
-vertical_minimum = -180
 accent_color = Color(0.49803922, 0.45490196, 0.5568628, 1)
-platform_rects = Array[Vector4]([Vector4(500, 500, 520, 24), Vector4(1180, 420, 520, 24)])
-stair_polygons = Array[PackedVector2Array]([PackedVector2Array(200, 612, 500, 500, 1020, 500, 1180, 420, 1700, 420, 1900, 500, 2100, 612, 2100, 720, 200, 720)])
+platform_rects = Array[Vector4]([Vector4(500, 500, 480, 24), Vector4(1180, 430, 480, 24)])
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1750966319]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1538401035]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=913315367]
+[node name="Geometry" type="Node2D" parent="." unique_id=769513276]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=2016258634]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=573515582]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=859490140]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=1220193675]
 position = Vector2(1344, 666)
-shape = SubResource("RectangleShape2D_cf041")
-
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=2077032413]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1735605551]
-position = Vector2(1344, -212)
-shape = SubResource("RectangleShape2D_2tibl")
-
-[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=413206697]
-collision_mask = 0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=12255932]
-position = Vector2(760, 512)
 shape = SubResource("RectangleShape2D_p8av5")
+one_way_collision = true
+one_way_collision_margin = 8.0
 
-[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=1254303761]
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1874635717]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=1200395684]
-position = Vector2(1440, 432)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=45443169]
+position = Vector2(740, 512)
 shape = SubResource("RectangleShape2D_p4x2t")
 
-[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=1457896421]
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=1333080989]
 collision_mask = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1436908633]
-polygon = PackedVector2Array(200, 612, 500, 500, 1020, 500, 1180, 420, 1700, 420, 1900, 500, 2100, 612, 2100, 720, 200, 720)
-
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=103070558]
-
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=1739917241]
-
-[node name="BallroomAntechamberDoor" type="Marker2D" parent="DoorAnchors" unique_id=276768553]
-position = Vector2(160, 612)
-
-[node name="SilentBallroomBossDoor" type="Marker2D" parent="DoorAnchors" unique_id=468259362]
-position = Vector2(2520, 612)
-
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=982318094]
-
-[node name="Chapter02CP05" type="Marker2D" parent="CheckpointAnchors" unique_id=236472961]
-position = Vector2(2200, 612)
-
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=504594070]
-
-[node name="E15" type="Marker2D" parent="EncounterAnchors" unique_id=847518498]
-position = Vector2(320, 612)
-
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1895009636]
-
-[node name="E15_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1569833334]
-position = Vector2(264, 612)
-
-[node name="E15_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1407054541]
-position = Vector2(376, 612)
-
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1086438275]
-
-[node name="BossIntroTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=338728933]
-position = Vector2(2320, 612)
-
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=164154784]
-
-[node name="CameraBounds" type="Area2D" parent="." unique_id=467346114]
-collision_layer = 0
-collision_mask = 2
-script = ExtResource("2_sladw")
-room_id = &"SILENT_BALLROOM_ANTECHAMBER"
-vertical_limits = Vector2i(-180, 720)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1918493860]
-position = Vector2(1344, 270)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=885751769]
+position = Vector2(1420, 442)
 shape = SubResource("RectangleShape2D_nvk6j")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=869108829]
+[node name="WalkableSurfaceTrim" type="Node2D" parent="." unique_id=703730930]
+z_index = 20
+z_as_relative = false
+script = ExtResource("2_cf041")
+room_width = 2688.0
+trim_color = Color(0.5381961, 0.49850982, 0.59231377, 1)
+platform_rects = Array[Vector4]([Vector4(500, 500, 480, 24), Vector4(1180, 430, 480, 24)])
+
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=841337907]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=1181925882]
+
+[node name="BallroomAntechamberDoor" type="Marker2D" parent="DoorAnchors" unique_id=319799167]
+position = Vector2(160, 612)
+
+[node name="SilentBallroomBossDoor" type="Marker2D" parent="DoorAnchors" unique_id=1830268172]
+position = Vector2(2520, 612)
+
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=576899090]
+
+[node name="Chapter02CP05" type="Marker2D" parent="CheckpointAnchors" unique_id=1864980948]
+position = Vector2(2340, 612)
+
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=944367670]
+
+[node name="E14" type="Marker2D" parent="EncounterAnchors" unique_id=919574257]
+position = Vector2(760, 612)
+
+[node name="E15" type="Marker2D" parent="EncounterAnchors" unique_id=250582219]
+position = Vector2(1680, 612)
+
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1591974563]
+
+[node name="E14_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=2131245095]
+position = Vector2(704, 612)
+
+[node name="E14_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1224313731]
+position = Vector2(816, 612)
+
+[node name="E15_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1691904899]
+position = Vector2(1624, 612)
+
+[node name="E15_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=19571587]
+position = Vector2(1736, 612)
+
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1578253350]
+
+[node name="BossIntroTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=684875094]
+position = Vector2(2440, 612)
+
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=1782086824]
+
+[node name="UpperCourtGallery" type="Marker2D" parent="RouteAnchors" unique_id=85907130]
+position = Vector2(1280, 430)
+
+[node name="CameraBounds" type="Area2D" parent="." unique_id=369032698]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("3_2tibl")
+room_id = &"SILENT_BALLROOM_ANTECHAMBER"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=270763779]
+position = Vector2(1344, 360)
+shape = SubResource("RectangleShape2D_pkn67")
+
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=951625667]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=505754678]
+[node name="RoomExit" type="Marker2D" parent="." unique_id=1435388890]
 position = Vector2(2624, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=238802835]
+[node name="DebugLabel" type="Label" parent="." unique_id=2139837560]
+z_index = 100
+z_as_relative = false
 offset_left = 32.0
-offset_top = -152.0
+offset_top = 28.0
 offset_right = 32.0
-offset_bottom = -152.0
+offset_bottom = 28.0
 theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
 text = "08 · Silent Ballroom Antechamber / 无声舞厅前室"

@@ -1,86 +1,88 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_kc5os"]
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="2_mocl5"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_rsu53"]
-size = Vector2(4608, 108)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_st2v6"]
-size = Vector2(4608, 64)
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_mocl5"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_rsu53"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_st2v6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ryjs5"]
-size = Vector2(4608, 900)
+size = Vector2(4480, 108)
 
-[node name="SilentBallroom" type="Node2D" unique_id=936964645]
-script = ExtResource("1_kc5os")
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lmfeo"]
+size = Vector2(4480, 720)
+
+[node name="SilentBallroom" type="Node2D" unique_id=977338055]
+z_index = -60
+z_as_relative = false
+script = ExtResource("1_mocl5")
 room_id = &"SILENT_BALLROOM"
 bilingual_name = "Silent Ballroom / 无声舞会厅"
 room_index = 9
-room_size = Vector2i(4608, 720)
-vertical_minimum = -180
+room_size = Vector2i(4480, 720)
 accent_color = Color(0.5411765, 0.47058824, 0.5921569, 1)
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=330603055]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=837969065]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=1618099785]
+[node name="Geometry" type="Node2D" parent="." unique_id=221560480]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1663796289]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1752199969]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=730208270]
-position = Vector2(2304, 666)
-shape = SubResource("RectangleShape2D_rsu53")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=634841874]
+position = Vector2(2240, 666)
+shape = SubResource("RectangleShape2D_ryjs5")
+one_way_collision = true
+one_way_collision_margin = 8.0
 
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=500864438]
-collision_mask = 0
+[node name="WalkableSurfaceTrim" type="Node2D" parent="." unique_id=1201013993]
+z_index = 20
+z_as_relative = false
+script = ExtResource("2_rsu53")
+room_width = 4480.0
+trim_color = Color(0.57788235, 0.5129412, 0.62478435, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=2057729358]
-position = Vector2(2304, -212)
-shape = SubResource("RectangleShape2D_st2v6")
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=420184059]
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1155666063]
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=46001228]
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=234336567]
+[node name="SilentBallroomExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1559148119]
+position = Vector2(4400, 612)
 
-[node name="SilentBallroomExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=115562860]
-position = Vector2(4500, 612)
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=359614293]
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=905499960]
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=689469050]
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=603654639]
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1246475484]
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=539810380]
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1579756380]
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=722134259]
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=530724091]
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=1508669922]
+[node name="BossLaneCenter" type="Marker2D" parent="RouteAnchors" unique_id=1867113767]
+position = Vector2(2450, 612)
 
-[node name="BossLaneCenter" type="Marker2D" parent="RouteAnchors" unique_id=1467545152]
-position = Vector2(2304, 612)
-
-[node name="CameraBounds" type="Area2D" parent="." unique_id=783184472]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=2128930368]
 collision_layer = 0
 collision_mask = 2
-script = ExtResource("2_mocl5")
+script = ExtResource("3_st2v6")
 room_id = &"SILENT_BALLROOM"
-vertical_limits = Vector2i(-180, 720)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=360387894]
-position = Vector2(2304, 270)
-shape = SubResource("RectangleShape2D_ryjs5")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=2129873455]
+position = Vector2(2240, 360)
+shape = SubResource("RectangleShape2D_lmfeo")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=1453134873]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=1146761384]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=634882130]
-position = Vector2(4544, 612)
+[node name="RoomExit" type="Marker2D" parent="." unique_id=225675955]
+position = Vector2(4416, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=1052699640]
+[node name="DebugLabel" type="Label" parent="." unique_id=1689287405]
+z_index = 100
+z_as_relative = false
 offset_left = 32.0
-offset_top = -152.0
+offset_top = 28.0
 offset_right = 32.0
-offset_bottom = -152.0
+offset_bottom = 28.0
 theme_override_font_sizes/font_size = 18
 theme_override_colors/font_color = Color(0.72, 0.77, 0.86, 0.82)
 text = "09 · Silent Ballroom / 无声舞会厅"
