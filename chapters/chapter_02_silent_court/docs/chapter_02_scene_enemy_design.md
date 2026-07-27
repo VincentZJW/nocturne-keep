@@ -1,6 +1,6 @@
 # 第二章场景与敌人联合设计
 
-Status: Stage 1 design approved for graybox construction; no Chapter II runtime content exists yet
+Status: Phase 1 room graybox and Phase 2 five-enemy prototypes implemented; formal encounters/Boss remain planned
 
 ## Design objective
 
@@ -68,6 +68,6 @@ No background or foreground layer may obscure actor silhouettes, weapon tips, te
 
 The complete roster, state/interrupt rules and damage values are authoritative in `chapter_02_enemy_roster.md`. The 34-enemy matrix is authoritative in `chapter_02_encounter_matrix.md`.
 
-## Stage boundary
+## Current stage boundary
 
-Stage 1 changes documentation only. F5 does not yet enter Chapter II because neither the target `PackedScene` nor saved profile/router exists. Stage 2 must first create a valid minimal target/profile and consume the existing Debug Run Config, then build the nine-room graybox without adding enemy AI.
+MainBootstrap and the saved Chapter II profile now load the nine-room Silent Court. Phase 2 adds one acceptance instance of each approved new enemy under `Phase2EnemyPrototypeShowcase`; it does not consume the 15 encounter anchors, populate the 34-enemy matrix, implement returning enemies or create Hollow Duchess behavior. Those boundaries remain explicit future approvals.

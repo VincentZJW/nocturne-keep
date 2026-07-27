@@ -1,0 +1,76 @@
+[gd_scene load_steps=10 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="1"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/hollow_retainer.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/court_halberdier.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/mourning_armor.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/blood_candle_acolyte.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/hanging_stalker.tscn" id="6"]
+
+[sub_resource type="RectangleShape2D" id="floor"]
+size = Vector2(2400, 108)
+[sub_resource type="RectangleShape2D" id="wall"]
+size = Vector2(64, 720)
+[sub_resource type="StyleBoxFlat" id="panel"]
+bg_color = Color(0.04, 0.05, 0.09, 0.78)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.39, 0.36, 0.52, 0.9)
+
+[node name="Phase2EnemyPrototypeRoom" type="Node2D"]
+
+[node name="Backdrop" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 2400, 0, 2400, 720, 0, 720)
+color = Color(0.045, 0.052, 0.082, 1)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(1200, 666)
+shape = SubResource("floor")
+[node name="FloorFace" type="Polygon2D" parent="Floor"]
+polygon = PackedVector2Array(0, 612, 2400, 612, 2400, 720, 0, 720)
+color = Color(0.14, 0.15, 0.2, 1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2(-32, 360)
+shape = SubResource("wall")
+[node name="RightWall" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+position = Vector2(2432, 360)
+shape = SubResource("wall")
+
+[node name="ChapterRuntime" parent="." instance=ExtResource("1")]
+position = Vector2(150, 584)
+
+[node name="Enemies" type="Node2D" parent="."]
+[node name="HollowRetainer" parent="Enemies" instance=ExtResource("2")]
+position = Vector2(430, 584)
+[node name="CourtHalberdier" parent="Enemies" instance=ExtResource("3")]
+position = Vector2(820, 584)
+[node name="MourningArmor" parent="Enemies" instance=ExtResource("4")]
+position = Vector2(1210, 584)
+[node name="BloodCandleAcolyte" parent="Enemies" instance=ExtResource("5")]
+position = Vector2(1630, 584)
+[node name="HangingStalker" parent="Enemies" instance=ExtResource("6")]
+position = Vector2(2030, 170)
+
+[node name="Instructions" type="PanelContainer" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 640.0
+offset_bottom = 78.0
+theme_override_styles/panel = SubResource("panel")
+[node name="Label" type="Label" parent="Instructions"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.83, 0.87, 0.93, 1)
+theme_override_font_sizes/font_size = 12
+text = "PHASE 2 PROTOTYPES · A/D MOVE · SPACE JUMP · J ATTACK · SHIFT DASH\nRetainer → Halberdier → Mourning Armor → Acolyte → Hanging Stalker"

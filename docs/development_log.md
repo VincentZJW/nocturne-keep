@@ -1,5 +1,63 @@
 # Development Log
 
+## 2026-07-27 — Chapter II Phase 2 enemy prototypes (preflight)
+
+Status: complete — Phase 2 implementation, Main integration and automated/graphical verification passed; manual combat-feel acceptance pending
+
+### Goal, planned files, tests, and scope check
+
+- Implement the five approved Chapter II enemy prototypes: Hollow Retainer, Court Halberdier, Mourning Armor, Blood-Candle Acolyte and Hanging Stalker. Each prototype will have original locally generated 64×64 pixel assets, typed tuning, an independently instantiable scene, reusable Health/Hitbox/Hurtbox composition and a bounded AI/state contract matching the approved roster.
+- Add one Chapter II prototype test room and focused deterministic tests for saved resources, required animations, combat values, state boundaries, frontal Mourning Armor mitigation/Poise, Acolyte projectile/support behavior and the Stalker's telegraphed direction-locked drop.
+- Keep configured F5 authority at `res://scenes/bootstrap/main_bootstrap.tscn`. To make the approved prototypes directly testable without beginning formal encounter population, add exactly one clearly named showcase instance of each role to the existing composed `SilentCourt` level. These are prototype acceptance instances, not EncounterGroups and not the planned 34-enemy roster.
+- Planned changes are confined to Chapter II enemy assets/resources/scripts/scenes/tests, the Chapter II level showcase references, Chapter II roster/implementation documentation, README, QA evidence and this log. Shared combat code, Player/weapon tuning, Chapter I content and existing user-owned dirty files are out of scope.
+- Verify with the exact Godot 4.7.1 executable: deterministic asset generation, import/parse, every enemy scene independently, the prototype room, focused Phase 2 tests, updated Chapter II/Main integration, configured formal F5 smoke, graphical Debug Chapter II evidence, the ordered full regression suite, `git diff --check`, and an isolated staged-tree check.
+
+### Read-only findings
+
+- Preflight is `master` at `f71603606414b85183c62193828ac49ef3728700`. The worktree already contains user-owned Chapter I tuning/scene/QA changes, shared returning-enemy resource changes and generated UID files; all are preserved and will be excluded from the Phase 2 commit.
+- Phase 1 leaves the nine-room `SilentCourt` composition authoritative with one shared Player/HUD and zero enemies. Its 15 encounter anchors and 30 spawn markers remain inert; Phase 2 will not activate them or author encounter progression.
+- Shared typed contracts already exist for `EnemyCombatant`, `GroundEnemyBase`, `HealthComponent`, `HitboxComponent`, `HurtboxComponent` and collision factions. Phase 2 can compose these rather than duplicate Health or damage settlement. Four grounded roles can share one narrow Chapter II behavior/config implementation; Hanging Stalker requires a separate ceiling-ambush controller.
+- Ravenfang remains authoritative at Normal 12 / Dash Attack 24. Phase 2 will not change Player Health, movement, actions, weapon damage, Chapter I enemies, loot balance, Bootstrap routing or room geometry.
+
+### Scope boundary
+
+- Authorized: five prototype roles, their original assets/animations/data/scenes/AI, one projectile/ember pair required by the Acolyte, one independent prototype room, focused tests, one-per-role Chapter II showcase instances, QA evidence and documentation.
+- Not authorized: formal E01–E15 population or activation, the planned 34-enemy distribution, returning-enemy placement, Hollow Duchess, Boss arena logic, narrative/doors/checkpoints/shop activation, final environment art, Chapter III, Player tuning or unrelated refactors.
+
+### Delivered implementation
+
+- Added five independently instantiable enemy scenes with concentrated typed Resources. Hollow Retainer delivers single stab/two-hit combo/retreat cadence; Court Halberdier chooses thrust, sweep or close shaft push and uses a 0.32-second Turn; Mourning Armor has 25% frontal Normal mitigation, full rear damage and four-point Poise with enhanced Dash impact; Blood-Candle Acolyte releases an 8-damage straight projectile, a one-hit 4-damage ground ember and at most one non-stacking 0.90 windup ally buff; Hanging Stalker uses a 0.55-second shadow telegraph, locked drop, guaranteed miss recovery, at most one claw and anchor return.
+- Four grounded roles share one Chapter II behavior/config layer over `GroundEnemyBase`; Hanging Stalker keeps its distinct `EnemyCombatant` ceiling controller. Every role composes the existing Health, Hurtbox, Hitbox, faction, attack-ID dedup and LootDrop responsibilities. No Player, Ravenfang, shared combat component or Chapter I runtime file changed.
+- Added five editable original concept SVGs, 184 transparent 64×64 PNG animation frames generated deterministically through Godot Image APIs and five nearest-neighbor SpriteFrames Resources. No external/downloaded/AI image or paid service was used.
+- Added the Blood-Candle projectile/ember scenes, one combined `phase_2_enemy_prototype_room.tscn`, two focused test scripts and a Main/Bootstrap graphical capture runner.
+- Added exactly one acceptance instance per new role under `SilentCourt/Phase2EnemyPrototypeShowcase`, at Grey Banner, Banquet, Gallery and Chapel locations. The existing 15 encounter anchors and 30 spawn markers remain inert; no EncounterGroup, planned 34-enemy population, returning enemy or Boss was added.
+
+### Verification commands and actual results
+
+1. Asset generation and import:
+   - `Godot --headless --path . --script .../generate_phase_2_enemy_assets.gd`: `CH2_PHASE2_ASSET_GENERATOR: PASS enemies=5`.
+   - `Godot --headless --path . --script .../build_phase_2_sprite_frames.gd`: `CH2_PHASE2_SPRITE_FRAMES: PASS resources=5`.
+   - `Godot --headless --editor --path . --import --quit`: exit 0 on exact `4.7.1.stable.official.a13da4feb`; no parser, missing-resource, invalid-UID, warning or import error.
+2. Focused contracts:
+   - `test_phase_2_enemy_prototypes.gd`: PASS for five scenes, 184 original 64×64 source frames, required animations, exact HP/primary values, Retainer bounded Recovery, Mourning Armor front 12→9/rear 12, Acolyte projectile and non-stacking buff, and Stalker direction lock.
+   - `test_phase_2_enemy_damage.gd`: `PASS damages=7/5,10/6,14/9,8/4,9/6 dedup=ok`.
+   - `test_silent_court_graybox.gd`: PASS for nine rooms, six debug spawns, fifteen inert encounter anchors, one Player/HUD and exactly five named prototype showcase instances.
+   - All five independent enemy scenes and `phase_2_enemy_prototype_room.tscn` started headlessly without red diagnostics.
+3. Main/Bootstrap and graphics:
+   - `Godot --path . --script .../capture_phase_2_enemy_qa.gd`: `CH2_PHASE2_MAIN_QA: PASS captures=5`; Output proved legal `DEBUG CHAPTER START ACTIVE` routed MainBootstrap to the production Silent Court scene. The live screenshots include real AI attacks and resulting Player HP changes.
+   - `Godot --path . --quit-after 240`: exit 0 and printed `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`, so formal F5 remains Opening-first.
+4. Regression and hygiene:
+   - Ordered exact-engine execution of all project/chapter SceneTree tests: `FULL_SUITE tests=49 failed=0`; all 49 logs contain no `SCRIPT ERROR`, `ERROR:` or `WARNING:`.
+   - `git diff --check`: PASS.
+   - Isolated staged implementation tree `/tmp/nocturne_phase2.ofxoiy`: exact-engine import exit 0; Phase 2 prototype, exact-damage/dedup and composed Silent Court tests all PASS. This proves the milestone does not depend on preserved unstaged Chapter I/shared-resource changes.
+
+### Known limitations and manual acceptance
+
+- Phase 2 art is production-oriented prototype pixel art, not final environment-matched animation polish. Audio, particles and final combat VFX remain deferred.
+- The five Main instances are intentionally spaced one per role for acceptance. They do not use encounter activation and must be replaced, not multiplied, when a separately approved Phase 3 authors E01–E15.
+- Human playtesting must still judge Retainer combo reaction time, Halberdier rear window, Mourning Armor Poise feel, Acolyte priority pressure and Stalker shadow readability. Automated results prove contracts and persistence, not subjective fairness.
+- Hollow Duchess, full encounter population, returning enemies, narrative/door/checkpoint/shop runtime and Chapter III remain unstarted.
+
 ## 2026-07-27 — Chapter II vertical graybox and traversal refinement (preflight)
 
 Status: complete — Phase 1 vertical graybox, Main integration, physical traversal and regression passed; manual feel acceptance pending

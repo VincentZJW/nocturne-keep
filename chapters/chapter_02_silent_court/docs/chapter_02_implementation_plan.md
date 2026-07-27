@@ -7,7 +7,7 @@ Target: 第二章 · 沉寂王庭 / Chapter II · The Silent Court
 1. Stage 1 — joint scene/enemy design: complete.
 2. Stage 2 — nine-room full graybox, saved profile and debug F5 route: complete.
 3. Phase 1 vertical graybox refinement: complete pending approval.
-4. Phase 2 five enemy roles and independent tests: pending approval.
+4. Phase 2 five enemy roles and independent tests: complete; manual feel acceptance pending.
 5. Later phases — encounter runtime/population, narrative presentation, Armory safe-room/shop boundary and Hollow Duchess Boss: not started.
 
 ## Stage 2 delivered paths
@@ -26,6 +26,14 @@ Target: 第二章 · 沉寂王庭 / Chapter II · The Silent Court
 - Stage 2 does not instantiate enemies or make doors, checkpoints, encounters, narrative or Boss behavior functional.
 - Script-based test processes bypass debug routing so the formal Opening → Catacomb → Chapter I regressions remain independently testable.
 
+## Phase 2 delivered paths
+
+- Enemy scenes: `res://chapters/chapter_02_silent_court/scenes/enemies/`.
+- Original concept/source/animation art: `res://chapters/chapter_02_silent_court/assets/enemies/`.
+- Independent room: `res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room.tscn`.
+- Focused tests: `test_phase_2_enemy_prototypes.gd`, `test_phase_2_enemy_damage.gd`.
+- Main acceptance instances: `SilentCourt/Phase2EnemyPrototypeShowcase`, exactly one of each new role.
+
 ## Next-stage acceptance boundary
 
-The next stage may implement only the five approved Chapter II enemy roles and their independent resource/animation/AI tests. It must not silently populate encounters, implement the Hollow Duchess, activate doors/checkpoints, add final environment art, build a shop or begin Chapter III.
+Phase 3 may begin only after approval. It may replace the five clearly named prototype showcase instances with authored E01–E15 encounter runtime/population. It must not silently implement the Hollow Duchess, activate narrative/doors/checkpoints/shop, add final environment art or begin Chapter III.

@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/projectiles/blood_candle_projectile.gd" id="1"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="2"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/projectiles/blood_candle_ember.tscn" id="3"]
+
+[sub_resource type="CircleShape2D" id="projectile_shape"]
+radius = 6.0
+
+[node name="BloodCandleProjectile" type="Area2D"]
+collision_layer = 0
+collision_mask = 1
+monitoring = true
+monitorable = false
+script = ExtResource("1")
+ember_scene = ExtResource("3")
+
+[node name="OuterFlame" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-9, 0, -4, -6, 5, -4, 9, 0, 5, 4, -4, 6)
+color = Color(0.62, 0.18, 0.27, 0.9)
+
+[node name="Core" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-4, 0, 0, -3, 5, 0, 0, 3)
+color = Color(0.93, 0.67, 0.35, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("projectile_shape")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 256
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("2")
+faction = &"enemy"
+attack_kind = &"blood_candle_projectile"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+disabled = true
+shape = SubResource("projectile_shape")

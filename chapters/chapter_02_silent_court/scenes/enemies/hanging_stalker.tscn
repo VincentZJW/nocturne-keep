@@ -1,0 +1,83 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/hanging_stalker.gd" id="1"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/enemies/hanging_stalker_data.tres" id="2"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/animations/hanging_stalker_sprite_frames.tres" id="3"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="7"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/enemies/hanging_stalker_loot.tres" id="8"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="9"]
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(30, 48)
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(42, 50)
+[sub_resource type="RectangleShape2D" id="drop"]
+size = Vector2(34, 38)
+[sub_resource type="RectangleShape2D" id="claw"]
+size = Vector2(48, 22)
+[sub_resource type="CircleShape2D" id="detect"]
+radius = 230.0
+[node name="HangingStalker" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 1
+script = ExtResource("1")
+config = ExtResource("2")
+[node name="VisualRoot" type="Node2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+texture_filter = 1
+sprite_frames = ExtResource("3")
+animation = &"hang"
+autoplay = "hang"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("body")
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4")
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5")
+faction = &"enemy"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("hurt")
+[node name="FacingRoot" type="Node2D" parent="."]
+[node name="DropHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(0, 14)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6")
+faction = &"enemy"
+attack_kind = &"stalker_drop"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/DropHitbox"]
+disabled = true
+shape = SubResource("drop")
+[node name="ClawHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(30, 4)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6")
+faction = &"enemy"
+attack_kind = &"stalker_claw"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/ClawHitbox"]
+disabled = true
+shape = SubResource("claw")
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("detect")
+[node name="TelegraphShadow" type="Polygon2D" parent="."]
+top_level = true
+polygon = PackedVector2Array(-28, 0, -18, -5, 18, -5, 28, 0, 18, 5, -18, 5)
+color = Color(0.12, 0.1, 0.18, 0.62)
+[node name="LootDropComponent" type="Node" parent="."]
+script = ExtResource("7")
+profile = ExtResource("8")
+dynamic_profile = ExtResource("9")

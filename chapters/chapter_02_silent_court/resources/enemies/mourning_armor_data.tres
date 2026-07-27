@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="SilentCourtEnemyConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/silent_court_enemy_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = &"Mourning Armor"
+max_health = 96
+attack_damage = 14
+patrol_speed = 26.0
+chase_speed = 44.0
+patrol_half_width = 130.0
+detection_range = 210.0
+lose_target_range = 290.0
+attack_range = 62.0
+attack_windup = 0.62
+attack_active_duration = 0.12
+attack_recovery = 0.72
+hurt_duration = 0.20
+knockback_speed = 75.0
+archetype = 2
+secondary_damage = 9
+tertiary_damage = 12
+close_range = 36.0
+turn_duration = 0.38
+secondary_windup = 0.55
+secondary_active_duration = 0.12
+secondary_recovery = 0.68
+poise_max = 4
+frontal_normal_multiplier = 0.75
+stagger_duration = 0.42

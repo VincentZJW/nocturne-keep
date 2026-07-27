@@ -79,7 +79,15 @@ func _test_composed_level() -> void:
 	_expect(level.get_node_or_null("Rooms/LastBanquetHall/Geometry/UpperPlatform01/CollisionShape2D") is CollisionShape2D, "Banquet table collision is missing")
 	_expect(level.get_node_or_null("Rooms/BloodCandleChapel/Geometry/UpperPlatform06/CollisionShape2D") is CollisionShape2D, "Chapel altar collision is missing")
 	_test_required_anchors(level)
-	_expect(_count_enemy_bodies(level) == 0, "Stage 2 graybox unexpectedly contains enemies")
+	_expect(_count_enemy_bodies(level) == 5, "Phase 2 showcase must contain exactly five prototype enemies")
+	for prototype_name: String in [
+		"HollowRetainerPrototype", "CourtHalberdierPrototype", "MourningArmorPrototype",
+		"BloodCandleAcolytePrototype", "HangingStalkerPrototype",
+	]:
+		_expect(
+			level.get_node_or_null("Phase2EnemyPrototypeShowcase/%s" % prototype_name) is EnemyCombatant,
+			"Missing Phase 2 Main prototype: %s" % prototype_name
+		)
 	var player: Player = level.get_node("ChapterRuntime/Player") as Player
 	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 32128, "Camera horizontal limits mismatch")
 	var wallet: CurrencyWallet = root.get_node_or_null("CurrencyManager") as CurrencyWallet
@@ -213,7 +221,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 spawns=6 encounters=15 player=1 hud=1")
+		print("SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 spawns=6 encounters=15 prototypes=5 player=1 hud=1")
 		quit(0)
 		return
 	for failure: String in _failures:

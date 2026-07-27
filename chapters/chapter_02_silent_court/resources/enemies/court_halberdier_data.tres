@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="SilentCourtEnemyConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/silent_court_enemy_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = &"Court Halberdier"
+max_health = 72
+attack_damage = 10
+patrol_speed = 38.0
+chase_speed = 58.0
+patrol_half_width = 150.0
+detection_range = 230.0
+lose_target_range = 310.0
+attack_range = 86.0
+attack_windup = 0.42
+attack_active_duration = 0.10
+attack_recovery = 0.54
+hurt_duration = 0.18
+knockback_speed = 110.0
+archetype = 1
+secondary_damage = 12
+tertiary_damage = 6
+close_range = 34.0
+secondary_range = 76.0
+turn_duration = 0.32
+secondary_windup = 0.48
+secondary_active_duration = 0.10
+secondary_recovery = 0.62

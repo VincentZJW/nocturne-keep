@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`统一Main启动路由 · Main Bootstrap Startup`
+当前版本：`第二章 Phase 2 · 五种敌人原型`
 
 ## 当前范围
 
-F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人（Guard 14、Shield 5、Spearman 6、Crossbowman 5、Gargoyle 4），其中27只在主路线、7只在可选高台路线。后续普通死亡仍只执行既有快速幽灵/检查点重生，不会重播墓窟。当前没有第二关正式玩法、经验系统、商店、磁盘存档或新能力树。
+F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人。第二章现有九房间立体灰盒，并已完成五种可战斗敌人原型：空壳侍从、王庭戟卫、哀悼铠甲、血烛侍祭和倒悬猎兽。Phase 2仅在第二章放置每种各一个、明确命名的验收实例；15组正式Encounter、34敌人编排、Hollow Duchess Boss、商店和最终美术尚未开始。
 
 ## 环境要求
 
@@ -40,9 +40,17 @@ res://scenes/bootstrap/main_bootstrap.tscn
 
 第一章正式根目录是`res://chapters/chapter_01_ravenmourn_outskirts/`，主场景是`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`。若要直接验证第一章，将`scripts/systems/debug_run_config.gd`中的`debug_chapter_start_enabled`临时设为`true`、章节设为`CHAPTER_01_RAVENMOURN_OUTSKIRTS`；Boss前流程再将`debug_start_spawn_id`设为`&"boss_checkpoint"`。完整章节直达测试使用`&"dark_forest_tutorial_spawn"`。完成后应把Debug开关恢复为`false`。
 
-第二章九房间灰盒文件保持现状，本次不继续开发第二章碰撞、敌人、Boss或玩法。第一章城门已从旧阈厅占位目标切换为现有`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`，用于验证章节边界资源引用。
+第二章主场景为`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`。它保留九房间灰盒和正式章节边界，并在`Phase2EnemyPrototypeShowcase`下放置五个独立验收实例；这些不是正式EncounterGroup，不代表最终数量或布阵。
 
 第二章开发直达：将Debug开关设为`true`、`debug_start_chapter_id`设为`CHAPTER_02_SILENT_COURT`、`debug_start_spawn_id`设为`&"CH2_START"`后按F5。Output必须打印`DEBUG CHAPTER START ACTIVE`并直接进入`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`；此模式不会播放Opening或进入墓窟。
+
+第二章五敌人独立验收房：
+
+```text
+res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room.tscn
+```
+
+使用F6或`"$GODOT_BIN" --path . <scene path>`运行。房间从左到右依次为侍从、戟卫、铠甲、侍祭和倒悬猎兽；它只验证原型，不替代Bootstrap/第二章Main验收。
 
 正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。
 
@@ -114,7 +122,7 @@ Main开发调试快捷键：
 
 正式Health/Stamina始终显示，不受F1影响。左下`TAKE 25 DMG`仅用于开发死亡/重生验证，并会随Debug HUD一起隐藏。F4的Traversal覆盖层默认关闭，只读显示脚底高度、起跳点、相对上升、位移、最近平台和Reachable评级；它属于同一Debug根节点，因此F1仍可统一隐藏。Main的调试面板使用锚点与容器布局；Enemy文本最多每0.15秒更新一次，隐藏时停止拼接。完整结构与字段契约见[Debug HUD规格](docs/design/debug_hud_spec.md)。
 
-第二章Phase 1立体灰盒已接入同一个`MainBootstrap`/Debug Chapter Start目标：九个房间包含可见且与碰撞同源的平台与宽楼梯，最大连续层级高差120px；军械库出生点和Boss前缓冲区保持安全，无敌人、遭遇或Boss实现。当前几何和可达性数据见[第二章房间指标](chapters/chapter_02_silent_court/docs/chapter_02_room_metrics.md)。
+第二章Phase 1立体灰盒与Phase 2五敌人原型均接入同一个`MainBootstrap`/Debug Chapter Start目标。九房间最大连续层级高差120px；五种原型使用原创64×64像素帧、最近邻显示、共享Health/Hitbox/Hurtbox/Loot契约，并保持Ravenfang 12/24不变。当前几何见[第二章房间指标](chapters/chapter_02_silent_court/docs/chapter_02_room_metrics.md)，敌人交付边界见[第二章敌人原型规格](chapters/chapter_02_silent_court/docs/chapter_02_enemy_prototype_spec.md)。
 
 连续按J使用同一个四帧基础突刺组成最多三段的有限攻击链，而不是无限连招树。首个J立即响应并约0.05秒进入有效帧；0.10–0.20秒合法窗口只锁存一个0.08秒输入且不会被乱按刷新。每段完整播放后以0.32秒最短起手间隔衔接，第三段结束固定进入0.34秒强制收招；收招结束前不能开始新的第一段。每段拥有独立attack_id，过早或窗口外连按不会重置第1帧。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。
 
@@ -129,6 +137,7 @@ Main开发调试快捷键：
 - [第二章房间指标](chapters/chapter_02_silent_court/docs/chapter_02_room_metrics.md)
 - [第二章路线与流程](chapters/chapter_02_silent_court/docs/chapter_02_route_and_flow.md)
 - [第二章敌人名册](chapters/chapter_02_silent_court/docs/chapter_02_enemy_roster.md)
+- [第二章敌人原型规格](chapters/chapter_02_silent_court/docs/chapter_02_enemy_prototype_spec.md)
 - [第二章Encounter矩阵](chapters/chapter_02_silent_court/docs/chapter_02_encounter_matrix.md)
 - [第二章Boss房规划](chapters/chapter_02_silent_court/docs/chapter_02_boss_room_plan.md)
 - [游戏设计基线](docs/game_design.md)

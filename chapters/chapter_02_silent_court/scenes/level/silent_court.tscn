@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=20 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
@@ -12,6 +12,11 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom_antechamber.tscn" id="10_room_08"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom.tscn" id="11_room_09"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/tools/chapter_02_graybox_qa_runner.gd" id="12_qa"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/hollow_retainer.tscn" id="13_retainer"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/court_halberdier.tscn" id="14_halberdier"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/mourning_armor.tscn" id="15_armor"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/blood_candle_acolyte.tscn" id="16_acolyte"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/enemies/hanging_stalker.tscn" id="17_stalker"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 1728)
@@ -87,6 +92,23 @@ position = Vector2(27032, 584)
 [node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="EncounterGroups" type="Node2D" parent="."]
+
+[node name="Phase2EnemyPrototypeShowcase" type="Node2D" parent="."]
+
+[node name="HollowRetainerPrototype" parent="Phase2EnemyPrototypeShowcase" instance=ExtResource("13_retainer")]
+position = Vector2(2816, 584)
+
+[node name="CourtHalberdierPrototype" parent="Phase2EnemyPrototypeShowcase" instance=ExtResource("14_halberdier")]
+position = Vector2(4352, 584)
+
+[node name="MourningArmorPrototype" parent="Phase2EnemyPrototypeShowcase" instance=ExtResource("15_armor")]
+position = Vector2(7808, 584)
+
+[node name="HangingStalkerPrototype" parent="Phase2EnemyPrototypeShowcase" instance=ExtResource("17_stalker")]
+position = Vector2(12880, 170)
+
+[node name="BloodCandleAcolytePrototype" parent="Phase2EnemyPrototypeShowcase" instance=ExtResource("16_acolyte")]
+position = Vector2(15936, 584)
 
 [node name="NarrativeTriggers" type="Node2D" parent="."]
 

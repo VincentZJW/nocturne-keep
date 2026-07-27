@@ -1,0 +1,97 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/silent_court_ground_enemy.gd" id="1"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/enemies/mourning_armor_data.tres" id="2"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/enemies/mourning_armor/animations/mourning_armor_sprite_frames.tres" id="3"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/mourning_armor_hit_policy.gd" id="7"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="8"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/enemies/mourning_armor_loot.tres" id="9"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="10"]
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(38, 54)
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(42, 56)
+[sub_resource type="RectangleShape2D" id="primary"]
+size = Vector2(64, 30)
+[sub_resource type="RectangleShape2D" id="secondary"]
+size = Vector2(40, 32)
+[sub_resource type="CircleShape2D" id="detect"]
+radius = 210.0
+[node name="MourningArmor" type="CharacterBody2D"]
+floor_snap_length = 6.0
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1")
+config = ExtResource("2")
+[node name="VisualRoot" type="Node2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+texture_filter = 1
+sprite_frames = ExtResource("3")
+animation = &"idle"
+autoplay = "idle"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("body")
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4")
+[node name="MourningArmorHitPolicy" type="Node" parent="."]
+script = ExtResource("7")
+frontal_normal_multiplier = 0.75
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5")
+faction = &"enemy"
+hit_policy_path = NodePath("../MourningArmorHitPolicy")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 1)
+shape = SubResource("hurt")
+[node name="FacingRoot" type="Node2D" parent="."]
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(38, -1)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6")
+faction = &"enemy"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox"]
+disabled = true
+shape = SubResource("primary")
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(25, 0)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6")
+faction = &"enemy"
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox"]
+disabled = true
+shape = SubResource("secondary")
+[node name="Muzzle" type="Marker2D" parent="FacingRoot"]
+position = Vector2(26, -8)
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("detect")
+[node name="WallCheck" type="RayCast2D" parent="."]
+position = Vector2(0, 4)
+target_position = Vector2(-24, 0)
+collision_mask = 1
+enabled = true
+[node name="FloorCheck" type="RayCast2D" parent="."]
+position = Vector2(-22, 19)
+target_position = Vector2(0, 26)
+collision_mask = 1
+enabled = true
+[node name="LootDropComponent" type="Node" parent="."]
+script = ExtResource("8")
+profile = ExtResource("9")
+dynamic_profile = ExtResource("10")

@@ -1,0 +1,206 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/alert/alert_01.png" id="1_cinqc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/alert/alert_02.png" id="2_lsegh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_shaft_push/attack_shaft_push_01.png" id="3_p2i3b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_shaft_push/attack_shaft_push_02.png" id="4_wlkhc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_shaft_push/attack_shaft_push_03.png" id="5_ly7oj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_shaft_push/attack_shaft_push_04.png" id="6_eti61"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_sweep/attack_sweep_01.png" id="7_kmag1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_sweep/attack_sweep_02.png" id="8_akt34"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_sweep/attack_sweep_03.png" id="9_rxwwq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_sweep/attack_sweep_04.png" id="10_coj0r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_sweep/attack_sweep_05.png" id="11_rp31t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_sweep/attack_sweep_06.png" id="12_t0gch"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_thrust/attack_thrust_01.png" id="13_7py76"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_thrust/attack_thrust_02.png" id="14_jassy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_thrust/attack_thrust_03.png" id="15_ixugo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_thrust/attack_thrust_04.png" id="16_ycbak"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/attack_thrust/attack_thrust_05.png" id="17_q3inn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/death/death_01.png" id="18_oguap"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/death/death_02.png" id="19_43vkk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/death/death_03.png" id="20_ltnlq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/death/death_04.png" id="21_irle0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/death/death_05.png" id="22_o5wie"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/death/death_06.png" id="23_bicuw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/hurt/hurt_01.png" id="24_f8oq6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/hurt/hurt_02.png" id="25_13r0e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/hurt/hurt_03.png" id="26_7xi1q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/idle/idle_01.png" id="27_44ejr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/idle/idle_02.png" id="28_3jw72"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/idle/idle_03.png" id="29_8q7wb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/idle/idle_04.png" id="30_w2kg5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/turn/turn_01.png" id="31_8q1ck"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/turn/turn_02.png" id="32_rofu4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/turn/turn_03.png" id="33_u21qu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/walk/walk_01.png" id="34_64rol"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/walk/walk_02.png" id="35_3o4yh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/walk/walk_03.png" id="36_cahio"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/walk/walk_04.png" id="37_ye2nh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/walk/walk_05.png" id="38_drk13"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/court_halberdier/sprites/walk/walk_06.png" id="39_181p3"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_cinqc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_lsegh")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_p2i3b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_wlkhc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ly7oj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_eti61")
+}],
+"loop": 0,
+"name": &"attack_shaft_push",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_kmag1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_akt34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_rxwwq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_coj0r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_rp31t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_t0gch")
+}],
+"loop": 0,
+"name": &"attack_sweep",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_7py76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_jassy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_ixugo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ycbak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_q3inn")
+}],
+"loop": 0,
+"name": &"attack_thrust",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_oguap")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_43vkk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ltnlq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_irle0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_o5wie")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_bicuw")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_f8oq6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_13r0e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_7xi1q")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_44ejr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_3jw72")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_8q7wb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_w2kg5")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_8q1ck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_rofu4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_u21qu")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_64rol")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_3o4yh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_cahio")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_ye2nh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_drk13")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_181p3")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]

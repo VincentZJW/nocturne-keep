@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SilentCourtEnemyConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/silent_court_enemy_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = &"Hollow Retainer"
+max_health = 48
+attack_damage = 7
+patrol_speed = 68.0
+chase_speed = 112.0
+patrol_half_width = 130.0
+detection_range = 210.0
+lose_target_range = 290.0
+attack_range = 48.0
+attack_windup = 0.18
+attack_active_duration = 0.09
+attack_recovery = 0.30
+hurt_duration = 0.14
+knockback_speed = 100.0
+archetype = 0
+secondary_damage = 5
+tertiary_damage = 5
+secondary_windup = 0.22
+secondary_active_duration = 0.08
+secondary_recovery = 0.38
+combo_gap = 0.08

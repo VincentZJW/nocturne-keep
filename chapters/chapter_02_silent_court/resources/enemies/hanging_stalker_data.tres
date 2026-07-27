@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="HangingStalkerConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/hanging_stalker_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = &"Hanging Stalker"
+max_health = 48
+drop_damage = 9
+claw_damage = 6
+detection_range = 230.0
+lose_target_range = 320.0
+telegraph_duration = 0.55
+direction_lock_lead = 0.18
+drop_speed = 360.0
+ground_recovery_duration = 0.52
+claw_windup = 0.25
+claw_active_duration = 0.1
+retreat_duration = 0.32
+return_speed = 210.0
+hurt_duration = 0.18
+knockback_speed = 100.0

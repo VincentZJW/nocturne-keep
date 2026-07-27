@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="SilentCourtEnemyConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/enemies/silent_court_enemy_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = &"Blood-Candle Acolyte"
+max_health = 60
+attack_damage = 8
+patrol_speed = 30.0
+chase_speed = 42.0
+patrol_half_width = 120.0
+detection_range = 300.0
+lose_target_range = 360.0
+attack_range = 255.0
+attack_windup = 0.65
+attack_active_duration = 0.06
+attack_recovery = 0.78
+hurt_duration = 0.18
+knockback_speed = 95.0
+archetype = 3
+secondary_damage = 4
+tertiary_damage = 4
+close_range = 88.0
+retreat_distance = 132.0
+projectile_speed = 180.0
+projectile_lifetime = 2.4
+ember_damage = 4
+ember_lifetime = 0.65
+buff_radius = 220.0
+buff_windup_multiplier = 0.9
+buff_channel_duration = 0.5
