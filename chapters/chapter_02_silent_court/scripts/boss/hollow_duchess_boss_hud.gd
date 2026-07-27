@@ -30,7 +30,7 @@ func bind_boss(new_boss: HollowDuchess) -> void:
 	name_label.text = "%s / %s" % [boss.config.display_name_en, boss.config.display_name_zh]
 	_on_health_changed(boss.health_component.current_health, boss.health_component.max_health)
 	_on_phase_changed(boss.get_phase())
-	_on_poise_changed(boss.get_current_poise(), boss.config.max_poise)
+	_on_poise_changed(boss.get_current_poise(), boss.get_max_poise())
 
 
 func show_for_combat() -> void:
@@ -54,7 +54,7 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 
 func _on_phase_changed(phase: int) -> void:
-	phase_label.text = "PHASE %d" % phase
+	phase_label.text = "PHASE 2 · UNMASKED" if phase >= 2 else "PHASE 1"
 
 
 func _on_poise_changed(current: int, maximum: int) -> void:

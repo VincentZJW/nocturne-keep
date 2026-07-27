@@ -35,43 +35,66 @@ func _run() -> void:
 	var controller: HollowDuchessRoomController = level.get_node_or_null(
 		"ChapterSystems/HollowDuchessRoomController"
 	) as HollowDuchessRoomController
-	if player == null or boss == null or controller == null:
+	var transition: Chapter02To03TransitionController = level.get_node_or_null(
+		"ChapterSystems/Chapter02To03TransitionController"
+	) as Chapter02To03TransitionController
+	if player == null or boss == null or controller == null or transition == null:
 		_fail("Main Boss composition is incomplete")
 		return
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT_DIR))
 	player.hurtbox.set_invulnerable(true)
-	player.global_position = Vector2(3100.0, -1216.0)
+	player.global_position = Vector2(2520.0, -1216.0)
 	player.velocity = Vector2.ZERO
+	player.player_camera.reset_smoothing()
+	await _wait_process_frames(8)
+	_save_viewport("01_boss_entrance_wide_main.png")
+	player.global_position = Vector2(2930.0, -1216.0)
+	await _wait_process_frames(10)
+	_save_viewport("02_boss_door_main.png")
+	player.global_position = Vector2(3800.0, -1216.0)
 	await _wait_physics_frames(4)
 	if not controller.encounter_started:
 		controller._on_activation_body_entered(player)
-	player.global_position = Vector2(5700.0, -1216.0)
+	player.global_position = Vector2(4100.0, -1216.0)
 	player.player_camera.reset_smoothing()
-	await _wait_process_frames(8)
-	_save_viewport("01_intro_main.png")
+	await _wait_process_frames(90)
+	_save_viewport("03_intro_dialogue_main.png")
 	await _wait_for_state(boss, &"Idle", 420)
-
-	await _capture_attack(boss, player, &"rapier_thrust", &"RapierThrustActive", "02_rapier_thrust_main.png")
-	await _capture_attack(boss, player, &"fan_slash", &"FanSlashActive", "03_fan_slash_main.png")
-	await _capture_attack(boss, player, &"backstep_riposte", &"BackstepRiposteActive", "04_backstep_riposte_main.png")
-	await _capture_attack(boss, player, &"side_step_cut", &"SideStepCutActive", "05_side_step_cut_main.png")
+	await _save_frozen_boss_frame(boss, "04_phase_1_main.png")
 
 	boss.debug_set_health(121)
 	await _wait_for_state(boss, &"PhaseTransition", 240)
 	await _wait_process_frames(12)
-	await _save_frozen_boss_frame(boss, "06_phase_transition_main.png")
-	await _wait_for_phase(boss, 2, 240)
-	await _capture_attack(boss, player, &"double_waltz_lunge", &"DoubleLungeHit1", "07_double_waltz_main.png")
-	await _capture_attack(boss, player, &"phantom_dancer_sweep", &"PhantomDanceActive", "08_phantom_dance_main.png")
-
-	boss.debug_set_health(50)
-	await _capture_attack(boss, player, &"final_waltz_crossing", &"FinalWaltzActive", "09_final_waltz_main.png")
+	await _save_frozen_boss_frame(boss, "05_mask_crack_main.png")
+	await _wait_process_frames(180)
+	await _save_frozen_boss_frame(boss, "06_phase_transformation_main.png")
+	await _wait_for_phase(boss, 2, 360)
+	await _wait_for_state(boss, &"Idle", 360)
+	player.global_position = boss.global_position + Vector2(-160.0, -28.0)
+	player.velocity = Vector2.ZERO
+	player.player_camera.reset_smoothing()
+	await _wait_process_frames(6)
+	await _save_frozen_boss_frame(boss, "07_phase_2_unmasked_main.png")
+	await _capture_attack(boss, player, &"double_waltz_lunge", &"DoubleLungeHit1", "08_phase_2_attack_main.png")
 	boss.debug_set_health(0)
 	await _wait_for_state(boss, &"Death", 120)
-	await _wait_process_frames(24)
-	await _save_frozen_boss_frame(boss, "10_death_main.png")
+	for _frame: int in range(600):
+		await physics_frame
+		if transition.get_reward_pickup() != null:
+			break
+	player.global_position = Vector2(5600.0, -1216.0)
+	player.player_camera.reset_smoothing()
+	await _wait_process_frames(10)
+	_save_viewport("09_duchess_reliquary_main.png")
+	var reward: WeaponPickup = transition.get_reward_pickup()
+	if reward == null:
+		_fail("Reliquary reward did not appear state=%s cleared=%s" % [boss.get_state_name(), controller.room_is_cleared])
+		return
+	reward.collect()
+	await _wait_process_frames(12)
+	_save_viewport("10_crimson_masque_claimed_main.png")
 	debug_config.reset_to_defaults()
-	print("HOLLOW_DUCHESS_MAIN_QA: PASS captures=%d main=%s" % [_capture_count, level.scene_file_path])
+	print("HOLLOW_DUCHESS_MAIN_QA: PASS captures=%d entrance=1 intro=1 phase2=1 reliquary=1 main=%s" % [_capture_count, level.scene_file_path])
 	quit(0)
 
 

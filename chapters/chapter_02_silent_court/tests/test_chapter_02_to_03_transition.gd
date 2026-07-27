@@ -45,7 +45,7 @@ func _run() -> void:
 	boss.config.death_duration = 0.06
 	boss.death_line_requested.connect(_on_death_line)
 	boss.debug_set_health(0)
-	await _wait_until(func() -> bool: return gate.is_revealed(), 120, "mirror reveal")
+	await _wait_until(func() -> bool: return controller.get_reward_pickup() != null, 120, "reliquary reward")
 	_expect(_death_lines == [
 		"夜巡守卫：你认识我？",
 		"瑟芙琳：不……但殿下一直在等你。",
@@ -53,11 +53,11 @@ func _run() -> void:
 		"瑟芙琳：十三声忏悔，会替她回答。",
 	], "Death dialogue sequence mismatch: %s" % [_death_lines])
 	_expect(session.has_story_flag(&"hollow_duchess_defeated"), "Duchess flag missing")
-	_expect(session.has_story_flag(&"chapter_02_exit_revealed"), "Exit reveal flag missing")
+	_expect(not session.has_story_flag(&"chapter_02_exit_revealed"), "Exit revealed before reliquary collection")
+	_expect(not gate.is_revealed(), "Mirror revealed before reliquary collection")
 	_expect(not boss.visible, "Defeated Boss did not disappear")
 	_expect(controller.get_reward_pickup() != null, "Crimson Masque pickup did not spawn")
-	# Re-enter the saved scene before collecting: Boss stays gone, mirror stays open,
-	# and the missing fixed reward is deterministically recreated.
+	# Re-enter before collecting: Boss stays gone, reliquary remains available and mirror stays sealed.
 	level.queue_free()
 	await process_frame
 	var reloaded: SilentCourtLevel = await _load_silent_court()
@@ -74,9 +74,10 @@ func _run() -> void:
 		"GameplayWorld/BossArea/BallroomMirrorGate"
 	) as BallroomMirrorGate
 	reload_controller.transition_data = reload_controller.transition_data.duplicate(true) as Chapter02TransitionData
+	reload_controller.transition_data.mirror_reveal_duration = 0.01
 	reload_controller.transition_data.door_open_duration = 0.01
 	_expect(not reload_boss.visible, "Boss respawned after persisted defeat")
-	_expect(reload_gate.is_revealed(), "Mirror closed after reload")
+	_expect(not reload_gate.is_revealed(), "Mirror revealed on uncollected reload")
 	var reward: WeaponPickup = reload_controller.get_reward_pickup()
 	_expect(reward != null and not reward.is_collected(), "Crimson Masque pickup was not recovered")
 	# Gate refuses passage until the fixed weapon has been collected.
@@ -85,8 +86,9 @@ func _run() -> void:
 	_expect(not manager.is_transitioning(), "Gate bypassed the reward prerequisite")
 	if reward != null:
 		_expect(reward.collect(), "Crimson Masque pickup collection failed")
-	await process_frame
+	await _wait_until(func() -> bool: return reload_gate.is_revealed(), 120, "post-collection mirror reveal")
 	_expect(session.has_story_flag(&"chapter_02_boss_weapon_collected"), "Reward flag missing")
+	_expect(session.has_story_flag(&"chapter_02_exit_revealed"), "Exit reveal flag missing after reward")
 	_expect(inventory.owns_weapon(&"crimson_masque_stilettos"), "Crimson Masque missing from inventory")
 	_expect(equipment.equipped_weapon_id == &"crimson_masque_stilettos", "Crimson Masque did not auto-equip")
 	_expect(equipment.get_normal_attack_damage() == 14, "Crimson Masque normal damage is not 14")
@@ -167,7 +169,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CH2_TO_CH3_TRANSITION_TEST: PASS dialogue=4 mirror=1 crimson=14/28 reload=2 passage=1 chapter3=1")
+		print("CH2_TO_CH3_TRANSITION_TEST: PASS dialogue=4 reliquary=1 mirror_after_reward=1 crimson=14/28 reload=2 passage=1 chapter3=1")
 		quit(0)
 		return
 	for failure: String in _failures:

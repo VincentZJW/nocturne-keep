@@ -65,18 +65,25 @@ func _validate_config(boss: HollowDuchess) -> void:
 	_expect(config.max_health == 220, "max HP must be 220")
 	_expect(is_equal_approx(config.phase_2_threshold, 0.55), "phase threshold must be 55%")
 	_expect(config.max_poise == 60, "max Poise must be 60")
+	_expect(config.phase_2_max_poise == 80, "Phase 2 max Poise must be 80")
+	_expect(is_equal_approx(config.phase_2_incoming_damage_multiplier, 0.85), "Phase 2 mitigation mismatch")
 	_expect(is_equal_approx(boss.get_turn_total_duration(), 0.58), "turn total must be 0.58s")
 	_expect(config.rapier_thrust_damage == 11, "Rapier damage mismatch")
 	_expect(config.fan_slash_damage == 13, "Fan damage mismatch")
 	_expect(config.riposte_damage == 12, "Riposte damage mismatch")
 	_expect(config.side_step_cut_damage == 12, "Side Cut damage mismatch")
-	_expect(config.double_lunge_damage_1 == 9 and config.double_lunge_damage_2 == 12, "Double Lunge damage mismatch")
-	_expect(config.phantom_damage == 10, "Phantom damage mismatch")
-	_expect(config.final_waltz_damage == 8, "Final Waltz damage mismatch")
+	_expect(config.phase_2_rapier_thrust_damage == 13, "Phase 2 Rapier damage mismatch")
+	_expect(config.phase_2_fan_slash_damage == 16, "Phase 2 Fan damage mismatch")
+	_expect(config.phase_2_riposte_damage == 14, "Phase 2 Riposte damage mismatch")
+	_expect(config.phase_2_side_step_cut_damage == 14, "Phase 2 Side Cut damage mismatch")
+	_expect(config.double_lunge_damage_1 == 10 and config.double_lunge_damage_2 == 14, "Double Lunge damage mismatch")
+	_expect(config.phantom_damage == 12, "Phantom damage mismatch")
+	_expect(config.final_waltz_damage == 10, "Final Waltz damage mismatch")
 	_expect(config.rapier_thrust_windup >= 0.46 and config.rapier_thrust_recovery >= 0.60, "Rapier timing mismatch")
 	_expect(config.fan_slash_windup >= 0.54 and config.fan_slash_recovery >= 0.72, "Fan timing mismatch")
 	_expect(config.phase_1_min_attack_gap >= 0.84, "Phase 1 gap too short")
-	_expect(config.phase_2_min_attack_gap >= 0.72, "Phase 2 gap too short")
+	_expect(is_equal_approx(config.phase_2_min_attack_gap, 0.82), "Phase 2 minimum gap mismatch")
+	_expect(is_equal_approx(config.phase_2_max_attack_gap, 1.02), "Phase 2 maximum gap mismatch")
 
 
 func _wait_until_combat_ready(boss: HollowDuchess) -> void:
@@ -110,6 +117,12 @@ func _validate_phase_and_poise(boss: HollowDuchess, player: Player) -> void:
 			break
 	_expect(boss.get_phase() == 2, "Phase 2 did not activate at 121 HP")
 	_expect(boss.health_component.current_health == 121, "Phase transition restored HP")
+	_expect(boss.get_current_poise() == 80, "Phase 2 Poise did not increase to 80")
+	_expect(boss.is_phase_transition_completed(), "Phase transition completion flag missing")
+	var mitigation_probe: HitboxComponent = HitboxComponent.new()
+	mitigation_probe.damage = 20
+	_expect(boss.hurtbox.hit_policy.resolve_damage(mitigation_probe) == 17, "Phase 2 damage reduction is not 15%")
+	mitigation_probe.queue_free()
 	boss.reset_boss()
 	boss.config.intro_retry_duration = 0.05
 	boss.activate(player, true)

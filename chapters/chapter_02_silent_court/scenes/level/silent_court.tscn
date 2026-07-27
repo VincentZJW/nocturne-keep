@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3]
+[gd_scene load_steps=48 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
@@ -38,6 +38,9 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_enemy_spawn_point.gd" id="36_spawn"]
 [ext_resource type="PackedScene" path="res://shared/scenes/enemies/fallen_crossbowman.tscn" id="37_crossbow"]
 [ext_resource type="PackedScene" path="res://shared/scenes/enemies/gargoyle_sentinel.tscn" id="38_gargoyle"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_boss_entrance.tscn" id="39_boss_entrance"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_encounter_presentation.tscn" id="40_boss_presentation"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/transitions/duchess_reliquary.tscn" id="41_reliquary"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 2520)
@@ -618,40 +621,40 @@ enemy_role = &"HangingStalker"
 placement = 2
 
 [node name="E15_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
-position = Vector2(2240, -1188)
+position = Vector2(1940, -1188)
 script = ExtResource("36_spawn")
 encounter_id = &"EncounterE15"
 floor_number = 3
-activation_center = Vector2(2440, -1188)
+activation_center = Vector2(2120, -1188)
 activation_range_x = 300.0
 enemy_scene = ExtResource("13_retainer")
 enemy_role = &"HollowRetainer"
-platform_left_bound = 2180.0
-platform_right_bound = 2640.0
+platform_left_bound = 1880.0
+platform_right_bound = 2320.0
 
 [node name="E15_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
-position = Vector2(2420, -1188)
+position = Vector2(2120, -1188)
 script = ExtResource("36_spawn")
 encounter_id = &"EncounterE15"
 floor_number = 3
-activation_center = Vector2(2440, -1188)
+activation_center = Vector2(2120, -1188)
 activation_range_x = 300.0
 enemy_scene = ExtResource("14_halberdier")
 enemy_role = &"CourtHalberdier"
-platform_left_bound = 2180.0
-platform_right_bound = 2640.0
+platform_left_bound = 1880.0
+platform_right_bound = 2320.0
 
 [node name="E15_GroundSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
-position = Vector2(2600, -1188)
+position = Vector2(2300, -1188)
 script = ExtResource("36_spawn")
 encounter_id = &"EncounterE15"
 floor_number = 3
-activation_center = Vector2(2440, -1188)
+activation_center = Vector2(2120, -1188)
 activation_range_x = 300.0
 enemy_scene = ExtResource("15_armor")
 enemy_role = &"MourningArmor"
-platform_left_bound = 2180.0
-platform_right_bound = 2640.0
+platform_left_bound = 1880.0
+platform_right_bound = 2320.0
 
 [node name="ChapterSystems" type="Node" parent="."]
 
@@ -676,8 +679,9 @@ boss_hud_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/Chapte
 intro_card_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/DuchessIntroCard")
 dialogue_label_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/DuchessDialogue")
 ballroom_fx_path = NodePath("../../GameplayWorld/BossArea/BallroomFx")
+presentation_path = NodePath("../../GameplayWorld/BossArea/DuchessEncounterPresentation")
 camera_left = 2688
-camera_right = 7168
+camera_right = 6400
 
 [node name="Chapter02To03TransitionController" type="Node" parent="ChapterSystems"]
 script = ExtResource("31_transition_controller")
@@ -688,7 +692,8 @@ boss_path = NodePath("../../GameplayWorld/BossArea/HollowDuchess")
 room_controller_path = NodePath("../HollowDuchessRoomController")
 ballroom_fx_path = NodePath("../../GameplayWorld/BossArea/BallroomFx")
 mirror_gate_path = NodePath("../../GameplayWorld/BossArea/BallroomMirrorGate")
-reward_anchor_path = NodePath("../../GameplayWorld/BossArea/Chapter02BossWeaponPickupAnchor")
+reward_anchor_path = NodePath("../../GameplayWorld/BossArea/DuchessReliquary/WeaponDisplay/PickupAnchor")
+reliquary_path = NodePath("../../GameplayWorld/BossArea/DuchessReliquary")
 pickup_parent_path = NodePath("../../GameplayWorld/Pickups")
 acquisition_panel_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/CrimsonMasqueAcquisitionPanel")
 
@@ -770,23 +775,29 @@ position = Vector2(2688, -1800)
 z_index = -6
 script = ExtResource("21_ballroom_fx")
 
+[node name="DuchessBossEntrance" parent="GameplayWorld/BossArea" instance=ExtResource("39_boss_entrance")]
+position = Vector2(3100, -1188)
+
+[node name="DuchessEncounterPresentation" parent="GameplayWorld/BossArea" instance=ExtResource("40_boss_presentation")]
+position = Vector2(4700, -1188)
+
 [node name="BossSpawn" type="Marker2D" parent="GameplayWorld/BossArea"]
-position = Vector2(6000, -1188)
+position = Vector2(4700, -1188)
 
 [node name="HollowDuchess" parent="GameplayWorld/BossArea" instance=ExtResource("18_duchess")]
-position = Vector2(6000, -1188)
+position = Vector2(4700, -1188)
 
 [node name="PlayerBossEntry" type="Marker2D" parent="GameplayWorld/BossArea"]
-position = Vector2(2920, -1216)
+position = Vector2(3460, -1216)
 
-[node name="Chapter02BossWeaponPickupAnchor" type="Marker2D" parent="GameplayWorld/BossArea"]
-position = Vector2(6460, -1188)
+[node name="DuchessReliquary" parent="GameplayWorld/BossArea" instance=ExtResource("41_reliquary")]
+position = Vector2(5550, -1188)
 
 [node name="BallroomMirrorGate" parent="GameplayWorld/BossArea" instance=ExtResource("28_mirror_gate")]
-position = Vector2(6870, -1188)
+position = Vector2(6250, -1188)
 
 [node name="BossActivationArea" type="Area2D" parent="GameplayWorld/BossArea"]
-position = Vector2(3100, -1548)
+position = Vector2(3800, -1548)
 collision_layer = 0
 collision_mask = 2
 monitoring = true
@@ -795,10 +806,10 @@ monitoring = true
 shape = SubResource("Rectangle_boss_activation")
 
 [node name="BossCameraBounds" type="Marker2D" parent="GameplayWorld/BossArea"]
-position = Vector2(4928, -1620)
+position = Vector2(4700, -1620)
 
 [node name="BossDoorRear" type="StaticBody2D" parent="GameplayWorld/BossArea"]
-position = Vector2(2800, -1268)
+position = Vector2(3280, -1268)
 collision_layer = 0
 collision_mask = 0
 
@@ -811,7 +822,7 @@ disabled = true
 shape = SubResource("Rectangle_boss_door")
 
 [node name="BossExitDoor" type="StaticBody2D" parent="GameplayWorld/BossArea"]
-position = Vector2(7060, -1268)
+position = Vector2(6050, -1268)
 collision_layer = 1
 collision_mask = 0
 

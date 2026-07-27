@@ -4630,3 +4630,59 @@ Status: complete — closed floor endpoints, formal bounded platform spawns, Mai
 - Automated checks verify saved height, platform floor contact, movement bounds, finite encounter membership, two 10-run transitions and three complete routes. Shared Phase 2 tests verify attack/hurt/death behavior. Subjective platform reachability, combat fairness, aggressive knockback outcomes and checkpoint replay feel still require human F5 play.
 - Manual route: set Debug chapter to `CHAPTER_02_SILENT_COURT`, spawn to `CH2_START`, press F5, follow F1 right through Banquet and the Grand door, follow F2 left through Chapel and the Servant door, then inspect the staged Antechamber before the Boss.
 - Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA images and two UID sidecars remain preserved and excluded from this milestone commit.
+
+## 2026-07-27 — Hollow Duchess entrance, unmasked phase and reliquary preflight
+
+Status: in progress — read-only Main/Boss/reward audit complete; implementation and exact-engine verification pending
+
+### Goal and scope
+
+- Make the saved F5 Chapter II Boss route unmistakable and compact: a formal entrance, 5–8 second first-view introduction, 1–1.5 second retry, a 3.5–5.5 second one-shot 55% transformation, genuinely redrawn Unmasked SpriteFrames, Phase 2 defense/damage/cadence changes, and a short post-fight Duchess’s Reliquary route.
+- Preserve the existing three-floor route, normal enemies, Chapter I, Player movement, Ravenfang values, Crimson Masque 14/28 values, loot/coin systems and the Chapter III destination scenes.
+
+### Read-only audit and planned task-owned files
+
+- Work begins on `master` at `cdd6b358c80ee0cc6f1df7469b815afe2839ac5c`; F5 resolves through `res://scenes/bootstrap/main_bootstrap.tscn` to `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn` for the Chapter II Debug route.
+- Saved Main paths are `SilentCourt/GameplayWorld/Geometry/Rooms/SilentBallroomAntechamber`, `SilentCourt/GameplayWorld/Geometry/Rooms/SilentBallroom`, `SilentCourt/GameplayWorld/BossArea/HollowDuchess`, `SilentCourt/GameplayWorld/BossArea/BossActivationArea`, `SilentCourt/ChapterSystems/HollowDuchessRoomController` and `SilentCourt/ChapterSystems/Chapter02To03TransitionController`.
+- Current CP05 is global `x=2500`, activation is `x=3100` (600 px), while Seraphine is at `x=6000`; the saved Ballroom is 4480 px wide and the Boss config spans 4140 px (`-3020..+1120`). The encounter therefore reads as a long corridor even though the trigger itself is near CP05.
+- The current intro only emits `你果然回来了。`; no saved entrance presentation or AnimationPlayer owns the required five-line exchange. Phase transition is 1.22 seconds, only draws cracks into the Phase 1 frame, and never switches SpriteFrames. Phase 2 has no damage reduction, remains at 60 Poise and reuses Phase 1 damage values.
+- The existing Chapter II→III controller spawns Crimson Masque at `Chapter02BossWeaponPickupAnchor` and begins mirror reveal immediately on Boss defeat. Reload restores that floor pickup and already-revealed mirror. The new flow must instead unlock a saved reliquary, preserve an uncollected displayed weapon, and reveal/enable the mirror only after collection.
+- Planned task-owned files include the Hollow Duchess config/runtime/room/transition scripts and tests, Silent Ballroom/Main saved composition, a narrow Boss hit policy, a composed entrance presentation, a composed reliquary, deterministic Godot Image generators/builders for Phase 2, focused Main/reload/phase tests, ten MainBootstrap screenshots, and Boss/transition/design documentation.
+- Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA images and two untracked UID sidecars are unrelated. They will remain untouched and excluded from staging.
+
+## 2026-07-27 — Hollow Duchess entrance, Unmasked phase and reliquary completion
+
+Status: complete — saved MainBootstrap route, original Phase 2 pixel art/audio, phase contracts, reliquary reward flow, 52-test regression and ten-frame graphical QA passed; human feel/audio-level acceptance pending
+
+### Delivered scope
+
+- Added the collision-backed `DuchessBossEntrance` at x=3100 with monumental black-red split doors, oxidized-gold framing, cracked porcelain crest, two faceless statues, sequential candles, carpet and bilingual “The final waltz admits no absence. / 最后一支舞，不容缺席。” inscription. CP05 remains at x=2500, all ordinary E15 actors end by x=2300, and the intro trigger is x=3800.
+- Reframed the old misleading 600 px trigger plus 2900 px hidden Boss leg into a 1300 px CP05→trigger route (1.02 design viewports, approximately 5.9 seconds at 220 px/s) with a visible door halfway through. Reduced the Ballroom saved width from 4480 to 3712 px; its collision-backed fight floor is 2770 px or 2.16 viewports.
+- Added a saved `DuchessEncounterPresentation/AnimationPlayer` with `intro_full` 6.40 s, `intro_retry` 1.25 s and `phase_transition_full` 4.40 s. First entry locks Player, frames both actors, lights candles, shows phantom dancers, plays an original project-generated broken waltz and emits the exact five-line exchange plus title. Retry shows only the shortened title route.
+- Built a separate looping `AudioStreamWAV` Resource at `assets/boss/hollow_duchess/audio/broken_waltz_intro.tres`; it is generated from deterministic project code, uses no downloaded/source-unknown asset and stops when Phase Transition starts. Chapter II currently has no ambient BGM source to duck.
+- Rebuilt Phase 2 as 100 original transparent source frames across all 20 saved animation names, plus five named transition stages. Runtime uses the Phase 1 SpriteFrames until the one-shot 55% transition, then swaps to `hollow_duchess_unmasked_sprite_frames.tres`; it does not use a red modulate/shader substitute.
+- Phase 2 keeps current HP, changes incoming damage to 0.85, Poise 60→80, stagger 0.56→0.48 s, protection 2.50→3.00 s and attack gap 0.84–1.02→0.82–1.02 s. Runtime attack values are Rapier 13, Fan 16, Riposte/Side 14, Double 10/14, Phantom 12 and Final Waltz 10 per pass; Phase 1 remains 11/13/12/12.
+- Replaced the corpse-side floor reward with the saved `DuchessReliquary` at x=5550. It unlocks only after death presentation and sits 850 px (0.66 viewport, approximately 3.9 seconds) from the Boss saved start. The saved crossed-stiletto display owns the visible weapon; E collection reuses the existing unique Tier 3 14/28 pickup contract, empties the cabinet, reveals the thirteen-crack mirror and unlocks the Royal Chapel Passage. Defeated/uncollected and collected reload branches both passed.
+
+### Exact commands and actual results
+
+1. Audio generation: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_02_silent_court/scripts/tools/generate_duchess_broken_waltz.gd` — `DUCHESS_BROKEN_WALTZ: PASS samples=145530`.
+2. Exact import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, import, UID or missing-resource error.
+3. Presentation/phase contract: `Godot --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_hollow_duchess_presentation_phase.gd` — `PASS intro=5 transition=10 phase2=0.85/80`. It verifies the looping AudioStreamWAV, five intro plays with only one full five-line dialogue, ten one-shot transitions, no HP restore, SpriteFrames swap and all Phase 2 damage values.
+4. Saved Main composition: `test_hollow_duchess_main_integration.gd` — `PASS boss=1 entrance=1 presentation=1 cp05=1 hud=1 reliquary=1 mirror=1`.
+5. Reward/reload/passage: `test_chapter_02_to_03_transition.gd` — `PASS dialogue=4 reliquary=1 mirror_after_reward=1 crimson=14/28 reload=2 passage=1 chapter3=1`.
+6. Full recursive exact-engine regression: a sorted loop over every repository `test_*.gd` using `Godot --headless --path . --script res://<test>` — `FULL_SUITE tests=52 failed=0`. This includes three complete physics/Input Map Chapter II routes, all Player/combat systems, Boss attack loops, five full Boss simulations, chapter transitions and Chapter I regressions.
+7. Graphical MainBootstrap QA: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tests/capture_hollow_duchess_qa.gd` — GL Compatibility / Apple M4; `HOLLOW_DUCHESS_MAIN_QA: PASS captures=10 entrance=1 intro=1 phase2=1 reliquary=1 main=res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`. Runtime output contained no `SCRIPT ERROR`, missing resource or red Godot error. SHA-256 evidence ledger: `docs/qa/chapter_02_hollow_duchess/hollow_duchess_entrance_phase_reliquary_qa_report.md`.
+8. Isolated staged-tree verification: archived tree `645c056b68b483d6cbbeed681706685c159c8bfd` to `/var/folders/ps/tqqkgqfd0k752pz37ddxwybh0000gn/T/tmp.x9jJpTNc1j`; exact import exited 0, and presentation/phase, saved Main composition and Chapter II→III transition tests all passed with `tests_failed=0`. This proves the milestone without the preserved unstaged Chapter I/shared/Player tuning changes.
+
+### Defects found and corrected during verification
+
+- Initial route regression exposed that shortening the Boss-room right wall globally also removed necessary floor bounds on earlier floors. Restoring the saved world wall to x=7200 returned all three full routes to `softlocks=0` without widening the actual Ballroom collision floor.
+- The first Phase 2 evidence capture proved runtime state but left Seraphine at the camera edge. The Main QA driver now waits for Phase 2 `Idle`, reframes the real saved Boss and captures a readable Unmasked silhouette; Gameplay timing is unchanged.
+- The first reliquary placement was 1150 px/0.90 viewport from the Boss saved start. It was moved to x=5550 and retested at 850 px/0.66 viewport, satisfying the requested 0.3–0.7 viewport and 3–8 second post-fight route.
+
+### Scope, known issues and manual acceptance
+
+- No Chapter II normal enemy, three-floor route, Chapter I file, Player movement/value, Ravenfang/Crimson value, loot probability, coin system or Chapter III formal map was changed. Pre-existing unrelated dirty files remain preserved and excluded from this milestone commit.
+- The original broken waltz is a functional low-fidelity prototype. Human acceptance is still required for loudness/musical feel, camera framing, entrance pacing, Phase 2 telegraph readability and the 3.9-second reliquary walk. Chapter II has no separate ordinary-area BGM source, so proximity ducking could not truthfully be implemented in this milestone.
+- F5 acceptance: set Debug chapter `CHAPTER_02_SILENT_COURT`, spawn `CH2_BOSS`, press F5, start at CP05, enter the visible door, cross the short threshold, view Phase 1, reach 121/220 HP, view the 4.40-second transformation, defeat Unmasked Seraphine, walk right to the reliquary, press E for Crimson Masque and use the revealed Royal Chapel Passage. Stop after the existing Chapter III entry placeholder; no Chapter III gameplay was added.

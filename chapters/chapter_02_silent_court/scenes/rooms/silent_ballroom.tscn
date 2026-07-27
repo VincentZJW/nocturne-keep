@@ -5,10 +5,10 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_st2v6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ryjs5"]
-size = Vector2(4480, 108)
+size = Vector2(3712, 108)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lmfeo"]
-size = Vector2(4480, 720)
+size = Vector2(3712, 720)
 
 [node name="SilentBallroom" type="Node2D" unique_id=977338055]
 z_index = -60
@@ -17,7 +17,7 @@ script = ExtResource("1_mocl5")
 room_id = &"SILENT_BALLROOM"
 bilingual_name = "Silent Ballroom / 无声舞会厅"
 room_index = 9
-room_size = Vector2i(4480, 720)
+room_size = Vector2i(3712, 720)
 accent_color = Color(0.5411765, 0.47058824, 0.5921569, 1)
 
 [node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=837969065]
@@ -28,7 +28,7 @@ accent_color = Color(0.5411765, 0.47058824, 0.5921569, 1)
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=634841874]
-position = Vector2(2240, 666)
+position = Vector2(1856, 666)
 shape = SubResource("RectangleShape2D_ryjs5")
 one_way_collision = true
 one_way_collision_margin = 8.0
@@ -37,7 +37,7 @@ one_way_collision_margin = 8.0
 z_index = 20
 z_as_relative = false
 script = ExtResource("2_rsu53")
-room_width = 4480.0
+room_width = 3712.0
 trim_color = Color(0.57788235, 0.5129412, 0.62478435, 1)
 
 [node name="PropsPlaceholder" type="Node2D" parent="." unique_id=420184059]
@@ -45,7 +45,7 @@ trim_color = Color(0.57788235, 0.5129412, 0.62478435, 1)
 [node name="DoorAnchors" type="Node2D" parent="." unique_id=46001228]
 
 [node name="SilentBallroomExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1559148119]
-position = Vector2(4400, 612)
+position = Vector2(3632, 612)
 
 [node name="CheckpointAnchors" type="Node2D" parent="." unique_id=359614293]
 
@@ -58,7 +58,7 @@ position = Vector2(4400, 612)
 [node name="RouteAnchors" type="Node2D" parent="." unique_id=530724091]
 
 [node name="BossLaneCenter" type="Marker2D" parent="RouteAnchors" unique_id=1867113767]
-position = Vector2(2450, 612)
+position = Vector2(1812, 612)
 
 [node name="CameraBounds" type="Area2D" parent="." unique_id=2128930368]
 collision_layer = 0
@@ -67,14 +67,14 @@ script = ExtResource("3_st2v6")
 room_id = &"SILENT_BALLROOM"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=2129873455]
-position = Vector2(2240, 360)
+position = Vector2(1856, 360)
 shape = SubResource("RectangleShape2D_lmfeo")
 
 [node name="RoomEntry" type="Marker2D" parent="." unique_id=1146761384]
 position = Vector2(64, 612)
 
 [node name="RoomExit" type="Marker2D" parent="." unique_id=225675955]
-position = Vector2(4416, 612)
+position = Vector2(3648, 612)
 
 [node name="DebugLabel" type="Label" parent="." unique_id=1689287405]
 z_index = 100

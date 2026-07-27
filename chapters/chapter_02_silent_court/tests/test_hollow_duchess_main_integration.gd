@@ -25,7 +25,9 @@ func _run() -> void:
 		"GameplayWorld/BossArea/BossExitDoor", "GameplayWorld/BossArea/BallroomFx", "PlayerSpawnPoints/CH2_BOSS",
 		"ChapterSystems/HollowDuchessRoomController", "GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/HollowDuchessBossHud",
 		"ChapterSystems/Chapter02To03TransitionController", "GameplayWorld/BossArea/BallroomMirrorGate",
-		"GameplayWorld/BossArea/Chapter02BossWeaponPickupAnchor",
+		"GameplayWorld/BossArea/DuchessBossEntrance/DoorBlocker",
+		"GameplayWorld/BossArea/DuchessEncounterPresentation/AnimationPlayer",
+		"GameplayWorld/BossArea/DuchessReliquary/WeaponDisplay/PickupAnchor",
 	]
 	for path: String in required_paths:
 		if level.get_node_or_null(path) == null:
@@ -35,7 +37,9 @@ func _run() -> void:
 	var spawn: Marker2D = level.get_node_or_null("PlayerSpawnPoints/CH2_BOSS") as Marker2D
 	if boss != null:
 		_expect(boss.health_component.max_health == 220, "Main Boss HP mismatch")
-		_expect(boss.global_position.distance_to(Vector2(6000, -1188)) < 1.0, "Main Boss spawn mismatch")
+		_expect(boss.global_position.distance_to(Vector2(4700, -1188)) < 1.0, "Main Boss spawn mismatch")
+		_expect(boss.phase_2_sprite_frames != null, "Main Boss Phase 2 SpriteFrames missing")
+		_expect(boss.config.phase_2_max_poise == 80, "Main Boss Phase 2 Poise mismatch")
 	if player != null and spawn != null:
 		player.global_position = spawn.global_position
 		_expect(player.global_position == Vector2(2500, -1216), "CH2_BOSS spawn mismatch")
@@ -49,7 +53,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("HOLLOW_DUCHESS_MAIN_TEST: PASS boss=1 doors=2 cp05=1 hud=1 mirror=1 reward_anchor=1")
+		print("HOLLOW_DUCHESS_MAIN_TEST: PASS boss=1 entrance=1 presentation=1 cp05=1 hud=1 reliquary=1 mirror=1")
 		quit(0)
 		return
 	for failure: String in _failures:

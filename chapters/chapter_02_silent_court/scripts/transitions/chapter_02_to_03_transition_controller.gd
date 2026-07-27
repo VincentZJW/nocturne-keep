@@ -24,6 +24,7 @@ const REWARD_WEAPON_ID: StringName = &"crimson_masque_stilettos"
 @export_node_path("HollowDuchessBallroomFx") var ballroom_fx_path: NodePath
 @export_node_path("BallroomMirrorGate") var mirror_gate_path: NodePath
 @export_node_path("Marker2D") var reward_anchor_path: NodePath
+@export_node_path("DuchessReliquary") var reliquary_path: NodePath
 @export_node_path("Node2D") var pickup_parent_path: NodePath
 @export_node_path("CrimsonMasqueAcquisitionPanel") var acquisition_panel_path: NodePath
 
@@ -39,6 +40,7 @@ const REWARD_WEAPON_ID: StringName = &"crimson_masque_stilettos"
 	mirror_gate_path
 ) as BallroomMirrorGate
 @onready var reward_anchor: Marker2D = get_node_or_null(reward_anchor_path) as Marker2D
+@onready var reliquary: DuchessReliquary = get_node_or_null(reliquary_path) as DuchessReliquary
 @onready var pickup_parent: Node2D = get_node_or_null(pickup_parent_path) as Node2D
 @onready var acquisition_panel: CrimsonMasqueAcquisitionPanel = get_node_or_null(
 	acquisition_panel_path
@@ -77,13 +79,13 @@ func _on_boss_defeated() -> void:
 	var session: ChapterSessionState = _session()
 	if session != null:
 		session.set_story_flag(FLAG_DUCHESS_DEFEATED)
-	player.set_input_profile(Player.InputProfile.LOCKED)
-	player.velocity = Vector2.ZERO
 	ballroom_fx.set_defeated()
 	boss.visible = false
+	reliquary.set_unlocked(true)
+	reliquary.set_collected(false)
 	_ensure_reward_pickup()
-	if not mirror_gate.begin_reveal(transition_data.mirror_reveal_duration):
-		_on_mirror_revealed()
+	if not player.is_dead():
+		player.set_input_profile(Player.InputProfile.FULL)
 
 
 func _on_mirror_revealed() -> void:
@@ -102,12 +104,17 @@ func _on_reward_collected(weapon_id: StringName) -> void:
 	var session: ChapterSessionState = _session()
 	if session != null:
 		session.set_story_flag(FLAG_REWARD_COLLECTED)
+	reliquary.set_collected(true)
 	var equipment: PlayerEquipmentManager = get_node_or_null(
 		"/root/EquipmentManager"
 	) as PlayerEquipmentManager
 	if acquisition_panel != null and equipment != null:
 		acquisition_panel.present(equipment.get_weapon(REWARD_WEAPON_ID))
 	reward_collected.emit(weapon_id)
+	player.set_input_profile(Player.InputProfile.LOCKED)
+	player.velocity = Vector2.ZERO
+	if not mirror_gate.begin_reveal(transition_data.mirror_reveal_duration):
+		_on_mirror_revealed()
 
 
 func _on_passage_requested() -> void:
@@ -156,8 +163,12 @@ func _apply_persisted_state() -> void:
 	_sequence_started = true
 	room_controller.apply_persisted_clear_state()
 	ballroom_fx.set_defeated()
-	mirror_gate.reveal_immediately()
-	if not session.has_story_flag(FLAG_REWARD_COLLECTED):
+	reliquary.set_unlocked(true, true)
+	if session.has_story_flag(FLAG_REWARD_COLLECTED):
+		reliquary.set_collected(true)
+		mirror_gate.reveal_immediately()
+	else:
+		reliquary.set_collected(false)
 		_ensure_reward_pickup()
 
 
@@ -175,6 +186,7 @@ func _ensure_reward_pickup() -> void:
 			session.set_story_flag(FLAG_REWARD_COLLECTED)
 		if _reward_pickup != null:
 			_reward_pickup.set_available(false)
+		reliquary.set_collected(true)
 		return
 	if _reward_pickup == null or not is_instance_valid(_reward_pickup):
 		_reward_pickup = reward_pickup_scene.instantiate() as WeaponPickup
@@ -183,6 +195,12 @@ func _ensure_reward_pickup() -> void:
 			return
 		pickup_parent.add_child(_reward_pickup)
 		_reward_pickup.global_position = reward_anchor.global_position
+		var floor_sprite: Sprite2D = _reward_pickup.get_node_or_null("Sprite2D") as Sprite2D
+		var floor_glow: PointLight2D = _reward_pickup.get_node_or_null("Glow") as PointLight2D
+		if floor_sprite != null:
+			floor_sprite.visible = false
+		if floor_glow != null:
+			floor_glow.visible = false
 		_reward_pickup.weapon_collected.connect(_on_reward_collected)
 	_reward_pickup.set_available(true)
 	reward_spawned.emit()
@@ -197,7 +215,8 @@ func _validate_dependencies() -> bool:
 		transition_data == null or not transition_data.is_valid()
 		or reward_pickup_scene == null or player == null or boss == null
 		or room_controller == null or ballroom_fx == null or mirror_gate == null
-		or reward_anchor == null or pickup_parent == null or acquisition_panel == null
+		or reward_anchor == null or reliquary == null or pickup_parent == null
+		or acquisition_panel == null
 	):
 		push_error("Chapter02To03TransitionController scene composition is incomplete")
 		return false

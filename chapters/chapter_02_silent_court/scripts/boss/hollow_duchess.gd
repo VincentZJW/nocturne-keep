@@ -5,6 +5,8 @@ extends CharacterBody2D
 
 signal combat_started
 signal phase_changed(phase: int)
+signal phase_transition_started
+signal phase_transition_completed
 signal poise_changed(current: int, maximum: int)
 signal attack_started(attack_name: StringName)
 signal attack_active(attack_name: StringName, attack_id: int)
@@ -105,6 +107,8 @@ const ATTACK_FINAL: StringName = &"final_waltz_crossing"
 
 @export var config: HollowDuchessConfig
 @export var phantom_route_scene: PackedScene
+@export var phase_transition_sprite_frames: SpriteFrames
+@export var phase_2_sprite_frames: SpriteFrames
 @export_node_path("AnimatedSprite2D") var sprite_path: NodePath = NodePath("VisualRoot/AnimatedSprite2D")
 @export_node_path("Node2D") var facing_root_path: NodePath = NodePath("FacingRoot")
 @export_node_path("HealthComponent") var health_path: NodePath = NodePath("HealthComponent")
@@ -135,6 +139,8 @@ var _turn_target_direction: float = -1.0
 var _turn_committed: bool = false
 var _phase: int = 1
 var _phase_transition_pending: bool = false
+var _phase_transition_completed: bool = false
+var _phase_2_visual_applied: bool = false
 var _current_poise: int = 60
 var _stagger_protection_remaining: float = 0.0
 var _attack_gap_remaining: float = 0.0
@@ -165,6 +171,7 @@ var _death_boss_line_emitted: bool = false
 var _death_passage_line_emitted: bool = false
 var _death_echo_line_emitted: bool = false
 var _defeat_emitted: bool = false
+var _phase_1_sprite_frames: SpriteFrames
 
 
 func _ready() -> void:
@@ -172,12 +179,13 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 	_spawn_position = global_position
+	_phase_1_sprite_frames = animated_sprite.sprite_frames
 	_arena_left = _spawn_position.x + config.arena_left_offset
 	_arena_right = _spawn_position.x + config.arena_right_offset
 	_rng.seed = 20260727
 	health_component.max_health = config.max_health
 	health_component.reset_to_full()
-	_current_poise = config.max_poise
+	_current_poise = get_max_poise()
 	hurtbox.hit_resolving.connect(_on_hit_resolving)
 	hurtbox.hit_received.connect(_on_hit_received)
 	health_component.health_changed.connect(_on_health_changed)
@@ -185,7 +193,7 @@ func _ready() -> void:
 	_disable_all_hitboxes()
 	_apply_facing()
 	_play_animation(&"idle")
-	poise_changed.emit(_current_poise, config.max_poise)
+	poise_changed.emit(_current_poise, get_max_poise())
 
 
 func _physics_process(delta: float) -> void:
@@ -279,7 +287,6 @@ func activate(target: Player, retry_intro: bool = false) -> void:
 	_target = target
 	_intro_retry = retry_intro
 	_enter_state(State.INTRO)
-	intro_line_requested.emit("你果然回来了。")
 
 
 func reset_boss() -> void:
@@ -291,6 +298,8 @@ func reset_boss() -> void:
 	_target = null
 	_phase = 1
 	_phase_transition_pending = false
+	_phase_transition_completed = false
+	_phase_2_visual_applied = false
 	_current_poise = config.max_poise
 	_stagger_protection_remaining = 0.0
 	_attack_gap_remaining = 0.0
@@ -314,6 +323,8 @@ func reset_boss() -> void:
 	health_component.reset_to_full()
 	hurtbox.set_enabled(true)
 	hurtbox.set_invulnerable(false)
+	if _phase_1_sprite_frames != null:
+		animated_sprite.sprite_frames = _phase_1_sprite_frames
 	animated_sprite.modulate = Color.WHITE
 	_enter_state(State.DORMANT)
 	phase_changed.emit(_phase)
@@ -332,6 +343,14 @@ func get_current_poise() -> int:
 	return _current_poise
 
 
+func get_max_poise() -> int:
+	return config.phase_2_max_poise if _phase >= 2 else config.max_poise
+
+
+func is_phase_transition_completed() -> bool:
+	return _phase_transition_completed
+
+
 func get_current_attack() -> StringName:
 	return _current_attack
 
@@ -348,6 +367,25 @@ func get_facing_direction() -> float:
 	return _facing_direction
 
 
+func get_attack_damage(attack_name: StringName, strike_index: int = 0) -> int:
+	match attack_name:
+		ATTACK_RAPIER:
+			return _phase_damage(config.rapier_thrust_damage, config.phase_2_rapier_thrust_damage)
+		ATTACK_FAN:
+			return _phase_damage(config.fan_slash_damage, config.phase_2_fan_slash_damage)
+		ATTACK_RIPOSTE:
+			return _phase_damage(config.riposte_damage, config.phase_2_riposte_damage)
+		ATTACK_SIDE_CUT:
+			return _phase_damage(config.side_step_cut_damage, config.phase_2_side_step_cut_damage)
+		ATTACK_DOUBLE:
+			return config.double_lunge_damage_2 if strike_index >= 2 else config.double_lunge_damage_1
+		ATTACK_PHANTOM:
+			return config.phantom_damage
+		ATTACK_FINAL:
+			return config.final_waltz_damage
+	return 0
+
+
 func get_turn_total_duration() -> float:
 	return config.turn_reaction_delay + config.turn_animation_duration
 
@@ -359,7 +397,7 @@ func get_player_distance() -> float:
 func get_debug_status() -> String:
 	return "DUCHESS | %s | P%d | HP %d/%d | POISE %d/%d | ATK %s | GAP %.2f | CHAIN %d | FACE %+.0f | DIST %.1f | TURN %.2f | SIDE %.2f | RIP %.2f | PHANTOM %.2f | FINAL %.2f" % [
 		get_state_name(), _phase, health_component.current_health, health_component.max_health,
-		_current_poise, config.max_poise, _current_attack, _attack_gap_remaining, _chain_count,
+		_current_poise, get_max_poise(), _current_attack, _attack_gap_remaining, _chain_count,
 		_facing_direction, get_player_distance(), _state_elapsed if _state == State.TURN else 0.0,
 		_side_step_cooldown, _riposte_cooldown, _phantom_cooldown, _final_cooldown,
 	]
@@ -566,16 +604,26 @@ func _process_double_lunge_gap() -> void:
 
 
 func _process_phase_transition(delta: float) -> void:
-	var safe_direction: float = -_facing_direction
-	if _can_move_direction(safe_direction, 24.0) and _state_elapsed < config.phase_transition_retreat_time:
-		velocity.x = move_toward(velocity.x, safe_direction * config.retreat_speed, config.acceleration * delta)
+	var center_delta: float = _spawn_position.x - global_position.x
+	if absf(center_delta) > 6.0:
+		velocity.x = move_toward(
+			velocity.x,
+			signf(center_delta) * config.phase_transition_center_speed,
+			config.acceleration * delta
+		)
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+	if not _phase_2_visual_applied and _state_elapsed >= config.phase_2_sprite_reveal_time:
+		_apply_phase_2_visual()
 	if _state_elapsed >= config.phase_transition_duration:
 		_phase = 2
 		_phase_transition_pending = false
+		_phase_transition_completed = true
+		_current_poise = config.phase_2_max_poise
 		hurtbox.set_invulnerable(false)
 		phase_changed.emit(_phase)
+		poise_changed.emit(_current_poise, get_max_poise())
+		phase_transition_completed.emit()
 		_attack_gap_remaining = config.phase_2_entry_gap
 		_enter_state(State.IDLE)
 
@@ -612,7 +660,7 @@ func _begin_final_pass() -> void:
 	_facing_direction = _final_pass_direction
 	_apply_facing()
 	_active_attack_id = _consume_attack_id()
-	final_hitbox.begin_attack(_active_attack_id, config.final_waltz_damage, _facing_direction, self)
+	final_hitbox.begin_attack(_active_attack_id, get_attack_damage(ATTACK_FINAL), _facing_direction, self)
 	attack_active.emit(ATTACK_FINAL, _active_attack_id)
 
 
@@ -624,10 +672,14 @@ func _process_light_hit() -> void:
 
 func _process_stagger() -> void:
 	velocity.x = move_toward(velocity.x, 0.0, config.deceleration * get_physics_process_delta_time())
-	if _state_elapsed >= config.stagger_duration:
-		_current_poise = config.max_poise
-		_stagger_protection_remaining = config.stagger_protection_duration
-		poise_changed.emit(_current_poise, config.max_poise)
+	var duration: float = config.phase_2_stagger_duration if _phase >= 2 else config.stagger_duration
+	if _state_elapsed >= duration:
+		_current_poise = get_max_poise()
+		_stagger_protection_remaining = (
+			config.phase_2_stagger_protection_duration
+			if _phase >= 2 else config.stagger_protection_duration
+		)
+		poise_changed.emit(_current_poise, get_max_poise())
 		_attack_gap_remaining = config.post_stagger_gap
 		_enter_state(State.IDLE)
 
@@ -701,7 +753,7 @@ func _enter_state(next_state: State) -> void:
 			_play_animation(&"rapier_thrust_windup")
 		State.RAPIER_THRUST_ACTIVE:
 			_play_animation(&"rapier_thrust_active")
-			_open_hitbox(rapier_hitbox, config.rapier_thrust_damage, ATTACK_RAPIER)
+			_open_hitbox(rapier_hitbox, get_attack_damage(ATTACK_RAPIER), ATTACK_RAPIER)
 		State.RAPIER_THRUST_RECOVERY:
 			_play_animation(&"rapier_thrust_recovery")
 		State.FAN_SLASH_WINDUP:
@@ -709,13 +761,13 @@ func _enter_state(next_state: State) -> void:
 			_play_animation(&"fan_slash_windup")
 		State.FAN_SLASH_ACTIVE:
 			_play_animation(&"fan_slash_active")
-			_open_hitbox(fan_hitbox, config.fan_slash_damage, ATTACK_FAN)
+			_open_hitbox(fan_hitbox, get_attack_damage(ATTACK_FAN), ATTACK_FAN)
 		State.FAN_SLASH_RECOVERY:
 			_play_animation(&"fan_slash_recovery")
 		State.BACKSTEP_RIPOSTE_PREPARE, State.BACKSTEP_RIPOSTE_WINDUP:
 			_play_animation(&"riposte")
 		State.BACKSTEP_RIPOSTE_ACTIVE:
-			_open_hitbox(riposte_hitbox, config.riposte_damage, ATTACK_RIPOSTE)
+			_open_hitbox(riposte_hitbox, get_attack_damage(ATTACK_RIPOSTE), ATTACK_RIPOSTE)
 		State.BACKSTEP_RIPOSTE_RECOVERY:
 			_play_animation(&"rapier_thrust_recovery")
 		State.SIDE_STEP_CUT_PREPARE:
@@ -725,20 +777,24 @@ func _enter_state(next_state: State) -> void:
 			_play_animation(&"fan_slash_windup")
 		State.SIDE_STEP_CUT_ACTIVE:
 			_play_animation(&"fan_slash_active")
-			_open_hitbox(side_cut_hitbox, config.side_step_cut_damage, ATTACK_SIDE_CUT)
+			_open_hitbox(side_cut_hitbox, get_attack_damage(ATTACK_SIDE_CUT), ATTACK_SIDE_CUT)
 		State.SIDE_STEP_CUT_RECOVERY:
 			_play_animation(&"fan_slash_recovery")
 		State.PHASE_TRANSITION:
 			_disable_all_hitboxes()
+			_clear_phantoms()
 			hurtbox.set_invulnerable(true)
+			if phase_transition_sprite_frames != null:
+				animated_sprite.sprite_frames = phase_transition_sprite_frames
 			_play_animation(&"phase_transition")
+			phase_transition_started.emit()
 		State.DOUBLE_LUNGE_WINDUP:
 			_lock_facing_to_target()
 			_play_animation(&"double_lunge")
 		State.DOUBLE_LUNGE_HIT_1:
-			_open_hitbox(double_hitbox_1, config.double_lunge_damage_1, ATTACK_DOUBLE)
+			_open_hitbox(double_hitbox_1, get_attack_damage(ATTACK_DOUBLE, 1), ATTACK_DOUBLE)
 		State.DOUBLE_LUNGE_HIT_2:
-			_open_hitbox(double_hitbox_2, config.double_lunge_damage_2, ATTACK_DOUBLE)
+			_open_hitbox(double_hitbox_2, get_attack_damage(ATTACK_DOUBLE, 2), ATTACK_DOUBLE)
 		State.DOUBLE_LUNGE_RECOVERY:
 			_play_animation(&"rapier_thrust_recovery")
 		State.PHANTOM_DANCE_PREPARE:
@@ -835,7 +891,7 @@ func _spawn_phantom_routes() -> void:
 		)
 		route.configure_route(
 			start, finish, config.phantom_telegraph, config.phantom_active,
-			config.phantom_damage, _consume_attack_id(), self
+			get_attack_damage(ATTACK_PHANTOM), _consume_attack_id(), self
 		)
 		route.route_finished.connect(_on_phantom_finished)
 		_active_phantoms.append(route)
@@ -878,7 +934,7 @@ func _on_hit_received(_damage: int, _source_position: Vector2, _attack_id: int) 
 		else config.normal_attack_poise_damage
 	)
 	_current_poise = maxi(0, _current_poise - poise_damage)
-	poise_changed.emit(_current_poise, config.max_poise)
+	poise_changed.emit(_current_poise, get_max_poise())
 	_flash_hit()
 	if _current_poise <= 0 and _stagger_protection_remaining <= 0.0 and _can_enter_stagger():
 		_enter_state(State.STAGGER)
@@ -912,7 +968,7 @@ func apply_persisted_defeat() -> void:
 
 
 func _flash_hit() -> void:
-	animated_sprite.modulate = Color(1.0, 0.76, 0.78, 1.0)
+	animated_sprite.modulate = Color(1.0, 0.64, 0.68, 1.0) if _phase >= 2 else Color(1.0, 0.76, 0.78, 1.0)
 	var tween: Tween = create_tween()
 	tween.tween_property(animated_sprite, "modulate", Color.WHITE, config.light_hit_flash_duration)
 
@@ -999,6 +1055,19 @@ func _play_animation(animation_name: StringName) -> void:
 		return
 	if animated_sprite.animation != animation_name or not animated_sprite.is_playing():
 		animated_sprite.play(animation_name)
+
+
+func _phase_damage(phase_1_damage: int, phase_2_damage: int) -> int:
+	return phase_2_damage if _phase >= 2 else phase_1_damage
+
+
+func _apply_phase_2_visual() -> void:
+	_phase_2_visual_applied = true
+	if phase_2_sprite_frames == null:
+		push_error("HollowDuchess Phase 2 SpriteFrames are missing")
+		return
+	animated_sprite.sprite_frames = phase_2_sprite_frames
+	_play_animation(&"phase_transition")
 
 
 func _validate_dependencies() -> bool:

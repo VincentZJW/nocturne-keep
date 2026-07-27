@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/hollow_duchess.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/boss/hollow_duchess_data.tres" id="2_config"]
@@ -7,6 +7,9 @@
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_phantom_route.tscn" id="7_phantom"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/hollow_duchess_unmasked_sprite_frames.tres" id="8_phase_2"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/hollow_duchess_hit_policy.gd" id="9_hit_policy"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_transition/hollow_duchess_transformation_sprite_frames.tres" id="10_transition"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_body"]
 size = Vector2(30, 62)
@@ -42,6 +45,8 @@ collision_mask = 3
 script = ExtResource("1_boss")
 config = ExtResource("2_config")
 phantom_route_scene = ExtResource("7_phantom")
+phase_transition_sprite_frames = ExtResource("10_transition")
+phase_2_sprite_frames = ExtResource("8_phase_2")
 
 [node name="VisualRoot" type="Node2D" parent="."]
 position = Vector2(0, -36)
@@ -67,9 +72,13 @@ collision_mask = 32
 monitoring = false
 script = ExtResource("5_hurtbox")
 faction = &"enemy"
+hit_policy_path = NodePath("../HollowDuchessHitPolicy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
 shape = SubResource("Rectangle_hurtbox")
+
+[node name="HollowDuchessHitPolicy" type="Node" parent="."]
+script = ExtResource("9_hit_policy")
 
 [node name="FacingRoot" type="Node2D" parent="."]
 

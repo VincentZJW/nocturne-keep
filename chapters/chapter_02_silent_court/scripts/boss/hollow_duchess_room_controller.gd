@@ -18,6 +18,7 @@ signal room_cleared
 @export_node_path("Control") var intro_card_path: NodePath
 @export_node_path("Label") var dialogue_label_path: NodePath
 @export_node_path("HollowDuchessBallroomFx") var ballroom_fx_path: NodePath
+@export_node_path("DuchessEncounterPresentation") var presentation_path: NodePath
 @export var camera_left: int = 27520
 @export var camera_right: int = 32128
 
@@ -32,13 +33,18 @@ signal room_cleared
 @onready var intro_card: Control = get_node_or_null(intro_card_path) as Control
 @onready var dialogue_label: Label = get_node_or_null(dialogue_label_path) as Label
 @onready var ballroom_fx: HollowDuchessBallroomFx = get_node_or_null(ballroom_fx_path) as HollowDuchessBallroomFx
+@onready var presentation: DuchessEncounterPresentation = get_node_or_null(
+	presentation_path
+) as DuchessEncounterPresentation
 
 var encounter_started: bool = false
 var room_is_cleared: bool = false
 var intro_seen: bool = false
 var _default_camera_left: int = 0
 var _default_camera_right: int = 0
+var _default_camera_zoom: Vector2 = Vector2.ONE
 var _dialogue_tween: Tween
+var _card_tween: Tween
 
 
 func _ready() -> void:
@@ -54,10 +60,15 @@ func _initialize_room() -> void:
 	boss.intro_line_requested.connect(_on_intro_line_requested)
 	boss.death_line_requested.connect(_on_death_line_requested)
 	boss.phase_changed.connect(_on_boss_phase_changed)
+	boss.phase_transition_started.connect(_on_phase_transition_started)
+	boss.phase_transition_completed.connect(_on_phase_transition_completed)
+	presentation.dialogue_requested.connect(_on_presentation_dialogue_requested)
+	presentation.title_requested.connect(_on_presentation_title_requested)
 	respawn_controller.player_respawned.connect(_on_player_respawned)
 	boss_hud.bind_boss(boss)
 	_default_camera_left = player.player_camera.limit_left
 	_default_camera_right = player.player_camera.limit_right
+	_default_camera_zoom = player.player_camera.zoom
 	_set_door_closed(rear_door, false)
 	_set_door_closed(exit_door, true)
 	intro_card.visible = false
@@ -74,9 +85,10 @@ func _on_activation_body_entered(body: Node2D) -> void:
 	_set_door_closed(exit_door, true)
 	_lock_camera()
 	player.set_input_profile(Player.InputProfile.LOCKED)
-	intro_card.visible = true
+	intro_card.visible = false
 	activation_area.set_deferred("monitoring", false)
 	boss.activate(player, intro_seen)
+	presentation.play_intro(intro_seen)
 	intro_seen = true
 	room_locked.emit()
 
@@ -90,6 +102,27 @@ func _on_intro_line_requested(text: String) -> void:
 	_show_dialogue("瑟芙琳：%s" % text, 2.2)
 
 
+func _on_presentation_dialogue_requested(speaker: String, text: String, duration: float) -> void:
+	_show_dialogue("%s：%s" % [speaker, text], duration)
+
+
+func _on_presentation_title_requested(title: String, subtitle: String) -> void:
+	var title_label: Label = intro_card.get_node_or_null("Title") as Label
+	if title_label != null:
+		title_label.text = "%s\n%s" % [title, subtitle]
+	intro_card.modulate.a = 1.0
+	intro_card.visible = true
+	if _card_tween != null and _card_tween.is_valid():
+		_card_tween.kill()
+	_card_tween = create_tween()
+	_card_tween.tween_interval(1.05)
+	_card_tween.tween_property(intro_card, "modulate:a", 0.0, 0.22)
+	_card_tween.tween_callback(func() -> void:
+		intro_card.visible = false
+		intro_card.modulate.a = 1.0
+	)
+
+
 func _on_death_line_requested(speaker: String, text: String) -> void:
 	_show_dialogue("%s：%s" % [speaker, text], 0.72)
 
@@ -97,6 +130,23 @@ func _on_death_line_requested(speaker: String, text: String) -> void:
 func _on_boss_phase_changed(phase: int) -> void:
 	if ballroom_fx != null:
 		ballroom_fx.set_phase(phase)
+
+
+func _on_phase_transition_started() -> void:
+	if player.is_dead():
+		return
+	player.set_input_profile(Player.InputProfile.LOCKED)
+	player.velocity = Vector2.ZERO
+	var camera_tween: Tween = create_tween()
+	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom * 1.08, 0.45)
+	presentation.play_phase_transition()
+
+
+func _on_phase_transition_completed() -> void:
+	if not player.is_dead():
+		player.set_input_profile(Player.InputProfile.FULL)
+	var camera_tween: Tween = create_tween()
+	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom, 0.35)
 
 
 func _on_boss_defeated() -> void:
@@ -118,7 +168,9 @@ func apply_persisted_clear_state() -> void:
 	_set_door_closed(exit_door, false)
 	intro_card.visible = false
 	dialogue_label.visible = false
+	presentation.reset_presentation()
 	boss_hud.hide_immediately()
+	presentation.reset_presentation()
 	boss.apply_persisted_defeat()
 	_release_camera()
 
@@ -168,6 +220,7 @@ func _lock_camera() -> void:
 func _release_camera() -> void:
 	player.player_camera.limit_left = _default_camera_left
 	player.player_camera.limit_right = _default_camera_right
+	player.player_camera.zoom = _default_camera_zoom
 	player.player_camera.reset_smoothing()
 
 
@@ -176,6 +229,7 @@ func _validate_dependencies() -> bool:
 		player == null or boss == null or activation_area == null or rear_door == null
 		or exit_door == null or checkpoint == null or respawn_controller == null
 		or boss_hud == null or intro_card == null or dialogue_label == null
+		or presentation == null
 	):
 		push_error("HollowDuchessRoomController scene composition is incomplete")
 		return false

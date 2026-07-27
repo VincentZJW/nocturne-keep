@@ -52,7 +52,7 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 
 使用F6或`"$GODOT_BIN" --path . <scene path>`运行。房间从左到右依次为侍从、戟卫、铠甲、侍祭和倒悬猎兽；它只验证原型，不替代Bootstrap/第二章Main验收。
 
-第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05进入Silent Ballroom会触发Boss标题、台词、房门与镜头锁定；瑟芙琳在121/220 HP进入第二阶段。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
+第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05向右看到白瓷裂面徽记、双雕像、黑红地毯和“最后一支舞，不容缺席”的Boss门；接近后门在0.90秒内开启，短距离抵达Intro Trigger。首次播放6.40秒原创破损华尔兹与五句入场对白，死亡重试缩短为1.25秒；华尔兹在变身开始时停止。瑟芙琳在121/220 HP进入4.40秒变身，切换为独立的`The Hollow Duchess, Unmasked / 无面公爵夫人`逐帧美术与80 Poise。击败后向右约850px（0.66个1280px视口）到`The Duchess's Reliquary / 公爵夫人遗物龛`，按E取得绯幕礼刺，镜墙才产生十三道裂纹并允许进入王室礼拜秘门。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
 
 ```text
 res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn
@@ -149,6 +149,7 @@ Main开发调试快捷键：
 - [第二章Encounter矩阵](chapters/chapter_02_silent_court/docs/chapter_02_encounter_matrix.md)
 - [第二章Boss房规划](chapters/chapter_02_silent_court/docs/chapter_02_boss_room_plan.md)
 - [空心公爵夫人Boss规格](chapters/chapter_02_silent_court/docs/chapter_02_hollow_duchess_boss_spec.md)
+- [空心公爵夫人入口、无面阶段与遗物龛规格](docs/design/hollow_duchess_boss_spec.md)
 - [第二章至第三章转场规格](chapters/chapter_02_silent_court/docs/chapter_02_to_03_transition_spec.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
@@ -207,7 +208,7 @@ Chapter I normal enemies resolve exactly one health-aware result on Player kill:
 
 Pickups use original Godot-drawn pixel shapes, expire after 20 seconds (blink for the final 3), do not block actors and never heal a dead/full-health Player. Environment deaths never create healing and use half of the selected tier's coin chance. Coins and equipped weapon persist through Player death and the castle threshold; a fresh run resets them.
 
-Starting Veilbound Daggers deal 10 normal / 20 Dash damage. Enemy and Boss Health/shield pools are scaled 10× to preserve hit counts; enemy/Boss outgoing damage and Player 100 HP/100 Stamina did not change. The Gate Knight awards 30 coins and leaves Ravenfang Daggers (12/24) at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`. The Hollow Duchess leaves Crimson Masque Stilettos (14/28) at the fixed `Chapter02BossWeaponPickupAnchor`. Press E to collect either story weapon; its chapter exit will not transition until the reward is taken.
+Starting Veilbound Daggers deal 10 normal / 20 Dash damage. Enemy and Boss Health/shield pools are scaled 10× to preserve hit counts; enemy/Boss outgoing damage and Player 100 HP/100 Stamina did not change. The Gate Knight awards 30 coins and leaves Ravenfang Daggers (12/24) at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`. After the Hollow Duchess dissolves, Crimson Masque Stilettos (14/28) remain mounted in `SilentCourt/GameplayWorld/BossArea/DuchessReliquary/WeaponDisplay` until collected. Press E at either story reward; the relevant chapter exit will not transition until the reward is taken.
 
 Ravenfang now uses a complete alternate 49-frame Player set rather than an overlay: curved raven-claw blades, folded-wing guards, black grips and cold blue-gray edges remain consistent in locomotion, aerial movement, Attack, Dash Attack, Hurt and Death. In the Boss fight, normal hits still deal damage but use a 0.32-second lightweight visual reaction without cancelling an attack, Turn, Attack Gap or AI. Dash reactions use a 0.50-second feedback cooldown and can only interrupt neutral Idle/Approach/Recovery for 0.12 seconds; Turn is no longer interruptible. Fallen Gate Knight now owns separate close Shield Bash (`14×30`), medium Slash (`26×22`) and long Thrust (`32×10`) damage volumes instead of the old shared `100×42` rectangle. Shield Bash uses a readable `0.46 / 0.10 / 0.68` second windup/active/recovery sequence, a 2.70-second repeat cooldown and a 22% Phase-1 selection weight. The latest turn target supersedes the old 0.80–1.00-second band: `0.33` seconds reaction plus `0.80` seconds authored motion measures `1.1333` seconds at 60 Hz, with facing committed at 80% of the animation. Per-skill post-active gaps remain 1.05–1.20 seconds except Shield Bash, now 1.18 seconds to preserve its full recovery and counter window.
 

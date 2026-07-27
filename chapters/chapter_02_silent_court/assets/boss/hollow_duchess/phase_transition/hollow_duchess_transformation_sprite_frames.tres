@@ -1,0 +1,30 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_transition/mask_crack.png" id="1_ggsxo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_transition/mask_break.png" id="2_syq51"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_transition/body_distort.png" id="3_2d22u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_transition/dress_tear.png" id="4_cmngp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_transition/phase_2_reveal.png" id="5_hmayn"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ggsxo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_syq51")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_2d22u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_cmngp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_hmayn")
+}],
+"loop": 0,
+"name": &"phase_transition",
+"speed": 1.15
+}]
