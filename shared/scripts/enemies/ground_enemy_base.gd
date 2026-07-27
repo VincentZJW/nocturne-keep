@@ -5,6 +5,8 @@ extends EnemyCombatant
 
 signal state_changed(previous_state: StringName, current_state: StringName)
 
+const PLATFORM_EDGE_MARGIN: float = 12.0
+
 const IDLE: StringName = &"Idle"
 const PATROL: StringName = &"Patrol"
 const CHASE: StringName = &"Chase"
@@ -41,6 +43,9 @@ var home_x: float = 0.0
 var current_state: StringName = IDLE
 var ai_active: bool = true
 var death_presentation_complete: bool = false
+var _movement_bounds_enabled: bool = false
+var _movement_left_bound: float = 0.0
+var _movement_right_bound: float = 0.0
 
 
 func _ready() -> void:
@@ -168,8 +173,29 @@ func set_facing_direction(direction: float) -> void:
 	floor_check.position.x = absf(floor_check.position.x) * facing_direction
 
 
+func configure_movement_bounds(left_bound: float, right_bound: float) -> void:
+	if right_bound <= left_bound:
+		_movement_bounds_enabled = false
+		return
+	_movement_bounds_enabled = true
+	_movement_left_bound = left_bound
+	_movement_right_bound = right_bound
+
+
+func has_movement_bounds() -> bool:
+	return _movement_bounds_enabled
+
+
+func get_movement_bounds() -> Vector2:
+	return Vector2(_movement_left_bound, _movement_right_bound)
+
+
 func can_advance(direction: float) -> bool:
 	set_facing_direction(direction)
+	if _movement_bounds_enabled:
+		var probe_x: float = global_position.x + direction * PLATFORM_EDGE_MARGIN
+		if probe_x < _movement_left_bound or probe_x > _movement_right_bound:
+			return false
 	wall_check.force_raycast_update()
 	floor_check.force_raycast_update()
 	return not wall_check.is_colliding() and floor_check.is_colliding()
@@ -180,6 +206,12 @@ func has_valid_target() -> bool:
 
 
 func reached_patrol_boundary() -> bool:
+	if _movement_bounds_enabled:
+		return (
+			global_position.x <= _movement_left_bound and facing_direction < 0.0
+		) or (
+			global_position.x >= _movement_right_bound and facing_direction > 0.0
+		)
 	return (
 		global_position.x <= home_x - config.patrol_half_width and facing_direction < 0.0
 	) or (

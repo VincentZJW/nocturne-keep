@@ -4580,3 +4580,53 @@ Status: complete — fixed Boss reward, Player/HUD integration, Chapter III prof
 - No Player speed, reach, action timing, input, Dash behavior, combo/crit/element logic, enemy/Boss tuning, loot table, Chapter I weapon value or formal Chapter III gameplay changed. The Godot Gameplay skill kept weapon data, inventory/equipment, Player presentation, UI and story transition responsibilities separate rather than placing reward state in the Boss script.
 - Human F5 route: use Chapter II Debug start `CH2_BOSS`, defeat Seraphine, finish all four lines, inspect the mask-and-paired-stiletto pickup, first verify the door refuses entry, collect with E, confirm the compact panel plus HUD T3 14/28, test J and Dash Attack in both directions, then cross the Processional Passage into Chapter III.
 - Art is deterministic project-native 16-bit-inspired production prototype art, not externally sourced concept illustration or final audio/VFX. Save-file persistence remains deferred; current ownership/equipment/story flags persist for the run and chapter transitions.
+
+## 2026-07-27 — Chapter II stair terminals and elevated encounters preflight
+
+Status: in progress — read-only node/spawn audit complete; implementation and Main/F5 evidence pending
+
+### Goal and scope
+
+- Preserve the current three-floor route while turning both floor-change stairs into unmistakable physical endpoints: a short stair, safe landing, closed architectural wall/door, transition trigger, then a stable next-floor vestibule.
+- Re-author the existing 38-enemy encounter composition so formal elevated platforms participate in combat, with explicit per-spawn movement bounds and no normal AI pursuit/retreat beyond platform edges.
+- Keep Chapter II Boss tuning/reward/Chapter III story, Chapter I, Player movement, ordinary enemy HP/damage and loot probabilities unchanged.
+
+### Read-only audit and planned task-owned files
+
+- Work begins on `master` at `1d39a68af73c654177d3d52966c3b3e6c4ca3042`; F5 remains `res://scenes/bootstrap/main_bootstrap.tscn` and Chapter II Main remains `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`.
+- Floor 1 currently overlaps `LastBanquetHall` ground beyond `GrandServiceStair` and its `Floor1ToFloor2` trigger; Floor 2 similarly keeps `ServantPassage` ground outside `ServantSideStair` and `Floor2ToFloor3`. The destinations are `PlayerSpawnPoints/CH2_FLOOR_2_START` and `PlayerSpawnPoints/CH2_FLOOR_3_START`.
+- All 38 enemies are presently authored from global coordinates inside `Chapter02EncounterRuntime`; five Ceiling/Air entries exist, but all 33 grounded entries use the three main-floor Y levels. Room-local `EnemySpawnAnchors` exist as untyped `Marker2D` references and are not consumed by the runtime.
+- Shared `GroundEnemyBase` already has forward floor/wall RayCasts and patrol-half-width protection. This milestone will add an optional per-instance bounded-platform contract, use typed platform SpawnPoints in the formal encounter runtime, update the two terminal/arrival compositions and add deterministic route/spawn tests plus eight real MainBootstrap screenshots.
+- Pre-existing user-owned Chapter I/shared enemy tuning, Player/item Resources, old QA images and two untracked UID sidecars remain outside this milestone and will not be staged or claimed.
+
+## 2026-07-27 — Chapter II stair terminals and elevated encounters completion
+
+Status: complete — closed floor endpoints, formal bounded platform spawns, Main integration, exact-engine regression and eight-image QA delivered; human combat-feel acceptance pending
+
+### Delivered scope
+
+- Preserved the existing three-floor snake route and replaced only its ambiguous endpoints. Floor 1 now ends at `GrandServiceStairTerminal`, a collision-backed royal arch/heavy door/crest/twin-candle composition. Floor 2 ends at the narrower timber `ServantSideStairTerminal` with a side-wing door, crest and lamp.
+- Cropped the obsolete `LastBanquetHall` continuation at global `x=6320..7168` and the obsolete `ServantPassage` walkable region at local `x=0..768`. Those regions are no longer hidden walkable floor; terminal walls and Camera bounds physically close the route.
+- Added closed arrival vestibules for `CH2_FLOOR_2_START` and `CH2_FLOOR_3_START`. Floor transitions now deactivate every encounter group and clear Chapter II Crossbow/Blood-Candle projectiles before relocation; the existing Player/HUD/Camera are reused.
+- Replaced the runtime's duplicated hard-coded spawn table with 38 typed saved `Chapter02EnemySpawnPoint` nodes. Final distribution is 22 Ground, 11 Platform and 5 Ceiling/Air across the existing 15 encounters.
+- Added optional per-instance movement bounds to `GroundEnemyBase`. Normal patrol/approach/retreat movement respects the authored platform bounds as well as existing floor/wall raycasts; combat knockback may still push an actor off a platform.
+- Reworked the Ballroom Antechamber as three staged groups: E13 provides an elevated Crossbowman, elevated Retainer, ground Halberdier and air Gargoyle; E14 adds elevated Acolyte, ground Armor and delayed ceiling Stalker; E15 places the final ground trio before the Boss threshold. The Boss room itself remains Boss-only.
+- Added formal quick spawns `CH2_FLOOR_1_STAIRS`, `CH2_FLOOR_2_STAIRS`, and `CH2_ANTECHAMBER`; the existing `CH2_GALLERY` and `CH2_CHAPEL` selectors remain available.
+
+### Exact commands and actual results
+
+1. Exact import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, import or missing-resource error.
+2. New terminal/platform test: `Godot --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_chapter_02_stair_platform_fix.gd` — `PASS transitions=20 ground=22 platform=11 air=5 bounded=11`. Both transitions were requested ten times; all 11 platform actors stayed on floor and within bounds over 240 physics frames.
+3. Saved Main contract: `test_silent_court_graybox.gd` — `PASS rooms=9 floors=3 spawns=14 encounters=15 enemies=38 player=1 hud=1`.
+4. Floor controller regression: `test_chapter_02_floor_transitions.gd` — `PASS transitions=2 player=1 hud=1`.
+5. Three real-physics/Input Map routes: `test_chapter_02_three_floor_route.gd` — all three finished at `(5703.896,-1216.075)` and `PASS runs=3 softlocks=0`.
+6. Chapter II enemy/Boss/story regressions: Phase 2 prototypes, Phase 2 damage, Hollow Duchess Main and Chapter II→III transition all passed with existing damage/dialogue/reward contracts unchanged.
+7. Full recursive exact-engine regression: every `test_*.gd` — `FULL_SUITE tests=51 failed=0`.
+8. Graphical MainBootstrap QA: `Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tools/capture_chapter_02_stair_platform_qa.gd` — GL Compatibility / Apple M4; `PASS captures=8 bootstrap=1 enemies=38 platform=11`. Runtime output contained no script/resource error. Evidence and hashes are in `docs/qa/chapter_02_stair_platform_fix/chapter_02_stair_platform_qa_report.md`.
+
+### Scope and acceptance
+
+- No Boss attack/value, Crimson Masque reward, Chapter II→III story, Chapter I, Player movement, ordinary enemy HP/damage or loot probability was changed. The Godot Gameplay skill guided a typed SpawnPoint composition and bounded movement contract rather than another hard-coded level table.
+- Automated checks verify saved height, platform floor contact, movement bounds, finite encounter membership, two 10-run transitions and three complete routes. Shared Phase 2 tests verify attack/hurt/death behavior. Subjective platform reachability, combat fairness, aggressive knockback outcomes and checkpoint replay feel still require human F5 play.
+- Manual route: set Debug chapter to `CHAPTER_02_SILENT_COURT`, spawn to `CH2_START`, press F5, follow F1 right through Banquet and the Grand door, follow F2 left through Chapel and the Servant door, then inspect the staged Antechamber before the Boss.
+- Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA images and two UID sidecars remain preserved and excluded from this milestone commit.

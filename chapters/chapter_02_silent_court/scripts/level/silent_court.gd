@@ -46,7 +46,7 @@ func _apply_debug_start_profile() -> void:
 	player.velocity = Vector2.ZERO
 	respawn_controller.set_spawn_point(marker)
 	var floor_limits: Vector2i = _floor_limits_for_y(marker.global_position.y)
-	_configure_camera(floor_limits.x, floor_limits.y)
+	_configure_camera_for_floor(marker.global_position.y, floor_limits)
 
 
 func _reset_disposable_debug_state(config: DebugRunConfigState) -> void:
@@ -72,15 +72,20 @@ func _connect_camera_bounds() -> void:
 
 
 func _on_room_entered(room_id: StringName, limits: Vector2i) -> void:
-	_configure_camera(limits.x, limits.y)
+	_configure_camera_for_floor(player.global_position.y, limits)
 	room_name_label.text = "CHAPTER II  ·  %s" % String(room_id).replace("_", " ")
 
 
-func _configure_camera(top_limit: int, bottom_limit: int) -> void:
+func _configure_camera(
+	left_limit: int,
+	right_limit: int,
+	top_limit: int,
+	bottom_limit: int
+) -> void:
 	if player.player_camera == null:
 		return
-	player.player_camera.limit_left = 0
-	player.player_camera.limit_right = CHAPTER_WIDTH
+	player.player_camera.limit_left = left_limit
+	player.player_camera.limit_right = right_limit
 	player.player_camera.limit_top = top_limit
 	player.player_camera.limit_bottom = bottom_limit
 	player.player_camera.reset_smoothing()
@@ -88,7 +93,25 @@ func _configure_camera(top_limit: int, bottom_limit: int) -> void:
 
 func configure_camera_for_world_y(world_y: float) -> void:
 	var floor_limits: Vector2i = _floor_limits_for_y(world_y)
-	_configure_camera(floor_limits.x, floor_limits.y)
+	_configure_camera_for_floor(world_y, floor_limits)
+
+
+func _configure_camera_for_floor(world_y: float, vertical_limits: Vector2i) -> void:
+	var horizontal_limits: Vector2i = _floor_horizontal_limits_for_y(world_y)
+	_configure_camera(
+		horizontal_limits.x,
+		horizontal_limits.y,
+		vertical_limits.x,
+		vertical_limits.y
+	)
+
+
+func _floor_horizontal_limits_for_y(world_y: float) -> Vector2i:
+	if world_y < -850.0:
+		return Vector2i(0, CHAPTER_WIDTH)
+	if world_y < 50.0:
+		return Vector2i(64, CHAPTER_WIDTH)
+	return Vector2i(0, 7040)
 
 
 func _floor_limits_for_y(world_y: float) -> Vector2i:

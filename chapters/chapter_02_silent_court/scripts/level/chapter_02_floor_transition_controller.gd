@@ -12,6 +12,7 @@ signal transition_finished(transition_id: StringName, destination_spawn_id: Stri
 @export_node_path("Node2D") var spawn_points_path: NodePath
 @export_node_path("Control") var fade_rect_path: NodePath
 @export_node_path("Node2D") var transition_areas_path: NodePath
+@export_node_path("Chapter02EncounterRuntime") var encounter_runtime_path: NodePath
 @export_range(0.1, 0.4, 0.01) var fade_out_duration: float = 0.22
 @export_range(0.0, 0.2, 0.01) var blackout_hold_duration: float = 0.08
 @export_range(0.1, 0.4, 0.01) var fade_in_duration: float = 0.22
@@ -21,6 +22,9 @@ signal transition_finished(transition_id: StringName, destination_spawn_id: Stri
 @onready var spawn_points: Node2D = get_node_or_null(spawn_points_path) as Node2D
 @onready var fade_rect: ColorRect = get_node_or_null(fade_rect_path) as ColorRect
 @onready var transition_areas: Node2D = get_node_or_null(transition_areas_path) as Node2D
+@onready var encounter_runtime: Chapter02EncounterRuntime = get_node_or_null(
+	encounter_runtime_path
+) as Chapter02EncounterRuntime
 
 var _transitioning: bool = false
 var _active_tween: Tween
@@ -30,7 +34,7 @@ var _active_transition: Chapter02FloorTransition
 
 
 func _ready() -> void:
-	if level == null or player == null or spawn_points == null or fade_rect == null or transition_areas == null:
+	if level == null or player == null or spawn_points == null or fade_rect == null or transition_areas == null or encounter_runtime == null:
 		push_error("Chapter02FloorTransitionController has an invalid node path")
 		return
 	fade_rect.visible = false
@@ -65,6 +69,7 @@ func request_transition(transition: Chapter02FloorTransition) -> bool:
 	player.set_input_profile(Player.InputProfile.LOCKED)
 	player.hurtbox.set_invulnerable(true)
 	player.velocity = Vector2.ZERO
+	encounter_runtime.prepare_floor_change()
 	fade_rect.visible = true
 	fade_rect.modulate.a = 0.0
 	transition_started.emit(transition.transition_id, transition.destination_spawn_id)

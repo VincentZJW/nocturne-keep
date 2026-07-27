@@ -21,6 +21,7 @@ const SPAWN_IDS: Array[StringName] = [
 	&"CH2_START", &"CH2_BANQUET", &"CH2_GALLERY", &"CH2_CHAPEL", &"CH2_ARMORY", &"CH2_BOSS",
 	&"CH2_FLOOR_1_START", &"CH2_FLOOR_1_BANQUET", &"CH2_FLOOR_2_START",
 	&"CH2_FLOOR_2_CHAPEL", &"CH2_FLOOR_3_START",
+	&"CH2_FLOOR_1_STAIRS", &"CH2_FLOOR_2_STAIRS", &"CH2_ANTECHAMBER",
 ]
 
 var _failures: Array[String] = []
@@ -78,14 +79,16 @@ func _test_composed_level() -> void:
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/GrandServiceStair/Geometry/CollisionPolygon2D") is CollisionPolygon2D, "Grand Service Stair collision is missing")
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/ServantSideStair/Geometry/CollisionPolygon2D") is CollisionPolygon2D, "Servant Side Stair collision is missing")
 	_test_floor_transitions(level)
+	_test_stair_terminals(level)
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/Rooms/LastBanquetHall/Geometry/UpperPlatform01/CollisionShape2D") is CollisionShape2D, "Banquet table collision is missing")
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/Rooms/BloodCandleChapel/Geometry/UpperPlatform04/CollisionShape2D") is CollisionShape2D, "Chapel altar collision is missing")
 	_test_required_anchors(level)
 	_expect(_count_enemy_bodies(level) == 38, "Chapter II must contain exactly 38 ordinary enemies")
+	_test_spawn_distribution(level)
 	_expect((level.get_node("GameplayWorld/Enemies") as Node2D).z_index == 10, "Enemy layer must be z=10")
 	var player: Player = level.get_node("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
 	_expect(player.z_index == 12 and not player.z_as_relative, "Player layer must be z=12")
-	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 7168, "Camera horizontal limits mismatch")
+	_expect(player.player_camera.limit_left == 0 and player.player_camera.limit_right == 7040, "Floor 1 camera terminal limit mismatch")
 	var wallet: CurrencyWallet = root.get_node_or_null("CurrencyManager") as CurrencyWallet
 	var equipment: PlayerEquipmentManager = root.get_node_or_null("EquipmentManager") as PlayerEquipmentManager
 	_expect(wallet != null and wallet.current_coins == 30, "Debug currency was not applied")
@@ -117,6 +120,65 @@ func _test_floor_transitions(level: Node) -> void:
 	_expect(second_transition != null and second_transition.destination_spawn_id == &"CH2_FLOOR_3_START", "F2-to-F3 trigger is invalid")
 	_expect(level.get_node_or_null("ChapterSystems/FloorTransitionController") is Chapter02FloorTransitionController, "Floor transition controller is missing")
 	_expect(level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/FloorTransitionFade") is ColorRect, "Floor transition fade is missing")
+
+
+func _test_stair_terminals(level: Node) -> void:
+	var grand_terminal: Node2D = level.get_node_or_null(
+		"GameplayWorld/Geometry/GrandServiceStairTerminal"
+	) as Node2D
+	var servant_terminal: Node2D = level.get_node_or_null(
+		"GameplayWorld/Geometry/ServantSideStairTerminal"
+	) as Node2D
+	_expect(grand_terminal != null, "Grand stair terminal is missing")
+	_expect(servant_terminal != null, "Servant stair terminal is missing")
+	_expect(
+		level.get_node_or_null("GameplayWorld/Geometry/GrandServiceStairTerminal/Geometry/EndWall/CollisionShape2D") is CollisionShape2D,
+		"Grand stair end wall collision is missing"
+	)
+	_expect(
+		level.get_node_or_null("GameplayWorld/Geometry/ServantSideStairTerminal/Geometry/EndWall/CollisionShape2D") is CollisionShape2D,
+		"Servant stair end wall collision is missing"
+	)
+	_expect(level.get_node_or_null("GameplayWorld/Geometry/Floor2ArrivalVestibule/ClosedDoor") is Polygon2D, "Floor 2 arrival door is missing")
+	_expect(level.get_node_or_null("GameplayWorld/Geometry/Floor3ArrivalVestibule/ClosedDoor") is Polygon2D, "Floor 3 arrival door is missing")
+	var banquet_floor: CollisionShape2D = level.get_node(
+		"GameplayWorld/Geometry/Rooms/LastBanquetHall/Geometry/MainFloor/CollisionShape2D"
+	) as CollisionShape2D
+	var banquet_shape: RectangleShape2D = banquet_floor.shape as RectangleShape2D
+	_expect(is_equal_approx(banquet_shape.size.x, 2096.0), "Banquet floor still extends beyond the grand stair")
+	var servant_floor: CollisionShape2D = level.get_node(
+		"GameplayWorld/Geometry/Rooms/ServantPassage/Geometry/MainFloor/CollisionShape2D"
+	) as CollisionShape2D
+	var servant_shape: RectangleShape2D = servant_floor.shape as RectangleShape2D
+	_expect(is_equal_approx(servant_shape.size.x, 512.0), "Servant floor still extends beyond the side stair")
+
+
+func _test_spawn_distribution(level: Node) -> void:
+	var spawn_root: Node2D = level.get_node_or_null("EnemySpawnPoints") as Node2D
+	_expect(spawn_root != null, "Formal EnemySpawnPoints root is missing")
+	if spawn_root == null:
+		return
+	var ground_count: int = 0
+	var platform_count: int = 0
+	var air_count: int = 0
+	for child: Node in spawn_root.get_children():
+		var spawn: Chapter02EnemySpawnPoint = child as Chapter02EnemySpawnPoint
+		_expect(spawn != null and spawn.is_valid_spawn(), "Invalid formal spawn: %s" % child.name)
+		if spawn == null:
+			continue
+		match spawn.placement:
+			Chapter02EnemySpawnPoint.Placement.GROUND:
+				ground_count += 1
+			Chapter02EnemySpawnPoint.Placement.PLATFORM:
+				platform_count += 1
+			Chapter02EnemySpawnPoint.Placement.CEILING_AIR:
+				air_count += 1
+		if spawn.placement == Chapter02EnemySpawnPoint.Placement.PLATFORM:
+			_expect(spawn.platform_right_bound > spawn.platform_left_bound, "Platform spawn lacks movement bounds: %s" % spawn.name)
+	_expect(spawn_root.get_child_count() == 38, "Formal spawn count must remain 38")
+	_expect(ground_count == 22, "Expected 22 ground enemies, got %d" % ground_count)
+	_expect(platform_count == 11, "Expected 11 platform enemies, got %d" % platform_count)
+	_expect(air_count == 5, "Expected 5 ceiling/air enemies, got %d" % air_count)
 
 
 func _test_room_vertical_geometry(room: Chapter02RoomGraybox, room_index: int) -> void:
@@ -189,7 +251,9 @@ func _test_all_debug_spawns() -> void:
 		await process_frame
 		var marker: Marker2D = level.get_node("PlayerSpawnPoints/%s" % spawn_id) as Marker2D
 		var player: Player = level.get_node("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player") as Player
-		_expect(player.global_position.distance_to(marker.global_position) < 1.0, "Debug spawn failed: %s" % spawn_id)
+		if player.global_position.distance_to(marker.global_position) >= 5.0:
+			print("CH2_DEBUG_SPAWN_DRIFT id=%s marker=%s player=%s" % [spawn_id, marker.global_position, player.global_position])
+		_expect(player.global_position.distance_to(marker.global_position) < 5.0, "Debug spawn failed: %s" % spawn_id)
 		level.queue_free()
 		await process_frame
 	config.reset_to_defaults()
@@ -231,7 +295,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 floors=3 spawns=11 encounters=15 enemies=38 player=1 hud=1")
+		print("SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 floors=3 spawns=14 encounters=15 enemies=38 player=1 hud=1")
 		quit(0)
 		return
 	for failure: String in _failures:

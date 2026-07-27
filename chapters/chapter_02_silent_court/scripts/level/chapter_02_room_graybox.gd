@@ -7,6 +7,7 @@ extends Node2D
 @export var room_size: Vector2i = Vector2i(1280, 720)
 @export var vertical_minimum: int = 0
 @export var accent_color: Color = Color("64748a")
+@export var main_floor_rect: Vector4 = Vector4.ZERO
 @export var platform_rects: Array[Vector4] = []
 @export var stair_polygons: Array[PackedVector2Array] = []
 
@@ -23,8 +24,16 @@ func _draw() -> void:
 	draw_rect(Rect2(0.0, top + height * 0.35, width, height * 0.65), Color("171b28"))
 	_draw_masonry(top, width, height)
 	_draw_room_identity(top, width, height)
-	draw_rect(Rect2(0.0, 612.0, width, 108.0), Color("242936"))
-	draw_rect(Rect2(0.0, 612.0, width, 6.0), accent_color.darkened(0.18))
+	var floor_rect: Rect2 = Rect2(0.0, 612.0, width, 108.0)
+	if main_floor_rect.z > 0.0 and main_floor_rect.w > 0.0:
+		floor_rect = Rect2(
+			main_floor_rect.x,
+			main_floor_rect.y,
+			main_floor_rect.z,
+			main_floor_rect.w
+		)
+	draw_rect(floor_rect, Color("242936"))
+	draw_rect(Rect2(floor_rect.position, Vector2(floor_rect.size.x, 6.0)), accent_color.darkened(0.18))
 	_draw_route_geometry()
 
 

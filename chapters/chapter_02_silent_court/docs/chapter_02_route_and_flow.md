@@ -1,36 +1,42 @@
-# Chapter II route and flow — three-floor authority
+# Chapter II route and flow — closed stair terminals
 
 Status: playable Main implementation, 2026-07-27
 
-## Route
+## Authoritative route
 
 ```text
-F3  x=384 Third Floor Landing -> Upper Court Gallery -> Antechamber -> Ballroom/Boss x=7168
-       ^
-       | 0.52 s black transition from short Servant Side Stair
-F2  x=0 Servant Passage <- Blood-Candle Chapel <- Royal Portrait Gallery x=7168
-                                                                    ^
-                                                                    | 0.52 s black transition from short Grand Service Stair
-F1  x=0 Castle Gate -> Grey Banner -> Armory -> Last Banquet Hall x=7168
+F3  closed arrival door -> Antechamber platform encounters -> Ballroom/Boss
+      ^
+      | black transition from the closed Servant Side Stair terminal
+F2  servant terminal <- Servant Passage <- Chapel <- Portrait Gallery <- closed arrival door
+                                                                        ^
+                                                                        | black transition
+F1  Castle Gate -> Grey Banner -> Armory -> Last Banquet -> Grand Stair terminal
 ```
 
-- Floor surfaces are `y=612`, `y=-288`, and `y=-1188`.
-- Floor 1 advances left-to-right. A 560 px / 14-step banquet stair leads into a black-screen transition to Floor 2.
-- Floor 2 advances right-to-left. A mirrored 560 px / 14-step servant stair leads into a black-screen transition to Floor 3.
-- Floor 3 advances left-to-right; the Hollow Duchess remains the terminal encounter.
-- Three identical horizontal bounds are shared. The route is long without exposing a 32k-pixel horizontal strip.
-- Each transition takes `0.52 s` (`0.22 + 0.08 + 0.22`), keeps the shared Player/HUD/Camera instance, locks Player input and damage during the move, and restores the previous control profile after the destination floor is visible.
+- Walkable floor surfaces remain `y=612`, `y=-288`, and `y=-1188`; the three-floor snake route was not redesigned.
+- Floor 1 advances left-to-right. `LastBanquetHall` now ends at global `x=6320`; the former room/floor continuation from `x=6320..7168` was cropped. The short Grand Service Stair leads to a collision-backed landing, royal arch, heavy wood door and terminal wall at global `x=6880`.
+- Floor 2 advances right-to-left. `ServantPassage` now has walkable floor only at local `x=768..1280`; the former local `x=0..768` continuation outside the stair was removed. The short Servant Side Stair ends at a narrow wood door and terminal wall at global `x=208`.
+- Floor 2 and Floor 3 start beside closed arrival doors (`Floor2ArrivalVestibule`, `Floor3ArrivalVestibule`) rather than in the middle of an open room. The next encounter activation centers remain safely separated from both arrival points.
+- Transition duration remains `0.52 s` (`0.22 + 0.08 + 0.22`). The controller reuses the sole Player/HUD/Camera, clears Chapter II projectiles, deactivates encounter groups, updates Camera bounds before fade-in and restores Player control after the destination is stable.
+- Camera horizontal limits stop at the architecture: F1 `0..7040`, F2 `64..7168`, F3 `0..7168`. No camera view can pan beyond a stair terminal into an unbuilt corridor.
 
 ## Main entry and debug selectors
 
 `project.godot` runs `res://scenes/bootstrap/main_bootstrap.tscn`. Chapter II resolves to `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`.
 
-Selectors: `CH2_START`, `CH2_BANQUET`, `CH2_GALLERY`, `CH2_CHAPEL`, `CH2_ARMORY`, `CH2_BOSS`, `CH2_FLOOR_1_START`, `CH2_FLOOR_1_BANQUET`, `CH2_FLOOR_2_START`, `CH2_FLOOR_2_CHAPEL`, `CH2_FLOOR_3_START`.
+Formal selectors include:
 
-For a complete F5 test, enable Chapter II in `DebugRunConfig`, choose `CH2_FLOOR_1_START` or `CH2_START`, then follow the snake route above. Walk onto the landing trigger at the end of each short stair; no direct coordinate write is required by gameplay.
+- Full route: `CH2_START`, `CH2_FLOOR_1_START`
+- Stair terminals: `CH2_FLOOR_1_STAIRS`, `CH2_FLOOR_2_STAIRS`
+- Platform-combat checks: `CH2_GALLERY`, `CH2_CHAPEL`, `CH2_ANTECHAMBER`
+- Existing room/Boss checks: `CH2_BANQUET`, `CH2_ARMORY`, `CH2_BOSS`, `CH2_FLOOR_2_START`, `CH2_FLOOR_3_START`
 
-## Timing contract
+For normal F5 acceptance, enable the Chapter II debug start, choose `CH2_START`, then follow the snake route. The stair doors are the only continuation points; stepping into their threshold performs the black-screen relocation.
 
-- The exact-engine clean traversal test completed all three floors and reached the Boss lane three times without a softlock.
-- Each no-combat run was 89.00 simulated seconds at 220 px/s with automatic jumps around authored props and both real black-screen floor transitions. Combat, exploration, checkpoint use and narrative are not included.
-- The 25–35 minute first-play target remains a manual content/pacing acceptance target; it is not claimed by the automated no-combat route.
+## Verification contract
+
+- The exact-engine transition stress test performed Floor 1→2 and Floor 2→3 ten times each (`20` transitions total) with correct Player landing and floor Camera bounds every time.
+- The real-physics/Input Map route test completed all three floors three times with `softlocks=0`.
+- Eight 1280×720 MainBootstrap captures under `docs/qa/chapter_02_stair_platform_fix/` show both terminal walls, both arrivals and three elevated-combat rooms.
+- Combat pacing, platform reachability feel and encounter fairness remain human F5 acceptance items; deterministic tests prove saved composition, bounds and runtime stability rather than subjective feel.

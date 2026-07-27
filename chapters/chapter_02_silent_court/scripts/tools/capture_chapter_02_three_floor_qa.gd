@@ -58,7 +58,7 @@ func _run() -> void:
 		player.global_position = capture["position"] as Vector2
 		player.velocity = Vector2.ZERO
 		var limits: Vector2i = capture["limits"] as Vector2i
-		level._configure_camera(limits.x, limits.y)
+		level.configure_camera_for_world_y(player.global_position.y)
 		player.player_camera.reset_smoothing()
 		await _wait_frames(18)
 		print("CH2_CAPTURE %s player=%s camera=%s limits=%s" % [

@@ -1,18 +1,28 @@
-# Chapter II encounter matrix — three-floor runtime
+# Chapter II encounter matrix — grounded and elevated runtime
 
 Status: finite Main population, 2026-07-27
 
-`Chapter02EncounterRuntime` creates every actor below under `SilentCourt/GameplayWorld/Enemies/EncounterE##`. Each saved definition stores a global foot position; the runtime applies the actor-origin offset once and activates only groups within 720 px X / 430 px Y of Player. Vertical filtering prevents another floor from waking at the same X.
+`SilentCourt/EnemySpawnPoints` is the saved source of truth. `Chapter02EncounterRuntime` groups those typed SpawnPoints under `SilentCourt/GameplayWorld/Enemies/EncounterE##`; it no longer owns a duplicate hard-coded coordinate table.
 
-| Floor | Encounters | Enemy count | Focus |
-| --- | --- | ---: | --- |
-| F1 | E01–E06 | 13 | Retainer teaching, Halberdier spacing, Armor/Shield weight; E06 remains on safe banquet ground before the short-stair transition |
-| F2 | E07–E12 | 15 | Stalker ceiling anchors, Acolyte support, Crossbow/Gargoyle pressure |
-| F3 | E13–E15 | 10 | compact mixed-role final examinations before CP05 |
-| Total | 15 | 38 | Boss excluded |
+| Floor / room | Encounter | Ground | Platform | Ceiling/Air | Composition and intent |
+| --- | --- | ---: | ---: | ---: | --- |
+| F1 Grey Banner | E01 | 1 | 0 | 0 | Retainer ground introduction |
+| F1 Grey Banner | E02 | 1 | 1 | 0 | Retainer on mid platform plus ground Retainer |
+| F1 corridor end | E03 | 2 | 0 | 0 | Ground Retainer + Halberdier; Armory safe space remains clear |
+| F1 Last Banquet | E04 | 1 | 1 | 0 | Ground Armor + reachable upper Crossbowman |
+| F1 Last Banquet | E05 | 3 | 0 | 0 | Retainer, Halberdier and Armor on broad floor |
+| F1 Last Banquet | E06 | 3 | 0 | 0 | Final ground group bounded to `x=5620..6280`, before the enemy-free stair |
+| F2 Portrait Gallery | E07 | 1 | 1 | 0 | Ground Retainer + upper Crossbowman |
+| F2 Portrait Gallery | E08 | 0 | 2 | 1 | Mid Retainer, upper Crossbowman, ceiling Stalker |
+| F2 Chapel | E09 | 2 | 1 | 0 | Ground Halberdier/Retainer + upper Acolyte |
+| F2 Chapel | E10 | 0 | 1 | 1 | Upper Acolyte + ceiling Stalker |
+| F2 Chapel | E11 | 1 | 1 | 1 | Ground Halberdier, upper Acolyte, ceiling Stalker |
+| F2 Servant Passage | E12 | 2 | 0 | 0 | Retainer + Halberdier bounded to `x=790..1240`; no stair pursuit |
+| F3 Antechamber stage 1 | E13 | 1 | 2 | 1 | Ground Halberdier, mid Crossbowman, upper Retainer, air Gargoyle |
+| F3 Antechamber stage 2 | E14 | 1 | 1 | 1 | Ground Armor, upper Acolyte, delayed ceiling Stalker |
+| F3 Antechamber stage 3 | E15 | 3 | 0 | 0 | Ground Retainer/Halberdier/Armor before the Boss threshold |
+| **Total** | **15** | **22** | **11** | **5** | **38 normal enemies; Boss excluded** |
 
-Composition counts are defined centrally in `scripts/level/chapter_02_encounter_runtime.gd`; no room owns an enemy instance. Grounded scenes use surface anchors, Hanging Stalkers use explicit ceiling positions and Gargoyles use explicit air positions.
+Platform participation is `11 / 38 = 28.9%`; including five explicit Ceiling/Air positions, `16 / 38 = 42.1%` of the roster is no longer authored on a main-floor line. Large Armor units remain on broad ground, Halberdiers are not placed on narrow suspended platforms, Acolytes/Crossbowmen favor elevated positions, and Stalkers/Gargoyle retain ceiling/air starts.
 
-Stage 1 floor-transition replacement preserves all 15 groups and 38 normal enemies. Only E06 and E12 anchors invalidated by removal of the two long ramps were moved to existing flat floor surfaces; comprehensive stuck-point and encounter redistribution work remains a separate approved stage.
-
-Activation does not create infinite spawns, cross-floor pursuit or global encounter state. Death/loot remain on the existing enemy components. The Hollow Duchess is separately composed at `GameplayWorld/BossArea/HollowDuchess` and is the only actor in the Boss fight lane.
+The Ballroom Boss room contains only the Hollow Duchess. E13–E15 form staged Antechamber pressure before the Boss room; their activation ranges are respectively 520, 440 and 300 px, avoiding one simultaneous room-wide wake-up.

@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3]
+[gd_scene load_steps=45 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
@@ -32,6 +32,12 @@
 [ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/transitions/chapter_02_to_03_transition_data.tres" id="30_transition_data"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/chapter_02_to_03_transition_controller.gd" id="31_transition_controller"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/ui/crimson_masque_acquisition_panel.tscn" id="32_acquisition_panel"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/grand_service_stair_terminal.tscn" id="33_grand_terminal"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/servant_side_stair_terminal.tscn" id="34_side_terminal"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/floor_arrival_portal.tscn" id="35_arrival_portal"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_enemy_spawn_point.gd" id="36_spawn"]
+[ext_resource type="PackedScene" path="res://shared/scenes/enemies/fallen_crossbowman.tscn" id="37_crossbow"]
+[ext_resource type="PackedScene" path="res://shared/scenes/enemies/gargoyle_sentinel.tscn" id="38_gargoyle"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 2520)
@@ -115,6 +121,18 @@ position = Vector2(6320, 0)
 
 [node name="ServantSideStair" parent="GameplayWorld/Geometry" instance=ExtResource("24_side_stair")]
 position = Vector2(168, -900)
+
+[node name="GrandServiceStairTerminal" parent="GameplayWorld/Geometry" instance=ExtResource("33_grand_terminal")]
+position = Vector2(6880, 420)
+
+[node name="ServantSideStairTerminal" parent="GameplayWorld/Geometry" instance=ExtResource("34_side_terminal")]
+position = Vector2(208, -480)
+
+[node name="Floor2ArrivalVestibule" parent="GameplayWorld/Geometry" instance=ExtResource("35_arrival_portal")]
+position = Vector2(7104, -288)
+
+[node name="Floor3ArrivalVestibule" parent="GameplayWorld/Geometry" instance=ExtResource("35_arrival_portal")]
+position = Vector2(64, -1188)
 
 [node name="PropsBehindActors" type="Node2D" parent="GameplayWorld"]
 z_index = -10
@@ -203,6 +221,438 @@ position = Vector2(3700, -316)
 [node name="CH2_FLOOR_3_START" type="Marker2D" parent="PlayerSpawnPoints"]
 position = Vector2(384, -1216)
 
+[node name="CH2_FLOOR_1_STAIRS" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(6480, 529)
+
+[node name="CH2_FLOOR_2_STAIRS" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(600, -374)
+
+[node name="CH2_ANTECHAMBER" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(384, -1216)
+
+[node name="EnemySpawnPoints" type="Node2D" parent="."]
+
+[node name="E01_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1760, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE01"
+activation_center = Vector2(1760, 612)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 1480.0
+platform_right_bound = 2040.0
+
+[node name="E02_MidPlatformSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2380, 500)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE02"
+activation_center = Vector2(2500, 560)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+placement = 1
+platform_left_bound = 2188.0
+platform_right_bound = 2628.0
+
+[node name="E02_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2860, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE02"
+activation_center = Vector2(2500, 560)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 2720.0
+platform_right_bound = 3160.0
+
+[node name="E03_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(3000, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE03"
+activation_center = Vector2(3020, 612)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 2780.0
+platform_right_bound = 3160.0
+
+[node name="E03_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(3120, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE03"
+activation_center = Vector2(3020, 612)
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 2780.0
+platform_right_bound = 3160.0
+
+[node name="E04_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(4440, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE04"
+activation_center = Vector2(4760, 520)
+enemy_scene = ExtResource("15_armor")
+enemy_role = &"MourningArmor"
+platform_left_bound = 4280.0
+platform_right_bound = 4620.0
+
+[node name="E04_UpperPlatformSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5060, 450)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE04"
+activation_center = Vector2(4760, 520)
+enemy_scene = ExtResource("37_crossbow")
+enemy_role = &"FallenCrossbowman"
+placement = 1
+platform_left_bound = 4924.0
+platform_right_bound = 5204.0
+
+[node name="E05_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(4740, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE05"
+activation_center = Vector2(5260, 612)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 4660.0
+platform_right_bound = 5540.0
+
+[node name="E05_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5360, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE05"
+activation_center = Vector2(5260, 612)
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 4660.0
+platform_right_bound = 5540.0
+
+[node name="E05_GroundSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5520, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE05"
+activation_center = Vector2(5260, 612)
+enemy_scene = ExtResource("15_armor")
+enemy_role = &"MourningArmor"
+platform_left_bound = 4660.0
+platform_right_bound = 5540.0
+
+[node name="E06_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5740, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE06"
+activation_center = Vector2(6000, 612)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 5620.0
+platform_right_bound = 6280.0
+
+[node name="E06_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(6000, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE06"
+activation_center = Vector2(6000, 612)
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 5620.0
+platform_right_bound = 6280.0
+
+[node name="E06_GroundSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(6240, 612)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE06"
+activation_center = Vector2(6000, 612)
+enemy_scene = ExtResource("15_armor")
+enemy_role = &"MourningArmor"
+platform_left_bound = 5620.0
+platform_right_bound = 6280.0
+
+[node name="E07_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(6180, -288)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE07"
+floor_number = 2
+activation_center = Vector2(6260, -340)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 6120.0
+platform_right_bound = 6320.0
+
+[node name="E07_UpperPlatformSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(6560, -400)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE07"
+floor_number = 2
+activation_center = Vector2(6260, -340)
+enemy_scene = ExtResource("37_crossbow")
+enemy_role = &"FallenCrossbowman"
+placement = 1
+platform_left_bound = 6368.0
+platform_right_bound = 6748.0
+
+[node name="E08_CeilingSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5780, -720)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE08"
+floor_number = 2
+activation_center = Vector2(5580, -430)
+enemy_scene = ExtResource("17_stalker")
+enemy_role = &"HangingStalker"
+placement = 2
+
+[node name="E08_MidPlatformSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5250, -480)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE08"
+floor_number = 2
+activation_center = Vector2(5580, -430)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+placement = 1
+platform_left_bound = 5028.0
+platform_right_bound = 5408.0
+
+[node name="E08_UpperPlatformSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(5900, -480)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE08"
+floor_number = 2
+activation_center = Vector2(5580, -430)
+enemy_scene = ExtResource("37_crossbow")
+enemy_role = &"FallenCrossbowman"
+placement = 1
+platform_left_bound = 5708.0
+platform_right_bound = 6088.0
+
+[node name="E09_UpperPlatformSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(3500, -400)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE09"
+floor_number = 2
+activation_center = Vector2(3880, -340)
+enemy_scene = ExtResource("16_acolyte")
+enemy_role = &"BloodCandleAcolyte"
+placement = 1
+platform_left_bound = 3340.0
+platform_right_bound = 3660.0
+
+[node name="E09_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(3780, -288)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE09"
+floor_number = 2
+activation_center = Vector2(3880, -340)
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 3680.0
+platform_right_bound = 3940.0
+
+[node name="E09_GroundSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(4140, -288)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE09"
+floor_number = 2
+activation_center = Vector2(3880, -340)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 4000.0
+platform_right_bound = 4300.0
+
+[node name="E10_CeilingSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2920, -720)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE10"
+floor_number = 2
+activation_center = Vector2(2950, -450)
+enemy_scene = ExtResource("17_stalker")
+enemy_role = &"HangingStalker"
+placement = 2
+
+[node name="E10_UpperPlatformSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2980, -500)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE10"
+floor_number = 2
+activation_center = Vector2(2950, -450)
+enemy_scene = ExtResource("16_acolyte")
+enemy_role = &"BloodCandleAcolyte"
+placement = 1
+platform_left_bound = 2780.0
+platform_right_bound = 3180.0
+
+[node name="E11_UpperPlatformSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2380, -500)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE11"
+floor_number = 2
+activation_center = Vector2(2140, -400)
+enemy_scene = ExtResource("16_acolyte")
+enemy_role = &"BloodCandleAcolyte"
+placement = 1
+platform_left_bound = 2220.0
+platform_right_bound = 2620.0
+
+[node name="E11_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1940, -288)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE11"
+floor_number = 2
+activation_center = Vector2(2140, -400)
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 1540.0
+platform_right_bound = 2160.0
+
+[node name="E11_CeilingSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2020, -720)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE11"
+floor_number = 2
+activation_center = Vector2(2140, -400)
+enemy_scene = ExtResource("17_stalker")
+enemy_role = &"HangingStalker"
+placement = 2
+
+[node name="E12_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(900, -288)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE12"
+floor_number = 2
+activation_center = Vector2(1010, -288)
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 790.0
+platform_right_bound = 1240.0
+
+[node name="E12_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1120, -288)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE12"
+floor_number = 2
+activation_center = Vector2(1010, -288)
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 790.0
+platform_right_bound = 1240.0
+
+[node name="E13_MidPlatformSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(760, -1300)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE13"
+floor_number = 3
+activation_center = Vector2(1300, -1280)
+activation_range_x = 520.0
+enemy_scene = ExtResource("37_crossbow")
+enemy_role = &"FallenCrossbowman"
+placement = 1
+platform_left_bound = 520.0
+platform_right_bound = 960.0
+
+[node name="E13_UpperPlatformSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1420, -1370)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE13"
+floor_number = 3
+activation_center = Vector2(1300, -1280)
+activation_range_x = 520.0
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+placement = 1
+platform_left_bound = 1200.0
+platform_right_bound = 1640.0
+
+[node name="E13_GroundSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1160, -1188)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE13"
+floor_number = 3
+activation_center = Vector2(1300, -1280)
+activation_range_x = 520.0
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 1040.0
+platform_right_bound = 1380.0
+
+[node name="E13_AirSpawn_04" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1840, -1460)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE13"
+floor_number = 3
+activation_center = Vector2(1300, -1280)
+activation_range_x = 520.0
+enemy_scene = ExtResource("38_gargoyle")
+enemy_role = &"GargoyleSentinel"
+placement = 2
+
+[node name="E14_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1960, -1188)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE14"
+floor_number = 3
+activation_center = Vector2(1980, -1250)
+activation_range_x = 440.0
+enemy_scene = ExtResource("15_armor")
+enemy_role = &"MourningArmor"
+platform_left_bound = 1820.0
+platform_right_bound = 2160.0
+
+[node name="E14_UpperPlatformSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(1540, -1370)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE14"
+floor_number = 3
+activation_center = Vector2(1980, -1250)
+activation_range_x = 440.0
+enemy_scene = ExtResource("16_acolyte")
+enemy_role = &"BloodCandleAcolyte"
+placement = 1
+platform_left_bound = 1200.0
+platform_right_bound = 1640.0
+
+[node name="E14_CeilingSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2200, -1620)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE14"
+floor_number = 3
+activation_center = Vector2(1980, -1250)
+activation_range_x = 440.0
+enemy_scene = ExtResource("17_stalker")
+enemy_role = &"HangingStalker"
+placement = 2
+
+[node name="E15_GroundSpawn_01" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2240, -1188)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE15"
+floor_number = 3
+activation_center = Vector2(2440, -1188)
+activation_range_x = 300.0
+enemy_scene = ExtResource("13_retainer")
+enemy_role = &"HollowRetainer"
+platform_left_bound = 2180.0
+platform_right_bound = 2640.0
+
+[node name="E15_GroundSpawn_02" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2420, -1188)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE15"
+floor_number = 3
+activation_center = Vector2(2440, -1188)
+activation_range_x = 300.0
+enemy_scene = ExtResource("14_halberdier")
+enemy_role = &"CourtHalberdier"
+platform_left_bound = 2180.0
+platform_right_bound = 2640.0
+
+[node name="E15_GroundSpawn_03" type="Marker2D" parent="EnemySpawnPoints"]
+position = Vector2(2600, -1188)
+script = ExtResource("36_spawn")
+encounter_id = &"EncounterE15"
+floor_number = 3
+activation_center = Vector2(2440, -1188)
+activation_range_x = 300.0
+enemy_scene = ExtResource("15_armor")
+enemy_role = &"MourningArmor"
+platform_left_bound = 2180.0
+platform_right_bound = 2640.0
+
 [node name="ChapterSystems" type="Node" parent="."]
 
 [node name="DoorRuntimePlaceholder" type="Node" parent="ChapterSystems"]
@@ -246,6 +696,7 @@ acquisition_panel_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActo
 script = ExtResource("25_encounters")
 player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
 enemies_parent_path = NodePath("../../GameplayWorld/Enemies")
+spawn_points_path = NodePath("../../EnemySpawnPoints")
 
 [node name="FloorTransitionController" type="Node" parent="ChapterSystems"]
 script = ExtResource("27_floor_transition_controller")
@@ -254,6 +705,7 @@ player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterR
 spawn_points_path = NodePath("../../PlayerSpawnPoints")
 fade_rect_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/FloorTransitionFade")
 transition_areas_path = NodePath("../../TransitionAreas")
+encounter_runtime_path = NodePath("../Chapter02EncounterRuntime")
 
 [node name="Doors" type="Node2D" parent="."]
 

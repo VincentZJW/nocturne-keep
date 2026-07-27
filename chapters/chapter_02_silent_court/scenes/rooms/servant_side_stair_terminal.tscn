@@ -1,0 +1,61 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="RectangleShape2D" id="LandingShape"]
+size = Vector2(112, 300)
+
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(32, 320)
+
+[node name="ServantSideStairTerminal" type="Node2D"]
+z_index = -20
+z_as_relative = false
+
+[node name="TerminalWall" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-160, -340, 72, -340, 72, 0, -160, 0)
+color = Color(0.115, 0.105, 0.115, 1)
+
+[node name="TimberBeam" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-160, -268, 72, -268, 72, -246, -160, -246)
+color = Color(0.24, 0.18, 0.16, 1)
+
+[node name="ServantDoorFrame" type="Line2D" parent="."]
+points = PackedVector2Array(-106, 0, -106, -178, -94, -198, -18, -198, -6, -178, -6, 0)
+width = 10.0
+default_color = Color(0.33, 0.29, 0.28, 1)
+
+[node name="NarrowWoodDoor" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-94, 0, -94, -176, -82, -186, -30, -186, -18, -176, -18, 0)
+color = Color(0.16, 0.105, 0.09, 1)
+
+[node name="SideWingCrest" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-64, -120, -52, -106, -64, -90, -76, -106)
+color = Color(0.45, 0.35, 0.22, 1)
+
+[node name="OldWallLamp" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(26, -176, 34, -194, 42, -176, 38, -158, 30, -158)
+color = Color(0.75, 0.43, 0.24, 1)
+
+[node name="StoneWoodLanding" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-112, 0, 0, 0, 0, 300, -112, 300)
+color = Color(0.17, 0.16, 0.17, 1)
+
+[node name="Geometry" type="Node2D" parent="."]
+
+[node name="Landing" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Landing"]
+position = Vector2(-56, 150)
+shape = SubResource("LandingShape")
+
+[node name="EndWall" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/EndWall"]
+position = Vector2(-128, -160)
+shape = SubResource("WallShape")
+
+[node name="TransitionThreshold" type="Marker2D" parent="."]
+position = Vector2(-28, -28)

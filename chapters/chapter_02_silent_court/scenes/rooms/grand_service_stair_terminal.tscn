@@ -1,0 +1,66 @@
+[gd_scene load_steps=3 format=3]
+
+[sub_resource type="RectangleShape2D" id="LandingShape"]
+size = Vector2(112, 300)
+
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(32, 320)
+
+[node name="GrandServiceStairTerminal" type="Node2D"]
+z_index = -20
+z_as_relative = false
+
+[node name="TerminalWall" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-80, -360, 160, -360, 160, 0, -80, 0)
+color = Color(0.105, 0.12, 0.17, 1)
+
+[node name="RoyalArchFrame" type="Line2D" parent="."]
+points = PackedVector2Array(6, 0, 6, -152, 18, -188, 56, -212, 94, -188, 106, -152, 106, 0)
+width = 12.0
+default_color = Color(0.38, 0.42, 0.50, 1)
+
+[node name="HeavyWoodDoor" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(18, 0, 18, -150, 30, -178, 56, -190, 82, -178, 94, -150, 94, 0)
+color = Color(0.18, 0.115, 0.095, 1)
+
+[node name="DoorBands" type="Line2D" parent="."]
+points = PackedVector2Array(20, -126, 92, -126, 20, -72, 92, -72)
+width = 5.0
+default_color = Color(0.34, 0.31, 0.30, 1)
+
+[node name="RoyalCrest" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(48, -116, 64, -116, 68, -96, 56, -82, 44, -96)
+color = Color(0.60, 0.47, 0.27, 1)
+
+[node name="LeftCandle" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(-50, -178, -42, -194, -34, -178, -38, -162, -46, -162)
+color = Color(0.88, 0.61, 0.31, 1)
+
+[node name="RightCandle" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(126, -178, 134, -194, 142, -178, 138, -162, 130, -162)
+color = Color(0.88, 0.61, 0.31, 1)
+
+[node name="StoneLanding" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(0, 0, 112, 0, 112, 300, 0, 300)
+color = Color(0.18, 0.21, 0.27, 1)
+
+[node name="Geometry" type="Node2D" parent="."]
+
+[node name="Landing" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Landing"]
+position = Vector2(56, 150)
+shape = SubResource("LandingShape")
+
+[node name="EndWall" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/EndWall"]
+position = Vector2(128, -160)
+shape = SubResource("WallShape")
+
+[node name="TransitionThreshold" type="Marker2D" parent="."]
+position = Vector2(28, -28)
