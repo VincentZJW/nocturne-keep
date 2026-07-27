@@ -5,9 +5,11 @@ extends Control
 
 @export_node_path("Label") var coin_label_path: NodePath = NodePath("CoinLabel")
 @export_node_path("Label") var weapon_label_path: NodePath = NodePath("WeaponLabel")
+@export_node_path("TextureRect") var weapon_icon_path: NodePath = NodePath("WeaponIcon")
 
 @onready var coin_label: Label = get_node_or_null(coin_label_path) as Label
 @onready var weapon_label: Label = get_node_or_null(weapon_label_path) as Label
+@onready var weapon_icon: TextureRect = get_node_or_null(weapon_icon_path) as TextureRect
 
 
 func _ready() -> void:
@@ -42,6 +44,8 @@ func _on_weapon_equipped(weapon: WeaponData) -> void:
 	weapon_label.text = "WPN T%d  %d / %d" % [
 		weapon.tier, weapon.normal_attack_damage, weapon.dash_attack_damage,
 	]
+	if weapon_icon != null:
+		weapon_icon.texture = weapon.hud_icon if weapon.hud_icon != null else weapon.icon
 
 
 func _wallet() -> CurrencyWallet:

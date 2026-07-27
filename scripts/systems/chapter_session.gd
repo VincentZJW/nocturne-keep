@@ -75,6 +75,17 @@ func apply_start_profile(profile: ChapterStartProfile, spawn_override: StringNam
 		completed_chapters[chapter_id] = true
 	for flag_id: StringName in profile.chapter_story_flags:
 		set_story_flag(flag_id, profile.chapter_story_flags[flag_id])
+	var inventory: PlayerWeaponInventory = get_node_or_null(
+		"/root/WeaponInventory"
+	) as PlayerWeaponInventory
+	var equipment: PlayerEquipmentManager = get_node_or_null(
+		"/root/EquipmentManager"
+	) as PlayerEquipmentManager
+	if inventory != null:
+		for weapon_id: StringName in profile.required_weapons:
+			inventory.add_weapon(weapon_id)
+	if equipment != null and not profile.equipped_weapon.is_empty():
+		equipment.equip_weapon(profile.equipped_weapon)
 	transition_target_changed.emit(current_chapter_id, pending_spawn_id)
 
 

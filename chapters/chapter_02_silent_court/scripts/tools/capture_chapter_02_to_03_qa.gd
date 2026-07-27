@@ -74,11 +74,11 @@ func _run() -> void:
 	await _capture("03_mirror_thirteen_cracks_main.png")
 	gate.reveal_progress = 1.0
 	await _capture("04_royal_chapel_passage_door_main.png")
-	var reward: Chapter02BossRewardPlaceholder = controller.get_reward_placeholder()
+	var reward: WeaponPickup = controller.get_reward_pickup()
 	if reward == null:
-		_failures.append("Reward placeholder missing during Main capture")
+		_failures.append("Crimson Masque reward missing during Main capture")
 	else:
-		reward.placeholder_collected.emit()
+		reward.collect()
 	gate.passage_requested.emit()
 	await _wait_for_scene("RoyalChapelPassage", 360)
 	await _wait_until(func() -> bool: return not manager.is_transitioning(), 240, "passage fade-in")

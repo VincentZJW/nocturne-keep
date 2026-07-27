@@ -84,6 +84,16 @@ func _test_chapter_three_entry_metadata() -> void:
 	_expect(profile.default_checkpoint_id == &"Chapter03CP01", "Chapter III CP01 mismatch")
 	_expect(profile.debug_ready and profile.is_valid_debug_target(), "Chapter III entry is not debug-ready")
 	_expect(
+		profile.required_weapons == [
+			&"veilbound_daggers", &"ravenfang_daggers", &"crimson_masque_stilettos",
+		],
+		"Chapter III weapon ownership profile mismatch",
+	)
+	_expect(
+		profile.equipped_weapon == &"crimson_masque_stilettos",
+		"Chapter III does not equip the Chapter II Boss reward",
+	)
+	_expect(
 		profile.chapter_story_flags.get(&"chapter_02_completed", false),
 		"Chapter III profile does not complete Chapter II"
 	)

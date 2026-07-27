@@ -1,6 +1,6 @@
 # Chapter II → Chapter III Transition Specification
 
-Status: implemented first playable transition; final Chapter II Boss weapon deferred
+Status: implemented first playable transition with final Chapter II Boss weapon
 
 ## Player-facing route
 
@@ -10,8 +10,8 @@ Silent Ballroom Boss defeat
 → Duchess and phantom hazards clear
 → Ballroom mirror restores and receives thirteen cracks
 → mirror panels separate to reveal the Royal Chapel Passage
-→ explicit Boss reward placeholder appears
-→ Player collects the placeholder prerequisite
+→ Crimson Masque Stilettos appear at the fixed reward anchor
+→ Player collects and auto-equips the permanent reward
 → E opens the Processional Door
 → Royal Processional Passage (enemy-free)
 → E enters the Chapel Vestibule
@@ -64,13 +64,13 @@ The authored Boss death presentation lasts about 3.70 seconds. The mirror reveal
 
 ## Reward prerequisite
 
-This milestone does **not** implement Crimson Masque Stilettos. It uses `chapter_02_boss_weapon_collected` and an explicitly labeled neutral placeholder at `Chapter02BossWeaponPickupAnchor` only to prove the story gate and recovery path.
+The fixed reward is `Crimson Masque Stilettos / 绯幕礼刺`, Weapon ID `crimson_masque_stilettos`. It is instantiated from its production pickup scene at `Chapter02BossWeaponPickupAnchor`, not from Seraphine's final global position. Collection adds the unique permanent WeaponData to WeaponInventory, auto-equips it through EquipmentManager, updates the HUD/Player SpriteFrames and writes `chapter_02_boss_weapon_collected`.
 
 Before collection, using the door shows:
 
 > 公爵夫人的遗物仍留在舞厅中。
 
-If the Boss has been defeated but the placeholder is missing, the transition controller recreates it at the deterministic anchor. Once collected, it is not recreated and the passage can be opened.
+If the Boss has been defeated but the fixed pickup is missing and not owned, the transition controller recreates it at the deterministic anchor. Once owned/collected, it is not recreated and the passage can be opened.
 
 ## Runtime state and reload behavior
 
@@ -83,7 +83,7 @@ If the Boss has been defeated but the placeholder is missing, the transition con
 - `royal_chapel_passage_opened`
 - `chapter_03_started`
 
-On a Chapter II scene reload after the Boss defeat, the Boss stays hidden, cleared encounter presentation is restored, the mirror remains revealed, and the uncollected reward placeholder is reconstructed. This is process-lifetime session persistence, not a disk-save implementation.
+On a Chapter II scene reload after the Boss defeat, the Boss stays hidden, cleared encounter presentation is restored, the mirror remains revealed, and the uncollected Crimson Masque pickup is reconstructed. After collection, inventory/equipment and the flag persist while no duplicate pickup is spawned. This is process-lifetime session persistence, not a disk-save implementation.
 
 `SceneTransitionManager` owns the fade and PackedScene replacement. It resolves chapter targets through `ChapterRegistry`, records the pending spawn in `ChapterSession`, and never duplicates Player/HUD/session state. Boss code contains no Chapter III path.
 
@@ -94,8 +94,8 @@ On a Chapter II scene reload after the Boss defeat, the Boss stays hidden, clear
 3. Press F5; MainBootstrap loads the production Silent Court scene at CP05.
 4. Enter the Silent Ballroom and defeat Seraphine.
 5. Observe all four lines, the mirror restoration/thirteen cracks, the split panels and secret door.
-6. Try E before collecting the placeholder and confirm the lore prompt blocks passage.
-7. Collect the clearly marked placeholder, press E at the door, cross the enemy-free passage, then press E at its side door.
+6. Try E before collecting the weapon and confirm the lore prompt blocks passage.
+7. Collect Crimson Masque Stilettos, confirm the acquisition panel plus HUD T3 14/28, press E at the door, cross the enemy-free passage, then press E at its side door.
 8. Confirm the Chapter III title card and the safe Chapel Vestibule placeholder.
 
 Human acceptance remains required for the full uninterrupted Chapter II pacing and the intended 15–30 second corridor traversal. Automated coverage proves state, gating, reload recovery and scene composition.

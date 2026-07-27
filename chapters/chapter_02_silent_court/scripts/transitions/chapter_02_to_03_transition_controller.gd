@@ -4,8 +4,8 @@ extends Node
 ## Orchestrates the post-Duchess presentation and gate prerequisites. The Boss
 ## owns combat/death only; SceneTransitionManager owns scene replacement.
 
-signal reward_placeholder_spawned
-signal reward_placeholder_collected
+signal reward_spawned
+signal reward_collected(weapon_id: StringName)
 signal exit_revealed
 signal passage_transition_requested
 
@@ -14,9 +14,10 @@ const FLAG_DUCHESS_DEFEATED: StringName = &"hollow_duchess_defeated"
 const FLAG_EXIT_REVEALED: StringName = &"chapter_02_exit_revealed"
 const FLAG_PASSAGE_OPENED: StringName = &"royal_chapel_passage_opened"
 const FLAG_REWARD_COLLECTED: StringName = &"chapter_02_boss_weapon_collected"
+const REWARD_WEAPON_ID: StringName = &"crimson_masque_stilettos"
 
 @export var transition_data: Chapter02TransitionData
-@export var reward_placeholder_scene: PackedScene
+@export var reward_pickup_scene: PackedScene
 @export_node_path("Player") var player_path: NodePath
 @export_node_path("HollowDuchess") var boss_path: NodePath
 @export_node_path("HollowDuchessRoomController") var room_controller_path: NodePath
@@ -24,6 +25,7 @@ const FLAG_REWARD_COLLECTED: StringName = &"chapter_02_boss_weapon_collected"
 @export_node_path("BallroomMirrorGate") var mirror_gate_path: NodePath
 @export_node_path("Marker2D") var reward_anchor_path: NodePath
 @export_node_path("Node2D") var pickup_parent_path: NodePath
+@export_node_path("CrimsonMasqueAcquisitionPanel") var acquisition_panel_path: NodePath
 
 @onready var player: Player = get_node_or_null(player_path) as Player
 @onready var boss: HollowDuchess = get_node_or_null(boss_path) as HollowDuchess
@@ -38,8 +40,11 @@ const FLAG_REWARD_COLLECTED: StringName = &"chapter_02_boss_weapon_collected"
 ) as BallroomMirrorGate
 @onready var reward_anchor: Marker2D = get_node_or_null(reward_anchor_path) as Marker2D
 @onready var pickup_parent: Node2D = get_node_or_null(pickup_parent_path) as Node2D
+@onready var acquisition_panel: CrimsonMasqueAcquisitionPanel = get_node_or_null(
+	acquisition_panel_path
+) as CrimsonMasqueAcquisitionPanel
 
-var _reward_placeholder: Chapter02BossRewardPlaceholder
+var _reward_pickup: WeaponPickup
 var _sequence_started: bool = false
 
 
@@ -61,8 +66,8 @@ func debug_complete_boss_sequence() -> void:
 	_on_boss_defeated()
 
 
-func get_reward_placeholder() -> Chapter02BossRewardPlaceholder:
-	return _reward_placeholder
+func get_reward_pickup() -> WeaponPickup:
+	return _reward_pickup
 
 
 func _on_boss_defeated() -> void:
@@ -76,7 +81,7 @@ func _on_boss_defeated() -> void:
 	player.velocity = Vector2.ZERO
 	ballroom_fx.set_defeated()
 	boss.visible = false
-	_ensure_reward_placeholder()
+	_ensure_reward_pickup()
 	if not mirror_gate.begin_reveal(transition_data.mirror_reveal_duration):
 		_on_mirror_revealed()
 
@@ -91,11 +96,18 @@ func _on_mirror_revealed() -> void:
 	exit_revealed.emit()
 
 
-func _on_reward_placeholder_collected() -> void:
+func _on_reward_collected(weapon_id: StringName) -> void:
+	if weapon_id != REWARD_WEAPON_ID:
+		return
 	var session: ChapterSessionState = _session()
 	if session != null:
 		session.set_story_flag(FLAG_REWARD_COLLECTED)
-	reward_placeholder_collected.emit()
+	var equipment: PlayerEquipmentManager = get_node_or_null(
+		"/root/EquipmentManager"
+	) as PlayerEquipmentManager
+	if acquisition_panel != null and equipment != null:
+		acquisition_panel.present(equipment.get_weapon(REWARD_WEAPON_ID))
+	reward_collected.emit(weapon_id)
 
 
 func _on_passage_requested() -> void:
@@ -103,7 +115,7 @@ func _on_passage_requested() -> void:
 	if session == null or not session.has_story_flag(FLAG_DUCHESS_DEFEATED):
 		return
 	if not session.has_story_flag(FLAG_REWARD_COLLECTED):
-		_ensure_reward_placeholder()
+		_ensure_reward_pickup()
 		mirror_gate.show_message(transition_data.missing_reward_prompt)
 		return
 	player.set_input_profile(Player.InputProfile.LOCKED)
@@ -146,25 +158,34 @@ func _apply_persisted_state() -> void:
 	ballroom_fx.set_defeated()
 	mirror_gate.reveal_immediately()
 	if not session.has_story_flag(FLAG_REWARD_COLLECTED):
-		_ensure_reward_placeholder()
+		_ensure_reward_pickup()
 
 
-func _ensure_reward_placeholder() -> void:
+func _ensure_reward_pickup() -> void:
 	var session: ChapterSessionState = _session()
-	if session != null and session.has_story_flag(FLAG_REWARD_COLLECTED):
-		if _reward_placeholder != null:
-			_reward_placeholder.set_available(false)
+	var inventory: PlayerWeaponInventory = get_node_or_null(
+		"/root/WeaponInventory"
+	) as PlayerWeaponInventory
+	var already_collected: bool = (
+		(session != null and session.has_story_flag(FLAG_REWARD_COLLECTED))
+		or (inventory != null and inventory.owns_weapon(REWARD_WEAPON_ID))
+	)
+	if already_collected:
+		if session != null:
+			session.set_story_flag(FLAG_REWARD_COLLECTED)
+		if _reward_pickup != null:
+			_reward_pickup.set_available(false)
 		return
-	if _reward_placeholder == null or not is_instance_valid(_reward_placeholder):
-		_reward_placeholder = reward_placeholder_scene.instantiate() as Chapter02BossRewardPlaceholder
-		if _reward_placeholder == null:
-			push_error("Chapter II Boss reward placeholder could not be instantiated")
+	if _reward_pickup == null or not is_instance_valid(_reward_pickup):
+		_reward_pickup = reward_pickup_scene.instantiate() as WeaponPickup
+		if _reward_pickup == null:
+			push_error("Chapter II Boss weapon pickup could not be instantiated")
 			return
-		pickup_parent.add_child(_reward_placeholder)
-		_reward_placeholder.global_position = reward_anchor.global_position
-		_reward_placeholder.placeholder_collected.connect(_on_reward_placeholder_collected)
-	_reward_placeholder.set_available(true)
-	reward_placeholder_spawned.emit()
+		pickup_parent.add_child(_reward_pickup)
+		_reward_pickup.global_position = reward_anchor.global_position
+		_reward_pickup.weapon_collected.connect(_on_reward_collected)
+	_reward_pickup.set_available(true)
+	reward_spawned.emit()
 
 
 func _session() -> ChapterSessionState:
@@ -174,9 +195,9 @@ func _session() -> ChapterSessionState:
 func _validate_dependencies() -> bool:
 	if (
 		transition_data == null or not transition_data.is_valid()
-		or reward_placeholder_scene == null or player == null or boss == null
+		or reward_pickup_scene == null or player == null or boss == null
 		or room_controller == null or ballroom_fx == null or mirror_gate == null
-		or reward_anchor == null or pickup_parent == null
+		or reward_anchor == null or pickup_parent == null or acquisition_panel == null
 	):
 		push_error("Chapter02To03TransitionController scene composition is incomplete")
 		return false

@@ -123,18 +123,29 @@ script = ExtResource("5_inventory_hud")
 
 [node name="CoinLabel" type="Label" parent="HUD/RunInventoryHud"]
 layout_mode = 0
-offset_right = 70.0
+offset_left = 24.0
+offset_right = 94.0
 offset_bottom = 20.0
 theme_override_font_sizes/font_size = 11
 text = "COIN 30"
 
 [node name="WeaponLabel" type="Label" parent="HUD/RunInventoryHud"]
 layout_mode = 0
+offset_left = 24.0
 offset_top = 18.0
 offset_right = 194.0
 offset_bottom = 38.0
 theme_override_font_sizes/font_size = 11
 text = "WPN T2  12 / 24"
+
+[node name="WeaponIcon" type="TextureRect" parent="HUD/RunInventoryHud"]
+layout_mode = 0
+offset_top = 7.0
+offset_right = 20.0
+offset_bottom = 27.0
+texture_filter = 1
+expand_mode = 1
+stretch_mode = 5
 
 [node name="RoomName" type="Label" parent="HUD"]
 layout_mode = 3

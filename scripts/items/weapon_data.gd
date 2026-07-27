@@ -13,6 +13,7 @@ extends Resource
 @export_range(1, 9999, 1) var normal_attack_damage: int = 10
 @export_range(1, 9999, 1) var dash_attack_damage: int = 20
 @export var icon: Texture2D
+@export var hud_icon: Texture2D
 @export var player_visual_id: StringName = &"veilbound"
 @export var player_idle_visual: Texture2D
 @export var player_attack_visual: Texture2D
@@ -21,6 +22,10 @@ extends Resource
 @export_range(0, 999999, 1) var shop_value: int = 0
 @export var can_sell: bool = false
 @export var is_story_reward: bool = false
+@export var is_unique: bool = true
+@export var is_permanent: bool = true
+@export var auto_equip_on_pickup: bool = false
+@export var allow_duplicates: bool = false
 
 
 func is_valid_weapon() -> bool:

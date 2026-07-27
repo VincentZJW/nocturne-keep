@@ -1,0 +1,281 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_end/air_dash_end_01.png" id="1_itsob"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_end/air_dash_end_02.png" id="2_uwldy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_loop/air_dash_loop_01.png" id="3_fxmdy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_loop/air_dash_loop_02.png" id="4_0xoke"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_loop/air_dash_loop_03.png" id="5_mc011"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_start/air_dash_start_01.png" id="6_dkarx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_start/air_dash_start_02.png" id="7_1lfa5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_01.png" id="8_nr7it"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_02.png" id="9_lqj72"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_03.png" id="10_vx1ya"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_04.png" id="11_rkqxc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_01.png" id="12_maxy5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_02.png" id="13_qoo0u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_03.png" id="14_2ybls"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_04.png" id="15_3pdlf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_05.png" id="16_xu8fj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_end/dash_end_01.png" id="17_tptxw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_end/dash_end_02.png" id="18_8drwm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_loop/dash_loop_01.png" id="19_qxqfk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_loop/dash_loop_02.png" id="20_lhekw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_loop/dash_loop_03.png" id="21_1t3oe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_start/dash_start_01.png" id="22_lrukg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_start/dash_start_02.png" id="23_hoqeb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_01.png" id="24_ahe37"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_02.png" id="25_x2k1y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_03.png" id="26_30ngo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_04.png" id="27_5bgnv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_05.png" id="28_o2iam"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/fall/fall_01.png" id="29_7dpuh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/fall/fall_02.png" id="30_6n0a4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/hurt/hurt_01.png" id="31_e463s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/hurt/hurt_02.png" id="32_p7rax"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/hurt/hurt_03.png" id="33_s4e80"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_01.png" id="34_pumoi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_02.png" id="35_ov5iv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_03.png" id="36_d3i3n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_04.png" id="37_meomr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_loop/jump_loop_01.png" id="38_7a4sn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_loop/jump_loop_02.png" id="39_po7bb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_start/jump_start_01.png" id="40_cagsg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_start/jump_start_02.png" id="41_tykg0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/land/land_01.png" id="42_32hkh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/land/land_02.png" id="43_g3alj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_01.png" id="44_nergt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_02.png" id="45_2jh0w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_03.png" id="46_x0k06"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_04.png" id="47_svd2y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_05.png" id="48_acf2j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_06.png" id="49_vwks7"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_itsob")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_uwldy")
+}],
+"loop": 0,
+"name": &"air_dash_end",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_fxmdy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_0xoke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_mc011")
+}],
+"loop": 1,
+"name": &"air_dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_dkarx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_1lfa5")
+}],
+"loop": 0,
+"name": &"air_dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_nr7it")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_lqj72")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_vx1ya")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_rkqxc")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_maxy5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_qoo0u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_2ybls")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_3pdlf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_xu8fj")
+}],
+"loop": 0,
+"name": &"dash_attack",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_tptxw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_8drwm")
+}],
+"loop": 0,
+"name": &"dash_end",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_qxqfk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_lhekw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_1t3oe")
+}],
+"loop": 1,
+"name": &"dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_lrukg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_hoqeb")
+}],
+"loop": 0,
+"name": &"dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_ahe37")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_x2k1y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_30ngo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_5bgnv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_o2iam")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 11.111111
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_7dpuh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_6n0a4")
+}],
+"loop": 1,
+"name": &"fall",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_e463s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_p7rax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_s4e80")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_pumoi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_ov5iv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_d3i3n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_meomr")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_7a4sn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_po7bb")
+}],
+"loop": 1,
+"name": &"jump_loop",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_cagsg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_tykg0")
+}],
+"loop": 0,
+"name": &"jump_start",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("42_32hkh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_g3alj")
+}],
+"loop": 0,
+"name": &"land",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44_nergt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_2jh0w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_x0k06")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_svd2y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_acf2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_vwks7")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 10.0
+}]

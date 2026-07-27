@@ -58,7 +58,7 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn
 ```
 
-第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。当前掉落物是明确标记的流程占位，不是正式Boss武器；拾取后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`。第三章场景仅实现安全的礼拜堂前庭入口，不包含正式地图、敌人或Boss。
+第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。Boss固定掉落第三阶`Crimson Masque Stilettos / 绯幕礼刺`；靠近后按E会加入唯一武器库存、自动装备、把HUD更新为14/28并写入章节奖励旗标。随后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`。第三章Debug Start会模拟三把武器均已拥有并装备绯幕礼刺；第三章场景目前仍只实现安全的礼拜堂前庭入口，不包含正式地图、敌人或Boss。
 
 正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。
 
@@ -182,6 +182,7 @@ Main开发调试快捷键：
 - [治疗拾取](docs/design/health_pickup_spec.md)
 - [金币系统](docs/design/currency_system_spec.md)
 - [武器与装备](docs/design/weapon_system_spec.md)
+- [绯幕礼刺规格](chapters/chapter_02_silent_court/docs/chapter_02_crimson_masque_stilettos_spec.md)
 - [第一章武器平衡](docs/design/weapon_balance_spec.md)
 - [第二章数值衔接边界](docs/design/chapter_02_combat_scaling_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
@@ -206,7 +207,7 @@ Chapter I normal enemies resolve exactly one health-aware result on Player kill:
 
 Pickups use original Godot-drawn pixel shapes, expire after 20 seconds (blink for the final 3), do not block actors and never heal a dead/full-health Player. Environment deaths never create healing and use half of the selected tier's coin chance. Coins and equipped weapon persist through Player death and the castle threshold; a fresh run resets them.
 
-Starting Veilbound Daggers deal 10 normal / 20 Dash damage. Enemy and Boss Health/shield pools are scaled 10× to preserve hit counts; enemy/Boss outgoing damage and Player 100 HP/100 Stamina did not change. The Gate Knight awards 30 coins and leaves Ravenfang Daggers (12/24) at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`. Press E to collect; the opened gate will not transition until the story weapon is taken.
+Starting Veilbound Daggers deal 10 normal / 20 Dash damage. Enemy and Boss Health/shield pools are scaled 10× to preserve hit counts; enemy/Boss outgoing damage and Player 100 HP/100 Stamina did not change. The Gate Knight awards 30 coins and leaves Ravenfang Daggers (12/24) at `Main/World/CastleEntranceArea/BossReward/WeaponPickup`. The Hollow Duchess leaves Crimson Masque Stilettos (14/28) at the fixed `Chapter02BossWeaponPickupAnchor`. Press E to collect either story weapon; its chapter exit will not transition until the reward is taken.
 
 Ravenfang now uses a complete alternate 49-frame Player set rather than an overlay: curved raven-claw blades, folded-wing guards, black grips and cold blue-gray edges remain consistent in locomotion, aerial movement, Attack, Dash Attack, Hurt and Death. In the Boss fight, normal hits still deal damage but use a 0.32-second lightweight visual reaction without cancelling an attack, Turn, Attack Gap or AI. Dash reactions use a 0.50-second feedback cooldown and can only interrupt neutral Idle/Approach/Recovery for 0.12 seconds; Turn is no longer interruptible. Fallen Gate Knight now owns separate close Shield Bash (`14×30`), medium Slash (`26×22`) and long Thrust (`32×10`) damage volumes instead of the old shared `100×42` rectangle. Shield Bash uses a readable `0.46 / 0.10 / 0.68` second windup/active/recovery sequence, a 2.70-second repeat cooldown and a 22% Phase-1 selection weight. The latest turn target supersedes the old 0.80–1.00-second band: `0.33` seconds reaction plus `0.80` seconds authored motion measures `1.1333` seconds at 60 Hz, with facing committed at 80% of the animation. Per-skill post-active gaps remain 1.05–1.20 seconds except Shield Bash, now 1.18 seconds to preserve its full recovery and counter window.
 

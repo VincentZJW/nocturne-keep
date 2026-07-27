@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/icons/inventory_icon.png" id="2_icon"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/weapons/crimson_masque_stilettos_pickup.tscn" id="3_pickup"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/icons/hud_icon.png" id="4_hud_icon"]
+
+[resource]
+script = ExtResource("1_weapon")
+weapon_id = &"crimson_masque_stilettos"
+display_name_zh = "绯幕礼刺"
+display_name_en = "Crimson Masque Stilettos"
+description_zh = "曾在无声舞会中用于最后决斗的一对礼刺。白瓷已裂，绯幕未落。"
+description_en = "A pair of court stilettos from the final silent waltz. The porcelain has cracked, but the crimson curtain has not fallen."
+weapon_type = &"dual_daggers"
+tier = 3
+normal_attack_damage = 14
+dash_attack_damage = 28
+icon = ExtResource("2_icon")
+hud_icon = ExtResource("4_hud_icon")
+player_visual_id = &"crimson_masque"
+world_pickup_visual = ExtResource("3_pickup")
+shop_value = 0
+can_sell = false
+is_story_reward = true
+is_unique = true
+is_permanent = true
+auto_equip_on_pickup = true
+allow_duplicates = false

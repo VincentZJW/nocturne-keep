@@ -4538,3 +4538,45 @@ Status: complete — implementation, MainBootstrap integration, reload contract,
 - Human F5 acceptance: enable Chapter II Debug start, select `CH2_BOSS`, press F5, enter the Ballroom, defeat Seraphine, inspect the mirror, first try the door without collecting, then collect the placeholder, press E, traverse the short corridor and press E into the Chapel Vestibule.
 - Automation proves the complete route, reload recovery, saved composition and 49 regressions. A human should still judge natural post-Boss pacing, the intended 15–30 second corridor duration and full CH2_START combat pacing.
 - Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA image changes and two untracked UID sidecars remain preserved and excluded. No Boss combat value, normal enemy, Chapter II floor, Chapter I, Player value, loot probability or formal Chapter III gameplay was changed.
+## 2026-07-27 — Crimson Masque Stilettos milestone preflight
+
+Status: complete — fixed Boss reward, Player/HUD integration, Chapter III profile, automated regression and six-image Main QA passed; human feel review pending
+
+### Goal and scope
+
+- Replace the explicit Chapter II Boss-reward placeholder with the permanent `Crimson Masque Stilettos / 绯幕礼刺` fixed reward, preserving the completed Duchess dialogue, mirror reveal, Royal Chapel Passage and Chapter III entry route.
+- Add a typed tier-3 WeaponData contract, original native pixel assets, complete Player SpriteFrames, world pickup, compact acquisition feedback, unique inventory/equipment persistence and the Chapter III debug-start loadout.
+- Keep Player movement, attack timing/range, Dash, enemy/Boss tuning, Chapter I weapon values, normal loot probabilities and formal Chapter III gameplay unchanged.
+
+### Read-only audit and planned files
+
+- Work begins on `master` at `82643ea43a7dc7f7763b1063ba44456dad2910da`; F5 remains `res://scenes/bootstrap/main_bootstrap.tscn`, Chapter II Main remains `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`, and the saved reward anchor is `SilentCourt/GameplayWorld/BossArea/Chapter02BossWeaponPickupAnchor`.
+- Existing weapon ownership/equipment is centralized in `WeaponInventory` and `EquipmentManager`; combat reads equipped damage only from WeaponData. `PlayerWeaponVisual` currently switches complete SpriteFrames between Veilbound and Ravenfang, and `RunInventoryHud` listens to `weapon_equipped`.
+- The Chapter II transition controller currently instantiates `Chapter02BossRewardPlaceholder`, sets only `chapter_02_boss_weapon_collected`, and intentionally does not touch inventory/equipment. The Chapter III Start Profile owns only Veilbound/Ravenfang and equips Ravenfang.
+- Planned task-owned work: extend the existing WeaponData/equipment/visual contracts for a third weapon; generate Crimson icons, pickup and all 49 Player frames; replace the placeholder scene/controller contract; update the Chapter III profile; add focused damage, acquisition, reload and Main graphical QA; update weapon/transition documentation.
+- Pre-existing user-owned Chapter I/shared tuning resources, `resources/player/player_action_prototype_config.tres`, old QA images and two untracked UID sidecars remain outside this milestone and will not be staged.
+
+### Delivered implementation
+
+- Replaced the neutral reward placeholder with the production `Crimson Masque Stilettos / 绯幕礼刺` WeaponPickup at the existing fixed `Chapter02BossWeaponPickupAnchor`. Collection reuses WeaponInventory/EquipmentManager, remains unique, auto-equips, updates the signal-driven icon/Tier/damage HUD and writes the existing passage prerequisite flag.
+- Added the tier-3 WeaponData with exact 14 Normal / 28 Dash values, bilingual description, unique/permanent/unsellable/story-reward metadata and separate inventory/HUD icon plus world pickup references. Veilbound remains 10/20 and Ravenfang remains 12/24.
+- Generated 49 original transparent 64×64 Player frames across all 16 existing animations, two 32×32 icons and one 64×64 broken-mask world pickup through Godot Image APIs. The straight Crimson Needle, shorter Masque Fan Blade, porcelain/fan guards and crimson grooves are distinct from both earlier weapon silhouettes. SpriteFrames swapping preserves pivots, feet, FPS, attack windows, Hitboxes and `flip_h` behavior.
+- Added the compact acquisition panel, upgraded the shared runtime HUD with a signal-driven weapon icon, and updated Chapter III Debug Start to own all three weapons and equip Crimson Masque without re-awarding it.
+- Reload contract now has both branches: defeated/uncollected recreates the weapon at the deterministic anchor; collected never respawns or duplicates it. The existing dialogue, mirror, processional passage and Chapter III entry remain the same MainBootstrap route.
+
+### Exact commands and actual results
+
+1. Asset generation: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_02_silent_court/scripts/tools/generate_crimson_masque_assets.gd` — `PASS animations=16 frames=49 icons=2 pickup=1`.
+2. Exact-engine import/parse: `Godot --headless --editor --path . --import --quit`, followed by `Godot --headless --editor --path . --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; final run had no parser, missing-resource, invalid-UID or import errors. PNG inspection confirmed RGBA, lossless import and `mipmaps/generate=false`; project filter remains nearest.
+3. SpriteFrames build: `Godot --headless --path . --script .../build_crimson_masque_sprite_frames.gd` — `PASS animations=16 frames=49`.
+4. Focused weapon contract: `test_crimson_masque_weapon.gd` — `PASS data=1 frames=49 damage=14/28 dedup=1 profile=1`; additionally verifies three-weapon switching, left/right flip without combat-anchor change, source-art differentiation and Chapter III ownership/equipment.
+5. Full Boss/reload/route contract: `test_chapter_02_to_03_transition.gd` — `PASS dialogue=4 mirror=1 crimson=14/28 reload=2 passage=1 chapter3=1`. Chapter Registry, Hollow Duchess Main composition and Silent Court graybox tests also passed.
+6. Graphical F5/MainBootstrap QA: `Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tools/capture_crimson_masque_qa.gd` — GL Compatibility / Apple M4, `PASS captures=6 bootstrap=1 damage=14/28 chapter3=1`. Six 1280×720 frames and hashes are recorded in `docs/qa/crimson_masque_stilettos/crimson_masque_qa_report.md`.
+7. Final recursive exact-engine regression after all runtime changes: ordered execution of every `test_*.gd` — `FULL_SUITE tests=50 failed=0`, logs `/tmp/crimson-final-suite.5AI4fu`; no test produced `SCRIPT ERROR`, `ERROR:` or a failed assertion.
+8. Final `git diff --check` — PASS.
+
+### Scope and manual acceptance
+
+- No Player speed, reach, action timing, input, Dash behavior, combo/crit/element logic, enemy/Boss tuning, loot table, Chapter I weapon value or formal Chapter III gameplay changed. The Godot Gameplay skill kept weapon data, inventory/equipment, Player presentation, UI and story transition responsibilities separate rather than placing reward state in the Boss script.
+- Human F5 route: use Chapter II Debug start `CH2_BOSS`, defeat Seraphine, finish all four lines, inspect the mask-and-paired-stiletto pickup, first verify the door refuses entry, collect with E, confirm the compact panel plus HUD T3 14/28, test J and Dash Attack in both directions, then cross the Processional Passage into Chapter III.
+- Art is deterministic project-native 16-bit-inspired production prototype art, not externally sourced concept illustration or final audio/VFX. Save-file persistence remains deferred; current ownership/equipment/story flags persist for the run and chapter transitions.

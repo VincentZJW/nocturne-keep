@@ -12,6 +12,9 @@ const STARTING_WEAPON: WeaponData = preload(
 const RAVENFANG_WEAPON: WeaponData = preload(
 	"res://resources/items/weapons/ravenfang_daggers.tres"
 )
+const CRIMSON_MASQUE_WEAPON: WeaponData = preload(
+	"res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_stilettos.tres"
+)
 
 var equipped_weapon_id: StringName = &"veilbound_daggers"
 
@@ -66,6 +69,8 @@ func get_weapon(weapon_id: StringName) -> WeaponData:
 			return STARTING_WEAPON
 		&"ravenfang_daggers":
 			return RAVENFANG_WEAPON
+		&"crimson_masque_stilettos":
+			return CRIMSON_MASQUE_WEAPON
 	return null
 
 

@@ -14,3 +14,5 @@ Player weapon damage and target Health/shield units increased 10× while enemy/B
 | Gate Knight shield | 100 | 10 | 5 |
 
 Ravenfang changes 10/20 to 12/24. Integer ceiling applies; it is a modest story upgrade, not a new action.
+
+Crimson Masque Stilettos extend the same linear progression to 14/28 after Chapter II. This changes only the two values resolved from equipped WeaponData; Player attack timing, reach, input buffer, Dash movement, critical/element systems and the existing Veilbound/Ravenfang values remain unchanged.

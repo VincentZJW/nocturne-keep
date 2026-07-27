@@ -171,6 +171,9 @@ static func _draw_dagger(
 	if weapon_style == &"ravenfang":
 		Renderer.draw_ravenfang_dagger(image, handle, tip, is_main)
 		return
+	if weapon_style == &"crimson_masque":
+		Renderer.draw_crimson_masque_stiletto(image, handle, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - handle).normalized()
 	var blade_start: Vector2i = handle + Vector2i(
 		roundi(direction.x * 3.0), roundi(direction.y * 3.0)

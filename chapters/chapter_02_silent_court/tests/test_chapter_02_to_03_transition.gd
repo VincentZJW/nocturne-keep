@@ -12,6 +12,9 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var session: ChapterSessionState = root.get_node("ChapterSession") as ChapterSessionState
+	var inventory: PlayerWeaponInventory = root.get_node("WeaponInventory") as PlayerWeaponInventory
+	var equipment: PlayerEquipmentManager = root.get_node("EquipmentManager") as PlayerEquipmentManager
+	equipment.reset_for_new_run()
 	var manager: SceneTransitionManagerState = root.get_node(
 		"SceneTransitionManager"
 	) as SceneTransitionManagerState
@@ -52,9 +55,9 @@ func _run() -> void:
 	_expect(session.has_story_flag(&"hollow_duchess_defeated"), "Duchess flag missing")
 	_expect(session.has_story_flag(&"chapter_02_exit_revealed"), "Exit reveal flag missing")
 	_expect(not boss.visible, "Defeated Boss did not disappear")
-	_expect(controller.get_reward_placeholder() != null, "Reward placeholder did not spawn")
+	_expect(controller.get_reward_pickup() != null, "Crimson Masque pickup did not spawn")
 	# Re-enter the saved scene before collecting: Boss stays gone, mirror stays open,
-	# and the missing placeholder is deterministically recreated.
+	# and the missing fixed reward is deterministically recreated.
 	level.queue_free()
 	await process_frame
 	var reloaded: SilentCourtLevel = await _load_silent_court()
@@ -74,17 +77,35 @@ func _run() -> void:
 	reload_controller.transition_data.door_open_duration = 0.01
 	_expect(not reload_boss.visible, "Boss respawned after persisted defeat")
 	_expect(reload_gate.is_revealed(), "Mirror closed after reload")
-	var reward: Chapter02BossRewardPlaceholder = reload_controller.get_reward_placeholder()
-	_expect(reward != null and reward.is_available(), "Reward placeholder was not recovered")
-	# Gate refuses passage until the placeholder condition has been collected.
+	var reward: WeaponPickup = reload_controller.get_reward_pickup()
+	_expect(reward != null and not reward.is_collected(), "Crimson Masque pickup was not recovered")
+	# Gate refuses passage until the fixed weapon has been collected.
 	reload_gate.passage_requested.emit()
 	await process_frame
 	_expect(not manager.is_transitioning(), "Gate bypassed the reward prerequisite")
 	if reward != null:
-		reward.placeholder_collected.emit()
+		_expect(reward.collect(), "Crimson Masque pickup collection failed")
 	await process_frame
 	_expect(session.has_story_flag(&"chapter_02_boss_weapon_collected"), "Reward flag missing")
-	reload_gate.passage_requested.emit()
+	_expect(inventory.owns_weapon(&"crimson_masque_stilettos"), "Crimson Masque missing from inventory")
+	_expect(equipment.equipped_weapon_id == &"crimson_masque_stilettos", "Crimson Masque did not auto-equip")
+	_expect(equipment.get_normal_attack_damage() == 14, "Crimson Masque normal damage is not 14")
+	_expect(equipment.get_dash_attack_damage() == 28, "Crimson Masque Dash damage is not 28")
+	var player: Player = reloaded.player
+	var weapon_visual: PlayerWeaponVisual = player.get_node("VisualRoot/WeaponVisual") as PlayerWeaponVisual
+	_expect(weapon_visual.get_visual_id() == &"crimson_masque", "Crimson Masque Player visual did not switch")
+	# Collected reload keeps the Boss gone and never duplicates the fixed reward.
+	reloaded.queue_free()
+	await process_frame
+	var collected_reload: SilentCourtLevel = await _load_silent_court()
+	var collected_controller: Chapter02To03TransitionController = collected_reload.get_node(
+		"ChapterSystems/Chapter02To03TransitionController"
+	) as Chapter02To03TransitionController
+	_expect(collected_controller.get_reward_pickup() == null, "Collected reward respawned")
+	var collected_gate: BallroomMirrorGate = collected_reload.get_node(
+		"GameplayWorld/BossArea/BallroomMirrorGate"
+	) as BallroomMirrorGate
+	collected_gate.passage_requested.emit()
 	await _wait_for_scene("RoyalChapelPassage", 240)
 	_expect(session.has_story_flag(&"chapter_02_completed"), "Chapter II completion flag missing")
 	_expect(session.has_story_flag(&"royal_chapel_passage_opened"), "Passage flag missing")
@@ -146,7 +167,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CH2_TO_CH3_TRANSITION_TEST: PASS dialogue=4 mirror=1 reward_gate=1 reload=1 passage=1 chapter3=1")
+		print("CH2_TO_CH3_TRANSITION_TEST: PASS dialogue=4 mirror=1 crimson=14/28 reload=2 passage=1 chapter3=1")
 		quit(0)
 		return
 	for failure: String in _failures:

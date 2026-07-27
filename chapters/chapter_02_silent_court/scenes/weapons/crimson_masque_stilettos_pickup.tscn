@@ -1,0 +1,42 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/world_pickup.png" id="2_texture"]
+
+[sub_resource type="CircleShape2D" id="Circle_pickup"]
+radius = 34.0
+
+[node name="CrimsonMasqueStilettosPickup" type="Area2D"]
+z_index = 14
+z_as_relative = false
+collision_layer = 0
+collision_mask = 2
+monitoring = false
+script = ExtResource("1_pickup")
+weapon_id = &"crimson_masque_stilettos"
+auto_equip = true
+
+[node name="Glow" type="PointLight2D" parent="."]
+position = Vector2(0, -24)
+energy = 0.38
+color = Color(0.64, 0.2, 0.3, 1)
+texture_scale = 0.22
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(0, -22)
+texture_filter = 1
+texture = ExtResource("2_texture")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -24)
+shape = SubResource("Circle_pickup")
+
+[node name="Prompt" type="Label" parent="."]
+offset_left = -175.0
+offset_top = -88.0
+offset_right = 175.0
+offset_bottom = -48.0
+theme_override_colors/font_color = Color(0.92, 0.86, 0.83, 1)
+theme_override_font_sizes/font_size = 12
+text = "E  拾取绯幕礼刺 / TAKE CRIMSON MASQUE"
+horizontal_alignment = 1

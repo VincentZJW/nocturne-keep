@@ -5,6 +5,9 @@ extends Node2D
 ## the baked Veilbound frames atomically, so old and new blade silhouettes never mix.
 
 const RAVENFANG_FRAMES_PATH: String = "res://resources/player/ravenfang_player_sprite_frames.tres"
+const CRIMSON_MASQUE_FRAMES_PATH: String = (
+	"res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_player_sprite_frames.tres"
+)
 
 @export_node_path("AnimatedSprite2D") var animated_sprite_path: NodePath = NodePath("../AnimatedSprite2D")
 @export_node_path("PlayerAnimationController") var animation_controller_path: NodePath = NodePath(
@@ -21,6 +24,7 @@ const RAVENFANG_FRAMES_PATH: String = "res://resources/player/ravenfang_player_s
 var _visual_id: StringName = &"veilbound"
 var _veilbound_frames: SpriteFrames
 var _ravenfang_frames: SpriteFrames
+var _crimson_masque_frames: SpriteFrames
 
 
 func _ready() -> void:
@@ -29,8 +33,14 @@ func _ready() -> void:
 		return
 	_veilbound_frames = animated_sprite.sprite_frames
 	_ravenfang_frames = load(RAVENFANG_FRAMES_PATH) as SpriteFrames
+	_crimson_masque_frames = load(CRIMSON_MASQUE_FRAMES_PATH) as SpriteFrames
 	if _ravenfang_frames == null:
 		push_error("PlayerWeaponVisual missing Ravenfang SpriteFrames: %s" % RAVENFANG_FRAMES_PATH)
+	if _crimson_masque_frames == null:
+		push_error(
+			"PlayerWeaponVisual missing Crimson Masque SpriteFrames: %s"
+			% CRIMSON_MASQUE_FRAMES_PATH
+		)
 	var equipment: PlayerEquipmentManager = _equipment()
 	if equipment != null:
 		equipment.weapon_equipped.connect(_on_weapon_equipped)
@@ -45,7 +55,7 @@ func _exit_tree() -> void:
 
 func _on_weapon_equipped(weapon: WeaponData) -> void:
 	_visual_id = weapon.player_visual_id if weapon != null else &"veilbound"
-	var selected_frames: SpriteFrames = _ravenfang_frames if _visual_id == &"ravenfang" else _veilbound_frames
+	var selected_frames: SpriteFrames = _frames_for_visual(_visual_id)
 	if selected_frames == null or selected_frames == animated_sprite.sprite_frames:
 		return
 	_swap_sprite_frames(selected_frames)
@@ -76,7 +86,21 @@ func get_visual_id() -> StringName:
 
 
 func get_active_sprite_frames_path() -> String:
-	return RAVENFANG_FRAMES_PATH if _visual_id == &"ravenfang" else PlayerSpriteFramesBuilder.RESOURCE_PATH
+	match _visual_id:
+		&"ravenfang":
+			return RAVENFANG_FRAMES_PATH
+		&"crimson_masque":
+			return CRIMSON_MASQUE_FRAMES_PATH
+	return PlayerSpriteFramesBuilder.RESOURCE_PATH
+
+
+func _frames_for_visual(visual_id: StringName) -> SpriteFrames:
+	match visual_id:
+		&"ravenfang":
+			return _ravenfang_frames
+		&"crimson_masque":
+			return _crimson_masque_frames
+	return _veilbound_frames
 
 
 func _equipment() -> PlayerEquipmentManager:

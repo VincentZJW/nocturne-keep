@@ -69,11 +69,14 @@ MainBootstrap
 └── Guarded Debug: ChapterStartProfile → selected chapter/spawn
 
 Chapter II Silent Ballroom
+→ fixed Crimson Masque WeaponPickup / WeaponInventory / EquipmentManager
 → Royal Chapel Passage
 → Chapter III Chapel Vestibule entry placeholder
 ```
 
 Every chapter destination composes one shared gameplay runtime instance. Cross-scene travel never moves Player by absolute global coordinates and never duplicates Player, HUD or session services.
+
+Weapon acquisition remains composed rather than chapter-local: WeaponData owns immutable tuning/presentation, WeaponInventory owns unique run-lifetime ids, EquipmentManager owns the equipped id and damage resolution, PlayerWeaponVisual swaps one complete SpriteFrames resource, and the HUD observes typed equipment signals. Chapter III Start Profile applies required ownership and equipped weapon through this same chain.
 
 ## Testing layers
 

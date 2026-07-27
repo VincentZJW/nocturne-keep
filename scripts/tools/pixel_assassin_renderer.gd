@@ -82,6 +82,9 @@ static func _draw_dagger(
 	if weapon_style == &"ravenfang":
 		draw_ravenfang_dagger(image, hand, tip, is_main)
 		return
+	if weapon_style == &"crimson_masque":
+		draw_crimson_masque_stiletto(image, hand, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - hand).normalized()
 	var blade_start: Vector2i = hand + Vector2i(roundi(direction.x * 3.0), roundi(direction.y * 3.0))
 	PixelCanvas.draw_line(image, blade_start, tip, Concept.PALE_STEEL, 2)
@@ -128,3 +131,63 @@ static func draw_ravenfang_dagger(
 	PixelCanvas.draw_line(image, hand, pommel_i, grip_black, 3)
 	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x - 1, pommel_i.y - 1, 3, 3), wing_blue)
 	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x, pommel_i.y, 1, 1), grip_black)
+
+
+static func draw_crimson_masque_stiletto(
+		image: Image, hand: Vector2i, tip: Vector2i, is_main: bool
+	) -> void:
+	var delta: Vector2 = Vector2(tip - hand)
+	var length: float = maxf(1.0, delta.length())
+	var direction: Vector2 = delta / length
+	var normal: Vector2 = Vector2(-direction.y, direction.x)
+	var blade_start: Vector2 = Vector2(hand) + direction * 3.0
+	var blade_tip: Vector2 = Vector2(tip)
+	var dark_silver: Color = Color("58616c")
+	var porcelain: Color = Color("ded8cf")
+	var pale_edge: Color = Color("ecf0ed")
+	var crimson: Color = Color("7d2130")
+	var grip_black: Color = Color("07090e")
+	var guard_center: Vector2 = Vector2(hand) + direction
+	var p0: Vector2i = Vector2i(roundi(blade_start.x), roundi(blade_start.y))
+	var p1: Vector2i = Vector2i(roundi(blade_tip.x), roundi(blade_tip.y))
+	# Straight needle silhouettes distinguish the court stilettos from Ravenfang's claws.
+	PixelCanvas.draw_line(image, p0, p1, dark_silver, 3 if is_main else 4)
+	PixelCanvas.draw_line(image, p0, p1, pale_edge, 1)
+	var groove_start: Vector2 = blade_start + direction * 3.0
+	var groove_end: Vector2 = blade_tip - direction * 3.0
+	PixelCanvas.draw_line(
+		image,
+		Vector2i(roundi(groove_start.x), roundi(groove_start.y)),
+		Vector2i(roundi(groove_end.x), roundi(groove_end.y)),
+		crimson,
+		1
+	)
+	if is_main:
+		# Cracked half-mask guard: porcelain crescent with one crimson fracture.
+		var mask_a: Vector2i = Vector2i(
+			roundi(guard_center.x + normal.x * 3.0), roundi(guard_center.y + normal.y * 3.0)
+		)
+		var mask_b: Vector2i = Vector2i(
+			roundi(guard_center.x - normal.x * 2.0), roundi(guard_center.y - normal.y * 2.0)
+		)
+		PixelCanvas.draw_line(image, mask_a, mask_b, porcelain, 3)
+		PixelCanvas.fill_rect(image, Rect2i(mask_a.x, mask_a.y, 1, 1), crimson)
+	else:
+		# Three compact fan facets read as a ceremonial folding guard.
+		for extent: int in [2, 3, 4]:
+			var offset_index: int = extent - 2
+			var fan_end: Vector2 = guard_center + normal * float(extent) - direction * float(offset_index)
+			PixelCanvas.draw_line(
+				image,
+				Vector2i(roundi(guard_center.x), roundi(guard_center.y)),
+				Vector2i(roundi(fan_end.x), roundi(fan_end.y)),
+				porcelain if extent != 3 else crimson,
+				1
+			)
+	var grip_end: Vector2 = Vector2(hand) - direction * 4.0
+	var grip_end_i: Vector2i = Vector2i(roundi(grip_end.x), roundi(grip_end.y))
+	PixelCanvas.draw_line(image, hand, grip_end_i, grip_black, 3)
+	var pommel: Vector2 = grip_end - direction * 1.5
+	var pommel_i: Vector2i = Vector2i(roundi(pommel.x), roundi(pommel.y))
+	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x - 1, pommel_i.y - 1, 3, 3), crimson)
+	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x, pommel_i.y, 1, 1), porcelain)
