@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <rect width="1600" height="900" fill="#0c1019"/>
+  <text x="64" y="70" fill="#d5dee3" font-family="sans-serif" font-size="34">CHAPTER II · THE SILENT COURT</text>
+  <text x="64" y="106" fill="#8091a5" font-family="sans-serif" font-size="20">PHASE 1 · VERTICAL GRAYBOX / 第二章立体灰盒路线</text>
+  <g font-family="sans-serif" font-size="15" fill="#d5dee3" stroke-linejoin="round">
+    <g transform="translate(64 150)">
+      <rect width="460" height="180" rx="8" fill="#131927" stroke="#465267"/>
+      <text x="18" y="28">01 CASTLE GATE · ARRIVAL LOOKOUT</text>
+      <path d="M15 146 H90 L145 105 H260 L300 146 H445 V168 H15Z" fill="#374252" stroke="#748399"/>
+      <rect x="280" y="76" width="92" height="18" fill="#46566a" stroke="#8fa0b5"/>
+    </g>
+    <g transform="translate(570 150)">
+      <rect width="460" height="180" rx="8" fill="#131927" stroke="#465267"/>
+      <text x="18" y="28">02 GREY BANNER · UPPER CORRIDOR</text>
+      <path d="M15 146 H65 L115 105 H195 V86 H300 V62 H390 L445 146 V168 H15Z" fill="#394250" stroke="#8792a2"/>
+      <path d="M112 105 H194 M198 86 H300 M304 62 H390" stroke="#b3bdca" stroke-width="4"/>
+    </g>
+    <g transform="translate(1076 150)">
+      <rect width="460" height="180" rx="8" fill="#171722" stroke="#5d4852"/>
+      <text x="18" y="28">03 LAST BANQUET · DOUBLE LEVEL</text>
+      <path d="M15 146 H70 L120 92 H185 L205 60 H330 L350 92 H395 L445 146 V168 H15Z" fill="#4e343d" stroke="#9b6d78"/>
+      <rect x="45" y="126" width="70" height="9" fill="#73505a"/><rect x="345" y="126" width="70" height="9" fill="#73505a"/>
+    </g>
+    <g transform="translate(64 370)">
+      <rect width="460" height="180" rx="8" fill="#141724" stroke="#55495e"/>
+      <text x="18" y="28">04 PORTRAIT GALLERY · AIR PATH</text>
+      <path d="M15 146 H445 V168 H15Z" fill="#353849" stroke="#897c96"/>
+      <rect x="55" y="106" width="82" height="12" fill="#49495e"/><rect x="168" y="78" width="70" height="12" fill="#55516a"/>
+      <rect x="266" y="50" width="70" height="12" fill="#625b77"/><rect x="365" y="92" width="65" height="12" fill="#49495e"/>
+    </g>
+    <g transform="translate(570 370)">
+      <rect width="460" height="180" rx="8" fill="#17131d" stroke="#733342"/>
+      <text x="18" y="28">05 BLOOD-CANDLE CHAPEL · THREE TIERS</text>
+      <path d="M15 146 H45 L85 108 H150 L175 77 H240 L265 46 H330 L355 77 H405 L445 146 V168 H15Z" fill="#4d1d29" stroke="#a85869"/>
+      <path d="M85 108 H150 M175 77 H240 M265 46 H330 M355 77 H405" stroke="#d17c8c" stroke-width="4"/>
+    </g>
+    <g transform="translate(1076 370)">
+      <rect width="460" height="180" rx="8" fill="#121923" stroke="#46534d"/>
+      <text x="18" y="28">06 SERVANT PASSAGE · UNDULATING ROUTE</text>
+      <path d="M15 146 L75 112 H145 L190 76 H275 L320 112 H390 L445 146 V168 H15Z" fill="#323a35" stroke="#77887e"/>
+      <path d="M15 146 L75 112 H145 L190 76 H275 L320 112 H390 L445 146" fill="none" stroke="#a5b2aa" stroke-width="4"/>
+    </g>
+    <g transform="translate(64 590)">
+      <rect width="460" height="180" rx="8" fill="#131924" stroke="#4b5966"/>
+      <text x="18" y="28">07 OLD ARMORY · SAFE MEZZANINE</text>
+      <path d="M15 146 H55 L105 98 H205 V72 H310 V146 H445 V168 H15Z" fill="#34404a" stroke="#7f93a2"/>
+      <circle cx="42" cy="132" r="8" fill="#b98243"/><text x="58" y="137" fill="#b98243">SAFE SPAWN</text>
+    </g>
+    <g transform="translate(570 590)">
+      <rect width="460" height="180" rx="8" fill="#171722" stroke="#625b70"/>
+      <text x="18" y="28">08 ANTECHAMBER · TWO LEVELS + BUFFER</text>
+      <path d="M15 146 H45 L95 100 H190 L215 70 H310 L350 108 H375 L405 146 H445 V168 H15Z" fill="#484052" stroke="#9b8eaa"/>
+      <path d="M375 146 H445" stroke="#d5dee3" stroke-width="5"/><text x="365" y="132" fill="#d5dee3">CP05</text>
+    </g>
+    <g transform="translate(1076 590)">
+      <rect width="460" height="180" rx="8" fill="#141522" stroke="#6c6078"/>
+      <text x="18" y="28">09 SILENT BALLROOM · FLAT BOSS LANE</text>
+      <path d="M15 146 H445 V168 H15Z" fill="#373344" stroke="#a494b5"/>
+      <path d="M45 118 V146 M415 118 V146" stroke="#8a7897" stroke-width="7"/>
+      <text x="151" y="132" fill="#bdb2ca">3968 px CLEAR LANE</text>
+    </g>
+  </g>
+  <text x="64" y="835" fill="#8d9caf" font-family="sans-serif" font-size="17">Traversal contract: full-floor fallback · tier rise ≤120 px · broad landings ≥192 px · no enemies / encounters / Boss in Phase 1</text>
+</svg>

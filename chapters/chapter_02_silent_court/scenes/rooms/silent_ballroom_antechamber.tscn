@@ -10,15 +10,15 @@ size = Vector2(2688, 108)
 size = Vector2(2688, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p8av5"]
-size = Vector2(300, 20)
+size = Vector2(520, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_p4x2t"]
-size = Vector2(320, 20)
+size = Vector2(520, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_nvk6j"]
 size = Vector2(2688, 900)
 
-[node name="SilentBallroomAntechamber" type="Node2D" unique_id=744575999]
+[node name="SilentBallroomAntechamber" type="Node2D" unique_id=2038360733]
 script = ExtResource("1_jcgpy")
 room_id = &"SILENT_BALLROOM_ANTECHAMBER"
 bilingual_name = "Silent Ballroom Antechamber / 无声舞厅前室"
@@ -26,92 +26,100 @@ room_index = 8
 room_size = Vector2i(2688, 720)
 vertical_minimum = -180
 accent_color = Color(0.49803922, 0.45490196, 0.5568628, 1)
+platform_rects = Array[Vector4]([Vector4(500, 500, 520, 24), Vector4(1180, 420, 520, 24)])
+stair_polygons = Array[PackedVector2Array]([PackedVector2Array(200, 612, 500, 500, 1020, 500, 1180, 420, 1700, 420, 1900, 500, 2100, 612, 2100, 720, 200, 720)])
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1366467747]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1750966319]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=1446194482]
+[node name="Geometry" type="Node2D" parent="." unique_id=913315367]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=216927929]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=2016258634]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=835597562]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=859490140]
 position = Vector2(1344, 666)
 shape = SubResource("RectangleShape2D_cf041")
 
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=1654338375]
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=2077032413]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=712538582]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1735605551]
 position = Vector2(1344, -212)
 shape = SubResource("RectangleShape2D_2tibl")
 
-[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1348249305]
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=413206697]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=486126071]
-position = Vector2(870, 502)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=12255932]
+position = Vector2(760, 512)
 shape = SubResource("RectangleShape2D_p8av5")
 
-[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=445077145]
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=1254303761]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=332251945]
-position = Vector2(1800, 462)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=1200395684]
+position = Vector2(1440, 432)
 shape = SubResource("RectangleShape2D_p4x2t")
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=918050662]
+[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=1457896421]
+collision_mask = 0
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=1911345167]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1436908633]
+polygon = PackedVector2Array(200, 612, 500, 500, 1020, 500, 1180, 420, 1700, 420, 1900, 500, 2100, 612, 2100, 720, 200, 720)
 
-[node name="BallroomAntechamberDoor" type="Marker2D" parent="DoorAnchors" unique_id=1612040881]
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=103070558]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=1739917241]
+
+[node name="BallroomAntechamberDoor" type="Marker2D" parent="DoorAnchors" unique_id=276768553]
 position = Vector2(160, 612)
 
-[node name="SilentBallroomBossDoor" type="Marker2D" parent="DoorAnchors" unique_id=829170218]
+[node name="SilentBallroomBossDoor" type="Marker2D" parent="DoorAnchors" unique_id=468259362]
 position = Vector2(2520, 612)
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=799037350]
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=982318094]
 
-[node name="Chapter02CP05" type="Marker2D" parent="CheckpointAnchors" unique_id=776555931]
+[node name="Chapter02CP05" type="Marker2D" parent="CheckpointAnchors" unique_id=236472961]
 position = Vector2(2200, 612)
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=819827594]
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=504594070]
 
-[node name="E15" type="Marker2D" parent="EncounterAnchors" unique_id=496377951]
+[node name="E15" type="Marker2D" parent="EncounterAnchors" unique_id=847518498]
 position = Vector2(320, 612)
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=637226569]
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1895009636]
 
-[node name="E15_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1338484710]
+[node name="E15_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1569833334]
 position = Vector2(264, 612)
 
-[node name="E15_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1995168162]
+[node name="E15_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1407054541]
 position = Vector2(376, 612)
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=204585037]
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1086438275]
 
-[node name="BossIntroTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=264648318]
+[node name="BossIntroTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=338728933]
 position = Vector2(2320, 612)
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=1589180555]
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=164154784]
 
-[node name="CameraBounds" type="Area2D" parent="." unique_id=1009749551]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=467346114]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_sladw")
 room_id = &"SILENT_BALLROOM_ANTECHAMBER"
 vertical_limits = Vector2i(-180, 720)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=710076976]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1918493860]
 position = Vector2(1344, 270)
 shape = SubResource("RectangleShape2D_nvk6j")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=841935101]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=869108829]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=1403898039]
+[node name="RoomExit" type="Marker2D" parent="." unique_id=505754678]
 position = Vector2(2624, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=2062401159]
+[node name="DebugLabel" type="Label" parent="." unique_id=238802835]
 offset_left = 32.0
 offset_top = -152.0
 offset_right = 32.0

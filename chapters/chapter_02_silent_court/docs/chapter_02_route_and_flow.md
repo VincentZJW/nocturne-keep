@@ -1,11 +1,11 @@
 # 第二章路线与流程
 
-Status: Stage 2 graybox implemented and verified
+Status: Phase 1 vertical graybox implemented; enemy/encounter/Boss phases not started
 
 ## Critical route map
 
 ```text
-F5 Debug ChapterStartRouter (implemented Stage 2)
+F5 MainBootstrap → Debug Chapter Start (implemented)
   ↓ CH2_START / CP01 (x=384)
 [01 Castle Gate Interior 0..2304] SAFE
   ↓ D01
@@ -32,9 +32,9 @@ F5 Debug ChapterStartRouter (implemented Stage 2)
 ## Main and branch pacing
 
 - Main route is linear and never requires repeated backtracking.
-- Optional Branch A: Banquet service balcony, one 128 px cumulative rise and one 176 px gap, returns inside Banquet.
-- Optional Branch B: Gallery archive, two 64 px tiers, returns before D04.
-- Optional Branch C: Servant kitchen/store path containing E13, reconnects before the Armory.
+- Optional Branch A: Banquet service balcony uses broad y=480 stairs and a y=388 central balcony, then returns before CP02.
+- Optional Branch B: Gallery archive uses five 360–440 px platforms with 80 px tier changes, then returns before D04.
+- Optional Branch C: Servant kitchen/store path is a continuous y=520→440→520 rise and descent that reconnects before the Armory.
 - Armory shortcut is persistent runtime state and links CP04 back to the safe post-Banquet corridor; it is not required for the first clear.
 - Every major combat sequence is followed by at least 320 px of safe horizontal travel; CP02–CP05 sit outside encounter gates and detection zones.
 
@@ -78,11 +78,11 @@ All memory triggers are one-shot per disposable chapter session and must not mut
 
 ## Transition and startup implementation
 
-1. `project.godot` still stores `run/main_scene="res://scenes/cinematics/opening_cinematic.tscn"`.
-2. The narrow `ChapterStartRouter` Autoload waits for the configured Opening, validates the debug-only target, and changes to Silent Court. It does nothing in release, when disabled, for invalid targets, or inside `--script` test processes.
+1. `project.godot` stores `run/main_scene="res://scenes/bootstrap/main_bootstrap.tscn"` as the single F5 authority.
+2. `MainBootstrap` selects formal Opening by default. Only an explicitly enabled, debug-build legal Chapter Start profile resolves through `ChapterStartRouter` to Silent Court; the router has no Autoload `_ready()` redirect side effect.
 3. The saved `chapter_02_start_profile.tres` is now the registry authority. It is `debug_ready=true`, defaults to `CH2_START`, exposes six legal selectors, equips Ravenfang, grants 30 disposable coins and starts full.
 4. `SilentCourt/ChapterRuntime` instances one shared Player, one Camera2D, one respawn controller and one signal-driven HUD. No Player or HUD is copied into a room.
-5. Normal authored startup remains recoverable by disabling `DebugRunConfig.debug_chapter_start_enabled`; the first-level threshold remains unchanged and no formal cross-chapter transition is claimed.
+5. Normal authored startup is the default because `DebugRunConfig.debug_chapter_start_enabled=false`. The migrated Chapter I castle-gate transition resolves the registered Chapter II scene without changing the Bootstrap entry.
 
 The first-level `ravenmourn_threshold.tscn` remains a visual threshold until a separately approved cross-chapter transition pass. Stage 1 does not change it.
 
@@ -107,7 +107,7 @@ The main scene instances the nine rooms at global X `0, 2304, 6912, 11520, 15616
 
 ## Stage 2 traversal result
 
-- One uninterrupted fully solid floor uses top `y=612` from global X `0..32128`; outer walls close only the chapter ends. Room joints have no vertical step or collision gap.
-- Final graphical F5 traversal used ordinary right movement plus Input Map jump/double-jump/Ground Dash/Air Dash actions, with 25 seconds of inspection per room and no teleport/flying. It completed in `362.05 s` (`6:02.05`). A one-second-stop preflight of the same final geometry completed in `146.09 s`.
-- Main-route traversal needs no extreme jump. Optional room platforms remain 280–360 px wide and 36–132 px above adjacent footing; Chapel's five-platform arc uses 132 px vertical tiers, inside the measured 167.10 px double-jump rise.
+- One continuous fully solid traversal surface spans global X `0..32128`; room joints remain aligned at y=612 with no collision gap. Broad stair sections temporarily raise that surface and always descend back to the common floor before protected exits/checkpoints.
+- Phase 1 adds visible collision-backed geometry to all authored platforms. Required tier differences are 68–120 px, landings are at least 360 px wide, and the Chapel's three-level stair reaches y=260 through two 120 px steps rather than one extreme jump.
+- Grey Banner has a long upper corridor; Banquet has a genuine lower/upper loop; Gallery has a high-ceiling jump route; Servant Passage rises and falls; Armory preserves a clear safe spawn; Antechamber returns to flat floor 588 px before the Boss-side checkpoint/door; Ballroom remains a 3968 px clear flat combat lane.
 - Fifteen Encounter anchors and thirty matching `E##_Spawn_01/02` markers exist, but no enemy, activation gate or encounter controller is instantiated in this stage.

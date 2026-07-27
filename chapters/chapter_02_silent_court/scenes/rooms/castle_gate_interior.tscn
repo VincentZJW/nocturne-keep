@@ -10,95 +10,103 @@ size = Vector2(2304, 108)
 size = Vector2(2304, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fevi3"]
-size = Vector2(280, 20)
+size = Vector2(520, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ytpmg"]
-size = Vector2(320, 20)
+size = Vector2(420, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_kgbe0"]
 size = Vector2(2304, 720)
 
-[node name="CastleGateInterior" type="Node2D" unique_id=1574586977]
+[node name="CastleGateInterior" type="Node2D" unique_id=1590798351]
 script = ExtResource("1_jkvkd")
 room_id = &"CASTLE_GATE_INTERIOR"
 bilingual_name = "Castle Gate Interior / 王城门内"
 room_size = Vector2i(2304, 720)
+platform_rects = Array[Vector4]([Vector4(880, 520, 520, 24), Vector4(1540, 448, 420, 24)])
+stair_polygons = Array[PackedVector2Array]([PackedVector2Array(440, 612, 800, 520, 1420, 520, 1740, 612, 1740, 720, 440, 720)])
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=704941870]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1972872310]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=154147482]
+[node name="Geometry" type="Node2D" parent="." unique_id=1047944017]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=579308843]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=667890569]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=783546410]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=425398150]
 position = Vector2(1152, 666)
 shape = SubResource("RectangleShape2D_hqmv6")
 
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=279282507]
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=1461089173]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1018638998]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=97970987]
 position = Vector2(1152, -32)
 shape = SubResource("RectangleShape2D_f8pj3")
 
-[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=767904990]
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1969624668]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1563182988]
-position = Vector2(1060, 508)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=572710752]
+position = Vector2(1140, 532)
 shape = SubResource("RectangleShape2D_fevi3")
 
-[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=1077106158]
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=2061934775]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=282336292]
-position = Vector2(1720, 460)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=1846378488]
+position = Vector2(1750, 460)
 shape = SubResource("RectangleShape2D_ytpmg")
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=522838392]
+[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=562591371]
+collision_mask = 0
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=231817714]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1598827698]
+polygon = PackedVector2Array(440, 612, 800, 520, 1420, 520, 1740, 612, 1740, 720, 440, 720)
 
-[node name="GateInteriorExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1355480575]
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=19326531]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=477155257]
+
+[node name="GateInteriorExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1006543575]
 position = Vector2(2240, 612)
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=235682701]
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=717745604]
 
-[node name="Chapter02CP01" type="Marker2D" parent="CheckpointAnchors" unique_id=1687807655]
+[node name="Chapter02CP01" type="Marker2D" parent="CheckpointAnchors" unique_id=710729144]
 position = Vector2(384, 612)
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1691631999]
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1083514944]
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=561016189]
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1452032877]
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=1344759311]
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=693607285]
 
-[node name="Chapter02TitleTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1180630052]
+[node name="Chapter02TitleTrigger" type="Marker2D" parent="NarrativeAnchors" unique_id=1066187673]
 position = Vector2(640, 612)
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=2044118091]
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=79099173]
 
-[node name="GateUpperLookout" type="Marker2D" parent="RouteAnchors" unique_id=1802963011]
+[node name="GateUpperLookout" type="Marker2D" parent="RouteAnchors" unique_id=40419237]
 position = Vector2(1700, 450)
 
-[node name="CameraBounds" type="Area2D" parent="." unique_id=22382360]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=14644950]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_w5u0h")
 room_id = &"CASTLE_GATE_INTERIOR"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1238496022]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1069942568]
 position = Vector2(1152, 360)
 shape = SubResource("RectangleShape2D_kgbe0")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=1875376609]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=989436793]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=1925528614]
+[node name="RoomExit" type="Marker2D" parent="." unique_id=1279852876]
 position = Vector2(2240, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=1395740624]
+[node name="DebugLabel" type="Label" parent="." unique_id=842509096]
 offset_left = 32.0
 offset_top = 28.0
 offset_right = 32.0

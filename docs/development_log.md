@@ -1,5 +1,54 @@
 # Development Log
 
+## 2026-07-27 — Chapter II vertical graybox and traversal refinement (preflight)
+
+Status: complete — Phase 1 vertical graybox, Main integration, physical traversal and regression passed; manual feel acceptance pending
+
+### Goal, planned files, tests, and scope check
+
+- Refine the nine existing `Chapter II: The Silent Court` rooms into a readable multi-level graybox: visible collision-backed platforms, broad stair/ramp routes, two- and three-tier spaces, safe rejoin paths, and a deliberately flat ballroom combat lane.
+- Keep the existing composed Chapter II scene and Bootstrap/Main startup chain authoritative. Regenerated room scenes must be the same PackedScenes instanced by `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`; formal Chapter I → Chapter II routing and Debug Chapter Start remain unchanged.
+- Planned runtime changes are limited to the Chapter II room graybox renderer, its deterministic room builder, and the nine generated Chapter II room scenes. Planned support changes are limited to Chapter II traversal tests/QA evidence, environment concept documentation, current Chapter II design documents, README and this log.
+- Verify with the exact Godot 4.7.1 executable: rebuild rooms, headless import/parse, focused Chapter II geometry/reachability and Bootstrap tests, full deterministic regression, graphical Bootstrap/Debug Chapter II run, screenshot inspection, `git diff --check`, and an isolated staged-tree check.
+- Scope is Phase 1 terrain only. No enemy, encounter activation, Boss, combat tuning, door gameplay, player ability, HUD, Chapter I asset, or unrelated system change is authorized. Existing encounter/door/checkpoint markers remain anchors only.
+
+### Read-only findings
+
+- Preflight is `master` at `62ca018fa29b80ed93a53ace23f68066dff2da14`. The worktree already contains user-owned Chapter I tuning, scene, shared enemy, QA image and generated UID changes; these paths will be preserved and excluded from this milestone.
+- Chapter II's composed level already instances all nine room PackedScenes at contiguous world positions and owns exactly one shared runtime Player/HUD. The room builder is the correct single source for collision geometry, while `Chapter02RoomGraybox` currently draws only the floor and two hard-coded ramp cases.
+- Several existing upper-platform collisions are therefore visually invisible, and the banquet hall, gallery, armory and antechamber lack authored access routes. The chapel has vertically spaced platforms but no stairs; this does not yet satisfy a reliable, readable traversal contract.
+- Existing measured movement supports approximately 83 px single-jump rise, 167 px double-jump rise and 321 px jump-plus-air-dash horizontal reach. Phase 1 keeps required tier rises at or below 120 px, uses broad landings, retains one continuous main traversal surface that rejoins y=612 before protected exits, and avoids mandatory precision gaps or one-way softlocks.
+
+### Delivered implementation
+
+- `Chapter02RoomGraybox` now exports typed `platform_rects` and `stair_polygons`. Its drawing code renders blocks, edge highlights and stair treads directly from those same arrays; the deterministic builder consumes the arrays to create matching `StaticBody2D` collisions. This removes the previous invisible-platform and hard-coded two-ramp split.
+- Regenerated all nine existing room PackedScenes used by the composed `SilentCourt` level. Gate Interior has an arrival lookout; Grey Banner has a long upper corridor; Banquet has a continuous double-level route; Gallery has five optional air-route platforms; Chapel has a symmetric three-tier stair; Servant Passage rises and descends; Armory has a safe mezzanine; Antechamber returns to a 588 px clear Boss buffer; Ballroom remains flat.
+- All platform widths are at least 192 px and all distinct adjacent tier heights differ by at most 120 px. Full-solid stairs have broad ascents/descents and no one-way traps. Existing room boundaries, shared Player/HUD, camera limits, door/checkpoint/narrative anchors and 15 future encounter anchors remain composed but inert.
+- Physical traversal exposed two genuine left-edge collision walls in Grey Banner and Banquet. Both were redesigned into continuous staged slopes and re-tested from the beginning. `CH2_ARMORY` and CP04 were also moved from the new stair volume to clear floor; all six Debug selectors now spawn at their exact markers.
+- Added an original editable environment layout board at `res://chapters/chapter_02_silent_court/assets/environment/concept_art/silent_court_vertical_graybox.svg`, a Bootstrap-based graphical QA capture script, six representative Main screenshots, and refreshed nine-room sequential traversal captures. No external asset or paid service was used.
+
+### Verification commands and actual results
+
+1. Deterministic room generation and focused contract:
+   - `Godot --headless --path . --script chapters/chapter_02_silent_court/scripts/tools/build_silent_court_graybox.gd`: `SILENT_COURT_ROOM_BUILDER: PASS rooms=9`.
+   - `Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_silent_court_graybox.gd`: PASS for nine rooms, expected platform/stair counts, collision parity, maximum 120 px tier rise, flat Ballroom, six Debug spawns, fifteen future encounter anchors, one Player/HUD and zero enemies.
+2. Final physical route:
+   - `Godot --path . chapters/chapter_02_silent_court/scenes/level/silent_court.tscn -- --recapture-ch2-graybox-fast`: `CH2_GRAYBOX_F5_TRAVERSAL: PASS duration=146.02s screenshots=9` after crossing all eight room joints through Player physics. Ground Dash, double jump and Air Dash were exercised; no coordinate teleport is used by this traversal runner.
+3. Configured Main/Bootstrap graphical QA:
+   - `Godot --path . --script chapters/chapter_02_silent_court/scripts/tools/capture_chapter_02_vertical_qa.gd`: `CH2_VERTICAL_MAIN_QA: PASS captures=6`; Output confirmed the legal Debug Chapter Start selected the production Silent Court scene.
+   - `Godot --path . --quit-after 240`: exit 0 on GL Compatibility / Apple M4 and printed `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`, proving formal F5 remains Opening-first.
+4. Regression and hygiene:
+   - `Godot --headless --editor --path . --import --quit`: exit 0 on exact Godot `4.7.1.stable.official.a13da4feb`; no parser, missing-resource, invalid-UID or import error.
+	- Ordered project and chapter SceneTree regression: `FULL_SUITE tests=47 failed=0`.
+	- `git diff --check`: PASS. QA commands and hashes are preserved in `res://docs/qa/chapter_02_vertical_graybox/phase_1_vertical_graybox_report.md`.
+	- Isolated staged implementation tree `7198722f1f593c73f0fa87261b6b6064ebf026a3`: exact-engine import exit 0 and focused Silent Court contract PASS, proving the milestone does not rely on preserved unstaged Chapter I/shared-resource changes.
+
+### Known limitations and manual acceptance
+
+- The new geometry is deliberately graybox: stair faces use visual tread marks over broad polygon slopes, not final tiles, props or environment lighting.
+- Automated and physical tests prove collision continuity and movement-envelope compliance; a human should still judge optional Gallery jump comfort, camera composition on the Chapel top tier and whether each upper route feels rewarding.
+- Enemy scenes, encounter activation/population, Hollow Duchess, combat gates, functional checkpoint activation and final environment art remain absent. Phase 2 must not start without explicit approval.
+
 ## 2026-07-27 — Main / Bootstrap formal startup routing repair (preflight)
 
 Status: complete — Bootstrap routing, formal/Debug separation, regression and graphical QA passed; full-length pacing acceptance remains manual

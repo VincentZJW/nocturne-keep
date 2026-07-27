@@ -12,6 +12,7 @@ const ROOM_SLUGS: Array[String] = [
 	"old_armory_safe_room", "silent_ballroom_antechamber", "silent_ballroom",
 ]
 const INSPECTION_SECONDS_PER_ROOM: float = 25.0
+const MAX_TRAVERSAL_SECONDS_PER_ROOM: float = 40.0
 
 @export_node_path("Player") var player_path: NodePath = NodePath("../../ChapterRuntime/Player")
 
@@ -35,7 +36,12 @@ func _run_full_traversal() -> void:
 	var output_directory: String = ProjectSettings.globalize_path("res://docs/qa/chapter_02_graybox")
 	DirAccess.make_dir_recursive_absolute(output_directory)
 	for room_index: int in range(ROOM_TARGETS.size()):
-		await _walk_to_x(ROOM_TARGETS[room_index])
+		var reached_target: bool = await _walk_to_x(ROOM_TARGETS[room_index])
+		if not reached_target:
+			Input.action_release("player_move_right")
+			push_error("Chapter II traversal timed out before room %02d target %.1f" % [room_index + 1, ROOM_TARGETS[room_index]])
+			get_tree().quit(1)
+			return
 		Input.action_release("player_move_right")
 		await get_tree().create_timer(inspection_seconds).timeout
 		await get_tree().process_frame
@@ -53,12 +59,15 @@ func _run_full_traversal() -> void:
 	get_tree().quit(0)
 
 
-func _walk_to_x(target_x: float) -> void:
+func _walk_to_x(target_x: float) -> bool:
 	Input.action_press("player_move_right")
 	var previous_x: float = player.global_position.x
 	var stalled_frames: int = 0
+	var started_at: int = Time.get_ticks_msec()
 	while player.global_position.x < target_x:
 		await get_tree().physics_frame
+		if float(Time.get_ticks_msec() - started_at) / 1000.0 > MAX_TRAVERSAL_SECONDS_PER_ROOM:
+			return false
 		await _run_planned_ability_tests()
 		var progress: float = player.global_position.x - previous_x
 		stalled_frames = stalled_frames + 1 if progress < 0.2 else 0
@@ -68,6 +77,7 @@ func _walk_to_x(target_x: float) -> void:
 			stalled_frames = 0
 		previous_x = player.global_position.x
 	Input.action_release("player_move_right")
+	return true
 
 
 func _run_planned_ability_tests() -> void:

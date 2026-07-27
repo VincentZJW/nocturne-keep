@@ -67,7 +67,7 @@ position = Vector2(11840, 584)
 position = Vector2(15776, 584)
 
 [node name="CH2_ARMORY" type="Marker2D" parent="PlayerSpawnPoints"]
-position = Vector2(23424, 584)
+position = Vector2(22912, 584)
 
 [node name="CH2_BOSS" type="Marker2D" parent="PlayerSpawnPoints"]
 position = Vector2(27032, 584)

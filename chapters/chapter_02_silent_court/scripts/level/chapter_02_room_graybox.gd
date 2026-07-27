@@ -7,6 +7,8 @@ extends Node2D
 @export var room_size: Vector2i = Vector2i(1280, 720)
 @export var vertical_minimum: int = 0
 @export var accent_color: Color = Color("64748a")
+@export var platform_rects: Array[Vector4] = []
+@export var stair_polygons: Array[PackedVector2Array] = []
 
 
 func _ready() -> void:
@@ -127,17 +129,43 @@ func _draw_ballroom(top: float, width: float, height: float) -> void:
 
 func _draw_route_geometry() -> void:
 	var stone: Color = accent_color.darkened(0.48)
-	if room_index == 2:
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(700, 612), Vector2(1100, 500), Vector2(1300, 500),
-			Vector2(1700, 612), Vector2(1700, 720), Vector2(700, 720),
-		]), stone)
-	elif room_index == 6:
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(420, 612), Vector2(760, 520), Vector2(1040, 520),
-			Vector2(1380, 612), Vector2(1380, 720), Vector2(420, 720),
-		]), stone)
-		draw_colored_polygon(PackedVector2Array([
-			Vector2(1900, 612), Vector2(2240, 520), Vector2(2480, 520),
-			Vector2(2820, 612), Vector2(2820, 720), Vector2(1900, 720),
-		]), stone)
+	var edge: Color = accent_color.lightened(0.08)
+	for platform: Vector4 in platform_rects:
+		var platform_rect: Rect2 = Rect2(platform.x, platform.y, platform.z, platform.w)
+		draw_rect(platform_rect, stone)
+		draw_line(platform_rect.position, platform_rect.position + Vector2(platform_rect.size.x, 0.0), edge, 3.0)
+		_draw_platform_blocks(platform_rect)
+	for stair_polygon: PackedVector2Array in stair_polygons:
+		if stair_polygon.size() < 3:
+			continue
+		draw_colored_polygon(stair_polygon, stone)
+		_draw_stair_surface(stair_polygon, edge)
+
+
+func _draw_platform_blocks(platform_rect: Rect2) -> void:
+	var joint: Color = Color(0.10, 0.11, 0.16, 0.45)
+	var block_width: float = 48.0
+	var x: float = platform_rect.position.x + block_width
+	while x < platform_rect.end.x:
+		draw_line(Vector2(x, platform_rect.position.y + 4.0), Vector2(x, platform_rect.end.y), joint, 1.0)
+		x += block_width
+
+
+func _draw_stair_surface(stair_polygon: PackedVector2Array, edge: Color) -> void:
+	var bottom_y: float = float(room_size.y)
+	var surface_points: Array[Vector2] = []
+	for point: Vector2 in stair_polygon:
+		if point.y < bottom_y - 1.0:
+			surface_points.append(point)
+	if surface_points.size() < 2:
+		return
+	for point_index: int in range(surface_points.size() - 1):
+		var from: Vector2 = surface_points[point_index]
+		var to: Vector2 = surface_points[point_index + 1]
+		draw_line(from, to, edge, 3.0)
+		var segment_length: float = from.distance_to(to)
+		var tread_count: int = maxi(1, int(segment_length / 32.0))
+		for tread_index: int in range(1, tread_count):
+			var ratio: float = float(tread_index) / float(tread_count)
+			var tread: Vector2 = from.lerp(to, ratio)
+			draw_line(tread, tread + Vector2(0.0, 8.0), edge.darkened(0.22), 1.0)

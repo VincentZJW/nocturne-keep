@@ -12,7 +12,7 @@ size = Vector2(4608, 64)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ryjs5"]
 size = Vector2(4608, 900)
 
-[node name="SilentBallroom" type="Node2D" unique_id=429089055]
+[node name="SilentBallroom" type="Node2D" unique_id=936964645]
 script = ExtResource("1_kc5os")
 room_id = &"SILENT_BALLROOM"
 bilingual_name = "Silent Ballroom / 无声舞会厅"
@@ -21,62 +21,62 @@ room_size = Vector2i(4608, 720)
 vertical_minimum = -180
 accent_color = Color(0.5411765, 0.47058824, 0.5921569, 1)
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=18539653]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=330603055]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=444101226]
+[node name="Geometry" type="Node2D" parent="." unique_id=1618099785]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=994075301]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1663796289]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=149360908]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=730208270]
 position = Vector2(2304, 666)
 shape = SubResource("RectangleShape2D_rsu53")
 
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=731573528]
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=500864438]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1293641937]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=2057729358]
 position = Vector2(2304, -212)
 shape = SubResource("RectangleShape2D_st2v6")
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1159652896]
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1155666063]
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=1842478508]
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=234336567]
 
-[node name="SilentBallroomExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=1798553564]
+[node name="SilentBallroomExitDoor" type="Marker2D" parent="DoorAnchors" unique_id=115562860]
 position = Vector2(4500, 612)
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=1535140092]
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=905499960]
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=568796626]
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=603654639]
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1397210373]
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=539810380]
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=204256847]
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=722134259]
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=1359184393]
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=1508669922]
 
-[node name="BossLaneCenter" type="Marker2D" parent="RouteAnchors" unique_id=2126347963]
+[node name="BossLaneCenter" type="Marker2D" parent="RouteAnchors" unique_id=1467545152]
 position = Vector2(2304, 612)
 
-[node name="CameraBounds" type="Area2D" parent="." unique_id=1132378017]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=783184472]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_mocl5")
 room_id = &"SILENT_BALLROOM"
 vertical_limits = Vector2i(-180, 720)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1340479036]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=360387894]
 position = Vector2(2304, 270)
 shape = SubResource("RectangleShape2D_ryjs5")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=1451412650]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=1453134873]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=959987850]
+[node name="RoomExit" type="Marker2D" parent="." unique_id=634882130]
 position = Vector2(4544, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=865551675]
+[node name="DebugLabel" type="Label" parent="." unique_id=1052699640]
 offset_left = 32.0
 offset_top = -152.0
 offset_right = 32.0

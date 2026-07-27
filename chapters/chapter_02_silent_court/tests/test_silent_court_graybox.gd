@@ -13,6 +13,9 @@ const ROOM_NODES: Array[String] = [
 	"OldArmorySafeRoom", "SilentBallroomAntechamber", "SilentBallroom",
 ]
 const ROOM_X: Array[float] = [0.0, 2304.0, 6912.0, 11520.0, 15616.0, 19456.0, 22784.0, 24832.0, 27520.0]
+const EXPECTED_PLATFORM_COUNTS: Array[int] = [2, 3, 7, 5, 6, 3, 2, 2, 0]
+const EXPECTED_STAIR_COUNTS: Array[int] = [1, 2, 1, 0, 1, 1, 1, 1, 0]
+const MAX_REQUIRED_TIER_RISE: float = 120.0
 const SPAWN_IDS: Array[StringName] = [
 	&"CH2_START", &"CH2_BANQUET", &"CH2_GALLERY", &"CH2_CHAPEL", &"CH2_ARMORY", &"CH2_BOSS",
 ]
@@ -67,9 +70,12 @@ func _test_composed_level() -> void:
 			_expect(room.get_node_or_null("Geometry/MainFloor/CollisionShape2D") is CollisionShape2D, "Missing floor: %s" % ROOM_NODES[index])
 			_expect(room.get_node_or_null("Geometry/CeilingBoundary/CollisionShape2D") is CollisionShape2D, "Missing ceiling: %s" % ROOM_NODES[index])
 			_expect(room.get_node_or_null("CameraBounds") is Chapter02CameraBounds, "Missing CameraBounds: %s" % ROOM_NODES[index])
+			_test_room_vertical_geometry(room as Chapter02RoomGraybox, index)
 	_expect(level.get_node_or_null("Rooms/GreyBannerCorridor/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Corridor stair ramp is missing")
-	_expect(level.get_node_or_null("Rooms/ServantPassage/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Passage up stair is missing")
-	_expect(level.get_node_or_null("Rooms/ServantPassage/Geometry/StairRamp02/CollisionPolygon2D") is CollisionPolygon2D, "Passage down stair is missing")
+	_expect(level.get_node_or_null("Rooms/GreyBannerCorridor/Geometry/StairRamp02/CollisionPolygon2D") is CollisionPolygon2D, "Corridor descent stair is missing")
+	_expect(level.get_node_or_null("Rooms/LastBanquetHall/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Banquet continuous stair is missing")
+	_expect(level.get_node_or_null("Rooms/ServantPassage/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Passage undulating stair is missing")
+	_expect(level.get_node_or_null("Rooms/BloodCandleChapel/Geometry/StairRamp01/CollisionPolygon2D") is CollisionPolygon2D, "Chapel three-tier stair is missing")
 	_expect(level.get_node_or_null("Rooms/LastBanquetHall/Geometry/UpperPlatform01/CollisionShape2D") is CollisionShape2D, "Banquet table collision is missing")
 	_expect(level.get_node_or_null("Rooms/BloodCandleChapel/Geometry/UpperPlatform06/CollisionShape2D") is CollisionShape2D, "Chapel altar collision is missing")
 	_test_required_anchors(level)
@@ -82,6 +88,32 @@ func _test_composed_level() -> void:
 	_expect(equipment != null and equipment.equipped_weapon_id == &"ravenfang_daggers", "Ravenfang was not equipped")
 	level.queue_free()
 	await process_frame
+
+
+func _test_room_vertical_geometry(room: Chapter02RoomGraybox, room_index: int) -> void:
+	if room == null:
+		return
+	_expect(room.platform_rects.size() == EXPECTED_PLATFORM_COUNTS[room_index], "%s platform count mismatch" % ROOM_NODES[room_index])
+	_expect(room.stair_polygons.size() == EXPECTED_STAIR_COUNTS[room_index], "%s stair count mismatch" % ROOM_NODES[room_index])
+	var geometry: Node = room.get_node_or_null("Geometry")
+	if geometry == null:
+		return
+	for platform_index: int in range(room.platform_rects.size()):
+		var platform: Vector4 = room.platform_rects[platform_index]
+		_expect(platform.z >= 192.0, "%s platform %d is too narrow for stable landing" % [ROOM_NODES[room_index], platform_index + 1])
+		_expect(geometry.get_node_or_null("UpperPlatform%02d/CollisionShape2D" % (platform_index + 1)) is CollisionShape2D, "%s platform %d has no collision" % [ROOM_NODES[room_index], platform_index + 1])
+	for stair_index: int in range(room.stair_polygons.size()):
+		_expect(geometry.get_node_or_null("StairRamp%02d/CollisionPolygon2D" % (stair_index + 1)) is CollisionPolygon2D, "%s stair %d has no collision" % [ROOM_NODES[room_index], stair_index + 1])
+	var surface_levels: Array[float] = [612.0]
+	for platform: Vector4 in room.platform_rects:
+		if not surface_levels.has(platform.y):
+			surface_levels.append(platform.y)
+	surface_levels.sort()
+	for level_index: int in range(surface_levels.size() - 1):
+		var rise: float = surface_levels[level_index + 1] - surface_levels[level_index]
+		_expect(rise <= MAX_REQUIRED_TIER_RISE, "%s tier rise %.1f exceeds %.1f px" % [ROOM_NODES[room_index], rise, MAX_REQUIRED_TIER_RISE])
+	if room_index == 8:
+		_expect(room.platform_rects.is_empty() and room.stair_polygons.is_empty(), "Silent Ballroom must remain a flat combat lane")
 
 
 func _test_required_anchors(level: Node) -> void:

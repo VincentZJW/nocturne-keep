@@ -10,12 +10,18 @@ size = Vector2(3328, 108)
 size = Vector2(3328, 64)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6k034"]
-size = Vector2(300, 20)
+size = Vector2(420, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_js3km"]
+size = Vector2(500, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e8q3v"]
+size = Vector2(440, 24)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tofpx"]
 size = Vector2(3328, 900)
 
-[node name="ServantPassage" type="Node2D" unique_id=432646328]
+[node name="ServantPassage" type="Node2D" unique_id=1363714936]
 script = ExtResource("1_e2ymq")
 room_id = &"SERVANT_PASSAGE"
 bilingual_name = "Servant Passage / 仆役通道"
@@ -23,100 +29,110 @@ room_index = 6
 room_size = Vector2i(3328, 720)
 vertical_minimum = -180
 accent_color = Color(0.38431373, 0.41960785, 0.39607844, 1)
+platform_rects = Array[Vector4]([Vector4(620, 520, 420, 24), Vector4(1380, 440, 500, 24), Vector4(2220, 520, 440, 24)])
+stair_polygons = Array[PackedVector2Array]([PackedVector2Array(260, 612, 620, 520, 1040, 520, 1380, 440, 1880, 440, 2220, 520, 2660, 520, 3040, 612, 3040, 720, 260, 720)])
 
-[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1055617838]
+[node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=643643171]
 
-[node name="Geometry" type="Node2D" parent="." unique_id=352338270]
+[node name="Geometry" type="Node2D" parent="." unique_id=1217090132]
 
-[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1919845083]
+[node name="MainFloor" type="StaticBody2D" parent="Geometry" unique_id=1044393469]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=478805470]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/MainFloor" unique_id=741374138]
 position = Vector2(1664, 666)
 shape = SubResource("RectangleShape2D_t4eqc")
 
-[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=588977786]
+[node name="CeilingBoundary" type="StaticBody2D" parent="Geometry" unique_id=1795348389]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1635563022]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/CeilingBoundary" unique_id=1209786236]
 position = Vector2(1664, -212)
 shape = SubResource("RectangleShape2D_sog7o")
 
-[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=181880343]
+[node name="UpperPlatform01" type="StaticBody2D" parent="Geometry" unique_id=1062934134]
 collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1246571443]
-position = Vector2(1910, 452)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform01" unique_id=1462528759]
+position = Vector2(830, 532)
 shape = SubResource("RectangleShape2D_6k034")
 
-[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=1886942520]
+[node name="UpperPlatform02" type="StaticBody2D" parent="Geometry" unique_id=584584838]
 collision_mask = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1741723358]
-polygon = PackedVector2Array(420, 612, 760, 520, 1040, 520, 1380, 612, 1380, 720, 420, 720)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform02" unique_id=1793607404]
+position = Vector2(1630, 452)
+shape = SubResource("RectangleShape2D_js3km")
 
-[node name="StairRamp02" type="StaticBody2D" parent="Geometry" unique_id=700099169]
+[node name="UpperPlatform03" type="StaticBody2D" parent="Geometry" unique_id=1475227282]
 collision_mask = 0
 
-[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp02" unique_id=379381274]
-polygon = PackedVector2Array(1900, 612, 2240, 520, 2480, 520, 2820, 612, 2820, 720, 1900, 720)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperPlatform03" unique_id=343308064]
+position = Vector2(2440, 532)
+shape = SubResource("RectangleShape2D_e8q3v")
 
-[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=572024158]
+[node name="StairRamp01" type="StaticBody2D" parent="Geometry" unique_id=433152463]
+collision_mask = 0
 
-[node name="DoorAnchors" type="Node2D" parent="." unique_id=1994653604]
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Geometry/StairRamp01" unique_id=1055877109]
+polygon = PackedVector2Array(260, 612, 620, 520, 1040, 520, 1380, 440, 1880, 440, 2220, 520, 2660, 520, 3040, 612, 3040, 720, 260, 720)
 
-[node name="ServantConnectionDoor" type="Marker2D" parent="DoorAnchors" unique_id=478976368]
+[node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1452737554]
+
+[node name="DoorAnchors" type="Node2D" parent="." unique_id=451466487]
+
+[node name="ServantConnectionDoor" type="Marker2D" parent="DoorAnchors" unique_id=470230169]
 position = Vector2(3250, 612)
 
-[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=1165596702]
+[node name="CheckpointAnchors" type="Node2D" parent="." unique_id=2109260740]
 
-[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1874553206]
+[node name="EncounterAnchors" type="Node2D" parent="." unique_id=1401113287]
 
-[node name="E12" type="Marker2D" parent="EncounterAnchors" unique_id=1425089077]
+[node name="E12" type="Marker2D" parent="EncounterAnchors" unique_id=207324616]
 position = Vector2(448, 612)
 
-[node name="E13" type="Marker2D" parent="EncounterAnchors" unique_id=1489059080]
+[node name="E13" type="Marker2D" parent="EncounterAnchors" unique_id=1264179285]
 position = Vector2(1664, 612)
 
-[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1531704000]
+[node name="EnemySpawnAnchors" type="Node2D" parent="." unique_id=1347253083]
 
-[node name="E12_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1831901910]
+[node name="E12_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=659504056]
 position = Vector2(392, 612)
 
-[node name="E12_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1575428601]
+[node name="E12_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1465705741]
 position = Vector2(504, 612)
 
-[node name="E13_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=586286752]
+[node name="E13_Spawn_01" type="Marker2D" parent="EnemySpawnAnchors" unique_id=2104330746]
 position = Vector2(1608, 612)
 
-[node name="E13_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1642444613]
+[node name="E13_Spawn_02" type="Marker2D" parent="EnemySpawnAnchors" unique_id=1642674557]
 position = Vector2(1720, 612)
 
-[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=2095890947]
+[node name="NarrativeAnchors" type="Node2D" parent="." unique_id=809193584]
 
-[node name="RouteAnchors" type="Node2D" parent="." unique_id=215596628]
+[node name="RouteAnchors" type="Node2D" parent="." unique_id=788723627]
 
-[node name="KitchenBranch" type="Marker2D" parent="RouteAnchors" unique_id=2014251254]
+[node name="KitchenBranch" type="Marker2D" parent="RouteAnchors" unique_id=1942076837]
 position = Vector2(2180, 442)
 
-[node name="CameraBounds" type="Area2D" parent="." unique_id=1122096898]
+[node name="CameraBounds" type="Area2D" parent="." unique_id=1738989619]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_5mlpe")
 room_id = &"SERVANT_PASSAGE"
 vertical_limits = Vector2i(-180, 720)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=2065177266]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds" unique_id=1139175078]
 position = Vector2(1664, 270)
-shape = SubResource("RectangleShape2D_js3km")
+shape = SubResource("RectangleShape2D_tofpx")
 
-[node name="RoomEntry" type="Marker2D" parent="." unique_id=694265357]
+[node name="RoomEntry" type="Marker2D" parent="." unique_id=353517337]
 position = Vector2(64, 612)
 
-[node name="RoomExit" type="Marker2D" parent="." unique_id=1798116199]
+[node name="RoomExit" type="Marker2D" parent="." unique_id=5400218]
 position = Vector2(3264, 612)
 
-[node name="DebugLabel" type="Label" parent="." unique_id=1970850734]
+[node name="DebugLabel" type="Label" parent="." unique_id=1491213503]
 offset_left = 32.0
 offset_top = -152.0
 offset_right = 32.0
