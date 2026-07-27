@@ -5,6 +5,8 @@ extends Node
 ## This service owns no combat, movement, AI, or save-game behavior.
 
 signal objective_changed(step: int, title_zh: String, title_en: String)
+signal story_flag_changed(flag_id: StringName, enabled: bool)
+signal transition_target_changed(chapter_id: StringName, spawn_id: StringName)
 
 enum ObjectiveStep {
 	LEAVE_CATACOMB,
@@ -22,6 +24,10 @@ var boss_reward_spawned: bool = false
 var boss_reward_collected: bool = false
 var is_debug_run: bool = false
 var current_objective: ObjectiveStep = ObjectiveStep.LEAVE_CATACOMB
+var current_chapter_id: StringName = &""
+var pending_spawn_id: StringName = &""
+var completed_chapters: Dictionary[StringName, bool] = {}
+var story_flags: Dictionary[StringName, bool] = {}
 
 
 func begin_formal_new_game() -> void:
@@ -58,6 +64,54 @@ func set_objective(step: ObjectiveStep) -> void:
 	objective_changed.emit(step, labels[0], labels[1])
 
 
+func apply_start_profile(profile: ChapterStartProfile, spawn_override: StringName = &"") -> void:
+	if profile == null:
+		return
+	current_chapter_id = profile.chapter_id
+	pending_spawn_id = (
+		spawn_override if not spawn_override.is_empty() else profile.default_spawn_id
+	)
+	for chapter_id: StringName in profile.previous_chapters_completed:
+		completed_chapters[chapter_id] = true
+	for flag_id: StringName in profile.chapter_story_flags:
+		set_story_flag(flag_id, profile.chapter_story_flags[flag_id])
+	transition_target_changed.emit(current_chapter_id, pending_spawn_id)
+
+
+func set_story_flag(flag_id: StringName, enabled: bool = true) -> void:
+	if flag_id.is_empty():
+		return
+	if story_flags.get(flag_id, false) == enabled:
+		return
+	story_flags[flag_id] = enabled
+	story_flag_changed.emit(flag_id, enabled)
+
+
+func has_story_flag(flag_id: StringName) -> bool:
+	return story_flags.get(flag_id, false)
+
+
+func mark_chapter_completed(chapter_id: StringName) -> void:
+	if not chapter_id.is_empty():
+		completed_chapters[chapter_id] = true
+
+
+func is_chapter_completed(chapter_id: StringName) -> bool:
+	return completed_chapters.get(chapter_id, false)
+
+
+func set_transition_target(chapter_id: StringName, spawn_id: StringName) -> void:
+	current_chapter_id = chapter_id
+	pending_spawn_id = spawn_id
+	transition_target_changed.emit(chapter_id, spawn_id)
+
+
+func consume_pending_spawn(default_spawn_id: StringName) -> StringName:
+	var result: StringName = pending_spawn_id if not pending_spawn_id.is_empty() else default_spawn_id
+	pending_spawn_id = &""
+	return result
+
+
 func reset_revival_state() -> void:
 	opening_completed = false
 	revival_completed = false
@@ -65,6 +119,10 @@ func reset_revival_state() -> void:
 	catacomb_exited = false
 	boss_reward_spawned = false
 	boss_reward_collected = false
+	current_chapter_id = &""
+	pending_spawn_id = &""
+	completed_chapters.clear()
+	story_flags.clear()
 	current_objective = ObjectiveStep.LEAVE_CATACOMB
 	var wallet: CurrencyWallet = get_node_or_null("/root/CurrencyManager") as CurrencyWallet
 	var equipment: PlayerEquipmentManager = get_node_or_null(

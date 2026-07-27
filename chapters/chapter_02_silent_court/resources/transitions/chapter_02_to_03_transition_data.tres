@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Chapter02TransitionData" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/chapter_02_transition_data.gd" id="1_data"]
+
+[resource]
+script = ExtResource("1_data")
+passage_scene_path = "res://chapters/chapter_02_silent_court/scenes/transitions/royal_chapel_passage.tscn"
+passage_spawn_id = &"royal_processional_passage_start"
+target_chapter_id = &"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES"
+target_spawn_id = &"chapter_03_start"
+fade_out_duration = 0.5
+fade_in_duration = 0.5
+mirror_reveal_duration = 2.2
+door_open_duration = 1.1
+missing_reward_prompt = "公爵夫人的遗物仍留在舞厅中。"

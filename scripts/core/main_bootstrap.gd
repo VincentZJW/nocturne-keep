@@ -29,7 +29,7 @@ func start_startup_flow() -> void:
 		router.get_debug_target_profile() if router != null else null
 	)
 	if debug_profile != null:
-		_prepare_session(true)
+		_prepare_session(true, debug_profile)
 		print(
 			"DEBUG CHAPTER START ACTIVE | %s | %s"
 			% [debug_profile.chapter_id, debug_profile.main_scene_path]
@@ -56,13 +56,18 @@ func get_selected_start_scene_path() -> String:
 	return opening_scene_path
 
 
-func _prepare_session(debug_run: bool) -> void:
+func _prepare_session(debug_run: bool, profile: ChapterStartProfile = null) -> void:
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
 	if session == null:
 		push_warning("MainBootstrap could not find ChapterSession; continuing without session reset")
 		return
 	if debug_run:
 		session.begin_debug_run()
+		var config: DebugRunConfigState = get_node_or_null(
+			"/root/DebugRunConfig"
+		) as DebugRunConfigState
+		var spawn_override: StringName = config.debug_start_spawn_id if config != null else &""
+		session.apply_start_profile(profile, spawn_override)
 	else:
 		session.begin_formal_new_game()
 

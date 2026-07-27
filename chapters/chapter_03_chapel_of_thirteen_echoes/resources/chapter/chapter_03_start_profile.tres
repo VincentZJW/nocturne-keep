@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="ChapterStartProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/chapter/chapter_start_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES_ENTRY"
+chapter_id = &"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES"
+bilingual_name = "第三章 · 十三响礼拜堂 / Chapter III · Chapel of Thirteen Echoes"
+main_scene_path = "res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn"
+default_spawn_id = &"chapter_03_start"
+default_checkpoint_id = &"Chapter03CP01"
+available_spawn_ids = Array[StringName]([&"chapter_03_start", &"Chapter03PlayerSpawn"])
+previous_chapters_completed = Array[StringName]([&"CHAPTER_PROLOGUE", &"CHAPTER_01_RAVENMOURN_OUTSKIRTS", &"CHAPTER_02_SILENT_COURT"])
+required_weapons = Array[StringName]([&"veilbound_daggers", &"ravenfang_daggers"])
+equipped_weapon = &"ravenfang_daggers"
+starting_currency = 30
+starting_hp = 100.0
+start_full_health = true
+chapter_boss_defeated = false
+chapter_shortcuts = {}
+chapter_story_flags = {
+&"chapter_02_completed": true,
+&"hollow_duchess_defeated": true,
+&"chapter_02_exit_revealed": true,
+&"royal_chapel_passage_opened": true,
+&"chapter_02_boss_weapon_collected": true,
+&"chapter_03_started": true
+}
+debug_ready = true

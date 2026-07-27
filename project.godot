@@ -25,6 +25,7 @@ WeaponInventory="*res://scripts/items/weapon_inventory.gd"
 EquipmentManager="*res://scripts/items/equipment_manager.gd"
 DebugRunConfig="*res://scripts/systems/debug_run_config.gd"
 ChapterStartRouter="*res://scripts/core/chapter_start_router.gd"
+SceneTransitionManager="*res://scripts/systems/scene_transition_manager.gd"
 
 [display]
 

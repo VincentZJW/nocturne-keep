@@ -16,6 +16,7 @@ func _run() -> void:
 	_test_registry()
 	_test_chapter_one_metadata()
 	_test_chapter_two_metadata()
+	_test_chapter_three_entry_metadata()
 	_test_debug_run_config()
 	_test_formal_flow_is_unchanged()
 	_finish()
@@ -67,12 +68,25 @@ func _test_chapter_two_metadata() -> void:
 	_expect(profile.debug_ready, "Chapter II is not marked debug-ready")
 	_expect(profile.is_valid_debug_target(), "Chapter II profile is not a valid debug target")
 	for planned_id: StringName in [
-		ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES,
 		ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP,
 		ChapterRegistry.CHAPTER_05_NIGHT_REPEATED,
 		ChapterRegistry.CHAPTER_06_HOLLOW_BELL_ABYSS,
 	]:
 		_expect(not ChapterRegistry.get_chapter(planned_id).debug_ready, "%s is unexpectedly ready" % planned_id)
+
+
+func _test_chapter_three_entry_metadata() -> void:
+	var profile: ChapterStartProfile = ChapterRegistry.get_chapter(
+		ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES
+	)
+	_expect(profile.main_scene_path == ChapterRegistry.CHAPTER_03_SCENE_PATH, "Chapter III path mismatch")
+	_expect(profile.default_spawn_id == &"chapter_03_start", "Chapter III entry spawn mismatch")
+	_expect(profile.default_checkpoint_id == &"Chapter03CP01", "Chapter III CP01 mismatch")
+	_expect(profile.debug_ready and profile.is_valid_debug_target(), "Chapter III entry is not debug-ready")
+	_expect(
+		profile.chapter_story_flags.get(&"chapter_02_completed", false),
+		"Chapter III profile does not complete Chapter II"
+	)
 
 
 func _test_debug_run_config() -> void:
@@ -115,7 +129,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapters I/II ready, Bootstrap preserved)")
+		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapters I/II/III-entry ready, Bootstrap preserved)")
 		quit(0)
 		return
 	for failure: String in _failures:

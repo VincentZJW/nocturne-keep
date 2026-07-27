@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3]
+[gd_scene load_steps=38 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
@@ -27,6 +27,10 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_encounter_runtime.gd" id="25_encounters"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_floor_transition.gd" id="26_floor_transition"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_floor_transition_controller.gd" id="27_floor_transition_controller"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/transitions/ballroom_mirror_gate.tscn" id="28_mirror_gate"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/transitions/chapter_02_boss_reward_placeholder.tscn" id="29_reward_placeholder"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/transitions/chapter_02_to_03_transition_data.tres" id="30_transition_data"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/chapter_02_to_03_transition_controller.gd" id="31_transition_controller"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 2520)
@@ -222,6 +226,18 @@ ballroom_fx_path = NodePath("../../GameplayWorld/BossArea/BallroomFx")
 camera_left = 2688
 camera_right = 7168
 
+[node name="Chapter02To03TransitionController" type="Node" parent="ChapterSystems"]
+script = ExtResource("31_transition_controller")
+transition_data = ExtResource("30_transition_data")
+reward_placeholder_scene = ExtResource("29_reward_placeholder")
+player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
+boss_path = NodePath("../../GameplayWorld/BossArea/HollowDuchess")
+room_controller_path = NodePath("../HollowDuchessRoomController")
+ballroom_fx_path = NodePath("../../GameplayWorld/BossArea/BallroomFx")
+mirror_gate_path = NodePath("../../GameplayWorld/BossArea/BallroomMirrorGate")
+reward_anchor_path = NodePath("../../GameplayWorld/BossArea/Chapter02BossWeaponPickupAnchor")
+pickup_parent_path = NodePath("../../GameplayWorld/Pickups")
+
 [node name="Chapter02EncounterRuntime" type="Node2D" parent="ChapterSystems"]
 script = ExtResource("25_encounters")
 player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
@@ -306,6 +322,12 @@ position = Vector2(6000, -1188)
 
 [node name="PlayerBossEntry" type="Marker2D" parent="GameplayWorld/BossArea"]
 position = Vector2(2920, -1216)
+
+[node name="Chapter02BossWeaponPickupAnchor" type="Marker2D" parent="GameplayWorld/BossArea"]
+position = Vector2(6460, -1188)
+
+[node name="BallroomMirrorGate" parent="GameplayWorld/BossArea" instance=ExtResource("28_mirror_gate")]
+position = Vector2(6870, -1188)
 
 [node name="BossActivationArea" type="Area2D" parent="GameplayWorld/BossArea"]
 position = Vector2(3100, -1548)

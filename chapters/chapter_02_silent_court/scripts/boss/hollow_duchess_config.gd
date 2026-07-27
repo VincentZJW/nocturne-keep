@@ -127,9 +127,11 @@ extends Resource
 @export_category("Presentation")
 @export var intro_full_duration: float = 5.1
 @export var intro_retry_duration: float = 1.0
-@export var death_duration: float = 2.2
+@export var death_duration: float = 3.70
 @export var death_player_line_time: float = 0.65
-@export var death_boss_line_time: float = 1.15
+@export var death_boss_line_time: float = 1.25
+@export var death_passage_line_time: float = 2.05
+@export var death_echo_line_time: float = 2.85
 @export var light_hit_flash_duration: float = 0.08
 
 @export_category("Attack Selection")

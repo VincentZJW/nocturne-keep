@@ -4477,3 +4477,64 @@ Status: complete — short stairs, two Main floor transitions, QA evidence and f
 - Current native-2D stair art is a readable first pass, not the later environment-wide art-polish deliverable. Existing debug labels remain visible in QA captures.
 - Manual F5 route: enable Chapter II direct start at `CH2_FLOOR_1_START`; travel F1 right to the short Grand stair and enter its landing, then travel F2 right-to-left to the short Servant stair and enter its landing. Verify the black transition, destination floor, Camera2D, controls and HUD after both moves.
 - Next proposed stage: Stage 2, a read-only-first audit of all Chapter II enemy platform/stuck points followed by minimal encounter and spawn redistribution. No Stage 2 work was performed here.
+
+## 2026-07-27 — Chapter II to Chapter III transition milestone
+
+Status: complete — implementation, MainBootstrap integration, reload contract, full regression and six-image graphical QA passed; manual pacing acceptance pending
+
+### Goal and scope
+
+- Complete the narrative and playable transition from `Chapter II: The Silent Court` to a clearly marked minimal `Chapter III: Chapel of Thirteen Echoes` entry placeholder.
+- Deliver the Hollow Duchess four-line death exchange, Ballroom mirror mechanism, Royal Chapel Passage secret door, short enemy-free processional corridor, reward-condition placeholder, typed runtime story flags and a formal Chapter Registry/scene-transition route.
+- This milestone does not create Crimson Masque Stilettos or any other final Boss weapon, does not alter Boss combat tuning, Player values, enemies, Chapter II floor structure, Chapter I or loot probabilities, and does not implement Chapter III encounters/map/Boss/final art.
+
+### Pre-implementation audit
+
+- Work begins on `master` at `b60daf3a837b63d27d421fbf6b88bfb29d22fd9e`; `project.godot` still starts `res://scenes/bootstrap/main_bootstrap.tscn`, and Chapter II resolves to `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`.
+- The saved Hollow Duchess encounter is `SilentCourt/GameplayWorld/BossArea/HollowDuchess`, controlled by `SilentCourt/ChapterSystems/HollowDuchessRoomController`. Its current death state emits only `夜巡守卫：你认识我？` and `瑟芙琳：不……但殿下一直在等你。`, then opens the plain `BossExitDoor`; no mirror wall, religious secret door, post-Boss passage, reward anchor or Chapter III scene exists.
+- `ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` is presently a `debug_ready=false` planned entry pointing at a missing `chapel_of_thirteen_echoes.tscn`. The project has `ChapterSession`, `ChapterRegistry`, `ChapterStartProfile` and direct `SceneTree.change_scene_to_file` controllers, but no `SceneTransitionManager`, no generic GameSession and no reusable story-flag ledger. The new cross-scene fade service and flags must therefore be narrow additions to the existing architecture, not falsely described as pre-existing systems.
+- Existing Player/HUD runtime composition is reusable. A scene change frees the source runtime and instantiates exactly one destination runtime; Autoload state persists. `interact` is already mapped to E.
+- Existing user-owned Chapter I, Player/item and shared-enemy Resource changes plus old QA image changes are present before this milestone. They are unrelated, will not be modified, staged or claimed.
+
+### Planned task-owned files and tests
+
+- Extend the typed ChapterSession/Bootstrap/Registry contracts, add one cross-scene fade service, create a Chapter III start profile and minimal entry scene, then add composed Chapter II mirror/secret-door/reward-placeholder and an enemy-free Royal Processional Passage scene.
+- Add focused story/reload/transition tests, update existing Chapter Registry assertions, create at least six graphical MainBootstrap evidence frames and run exact Godot 4.7.1 import, Chapter II/Boss regressions and the affected system suite.
+
+### Delivered implementation
+
+- Extended the existing typed `ChapterSession` instead of creating a duplicate GameSession. It now owns process-lifetime chapter completion, story flags and one pending transition spawn; `MainBootstrap` applies complete debug profiles through the same service.
+- Added the global `SceneTransitionManager` fade service and connected it to `ChapterRegistry`. The Boss never hard-codes a Chapter III path, and each destination scene composes exactly one existing Player/HUD runtime.
+- Completed Seraphine's four-line death exchange, clears her Ballroom presentation, and starts a 2.20-second native-2D mirror sequence. The restored mirror contains no Player reflection, receives thirteen visible cracks and separates to reveal a black bell-shaped Royal Chapel Passage door with thirteen grooves, royal crest, prayer statues and restrained mist.
+- Added a clearly labeled neutral Boss reward placeholder at `SilentCourt/GameplayWorld/BossArea/Chapter02BossWeaponPickupAnchor`. It exists only to prove `chapter_02_boss_weapon_collected`; it is not Crimson Masque Stilettos and does not alter weapon inventory, HUD or damage.
+- Added the enemy-free `RoyalChapelPassage` with one shared runtime, short ceremonial route, pointed windows, prayer benches, bell motifs and an E-driven side-door transition. Added the safe `Chapter03EntryPlaceholder` with the required spawn, CP01, CameraBounds, door, title trigger, floor, route placeholder, safety bounds and Debug label; it contains no enemies, encounters, Boss or full Chapter III content.
+- Reloading Chapter II after Seraphine's defeat hides the Boss, retains the revealed mirror and reconstructs a missing uncollected placeholder. The secret door refuses entry until collection and displays `公爵夫人的遗物仍留在舞厅中。`.
+- Added the dedicated transition specification and a six-image MainBootstrap QA ledger. Shared HUD room labels now update correctly in the processional passage and Chapter III vestibule.
+
+### Story flags and transition timing
+
+- Flags: `hollow_duchess_defeated`, `chapter_02_exit_revealed`, `chapter_02_boss_weapon_collected`, `chapter_02_completed`, `royal_chapel_passage_opened`, `chapter_03_started`.
+- Boss death presentation: about 3.70 seconds; mirror reveal: 2.20 seconds; door open: 1.10 seconds; fade out/in: 0.50/0.50 seconds.
+- Dialogue: `夜巡守卫：你认识我？` → `瑟芙琳：不……但殿下一直在等你。` → `瑟芙琳：穿过镜后的礼门。` → `瑟芙琳：十三声忏悔，会替她回答。`.
+
+### Commands and actual results
+
+1. Exact import: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, missing-resource, invalid-UID or import error.
+2. Focused contracts:
+   - `test_chapter_start_foundation.gd`: PASS — seven Registry entries, Chapters I/II/III-entry ready and MainBootstrap preserved.
+   - `test_hollow_duchess_main_integration.gd`: `PASS boss=1 doors=2 cp05=1 hud=1 mirror=1 reward_anchor=1`.
+   - `test_chapter_02_to_03_transition.gd`: `PASS dialogue=4 mirror=1 reward_gate=1 reload=1 passage=1 chapter3=1`.
+   - `test_silent_court_graybox.gd`: `PASS rooms=9 floors=3 spawns=11 encounters=15 enemies=38 player=1 hud=1`.
+   - `test_chapter_02_three_floor_route.gd`: `PASS runs=3 softlocks=0` after three real-physics/Input Map traversals.
+3. Full deterministic regression: root suite 22/22 plus chapter suite 27/27; `FULL_SUITE tests=49 failed=0`. This includes Chapter I gameplay, all Player systems, Chapter II enemies, seven Boss attack loops and five complete Boss simulations.
+4. Graphical MainBootstrap flow: `Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tools/capture_chapter_02_to_03_qa.gd` — exit 0 on GL Compatibility / Apple M4; `CH2_TO_CH3_MAIN_QA: PASS captures=6 bootstrap=1 mirror=1 passage=1 chapter3=1`.
+5. Visual evidence and SHA-256 ledger: `docs/qa/chapter_02_to_03_transition/chapter_02_to_03_transition_qa_report.md`. Six real 1280×720 frames cover Boss death, dialogue, thirteen cracks, secret door, processional passage and Chapter III vestibule.
+6. Isolated staged tree `/tmp/nocturne_ch2_transition.gEYf1c`: exact-engine import plus Chapter Registry, Hollow Duchess Main composition and full Chapter II→III transition tests all passed without relying on preserved unstaged tuning/resources.
+7. Final `git diff --check`: PASS; no user-owned dirty path is included in the milestone diff.
+
+### Scope and manual acceptance
+
+- The final Chapter II Boss weapon is deliberately deferred despite the second attachment. This milestone stops at an honest reward prerequisite placeholder, as required by the first attachment and the project's approval gate.
+- Human F5 acceptance: enable Chapter II Debug start, select `CH2_BOSS`, press F5, enter the Ballroom, defeat Seraphine, inspect the mirror, first try the door without collecting, then collect the placeholder, press E, traverse the short corridor and press E into the Chapel Vestibule.
+- Automation proves the complete route, reload recovery, saved composition and 49 regressions. A human should still judge natural post-Boss pacing, the intended 15–30 second corridor duration and full CH2_START combat pacing.
+- Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA image changes and two untracked UID sidecars remain preserved and excluded. No Boss combat value, normal enemy, Chapter II floor, Chapter I, Player value, loot probability or formal Chapter III gameplay was changed.

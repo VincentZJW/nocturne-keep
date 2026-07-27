@@ -1,7 +1,7 @@
 # Technical Architecture
 
-Version: 0.1.0 (M0)
-Last updated: 2026-07-20
+Version: 0.2.0
+Last updated: 2026-07-27
 
 ## Goals
 
@@ -43,7 +43,9 @@ This is the target decomposition, not functionality delivered in M0.
 
 ## Global state policy
 
-No Autoload is needed in M0. Future global services are limited to durable cross-scene concerns such as session state and a small typed event bus. Movement, combat, AI, and encounter behavior remain instanced nodes.
+M0 required no Autoload. The current project now uses narrow Autoloads only for genuine cross-scene concerns: `ChapterSession` for process-lifetime progression/story flags, `DebugRunConfig` for guarded development routing, `SceneTransitionManager` for fade-backed scene replacement, and the existing currency/inventory/equipment services. Movement, combat, AI, encounters, Player/HUD composition and presentation remain instanced nodes.
+
+`SceneTransitionManager` resolves chapter targets through `ChapterRegistry`, records the pending chapter/spawn in `ChapterSession`, fades, and replaces the active PackedScene. It does not own Player state or chapter gameplay. `ChapterSession` is runtime state, not a disk save; persistent storage remains a future `user://` concern.
 
 ## Signal boundaries
 
@@ -59,14 +61,19 @@ Planned public signals include `health_changed`, `died`, `damage_received`, `che
 
 Collision layers will be documented before M2 combat implementation. World bodies, actors, hitboxes, hurtboxes, and triggers will use distinct named layers/masks. Overall body collisions will never substitute for hitbox/hurtbox damage resolution.
 
-## Scene flow (planned)
+## Current chapter flow
 
 ```text
-Main Menu → Room 01 → Room 02 ⇄ Room 03 → Boss Arena → Victory
-                         ↑ checkpoint   ↑ double jump gate
+MainBootstrap
+├── Formal: Opening → Veilbound Catacomb → Chapter I → Chapter II
+└── Guarded Debug: ChapterStartProfile → selected chapter/spawn
+
+Chapter II Silent Ballroom
+→ Royal Chapel Passage
+→ Chapter III Chapel Vestibule entry placeholder
 ```
 
-The return from Room 03 to the elevated route in Room 02 is the required light backtracking path.
+Every chapter destination composes one shared gameplay runtime instance. Cross-scene travel never moves Player by absolute global coordinates and never duplicates Player, HUD or session services.
 
 ## Testing layers
 

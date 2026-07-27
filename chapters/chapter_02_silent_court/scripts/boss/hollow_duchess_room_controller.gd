@@ -91,7 +91,7 @@ func _on_intro_line_requested(text: String) -> void:
 
 
 func _on_death_line_requested(speaker: String, text: String) -> void:
-	_show_dialogue("%s：%s" % [speaker, text], 1.0)
+	_show_dialogue("%s：%s" % [speaker, text], 0.72)
 
 
 func _on_boss_phase_changed(phase: int) -> void:
@@ -108,6 +108,19 @@ func _on_boss_defeated() -> void:
 	_set_door_closed(exit_door, false)
 	_release_camera()
 	room_cleared.emit()
+
+
+func apply_persisted_clear_state() -> void:
+	room_is_cleared = true
+	encounter_started = false
+	activation_area.set_deferred("monitoring", false)
+	_set_door_closed(rear_door, false)
+	_set_door_closed(exit_door, false)
+	intro_card.visible = false
+	dialogue_label.visible = false
+	boss_hud.hide_immediately()
+	boss.apply_persisted_defeat()
+	_release_camera()
 
 
 func _on_player_respawned(_spawn_position: Vector2) -> void:

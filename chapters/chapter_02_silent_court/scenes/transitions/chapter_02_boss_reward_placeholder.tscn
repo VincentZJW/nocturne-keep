@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/chapter_02_boss_reward_placeholder.gd" id="1_reward"]
+
+[sub_resource type="CircleShape2D" id="Circle_pickup"]
+radius = 52.0
+
+[node name="Chapter02BossRewardPlaceholder" type="Area2D"]
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+script = ExtResource("1_reward")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -24)
+shape = SubResource("Circle_pickup")
+
+[node name="Prompt" type="Label" parent="."]
+offset_left = -180.0
+offset_top = -92.0
+offset_right = 180.0
+offset_bottom = -46.0
+theme_override_colors/font_color = Color(0.80, 0.82, 0.86, 1)
+theme_override_font_sizes/font_size = 12
+text = "E  BOSS REWARD PLACEHOLDER\n第二章奖励条件占位（非正式武器）"
+horizontal_alignment = 1

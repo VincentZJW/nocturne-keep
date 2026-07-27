@@ -58,6 +58,8 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn
 ```
 
+第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。当前掉落物是明确标记的流程占位，不是正式Boss武器；拾取后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`。第三章场景仅实现安全的礼拜堂前庭入口，不包含正式地图、敌人或Boss。
+
 正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
@@ -147,6 +149,7 @@ Main开发调试快捷键：
 - [第二章Encounter矩阵](chapters/chapter_02_silent_court/docs/chapter_02_encounter_matrix.md)
 - [第二章Boss房规划](chapters/chapter_02_silent_court/docs/chapter_02_boss_room_plan.md)
 - [空心公爵夫人Boss规格](chapters/chapter_02_silent_court/docs/chapter_02_hollow_duchess_boss_spec.md)
+- [第二章至第三章转场规格](chapters/chapter_02_silent_court/docs/chapter_02_to_03_transition_spec.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
 - [世界观](docs/narrative/world_bible.md)

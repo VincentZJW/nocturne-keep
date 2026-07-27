@@ -24,6 +24,8 @@ func _run() -> void:
 		"GameplayWorld/BossArea/HollowDuchess", "GameplayWorld/BossArea/BossActivationArea", "GameplayWorld/BossArea/BossDoorRear",
 		"GameplayWorld/BossArea/BossExitDoor", "GameplayWorld/BossArea/BallroomFx", "PlayerSpawnPoints/CH2_BOSS",
 		"ChapterSystems/HollowDuchessRoomController", "GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/HollowDuchessBossHud",
+		"ChapterSystems/Chapter02To03TransitionController", "GameplayWorld/BossArea/BallroomMirrorGate",
+		"GameplayWorld/BossArea/Chapter02BossWeaponPickupAnchor",
 	]
 	for path: String in required_paths:
 		if level.get_node_or_null(path) == null:
@@ -47,7 +49,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("HOLLOW_DUCHESS_MAIN_TEST: PASS boss=1 doors=2 cp05=1 hud=1")
+		print("HOLLOW_DUCHESS_MAIN_TEST: PASS boss=1 doors=2 cp05=1 hud=1 mirror=1 reward_anchor=1")
 		quit(0)
 		return
 	for failure: String in _failures:

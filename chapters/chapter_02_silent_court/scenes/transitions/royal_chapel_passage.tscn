@@ -1,0 +1,111 @@
+[gd_scene load_steps=9 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="1_runtime"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/royal_chapel_passage.gd" id="2_controller"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/royal_chapel_passage_art.gd" id="3_art"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/transitions/chapter_02_to_03_transition_data.tres" id="4_data"]
+
+[sub_resource type="RectangleShape2D" id="Rectangle_ground"]
+size = Vector2(3600, 108)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_wall"]
+size = Vector2(64, 720)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_exit"]
+size = Vector2(220, 300)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_camera"]
+size = Vector2(3600, 720)
+
+[node name="RoyalChapelPassage" type="Node2D"]
+script = ExtResource("2_controller")
+transition_data = ExtResource("4_data")
+player_path = NodePath("GameplayWorld/ChapterRuntime/Player")
+respawn_controller_path = NodePath("GameplayWorld/ChapterRuntime/PlayerRespawnController")
+spawn_path = NodePath("SpawnPoints/royal_processional_passage_start")
+exit_area_path = NodePath("TransitionAreas/Chapter03SideDoor")
+prompt_path = NodePath("GameplayWorld/ChapterRuntime/HUD/PassagePrompt")
+
+[node name="EnvironmentArt" type="Node2D" parent="."]
+z_index = -40
+script = ExtResource("3_art")
+
+[node name="GameplayWorld" type="Node2D" parent="."]
+
+[node name="Geometry" type="Node2D" parent="GameplayWorld"]
+
+[node name="MainFloor" type="StaticBody2D" parent="GameplayWorld/Geometry"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Geometry/MainFloor"]
+position = Vector2(1800, 666)
+shape = SubResource("Rectangle_ground")
+
+[node name="LeftBoundary" type="StaticBody2D" parent="GameplayWorld/Geometry"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Geometry/LeftBoundary"]
+position = Vector2(-32, 360)
+shape = SubResource("Rectangle_wall")
+
+[node name="RightBoundary" type="StaticBody2D" parent="GameplayWorld/Geometry"]
+position = Vector2(3600, 0)
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Geometry/RightBoundary"]
+position = Vector2(32, 360)
+shape = SubResource("Rectangle_wall")
+
+[node name="ChapterRuntime" parent="GameplayWorld" instance=ExtResource("1_runtime")]
+
+[node name="PassagePrompt" type="Label" parent="GameplayWorld/ChapterRuntime/HUD"]
+layout_mode = 3
+anchors_preset = 12
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 280.0
+offset_top = -104.0
+offset_right = -280.0
+offset_bottom = -68.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.82, 0.85, 0.88, 1)
+theme_override_font_sizes/font_size = 14
+text = "E  ENTER CHAPEL VESTIBULE / 进入礼拜堂前庭"
+horizontal_alignment = 1
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="royal_processional_passage_start" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(180, 584)
+
+[node name="CameraBounds" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds"]
+position = Vector2(1800, 360)
+shape = SubResource("Rectangle_camera")
+
+[node name="TransitionAreas" type="Node2D" parent="."]
+
+[node name="Chapter03SideDoor" type="Area2D" parent="TransitionAreas"]
+position = Vector2(3420, 462)
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TransitionAreas/Chapter03SideDoor"]
+shape = SubResource("Rectangle_exit")
+
+[node name="DebugLabel" type="Label" parent="."]
+z_index = 100
+offset_left = 80.0
+offset_top = 74.0
+offset_right = 520.0
+offset_bottom = 106.0
+theme_override_font_sizes/font_size = 12
+text = "TRANSITION SPACE · NO ENEMIES · 15–30s TARGET"

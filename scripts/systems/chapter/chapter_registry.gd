@@ -23,9 +23,13 @@ const CHAPTER_02_SCENE_PATH: String = (
 const CHAPTER_02_PROFILE_PATH: String = (
 	"res://chapters/chapter_02_silent_court/resources/chapter/chapter_02_start_profile.tres"
 )
+const CHAPTER_03_PROFILE_PATH: String = (
+	"res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/chapter/"
+	+ "chapter_03_start_profile.tres"
+)
 const CHAPTER_03_SCENE_PATH: String = (
 	"res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/"
-	+ "chapel_of_thirteen_echoes.tscn"
+	+ "chapter_03_entry_placeholder.tscn"
 )
 const CHAPTER_04_SCENE_PATH: String = (
 	"res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn"
@@ -90,13 +94,11 @@ static func _ensure_initialized() -> void:
 	) as ChapterStartProfile
 	assert(chapter_two_profile != null, "Chapter II start profile failed to load")
 	_register(chapter_two_profile)
-	_register(_make_planned_profile(
-		CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES,
-		"第三章 · 十三回声礼拜堂 / Chapter III · Chapel of Thirteen Echoes",
-		CHAPTER_03_SCENE_PATH,
-		&"chapter_03_start",
-		[CHAPTER_PROLOGUE, CHAPTER_01_RAVENMOURN_OUTSKIRTS, CHAPTER_02_SILENT_COURT]
-	))
+	var chapter_three_profile: ChapterStartProfile = ResourceLoader.load(
+		CHAPTER_03_PROFILE_PATH, "ChapterStartProfile"
+	) as ChapterStartProfile
+	assert(chapter_three_profile != null, "Chapter III entry profile failed to load")
+	_register(chapter_three_profile)
 	_register(_make_planned_profile(
 		CHAPTER_04_DROWNED_UNDERKEEP,
 		"第四章 · 沉没下堡 / Chapter IV · The Drowned Underkeep",

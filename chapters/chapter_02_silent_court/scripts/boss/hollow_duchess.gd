@@ -162,6 +162,8 @@ var _active_phantoms: Array[DuchessPhantomRoute] = []
 var _debug_forced_attack: StringName = &""
 var _death_player_line_emitted: bool = false
 var _death_boss_line_emitted: bool = false
+var _death_passage_line_emitted: bool = false
+var _death_echo_line_emitted: bool = false
 var _defeat_emitted: bool = false
 
 
@@ -304,6 +306,8 @@ func reset_boss() -> void:
 	_final_pass_elapsed = 0.0
 	_death_player_line_emitted = false
 	_death_boss_line_emitted = false
+	_death_passage_line_emitted = false
+	_death_echo_line_emitted = false
 	_defeat_emitted = false
 	_facing_direction = -1.0
 	_apply_facing()
@@ -636,6 +640,12 @@ func _process_death() -> void:
 	if _state_elapsed >= config.death_boss_line_time and not _death_boss_line_emitted:
 		_death_boss_line_emitted = true
 		death_line_requested.emit("瑟芙琳", "不……但殿下一直在等你。")
+	if _state_elapsed >= config.death_passage_line_time and not _death_passage_line_emitted:
+		_death_passage_line_emitted = true
+		death_line_requested.emit("瑟芙琳", "穿过镜后的礼门。")
+	if _state_elapsed >= config.death_echo_line_time and not _death_echo_line_emitted:
+		_death_echo_line_emitted = true
+		death_line_requested.emit("瑟芙琳", "十三声忏悔，会替她回答。")
 	if _state_elapsed >= config.death_duration and not _defeat_emitted:
 		_defeat_emitted = true
 		boss_defeated.emit()
@@ -888,6 +898,17 @@ func _on_health_changed(current: int, maximum: int) -> void:
 func _on_died() -> void:
 	if _state != State.DEATH:
 		_enter_state(State.DEATH)
+
+
+func apply_persisted_defeat() -> void:
+	_clear_phantoms()
+	_disable_all_hitboxes()
+	velocity = Vector2.ZERO
+	hurtbox.set_enabled(false)
+	visible = false
+	_state = State.DEATH
+	_defeat_emitted = true
+	set_physics_process(false)
 
 
 func _flash_hit() -> void:
