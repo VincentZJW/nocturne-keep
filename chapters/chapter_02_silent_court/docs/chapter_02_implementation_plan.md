@@ -8,7 +8,8 @@ Target: 第二章 · 沉寂王庭 / Chapter II · The Silent Court
 2. Stage 2 — nine-room full graybox, saved profile and debug F5 route: complete.
 3. Phase 1 vertical graybox refinement: complete pending approval.
 4. Phase 2 five enemy roles and independent tests: complete; manual feel acceptance pending.
-5. Later phases — encounter runtime/population, narrative presentation, Armory safe-room/shop boundary and Hollow Duchess Boss: not started.
+5. Hollow Duchess Boss — complete first playable two-phase implementation; manual combat-feel acceptance pending.
+6. Later phases — formal encounter population, narrative presentation and Armory safe-room/shop boundary: not started.
 
 ## Stage 2 delivered paths
 
@@ -34,6 +35,15 @@ Target: 第二章 · 沉寂王庭 / Chapter II · The Silent Court
 - Focused tests: `test_phase_2_enemy_prototypes.gd`, `test_phase_2_enemy_damage.gd`.
 - Main acceptance instances: `SilentCourt/Phase2EnemyPrototypeShowcase`, exactly one of each new role.
 
+## Hollow Duchess delivered paths
+
+- Boss scene/config/state: `res://chapters/chapter_02_silent_court/scenes/boss/hollow_duchess.tscn` and `resources/boss/hollow_duchess_data.tres`.
+- Pixel art: `res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/` (101 runtime frames plus concept/effects).
+- Main encounter: `SilentCourt/BossArea/HollowDuchess` with `ChapterSystems/HollowDuchessRoomController`, door/camera/CP05 reset and signal-driven Boss HUD.
+- Independent room: `res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn`.
+- Specification: `chapter_02_hollow_duchess_boss_spec.md`; Main evidence: `res://docs/qa/chapter_02_hollow_duchess/`.
+- Verification: seven attacks ×10 deterministic cycles, five 222–226-second live combat simulations, Bootstrap/CH2_BOSS Main composition and ten rendered checkpoints.
+
 ## Next-stage acceptance boundary
 
-Phase 3 may begin only after approval. It may replace the five clearly named prototype showcase instances with authored E01–E15 encounter runtime/population. It must not silently implement the Hollow Duchess, activate narrative/doors/checkpoints/shop, add final environment art or begin Chapter III.
+The next stage may begin only after approval. It may replace the five clearly named prototype showcase instances with authored E01–E15 encounter runtime/population or separately implement approved narrative/shop work. It must not alter the accepted Duchess cadence without a new balance task, add final environment art or begin Chapter III.

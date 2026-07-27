@@ -1,0 +1,192 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/hollow_duchess.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/boss/hollow_duchess_data.tres" id="2_config"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/animations/hollow_duchess_sprite_frames.tres" id="3_frames"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_phantom_route.tscn" id="7_phantom"]
+
+[sub_resource type="RectangleShape2D" id="Rectangle_body"]
+size = Vector2(30, 62)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_hurtbox"]
+size = Vector2(32, 58)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_rapier"]
+size = Vector2(62, 12)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_fan"]
+size = Vector2(44, 12)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_riposte"]
+size = Vector2(58, 12)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_side_cut"]
+size = Vector2(46, 18)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_double_1"]
+size = Vector2(58, 12)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_double_2"]
+size = Vector2(72, 12)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_final"]
+size = Vector2(42, 52)
+
+[node name="HollowDuchess" type="CharacterBody2D"]
+floor_snap_length = 6.0
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_boss")
+config = ExtResource("2_config")
+phantom_route_scene = ExtResource("7_phantom")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+position = Vector2(0, -36)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+texture_filter = 1
+sprite_frames = ExtResource("3_frames")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -31)
+shape = SubResource("Rectangle_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_health")
+max_health = 220
+
+[node name="Hurtbox" type="Area2D" parent="."]
+position = Vector2(0, -31)
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5_hurtbox")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("Rectangle_hurtbox")
+
+[node name="FacingRoot" type="Node2D" parent="."]
+
+[node name="RapierThrustHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(47, -36)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_rapier_thrust"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/RapierThrustHitbox"]
+disabled = true
+shape = SubResource("Rectangle_rapier")
+
+[node name="FanSlashHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(29, -32)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_fan_slash"
+
+[node name="CollisionShapeUpper" type="CollisionShape2D" parent="FacingRoot/FanSlashHitbox"]
+position = Vector2(0, -5)
+rotation = -0.20944
+disabled = true
+shape = SubResource("Rectangle_fan")
+
+[node name="CollisionShapeLower" type="CollisionShape2D" parent="FacingRoot/FanSlashHitbox"]
+position = Vector2(0, 6)
+rotation = 0.244346
+disabled = true
+shape = SubResource("Rectangle_fan")
+
+[node name="RiposteHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(45, -36)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_backstep_riposte"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/RiposteHitbox"]
+disabled = true
+shape = SubResource("Rectangle_riposte")
+
+[node name="SideStepCutHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(31, -31)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_side_step_cut"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SideStepCutHitbox"]
+disabled = true
+shape = SubResource("Rectangle_side_cut")
+
+[node name="DoubleLungeHitbox1" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(45, -36)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_double_lunge_1"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/DoubleLungeHitbox1"]
+disabled = true
+shape = SubResource("Rectangle_double_1")
+
+[node name="DoubleLungeHitbox2" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(52, -36)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_double_lunge_2"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/DoubleLungeHitbox2"]
+disabled = true
+shape = SubResource("Rectangle_double_2")
+
+[node name="FinalWaltzHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(23, -30)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_final_waltz"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/FinalWaltzHitbox"]
+disabled = true
+shape = SubResource("Rectangle_final")
+
+[node name="RouteTelegraph" type="Line2D" parent="."]
+z_index = -1
+width = 4.0
+default_color = Color(0.67, 0.55, 0.75, 0.65)

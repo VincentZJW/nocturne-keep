@@ -2,11 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第二章 Phase 2 · 五种敌人原型`
+当前版本：`第二章 Boss · 空心公爵夫人·瑟芙琳`
 
 ## 当前范围
 
-F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人。第二章现有九房间立体灰盒，并已完成五种可战斗敌人原型：空壳侍从、王庭戟卫、哀悼铠甲、血烛侍祭和倒悬猎兽。Phase 2仅在第二章放置每种各一个、明确命名的验收实例；15组正式Encounter、34敌人编排、Hollow Duchess Boss、商店和最终美术尚未开始。
+F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人。第二章现有九房间立体灰盒、五种可战斗敌人原型，以及完整接入Silent Ballroom的两阶段Boss空心公爵夫人·瑟芙琳。15组正式Encounter、34敌人正式编排、商店和最终环境美术尚未开始。
 
 ## 环境要求
 
@@ -51,6 +51,12 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 ```
 
 使用F6或`"$GODOT_BIN" --path . <scene path>`运行。房间从左到右依次为侍从、戟卫、铠甲、侍祭和倒悬猎兽；它只验证原型，不替代Bootstrap/第二章Main验收。
+
+第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05进入Silent Ballroom会触发Boss标题、台词、房门与镜头锁定；瑟芙琳在121/220 HP进入第二阶段。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
+
+```text
+res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn
+```
 
 正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。
 
@@ -140,6 +146,7 @@ Main开发调试快捷键：
 - [第二章敌人原型规格](chapters/chapter_02_silent_court/docs/chapter_02_enemy_prototype_spec.md)
 - [第二章Encounter矩阵](chapters/chapter_02_silent_court/docs/chapter_02_encounter_matrix.md)
 - [第二章Boss房规划](chapters/chapter_02_silent_court/docs/chapter_02_boss_room_plan.md)
+- [空心公爵夫人Boss规格](chapters/chapter_02_silent_court/docs/chapter_02_hollow_duchess_boss_spec.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
 - [世界观](docs/narrative/world_bible.md)

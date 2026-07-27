@@ -1,6 +1,6 @@
 # 无声舞会厅 Boss 房空间规划
 
-Status: Stage 1 spatial plan; no Duchess combat implementation
+Status: playable Hollow Duchess encounter integrated; human combat-feel acceptance pending
 
 ## Arena dimensions
 
@@ -31,15 +31,15 @@ Background may contain broken mirrors, stage, chandelier and faceless dancers. C
 
 The preceding Antechamber owns E15 and CP05. A 488 px safe buffer separates CP05 `(27032,612)` from the approach trigger `(27360,612)`; the Player can prepare without starting the Boss.
 
-## Stage 8 placeholder contract
+## Runtime Boss contract
 
-States: Idle, ElegantApproach, RapierWindup, RapierThrust, FanSlash, Backstep, SideStep, Recovery, Hurt, DeathPlaceholder. Stage 8 validates space, door/reset/camera and a single death completion only. It does not implement full balance, phase two, final pixel animation or dancers.
+The saved room now composes the real two-phase `HollowDuchess` at global `(30820,612)`, the room controller, solid rear/exit doors, Boss HUD, intro/dialogue presentation and a native-drawn Ballroom backdrop. Phase 1 owns Rapier, Fan, Riposte and Side-Step attacks; Phase 2 adds Double Lunge, telegraphed dancer lanes and Final Waltz. Exact combat values and state timing live in `chapter_02_hollow_duchess_boss_spec.md`.
 
-DeathPlaceholder must emit the room completion once, reopen the Boss door/exit, and present the required final line: `殿下一直在等你。` No Chapter III transition is implemented in this plan.
+Death emits room completion once, reopens both doors and presents the required final line: `殿下一直在等你。` The open exit remains a safe placeholder; no Chapter III transition is implemented.
 
 ## Failure/reset behavior
 
-- Player death closes active hitboxes, resets the placeholder Boss and reopens the entry state before respawning at CP05.
+- Player death closes active hitboxes, clears phantom routes, resets the real Boss and reopens the entry state before respawning at CP05.
 - CP05 activation alone never closes the door.
-- Boss death remains cleared for the current disposable run and opens the exit.
+- Boss death remains cleared for the current disposable run, fades its HUD and opens the exit.
 - Leaving Debug Chapter Start or restarting with reset enabled returns Boss/door state to authored defaults.

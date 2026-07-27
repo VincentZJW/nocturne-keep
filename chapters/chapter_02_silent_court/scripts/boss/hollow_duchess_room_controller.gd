@@ -1,0 +1,169 @@
+class_name HollowDuchessRoomController
+extends Node
+
+## Owns Silent Ballroom encounter presentation, lock/camera/reset, not Boss combat decisions.
+
+signal room_locked
+signal room_reset
+signal room_cleared
+
+@export_node_path("Player") var player_path: NodePath
+@export_node_path("HollowDuchess") var boss_path: NodePath
+@export_node_path("Area2D") var activation_area_path: NodePath
+@export_node_path("StaticBody2D") var rear_door_path: NodePath
+@export_node_path("StaticBody2D") var exit_door_path: NodePath
+@export_node_path("Marker2D") var checkpoint_path: NodePath
+@export_node_path("PlayerRespawnController") var respawn_controller_path: NodePath
+@export_node_path("HollowDuchessBossHud") var boss_hud_path: NodePath
+@export_node_path("Control") var intro_card_path: NodePath
+@export_node_path("Label") var dialogue_label_path: NodePath
+@export_node_path("HollowDuchessBallroomFx") var ballroom_fx_path: NodePath
+@export var camera_left: int = 27520
+@export var camera_right: int = 32128
+
+@onready var player: Player = get_node_or_null(player_path) as Player
+@onready var boss: HollowDuchess = get_node_or_null(boss_path) as HollowDuchess
+@onready var activation_area: Area2D = get_node_or_null(activation_area_path) as Area2D
+@onready var rear_door: StaticBody2D = get_node_or_null(rear_door_path) as StaticBody2D
+@onready var exit_door: StaticBody2D = get_node_or_null(exit_door_path) as StaticBody2D
+@onready var checkpoint: Marker2D = get_node_or_null(checkpoint_path) as Marker2D
+@onready var respawn_controller: PlayerRespawnController = get_node_or_null(respawn_controller_path) as PlayerRespawnController
+@onready var boss_hud: HollowDuchessBossHud = get_node_or_null(boss_hud_path) as HollowDuchessBossHud
+@onready var intro_card: Control = get_node_or_null(intro_card_path) as Control
+@onready var dialogue_label: Label = get_node_or_null(dialogue_label_path) as Label
+@onready var ballroom_fx: HollowDuchessBallroomFx = get_node_or_null(ballroom_fx_path) as HollowDuchessBallroomFx
+
+var encounter_started: bool = false
+var room_is_cleared: bool = false
+var intro_seen: bool = false
+var _default_camera_left: int = 0
+var _default_camera_right: int = 0
+var _dialogue_tween: Tween
+
+
+func _ready() -> void:
+	call_deferred("_initialize_room")
+
+
+func _initialize_room() -> void:
+	if not _validate_dependencies():
+		return
+	activation_area.body_entered.connect(_on_activation_body_entered)
+	boss.combat_started.connect(_on_boss_combat_started)
+	boss.boss_defeated.connect(_on_boss_defeated)
+	boss.intro_line_requested.connect(_on_intro_line_requested)
+	boss.death_line_requested.connect(_on_death_line_requested)
+	boss.phase_changed.connect(_on_boss_phase_changed)
+	respawn_controller.player_respawned.connect(_on_player_respawned)
+	boss_hud.bind_boss(boss)
+	_default_camera_left = player.player_camera.limit_left
+	_default_camera_right = player.player_camera.limit_right
+	_set_door_closed(rear_door, false)
+	_set_door_closed(exit_door, true)
+	intro_card.visible = false
+	dialogue_label.visible = false
+	respawn_controller.set_spawn_point(checkpoint)
+
+
+func _on_activation_body_entered(body: Node2D) -> void:
+	if body != player or encounter_started or room_is_cleared:
+		return
+	encounter_started = true
+	respawn_controller.set_spawn_point(checkpoint)
+	_set_door_closed(rear_door, true)
+	_set_door_closed(exit_door, true)
+	_lock_camera()
+	player.set_input_profile(Player.InputProfile.LOCKED)
+	intro_card.visible = true
+	activation_area.set_deferred("monitoring", false)
+	boss.activate(player, intro_seen)
+	intro_seen = true
+	room_locked.emit()
+
+
+func _on_boss_combat_started() -> void:
+	intro_card.visible = false
+	player.set_input_profile(Player.InputProfile.FULL)
+
+
+func _on_intro_line_requested(text: String) -> void:
+	_show_dialogue("瑟芙琳：%s" % text, 2.2)
+
+
+func _on_death_line_requested(speaker: String, text: String) -> void:
+	_show_dialogue("%s：%s" % [speaker, text], 1.0)
+
+
+func _on_boss_phase_changed(phase: int) -> void:
+	if ballroom_fx != null:
+		ballroom_fx.set_phase(phase)
+
+
+func _on_boss_defeated() -> void:
+	if room_is_cleared:
+		return
+	room_is_cleared = true
+	encounter_started = false
+	_set_door_closed(rear_door, false)
+	_set_door_closed(exit_door, false)
+	_release_camera()
+	room_cleared.emit()
+
+
+func _on_player_respawned(_spawn_position: Vector2) -> void:
+	if room_is_cleared or not encounter_started:
+		return
+	boss.reset_boss()
+	encounter_started = false
+	_set_door_closed(rear_door, false)
+	_set_door_closed(exit_door, true)
+	activation_area.set_deferred("monitoring", true)
+	intro_card.visible = false
+	dialogue_label.visible = false
+	boss_hud.hide_immediately()
+	_release_camera()
+	room_reset.emit()
+
+
+func _show_dialogue(text: String, duration: float) -> void:
+	if _dialogue_tween != null and _dialogue_tween.is_valid():
+		_dialogue_tween.kill()
+	dialogue_label.text = text
+	dialogue_label.modulate.a = 1.0
+	dialogue_label.visible = true
+	_dialogue_tween = create_tween()
+	_dialogue_tween.tween_interval(duration)
+	_dialogue_tween.tween_property(dialogue_label, "modulate:a", 0.0, 0.25)
+	_dialogue_tween.tween_callback(func() -> void: dialogue_label.visible = false)
+
+
+func _set_door_closed(door: StaticBody2D, closed: bool) -> void:
+	door.visible = closed
+	door.collision_layer = 1 if closed else 0
+	for child: Node in door.get_children():
+		var collision: CollisionShape2D = child as CollisionShape2D
+		if collision != null:
+			collision.set_deferred("disabled", not closed)
+
+
+func _lock_camera() -> void:
+	player.player_camera.limit_left = camera_left
+	player.player_camera.limit_right = camera_right
+	player.player_camera.reset_smoothing()
+
+
+func _release_camera() -> void:
+	player.player_camera.limit_left = _default_camera_left
+	player.player_camera.limit_right = _default_camera_right
+	player.player_camera.reset_smoothing()
+
+
+func _validate_dependencies() -> bool:
+	if (
+		player == null or boss == null or activation_area == null or rear_door == null
+		or exit_door == null or checkpoint == null or respawn_controller == null
+		or boss_hud == null or intro_card == null or dialogue_label == null
+	):
+		push_error("HollowDuchessRoomController scene composition is incomplete")
+		return false
+	return true

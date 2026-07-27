@@ -4321,3 +4321,62 @@ Status: complete — Chapter I filesystem migration, shared ownership split, deb
 - Boss-preflight: set only `debug_start_spawn_id=&"boss_checkpoint"`, press F5, defeat Fallen Gate Knight, collect Ravenfang and enter the open gate; Chapter II Castle Gate Interior must load.
 - Automated checks establish saved paths, spawning, resources, enemy/Boss behavior contracts and scene change. Human acceptance is still required for uninterrupted full-chapter pacing and combat feel.
 - The pre-existing user-owned tuning, Main reserialization, seven QA image changes and two untracked generated UID files remain preserved. They are not to be silently included in this isolated migration commit.
+## 2026-07-27 — Chapter II Hollow Duchess Boss milestone
+
+Status: complete — implementation, Main integration, exact-engine regression and graphical QA passed; manual combat-feel acceptance pending
+
+### Goal
+
+- Implement The Hollow Duchess, Seraphine as the complete two-phase Chapter II Boss, including authored movement, seven readable attacks, attack/recovery cadence, turn locking, Poise/Stagger resistance, intro/death presentation and deterministic reset.
+- Produce original, game-ready pixel sprites and effects under the Chapter II Boss-owned asset tree, compose an independently loadable Boss scene/test room, and integrate the real encounter into Silent Ballroom and the Bootstrap Chapter II `CH2_BOSS` path.
+- Reuse the existing typed Health/Hitbox/Hurtbox, Player, respawn and chapter-runtime contracts without changing Player movement, Ravenfang 12/24 damage, Chapter I content, Phase 2 enemy tuning, loot, currency or later chapters.
+
+### Pre-implementation audit
+
+- Work begins on `master` at `fe667345e0371d14ba46cb008c88c576cb87dbac`. `project.godot` resolves `run/main_scene` to `res://scenes/bootstrap/main_bootstrap.tscn`; debug Chapter Start is currently disabled and defaults to Chapter I.
+- Chapter II Main is `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`. It already owns `PlayerSpawnPoints/CH2_BOSS`, `BossArea/BossSpawn`, `BossArea/PlayerBossEntry`, `BossArea/BossActivationArea`, `BossArea/BossCameraBounds`, `BossArea/BossDoorRear` and `BossArea/BossExitDoor`, but all are inert graybox anchors and there is no Hollow Duchess scene, script, Resource, art or animation.
+- Silent Ballroom is `res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom.tscn`; CP05 and the Boss-door anchor are in `silent_ballroom_antechamber.tscn`. The composed Player is `res://scenes/player/player.tscn` with `res://scripts/player/player.gd`: run speed 220 px/s, jump velocity -420 px/s, Dash 480 px/s for 0.18 s, Ravenfang Normal/Dash damage 12/24, and the existing Health/Hurt/respawn/HUD composition.
+- Reusable combat contracts are `HealthComponent`, `HitboxComponent` and `HurtboxComponent`. Chapter I's room controller, Boss HUD, camera lock and reset patterns are implementation references only; Chapter I files and its live tuning will not be modified.
+- Pre-existing user-owned Chapter I/shared tuning, QA images and two untracked UID files remain in the worktree. They will be preserved and excluded from this Boss commit.
+
+### Planned files, tests, and scope check
+
+- Add Chapter II-owned Boss config/state script, room controller/presentation components, boss scene, isolated test room, original pixel generator/SpriteFrames/effects, focused deterministic tests and F5 QA capture tooling.
+- Update Silent Court only where required for the actual Boss instance, solid doors, activation, CP05 respawn, camera lock, Boss HUD/dialogue and cleared-state exit placeholder. Do not populate E01–E15 or create Chapter III content.
+- Verify exact Godot 4.7.1 import/parse, standalone Boss/test-room startup, seven attack timing/dedup contracts, turn/Poise/phase/reset contracts, existing Chapter II/Player regressions, formal F5 bootstrap and graphical `CH2_BOSS` Main captures. Record real commands/results before one isolated commit.
+
+### Delivered implementation
+
+- Added a typed, concentrated `HollowDuchessConfig` and explicit two-phase `HollowDuchess` state controller. Phase 1 implements Rapier Thrust, Fan Slash, Backstep Riposte and Side-Step Cut; Phase 2 adds Double Waltz Lunge, two telegraphed non-solid Phantom Dancer routes and three-pass Final Waltz Crossing. Every action has explicit Windup/Active/Recovery, direction lock, bounded repeat selection and mandatory chain recovery.
+- Added 220 HP, the exact 121 HP/55% transition without healing, 60 Poise, Normal 10/Dash 24 Poise pressure, 0.56-second Stagger and 2.50-second protection. Normal attacks cannot cancel Boss attacks, Dash light reaction is neutral-state-only, and the 0.14+0.44-second Turn commits facing at 70% rather than one-frame flipping.
+- Composed the saved `hollow_duchess.tscn` from the existing shared Health/Hitbox/Hurtbox contracts. Separate geometry covers Rapier, Fan, Riposte, Side Cut, both Double Lunge hits and Final Waltz. Phantom and Final passes use fresh attack IDs and the shared target ledger to prevent repeated damage inside one active pass.
+- Generated 101 original transparent 96×96 nearest-neighbor Boss frames across twenty named sequences, plus an original editable concept SVG and phantom effect. Built one saved SpriteFrames Resource; no external, downloaded, AI-generated or provenance-unknown asset was used.
+- Added the production encounter at `SilentCourt/BossArea/HollowDuchess`, signal-driven bilingual Boss HP/Phase/Poise HUD, intro/death dialogue, Ballroom presentation, solid rear/exit doors, existing-camera bounds, CP05 retry and deterministic reset. Player death keeps the established ghost/respawn presentation; Boss death does not create a ghost and opens the safe exit placeholder without starting Chapter III.
+- Added an independently runnable Boss test room, configuration/state tests, Main composition test, five full live-component battle simulations and Bootstrap-based graphical QA tooling. Updated current Chapter II plan, Boss-room plan, README and dedicated Boss specification.
+
+### Verification commands and actual results
+
+1. Generation/import:
+   - Exact Godot asset generator: `HOLLOW_DUCHESS_ASSET_GENERATOR: PASS animations=20`.
+   - Exact Godot SpriteFrames builder: `HOLLOW_DUCHESS_SPRITE_FRAMES: PASS animations=20`.
+   - `Godot --headless --editor --path . --import --quit`: exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, resource, UID or import error.
+2. Focused Boss contracts:
+   - `test_hollow_duchess_boss.gd`: `PASS attacks=7 iterations=70 phase=2 poise=60`; each of seven attacks completed ten start/active/finish cycles.
+   - `test_hollow_duchess_main_integration.gd`: `PASS boss=1 doors=2 cp05=1 hud=1` and exact `CH2_BOSS` Player spawn.
+   - `test_hollow_duchess_full_fights.gd`: five real-component simulations completed at 222/223/224/225/226 simulated seconds, 16 accepted Player hits each and 294 total Boss attack starts.
+   - Standalone Boss scene/test room and composed Silent Court started headlessly without red diagnostics.
+3. Main/Bootstrap graphics:
+   - `Godot --path . --script .../capture_hollow_duchess_qa.gd`: `PASS captures=10`; Output proves MainBootstrap selected the saved Chapter II Main. Evidence covers intro, seven attacks, phase transition and death under `res://docs/qa/chapter_02_hollow_duchess/`.
+   - `Godot --headless --path . --quit-after 120`: formal default still prints `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`.
+4. Regression/hygiene:
+   - Recursive exact-engine `test_*.gd` suite: `FULL_SUITE tests=46 passed=46 failed=0`.
+   - Five existing pixel/enemy/Boss asset validators: 5 passed, 0 failed.
+   - Isolated staged tree `/tmp/nocturne_duchess_staged_final.CQn6yI`: exact-engine import plus Boss contract, Main composition and all five full fights passed, proving the milestone does not depend on preserved unstaged Chapter I/shared tuning.
+   - `git diff --check`: PASS.
+
+### Known limitations and manual acceptance
+
+- The Boss is a complete first playable pixel implementation, not final per-frame art polish. Final audio, richer particles and environment-matched lighting are intentionally deferred.
+- Automated fights use the real damage component chain and real Boss AI while protecting the test Player from death. They prove state/cadence/victory completion, not subjective reaction comfort or player skill balance.
+- Manual F5 acceptance should judge Rapier/Fan silhouette clarity, Riposte/Side-Step punish windows, 0.58-second Turn readability, Phantom lane contrast, Final Waltz routing, camera extremes and whether one safe punish but not three greedy hits feels consistent.
+- The five Phase 2 enemy showcase instances and formal E01–E15 population remain unchanged. Chapter III, shop, final environment art and unrelated Chapter I/user-owned dirty paths remain outside this commit.

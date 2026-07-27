@@ -1,0 +1,37 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/duchess_phantom_route.gd" id="1_route"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/effects/phantom_dancer.png" id="2_phantom"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="3_hitbox"]
+
+[sub_resource type="RectangleShape2D" id="Rectangle_phantom"]
+size = Vector2(36, 52)
+
+[node name="DuchessPhantomRoute" type="Node2D"]
+script = ExtResource("1_route")
+
+[node name="Telegraph" type="Line2D" parent="."]
+z_index = -1
+width = 3.0
+default_color = Color(0.66, 0.55, 0.76, 0.72)
+texture_filter = 1
+
+[node name="Phantom" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_phantom")
+position = Vector2(0, -26)
+modulate = Color(0.75, 0.82, 0.95, 0.68)
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("3_hitbox")
+faction = &"enemy"
+attack_kind = &"boss_phantom_dancer"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+position = Vector2(0, -26)
+disabled = true
+shape = SubResource("Rectangle_phantom")

@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="HollowDuchessConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/hollow_duchess_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+max_health = 220
+phase_2_threshold = 0.55
+max_poise = 60
+stagger_duration = 0.56
+stagger_protection_duration = 2.5
+normal_attack_poise_damage = 10
+dash_attack_poise_damage = 24
+approach_speed = 132.0
+retreat_speed = 120.0
+side_step_speed = 300.0
+backstep_speed = 350.0
+turn_reaction_delay = 0.14
+turn_animation_duration = 0.44
+turn_facing_commit_ratio = 0.7
+phase_1_min_attack_gap = 0.84
+phase_1_max_attack_gap = 1.02
+phase_2_min_attack_gap = 0.72
+phase_2_max_attack_gap = 0.9
+chain_limit = 2
+rapier_thrust_damage = 11
+fan_slash_damage = 13
+riposte_damage = 12
+side_step_cut_damage = 12
+double_lunge_damage_1 = 9
+double_lunge_damage_2 = 12
+phantom_damage = 10
+final_waltz_damage = 8
