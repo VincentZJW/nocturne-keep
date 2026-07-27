@@ -1,6 +1,6 @@
 extends SceneTree
 
-const BOLT_SCENE: PackedScene = preload("res://scenes/projectiles/crossbow_bolt.tscn")
+const BOLT_SCENE: PackedScene = preload("res://shared/scenes/projectiles/crossbow_bolt.tscn")
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
 
 var _failures: Array[String] = []

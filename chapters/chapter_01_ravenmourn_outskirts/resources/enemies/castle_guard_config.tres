@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="CastleGuardConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/enemies/castle_guard_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+max_health = 30
+attack_damage = 5
+patrol_speed = 45.0
+chase_speed = 75.0
+ground_acceleration = 420.0
+ground_deceleration = 520.0
+gravity = 980.0
+patrol_half_width = 150.0
+platform_height_tolerance = 72.0
+detection_range = 180.0
+lose_target_range = 260.0
+attack_range = 46.0
+attack_windup = 0.35
+attack_active_duration = 0.1
+attack_recovery = 0.45
+hurt_duration = 0.18
+knockback_speed = 120.0
+death_hide_delay = 0.0
+initial_idle_duration = 0.55
+patrol_turn_pause = 0.25

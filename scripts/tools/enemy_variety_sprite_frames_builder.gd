@@ -2,8 +2,17 @@ extends SceneTree
 
 ## Builds and saves three persistent SpriteFrames resources after PNG import.
 
-const ROOT: String = "res://assets/sprites/enemies"
-const OUTPUT_ROOT: String = "res://resources/enemies"
+const ASSET_ROOTS: Dictionary[String, String] = {
+	"cursed_shield_guard": "res://shared/assets/enemies/cursed_shield_guard",
+	"decayed_spearman": "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/decayed_spearman",
+	"fallen_crossbowman": "res://shared/assets/enemies/fallen_crossbowman",
+}
+const FRAME_OUTPUT_PATHS: Dictionary[String, String] = {
+	"cursed_shield_guard": "res://shared/resources/enemies/cursed_shield_guard_sprite_frames.tres",
+	"decayed_spearman": "res://chapters/chapter_01_ravenmourn_outskirts/resources/enemies/decayed_spearman_sprite_frames.tres",
+	"fallen_crossbowman": "res://shared/resources/enemies/fallen_crossbowman_sprite_frames.tres",
+}
+const SHIELD_RESOURCE_ROOT: String = "res://shared/resources/enemies"
 
 const DEFINITIONS: Dictionary[String, Dictionary] = {
 	"cursed_shield_guard": {
@@ -31,28 +40,28 @@ func _initialize() -> void:
 	var failures: int = 0
 	for enemy_name: String in DEFINITIONS:
 		var frames: SpriteFrames = _build_enemy(enemy_name, DEFINITIONS[enemy_name])
-		var output_path: String = OUTPUT_ROOT.path_join("%s_sprite_frames.tres" % enemy_name)
+		var output_path: String = FRAME_OUTPUT_PATHS[enemy_name]
 		var error: Error = ResourceSaver.save(frames, output_path)
 		if error != OK:
 			push_error("Cannot save %s" % output_path)
 			failures += 1
 	var effect_error: Error = ResourceSaver.save(
 		_build_shield_break_effect(),
-		OUTPUT_ROOT.path_join("cursed_shield_guard_shield_break_fx_sprite_frames.tres")
+		SHIELD_RESOURCE_ROOT.path_join("cursed_shield_guard_shield_break_fx_sprite_frames.tres")
 	)
 	if effect_error != OK:
 		push_error("Cannot save Shield Guard break effect SpriteFrames")
 		failures += 1
 	var shield_visual_error: Error = ResourceSaver.save(
 		_build_shield_visual(),
-		OUTPUT_ROOT.path_join("cursed_shield_guard_shield_sprite_frames.tres")
+		SHIELD_RESOURCE_ROOT.path_join("cursed_shield_guard_shield_sprite_frames.tres")
 	)
 	if shield_visual_error != OK:
 		push_error("Cannot save Shield Guard ShieldVisual SpriteFrames")
 		failures += 1
 	var shield_hit_error: Error = ResourceSaver.save(
 		_build_shield_hit_effect(),
-		OUTPUT_ROOT.path_join("cursed_shield_guard_shield_hit_fx_sprite_frames.tres")
+		SHIELD_RESOURCE_ROOT.path_join("cursed_shield_guard_shield_hit_fx_sprite_frames.tres")
 	)
 	if shield_hit_error != OK:
 		push_error("Cannot save Shield Guard hit effect SpriteFrames")
@@ -74,7 +83,7 @@ func _build_enemy(enemy_name: String, animations: Dictionary) -> SpriteFrames:
 		frames.set_animation_speed(animation_name, speed)
 		frames.set_animation_loop(animation_name, looping)
 		for frame_index: int in range(count):
-			var texture_path: String = ROOT.path_join(enemy_name).path_join(animation_key).path_join(
+			var texture_path: String = ASSET_ROOTS[enemy_name].path_join(animation_key).path_join(
 				"%s_%02d.png" % [animation_key, frame_index + 1]
 			)
 			var texture: Texture2D = load(texture_path) as Texture2D
@@ -90,12 +99,12 @@ func _build_shield_break_effect() -> SpriteFrames:
 	frames.rename_animation(&"default", &"shield_break")
 	# Four equal frames span the complete configured GuardBreak readability window.
 	var config: CursedShieldGuardConfig = load(
-		"res://resources/enemies/cursed_shield_guard_config.tres"
+		"res://shared/resources/enemies/cursed_shield_guard_config.tres"
 	) as CursedShieldGuardConfig
 	frames.set_animation_speed(&"shield_break", 4.0 / config.guard_break_duration)
 	frames.set_animation_loop(&"shield_break", false)
 	for frame_index: int in range(4):
-		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var texture_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_break_fx"
 		).path_join("shield_break_fx_%02d.png" % (frame_index + 1))
 		var texture: Texture2D = load(texture_path) as Texture2D
@@ -114,7 +123,7 @@ func _build_shield_visual() -> SpriteFrames:
 		frames.add_animation(animation_name)
 		frames.set_animation_speed(animation_name, 1.0)
 		frames.set_animation_loop(animation_name, true)
-		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var texture_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_visual"
 		).path_join("%s.png" % state_name)
 		var texture: Texture2D = load(texture_path) as Texture2D
@@ -126,7 +135,7 @@ func _build_shield_visual() -> SpriteFrames:
 	frames.set_animation_speed(&"shield_break", 8.0)
 	frames.set_animation_loop(&"shield_break", false)
 	for frame_index: int in range(4):
-		var break_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var break_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_visual"
 		).path_join("shield_break_%02d.png" % (frame_index + 1))
 		var break_texture: Texture2D = load(break_path) as Texture2D
@@ -143,7 +152,7 @@ func _build_shield_hit_effect() -> SpriteFrames:
 	frames.set_animation_speed(&"shield_hit", 18.0)
 	frames.set_animation_loop(&"shield_hit", false)
 	for frame_index: int in range(3):
-		var texture_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var texture_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_hit_fx"
 		).path_join("shield_hit_fx_%02d.png" % (frame_index + 1))
 		var texture: Texture2D = load(texture_path) as Texture2D
@@ -160,7 +169,7 @@ func _duration_ratio(enemy_name: String, animation_name: String, frame: int, spe
 		and (animation_name == "attack" or animation_name == "attack_unshielded")
 	):
 		var config: CursedShieldGuardConfig = load(
-			"res://resources/enemies/cursed_shield_guard_config.tres"
+			"res://shared/resources/enemies/cursed_shield_guard_config.tres"
 		) as CursedShieldGuardConfig
 		return [
 			config.attack_windup * speed * 0.5,
@@ -171,13 +180,13 @@ func _duration_ratio(enemy_name: String, animation_name: String, frame: int, spe
 		][frame]
 	if enemy_name == "cursed_shield_guard" and animation_name == "guard_break":
 		var shield_config: CursedShieldGuardConfig = load(
-			"res://resources/enemies/cursed_shield_guard_config.tres"
+			"res://shared/resources/enemies/cursed_shield_guard_config.tres"
 		) as CursedShieldGuardConfig
 		var frame_seconds: Array[float] = [0.10, 0.10, 0.20, shield_config.guard_break_duration - 0.40]
 		return frame_seconds[frame] * speed
 	if enemy_name == "decayed_spearman" and animation_name == "attack_thrust":
 		var config: DecayedSpearmanConfig = load(
-			"res://resources/enemies/decayed_spearman_config.tres"
+			"res://chapters/chapter_01_ravenmourn_outskirts/resources/enemies/decayed_spearman_config.tres"
 		) as DecayedSpearmanConfig
 		return [
 			config.attack_windup * speed / 3.0,
@@ -189,7 +198,7 @@ func _duration_ratio(enemy_name: String, animation_name: String, frame: int, spe
 		][frame]
 	if enemy_name == "fallen_crossbowman" and animation_name == "reload":
 		var config: FallenCrossbowmanConfig = load(
-			"res://resources/enemies/fallen_crossbowman_config.tres"
+			"res://shared/resources/enemies/fallen_crossbowman_config.tres"
 		) as FallenCrossbowmanConfig
 		return config.reload_duration * speed / 4.0
 	return 1.0

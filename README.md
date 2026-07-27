@@ -2,7 +2,7 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第二章九房间完整灰盒 · Chapter II Silent Court Stage 2`
+当前版本：`第一章章节化整理 · Chapter I Reorganization`
 
 ## 当前范围
 
@@ -36,13 +36,15 @@ GODOT_BIN="/absolute/path/to/Godot"
 res://scenes/cinematics/opening_cinematic.tscn
 ```
 
-章节化启动阶段2现已完成：项目拥有统一`ChapterRegistry`、保存的`ChapterStartProfile`、`DebugRunConfig`和受Debug构建门控的`ChapterStartRouter`。`run/main_scene`仍然是Opening，但当前开发默认配置会在F5初始化后直接进入第二章《沉寂王庭》的`CH2_START`；Release、禁用Debug启动、非法目标以及脚本测试进程不会被路由。不要手工改写`run/main_scene`。
+章节化启动系统保留统一`ChapterRegistry`、保存的`ChapterStartProfile`、`DebugRunConfig`和受Debug构建门控的`ChapterStartRouter`。`run/main_scene`仍是Opening，但本次迁移后的开发默认配置会在F5初始化后直接进入第一章`dark_forest_tutorial_spawn`；Release、禁用Debug启动、非法目标以及脚本测试进程不会被路由。不要手工改写`run/main_scene`。
 
-第二章九房间灰盒已经落地为总长32,128 px的连续路线：城门内厅→灰旗长廊→末宴大厅→王室画像长廊→血烛礼拜堂→仆役通道→旧军械库安全室→无声舞厅前室→无声舞会厅。F5中只有一名共享Player与一套HUD，默认装备Ravenfang、30金币、满HP/耐力；15组Encounter、30个敌人出生点、5个检查点、10扇门、6个叙事触发和Boss空间目前只保存为命名Anchor，本阶段没有正式敌人或门/检查点逻辑。
+第一章正式根目录是`res://chapters/chapter_01_ravenmourn_outskirts/`，主场景是`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`。若要快速验证Boss前流程，将`scripts/systems/debug_run_config.gd`中的`debug_start_spawn_id`临时设为`&"boss_checkpoint"`后按F5；完整章节测试使用默认`&"dark_forest_tutorial_spawn"`。两种配置都通过同一个保存的`chapter_01_start_profile.tres`校验，不需要改写`run/main_scene`。
 
-若将`DebugRunConfig.debug_chapter_start_enabled`设为`false`，自然播放或跳过Opening后仍按原流程加载`res://scenes/levels/veilbound_catacomb.tscn`，再进入`res://scenes/main/main.tscn`；这条正式Opening→复苏→第一章路线未被第二章改写。
+第二章九房间灰盒文件保持现状，本次不继续开发第二章碰撞、敌人、Boss或玩法。第一章城门已从旧阈厅占位目标切换为现有`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`，用于验证章节边界资源引用。
 
-第二章当前人工测试：按F5后直接位于城门内厅，使用A/D或方向键向右依次穿过九房；Space、二段Space、地面/空中Shift可检查可选平台与支路，最终到达无声舞会厅。六个Debug出生选择器为`CH2_START`、`CH2_BANQUET`、`CH2_GALLERY`、`CH2_CHAPEL`、`CH2_ARMORY`、`CH2_BOSS`，可在`DebugRunConfig.debug_start_spawn_id`中选择。
+若将`DebugRunConfig.debug_chapter_start_enabled`设为`false`，自然播放或跳过Opening后仍按原流程加载`res://scenes/levels/veilbound_catacomb.tscn`，再进入`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`；这条正式Opening→复苏→第一章路线未被第二章改写。
+
+第一章当前人工测试：按F5后直接位于暗黑森林教程起点，完整通过森林、城郊、城堡前路和Boss桥。Boss快速测试改用`boss_checkpoint`；击败Boss、拾取鸦牙双匕并进入打开后的城门后，应加载第二章城门内厅。
 
 `F6`只运行Godot编辑器当前打开的场景；它不是固定路径。当前审计保存的编辑器场景为Main，因此此时F6与F5一致。也可以直接启动F5目标：
 
@@ -53,13 +55,13 @@ res://scenes/cinematics/opening_cinematic.tscn
 第一只敌人的独立战斗测试房仍保留在：
 
 ```text
-res://scenes/tools/combat_test_room.tscn
+res://chapters/chapter_01_ravenmourn_outskirts/scenes/tests/combat_test_room.tscn
 ```
 
 在Godot的FileSystem面板双击该场景后按`F6`，或使用命令：
 
 ```bash
-"$GODOT_BIN" --path . res://scenes/tools/combat_test_room.tscn
+"$GODOT_BIN" --path . res://chapters/chapter_01_ravenmourn_outskirts/scenes/tests/combat_test_room.tscn
 ```
 
 测试房继续只包含一名Player和一只守卫，并提供血量、状态、实际剑伤害、可关闭的Hitbox/Hurtbox可视化以及Reset按钮；它不会替换正式Main启动场景。Main默认使用紧凑Debug HUD：左上保留Player状态、HP、耐力、速度、Dash、Hurt与无敌摘要；左下保留当前遭遇及存活/参与/攻击数量。F2展开后仍可查看原有全部Action字段和每只敌人的完整运行信息。
@@ -67,7 +69,7 @@ res://scenes/tools/combat_test_room.tscn
 混合敌人独立测试房：
 
 ```text
-res://scenes/tools/enemy_variety_test_room.tscn
+res://chapters/chapter_01_ravenmourn_outskirts/scenes/tests/enemy_variety_test_room.tscn
 ```
 
 该场景同时放置剑卫、盾卫、长矛兵和高平台弩手，提供每只敌人的类型、状态、生命、动画、攻击阶段、盾牌状态、射程/装填和弩箭数量，并有可关闭的Hitbox/Hurtbox显示与Reset。Main的`ENEMY DEBUG`使用同一通用敌人接口，不再硬编码为Castle Guard。
@@ -75,13 +77,13 @@ res://scenes/tools/enemy_variety_test_room.tscn
 新增独立测试房：
 
 ```text
-res://scenes/tools/gargoyle_test_room.tscn
-res://scenes/tools/boss_test_room.tscn
+res://chapters/chapter_01_ravenmourn_outskirts/scenes/tests/gargoyle_test_room.tscn
+res://chapters/chapter_01_ravenmourn_outskirts/scenes/tests/boss_test_room.tscn
 ```
 
 它们用于快速验证石像鬼和Boss状态/动画；最终验收仍以F5开场后Main的18组实际遭遇和城堡木桥流程为准。
 
-建议Main人工测试顺序：从出生点观察月亮、远景树海与前景枯树的层次，沿Group01..03确认泥石路、杂草、灌木、破栅栏、路标、车轮和墓石不会掩盖攻击；在Group03..05观察森林减少、废岗楼/断墙/铁门增加且远处尖塔逐渐放大。继续从边缘登上PlatformB/C/D与GargoylePerch，在Group06/07确认后段城墙、石砖、碎石、杂草和链条仍保持敌人可读性。到达`(5480,612)`前应看到`RAVENMOURN CASTLE`铁拱门且可自由通行；踏上木桥后确认深青蓝水面/倒影/桥影、多尖塔城堡主体、加宽重门、100点Boss盾量与Phase 2正常。击败Boss后等待完整1.20秒升门，拾取永久鸦牙双匕奖励，再进入`CastleEntranceTrigger`并无文字淡出到阈厅占位场景。
+建议Main人工测试顺序：从出生点观察月亮、远景树海与前景枯树的层次，沿Group01..03确认泥石路、杂草、灌木、破栅栏、路标、车轮和墓石不会掩盖攻击；在Group03..05观察森林减少、废岗楼/断墙/铁门增加且远处尖塔逐渐放大。继续从边缘登上PlatformB/C/D与GargoylePerch，在Group06/07确认后段城墙、石砖、碎石、杂草和链条仍保持敌人可读性。到达`(5480,612)`前应看到`RAVENMOURN CASTLE`铁拱门且可自由通行；踏上木桥后确认深青蓝水面/倒影/桥影、多尖塔城堡主体、加宽重门、100点Boss盾量与Phase 2正常。击败Boss后等待完整1.20秒升门，拾取永久鸦牙双匕奖励，再进入`CastleEntranceTrigger`并淡出加载第二章城门内厅。
 
 当前灰盒击杀次数：剑卫普通/Dash为3/2；盾卫从背后或破盾后击杀本体为5/3，纯正面总输入为普通8次或Dash 5次（前3/2次只削减盾量且破盾伤害不溢出）；长矛兵为5/3；弩手为4/2。满血Player分别在剑卫第20、盾卫第13、长矛兵第10、弩箭第17次命中时死亡。
 
@@ -131,29 +133,29 @@ Main开发调试快捷键：
 - [开发日志](docs/development_log.md)
 - [世界观](docs/narrative/world_bible.md)
 - [开场分镜](docs/narrative/opening_cinematic_script.md)
-- [第一章叙事](docs/narrative/chapter_01_story_spec.md)
+- [第一章叙事](chapters/chapter_01_ravenmourn_outskirts/docs/narrative/chapter_01_story_spec.md)
 - [暮帷墓窟复苏场景](docs/narrative/veilbound_catacomb_scene.md)
 - [守烛人角色规格](docs/narrative/candle_warden_character_spec.md)
 - [墓窟复苏完整对话](docs/narrative/catacomb_revival_dialogue.md)
-- [场景切换规格](docs/design/scene_transition_spec.md)
+- [场景切换规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/scene_transition_spec.md)
 - [主角叙事规格](docs/narrative/character_protagonist_spec.md)
-- [嵌入式教程规格](docs/design/tutorial_spec.md)
-- [第一关34敌人编排](docs/design/first_level_encounter_spec.md)
-- [环境叙事规格](docs/design/environment_storytelling_spec.md)
+- [嵌入式教程规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/tutorial_spec.md)
+- [第一关34敌人编排](chapters/chapter_01_ravenmourn_outskirts/docs/design/first_level_encounter_spec.md)
+- [环境叙事规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/environment_storytelling_spec.md)
 - [检查点与重生规格](docs/design/checkpoint_and_respawn_spec.md)
 - [玩家动作接口](docs/design/player_combat_spec.md)
 - [基础战斗组件规格](docs/design/combat_system_spec.md)
-- [Cursed Castle Guard敌人规格](docs/design/enemy_castle_guard_spec.md)
-- [敌人名册](docs/design/enemy_roster_spec.md)
-- [Cursed Shield Guard规格](docs/design/enemy_cursed_shield_guard_spec.md)
-- [Decayed Spearman规格](docs/design/enemy_decayed_spearman_spec.md)
-- [Fallen Crossbowman规格](docs/design/enemy_fallen_crossbowman_spec.md)
-- [Gargoyle Sentinel规格](docs/design/enemy_gargoyle_sentinel_spec.md)
-- [Fallen Gate Knight Boss规格](docs/design/boss_fallen_gate_knight_spec.md)
-- [第一关遭遇规格](docs/design/first_level_encounter_spec.md)
-- [Boss房与重生规格](docs/design/boss_room_spec.md)
-- [第一关环境美术规格](docs/design/environment_art_spec.md)
-- [灰盒遭遇设计规格](docs/design/encounter_design_spec.md)
+- [Cursed Castle Guard敌人规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/enemy_castle_guard_spec.md)
+- [敌人名册](chapters/chapter_01_ravenmourn_outskirts/docs/design/enemy_roster_spec.md)
+- [Cursed Shield Guard规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/enemy_cursed_shield_guard_spec.md)
+- [Decayed Spearman规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/enemy_decayed_spearman_spec.md)
+- [Fallen Crossbowman规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/enemy_fallen_crossbowman_spec.md)
+- [Gargoyle Sentinel规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/enemy_gargoyle_sentinel_spec.md)
+- [Fallen Gate Knight Boss规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/boss_fallen_gate_knight_spec.md)
+- [第一关遭遇规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/first_level_encounter_spec.md)
+- [Boss房与重生规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/boss_room_spec.md)
+- [第一关环境美术规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/environment_art_spec.md)
+- [灰盒遭遇设计规格](chapters/chapter_01_ravenmourn_outskirts/docs/design/encounter_design_spec.md)
 - [Debug HUD规格](docs/design/debug_hud_spec.md)
 - [随机掉落系统](docs/design/loot_drop_system_spec.md)
 - [治疗拾取](docs/design/health_pickup_spec.md)
@@ -162,8 +164,8 @@ Main开发调试快捷键：
 - [第一章武器平衡](docs/design/weapon_balance_spec.md)
 - [第二章数值衔接边界](docs/design/chapter_02_combat_scaling_spec.md)
 - [耐力系统规格](docs/design/stamina_system_spec.md)
-- [移动范围与关卡尺度](docs/design/level_metrics.md)
-- [第一关移动与平台规范](docs/design/level_traversal_spec.md)
+- [移动范围与关卡尺度](chapters/chapter_01_ravenmourn_outskirts/docs/design/level_metrics.md)
+- [第一关移动与平台规范](chapters/chapter_01_ravenmourn_outskirts/docs/design/level_traversal_spec.md)
 - [碰撞层与实体几何规范](docs/design/collision_layers_spec.md)
 - [已知问题](docs/known_issues.md)
 

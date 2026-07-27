@@ -13,7 +13,10 @@ const CHAPTER_05_NIGHT_REPEATED: StringName = &"CHAPTER_05_NIGHT_REPEATED"
 const CHAPTER_06_HOLLOW_BELL_ABYSS: StringName = &"CHAPTER_06_HOLLOW_BELL_ABYSS"
 
 const PROLOGUE_SCENE_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
-const CHAPTER_01_SCENE_PATH: String = "res://scenes/main/main.tscn"
+const CHAPTER_01_SCENE_PATH: String = "res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn"
+const CHAPTER_01_PROFILE_PATH: String = (
+	"res://chapters/chapter_01_ravenmourn_outskirts/resources/chapter/chapter_01_start_profile.tres"
+)
 const CHAPTER_02_SCENE_PATH: String = (
 	"res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn"
 )
@@ -77,26 +80,11 @@ static func _ensure_initialized() -> void:
 		100.0,
 		true
 	))
-	_register(_make_profile(
-		CHAPTER_01_RAVENMOURN_OUTSKIRTS,
-		"第一章 · 鸦泣城郊 / Chapter I · Ravenmourn Outskirts",
-		CHAPTER_01_SCENE_PATH,
-		&"dark_forest_tutorial_spawn",
-		&"chapter_01_start",
-		[
-			&"dark_forest_tutorial_spawn",
-			&"after_tutorial",
-			&"after_forest",
-			&"after_outskirts",
-			&"boss_checkpoint",
-		],
-		[CHAPTER_PROLOGUE],
-		[&"veilbound_daggers"],
-		&"veilbound_daggers",
-		0,
-		100.0,
-		true
-	))
+	var chapter_one_profile: ChapterStartProfile = ResourceLoader.load(
+		CHAPTER_01_PROFILE_PATH, "ChapterStartProfile"
+	) as ChapterStartProfile
+	assert(chapter_one_profile != null, "Chapter I start profile failed to load")
+	_register(chapter_one_profile)
 	var chapter_two_profile: ChapterStartProfile = ResourceLoader.load(
 		CHAPTER_02_PROFILE_PATH, "ChapterStartProfile"
 	) as ChapterStartProfile

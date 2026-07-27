@@ -2,7 +2,7 @@ extends SceneTree
 
 ## Integration tests for the signal-driven, rebindable PLAYER-HP-002 Health HUD.
 
-const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 
 var _failures: Array[String] = []
 

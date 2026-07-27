@@ -1,0 +1,219 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_fall/death_fall_01.png" id="1_53gdy"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_fall/death_fall_02.png" id="2_tyxnu"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_fall/death_fall_03.png" id="3_e12ni"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_fall/death_fall_04.png" id="4_sp0bn"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_fall/death_fall_05.png" id="5_wy6tv"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_shatter/death_shatter_01.png" id="6_mndpq"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_shatter/death_shatter_02.png" id="7_7ma3r"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_shatter/death_shatter_03.png" id="8_1uhps"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_shatter/death_shatter_04.png" id="9_vov3f"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/death_shatter/death_shatter_05.png" id="10_r36p3"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive/dive_01.png" id="11_stj80"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive/dive_02.png" id="12_gblh8"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive/dive_03.png" id="13_8bngg"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive/dive_04.png" id="14_mwfl3"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive_windup/dive_windup_01.png" id="15_clt15"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive_windup/dive_windup_02.png" id="16_fqnd5"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive_windup/dive_windup_03.png" id="17_j5e3b"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dive_windup/dive_windup_04.png" id="18_onker"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dormant/dormant_01.png" id="19_6yp46"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dormant/dormant_02.png" id="20_gdhwr"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dormant/dormant_03.png" id="21_ioaxf"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/dormant/dormant_04.png" id="22_ii5xl"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/ground_stun/ground_stun_01.png" id="23_ei34x"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/ground_stun/ground_stun_02.png" id="24_xhvhh"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/ground_stun/ground_stun_03.png" id="25_8v2ko"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/ground_stun/ground_stun_04.png" id="26_h3o6y"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hover/hover_01.png" id="27_lun4y"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hover/hover_02.png" id="28_xnql6"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hover/hover_03.png" id="29_qxwcd"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hover/hover_04.png" id="30_isvni"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hurt/hurt_01.png" id="31_ecu57"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hurt/hurt_02.png" id="32_glesr"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/hurt/hurt_03.png" id="33_hsmmg"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/return_to_air/return_to_air_01.png" id="34_j8suq"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/return_to_air/return_to_air_02.png" id="35_06wjt"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/return_to_air/return_to_air_03.png" id="36_je5b3"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/return_to_air/return_to_air_04.png" id="37_1b2qy"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/wake/wake_01.png" id="38_awy7a"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/wake/wake_02.png" id="39_h66nw"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/wake/wake_03.png" id="40_r144o"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/gargoyle_sentinel/wake/wake_04.png" id="41_xx7ct"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_53gdy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_tyxnu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_e12ni")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_sp0bn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_wy6tv")
+}],
+"loop": 0,
+"name": &"death_fall",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_mndpq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7ma3r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_1uhps")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_vov3f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_r36p3")
+}],
+"loop": 0,
+"name": &"death_shatter",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_stj80")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_gblh8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_8bngg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_mwfl3")
+}],
+"loop": 1,
+"name": &"dive",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_clt15")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_fqnd5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_j5e3b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_onker")
+}],
+"loop": 0,
+"name": &"dive_windup",
+"speed": 8.888889
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_6yp46")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_gdhwr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_ioaxf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_ii5xl")
+}],
+"loop": 1,
+"name": &"dormant",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_ei34x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_xhvhh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_8v2ko")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_h3o6y")
+}],
+"loop": 1,
+"name": &"ground_stun",
+"speed": 6.153846
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_lun4y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_xnql6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_qxwcd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_isvni")
+}],
+"loop": 1,
+"name": &"hover",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_ecu57")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_glesr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_hsmmg")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.666667
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_j8suq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_06wjt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_je5b3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_1b2qy")
+}],
+"loop": 1,
+"name": &"return_to_air",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_awy7a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_h66nw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_r144o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_xx7ct")
+}],
+"loop": 0,
+"name": &"wake",
+"speed": 8.0
+}]

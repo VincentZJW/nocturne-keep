@@ -4107,3 +4107,53 @@ Status: in progress — implementation authorized; no later Chapter II content s
 - Automated evidence proves saved paths, anchors, single Player/HUD composition, basic collision continuity, debug profile state, full route and camera-boundary switching. Jump/Dash metrics prove comfortable geometry envelopes; platform feel and optional-branch readability still require human F5 playtesting.
 - Platforms, banquet tables, altar and stair ramps use full-solid graybox collision. One-way behavior, staircase comfort, underside/edge polish, functional normal/encounter/shortcut/Boss doors and active CP01–CP05 are deliberately deferred.
 - The 20 pre-existing user-owned modified/untracked paths remain preserved and excluded. No Chapter I Main scene, existing enemy/Boss tuning, combat, Player movement Resource or art was modified by Stage 2.
+## 2026-07-27 — Chapter I filesystem reorganization
+
+Status: complete — Chapter I filesystem migration, shared ownership split, debug profiles and regression evidence delivered; Chapter II feature development remains paused
+
+### Goal
+
+- Move the complete Ravenmourn Outskirts runtime, encounters, two Chapter I-only normal enemies, Fallen Gate Knight, Chapter I environment/tutorial/test tooling and Chapter I documents under `res://chapters/chapter_01_ravenmourn_outskirts/`.
+- Move the three normal enemies explicitly reused by the approved Chapter II roster (Cursed Shield Guard, Fallen Crossbowman and Gargoyle Sentinel) into `res://shared/` without duplicating their formal assets.
+- Preserve the formal Opening bootstrap, current gameplay/tuning/node names and all user-owned dirty work while updating every live path reference.
+
+### Pre-implementation audit and plan
+
+- Work begins on `master` at `86403d7`; `project.godot` still resolves `run/main_scene` to `res://scenes/cinematics/opening_cinematic.tscn`.
+- The formal non-debug flow remains Opening → Veilbound Catacomb → legacy `res://scenes/main/main.tscn`; Debug F5 currently routes to the existing Chapter II Stage 2 graybox. This migration does not add Chapter II gameplay.
+- Twenty pre-existing modified/untracked paths overlap several migration targets. They are preserved; overlapping content will not be reset, cleaned or silently folded into the migration commit.
+- The authoritative pre-move inventory and path map is `docs/migration/chapter_01_reorganization_manifest.md`. It records 388 files containing 845 relevant legacy path occurrences before movement.
+- Scope excludes Prologue relocation, new enemies/Bosses, encounter changes, balance changes, art replacement, Player changes and Chapter II graybox/content work.
+
+### Delivered migration
+
+- Added `res://chapters/chapter_01_ravenmourn_outskirts/` and moved the saved Main gameplay root to `scenes/level/ravenmourn_outskirts.tscn`; its local encounter/Boss bridge transforms, Checkpoints, HUD, tutorial, reward and gate composition remain intact.
+- Moved Castle Guard, Decayed Spearman and Fallen Gate Knight formal runtime/art into Chapter I. Moved Shield Guard, Crossbowman, Gargoyle, Crossbow Bolt and the minimal generic enemy base/config scripts into `res://shared/`, because the approved Chapter II roster directly reuses those types.
+- Moved Chapter I environment/tutorial/transition scripts, test scenes, QA/build helpers, deterministic tests and chapter-specific design/narrative documents into the chapter tree. Public Player/combat/HUD/items/checkpoint/chapter services and Prologue/Catacomb remain at neutral root paths.
+- Rewrote scene/resource/script/import references and refactored the mixed enemy art/SpriteFrames builders to use explicit per-enemy roots instead of a legacy common directory. Old live Main/enemy/Boss/projectile path search is now zero outside historical records.
+- Added the saved `chapter_01_start_profile.tres`, a narrow Chapter I debug-spawn adapter and five validated selectors. Debug F5 defaults to `dark_forest_tutorial_spawn`; `boss_checkpoint` is the Boss-preflight selector. The formal Opening bootstrap remains configured.
+- Updated Castle Entrance to load the existing Chapter II level after Boss reward/gate completion. This closes the already-authored chapter boundary without adding Chapter II gameplay.
+- Git removed `824` tracked files from legacy locations (806 detected renames plus 18 deletions paired with regenerated/moved assets). Final Chapter I contains `472` tracked files; `shared` contains `359` tracked files total. There are `501` resolved Chapter I/shared references across `97` live non-document files.
+
+### Exact commands and actual results
+
+1. Godot 4.7.1 import/parse:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`: exit 0; no Script Error, Parse Error, Failed to Load, Invalid UID or Missing Resource diagnostic. Logs: `docs/qa/chapter_01_reorganization/headless_import.log` and `headless_import_after_profiles.log`.
+2. Ordered automated regression:
+   - Every `test_*.gd` and `validate_*.gd` below root tests plus Chapter I/II tests ran with the exact engine. First run: 44/45 passed; the sole failure was an obsolete assertion that still expected the removed threshold placeholder. After updating that contract, focused rerun passed; final full rerun is recorded in `all_automated_tests_final.log`.
+   - Coverage includes five Chapter I debug spawns, Chapter I flow/encounters/checkpoints, all five normal enemies, Boss geometry/counter windows/reward/gate, Player/combat/HUD regressions and Chapter II graybox preservation.
+3. Configured graphical F5-equivalent startup:
+   - `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --quit-after 360`: exit 0 on GL Compatibility / Apple M4; Opening bootstrap routed through the default Chapter I profile without red diagnostics. Log: `f5_chapter_01_start.log`.
+4. Rendered Chapter I/transition QA:
+   - `Godot --path . --script chapters/chapter_01_ravenmourn_outskirts/scripts/tests/capture_chapter_01_reorganization_qa.gd`: exit 0, `PASS (6 rendered checkpoints, Chapter II loaded)`.
+   - Evidence: `chapter_01_forest.png`, `chapter_01_outskirts.png`, `chapter_01_castle_approach.png`, `chapter_01_boss.png`, `chapter_01_ravenfang_drop.png`, `chapter_01_enter_chapter_02.png` under `docs/qa/chapter_01_reorganization/`.
+5. Hygiene:
+   - Old live runtime path search: zero matches outside the explicitly excluded historical logs/manifests/QA.
+   - `git diff --check`: recorded after final staging review.
+
+### Manual acceptance and preserved worktree state
+
+- Full Chapter I: leave `debug_start_chapter_id` at Chapter I and `debug_start_spawn_id=&"dark_forest_tutorial_spawn"`, press F5, then traverse forest → outskirts → castle approach → Boss bridge.
+- Boss-preflight: set only `debug_start_spawn_id=&"boss_checkpoint"`, press F5, defeat Fallen Gate Knight, collect Ravenfang and enter the open gate; Chapter II Castle Gate Interior must load.
+- Automated checks establish saved paths, spawning, resources, enemy/Boss behavior contracts and scene change. Human acceptance is still required for uninterrupted full-chapter pacing and combat feel.
+- The pre-existing user-owned tuning, Main reserialization, seven QA image changes and two untracked generated UID files remain preserved. They are not to be silently included in this isolated migration commit.

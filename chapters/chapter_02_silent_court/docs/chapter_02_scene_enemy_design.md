@@ -13,13 +13,13 @@ The chapter communicates that the court repeats remnants of the Night of the Hol
 | # | Audited item | Actual state before Stage 1 |
 | --- | --- | --- |
 | 1 | `run/main_scene` | `res://scenes/cinematics/opening_cinematic.tscn` |
-| 2 | Main / Bootstrap | Playable Chapter I is `res://scenes/main/main.tscn`; no Bootstrap/router exists. |
+| 2 | Main / Bootstrap | Playable Chapter I is `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`; no Bootstrap/router exists. |
 | 3 | Debug Chapter Start | `res://scripts/systems/debug_run_config.gd`, `res://scripts/systems/chapter/chapter_registry.gd`, `res://scripts/systems/chapter/chapter_start_profile.gd`. |
 | 4 | Current F5 default | Actual F5 still starts Opening. Debug config selects Chapter II but nothing consumes it. |
 | 5 | Chapter II Start Profile | No saved `.tres` exists. Only registry metadata exists in code; planned saved path is `res://chapters/chapter_02_silent_court/resources/chapter/chapter_02_start_profile.tres`. |
 | 6 | Chapter II main scene | Missing. Registered target is `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`. |
 | 7 | Chapter II directory | Missing before this milestone; Stage 1 creates only its six `docs/` files. |
-| 8 | Chapter I → II transition | `Main/CastleEntranceTransition` loads only `res://scenes/transitions/ravenmourn_threshold.tscn`, a static threshold presentation with no Chapter II transition controller. |
+| 8 | Chapter I → II transition | `Main/CastleEntranceTransition` loads only `res://chapters/chapter_01_ravenmourn_outskirts/scenes/transitions/ravenmourn_threshold.tscn`, a static threshold presentation with no Chapter II transition controller. |
 | 9 | Formal Player | `res://scenes/player/player.tscn`, `res://scripts/player/player.gd`. It remains shared and is not copied. |
 | 10 | Camera | `Player/Camera2D`, local `(0,-105)`, smoothing 7, current Chapter I limits `0..6600`; Boss room controller temporarily replaces horizontal limits. |
 | 11 | HUD / Debug HUD | Formal `Main/HUD` CanvasLayer; compact debug `Main/Interface/DebugHudRoot` CanvasLayer root. Main-local NodePaths mean Stage 2 must compose/rebind shared HUD presentation for Silent Court. |

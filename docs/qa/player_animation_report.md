@@ -21,7 +21,7 @@ The rows, from top to bottom, are Idle (4), Run (6), Ground Dash (5), Air Dash (
 - Ground Dash, Air Dash, Attack frame 03, and Dash Attack frame 03 are distinct files and poses.
 - The preceding six-frame Attack and Dash Attack sequences remain archived as twelve valid 64×64 references.
 - The four reference copies are byte-identical to the original front, side, dash, and attack images.
-- The formal Main remains `res://scenes/main/main.tscn`; the canvas texture default remains Nearest.
+- The formal Main remains `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`; the canvas texture default remains Nearest.
 
 ## Visual review
 

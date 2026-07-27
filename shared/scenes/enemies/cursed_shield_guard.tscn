@@ -1,0 +1,145 @@
+[gd_scene load_steps=19 format=3]
+
+[ext_resource type="Script" path="res://shared/scripts/enemies/cursed_shield_guard.gd" id="1_enemy"]
+[ext_resource type="Resource" path="res://shared/resources/enemies/cursed_shield_guard_config.tres" id="2_config"]
+[ext_resource type="SpriteFrames" path="res://shared/resources/enemies/cursed_shield_guard_sprite_frames.tres" id="3_frames"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://scripts/combat/shield_component.gd" id="7_shield"]
+[ext_resource type="SpriteFrames" path="res://shared/resources/enemies/cursed_shield_guard_shield_break_fx_sprite_frames.tres" id="8_break_fx"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_break_fx/broken_shield_marker.png" id="9_break_marker"]
+[ext_resource type="SpriteFrames" path="res://shared/resources/enemies/cursed_shield_guard_shield_sprite_frames.tres" id="10_shield_frames"]
+[ext_resource type="SpriteFrames" path="res://shared/resources/enemies/cursed_shield_guard_shield_hit_fx_sprite_frames.tres" id="11_shield_hit_fx"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="12_loot"]
+[ext_resource type="Resource" path="res://resources/items/loot/shield_guard_loot.tres" id="13_loot_profile"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="14_dynamic_loot"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
+size = Vector2(34, 54)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hurtbox"]
+size = Vector2(36, 54)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(46, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_detection"]
+radius = 170.0
+
+[node name="CursedShieldGuard" type="CharacterBody2D"]
+floor_snap_length = 6.0
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_enemy")
+config = ExtResource("2_config")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+unique_name_in_owner = true
+texture_filter = 1
+sprite_frames = ExtResource("3_frames")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="GuardBreakMarker" type="Sprite2D" parent="VisualRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 4
+position = Vector2(0, -42)
+texture_filter = 1
+texture = ExtResource("9_break_marker")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_body")
+
+[node name="HealthComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_health")
+
+[node name="ShieldComponent" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("7_shield")
+
+[node name="Hurtbox" type="Area2D" parent="."]
+unique_name_in_owner = true
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5_hurtbox")
+faction = &"enemy"
+hit_policy_path = NodePath("../ShieldComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 3)
+shape = SubResource("RectangleShape2D_hurtbox")
+
+[node name="FacingRoot" type="Node2D" parent="."]
+unique_name_in_owner = true
+
+[node name="ShieldVisual" type="AnimatedSprite2D" parent="FacingRoot"]
+unique_name_in_owner = true
+z_index = 2
+texture_filter = 1
+sprite_frames = ExtResource("10_shield_frames")
+animation = &"intact"
+autoplay = "intact"
+
+[node name="ShieldHitEffect" type="AnimatedSprite2D" parent="FacingRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 3
+texture_filter = 1
+sprite_frames = ExtResource("11_shield_hit_fx")
+animation = &"shield_hit"
+
+[node name="ShieldBreakEffect" type="AnimatedSprite2D" parent="FacingRoot"]
+unique_name_in_owner = true
+visible = false
+z_index = 4
+scale = Vector2(2, 2)
+texture_filter = 1
+sprite_frames = ExtResource("8_break_fx")
+animation = &"shield_break"
+
+[node name="AttackHitbox" type="Area2D" parent="FacingRoot"]
+unique_name_in_owner = true
+position = Vector2(34, 0)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"enemy_melee"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/AttackHitbox"]
+disabled = true
+shape = SubResource("RectangleShape2D_attack")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("CircleShape2D_detection")
+
+[node name="WallCheck" type="RayCast2D" parent="."]
+position = Vector2(0, 3)
+target_position = Vector2(-24, 0)
+collision_mask = 1
+enabled = true
+
+[node name="FloorCheck" type="RayCast2D" parent="."]
+position = Vector2(-21, 18)
+target_position = Vector2(0, 24)
+collision_mask = 1
+enabled = true
+
+[node name="LootDropComponent" type="Node" parent="."]
+script = ExtResource("12_loot")
+profile = ExtResource("13_loot_profile")
+dynamic_profile = ExtResource("14_dynamic_loot")

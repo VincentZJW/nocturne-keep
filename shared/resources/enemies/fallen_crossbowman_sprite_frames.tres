@@ -1,0 +1,160 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/aim/aim_01.png" id="1_6xsf0"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/aim/aim_02.png" id="2_jxhyr"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/aim/aim_03.png" id="3_r5tuk"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/aim/aim_04.png" id="4_otawt"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/death/death_01.png" id="5_nshp6"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/death/death_02.png" id="6_bp4sy"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/death/death_03.png" id="7_eufsi"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/death/death_04.png" id="8_g3cxe"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/death/death_05.png" id="9_3ur33"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/death/death_06.png" id="10_s8pld"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/hurt/hurt_01.png" id="11_hf7yt"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/hurt/hurt_02.png" id="12_x75lh"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/hurt/hurt_03.png" id="13_7u7j3"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/idle/idle_01.png" id="14_g2f24"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/idle/idle_02.png" id="15_m2e8a"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/idle/idle_03.png" id="16_rq365"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/idle/idle_04.png" id="17_s1lng"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/reload/reload_01.png" id="18_h007v"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/reload/reload_02.png" id="19_7oatk"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/reload/reload_03.png" id="20_bs6db"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/reload/reload_04.png" id="21_fqx2a"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/shoot/shoot_01.png" id="22_85wru"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/shoot/shoot_02.png" id="23_vtj7o"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/shoot/shoot_03.png" id="24_hiwa3"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/walk/walk_01.png" id="25_wroct"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/walk/walk_02.png" id="26_2n536"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/walk/walk_03.png" id="27_c4h4b"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/walk/walk_04.png" id="28_naqiu"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/walk/walk_05.png" id="29_48hbp"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/fallen_crossbowman/walk/walk_06.png" id="30_bqrrf"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_6xsf0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_jxhyr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_r5tuk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_otawt")
+}],
+"loop": 1,
+"name": &"aim",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_nshp6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_bp4sy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_eufsi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_g3cxe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_3ur33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_s8pld")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_hf7yt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_x75lh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_7u7j3")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.666667
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_g2f24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_m2e8a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_rq365")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_s1lng")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.5,
+"texture": ExtResource("18_h007v")
+}, {
+"duration": 1.5,
+"texture": ExtResource("19_7oatk")
+}, {
+"duration": 1.5,
+"texture": ExtResource("20_bs6db")
+}, {
+"duration": 1.5,
+"texture": ExtResource("21_fqx2a")
+}],
+"loop": 0,
+"name": &"reload",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_85wru")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_vtj7o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_hiwa3")
+}],
+"loop": 0,
+"name": &"shoot",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_wroct")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_2n536")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_c4h4b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_naqiu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_48hbp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_bqrrf")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]

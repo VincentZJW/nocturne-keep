@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="GargoyleSentinelConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://shared/scripts/enemies/gargoyle_sentinel_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+display_name = &"GargoyleSentinel"
+max_health = 30
+dive_damage = 7
+detection_range = 220.0
+lose_target_range = 310.0
+hover_speed = 45.0
+dive_windup = 0.45
+dive_direction_lock_duration = 0.15
+dive_speed = 300.0
+ground_stun_duration = 0.65
+return_height = 70.0
+return_speed = 125.0
+attack_cooldown = 1.1
+hurt_duration = 0.18
+knockback_speed = 95.0

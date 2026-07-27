@@ -2,7 +2,7 @@ extends SceneTree
 
 ## Compact/expanded/hidden and responsive-layout contract for the configured F5 Main HUD.
 
-const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 const TEST_SIZES: Array[Vector2i] = [
 	Vector2i(800, 540),
 	Vector2i(1280, 664),

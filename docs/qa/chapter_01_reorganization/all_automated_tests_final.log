@@ -1,0 +1,252 @@
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_boss_attack_geometry.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+BOSS_GEOMETRY old_shared=(100.0, 42.0)@(65.0, 4.0) shield=14x30@(19,4) slash=26x22@(16,0) thrust=32x10@(20,-7)
+RANGE_20 shield left=10/10 right=10/10 outside_safe and inside_hit
+RANGE_20 slash left=10/10 right=10/10 outside_safe and inside_hit
+RANGE_20 thrust left=10/10 right=10/10 outside_safe and inside_hit
+SHIELD_BASH_TIMING windup=0.46 active=0.10 recovery=0.68 post_active_gap=1.18
+CONTROLLED_FIGHT_1 bash=2 slash=4 heavy=6 min_bash_gap=4.80
+CONTROLLED_FIGHT_2 bash=3 slash=6 heavy=3 min_bash_gap=3.60
+CONTROLLED_FIGHT_3 bash=1 slash=4 heavy=7 min_bash_gap=n/a
+SHIELD_BASH_WEIGHTS sampled shield=0.209 slash=0.430 heavy=0.360 cooldown=2.70
+BOSS_ATTACK_GEOMETRY_TEST: PASS
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_boss_counter_windows.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_COUNTER_TIMING normal=0.320 active=0.050..0.150 dash_attack_from_dash=0.267 reverse_ready=0.267 dash=0.180 normal+dash=0.500 normal+move48=0.620 dash_attack+reverse=0.447
+COUNTER ShieldBash gap=1.183 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=5/5
+COUNTER SwordSlash gap=1.050 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=5/5
+COUNTER HeavyOverhead gap=1.200 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=5/5
+COUNTER ComboSlash gap=1.050 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=n/a
+COUNTER ChargeThrust gap=1.133 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=n/a
+COUNTER JumpSmash gap=1.167 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=n/a
+COUNTER ShockwaveStrike gap=1.100 dash_attack_reverse=5/5 normal_dash=5/5 normal_move=n/a
+CONTROLLED_BOSS_FIGHTS durations=28.46,26.98,33.54 average=29.66
+BOSS_COUNTER_WINDOWS_TEST: PASS
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_combat_test_room.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+COMBAT_TEST_ROOM_TEST: PASS (composition, no contact damage, enemy damage, death, respawn)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_enemy_balance.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ENEMY_BALANCE_TEST: PASS (Shield front 8/5, rear 5/3; others unchanged)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_enemy_variety_damage.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ENEMY_VARIETY_DAMAGE_TEST: PASS (Shield 8, Spear 10, Bolt 6, Player Hurt)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_first_level_boss.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+BOSS_TURN_TIMING: free=1.1333 facing=0.9833 recovery=1.1333 target=1.00..1.30
+FIRST_LEVEL_BOSS_TEST: PASS (shield routing, phase, room lock/reset, death/exit)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_main_enemy_integration.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_ENEMY_INTEGRATION_TEST: PASS (18 groups, 34 mixed enemies, Boss room, HUD/respawn)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_ravenfang_boss_pressure.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+REAR_NORMAL_20: first=20 second=14 third=0 | REAR_DASH_10: 10 | PRESSURE_10S: started=6 completed=6
+RAVENFANG_BOSS_PRESSURE_TEST: PASS
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/enemies/test_castle_guard.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CASTLE_GUARD_TEST: PASS (patrol, edge, chase, fair attack, Hurt, Death)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/enemies/test_enemy_variety.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SHIELD_DASH_MATRIX: before B50 SH30; front1 B50 SH10; front2 B50 SH0; rear B30 SH30; post-break normal/dash B40/B20
+ENEMY_VARIETY_TEST: PASS (shield facing/break, spear reach, crossbow cadence)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/items/test_loot_weapon_progression.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+LOOT_1000_FULL: { &"coin": 708, &"small_health": 0, &"large_health": 0, &"none": 292 }
+LOOT_1000_LIGHT: { &"coin": 513, &"small_health": 267, &"large_health": 69, &"none": 151 }
+LOOT_1000_HEAVY: { &"coin": 350, &"small_health": 345, &"large_health": 164, &"none": 141 }
+LOOT_1000_CRITICAL: { &"coin": 196, &"small_health": 240, &"large_health": 423, &"none": 141 }
+LOOT_1000_ENVIRONMENT_FULL: { &"coin": 360, &"small_health": 0, &"large_health": 0, &"none": 640 }
+LOOT_WEAPON_PROGRESSION_TEST: PASS
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_castle_bridge_flow.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CASTLE_BRIDGE_FLOW_TEST: PASS (solid underside, moat death/respawn, Boss reset/persistence)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_chapter_01_start_profiles.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHAPTER_01_START_PROFILE_TEST: PASS (5 spawns, Chapter II transition)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_chapter_one_flow.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHAPTER_ONE_FLOW_TEST: PASS (8-shot opening, 11-step tutorial, 18 groups, 34 enemies, checkpoints, Boss epilogue)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_first_level_environment_unity.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+FIRST_LEVEL_ENVIRONMENT_UNITY_TEST: PASS (forest, frontier, approach, fortress, geometry preservation)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_main_platform_reachability.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_PLATFORM_REACHABILITY_TEST: PASS (5 solid surfaces, jump/double-jump underside blocking, Dash side blocking, top landings)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_main_traversal_routes.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_TRAVERSAL_ROUTES_TEST: PASS (mainline no Air Dash, mobility Crossbow route, novice-timing Gargoyle route; no teleport)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/level/test_ravenmourn_environment.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+RAVENMOURN_ENVIRONMENT_TEST: PASS (Main art, collision preservation, gate, text-free transition)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/tools/validate_castle_guard_assets.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CASTLE_GUARD_ASSET_TEST: PASS (24 frames + reference, heavy cut, dissolve, timing, scene)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/tools/validate_enemy_variety_assets.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+ENEMY_VARIETY_ASSET_TEST: PASS (124 64x64 frames + bolt, lossless/no mipmaps, 48px floor)
+EXIT 0
+== chapters/chapter_01_ravenmourn_outskirts/tests/tools/validate_first_level_boss_assets.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+FIRST_LEVEL_BOSS_ASSET_TEST: PASS (141 transparent lossless/no-mipmap frames)
+EXIT 0
+== chapters/chapter_02_silent_court/tests/test_silent_court_graybox.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+SILENT_COURT_GRAYBOX_TEST: PASS rooms=9 spawns=6 encounters=15 player=1 hud=1
+EXIT 0
+== tests/combat/test_crossbow_bolt.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CROSSBOW_BOLT_TEST: PASS (six damage, one hit, World collision cleanup)
+EXIT 0
+== tests/combat/test_gargoyle_sentinel.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+GARGOYLE_SENTINEL_TEST: PASS (wake, dive 7 once, stun 0.65, return, shatter)
+EXIT 0
+== tests/combat/test_health_component.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HEALTH_COMPONENT_TEST: PASS (health, damage, healing, death guard, Player composition)
+EXIT 0
+== tests/combat/test_hitbox_hurtbox_components.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+HITBOX_HURTBOX_TEST: PASS (activation, faction, deduplication, deferred physics disable)
+EXIT 0
+== tests/combat/test_player_attack_damage.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_ATTACK_DAMAGE_TEST: PASS (Attack 10, Dash Attack 20, windows, dedup, facing)
+EXIT 0
+== tests/level/test_veilbound_catacomb_flow.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+VEILBOUND_CATACOMB_FLOW_TEST: PASS (F5 route, 30 bilingual lines, skip, daggers, door, Main spawn)
+EXIT 0
+== tests/level/test_veilbound_scene_transitions.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+VEILBOUND_SCENE_TRANSITIONS_TEST: PASS (Opening skip -> Catacomb skip -> Main tutorial)
+EXIT 0
+== tests/player/test_chain_dash_stamina.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHAIN_DASH_STAMINA_TEST: PASS (edge chaining, four charges, shared Air/Ground pool, HUD, collision)
+EXIT 0
+== tests/player/test_continuous_air_dash.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CONTINUOUS_AIR_DASH_TEST: PASS (four Air segments, mixed pool, direction, gravity, collision)
+EXIT 0
+== tests/player/test_dash_attack.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+DASH_ATTACK_TEST: PASS (immediate J, transitions, air recovery, collision, debug HUD)
+EXIT 0
+== tests/player/test_fast_attack.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+FAST_ATTACK_TEST: PASS (immediate response, single buffer, three-hit cap, 0.34s forced recovery, 0.25s Dash Attack)
+EXIT 0
+== tests/player/test_m15_player_actions.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+M15_PLAYER_ACTION_TEST: PASS (split Ground Dash, chained Air Dash, thrust Attack)
+EXIT 0
+== tests/player/test_m1_player_movement.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+M1_PLAYER_MOVEMENT_TEST: PASS (movement, jump assists, collision, camera, six animations)
+EXIT 0
+== tests/player/test_player_animation_system.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_ANIMATION_SYSTEM_TEST: PASS (16 animations, segmented Ground/Air Dash verified)
+EXIT 0
+== tests/player/test_player_death_presentation.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_DEATH_PRESENTATION_TEST: PASS (flat body, released daggers, ghost rise/pause, cleanup)
+EXIT 0
+== tests/player/test_player_death_state.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_DEATH_STATE_TEST: PASS (single entry, lockout, full presentation, no respawn)
+EXIT 0
+== tests/player/test_player_hurt_reaction.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_HURT_TEST: PASS (art, interruption, collision knockback, invulnerability, air, Death precedence)
+EXIT 0
+== tests/player/test_player_respawn.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_RESPAWN_TEST: PASS (delay, reset, HUD, repeat cycle, input recovery)
+EXIT 0
+== tests/systems/test_chapter_start_foundation.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapters I/II ready, Opening preserved)
+EXIT 0
+== tests/tools/validate_pixel_character_assets.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PIXEL_CHARACTER_VALIDATION: PASS (11 assets + board)
+EXIT 0
+== tests/tools/validate_player_animation_assets.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_ANIMATION_VALIDATION: PASS (38 frames + ghost + 4 byte-identical references)
+EXIT 0
+== tests/ui/test_main_debug_hud.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+MAIN_DEBUG_HUD_TEST: PASS (compact, expanded, hidden, F1/F2/F3/F4, responsive layout)
+EXIT 0
+== tests/ui/test_player_health_hud.gd ==
+Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
+
+PLAYER_HEALTH_HUD_TEST: PASS (initial, signals, reset, rebind, Stamina regression)
+EXIT 0
+TOTAL 45 FAILED 0

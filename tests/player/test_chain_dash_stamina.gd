@@ -3,7 +3,7 @@ extends SceneTree
 ## Deterministic chained Ground Dash, stamina, Air Dash, Dash Attack, HUD, and collision tests.
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
-const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 const PlayerScript: Script = preload("res://scripts/player/player.gd")
 
 var _failures: Array[String] = []

@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="CursedShieldGuardConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://shared/scripts/enemies/cursed_shield_guard_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+display_name = &"CursedShieldGuard"
+max_health = 50
+attack_damage = 8
+patrol_speed = 35.0
+chase_speed = 52.0
+ground_acceleration = 340.0
+ground_deceleration = 500.0
+gravity = 980.0
+patrol_half_width = 140.0
+platform_height_tolerance = 72.0
+detection_range = 170.0
+lose_target_range = 250.0
+attack_range = 46.0
+attack_windup = 0.4
+attack_active_duration = 0.1
+attack_recovery = 0.55
+hurt_duration = 0.18
+knockback_speed = 90.0
+initial_idle_duration = 0.65
+patrol_turn_pause = 0.3
+shield_max_health = 30
+shield_center_tolerance = 8.0
+guard_break_duration = 0.65
+block_reaction_duration = 0.24
+turn_delay = 0.22
+shield_break_flash_duration = 0.05
+shield_break_flash_alpha = 0.3

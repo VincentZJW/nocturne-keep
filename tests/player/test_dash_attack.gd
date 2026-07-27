@@ -3,7 +3,7 @@ extends SceneTree
 ## Deterministic M1.5 Dash Attack input, state, motion, recovery, and boundary tests.
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
-const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 const PlayerScript: Script = preload("res://scripts/player/player.gd")
 const Concept: Script = preload("res://scripts/tools/pixel_character_generator.gd")
 const DASH_ATTACK_PATH: String = "res://assets/sprites/player/assassin/dash_attack/dash_attack_03.png"

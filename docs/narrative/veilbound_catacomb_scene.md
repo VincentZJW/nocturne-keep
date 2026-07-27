@@ -27,4 +27,4 @@ During the automatic sequence Player is `LOCKED` and physics-paused. Completion 
 
 ## Transition
 
-The exit records ChapterSession flags, fades for 0.55 seconds and loads `res://scenes/main/main.tscn`. Main begins at `Main/World/DarkForestTutorialSpawn (320,612)`. Later deaths do not reference this scene.
+The exit records ChapterSession flags, fades for 0.55 seconds and loads `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`. Main begins at `Main/World/DarkForestTutorialSpawn (320,612)`. Later deaths do not reference this scene.

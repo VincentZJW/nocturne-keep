@@ -1,0 +1,64 @@
+[gd_resource type="Resource" script_class="FallenGateKnightConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/fallen_gate_knight_config.gd" id="1_config"]
+
+[resource]
+script = ExtResource("1_config")
+display_name = &"FallenGateKnight"
+display_name_en = "FALLEN GATE KNIGHT"
+display_name_zh = "堕落门卫骑士"
+max_health = 180
+boss_shield_max_health = 100
+shield_bash_damage = 8
+sword_slash_damage = 10
+heavy_overhead_damage = 15
+charge_thrust_damage = 12
+shockwave_damage = 8
+shielded_move_speed = 52.0
+unshielded_move_speed = 68.0
+acceleration = 340.0
+deceleration = 480.0
+gravity = 980.0
+detection_range = 520.0
+attack_range = 88.0
+shield_bash_hitbox_size = Vector2(14, 30)
+shield_bash_hitbox_offset = Vector2(19, 4)
+slash_hitbox_size = Vector2(26, 22)
+slash_hitbox_offset = Vector2(16, 0)
+thrust_hitbox_size = Vector2(32, 10)
+thrust_hitbox_offset = Vector2(20, -7)
+shield_visual_forward_tip = 32.0
+slash_visual_forward_tip = 31.0
+thrust_visual_forward_tip = 41.0
+shield_bash_trigger_range = 37.0
+sword_slash_trigger_range = 40.0
+heavy_overhead_trigger_range = 40.0
+shield_bash_selection_weight = 0.22
+sword_slash_selection_weight = 0.43
+heavy_overhead_selection_weight = 0.35
+shield_bash_repeat_cooldown = 2.7
+attack_selection_seed = 1977
+shield_break_stun = 0.9
+phase_transition_duration = 1.1
+boss_turn_reaction_delay = 0.33
+boss_turn_animation_duration = 0.8
+boss_turn_cooldown = 0.14
+boss_turn_facing_commit_ratio = 0.8
+turn_side_threshold = 12.0
+attack_recovery = 0.42
+shield_bash_attack_gap = 1.18
+sword_slash_attack_gap = 1.05
+heavy_overhead_attack_gap = 1.2
+combo_slash_attack_gap = 1.05
+charge_thrust_attack_gap = 1.12
+jump_smash_attack_gap = 1.16
+shockwave_strike_attack_gap = 1.1
+post_attack_move_multiplier = 0.5
+shield_bash_windup = 0.46
+shield_bash_active = 0.1
+shield_bash_recovery = 0.68
+boss_light_hit_reaction_cooldown = 0.32
+boss_heavy_hit_reaction_cooldown = 0.5
+boss_heavy_hit_reaction_duration = 0.12
+shield_break_flash_duration = 0.07
+shield_break_flash_alpha = 0.35

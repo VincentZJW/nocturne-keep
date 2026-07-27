@@ -1,7 +1,7 @@
 extends SceneTree
 
-## Chapter-start contract: Opening remains configured while debug routing targets
-## the now-loadable Chapter II profile.
+## Chapter-start contract: Opening remains configured while debug routing can
+## target either loadable chapter profile.
 
 const EXPECTED_F5_PATH: String = "res://scenes/cinematics/opening_cinematic.tscn"
 
@@ -14,6 +14,7 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_test_registry()
+	_test_chapter_one_metadata()
 	_test_chapter_two_metadata()
 	_test_debug_run_config()
 	_test_formal_flow_is_unchanged()
@@ -44,6 +45,16 @@ func _test_registry() -> void:
 	)
 
 
+func _test_chapter_one_metadata() -> void:
+	var profile: ChapterStartProfile = ChapterRegistry.get_chapter(
+		ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS
+	)
+	_expect(profile.main_scene_path == ChapterRegistry.CHAPTER_01_SCENE_PATH, "Chapter I path mismatch")
+	_expect(profile.default_spawn_id == &"dark_forest_tutorial_spawn", "Chapter I default spawn mismatch")
+	_expect(profile.available_spawn_ids.has(&"boss_checkpoint"), "Chapter I Boss checkpoint missing")
+	_expect(profile.debug_ready and profile.is_valid_debug_target(), "Chapter I profile is not debug-ready")
+
+
 func _test_chapter_two_metadata() -> void:
 	var profile: ChapterStartProfile = ChapterRegistry.get_chapter(
 		ChapterRegistry.CHAPTER_02_SILENT_COURT
@@ -71,10 +82,10 @@ func _test_debug_run_config() -> void:
 		return
 	_expect(config.debug_chapter_start_enabled, "Debug chapter start is not enabled by default")
 	_expect(
-		config.debug_start_chapter_id == ChapterRegistry.CHAPTER_02_SILENT_COURT,
-		"Debug target does not default to Chapter II"
+		config.debug_start_chapter_id == ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS,
+		"Debug target does not default to Chapter I"
 	)
-	_expect(config.debug_start_spawn_id == &"CH2_START", "Debug spawn default mismatch")
+	_expect(config.debug_start_spawn_id == &"dark_forest_tutorial_spawn", "Debug spawn default mismatch")
 	_expect(config.debug_reset_chapter_state_on_run, "Debug reset default mismatch")
 	_expect(config.debug_use_test_currency and config.debug_test_currency == 30, "Debug currency defaults mismatch")
 	_expect(config.debug_start_full_health, "Full-health debug default mismatch")
@@ -85,7 +96,7 @@ func _test_debug_run_config() -> void:
 		"Debug/release guard does not reflect the build type"
 	)
 	var target: ChapterStartProfile = config.get_target_profile()
-	_expect(target != null and target.chapter_id == ChapterRegistry.CHAPTER_02_SILENT_COURT, "Target profile lookup failed")
+	_expect(target != null and target.chapter_id == ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS, "Target profile lookup failed")
 	config.debug_chapter_start_enabled = false
 	_expect(not config.is_chapter_start_allowed(), "Disabled debug start was still allowed")
 	config.reset_to_defaults()
@@ -106,7 +117,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapter II ready, Opening preserved)")
+		print("CHAPTER_START_FOUNDATION_TEST: PASS (7 entries, Chapters I/II ready, Opening preserved)")
 		quit(0)
 		return
 	for failure: String in _failures:

@@ -2,7 +2,7 @@ extends SceneTree
 
 ## Death body, released daggers, ghost rise/pause, cleanup, and lockout timing test.
 
-const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 const PlayerScript: Script = preload("res://scripts/player/player.gd")
 
 var _failures: Array[String] = []

@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_break_fx/shield_break_fx_01.png" id="1_f31aa"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_break_fx/shield_break_fx_02.png" id="2_ux3vl"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_break_fx/shield_break_fx_03.png" id="3_gv30f"]
+[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_break_fx/shield_break_fx_04.png" id="4_su00w"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_f31aa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_ux3vl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_gv30f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_su00w")
+}],
+"loop": 0,
+"name": &"shield_break",
+"speed": 6.153846153846153
+}]

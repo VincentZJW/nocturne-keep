@@ -1,5 +1,5 @@
 Godot Engine v4.7.1.stable.official.a13da4feb - https://godotengine.org
 OpenGL API 4.1 Metal - 90.5 - Compatibility - Using Device: Apple - Apple M4
 
-RAVENMOURN_ENVIRONMENT_QA: main=res://scenes/main/main.tscn arch=true gate_open=true transition=res://scenes/transitions/ravenmourn_threshold.tscn
+RAVENMOURN_ENVIRONMENT_QA: main=res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn arch=true gate_open=true transition=res://chapters/chapter_01_ravenmourn_outskirts/scenes/transitions/ravenmourn_threshold.tscn
 RAVENMOURN_THRESHOLD_QA: loaded=true

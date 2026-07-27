@@ -25,6 +25,10 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var config: DebugRunConfigState = root.get_node_or_null("DebugRunConfig") as DebugRunConfigState
+	if config != null:
+		config.debug_start_chapter_id = ChapterRegistry.CHAPTER_02_SILENT_COURT
+		config.debug_start_spawn_id = &"CH2_START"
 	_test_resources_and_profile()
 	await _test_composed_level()
 	await _test_all_debug_spawns()
@@ -124,6 +128,7 @@ func _test_all_debug_spawns() -> void:
 	if config == null:
 		_failures.append("DebugRunConfig is missing")
 		return
+	config.debug_start_chapter_id = ChapterRegistry.CHAPTER_02_SILENT_COURT
 	for spawn_id: StringName in SPAWN_IDS:
 		config.debug_start_spawn_id = spawn_id
 		var level: Node = _instantiate_level()

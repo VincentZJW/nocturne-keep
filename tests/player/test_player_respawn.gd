@@ -2,7 +2,7 @@ extends SceneTree
 
 ## PLAYER-RESPAWN-001 integration test for delayed, repeatable single-point respawn.
 
-const MAIN_SCENE: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 const PlayerScript: Script = preload("res://scripts/player/player.gd")
 
 var _failures: Array[String] = []

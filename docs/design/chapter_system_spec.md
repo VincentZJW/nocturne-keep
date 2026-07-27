@@ -11,7 +11,7 @@ The chapter system separates the permanent project entry from a developer-select
 | ID | Display name | Main scene path | Debug ready |
 | --- | --- | --- | --- |
 | `CHAPTER_PROLOGUE` | 序章 · 复苏 / Prologue · Awakening | `res://scenes/cinematics/opening_cinematic.tscn` | yes |
-| `CHAPTER_01_RAVENMOURN_OUTSKIRTS` | 第一章 · 鸦泣城郊 / Chapter I · Ravenmourn Outskirts | `res://scenes/main/main.tscn` | yes |
+| `CHAPTER_01_RAVENMOURN_OUTSKIRTS` | 第一章 · 鸦泣城郊 / Chapter I · Ravenmourn Outskirts | `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn` | yes |
 | `CHAPTER_02_SILENT_COURT` | 第二章 · 沉寂王庭 / Chapter II · The Silent Court | `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn` | no, scene/profile pending |
 | `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` | 第三章 · 十三回声礼拜堂 / Chapter III · Chapel of Thirteen Echoes | planned chapter path | no |
 | `CHAPTER_04_DROWNED_UNDERKEEP` | 第四章 · 沉没下堡 / Chapter IV · The Drowned Underkeep | planned chapter path | no |

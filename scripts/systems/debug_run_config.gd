@@ -5,8 +5,8 @@ extends Node
 ## never changes scenes. ChapterStartRouter consumes it behind a debug-build gate.
 
 @export var debug_chapter_start_enabled: bool = true
-@export var debug_start_chapter_id: StringName = ChapterRegistry.CHAPTER_02_SILENT_COURT
-@export var debug_start_spawn_id: StringName = &"CH2_START"
+@export var debug_start_chapter_id: StringName = ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS
+@export var debug_start_spawn_id: StringName = &"dark_forest_tutorial_spawn"
 @export var debug_reset_chapter_state_on_run: bool = true
 @export var debug_use_test_currency: bool = true
 @export_range(0, 999999, 1) var debug_test_currency: int = 30
@@ -25,8 +25,8 @@ func get_target_profile() -> ChapterStartProfile:
 
 func reset_to_defaults() -> void:
 	debug_chapter_start_enabled = true
-	debug_start_chapter_id = ChapterRegistry.CHAPTER_02_SILENT_COURT
-	debug_start_spawn_id = &"CH2_START"
+	debug_start_chapter_id = ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS
+	debug_start_spawn_id = &"dark_forest_tutorial_spawn"
 	debug_reset_chapter_state_on_run = true
 	debug_use_test_currency = true
 	debug_test_currency = 30

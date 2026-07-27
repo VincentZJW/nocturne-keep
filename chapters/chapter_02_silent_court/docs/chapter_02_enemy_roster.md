@@ -74,4 +74,4 @@ No standalone `AttackContext` exists. Phase 5 may introduce a narrow typed Resou
 | Returning shared enemies | 3 |
 | **Total** | **34** |
 
-Returning instances are one Cursed Shield Guard, one Fallen Crossbowman and one Gargoyle Sentinel, referenced from shared scene paths. No enemy is copied under the chapter directory.
+Returning instances are one Cursed Shield Guard, one Fallen Crossbowman and one Gargoyle Sentinel. Their formal scene paths are `res://shared/scenes/enemies/cursed_shield_guard.tscn`, `res://shared/scenes/enemies/fallen_crossbowman.tscn` and `res://shared/scenes/enemies/gargoyle_sentinel.tscn`; no enemy is copied from or made dependent on the Chapter I directory.

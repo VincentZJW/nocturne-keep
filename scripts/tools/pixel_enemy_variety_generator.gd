@@ -3,7 +3,11 @@ extends SceneTree
 ## Deterministic original 64×64 pixel production frames for the first enemy variety batch.
 
 const PixelCanvas: Script = preload("res://scripts/tools/pixel_art_canvas.gd")
-const ROOT: String = "res://assets/sprites/enemies"
+const ASSET_ROOTS: Dictionary[String, String] = {
+	"cursed_shield_guard": "res://shared/assets/enemies/cursed_shield_guard",
+	"decayed_spearman": "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/decayed_spearman",
+	"fallen_crossbowman": "res://shared/assets/enemies/fallen_crossbowman",
+}
 const DARK: Color = Color("10141d")
 const IRON: Color = Color("303846")
 const MID_IRON: Color = Color("566171")
@@ -46,41 +50,41 @@ func _initialize() -> void:
 			var count: int = animations[animation_name] as int
 			for frame_index: int in range(count):
 				var image: Image = _draw_frame(enemy_name, animation_name, frame_index, count)
-				var output_path: String = ROOT.path_join(enemy_name).path_join(animation_name).path_join(
+				var output_path: String = ASSET_ROOTS[enemy_name].path_join(animation_name).path_join(
 					"%s_%02d.png" % [animation_name, frame_index + 1]
 				)
 				failures += 0 if _save_png(image, output_path) == OK else 1
 				total += 1
 	for frame_index: int in range(4):
 		var shield_fx: Image = _draw_shield_break_fx(frame_index)
-		var shield_fx_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var shield_fx_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_break_fx"
 		).path_join("shield_break_fx_%02d.png" % (frame_index + 1))
 		failures += 0 if _save_png(shield_fx, shield_fx_path) == OK else 1
 		total += 1
 	for shield_state: String in ["intact", "cracked", "critical"]:
 		var shield_state_image: Image = _draw_shield_visual_state(shield_state)
-		var shield_state_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var shield_state_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_visual"
 		).path_join("%s.png" % shield_state)
 		failures += 0 if _save_png(shield_state_image, shield_state_path) == OK else 1
 		total += 1
 	for frame_index: int in range(4):
 		var shield_break_image: Image = _draw_shield_visual_break(frame_index)
-		var shield_break_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var shield_break_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_visual"
 		).path_join("shield_break_%02d.png" % (frame_index + 1))
 		failures += 0 if _save_png(shield_break_image, shield_break_path) == OK else 1
 		total += 1
 	for frame_index: int in range(3):
 		var shield_hit_image: Image = _draw_shield_hit_fx(frame_index)
-		var shield_hit_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+		var shield_hit_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 			"shield_hit_fx"
 		).path_join("shield_hit_fx_%02d.png" % (frame_index + 1))
 		failures += 0 if _save_png(shield_hit_image, shield_hit_path) == OK else 1
 		total += 1
 	var broken_shield_marker: Image = _draw_broken_shield_marker()
-	var marker_path: String = ROOT.path_join("cursed_shield_guard").path_join(
+	var marker_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
 		"shield_break_fx"
 	).path_join("broken_shield_marker.png")
 	failures += 0 if _save_png(broken_shield_marker, marker_path) == OK else 1
@@ -89,7 +93,7 @@ func _initialize() -> void:
 	PixelCanvas.draw_line(bolt, Vector2i(2, 4), Vector2i(20, 4), STEEL, 2)
 	PixelCanvas.fill_rect(bolt, Rect2i(0, 2, 4, 5), RUST)
 	PixelCanvas.fill_rect(bolt, Rect2i(20, 3, 4, 3), BONE)
-	failures += 0 if _save_png(bolt, "res://assets/sprites/projectiles/crossbow_bolt.png") == OK else 1
+	failures += 0 if _save_png(bolt, "res://shared/assets/projectiles/crossbow_bolt.png") == OK else 1
 	total += 1
 	print("ENEMY_VARIETY_PIXEL_BUILD: %s (%d files)" % ["OK" if failures == 0 else "FAIL", total])
 	quit(0 if failures == 0 else 1)

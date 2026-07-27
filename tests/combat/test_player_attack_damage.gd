@@ -3,7 +3,7 @@ extends SceneTree
 ## Connects existing Player Attack frame windows to Castle Guard Health.
 
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
-const GUARD_SCENE: PackedScene = preload("res://scenes/enemies/castle_guard.tscn")
+const GUARD_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/enemies/castle_guard.tscn")
 
 var _failures: Array[String] = []
 

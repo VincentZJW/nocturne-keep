@@ -2,7 +2,7 @@ extends SceneTree
 
 ## Deterministic Gargoyle state, damage, one-hit, stun, return, and death checks.
 
-const GARGOYLE_SCENE: PackedScene = preload("res://scenes/enemies/gargoyle_sentinel.tscn")
+const GARGOYLE_SCENE: PackedScene = preload("res://shared/scenes/enemies/gargoyle_sentinel.tscn")
 const PLAYER_SCENE: PackedScene = preload("res://scenes/player/player.tscn")
 
 var _failures: Array[String] = []

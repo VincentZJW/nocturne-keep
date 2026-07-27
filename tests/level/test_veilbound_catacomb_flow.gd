@@ -4,7 +4,7 @@ extends SceneTree
 
 const OPENING: PackedScene = preload("res://scenes/cinematics/opening_cinematic.tscn")
 const CATACOMB: PackedScene = preload("res://scenes/levels/veilbound_catacomb.tscn")
-const MAIN: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 
 var _failures: Array[String] = []
 
@@ -67,7 +67,7 @@ func _test_catacomb_composition(catacomb: VeilboundCatacombController) -> void:
 	]:
 		_expect(catacomb.has_node(path), "Catacomb is missing %s" % path)
 	_expect(catacomb.get_tree().get_nodes_in_group("enemies").is_empty(), "Catacomb contains an enemy")
-	_expect(catacomb.dark_forest_scene_path == "res://scenes/main/main.tscn", "Catacomb exit does not target Main")
+	_expect(catacomb.dark_forest_scene_path == "res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn", "Catacomb exit does not target Main")
 	_expect(catacomb.player.get_input_profile() == Player.InputProfile.LOCKED, "Player is not locked during revival")
 	var facade: Node2D = catacomb.get_node("World/ArchitectureFront") as Node2D
 	var backdrop: Node2D = catacomb.get_node("World/StoneDoorBody/DoorOpeningBackdrop") as Node2D

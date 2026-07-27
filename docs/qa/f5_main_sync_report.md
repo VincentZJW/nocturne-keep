@@ -9,7 +9,7 @@ Audited commit baseline: `04c8769 fix: defer hurtbox physics state changes`
 `project.godot` sets:
 
 ```text
-run/main_scene="res://scenes/main/main.tscn"
+run/main_scene="res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn"
 ```
 
 No filename inference or editor-current-scene assumption was used for this result.
@@ -27,7 +27,7 @@ No filename inference or editor-current-scene assumption was used for this resul
 - `Main/World/Encounters/EncounterGroup04/Enemies/CursedGuard04A` — `(2070, 610)`.
 - `Main/World/Encounters/EncounterGroup04/Enemies/CursedGuard04B` — `(2310, 610)`.
 
-All five Guards instance `res://scenes/enemies/castle_guard.tscn`; no Main instance overrides the Guard script, SpriteFrames, configuration, Health, or sword damage.
+All five Guards instance `res://chapters/chapter_01_ravenmourn_outskirts/scenes/enemies/castle_guard.tscn`; no Main instance overrides the Guard script, SpriteFrames, configuration, Health, or sword damage.
 
 ## Latest runtime resources verified in Main
 
@@ -36,9 +36,9 @@ All five Guards instance `res://scenes/enemies/castle_guard.tscn`; no Main insta
 - Player movement config: `res://resources/player/player_movement_config.tres`
 - Player action config: `res://resources/player/player_action_prototype_config.tres`
 - Player Hurt config: `res://resources/player/player_hurt_config.tres`
-- Guard PackedScene: `res://scenes/enemies/castle_guard.tscn`
-- Guard SpriteFrames: `res://resources/enemies/castle_guard_sprite_frames.tres`
-- Guard config: `res://resources/enemies/castle_guard_config.tres`
+- Guard PackedScene: `res://chapters/chapter_01_ravenmourn_outskirts/scenes/enemies/castle_guard.tscn`
+- Guard SpriteFrames: `res://chapters/chapter_01_ravenmourn_outskirts/resources/enemies/castle_guard_sprite_frames.tres`
+- Guard config: `res://chapters/chapter_01_ravenmourn_outskirts/resources/enemies/castle_guard_config.tres`
 - Guard sword damage from current config: `5`
 
 ## Main runtime acceptance

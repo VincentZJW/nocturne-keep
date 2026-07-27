@@ -68,7 +68,7 @@ Enemy Health and damage are authored only in the shared Config resources. Saved 
 
 ## Main and test composition
 
-F5 runs `res://scenes/cinematics/opening_cinematic.tscn`, which enters `res://scenes/main/main.tscn`. Main owns 18 one-shot encounter groups with 34 normal enemies, followed by a separate resettable Boss room. Its closable debug panel reports loot state and the Boss Body/Shield/reward state via typed contracts.
+F5 runs `res://scenes/cinematics/opening_cinematic.tscn`, which enters `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`. Main owns 18 one-shot encounter groups with 34 normal enemies, followed by a separate resettable Boss room. Its closable debug panel reports loot state and the Boss Body/Shield/reward state via typed contracts.
 
 `combat_test_room.tscn` remains the one-Guard regression room. `enemy_variety_test_room.tscn` contains all four types, a high platform, toggleable Hitbox/Hurtbox display, and Reset.
 

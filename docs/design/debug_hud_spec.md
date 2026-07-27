@@ -9,7 +9,7 @@ The Debug HUD exposes runtime state for development but owns no Health, Stamina,
 F5 authority remains:
 
 ```text
-res://scenes/main/main.tscn
+res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn
 ```
 
 ## Runtime structure

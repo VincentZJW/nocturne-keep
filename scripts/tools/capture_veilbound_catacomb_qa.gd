@@ -3,7 +3,7 @@ extends SceneTree
 ## F5-route QA evidence for the Chapter I revival bridge.
 
 const CATACOMB: PackedScene = preload("res://scenes/levels/veilbound_catacomb.tscn")
-const MAIN: PackedScene = preload("res://scenes/main/main.tscn")
+const MAIN: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
 
 
 func _initialize() -> void:

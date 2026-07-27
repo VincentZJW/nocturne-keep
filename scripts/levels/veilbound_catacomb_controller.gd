@@ -12,7 +12,7 @@ signal catacomb_exit_requested
 @export var monologue_en: CatacombDialogue
 @export var dialogue_zh: CatacombDialogue
 @export var dialogue_en: CatacombDialogue
-@export_file("*.tscn") var dark_forest_scene_path: String = "res://scenes/main/main.tscn"
+@export_file("*.tscn") var dark_forest_scene_path: String = "res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn"
 @export_range(0.2, 1.0, 0.05) var transition_duration: float = 0.55
 @export_range(0.3, 1.5, 0.05) var skip_hold_duration: float = 0.75
 

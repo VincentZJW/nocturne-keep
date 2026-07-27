@@ -44,7 +44,7 @@ Result: PASS
 - alpha is binary with no blurred edge pixels;
 - the silhouette has exactly one opaque color;
 - project-wide Canvas texture filtering remains Nearest;
-- `application/run/main_scene` remains `res://scenes/main/main.tscn`.
+- `application/run/main_scene` remains `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`.
 
 ## Visual findings
 
