@@ -77,6 +77,7 @@ func _test_composed_level() -> void:
 			_test_room_vertical_geometry(room as Chapter02RoomGraybox, index)
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/GrandServiceStair/Geometry/CollisionPolygon2D") is CollisionPolygon2D, "Grand Service Stair collision is missing")
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/ServantSideStair/Geometry/CollisionPolygon2D") is CollisionPolygon2D, "Servant Side Stair collision is missing")
+	_test_floor_transitions(level)
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/Rooms/LastBanquetHall/Geometry/UpperPlatform01/CollisionShape2D") is CollisionShape2D, "Banquet table collision is missing")
 	_expect(level.get_node_or_null("GameplayWorld/Geometry/Rooms/BloodCandleChapel/Geometry/UpperPlatform04/CollisionShape2D") is CollisionShape2D, "Chapel altar collision is missing")
 	_test_required_anchors(level)
@@ -91,6 +92,31 @@ func _test_composed_level() -> void:
 	_expect(equipment != null and equipment.equipped_weapon_id == &"ravenfang_daggers", "Ravenfang was not equipped")
 	level.queue_free()
 	await process_frame
+
+
+func _test_floor_transitions(level: Node) -> void:
+	var grand_stair: Chapter02Stair = level.get_node_or_null(
+		"GameplayWorld/Geometry/GrandServiceStair"
+	) as Chapter02Stair
+	var side_stair: Chapter02Stair = level.get_node_or_null(
+		"GameplayWorld/Geometry/ServantSideStair"
+	) as Chapter02Stair
+	_expect(grand_stair != null and grand_stair.surface_points.size() == 2, "Grand short stair is missing")
+	_expect(side_stair != null and side_stair.surface_points.size() == 2, "Servant short stair is missing")
+	if grand_stair != null:
+		_expect(grand_stair.surface_points[0].distance_to(grand_stair.surface_points[1]) < 650.0, "Grand stair is still a long ramp")
+	if side_stair != null:
+		_expect(side_stair.surface_points[0].distance_to(side_stair.surface_points[1]) < 650.0, "Servant stair is still a long ramp")
+	var first_transition: Chapter02FloorTransition = level.get_node_or_null(
+		"TransitionAreas/Floor1ToFloor2"
+	) as Chapter02FloorTransition
+	var second_transition: Chapter02FloorTransition = level.get_node_or_null(
+		"TransitionAreas/Floor2ToFloor3"
+	) as Chapter02FloorTransition
+	_expect(first_transition != null and first_transition.destination_spawn_id == &"CH2_FLOOR_2_START", "F1-to-F2 trigger is invalid")
+	_expect(second_transition != null and second_transition.destination_spawn_id == &"CH2_FLOOR_3_START", "F2-to-F3 trigger is invalid")
+	_expect(level.get_node_or_null("ChapterSystems/FloorTransitionController") is Chapter02FloorTransitionController, "Floor transition controller is missing")
+	_expect(level.get_node_or_null("GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/FloorTransitionFade") is ColorRect, "Floor transition fade is missing")
 
 
 func _test_room_vertical_geometry(room: Chapter02RoomGraybox, room_index: int) -> void:

@@ -4,7 +4,7 @@ Status: playable procedural/native-2D first pass; final pixel tiles and independ
 
 ## Floor identities
 
-- F1 Public Court: coarse blue-grey masonry, gate arches, grey guard banners, weapon silhouettes, compact armory, timber banquet tables and a monumental stone stair.
+- F1 Public Court: coarse blue-grey masonry, gate arches, grey guard banners, weapon silhouettes, compact armory, timber banquet tables and a short stone service stair that signals the floor transition without consuming an entire room.
 - F2 Noble/Chapel: oxidized portrait frames, red chapel arches/candles, altar massing and a narrow servant passage. Layout height and props distinguish it from F1 even with the shared native-2D renderer.
 - F3 Ritual/Ballroom: purple-black wall panels, mirror frames, moonlit medallions, ceremonial trim and the existing Ballroom FX/Boss presentation.
 
@@ -21,6 +21,7 @@ The current implementation uses editable Godot native 2D drawing and original pr
 
 - Full ground fill and masonry remain behind actors.
 - Only a three-pixel surface lip is in front at z=20.
-- Each stair uses a narrow structural beam behind actors plus an independently drawn edge/tread treatment; there is no large high-z triangular fill that can cover actors.
+- Each short stair uses 14 readable step edges, a narrow structural mass behind actors and an independently drawn handrail/tread treatment; there is no large high-z triangular fill that can cover actors. The F1 stair reads as heavier stone, while the F2 servant stair adds restrained timber accents.
+- Inter-floor travel uses a fully opaque black fade, so unfinished scenery between elevations is never exposed. The fade is presentation-only and does not replace the later floor-wide final art pass.
 - Props never occupy the combat warning layer, and Boss-room ground remains flat.
 - Texture filtering, mipmaps and external scaling are unchanged; actors retain nearest-neighbor presentation.

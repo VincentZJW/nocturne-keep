@@ -29,10 +29,12 @@ Room roots:
 
 ## Stair metrics
 
-- Grand Service Stair: scene `scenes/rooms/grand_service_stair.tscn`, world origin `(5368,-900)`, 1800 px run / 900 px rise, 26.6 degrees.
-- Servant Side Stair: scene `scenes/rooms/servant_side_stair.tscn`, world origin `(168,-1800)`, 1800 px run / 900 px rise, 26.6 degrees.
-- Both use a single tested collision polygon and a separate thin z=20 trim. Upper-floor main surfaces are one-way only at the staircase crossing so the ascending actor can pass the underside and land; ordinary platforms remain full-solid.
-- Obsolete room ceiling blockers were removed because they physically intersected both cross-floor stair volumes. The 900 px floor gap is far above the measured 167.10 px double-jump rise.
+- Grand Service Stair: scene `scenes/rooms/grand_service_stair.tscn`, world origin `(6320,0)`, 560 px horizontal run / 192 px rise, approximately 592 px surface length, with 14 visible stone steps.
+- Servant Side Stair: scene `scenes/rooms/servant_side_stair.tscn`, world origin `(168,-900)`, 560 px horizontal run / 192 px rise, approximately 592 px surface length, with 14 visible stone-and-timber steps.
+- Both stairs use a solid collision wedge, a rear structural fill and a separately drawn tread/rail treatment. They only communicate a nearby floor change; they no longer span the full 900 px elevation gap.
+- `TransitionAreas/Floor1ToFloor2` at `(6880,372)` relocates to `CH2_FLOOR_2_START`; `TransitionAreas/Floor2ToFloor3` at `(208,-528)` relocates to `CH2_FLOOR_3_START`.
+- `ChapterSystems/FloorTransitionController` performs `0.22 s` fade-out + `0.08 s` full-black hold + `0.22 s` fade-in (`0.52 s` total). Player input and damage reception are temporarily locked, relocation happens only at full black, and the existing Camera2D bounds are switched to the destination floor before reveal.
+- The 900 px floor separation remains intentionally larger than the measured 167.10 px double-jump rise; normal jumping cannot bypass the authored floor transitions.
 
 ## Spawn positions
 

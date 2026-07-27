@@ -86,6 +86,11 @@ func _configure_camera(top_limit: int, bottom_limit: int) -> void:
 	player.player_camera.reset_smoothing()
 
 
+func configure_camera_for_world_y(world_y: float) -> void:
+	var floor_limits: Vector2i = _floor_limits_for_y(world_y)
+	_configure_camera(floor_limits.x, floor_limits.y)
+
+
 func _floor_limits_for_y(world_y: float) -> Vector2i:
 	if world_y < -850.0:
 		return Vector2i(-1800, -1080)

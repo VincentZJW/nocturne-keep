@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3]
+[gd_scene load_steps=34 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
@@ -25,6 +25,8 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/grand_service_stair.tscn" id="23_grand_stair"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/rooms/servant_side_stair.tscn" id="24_side_stair"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_encounter_runtime.gd" id="25_encounters"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_floor_transition.gd" id="26_floor_transition"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_floor_transition_controller.gd" id="27_floor_transition_controller"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 2520)
@@ -34,6 +36,9 @@ size = Vector2(320, 720)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_boss_door"]
 size = Vector2(36, 160)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_floor_transition"]
+size = Vector2(140, 160)
 
 [sub_resource type="StyleBoxFlat" id="Style_boss_panel"]
 bg_color = Color(0.035, 0.025, 0.055, 0.86)
@@ -101,10 +106,10 @@ position = Vector2(0, -1800)
 position = Vector2(2688, -1800)
 
 [node name="GrandServiceStair" parent="GameplayWorld/Geometry" instance=ExtResource("23_grand_stair")]
-position = Vector2(5368, -900)
+position = Vector2(6320, 0)
 
 [node name="ServantSideStair" parent="GameplayWorld/Geometry" instance=ExtResource("24_side_stair")]
-position = Vector2(168, -1800)
+position = Vector2(168, -900)
 
 [node name="PropsBehindActors" type="Node2D" parent="GameplayWorld"]
 z_index = -10
@@ -117,6 +122,20 @@ z_as_relative = false
 [node name="PlayerAnchorOrRuntimeActors" type="Node2D" parent="GameplayWorld"]
 
 [node name="ChapterRuntime" parent="GameplayWorld/PlayerAnchorOrRuntimeActors" instance=ExtResource("2_runtime")]
+
+[node name="FloorTransitionFade" type="ColorRect" parent="GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD"]
+visible = false
+z_index = 500
+z_as_relative = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.008, 0.006, 0.014, 1)
 
 [node name="Pickups" type="Node2D" parent="GameplayWorld"]
 z_index = 14
@@ -208,6 +227,14 @@ script = ExtResource("25_encounters")
 player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
 enemies_parent_path = NodePath("../../GameplayWorld/Enemies")
 
+[node name="FloorTransitionController" type="Node" parent="ChapterSystems"]
+script = ExtResource("27_floor_transition_controller")
+level_path = NodePath("../..")
+player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
+spawn_points_path = NodePath("../../PlayerSpawnPoints")
+fade_rect_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/FloorTransitionFade")
+transition_areas_path = NodePath("../../TransitionAreas")
+
 [node name="Doors" type="Node2D" parent="."]
 
 [node name="Checkpoints" type="Node2D" parent="."]
@@ -219,6 +246,30 @@ enemies_parent_path = NodePath("../../GameplayWorld/Enemies")
 [node name="CameraBounds" type="Node2D" parent="."]
 
 [node name="TransitionAreas" type="Node2D" parent="."]
+
+[node name="Floor1ToFloor2" type="Area2D" parent="TransitionAreas"]
+position = Vector2(6880, 372)
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+script = ExtResource("26_floor_transition")
+transition_id = &"FLOOR_1_TO_FLOOR_2"
+destination_spawn_id = &"CH2_FLOOR_2_START"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TransitionAreas/Floor1ToFloor2"]
+shape = SubResource("Rectangle_floor_transition")
+
+[node name="Floor2ToFloor3" type="Area2D" parent="TransitionAreas"]
+position = Vector2(208, -528)
+collision_layer = 0
+collision_mask = 2
+monitoring = true
+script = ExtResource("26_floor_transition")
+transition_id = &"FLOOR_2_TO_FLOOR_3"
+destination_spawn_id = &"CH2_FLOOR_3_START"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="TransitionAreas/Floor2ToFloor3"]
+shape = SubResource("Rectangle_floor_transition")
 
 [node name="WorldBounds" type="Node2D" parent="."]
 

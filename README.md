@@ -42,7 +42,7 @@ res://scenes/bootstrap/main_bootstrap.tscn
 
 第二章主场景为`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`。它保留九房间灰盒和正式章节边界，并在`Phase2EnemyPrototypeShowcase`下放置五个独立验收实例；这些不是正式EncounterGroup，不代表最终数量或布阵。
 
-第二章开发直达：将Debug开关设为`true`、`debug_start_chapter_id`设为`CHAPTER_02_SILENT_COURT`、`debug_start_spawn_id`设为`&"CH2_FLOOR_1_START"`（兼容`&"CH2_START"`）后按F5。Output必须打印`DEBUG CHAPTER START ACTIVE`并直接进入`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`；此模式不会播放Opening或进入墓窟。新版路线为F1向右→宴会主楼梯→F2向左→仆役侧楼梯→F3向右→Silent Ballroom；楼层直达还可使用`CH2_FLOOR_2_START`、`CH2_FLOOR_2_CHAPEL`、`CH2_FLOOR_3_START`和`CH2_BOSS`。
+第二章开发直达：将Debug开关设为`true`、`debug_start_chapter_id`设为`CHAPTER_02_SILENT_COURT`、`debug_start_spawn_id`设为`&"CH2_FLOOR_1_START"`（兼容`&"CH2_START"`）后按F5。Output必须打印`DEBUG CHAPTER START ACTIVE`并直接进入`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`；此模式不会播放Opening或进入墓窟。新版路线为F1向右→短宴会石阶与0.52秒黑屏转场→F2向左→短仆役侧阶与0.52秒黑屏转场→F3向右→Silent Ballroom；楼层直达还可使用`CH2_FLOOR_2_START`、`CH2_FLOOR_2_CHAPEL`、`CH2_FLOOR_3_START`和`CH2_BOSS`。
 
 第二章五敌人独立验收房：
 

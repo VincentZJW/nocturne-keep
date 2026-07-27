@@ -4425,3 +4425,55 @@ Status: complete — Main integration, three-floor route, layer/collision eviden
 - Automated traversal deliberately disables combat and uses real Player physics/Input Map. It proves three complete routes without softlock, but it does not substantiate the 25–35 minute first-play target; combat pacing, encounter fairness and stair feel remain human F5 acceptance items.
 - Environment art is an editable Godot-native first playable pass, not final tiles or independent painted concept art. Floor-owned folders contain honest replacement-slot README files and are not claimed as completed concept sheets.
 - No Chapter I, Player tuning, Ravenfang damage, Chapter II enemy/Boss balance, loot/currency, save foundation or Chapter III logic was changed. Pre-existing user-owned Chapter I/shared resource and QA changes remain preserved outside this commit.
+
+## 2026-07-27 — Chapter II polish Stage 1: short stairs and floor fades
+
+Status: complete — short stairs, two Main floor transitions, QA evidence and focused regression delivered
+
+### Goal and scope
+
+- Replace the two 1,800 px continuous inter-floor ramps with short, visibly stepped castle stairs followed by a 0.35–0.80 second black-screen relocation through the existing MainBootstrap/Chapter II runtime.
+- Preserve exactly one Player, HUD, Camera2D and encounter runtime; update camera bounds at blackout, prevent input/damage during relocation, and keep the current three-floor direction and spawn selectors.
+- This stage explicitly excludes the later enemy-platform redistribution, Boss-room/dialogue/reward/Chapter III exit work and environment-wide art polish requested for subsequent approvals.
+
+### Pre-implementation audit and planned files
+
+- Work begins on `master` at `5f84f1ca3d4dd9f937c33f0fbf0e34725fcd87cb`; `project.godot` resolves `run/main_scene` to `res://scenes/bootstrap/main_bootstrap.tscn`, Chapter II resolves to `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`, and Debug direct start remains opt-in through `DebugRunConfig` with `CHAPTER_02_SILENT_COURT` plus `CH2_START`/`CH2_FLOOR_1_START`.
+- Current F1→F2 traversal is `GameplayWorld/Geometry/GrandServiceStair`, scene `scenes/rooms/grand_service_stair.tscn`, spanning 1,800 px run and 900 px rise. F2→F3 is the equivalent `ServantSideStair`; both use one-way collision wedges and no trigger/fade. `TransitionAreas` is empty.
+- Chapter runtime contains the sole Player/Camera/HUD. The Player provides the safe `InputProfile.LOCKED` contract; the HUD CanvasLayer has no Chapter II floor fade. Camera floor limits are selected in `silent_court.gd` from world Y.
+- Fifteen Encounter groups and 38 enemies are built by `Chapter02EncounterRuntime`. E06 currently places actors on/around the long Grand stair and E12 sits next to the long Servant stair; only the minimum positions invalidated by removing those ramps may be moved in this stage.
+- Planned task files: both stair scenes and their drawing script, a typed transition Area/controller, the Silent Court Main composition/controller, focused transition/route tests, Stage 1 Main QA capture, route/metrics documentation and this log. Pre-existing Chapter I/shared tuning, loot/Player Resources and old QA image changes remain untouched and unstaged.
+
+### Delivered
+
+- Replaced both 1,800 px / 900 px long ramps with compact 560 px horizontal / 192 px-rise stairs. `GrandServiceStair` uses 14 visible stone steps; `ServantSideStair` mirrors the route direction and adds restrained timber rail accents. Both use solid collision wedges and preserve actor readability.
+- Added typed `Chapter02FloorTransition` trigger areas and a focused `Chapter02FloorTransitionController`. Its `0.22 s` fade-out + `0.08 s` full-black hold + `0.22 s` fade-in totals `0.52 s`, within the approved `0.35–0.80 s` target.
+- The controller reuses the sole saved Player, Camera2D and HUD, locks input, temporarily prevents damage, clears velocity, relocates only at full black, changes the existing floor-local camera limits and restores the previous input/invulnerability contract after reveal. Concurrent requests and dead-player requests are rejected.
+- Added F1→F2 and F2→F3 triggers to the saved Chapter II Main scene. The first resolves to `CH2_FLOOR_2_START`; the second resolves to `CH2_FLOOR_3_START`. `project.godot` remains unchanged and F5 still enters `MainBootstrap`.
+- Preserved all 15 encounter groups and 38 normal enemies. Only E06 and E12 actors whose anchors depended on the removed long ramps were moved to existing safe floor surfaces; comprehensive enemy-stuck and distribution work remains Stage 2.
+- Added focused saved-scene and runtime transition assertions, updated the existing graybox/route QA, and added a graphical MainBootstrap capture with five 1280×720 evidence frames under `docs/qa/chapter_02_floor_transitions/`.
+
+### Commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`
+  - Exit `0`; exact Godot `4.7.1.stable.official.a13da4feb`; no parse, import or resource errors.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_silent_court_graybox.gd`
+  - `PASS rooms=9 floors=3 spawns=11 encounters=15 enemies=38 player=1 hud=1`.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_chapter_02_floor_transitions.gd`
+  - `PASS transitions=2 player=1 hud=1`; both transitions rejected duplicate requests, locked input, applied temporary invulnerability, selected the correct destination/camera floor and restored state.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_02_silent_court/tests/test_chapter_02_three_floor_route.gd`
+  - `PASS runs=3 softlocks=0`; all three real-physics/Input Map routes finished in `89.00 s` at `(5703.896,-1216.075)`.
+- The same exact-engine invocation passed `test_phase_2_enemy_prototypes.gd`, `test_phase_2_enemy_damage.gd`, `test_hollow_duchess_boss.gd`, `test_hollow_duchess_main_integration.gd` and `test_hollow_duchess_full_fights.gd`. Boss coverage completed seven attack cycles ×10, Main composition `boss=1 doors=2 cp05=1 hud=1`, and five complete simulated fights with 294 attacks total.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tools/capture_chapter_02_floor_transition_qa.gd`
+  - `CH2_FLOOR_TRANSITION_MAIN_QA: PASS captures=5 transitions=2`; graphical MainBootstrap run completed without red errors. Evidence and hashes are recorded in `docs/qa/chapter_02_floor_transitions/chapter_02_floor_transition_qa_report.md`.
+
+### Defect found during Stage 1 verification
+
+- The first transition run exposed a saved-transform error: the shortened `ServantSideStair` still inherited its former `-1800` world Y and its new solid wedge overlapped the F3 destination. The focused runtime test reported the incorrect landing, the root was corrected to `(168,-900)`, and all subsequent transition and three-route runs passed.
+
+### Known issues and manual acceptance
+
+- Automated traversal deliberately disables combat and therefore does not certify encounter fairness, enemy/platform stuck points or the human feel of the short stair approach. Those are Stage 2/manual acceptance items.
+- Current native-2D stair art is a readable first pass, not the later environment-wide art-polish deliverable. Existing debug labels remain visible in QA captures.
+- Manual F5 route: enable Chapter II direct start at `CH2_FLOOR_1_START`; travel F1 right to the short Grand stair and enter its landing, then travel F2 right-to-left to the short Servant stair and enter its landing. Verify the black transition, destination floor, Camera2D, controls and HUD after both moves.
+- Next proposed stage: Stage 2, a read-only-first audit of all Chapter II enemy platform/stuck points followed by minimal encounter and spawn redistribution. No Stage 2 work was performed here.
