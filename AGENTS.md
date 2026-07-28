@@ -25,6 +25,25 @@ After each milestone:
 4. Create one clear Git commit.
 5. Stop and wait for approval.
 
+## Mandatory chapter scene workflow
+
+The authoritative specification is `docs/design/chapter_scene_workflow_spec.md`. It applies to every formal Chapter III–VI scene milestone and to any formal Chapter I/II rework. Before beginning chapter scene work, read that specification and record compliance in `docs/development_log.md`.
+
+Formal chapter scene work must pass these gates in order:
+
+1. **Chapter audit gate:** document story purpose, theme, art and architectural language, pacing, enemies, Boss relationship, signature imagery, adjacent-chapter contrast, environmental narrative and reusable versus missing assets.
+2. **Asset gate:** create missing original or provenance-safe pixel assets inside the chapter-owned asset tree before formal scene assembly. Geometric blocks, lines, empty frames and flat-color stand-ins are not formal assets.
+3. **Scene gate:** compose saved scenes from formal assets with readable foreground, midground and background layers, distinct room purposes, controlled occlusion and combat/traversal readability.
+4. **Narrative gate:** each area must communicate its former function, what happened there, why its inhabitants belong there, its relationship to the chapter truth/Boss and its gameplay purpose.
+5. **Main gate:** integrate the saved scene and assets into the actual `MainBootstrap`/F5 route. A tool, preview or isolated test scene is not completion evidence.
+6. **QA gate:** verify visual completeness, theme coherence, layering, reachability, collisions, transitions, resource references, Main integration and Output/Debugger status; preserve relevant evidence under `docs/qa/`.
+
+Graybox geometry is allowed only during an explicitly named prototype/graybox milestone. It must be labeled as non-final, kept out of formal environment acceptance, and replaced before the chapter scene can be marked complete. If any gate fails—or the scene still reads as placeholder art—the milestone status is not complete.
+
+Chapter-exclusive content belongs under the relevant `res://chapters/chapter_xx_.../` tree, normally using `assets/environment`, `assets/props`, `assets/doors`, `assets/portraits`, `assets/weapons`, `assets/pickups`, `assets/fx`, `assets/ui`, plus `scenes`, `docs` and `resources`. Shared assets require an explicit reuse/provenance note.
+
+Every completed chapter-scene report must use the headings and answer the F5 quality-testing question defined in `docs/design/chapter_scene_workflow_spec.md`.
+
 ## Code rules
 
 - Files and signals use `snake_case`; classes and node names use `PascalCase`.

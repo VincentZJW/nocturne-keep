@@ -139,6 +139,7 @@ Main开发调试快捷键：
 ## 文档
 
 - [技术架构](docs/technical_architecture.md)
+- [章节场景强制工作流](docs/design/chapter_scene_workflow_spec.md)
 - [章节系统规格](docs/design/chapter_system_spec.md)
 - [Debug章节启动规格](docs/design/debug_chapter_start_spec.md)
 - [Session与存档边界](docs/design/save_and_session_spec.md)

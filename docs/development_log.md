@@ -4800,3 +4800,40 @@ Status: complete — saved Main art replacement, transition profiling, formal Bo
 - No Player/enemy/Boss combat value, room collision, chapter route, reward value, Chapter I or Chapter III gameplay was changed. The Godot Gameplay skill guided typed signal/controller separation and saved Sprite2D composition rather than placing transition control inside the Boss AI.
 - Full-route manual test: choose `CHAPTER_02_SILENT_COURT` + `CH2_START`, press F5, inspect Armory/Banquet on Floor 1, Gallery/Chapel on Floor 2, then Antechamber/Ballroom on Floor 3. Boss-only manual test: choose `CH2_BOSS`, press F5, walk right into the large double door, verify fade/black relocation/fade-in, five dialogue lines, title and combat; die once to check the shortened retry.
 - Human acceptance still owns subjective portrait polish, prop density, candle atmosphere, Boss entrance pacing and real combat readability. Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA images and two UID sidecars remain preserved and excluded from this milestone.
+
+## 2026-07-28 — Mandatory chapter-scene workflow policy preflight
+
+Status: in progress — repository governance audit complete; policy documentation and verification pending
+
+### Goal, files, tests and scope check
+
+- Make the chapter-scene quality contract mandatory for every future Chapter III–VI scene milestone and any formal Chapter I/II rework: story/theme audit first, formal chapter-owned pixel assets before formal scene assembly, environmental storytelling, saved Main/F5 integration and visual/technical QA before completion.
+- Add the enforceable source of truth at `docs/design/chapter_scene_workflow_spec.md`, bind it from root `AGENTS.md`, and expose it from `README.md`. This log is the only other task-owned file.
+- Formal completion must fail when a scene remains visibly graybox, uses geometric stand-ins as final art, lacks chapter identity or narrative function, is absent from the saved Main route, or lacks preserved QA evidence. Explicit prototype milestones may still use labeled graybox scenes, but they cannot be reported as formal environment completion.
+- This governance milestone changes documentation only. It does not modify `.gd`, `.tscn`, `.tres`, `project.godot`, runtime balance, Chapter I/II content, Chapter III gameplay or generated assets.
+- Planned verification uses the exact Godot 4.7.1 executable at `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot`: documentation diff/whitespace validation, headless import/parse and an F5-equivalent bootstrap smoke. No gameplay assertion is replaced by a documentation claim.
+- Work starts on `master` at `7f8e7d7d41489d1b124157334bc2beba7a952042`. Pre-existing Chapter I/shared/Player tuning changes, QA image edits and two untracked UID sidecars remain user-owned and outside this policy commit.
+
+## 2026-07-28 — Mandatory chapter-scene workflow policy completion
+
+Status: complete — six mandatory gates, chapter asset ownership, Main/F5 acceptance and fixed reporting contract are now repository policy
+
+### Delivered policy
+
+- Added `docs/design/chapter_scene_workflow_spec.md` as the authoritative workflow for Chapter III–VI and formal Chapter I/II rework. It defines the chapter audit, asset-first, formal scene assembly, environmental narrative, Main integration and QA gates, plus explicit failure conditions that prevent graybox-quality work from being reported as complete.
+- Bound the policy from root `AGENTS.md`, including the rule that geometric stand-ins are allowed only inside explicitly labeled prototype/graybox milestones and never satisfy formal environment acceptance.
+- Standardized chapter-local ownership for environment, prop, door, portrait, weapon, pickup, FX and UI assets; shared reuse requires an explicit provenance/adaptation note.
+- Added an environment narrative matrix, combat-readability requirements, QA evidence contract and the exact `Chapter X 场景开发报告` headings. Every report must answer how the user can press F5, enter Main and assess the chapter's scene quality.
+- Linked the mandatory policy from `README.md`. No gameplay scene, script, Resource, asset, project setting, routing or balance value was changed.
+
+### Exact commands and actual results
+
+1. Documentation validation: `git diff --check -- AGENTS.md README.md docs/development_log.md docs/design/chapter_scene_workflow_spec.md` — exit 0; no whitespace error.
+2. Exact import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, import, autoload or missing-resource error.
+3. F5-equivalent Main bootstrap smoke: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --quit-after 240` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; no runtime, script or resource error.
+
+### Scope and future acceptance
+
+- This milestone deliberately contains documentation/governance changes only; no visual asset was generated and no chapter content was altered. Full gameplay regression was not repeated because the runtime tree is unchanged; exact import and formal Main startup verify that policy files did not disturb project loading.
+- The policy does not auto-authorize Chapter III or any rework. Each new chapter still requires explicit approval and a separate milestone with audit, asset creation, saved Main integration, exact-engine verification and human visual acceptance.
+- Pre-existing user-owned Chapter I/shared/Player tuning changes, QA image edits and two UID sidecars remain preserved and excluded from this policy commit.
