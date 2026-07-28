@@ -3,14 +3,39 @@ extends Node2D
 
 ## Low-cost native-2D Ballroom presentation responding to the Boss phase.
 
+@export_node_path("VisibleOnScreenNotifier2D") var visibility_notifier_path: NodePath = NodePath(
+	"VisibilityNotifier"
+)
+
+@onready var visibility_notifier: VisibleOnScreenNotifier2D = get_node_or_null(
+	visibility_notifier_path
+) as VisibleOnScreenNotifier2D
+
 var _phase: int = 1
 var _pulse: float = 0.0
+var _redraw_accumulator: float = 0.0
 var _defeated: bool = false
 const BALLROOM_WIDTH: float = 3712.0
+const REDRAW_INTERVAL: float = 1.0 / 12.0
+
+
+func _ready() -> void:
+	if visibility_notifier == null:
+		push_error("HollowDuchessBallroomFx requires a VisibilityNotifier")
+		set_process(false)
+		return
+	visibility_notifier.screen_entered.connect(_on_screen_entered)
+	visibility_notifier.screen_exited.connect(_on_screen_exited)
+	set_process(false)
+	call_deferred("_sync_visibility")
 
 
 func _process(delta: float) -> void:
 	_pulse += delta
+	_redraw_accumulator += delta
+	if _redraw_accumulator < REDRAW_INTERVAL:
+		return
+	_redraw_accumulator = fmod(_redraw_accumulator, REDRAW_INTERVAL)
 	queue_redraw()
 
 
@@ -22,6 +47,25 @@ func set_phase(phase: int) -> void:
 func set_defeated() -> void:
 	_defeated = true
 	queue_redraw()
+
+
+func is_animation_processing() -> bool:
+	return is_processing()
+
+
+func _sync_visibility() -> void:
+	set_process(visibility_notifier != null and visibility_notifier.is_on_screen())
+	if is_processing():
+		queue_redraw()
+
+
+func _on_screen_entered() -> void:
+	set_process(true)
+	queue_redraw()
+
+
+func _on_screen_exited() -> void:
+	set_process(false)
 
 
 func _draw() -> void:

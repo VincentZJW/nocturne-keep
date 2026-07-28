@@ -22,6 +22,7 @@ const REWARD_WEAPON_ID: StringName = &"crimson_masque_stilettos"
 @export_node_path("HollowDuchess") var boss_path: NodePath
 @export_node_path("HollowDuchessRoomController") var room_controller_path: NodePath
 @export_node_path("HollowDuchessBallroomFx") var ballroom_fx_path: NodePath
+@export_node_path("Chapter02EncounterRuntime") var encounter_runtime_path: NodePath
 @export_node_path("BallroomMirrorGate") var mirror_gate_path: NodePath
 @export_node_path("Marker2D") var reward_anchor_path: NodePath
 @export_node_path("DuchessReliquary") var reliquary_path: NodePath
@@ -36,6 +37,9 @@ const REWARD_WEAPON_ID: StringName = &"crimson_masque_stilettos"
 @onready var ballroom_fx: HollowDuchessBallroomFx = get_node_or_null(
 	ballroom_fx_path
 ) as HollowDuchessBallroomFx
+@onready var encounter_runtime: Chapter02EncounterRuntime = get_node_or_null(
+	encounter_runtime_path
+) as Chapter02EncounterRuntime
 @onready var mirror_gate: BallroomMirrorGate = get_node_or_null(
 	mirror_gate_path
 ) as BallroomMirrorGate
@@ -61,6 +65,12 @@ func _initialize_transition() -> void:
 	mirror_gate.mirror_revealed.connect(_on_mirror_revealed)
 	mirror_gate.passage_requested.connect(_on_passage_requested)
 	mirror_gate.door_opened.connect(_on_door_opened)
+	reliquary.pickup_requested.connect(_on_reliquary_pickup_requested)
+	var manager: SceneTransitionManagerState = get_node_or_null(
+		"/root/SceneTransitionManager"
+	) as SceneTransitionManagerState
+	if manager != null:
+		manager.prepare_scene(transition_data.passage_scene_path)
 	_apply_persisted_state()
 
 
@@ -80,6 +90,7 @@ func _on_boss_defeated() -> void:
 	if session != null:
 		session.set_story_flag(FLAG_DUCHESS_DEFEATED)
 	ballroom_fx.set_defeated()
+	encounter_runtime.release_for_chapter_exit()
 	boss.visible = false
 	reliquary.set_unlocked(true)
 	reliquary.set_collected(false)
@@ -115,6 +126,12 @@ func _on_reward_collected(weapon_id: StringName) -> void:
 	player.velocity = Vector2.ZERO
 	if not mirror_gate.begin_reveal(transition_data.mirror_reveal_duration):
 		_on_mirror_revealed()
+
+
+func _on_reliquary_pickup_requested() -> void:
+	_ensure_reward_pickup()
+	if _reward_pickup != null:
+		_reward_pickup.collect()
 
 
 func _on_passage_requested() -> void:
@@ -163,6 +180,7 @@ func _apply_persisted_state() -> void:
 	_sequence_started = true
 	room_controller.apply_persisted_clear_state()
 	ballroom_fx.set_defeated()
+	encounter_runtime.release_for_chapter_exit()
 	reliquary.set_unlocked(true, true)
 	if session.has_story_flag(FLAG_REWARD_COLLECTED):
 		reliquary.set_collected(true)
@@ -202,6 +220,7 @@ func _ensure_reward_pickup() -> void:
 		if floor_glow != null:
 			floor_glow.visible = false
 		_reward_pickup.weapon_collected.connect(_on_reward_collected)
+	_reward_pickup.set_player_interaction_enabled(false)
 	_reward_pickup.set_available(true)
 	reward_spawned.emit()
 
@@ -214,7 +233,8 @@ func _validate_dependencies() -> bool:
 	if (
 		transition_data == null or not transition_data.is_valid()
 		or reward_pickup_scene == null or player == null or boss == null
-		or room_controller == null or ballroom_fx == null or mirror_gate == null
+		or room_controller == null or ballroom_fx == null or encounter_runtime == null
+		or mirror_gate == null
 		or reward_anchor == null or reliquary == null or pickup_parent == null
 		or acquisition_panel == null
 	):

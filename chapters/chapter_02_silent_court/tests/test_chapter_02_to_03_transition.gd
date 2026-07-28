@@ -73,6 +73,9 @@ func _run() -> void:
 	var reload_gate: BallroomMirrorGate = reloaded.get_node(
 		"GameplayWorld/BossArea/BallroomMirrorGate"
 	) as BallroomMirrorGate
+	var reload_reliquary: DuchessReliquary = reloaded.get_node(
+		"GameplayWorld/BossArea/DuchessReliquary"
+	) as DuchessReliquary
 	reload_controller.transition_data = reload_controller.transition_data.duplicate(true) as Chapter02TransitionData
 	reload_controller.transition_data.mirror_reveal_duration = 0.01
 	reload_controller.transition_data.door_open_duration = 0.01
@@ -80,12 +83,15 @@ func _run() -> void:
 	_expect(not reload_gate.is_revealed(), "Mirror revealed on uncollected reload")
 	var reward: WeaponPickup = reload_controller.get_reward_pickup()
 	_expect(reward != null and not reward.is_collected(), "Crimson Masque pickup was not recovered")
+	_expect(reward != null and not reward.player_interaction_enabled, "Hidden pickup retained duplicate interaction")
 	# Gate refuses passage until the fixed weapon has been collected.
 	reload_gate.passage_requested.emit()
 	await process_frame
 	_expect(not manager.is_transitioning(), "Gate bypassed the reward prerequisite")
 	if reward != null:
-		_expect(reward.collect(), "Crimson Masque pickup collection failed")
+		reload_reliquary.pickup_requested.emit()
+		await process_frame
+		_expect(reward.is_collected(), "Reliquary interaction did not collect Crimson Masque")
 	await _wait_until(func() -> bool: return reload_gate.is_revealed(), 120, "post-collection mirror reveal")
 	_expect(session.has_story_flag(&"chapter_02_boss_weapon_collected"), "Reward flag missing")
 	_expect(session.has_story_flag(&"chapter_02_exit_revealed"), "Exit reveal flag missing after reward")
@@ -119,6 +125,11 @@ func _run() -> void:
 		await _wait_for_scene("Chapter03EntryPlaceholder", 240)
 	_expect(current_scene is Chapter03EntryPlaceholder, "Chapter III entry placeholder did not load")
 	_expect(session.has_story_flag(&"chapter_03_started"), "Chapter III started flag missing")
+	await _wait_until(
+		func() -> bool: return not manager.is_scene_retirement_in_progress(),
+		300,
+		"incremental scene retirement"
+	)
 	if current_scene != null:
 		for path: String in [
 			"SpawnPoints/Chapter03PlayerSpawn", "Checkpoints/Chapter03CP01", "CameraBounds",

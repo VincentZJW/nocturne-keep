@@ -52,7 +52,7 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 
 使用F6或`"$GODOT_BIN" --path . <scene path>`运行。房间从左到右依次为侍从、戟卫、铠甲、侍祭和倒悬猎兽；它只验证原型，不替代Bootstrap/第二章Main验收。
 
-第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05向右看到白瓷裂面徽记、双雕像、黑红地毯和“最后一支舞，不容缺席”的Boss门；接近后门在0.90秒内开启，短距离抵达Intro Trigger。首次播放6.40秒原创破损华尔兹与五句入场对白，死亡重试缩短为1.25秒；华尔兹在变身开始时停止。瑟芙琳在121/220 HP进入4.40秒变身，切换为独立的`The Hollow Duchess, Unmasked / 无面公爵夫人`逐帧美术与80 Poise。击败后向右约850px（0.66个1280px视口）到`The Duchess's Reliquary / 公爵夫人遗物龛`，按E取得绯幕礼刺，镜墙才产生十三道裂纹并允许进入王室礼拜秘门。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
+第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05向右看到白瓷裂面徽记、双雕像、黑红地毯和“最后一支舞，不容缺席”的Boss门；玩家与角色武器始终绘制在门板之前。接近后门在0.90秒内开启，短距离抵达Intro Trigger。首次播放6.40秒原创破损华尔兹与五句入场对白，死亡重试缩短为1.25秒；华尔兹在变身开始时停止。瑟芙琳在121/220 HP进入4.40秒变身，切换为独立的`The Hollow Duchess, Unmasked / 无面公爵夫人`逐帧美术与80 Poise。击败后向右约850px（0.66个1280px视口）到小型`Duchess's Reliquary / 公爵夫人遗物台`；进入112px交互范围后出现“按 E 拾取 绯幕礼刺”，台座双烛以三帧像素火焰动态摆动。按E取得绯幕礼刺后展示武器与提示消失，镜墙才产生十三道裂纹并允许进入王室礼拜秘门。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
 
 ```text
 res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn

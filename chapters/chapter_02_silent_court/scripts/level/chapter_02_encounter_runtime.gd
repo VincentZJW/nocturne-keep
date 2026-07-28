@@ -18,6 +18,7 @@ const UPDATE_INTERVAL: float = 0.15
 
 var _groups: Array[Node2D] = []
 var _update_timer: float = 0.0
+var _chapter_exit_cleanup_started: bool = false
 
 
 func _ready() -> void:
@@ -41,6 +42,11 @@ func _process(delta: float) -> void:
 			and absf(player.global_position.y - center.y) <= ACTIVATION_RANGE_Y
 		)
 		_set_group_active(group, engaged)
+
+
+func _exit_tree() -> void:
+	if get_tree() != null and get_tree().process_frame.is_connected(_release_next_group):
+		get_tree().process_frame.disconnect(_release_next_group)
 
 
 func get_encounter_count() -> int:
@@ -112,6 +118,31 @@ func prepare_floor_change() -> void:
 	for group: Node2D in _groups:
 		_set_group_active(group, false)
 		_clear_transient_projectiles(group)
+
+
+func release_for_chapter_exit() -> void:
+	if _chapter_exit_cleanup_started:
+		return
+	_chapter_exit_cleanup_started = true
+	set_process(false)
+	for group: Node2D in _groups:
+		_set_group_active(group, false)
+		_clear_transient_projectiles(group)
+	call_deferred("_release_next_group")
+
+
+func get_remaining_exit_cleanup_groups() -> int:
+	return _groups.size()
+
+
+func _release_next_group() -> void:
+	if _groups.is_empty():
+		return
+	var group: Node2D = _groups.pop_back()
+	if is_instance_valid(group):
+		group.queue_free()
+	if not _groups.is_empty():
+		get_tree().process_frame.connect(_release_next_group, CONNECT_ONE_SHOT)
 
 
 func get_placement_counts() -> Dictionary:

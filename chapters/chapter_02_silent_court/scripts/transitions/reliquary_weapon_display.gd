@@ -3,16 +3,33 @@ extends Node2D
 
 
 func _draw() -> void:
-	# Crimson Needle and shorter Masque Fan Blade cross without becoming one silhouette.
-	_draw_stiletto(Vector2(-56, 28), Vector2(58, -30), true)
-	_draw_stiletto(Vector2(50, 32), Vector2(-42, -24), false)
+	# Two court stilettos cross as readable weapons rather than thin metal rods.
+	_draw_stiletto(Vector2(-34, 22), Vector2(38, -20), true)
+	_draw_stiletto(Vector2(32, 23), Vector2(-32, -18), false)
 
 
-func _draw_stiletto(start: Vector2, finish: Vector2, primary: bool) -> void:
-	draw_line(start, finish, Color("d8dfe3"), 5.0 if primary else 4.0)
-	var direction: Vector2 = (finish - start).normalized()
+func _draw_stiletto(pommel: Vector2, tip: Vector2, primary: bool) -> void:
+	var direction: Vector2 = (tip - pommel).normalized()
 	var normal: Vector2 = Vector2(-direction.y, direction.x)
-	draw_line(start - direction * 16.0, start + direction * 14.0, Color("2b2430"), 8.0)
-	draw_line(start + normal * 13.0, start - normal * 13.0, Color("9a3148"), 5.0)
-	draw_circle(start, 7.0, Color("d4cbc6"))
-	draw_line(finish - direction * 46.0, finish, Color("8f263d"), 2.0)
+	var guard_center: Vector2 = pommel + direction * (17.0 if primary else 15.0)
+	var blade_base: Vector2 = guard_center + direction * 5.0
+	var blade_half_width: float = 4.0 if primary else 3.5
+	var blade: PackedVector2Array = PackedVector2Array([
+		blade_base + normal * blade_half_width,
+		tip,
+		blade_base - normal * blade_half_width,
+	])
+	var handle_start: Vector2 = pommel + direction * 3.0
+	var handle: PackedVector2Array = PackedVector2Array([
+		handle_start + normal * 3.0,
+		guard_center + normal * 3.0,
+		guard_center - normal * 3.0,
+		handle_start - normal * 3.0,
+	])
+	draw_colored_polygon(handle, Color("282631"))
+	draw_line(handle_start, guard_center, Color("78404c"), 2.0)
+	draw_line(guard_center + normal * 10.0, guard_center - normal * 10.0, Color("a44a5f"), 4.0)
+	draw_circle(pommel, 4.0, Color("b78a58"))
+	draw_colored_polygon(blade, Color("d8dfe3"))
+	draw_line(blade_base, tip - direction * 2.0, Color("71879a"), 1.0)
+	draw_line(blade_base + normal * blade_half_width, tip, Color("f0f1eb"), 1.0)

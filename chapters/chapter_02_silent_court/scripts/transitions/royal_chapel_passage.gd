@@ -46,6 +46,14 @@ func _ready() -> void:
 	var session: ChapterSessionState = _session()
 	if session != null:
 		session.consume_pending_spawn(DEFAULT_SPAWN_ID)
+	var manager: SceneTransitionManagerState = get_node_or_null(
+		"/root/SceneTransitionManager"
+	) as SceneTransitionManagerState
+	var target_profile: ChapterStartProfile = ChapterRegistry.get_chapter_or_null(
+		transition_data.target_chapter_id
+	)
+	if manager != null and target_profile != null:
+		manager.prepare_scene(target_profile.main_scene_path)
 
 
 func _unhandled_input(event: InputEvent) -> void:

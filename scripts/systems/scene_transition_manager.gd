@@ -18,6 +18,9 @@ var _target_scene_path: String = ""
 var _target_spawn_id: StringName = &""
 var _target_chapter_id: StringName = &""
 var _fade_in_duration: float = 0.50
+var _prepared_scene_paths: Dictionary[String, bool] = {}
+var _retirement_nodes: Array[Node] = []
+const RETIREMENT_BATCH_SIZE: int = 18
 
 
 func _ready() -> void:
@@ -89,8 +92,32 @@ func transition_to_scene(
 	return true
 
 
+func prepare_scene(target_scene_path: String) -> bool:
+	if not ResourceLoader.exists(target_scene_path, "PackedScene"):
+		return false
+	if _prepared_scene_paths.has(target_scene_path):
+		return true
+	var current_status: ResourceLoader.ThreadLoadStatus = ResourceLoader.load_threaded_get_status(
+		target_scene_path
+	)
+	if current_status == ResourceLoader.THREAD_LOAD_INVALID_RESOURCE:
+		var request_error: Error = ResourceLoader.load_threaded_request(
+			target_scene_path,
+			"PackedScene",
+			true
+		)
+		if request_error != OK:
+			return false
+	_prepared_scene_paths[target_scene_path] = true
+	return true
+
+
 func is_transitioning() -> bool:
 	return _transitioning
+
+
+func is_scene_retirement_in_progress() -> bool:
+	return not _retirement_nodes.is_empty()
 
 
 func get_fade_alpha() -> float:
@@ -99,12 +126,107 @@ func get_fade_alpha() -> float:
 
 func _perform_scene_change() -> void:
 	screen_blacked_out.emit(_target_scene_path)
-	get_tree().scene_changed.connect(_on_scene_changed, CONNECT_ONE_SHOT)
+	if _prepared_scene_paths.has(_target_scene_path):
+		_continue_prepared_scene_change()
+		return
+	_change_scene_from_file()
+
+
+func _continue_prepared_scene_change() -> void:
+	if not _transitioning:
+		return
+	var status: ResourceLoader.ThreadLoadStatus = ResourceLoader.load_threaded_get_status(
+		_target_scene_path
+	)
+	match status:
+		ResourceLoader.THREAD_LOAD_IN_PROGRESS:
+			get_tree().process_frame.connect(_continue_prepared_scene_change, CONNECT_ONE_SHOT)
+		ResourceLoader.THREAD_LOAD_LOADED:
+			var packed: PackedScene = ResourceLoader.load_threaded_get(
+				_target_scene_path
+			) as PackedScene
+			_prepared_scene_paths.erase(_target_scene_path)
+			if packed == null:
+				_change_scene_from_file()
+				return
+			_change_to_prepared_scene(packed)
+		ResourceLoader.THREAD_LOAD_FAILED:
+			_prepared_scene_paths.erase(_target_scene_path)
+			_change_scene_from_file()
+		_:
+			_prepared_scene_paths.erase(_target_scene_path)
+			_change_scene_from_file()
+
+
+func _change_scene_from_file() -> void:
+	_connect_scene_changed()
 	var error: Error = get_tree().change_scene_to_file(_target_scene_path)
 	if error != OK:
-		if get_tree().scene_changed.is_connected(_on_scene_changed):
-			get_tree().scene_changed.disconnect(_on_scene_changed)
+		_disconnect_scene_changed()
 		_fail_transition(error_string(error))
+
+
+func _change_to_prepared_scene(packed: PackedScene) -> void:
+	var next_scene: Node = packed.instantiate()
+	if next_scene == null:
+		_fail_transition("Prepared PackedScene could not be instantiated")
+		return
+	var previous_scene: Node = get_tree().current_scene
+	get_tree().root.add_child(next_scene)
+	get_tree().current_scene = next_scene
+	if previous_scene != null:
+		_prepare_scene_for_incremental_retirement(previous_scene)
+	_on_scene_changed()
+
+
+func _prepare_scene_for_incremental_retirement(scene: Node) -> void:
+	# A full change_scene teardown produced the only repeatable Chapter II spike.
+	# Disable the old world immediately, then retire its leaf-first tree in small
+	# batches so resource destruction does not monopolize a rendered frame.
+	scene.process_mode = Node.PROCESS_MODE_DISABLED
+	var canvas_item: CanvasItem = scene as CanvasItem
+	if canvas_item != null:
+		canvas_item.visible = false
+	for child: Node in scene.find_children("*", "CollisionObject2D", true, false):
+		var collision_object: CollisionObject2D = child as CollisionObject2D
+		collision_object.collision_layer = 0
+		collision_object.collision_mask = 0
+		var area: Area2D = collision_object as Area2D
+		if area != null:
+			area.monitoring = false
+			area.monitorable = false
+	for child: Node in scene.find_children("*", "AudioStreamPlayer", true, false):
+		var audio_player: AudioStreamPlayer = child as AudioStreamPlayer
+		audio_player.stop()
+	_retirement_nodes.clear()
+	var traversal: Array[Node] = [scene]
+	while not traversal.is_empty():
+		var node: Node = traversal.pop_back()
+		_retirement_nodes.append(node)
+		for child: Node in node.get_children():
+			traversal.append(child)
+	call_deferred("_retire_scene_batch")
+
+
+func _retire_scene_batch() -> void:
+	var retired: int = 0
+	while not _retirement_nodes.is_empty() and retired < RETIREMENT_BATCH_SIZE:
+		var node: Node = _retirement_nodes.pop_back()
+		if is_instance_valid(node) and not node.is_queued_for_deletion():
+			node.queue_free()
+		retired += 1
+	if not _retirement_nodes.is_empty():
+		get_tree().process_frame.connect(_retire_scene_batch, CONNECT_ONE_SHOT)
+
+
+func _connect_scene_changed() -> void:
+	if not get_tree().scene_changed.is_connected(_on_scene_changed):
+		get_tree().scene_changed.connect(_on_scene_changed, CONNECT_ONE_SHOT)
+
+
+func _disconnect_scene_changed() -> void:
+	if get_tree().scene_changed.is_connected(_on_scene_changed):
+		get_tree().scene_changed.disconnect(_on_scene_changed)
 
 
 func _on_scene_changed() -> void:

@@ -691,6 +691,7 @@ player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterR
 boss_path = NodePath("../../GameplayWorld/BossArea/HollowDuchess")
 room_controller_path = NodePath("../HollowDuchessRoomController")
 ballroom_fx_path = NodePath("../../GameplayWorld/BossArea/BallroomFx")
+encounter_runtime_path = NodePath("../Chapter02EncounterRuntime")
 mirror_gate_path = NodePath("../../GameplayWorld/BossArea/BallroomMirrorGate")
 reward_anchor_path = NodePath("../../GameplayWorld/BossArea/DuchessReliquary/WeaponDisplay/PickupAnchor")
 reliquary_path = NodePath("../../GameplayWorld/BossArea/DuchessReliquary")
@@ -774,6 +775,9 @@ z_as_relative = false
 position = Vector2(2688, -1800)
 z_index = -6
 script = ExtResource("21_ballroom_fx")
+
+[node name="VisibilityNotifier" type="VisibleOnScreenNotifier2D" parent="GameplayWorld/BossArea/BallroomFx"]
+rect = Rect2(0, -180, 3712, 792)
 
 [node name="DuchessBossEntrance" parent="GameplayWorld/BossArea" instance=ExtResource("39_boss_entrance")]
 position = Vector2(3100, -1188)

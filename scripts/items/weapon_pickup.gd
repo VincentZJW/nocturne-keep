@@ -5,6 +5,7 @@ signal weapon_collected(weapon_id: StringName)
 
 @export var weapon_id: StringName = &"ravenfang_daggers"
 @export var auto_equip: bool = true
+@export var player_interaction_enabled: bool = true
 
 @onready var prompt: Label = get_node_or_null("Prompt") as Label
 
@@ -15,6 +16,7 @@ var _collected: bool = false
 func _ready() -> void:
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
+	set_process_unhandled_input(player_interaction_enabled)
 	if prompt != null:
 		prompt.visible = false
 
@@ -22,6 +24,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if (
 		_collected
+		or not player_interaction_enabled
 		or _player_in_range == null
 		or _player_in_range.is_dead()
 		or not event.is_action_pressed("interact")
@@ -58,9 +61,19 @@ func collect() -> bool:
 func set_available(available: bool) -> void:
 	_collected = not available
 	visible = available
-	set_deferred("monitoring", available)
+	set_deferred("monitoring", available and player_interaction_enabled)
 	if prompt != null:
-		prompt.visible = available and _player_in_range != null
+		prompt.visible = available and player_interaction_enabled and _player_in_range != null
+
+
+func set_player_interaction_enabled(enabled: bool) -> void:
+	player_interaction_enabled = enabled
+	set_process_unhandled_input(enabled)
+	if not enabled:
+		_player_in_range = null
+	set_deferred("monitoring", enabled and not _collected)
+	if prompt != null:
+		prompt.visible = enabled and not _collected and _player_in_range != null
 
 
 func is_collected() -> bool:
@@ -69,7 +82,7 @@ func is_collected() -> bool:
 
 func _on_body_entered(body: Node2D) -> void:
 	var player: Player = body as Player
-	if player == null or _collected:
+	if player == null or _collected or not player_interaction_enabled:
 		return
 	_player_in_range = player
 	if prompt != null:
