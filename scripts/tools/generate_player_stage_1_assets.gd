@@ -85,7 +85,7 @@ func _export_concept_deliverables() -> int:
 		"night_warden_outfit_breakdown.png": {"source": turnaround, "rect": Rect2i(280, 510, 670, 514)},
 		"night_warden_hood_detail.png": {"source": turnaround, "rect": Rect2i(1040, 0, 496, 520)},
 		"night_warden_guard_scale_comparison.png": {"source": turnaround, "rect": Rect2i(930, 500, 606, 524)},
-		"night_warden_dual_dagger_pose_sheet.png": {"source": action, "rect": Rect2i(0, 0, 1055, 1024)},
+		"night_warden_dual_dagger_pose_sheet.png": {"source": action, "rect": Rect2i(1055, 0, 481, 1024)},
 		"night_warden_animation_pose_sheet.png": {"source": action, "rect": Rect2i(0, 0, 1055, 1024)},
 	}
 	var failures: int = 0

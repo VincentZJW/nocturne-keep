@@ -4,7 +4,7 @@ Version: 1.0
 
 Date: 2026-07-28
 
-Status: Stage 1 implemented; Stage 2 visual acceptance pending
+Status: Stage 2 visually accepted; Stage 3 Candle Warden work not started
 
 ## Character identity
 
@@ -71,12 +71,10 @@ The formal death controller continues to own body fall, dagger separation, ghost
 
 ## Historical assets
 
-Earlier `res://assets/sprites/player/assassin/` and weapon-specific frame trees remain as provenance/reference material. Active SpriteFrames resources no longer reference those roots. Deletion is deferred until Stage 2 verifies all formal routes and repository history coverage.
+Earlier `res://assets/sprites/player/assassin/` and weapon-specific frame trees remain as provenance/reference material. Active SpriteFrames resources no longer reference those roots; the Stage 2 deterministic audit verifies `legacy_refs=0`. Historical sources are deliberately retained as non-runtime reference because earlier approved animation work required those key poses to remain available.
 
-## Stage 2 manual acceptance focus
+## Stage 2 acceptance result
 
-1. Compare Player and Castle Guard at native scale in Chapter I.
-2. Review the three normal attack silhouettes and hit-window alignment.
-3. Review ground/air Dash, double jump, heavy/light hurt and full death flow.
-4. Equip Veilbound, Ravenfang and Crimson Masque and inspect every critical action in both facings.
-5. Run the formal Opening → revival → dagger pickup transition and confirm body identity remains consistent.
+Stage 2 passed on 2026-07-28. The QA verified native Chapter I scale, all required locomotion/combat/hurt/death poses, released daggers, hooded ghost, three weapon adaptations and shared Prologue/Chapter I–III routing. Evidence and exact results are recorded in `res://docs/qa/core_character_art_rework/stage_2/stage_2_report.md`.
+
+The next gate is Stage 3 Candle Warden work and is not part of this specification's accepted Player scope.

@@ -1,5 +1,46 @@
 # Development Log
 
+## 2026-07-28 — Core character art rework Stage 2 (preflight)
+
+Status: complete — Player strong visual QA passed; Candle Warden Stage 3 remains blocked
+
+### Goal, planned files, tests, and scope check
+
+- Audit the committed Stage 1 Night Warden against every mandatory Stage 2 acceptance row: concept views, silhouette, Chapter I Guard scale, formal idle/run/turn/aerial/dash/combo/hurt/death presentation, dropped daggers, hooded ghost, all three weapon variants, shared Main integration and absence of active legacy-frame references.
+- Add a deterministic Stage 2 integrity test and a Bootstrap-routed graphical QA runner under `tests/player/` and `scripts/tools/`. Preserve native 64×64 nearest-neighbor presentation and capture evidence under `res://docs/qa/core_character_art_rework/stage_2/` from the real shared Player used by the Prologue and Chapters I–III.
+- Review every produced image at original resolution. Any actual failure in scale, anchor, weapon readability, pose distinction, chapter consistency or runtime references must be fixed inside Stage 2 and retested; acceptance must not be inferred from file existence alone.
+- Run the exact Godot 4.7.1 executable for import/parse, Stage 1 and Stage 2 art tests, Player animation/action/death regressions, Prologue and Chapter I–III composition, independent scene smoke, Bootstrap/F5 startup and graphical capture. Record exact results and create one isolated Stage 2 commit.
+
+### Read-only baseline and scope boundary
+
+- Stage 2 begins on `master` at `f9d17bb`. Stage 1 is committed; the worktree still contains pre-existing Chapter I Boss/enemy tuning, Chapter I level, shared enemy resources, Ravenfang QA images, loot/action tuning and two generated UID sidecars. They remain user-owned, unstaged and excluded.
+- The committed Player is 57 visible pixels versus the Chapter I Castle Guard's 58 (`98.28%`), uses unit visual scale, preserves the y=60 foot baseline and exposes three synchronized 30-animation SpriteFrames resources. The Prologue revival uses eight matching unarmed textures.
+- Authorized: Player-only QA scripts/tests, Player/Main visual evidence, corrections required to make a Stage 2 acceptance row truthful, Stage 2 QA report, Player art documentation and this log.
+- Not authorized: Candle Warden concepts/pixels/gestures/lighting, Prologue dialogue or camera changes, enemies/Bosses, chapter art, gameplay balance, movement, hitbox geometry, progression or unrelated cleanup. Stage 3 will not begin without a new approval after this milestone stops.
+
+### Delivered QA and correction
+
+- Added a deterministic Stage 2 audit covering ten formal concepts, three synchronized 30-animation SpriteFrames resources, 64×64 lossless/no-mipmap source frames, unit visual scale, 57/58 Player/Guard ratio, shared Prologue/Chapter I–III Player authority, prone death frame, hooded ghost and zero active legacy-frame references.
+- Added split-process graphical runners and captured 22 runtime images: 19 from the Bootstrap-routed Chapter I Main scene plus one each from Chapter II, Chapter III and the formal Prologue revival scene. The Chapter I sequence includes native scale, locomotion, aerial actions, all attacks, hurt, actual lethal death/dagger/ghost phases and three weapon adaptations.
+- The initial Stage 2 audit correctly failed because the dual-dagger and animation pose sheets were duplicate crops. Updated the deterministic generator to crop the dedicated weapon panel, regenerated the asset and reran the audit to PASS.
+- Reviewed every screenshot at original resolution. The Player is an authored adult 64×64 character at unit scale, remains readable in dark chapters, has complete dagger silhouettes, distinct action lines and the approved horizontal death plus hooded soul release. Three non-blocking presentation notes are recorded in the Stage 2 report.
+
+### Exact commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script tests/player/test_player_stage_1_art.gd` → `PASS concepts=10 revival=8 resources=3 animations=30 collisions=preserved`.
+- `... --script tests/player/test_player_stage_2_qa.gd` → `PASS concepts=10 styles=3 animations=30 ratio=57/58 chapters=4 legacy_refs=0`.
+- Player animation, fast attack and death presentation tests all PASS: 16 animation contracts, segmented Ground/Air Dash, immediate buffered three-hit attack, prone body, released daggers, ghost rise/pause and cleanup.
+- Prologue flow PASS: F5 route, 30 bilingual lines, skip, dagger pickup, door and Main spawn.
+- Chapter I integration PASS: 18 groups, 34 enemies, Boss room and HUD/respawn. Chapter II graybox PASS: nine rooms, three floors, 38 enemies, one shared Player/HUD; its pre-existing two-ObjectDB shutdown warning remains. Chapter III roster PASS: six roles and six Main instances.
+- `Godot --headless --path . --scene res://scenes/player/player.tscn --quit-after 120`, animation preview equivalent and configured `Godot --headless --path . --quit-after 240` all exited 0. Formal MainBootstrap remained Opening-first.
+- Final graphical captures ran one scene per process: Chapter I `PASS captures=19`, Chapter II/III/Prologue each PASS. This removed the GL/RID diagnostics produced by the discarded first combined multi-scene capture attempt.
+
+### Evidence, limits, and next gate
+
+- Full matrix: `res://docs/qa/core_character_art_rework/stage_2/stage_2_report.md`; screenshots: `res://docs/qa/core_character_art_rework/stage_2/`.
+- Weapon differences are deliberately restrained at 1×, the Chapter I tutorial prompt remains in several captures, and the Prologue evidence shows the unarmed emergence identity rather than the post-pickup armed state. None changes gameplay or blocks the approved visual contract.
+- No Candle Warden asset, gesture, lantern-light, dialogue or camera work was started. Stage 3 remains pending explicit approval.
+
 ## 2026-07-28 — Core character art rework Stage 1 (preflight)
 
 Status: complete — Player concept, formal pixel assets, animation integration, Prologue consistency and Main verification passed; Stage 2 visual acceptance remains
