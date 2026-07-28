@@ -1,8 +1,8 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_hit_fx/shield_hit_fx_01.png" id="1_xtqrh"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_hit_fx/shield_hit_fx_02.png" id="2_mjrq7"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_hit_fx/shield_hit_fx_03.png" id="3_uys6d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_hit_fx_01.png" id="1_xtqrh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_hit_fx_02.png" id="2_mjrq7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_hit_fx_03.png" id="3_uys6d"]
 
 [resource]
 animations = [{

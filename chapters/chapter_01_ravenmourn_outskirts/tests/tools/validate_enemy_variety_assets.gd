@@ -1,10 +1,11 @@
 extends SceneTree
 
 const ASSET_ROOTS: Dictionary[String, String] = {
-	"cursed_shield_guard": "res://shared/assets/enemies/cursed_shield_guard",
-	"decayed_spearman": "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/decayed_spearman",
-	"fallen_crossbowman": "res://shared/assets/enemies/fallen_crossbowman",
+	"cursed_shield_guard": "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/sprites",
+	"decayed_spearman": "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/decayed_spearman/sprites",
+	"fallen_crossbowman": "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/fallen_crossbowman/sprites",
 }
+const SHIELD_EFFECT_ROOT: String = "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects"
 const FRAME_PATHS: Dictionary[String, String] = {
 	"cursed_shield_guard": "res://shared/resources/enemies/cursed_shield_guard_sprite_frames.tres",
 	"decayed_spearman": "res://chapters/chapter_01_ravenmourn_outskirts/resources/enemies/decayed_spearman_sprite_frames.tres",
@@ -90,6 +91,8 @@ func _validate_png(
 		else "%s_%02d.png" % [animation_name, frame_number]
 	)
 	var path: String = ASSET_ROOTS[enemy_name].path_join(animation_name).path_join(filename)
+	if enemy_name == "cursed_shield_guard" and animation_name in ["shield_break_fx", "shield_hit_fx", "shield_visual"]:
+		path = SHIELD_EFFECT_ROOT.path_join(filename)
 	_expect(FileAccess.file_exists(path), "Missing %s" % path)
 	if not FileAccess.file_exists(path):
 		return
@@ -142,9 +145,7 @@ func _validate_shield_break_effect() -> void:
 		_expect(is_equal_approx(effect_duration, 0.65), "Shield break effect does not span 0.65 seconds")
 	for frame_number: int in range(1, 5):
 		_validate_png("cursed_shield_guard", "shield_break_fx", frame_number)
-	var marker_path: String = ASSET_ROOTS["cursed_shield_guard"].path_join(
-		"shield_break_fx"
-	).path_join("broken_shield_marker.png")
+	var marker_path: String = SHIELD_EFFECT_ROOT.path_join("broken_shield_marker.png")
 	_expect(FileAccess.file_exists(marker_path), "Broken shield marker is missing")
 	if FileAccess.file_exists(marker_path):
 		var marker: Image = Image.new()
@@ -171,7 +172,7 @@ func _validate_shield_visuals() -> void:
 	_expect(frames.get_frame_count(&"shield_break") == 4, "ShieldVisual break is not four frames")
 	_expect(not frames.get_animation_loop(&"shield_break"), "ShieldVisual break unexpectedly loops")
 	for state_name: String in ["intact", "cracked", "critical"]:
-		_validate_png("cursed_shield_guard", "shield_visual", 1, "%s.png" % state_name)
+		_validate_png("cursed_shield_guard", "shield_visual", 1, "shield_%s.png" % state_name)
 	for frame_number: int in range(1, 5):
 		_validate_png("cursed_shield_guard", "shield_visual", frame_number, "shield_break_%02d.png" % frame_number)
 

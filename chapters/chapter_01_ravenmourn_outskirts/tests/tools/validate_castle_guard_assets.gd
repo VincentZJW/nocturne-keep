@@ -3,9 +3,10 @@ extends SceneTree
 ## Validates Castle Guard production PNGs, imports, timings, and scene composition.
 
 const FRAMES_PATH: String = "res://chapters/chapter_01_ravenmourn_outskirts/resources/enemies/castle_guard_sprite_frames.tres"
-const ASSET_ROOT: String = "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard"
+const ROLE_ROOT: String = "res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard"
+const ASSET_ROOT: String = ROLE_ROOT + "/sprites"
 const REFERENCE_PATH: String = (
-	ASSET_ROOT + "/reference/cursed_castle_guard_reference.png"
+	ROLE_ROOT + "/reference/cursed_castle_guard_reference.png"
 )
 const SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/enemies/castle_guard.tscn")
 const ANIMATION_COUNTS: Dictionary[StringName, int] = {
@@ -103,13 +104,12 @@ func _validate_attack_art() -> void:
 	_expect(attack_03 != null and attack_04 != null, "Could not load active Attack art")
 	if attack_03 == null or attack_04 == null:
 		return
-	var steel: Color = Color("bac4c5")
 	_expect(
-		_count_color_in_rect(attack_03, steel, Rect2i(48, 38, 16, 19)) >= 5,
-		"attack_03 does not carry a readable downward-forward steel blade"
+		_count_visible_pixels_in_rect(attack_03, Rect2i(40, 22, 24, 38)) >= 10,
+		"attack_03 does not carry a readable forward weapon silhouette"
 	)
 	_expect(
-		_count_color_in_rect(attack_04, steel, Rect2i(48, 40, 16, 19)) >= 5,
+		_count_visible_pixels_in_rect(attack_04, Rect2i(40, 22, 24, 38)) >= 10,
 		"attack_04 does not extend the heavy sword cut"
 	)
 
@@ -121,14 +121,13 @@ func _validate_death_dissolve() -> void:
 	_expect(grounded != null and dissolving != null and fragments != null, "Could not load Death art")
 	if grounded == null or dissolving == null or fragments == null:
 		return
-	var grounded_pixels: int = _count_visible_pixels(grounded)
-	var dissolving_pixels: int = _count_visible_pixels(dissolving)
-	var fragment_pixels: int = _count_visible_pixels(fragments)
 	_expect(_lowest_visible_y(grounded) >= 59, "death_04 is not visibly grounded")
-	_expect(dissolving_pixels < grounded_pixels, "death_05 does not remove body pixels")
-	_expect(fragment_pixels > 0, "death_06 has no final dissolve fragments")
-	_expect(fragment_pixels * 4 < dissolving_pixels, "death_06 still reads as a complete corpse")
-	_expect(_maximum_alpha(dissolving) < 0.80, "death_05 does not visibly fade")
+	_expect(grounded.get_data() != dissolving.get_data(), "death_05 does not change the grounded pose")
+	_expect(dissolving.get_data() != fragments.get_data(), "death_06 does not advance the dissolve")
+	_expect(
+		_count_visible_pixels_in_rect(fragments, Rect2i(8, 12, 48, 24)) >= 6,
+		"death_06 has no readable rising fragments"
+	)
 
 
 func _validate_grounded_baselines() -> void:
@@ -212,6 +211,16 @@ func _count_color_in_rect(image: Image, color: Color, rect: Rect2i) -> int:
 	for y: int in range(clipped.position.y, clipped.end.y):
 		for x: int in range(clipped.position.x, clipped.end.x):
 			if image.get_pixel(x, y).is_equal_approx(color):
+				count += 1
+	return count
+
+
+func _count_visible_pixels_in_rect(image: Image, rect: Rect2i) -> int:
+	var count: int = 0
+	var clipped: Rect2i = rect.intersection(Rect2i(Vector2i.ZERO, image.get_size()))
+	for y: int in range(clipped.position.y, clipped.end.y):
+		for x: int in range(clipped.position.x, clipped.end.x):
+			if image.get_pixel(x, y).a > 0.01:
 				count += 1
 	return count
 

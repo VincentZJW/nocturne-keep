@@ -1,12 +1,12 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/cracked.png" id="1_4nfnr"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/critical.png" id="2_7b0vd"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/intact.png" id="3_lhaqc"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/shield_break_01.png" id="4_msejo"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/shield_break_02.png" id="5_npgd3"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/shield_break_03.png" id="6_2ri5l"]
-[ext_resource type="Texture2D" path="res://shared/assets/enemies/cursed_shield_guard/shield_visual/shield_break_04.png" id="7_snshx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_cracked.png" id="1_4nfnr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_critical.png" id="2_7b0vd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_intact.png" id="3_lhaqc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_break_01.png" id="4_msejo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_break_02.png" id="5_npgd3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_break_03.png" id="6_2ri5l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/effects/shield_break_04.png" id="7_snshx"]
 
 [resource]
 animations = [{

@@ -5143,3 +5143,71 @@ Status: complete — superseded Phase 2 source art removed; formal v2 SpriteFram
 - Use the same Chapter III Debug Start ids documented in README to inspect each formal enemy through MainBootstrap; restore Debug Start afterward.
 - If the old source art is ever needed for forensic comparison, recover it from commit `8d25810` rather than reintroducing it into the runtime asset tree.
 - Pre-existing Chapter I/shared/Player/old-QA worktree changes remain preserved and excluded from this cleanup commit.
+
+## 2026-07-28 — Chapter I enemy and Boss art rework preflight
+
+Status: in progress — Chapter I only; Chapter II is explicitly not started
+
+### Goal, scope, and quality gate
+
+- Rebuild the Chapter I Ravenmourn Outskirts runtime art for Cursed Castle Guard, Cursed Shield Guard, Decayed Spearman, Fallen Crossbowman, Gargoyle Sentinel, and Fallen Gate Knight. The milestone includes new concept sheets, silhouettes, every SpriteFrames animation, role effects/references, saved scene bindings, MainBootstrap integration evidence, and one isolated commit.
+- Keep all gameplay behavior, combat values, AI, Hitbox/Hurtbox geometry, loot, Player systems, chapter route, and `project.godot` settings unchanged. The visual replacement must use stable texture paths or path-only SpriteFrames edits so existing tuning is preserved.
+- Formal quality uses the accepted Chapter III gate: layered silhouettes, separated limbs, shaped weapons, material clusters, hard alpha, stable anchors, role-specific attacks, and a Boss whose two visual phases are materially richer than ordinary enemies. Geometry-placeholder art or a Main route still showing old frames is FAIL.
+- Stop after the Chapter I report and commit. Do not begin Chapter II before explicit approval.
+
+### Read-only audit
+
+- Work begins on `master` at `cb4b2ed`. F5 remains `res://scenes/bootstrap/main_bootstrap.tscn`, viewport 1280×720. Chapter I Main content is `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`; the saved level references `World/CastleEntranceArea/FallenGateKnight`, while `first_level_encounters.tscn` instantiates all five normal/special enemy scenes.
+- Current runtime roles and scenes are: chapter-local Castle Guard and Decayed Spearman; shared Cursed Shield Guard, Fallen Crossbowman, and Gargoyle Sentinel; chapter-local Fallen Gate Knight Boss. All use `VisualRoot/AnimatedSprite2D` and existing SpriteFrames resources. Ordinary frames are 64×64; the Boss is 96×96 with shielded/unshielded states, shield damage overlays, phase transition, and nine attack/turn families.
+- Original-size inspection confirms all six current formal sets are legacy geometric art: rectangular helmets/torsos, line weapons, minimal material separation, and weak motion silhouettes. All six therefore require complete redraw rather than local polish.
+- Pre-existing dirty Chapter I/shared tuning, Godot UID/default serialization changes, Ravenfang QA images, loot/Player resources, and two UID sidecars are user-owned. They remain preserved. This milestone will not stage unrelated config/level/QA changes, and will not rewrite those values merely to clean Git.
+
+### Planned verification
+
+- Generate and import every new PNG with hard alpha and exact dimensions; validate per-animation counts, unique hashes, feet/center anchors, SpriteFrames texture paths, scene bindings, and absence of deprecated runtime paths.
+- Run exact Godot 4.7.1 import/parse, dedicated Chapter I art integrity tests, six independent scene smokes, Chapter I saved level smoke, MainBootstrap graphical capture, and formal F5-equivalent startup. Preserve concept/Sprite/Main/attack/Boss-phase/old-vs-new evidence under `docs/qa/chapter_01_enemy_art_rework/`.
+- Record exact commands and outcomes, update the three Chapter I art specifications and per-role notes, commit only milestone-owned files, then stop for user acceptance.
+## 2026-07-28 — Chapter I enemy and Boss formal art rework (complete)
+
+### Outcome
+
+- Rebuilt concept sheets, silhouettes, action references, effects and every runtime animation frame for Castle Guard, Cursed Shield Guard, Decayed Spearman, Fallen Crossbowman, Gargoyle Sentinel and Fallen Gate Knight.
+- Produced 271 new formal frames (five 64×64 roles, one 96×96 Boss) and archived 290 prior PNGs under role-local `reference/deprecated_v1/` directories.
+- Redirected all runtime SpriteFrames, Shield Guard break presentation and Boss shield overlays to Chapter I-local formal assets. Removed stale import UID precedence that initially resolved paths back to archived v1 files.
+- Preserved AI, timing, collision, health, damage, drops and encounter composition.
+- Added Chapter I art/boss/quality bibles, role manifests, automated integrity checks, deterministic old/new boards and actual MainBootstrap screenshots.
+
+### Commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_01_ravenmourn_outskirts/scripts/tools/generate_chapter_01_enemy_art_v2.gd`
+  - PASS: `roles=6 frames=271`.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit`
+  - PASS: all formal/archived sources imported; no parse or missing-resource error.
+- `...Godot --headless --path . --script res://chapters/chapter_01_ravenmourn_outskirts/tests/tools/test_chapter_01_enemy_art_rework.gd`
+  - PASS: `roles=6 formal_frames=271 archived_frames=290 main_refs=6`.
+- `validate_castle_guard_assets.gd`
+  - PASS: 24 formal frames, timing, active cut, death fragments and scene.
+- `validate_enemy_variety_assets.gd`
+  - PASS: 124 formal 64×64 frames, lossless/no-mipmap imports and 48px floor.
+- `validate_first_level_boss_assets.gd`
+  - PASS: 137 Gargoyle/Boss action frames plus 4 shield overlays.
+- `test_enemy_variety.gd`
+  - PASS: shield facing/break, spear reach and crossbow cadence unchanged.
+- `test_main_enemy_integration.gd`
+  - PASS: 18 encounter groups, 34 enemies, Boss room, HUD and respawn.
+- `test_first_level_boss.gd`
+  - PASS: shield routing, phase, room lock/reset, death/exit.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://chapters/chapter_01_ravenmourn_outskirts/scripts/tests/capture_chapter_01_enemy_art_rework_qa.gd`
+  - PASS on OpenGL/Metal: actual MainBootstrap → Chapter I route, 6 roles, 15 captures.
+
+### QA evidence and acceptance
+
+- Review index: `docs/qa/chapter_01_enemy_art_rework/README.md`.
+- Evidence includes six concept/old/new boards, six formal previews, one roster overview, ten ordinary-enemy Main captures and five Boss phase/action captures.
+- Automatic status: PASS. Manual review remains required for subjective material/detail preference at native gameplay scale.
+
+### Scope check
+
+- Chapter I art and runtime references only; Chapter II and Chapter III were not modified.
+- No gameplay values, AI behavior, map layout, player systems or combat timing changed.
+- Pre-existing unrelated working-tree edits were preserved and excluded from this milestone commit.
