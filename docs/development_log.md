@@ -5283,3 +5283,28 @@ Status: complete — Boss-only v3 concept/formal art, permanent shield stages an
 - User review accepted the concept direction but identified the live greatsword as too short. The shared formal-frame renderer now extends the visible blade by a restrained 7 pixels inside the existing 96×96 cell and uses a longer two-stage taper with a sharper point. This applies consistently to Phase 1, Phase 2, idle/movement and every attack family.
 - The adjustment is presentation-only: Boss attack reach, hitboxes, AI, timing and combat values remain unchanged. Regenerated MainBootstrap evidence confirms the blade reads longer and sharper without exceeding the knight's body scale or dominating the shielded silhouette.
 - Re-ran the 165-frame generator, exact Godot import, focused art integrity, Boss combat regression and MainBootstrap nine-shot capture after the correction; all passed without a red Output/Debugger error.
+
+## 2026-07-28 — Core character art rework, Stage 0 audit preflight
+
+Status: in progress — read-only Player/Candle Warden/Main reference audit only
+
+### Goal and scope
+
+- Establish the authoritative runtime paths, animation/resource inventory, visual dimensions, collision geometry, weapon presentation chain, prologue cinematic bindings, shared chapter instancing and current error baseline for the Player and The Candle Warden.
+- This stage will not generate concept art, redraw sprites, replace runtime resources, alter dialogue/camera staging, resize collision geometry, or change movement/combat values. The stricter staged approval rule in the supplied specification is authoritative: Stage 1 will not begin without explicit user approval after this audit.
+- Preserve and exclude all pre-existing unstaged Resource/scene serialization, Ravenfang QA images and UID sidecars. Stage 0 may modify only this development-log audit record, the task-owned read-only audit utility, and task-owned QA evidence.
+
+### Planned inspection and tests
+
+- Read `project.godot`, Bootstrap/debug profiles, Player and Candle Warden scenes/scripts/resources, all SpriteFrames and animation bindings, death/ghost/weapon presentation, camera/HUD dependencies, prologue revival choreography and chapter instance references.
+- Measure opaque-pixel visual bounds for Player and Chapter I Castle Guard rather than inferring size from canvas dimensions; record collision/Hurtbox/Hitbox and feet-origin values separately.
+- Run exact Godot 4.7.1 import/parse, the relevant saved scenes and the normal MainBootstrap/F5 route; report missing resources, invalid UIDs, parser/runtime errors and concrete Stage 1 file ownership. Then create one audit-only commit and stop.
+
+### Stage 0 result
+
+- Completed the authoritative Player/Candle Warden/prologue/Main audit in `docs/qa/core_character_art_rework/stage_0_audit.md`. Added `scripts/tools/audit_core_character_assets.gd` to make SpriteFrames metadata, alpha bounds, scene composition and collision dimensions repeatable without mutating runtime resources.
+- Confirmed one formal Player PackedScene is shared by the prologue, Chapter I and `ChapterRuntime` used by Chapters II/III. No formal scene has a Player/VisualRoot scale or SpriteFrames override. Current Player idle visible height is 55px versus the Chapter I Castle Guard's 58px (`94.83%`), narrowly below the new 95% minimum.
+- Confirmed the current weapon presentation swaps three complete SpriteFrames resources; `VisualRoot/WeaponVisual` is a controller, not a hand-mounted Sprite. Current runtime has 16 animation names and no separate three-hit Attack art, Ready Idle, Walk, Turn, Start/Stop, Jump Apex, Double Jump, Interact or Respawn animation.
+- Confirmed the Candle Warden scene contains only one custom-drawn `Node2D`: no concept image, Sprite/SpriteFrames, AnimationPlayer, PointLight2D, particle node, formal walk/rise/talk sequence or departure. The prologue uses 30 aligned bilingual dialogue entries, three limited visual cues and no camera choreography toward the Warden.
+- Exact Godot 4.7.1 editor import, audit, Player asset validation, prologue/Main/chapter-start flows, Chapters I/II regression and a windowed formal Main startup all passed with no red Output/Debugger error. Two existing suites still emit a non-fatal two-instance ObjectDB cleanup warning; this is recorded as technical debt rather than hidden.
+- Stage 0 changed no game art, scene, dialogue, animation, collision, camera or balance data. Stage 1 remains blocked on explicit approval per the supplied staged workflow.
