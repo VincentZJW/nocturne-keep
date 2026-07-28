@@ -1,0 +1,340 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_point/gesture_point_01.png" id="1_d3xwo"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_point/gesture_point_02.png" id="2_lwxg0"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_point/gesture_point_03.png" id="3_8vlir"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_point/gesture_point_04.png" id="4_0hwl2"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_warn/gesture_warn_01.png" id="5_j8hyj"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_warn/gesture_warn_02.png" id="6_hhms0"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_warn/gesture_warn_03.png" id="7_idh36"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/gesture_warn/gesture_warn_04.png" id="8_dwf8h"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/idle/idle_01.png" id="9_a2h2w"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/idle/idle_02.png" id="10_rf3j7"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/idle/idle_03.png" id="11_pg5ox"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/idle/idle_04.png" id="12_1igge"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/lantern_idle/lantern_idle_01.png" id="13_woorv"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/lantern_idle/lantern_idle_02.png" id="14_pi7xp"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/lantern_idle/lantern_idle_03.png" id="15_rb3ka"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/lantern_idle/lantern_idle_04.png" id="16_tndaj"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/lantern_idle/lantern_idle_05.png" id="17_tvdvx"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/lantern_idle/lantern_idle_06.png" id="18_3u0s2"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/look_at_player/look_at_player_01.png" id="19_oub0a"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/look_at_player/look_at_player_02.png" id="20_ac3lh"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/look_at_player/look_at_player_03.png" id="21_lptwh"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/offer_key/offer_key_01.png" id="22_4y727"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/offer_key/offer_key_02.png" id="23_djs2b"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/offer_key/offer_key_03.png" id="24_omdor"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/offer_key/offer_key_04.png" id="25_skmaq"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/open_door/open_door_01.png" id="26_6vcgn"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/open_door/open_door_02.png" id="27_38fxr"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/open_door/open_door_03.png" id="28_6i3le"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/open_door/open_door_04.png" id="29_aws55"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/open_door/open_door_05.png" id="30_rq1uk"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/raise_lantern/raise_lantern_01.png" id="31_7cosh"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/raise_lantern/raise_lantern_02.png" id="32_bkd4p"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/raise_lantern/raise_lantern_03.png" id="33_065f4"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/raise_lantern/raise_lantern_04.png" id="34_en4ru"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/return_to_shadow/return_to_shadow_01.png" id="35_wmi0u"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/return_to_shadow/return_to_shadow_02.png" id="36_wmdoe"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/return_to_shadow/return_to_shadow_03.png" id="37_pmfs1"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/return_to_shadow/return_to_shadow_04.png" id="38_hijes"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/return_to_shadow/return_to_shadow_05.png" id="39_6ss23"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/return_to_shadow/return_to_shadow_06.png" id="40_qxo3k"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/rising/rising_01.png" id="41_prte5"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/rising/rising_02.png" id="42_gfhjf"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/rising/rising_03.png" id="43_lv6gk"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/rising/rising_04.png" id="44_b1the"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/rising/rising_05.png" id="45_ep38b"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/seated/seated_01.png" id="46_jprav"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/seated/seated_02.png" id="47_4gl5y"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/slow_walk/slow_walk_01.png" id="48_4yf1g"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/slow_walk/slow_walk_02.png" id="49_583qa"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/slow_walk/slow_walk_03.png" id="50_v4w43"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/slow_walk/slow_walk_04.png" id="51_yjfy6"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/slow_walk/slow_walk_05.png" id="52_7is63"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/slow_walk/slow_walk_06.png" id="53_muju6"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk/talk_01.png" id="54_maciu"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk/talk_02.png" id="55_m7xkp"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk/talk_03.png" id="56_7upjk"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk/talk_04.png" id="57_4scfv"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk_emphasis/talk_emphasis_01.png" id="58_jhhof"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk_emphasis/talk_emphasis_02.png" id="59_5xfx4"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk_emphasis/talk_emphasis_03.png" id="60_6fvro"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/talk_emphasis/talk_emphasis_04.png" id="61_slfku"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/turn_away/turn_away_01.png" id="62_7mobh"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/turn_away/turn_away_02.png" id="63_87eoe"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/turn_away/turn_away_03.png" id="64_bf47t"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/animations/turn_away/turn_away_04.png" id="65_86ikv"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_d3xwo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_lwxg0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_8vlir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_0hwl2")
+}],
+"loop": 0,
+"name": &"gesture_point",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_j8hyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_hhms0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_idh36")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_dwf8h")
+}],
+"loop": 0,
+"name": &"gesture_warn",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_a2h2w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_rf3j7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_pg5ox")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_1igge")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_woorv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_pi7xp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_rb3ka")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_tndaj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_tvdvx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_3u0s2")
+}],
+"loop": 1,
+"name": &"lantern_idle",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_oub0a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_ac3lh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lptwh")
+}],
+"loop": 0,
+"name": &"look_at_player",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_4y727")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_djs2b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_omdor")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_skmaq")
+}],
+"loop": 0,
+"name": &"offer_key",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_6vcgn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_38fxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_6i3le")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_aws55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_rq1uk")
+}],
+"loop": 0,
+"name": &"open_door",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_7cosh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_bkd4p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_065f4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_en4ru")
+}],
+"loop": 0,
+"name": &"raise_lantern",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("35_wmi0u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_wmdoe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_pmfs1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_hijes")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_6ss23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_qxo3k")
+}],
+"loop": 0,
+"name": &"return_to_shadow",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_prte5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_gfhjf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_lv6gk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_b1the")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_ep38b")
+}],
+"loop": 0,
+"name": &"rising",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("46_jprav")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_4gl5y")
+}],
+"loop": 1,
+"name": &"seated",
+"speed": 3.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_4yf1g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_583qa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_v4w43")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_yjfy6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_7is63")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_muju6")
+}],
+"loop": 1,
+"name": &"slow_walk",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("54_maciu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_m7xkp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_7upjk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_4scfv")
+}],
+"loop": 1,
+"name": &"talk",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_jhhof")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_5xfx4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_6fvro")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_slfku")
+}],
+"loop": 0,
+"name": &"talk_emphasis",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_7mobh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_87eoe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_bf47t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_86ikv")
+}],
+"loop": 0,
+"name": &"turn_away",
+"speed": 7.0
+}]

@@ -1,0 +1,34 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/effects/soul_flame/soul_flame_01.png" id="1_3iyb4"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/effects/soul_flame/soul_flame_02.png" id="2_juuti"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/effects/soul_flame/soul_flame_03.png" id="3_8eqi6"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/effects/soul_flame/soul_flame_04.png" id="4_bq8im"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/effects/soul_flame/soul_flame_05.png" id="5_rh8dw"]
+[ext_resource type="Texture2D" path="res://chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/effects/soul_flame/soul_flame_06.png" id="6_aaw3y"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_3iyb4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_juuti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_8eqi6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_bq8im")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_rh8dw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_aaw3y")
+}],
+"loop": 1,
+"name": &"soul_flame",
+"speed": 8.0
+}]

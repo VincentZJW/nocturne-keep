@@ -18,6 +18,7 @@ signal catacomb_exit_requested
 
 @onready var player: Player = $World/Player
 @onready var player_visual: Node2D = $World/Player/VisualRoot
+@onready var player_camera: Camera2D = $World/Player/Camera2D
 @onready var revival_art: RevivalPlayerArt = $World/Player/RevivalPlayerArt
 @onready var candle_warden: CandleWarden = $World/CandleWarden
 @onready var dialogue_ui: CatacombDialogueUI = $NarrativeUI/DialogueUI
@@ -46,6 +47,7 @@ var _daggers_collected: bool = false
 var _door_open: bool = false
 var _transitioning: bool = false
 var _active_tween: Tween
+var _camera_tween: Tween
 
 
 func _ready() -> void:
@@ -156,7 +158,9 @@ func _run_revival_sequence() -> void:
 		return
 	revival_art.set_pose(RevivalPlayerArt.Pose.KNEEL)
 	candle_warden.visible = true
+	candle_warden.restore_from_shadow()
 	candle_warden.set_presentation_state(CandleWarden.PresentationState.RISING)
+	_focus_camera_on_warden()
 	await get_tree().create_timer(0.85).timeout
 	if _story_complete:
 		return
@@ -166,8 +170,9 @@ func _run_revival_sequence() -> void:
 	await _active_tween.finished
 	if _story_complete:
 		return
-	candle_warden.set_presentation_state(CandleWarden.PresentationState.IDLE)
+	candle_warden.set_presentation_state(CandleWarden.PresentationState.LANTERN_IDLE)
 	revival_art.set_pose(RevivalPlayerArt.Pose.STAND)
+	_frame_dialogue_pair()
 	_start_dialogue(dialogue_zh, dialogue_en)
 	await _wait_for_dialogue_completion()
 	if not _story_complete:
@@ -214,11 +219,38 @@ func _apply_dialogue_cue(cue: StringName) -> void:
 		&"player_look_around", &"player_talk":
 			revival_art.set_pose(RevivalPlayerArt.Pose.SIT_UP if candle_warden.visible == false else RevivalPlayerArt.Pose.STAND)
 		&"warden_raise_lantern":
+			candle_warden.facing_left = true
 			candle_warden.set_presentation_state(CandleWarden.PresentationState.RAISE_LANTERN)
+			candle_warden.pulse_soul_flame(1.35, 0.4)
 		&"warden_turn_away":
 			candle_warden.facing_left = false
 			candle_warden.set_presentation_state(CandleWarden.PresentationState.TURN_AWAY)
+		&"warden_contemplate":
+			candle_warden.facing_left = true
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.LANTERN_IDLE)
+			candle_warden.contract_soul_flame(0.45)
+		&"warden_look_player":
+			candle_warden.facing_left = true
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.LOOK_AT_PLAYER)
+		&"warden_talk_emphasis", &"warden_key_emphasis":
+			candle_warden.facing_left = true
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.TALK_EMPHASIS)
+			candle_warden.pulse_soul_flame(1.22, 0.32)
+			_emphasize_dialogue_camera()
+		&"warden_point":
+			candle_warden.facing_left = false
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.GESTURE_POINT)
+		&"warden_warn":
+			candle_warden.facing_left = true
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.GESTURE_WARN)
+			candle_warden.pulse_soul_flame(1.18, 0.28)
+		&"warden_fourteenth":
+			candle_warden.facing_left = true
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.GESTURE_WARN)
+			candle_warden.contract_soul_flame(0.52)
+			_emphasize_dialogue_camera()
 		&"warden_talk":
+			candle_warden.facing_left = true
 			candle_warden.set_presentation_state(CandleWarden.PresentationState.TALK)
 
 
@@ -247,7 +279,10 @@ func _complete_story_sequence(skipped: bool) -> void:
 	player.global_position.y = 517.0
 	candle_warden.visible = true
 	candle_warden.position.x = 760.0
-	candle_warden.set_presentation_state(CandleWarden.PresentationState.IDLE)
+	candle_warden.restore_from_shadow()
+	candle_warden.facing_left = true
+	candle_warden.set_presentation_state(CandleWarden.PresentationState.LANTERN_IDLE)
+	_restore_camera_follow()
 	player.set_physics_process(true)
 	player.set_input_profile(Player.InputProfile.CATACOMB_MOVE_ONLY)
 	gameplay_hud_root.visible = true
@@ -316,8 +351,14 @@ func _open_stone_door() -> void:
 		return
 	_door_open = true
 	interaction_prompt.visible = false
-	candle_warden.set_presentation_state(CandleWarden.PresentationState.RAISE_LANTERN)
+	candle_warden.facing_left = false
+	candle_warden.set_presentation_state(CandleWarden.PresentationState.OFFER_KEY)
+	candle_warden.pulse_soul_flame(1.30, 0.38)
 	_active_tween = create_tween()
+	_active_tween.tween_callback(
+		func() -> void:
+			candle_warden.set_presentation_state(CandleWarden.PresentationState.OPEN_DOOR)
+	)
 	_active_tween.tween_property(stone_door, "rune_strength", 1.0, 0.35)
 	_active_tween.tween_property(stone_door, "open_progress", 1.0, 1.15).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
 	_active_tween.parallel().tween_property(stone_door, "rune_strength", 0.25, 1.15)
@@ -335,6 +376,7 @@ func _on_exit_trigger_body_entered(body: Node2D) -> void:
 	_transitioning = true
 	player.set_input_profile(Player.InputProfile.LOCKED)
 	interaction_prompt.visible = false
+	candle_warden.return_to_shadow()
 	var chapter_session: Node = get_node_or_null("/root/ChapterSession")
 	if chapter_session != null and chapter_session.has_method("mark_catacomb_exited"):
 		chapter_session.call("mark_catacomb_exited")
@@ -358,6 +400,35 @@ func _get_nearby_observation() -> Area2D:
 		if area != null and area.has_overlapping_bodies():
 			return area
 	return null
+
+
+func _focus_camera_on_warden() -> void:
+	_tween_story_camera(Vector2(110.0, -8.0), Vector2(1.05, 1.05), 0.8)
+
+
+func _frame_dialogue_pair() -> void:
+	_tween_story_camera(Vector2(82.0, -5.0), Vector2.ONE, 0.65)
+
+
+func _restore_camera_follow() -> void:
+	_tween_story_camera(Vector2.ZERO, Vector2.ONE, 0.45)
+
+
+func _emphasize_dialogue_camera() -> void:
+	if _camera_tween != null and _camera_tween.is_valid():
+		_camera_tween.kill()
+	_camera_tween = create_tween()
+	_camera_tween.tween_property(player_camera, "zoom", Vector2(1.04, 1.04), 0.22).set_trans(Tween.TRANS_SINE)
+	_camera_tween.tween_interval(0.34)
+	_camera_tween.tween_property(player_camera, "zoom", Vector2.ONE, 0.28).set_trans(Tween.TRANS_SINE)
+
+
+func _tween_story_camera(offset: Vector2, target_zoom: Vector2, duration: float) -> void:
+	if _camera_tween != null and _camera_tween.is_valid():
+		_camera_tween.kill()
+	_camera_tween = create_tween().set_parallel(true)
+	_camera_tween.tween_property(player_camera, "position", offset, duration).set_trans(Tween.TRANS_SINE)
+	_camera_tween.tween_property(player_camera, "zoom", target_zoom, duration).set_trans(Tween.TRANS_SINE)
 
 
 func _bell_player_setup() -> void:

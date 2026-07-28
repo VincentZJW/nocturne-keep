@@ -1,5 +1,50 @@
 # Development Log
 
+## 2026-07-28 — Core character art rework Stage 3 (preflight)
+
+Status: complete — Candle Warden concept, formal pixel acting, lantern light and Prologue integration only; Stage 4 strong QA not started
+
+### Goal, planned files, tests, and scope check
+
+- Replace the Prologue Candle Warden's single custom-drawn geometric `Node2D` with one independently instantiable typed AnimatedSprite2D presentation scene. Author a consistent masked funerary keeper, 105–120% of the accepted Player height, with layered ritual robes, readable hands/keys, a formed dark-iron lantern, animated cold-blue soul fire and restrained local light.
+- Create two original concept masters and ten production crops under a Prologue-owned chapter asset root, then create deterministic 80×80 pixel frames and focused SpriteFrames resources for seated/rise, idle/lantern idle, look, talk/emphasis, point/warn, key/open-door, slow walk, turn and return-to-shadow. Concept art is reference only; runtime pixels must be independently authored through Godot Image APIs.
+- Preserve the existing bilingual 27-line story text and formal `MainBootstrap → Opening → VeilboundCatacomb` route. Improve only cue-to-gesture mapping, one restrained camera handoff, the lantern response and the existing stone-door presentation. Do not rewrite narrative, change Player gameplay, alter chapter flow or add combat behavior.
+- Verify with exact Godot 4.7.1 import/parse, focused asset/state/cue tests, independent Candle Warden scene smoke, existing Prologue flow and configured F5 startup. Capture real Prologue/Main evidence for entrance, talk, emphasis, point, warn, key/door, flame and composition; review every image before making an isolated Stage 3 commit.
+
+### Read-only baseline and ownership boundary
+
+- Stage 3 begins on `master` at `3b182db`. Pre-existing Chapter I Boss/enemy tuning, Chapter I level serialization, shared enemy resources, Ravenfang QA images, Player/loot tuning and two UID sidecars remain user-owned, unstaged and excluded.
+- F5 authority is `res://scenes/bootstrap/main_bootstrap.tscn`; the formal Prologue gameplay scene is `res://scenes/levels/veilbound_catacomb.tscn`. Its only NPC instance is `VeilboundCatacomb/World/CandleWarden`, sourced from `res://scenes/npcs/candle_warden.tscn` and controlled by `res://scripts/npcs/candle_warden.gd` plus `res://scripts/levels/veilbound_catacomb_controller.gd`.
+- Baseline failure is concrete: `candle_warden.tscn` contains only a scripted Node2D. The script draws a polygon robe, rectangles, circles and line-art lantern every frame; it has no SpriteFrames, formal pixel assets, animation player, PointLight2D or particle/effect node. Dialogue exposes only generic `warden_talk`, `warden_raise_lantern` and `warden_turn_away` cues.
+- Existing layering is sound and remains authoritative: Player and Candle Warden are z=10, fixed architecture front is z=5, stone door front is z=20/25 relative to the door body, HUD is CanvasLayer 6 and dialogue is CanvasLayer 20. Stage 3 must preserve the single NPC instance and these UI/world boundaries.
+- Authorized: Candle Warden concepts/runtime assets/effects, its scene and typed presentation script, cue/lantern/camera choreography inside the existing Prologue controller, focused tests/QA/docs. Not authorized: Player art/gameplay, dialogue text rewrite, enemies/Bosses, level geometry, door collision semantics, Chapter I–III content or Stage 4 acceptance claims.
+
+### Implemented
+
+- Added two original high-resolution concept masters and ten named concept deliverables under `chapters/prologue_veilbound_catacomb/assets/npcs/candle_warden/concept_art/`. Added a deterministic Godot `Image` generator and SpriteFrames builder; runtime art is independently authored at 80×80 rather than being a downscaled concept render.
+- Added 15 body animations / 65 transparent PNG frames: seated, rising, breathing idle, lantern idle, look, talk, talk emphasis, point, warn, key offer, door open, slow walk, raise lantern, turn away and return to shadow. Added an independent six-frame soul flame, local radial light and restrained soul motes. Measured idle height is enforced at 105–120% of the accepted Player idle height.
+- Replaced the legacy custom `_draw()` polygon/rectangle NPC with one typed `AnimatedSprite2D` presentation scene. The body, formed lantern, flame, PointLight2D and motes have explicit layer ownership; left/right display uses `flip_h`. The legacy source is retained as text under `archive_legacy/` for comparison and is no longer referenced at runtime.
+- Preserved every bilingual story line, speaker, duration and formal route. Updated cue values only, mapping the existing narrative to contemplation, look, quiet talk, key emphasis, warning, pointing, soul-flame contraction/pulse and door-key gestures. Added altar-to-Warden camera easing, two-character framing, restrained 4% important-line pushes and restoration to Player follow.
+- The formal sequence still owns exactly one `VeilboundCatacomb/World/CandleWarden` instance and remains `MainBootstrap → OpeningCinematic → VeilboundCatacomb → Chapter I`. Player gameplay, enemies/Bosses, chapter geometry, combat and the existing stone-door collision semantics were not changed.
+
+### Verification and evidence
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS; exact 4.7.1 import/class registration, no parse/resource errors.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/narrative/test_candle_warden_stage_3.gd` — PASS; ten concepts, 65 frames, six-frame flame, nearest filter, visual ratio, state mapping, cue coverage and one formal instance.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/level/test_veilbound_catacomb_flow.gd` — PASS; formal route, aligned dialogue, skip, daggers, door and Main spawn.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/level/test_veilbound_scene_transitions.gd` — PASS; Opening skip, Catacomb skip and Chapter I tutorial transition remain intact.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://tests/systems/test_main_bootstrap_flow.gd` — functional PASS; its pre-existing Chapter II teardown still reports two anonymous RefCounted leak warnings. Verbose inspection found no Warden node/resource in those leaked instances.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --scene res://scenes/npcs/candle_warden.tscn --quit-after 120` — PASS; independently instantiable scene smoke.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://scripts/tools/capture_candle_warden_stage_3_main_qa.gd` — PASS; eight formal Prologue captures at 1280×720, all visually inspected.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --quit-after 900` — PASS; actual F5 authority selected formal new game and loaded OpeningCinematic with no red error before controlled exit.
+- Evidence and review notes: `docs/qa/core_character_art_rework/stage_3/stage_3_report.md`; runtime contact sheet and eight captures are in the same folder.
+
+### Known issues and manual acceptance
+
+- The two anonymous RefCounted teardown warnings belong to the existing MainBootstrap/Chapter II threaded-load test path; all Stage 3 focused and Prologue runs exit cleanly. They remain recorded rather than hidden.
+- Press F5 with Debug Chapter Start disabled, allow or skip the Opening, then watch the altar revival. Verify the Warden rises from shadow, walks into the two-character frame, uses different gestures for the key/castle/warning lines, contracts the flame at the fourteenth toll, settles to lantern idle, performs the key/door action after the blades are recovered, and retreats as the catacomb exits.
+- Stage 4 must perform the dedicated strong visual-QA matrix and final acceptance. Stage 3 does not claim that gate.
+
 ## 2026-07-28 — Core character art rework Stage 2 (preflight)
 
 Status: complete — Player strong visual QA passed; Candle Warden Stage 3 remains blocked
