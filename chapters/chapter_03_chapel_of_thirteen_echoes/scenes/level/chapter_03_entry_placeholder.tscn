@@ -1,13 +1,18 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=17 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="1_runtime"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_entry_placeholder.gd" id="2_level"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_entry_art.gd" id="3_art"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="4_penitent"]
 [ext_resource type="Script" path="res://scripts/encounters/encounter_group.gd" id="5_encounter"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="6_executioner"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="7_chorister"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="8_seraph"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="9_wraith"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="10_scribe"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_ground"]
-size = Vector2(1800, 108)
+size = Vector2(4200, 108)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_wall"]
 size = Vector2(64, 720)
@@ -16,7 +21,7 @@ size = Vector2(64, 720)
 size = Vector2(260, 360)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_camera"]
-size = Vector2(1800, 720)
+size = Vector2(4200, 720)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_encounter"]
 size = Vector2(440, 300)
@@ -45,7 +50,7 @@ collision_layer = 1
 collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Geometry/MainFloor"]
-position = Vector2(900, 666)
+position = Vector2(2100, 666)
 shape = SubResource("Rectangle_ground")
 
 [node name="SafetyBoundaryLeft" type="StaticBody2D" parent="GameplayWorld/Geometry"]
@@ -57,7 +62,7 @@ position = Vector2(-32, 360)
 shape = SubResource("Rectangle_wall")
 
 [node name="MainRouteExitPlaceholder" type="StaticBody2D" parent="GameplayWorld/Geometry"]
-position = Vector2(1800, 0)
+position = Vector2(4200, 0)
 collision_layer = 1
 collision_mask = 0
 
@@ -85,6 +90,69 @@ shape = SubResource("Rectangle_encounter")
 
 [node name="BellchainPenitent" parent="GameplayWorld/Phase2AEncounter/Enemies" instance=ExtResource("4_penitent")]
 position = Vector2(1260, 584)
+
+[node name="Phase2BEncounter" type="Node2D" parent="GameplayWorld"]
+script = ExtResource("5_encounter")
+encounter_name = &"CH3_PHASE2B_EXECUTIONER"
+region_name = &"Censer Aisle Prototype"
+simultaneous_attack_limit = 1
+
+[node name="ActivationArea" type="Area2D" parent="GameplayWorld/Phase2BEncounter"]
+position = Vector2(1600, 472)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Phase2BEncounter/ActivationArea"]
+shape = SubResource("Rectangle_encounter")
+
+[node name="Enemies" type="Node2D" parent="GameplayWorld/Phase2BEncounter"]
+
+[node name="CenserExecutioner" parent="GameplayWorld/Phase2BEncounter/Enemies" instance=ExtResource("6_executioner")]
+position = Vector2(1780, 584)
+
+[node name="Phase2CDEEncounter" type="Node2D" parent="GameplayWorld"]
+script = ExtResource("5_encounter")
+encounter_name = &"CH3_PHASE2CDE_AERIAL_WRAITH"
+region_name = &"Broken Choir Prototype"
+simultaneous_attack_limit = 2
+
+[node name="ActivationArea" type="Area2D" parent="GameplayWorld/Phase2CDEEncounter"]
+position = Vector2(2190, 472)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Phase2CDEEncounter/ActivationArea"]
+shape = SubResource("Rectangle_encounter")
+
+[node name="Enemies" type="Node2D" parent="GameplayWorld/Phase2CDEEncounter"]
+
+[node name="SilentChorister" parent="GameplayWorld/Phase2CDEEncounter/Enemies" instance=ExtResource("7_chorister")]
+position = Vector2(2280, 455)
+
+[node name="StainedGlassSeraph" parent="GameplayWorld/Phase2CDEEncounter/Enemies" instance=ExtResource("8_seraph")]
+position = Vector2(2560, 405)
+
+[node name="ConfessionalWraith" parent="GameplayWorld/Phase2CDEEncounter/Enemies" instance=ExtResource("9_wraith")]
+position = Vector2(2790, 584)
+
+[node name="Phase2FEncounter" type="Node2D" parent="GameplayWorld"]
+script = ExtResource("5_encounter")
+encounter_name = &"CH3_PHASE2F_SCRIBE"
+region_name = &"Scriptorium Threshold Prototype"
+simultaneous_attack_limit = 1
+
+[node name="ActivationArea" type="Area2D" parent="GameplayWorld/Phase2FEncounter"]
+position = Vector2(3220, 472)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Phase2FEncounter/ActivationArea"]
+shape = SubResource("Rectangle_encounter")
+
+[node name="Enemies" type="Node2D" parent="GameplayWorld/Phase2FEncounter"]
+
+[node name="ThirteenthScribe" parent="GameplayWorld/Phase2FEncounter/Enemies" instance=ExtResource("10_scribe")]
+position = Vector2(3500, 584)
 
 [node name="ChapterTitleCard" type="Panel" parent="GameplayWorld/ChapterRuntime/HUD"]
 layout_mode = 3
@@ -125,6 +193,15 @@ position = Vector2(240, 584)
 [node name="CH3_BELLCHAIN_TEST" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(820, 584)
 
+[node name="CH3_EXECUTIONER_TEST" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1460, 584)
+
+[node name="CH3_CHOIR_TEST" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(2040, 584)
+
+[node name="CH3_SCRIBE_TEST" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(3160, 584)
+
 [node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="Chapter03CP01" type="Marker2D" parent="Checkpoints"]
@@ -135,7 +212,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds"]
-position = Vector2(900, 360)
+position = Vector2(2100, 360)
 shape = SubResource("Rectangle_camera")
 
 [node name="Doors" type="Node2D" parent="."]
@@ -156,11 +233,11 @@ shape = SubResource("Rectangle_trigger")
 
 [node name="DebugLabel" type="Label" parent="."]
 z_index = 100
-offset_left = 640.0
+offset_left = 3040.0
 offset_top = 520.0
-offset_right = 1180.0
+offset_right = 3580.0
 offset_bottom = 566.0
 theme_override_colors/font_color = Color(0.72, 0.74, 0.80, 0.85)
 theme_override_font_sizes/font_size = 13
-text = "CHAPTER III ENTRY PROTOTYPE / 第三章入口原型\nPHASE 2A · BELLCHAIN PENITENT SOLO ENCOUNTER"
+text = "CHAPTER III ENEMY ACCEPTANCE PROTOTYPE / 第三章敌人验收原型\nPHASE 2 · SIX-ROLE COMBAT ROUTE"
 horizontal_alignment = 1

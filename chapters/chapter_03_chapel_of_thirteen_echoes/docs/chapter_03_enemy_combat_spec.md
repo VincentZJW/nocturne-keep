@@ -1,6 +1,6 @@
 # Chapter III Enemy Combat Specification / 第三章敌人战斗规格
 
-Status: **Phase 2A implemented — Bellchain Penitent complete; Phase 2B not started**
+Status: **Phase 2A–2F implemented — all six normal enemies complete; Phase 3 Trial Hall and Phase 4 forced QA remain**
 
 ## Required project audit ledger
 
@@ -13,7 +13,7 @@ Status: **Phase 2A implemented — Bellchain Penitent complete; Phase 2B not sta
 | Chapter III registered | yes, `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` |
 | Current Chapter III scene | `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn` |
 | Chapter III profile | `res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/chapter/chapter_03_start_profile.tres`, `debug_ready=true` |
-| Chapter III profile target/spawns | entry prototype; `chapter_03_start`, `Chapter03PlayerSpawn`, `CH3_BELLCHAIN_TEST` |
+| Chapter III profile target/spawns | entry acceptance prototype; base spawn plus `CH3_BELLCHAIN_TEST`, `CH3_EXECUTIONER_TEST`, `CH3_CHOIR_TEST`, `CH3_SCRIBE_TEST` |
 | Boss reward weapon | Crimson Masque Stilettos / 绯幕礼刺 |
 | WeaponData | `res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_stilettos.tres` |
 | Chapter III equipment | owns Veilbound/Ravenfang/Crimson Masque and equips `crimson_masque_stilettos` |
@@ -32,7 +32,7 @@ Status: **Phase 2A implemented — Bellchain Penitent complete; Phase 2B not sta
 | Loot | `res://scripts/items/loot_drop_component.gd`; one roll on `enemy_died` |
 | Encounter | `res://scripts/encounters/encounter_group.gd`; one-shot group, up to 4 attackers by authored limit |
 | Edge handling | GroundEnemyBase floor/wall RayCasts plus optional movement bounds |
-| Projectile base | absent; Crossbow Bolt and Blood-Candle Projectile are concrete implementations |
+| Chapter III projectile/fields | local typed projectile plus damage/Hush/Seal timed-field scenes; world collision and owner cleanup |
 | Existing balance | Chapter I approximately 30–50 HP / 5–10 damage; Chapter II 48–96 HP / 4–14 damage |
 | Enemy pixels/FPS | saved enemy PNGs are 64×64; idle 4, walk 8, attacks usually 10–12, hurt 12–16.67, death 8–9 FPS |
 | Texture filtering | project default `textures/canvas_textures/default_texture_filter=0` (Nearest); enemy Sprite nodes explicitly use `texture_filter=1` (Nearest) |
@@ -58,19 +58,19 @@ Status: **Phase 2A implemented — Bellchain Penitent complete; Phase 2B not sta
 
 `EnemyGroundConfig.max_health` currently exposes an inspector range of 1–100, while Executioner requires 126. Phase 2B must either widen only this editor hint without changing existing values or provide a compatible chapter-local data contract; it must not silently clamp the heavy enemy or duplicate Health truth.
 
-## Planned Chapter III composition
+## Implemented Chapter III composition
 
-Common future scripts/resources, created only when their owning phase begins:
+The delivered Phase 2 structure is deliberately shallow:
 
 ```text
 scripts/enemies/
 ├── components/chapter_03_poise_component.gd
-├── components/chapter_03_attack_ledger.gd
-├── chapter_03_attack_data.gd
-├── chapter_03_enemy_data.gd
-├── chapter_03_ground_enemy_base.gd
-├── chapter_03_air_enemy_base.gd
-└── <six type-specific controllers>.gd
+├── components/chapter_03_enemy_projectile.gd
+├── components/chapter_03_timed_field.gd
+├── components/chapter_03_scribe_ward_policy.gd
+├── bellchain_penitent.gd
+├── chapter_03_specialist_config.gd
+└── chapter_03_specialist_enemy.gd
 ```
 
 Composition rules:
@@ -103,7 +103,7 @@ Rules:
 9. Player invulnerability remains authoritative; no enemy bypasses it;
 10. no enemy crosses authored room/floor bounds to pursue.
 
-Because each Hitbox has a local target ledger, multi-projectile volleys and multi-node hazards require a shared Chapter III attack ledger. This is essential for Seraph Volley's “one primary damage per round” and cannot be solved by merely assigning the same id to separate Hitbox nodes.
+`HitboxComponent.set_shared_target_ledger()` now lets an explicitly opted-in volley share one target-id dictionary without changing ordinary per-Hitbox attack resets. Seraph uses it so one volley settles one primary damage result; existing Hitbox regression tests prove ordinary attacks still reset correctly.
 
 ## Bellchain Penitent state machine
 
@@ -223,7 +223,7 @@ HP zero → Death + seal/ward cleanup
 - Phase 2C Hush: keyed stamina-regeneration modifier API with source cleanup; base 35/14 per-second rates remain unchanged outside the field.
 - Phase 2F Binding: keyed movement-speed modifier API; base speed/jump/gravity/Dash values remain unchanged.
 
-These interfaces are not implemented in Phase 0. If they cannot be added without affecting unrelated movement feel, the specific control effect must pause for approval rather than use a brittle direct mutation.
+These interfaces are implemented as source-keyed, clearable modifiers. They multiply only the calculated regeneration/movement result while active, and reset/respawn cleanup restores 1.0; the saved Player base values are unchanged.
 
 ## Reset, loot and encounter rules
 
@@ -235,4 +235,4 @@ These interfaces are not implemented in Phase 0. If they cannot be added without
 
 ## Required implementation tests per enemy phase
 
-F6 standalone and Main/F5 must cover: Idle, movement/hover, Alert, approach/reposition, every Windup/Active/Recovery, direction lock, both facings, light hit, Stagger, Hurt, Death, dedup, loot, reset, death count, walls and vertical/platform bounds. Each phase stops after its single enemy and does not wait until Phase 4 to discover composition errors.
+Phase 2 automated coverage validates all saved scenes, typed values, 415 total runtime frames, required common/action phase families, nearest filtering, transparency, Health/Poise, shared volley dedup, Paper Ward and keyed Player modifier cleanup. Main and combination-room 600-frame smokes and five graphical Main captures are green. Both-facing feel, twenty-kill samples and all planned mixed combinations remain Phase 4 manual/forced QA.

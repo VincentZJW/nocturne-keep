@@ -1,5 +1,47 @@
 # Development Log
 
+## 2026-07-28 — Chapter III Phase 2B–2F enemy implementation
+
+Status: complete — all six Chapter III normal enemies are saved, Main-accessible and verified; manual combat-feel review remains
+
+### Goal, planned files, tests, and scope check
+
+- Continue from the committed Bellchain Penitent Phase 2A baseline and implement, in order, Censer Executioner, Silent Chorister, Stained Glass Seraph, Confessional Wraith and Thirteenth Scribe. Each role must receive original 64×64 pixel animation assets, concentrated typed tuning, a saved independently instantiable scene, distinct AI/action contracts, Poise, Health/Hitbox/Hurtbox integration and death cleanup.
+- Reuse the committed Chapter III Poise component and shared combat contracts. Add only narrow Chapter III projectile, timed-area and temporary-player-modifier support required by the approved enemy designs; do not duplicate Player Health or damage settlement and do not alter Ravenfang/Player balance.
+- Extend the Chapter III entry prototype so all six roles are directly reachable through the configured Main/Bootstrap debug route. Add a six-enemy combination test room and focused deterministic tests for saved values, animation families, action phases, projectile/world collision, single-hit ledgers, support-field non-stacking and cleanup.
+- Generate all enemy art locally through Godot Image APIs. No external/downloaded/commercial/AI-generated asset is authorized. The Chapter III entry remains an enemy acceptance prototype rather than a claim of final Chapter III environment art.
+- Verify with the exact Godot 4.7.1 executable: deterministic generation and import, independent scene smoke tests, focused role and damage tests, combination room, Bootstrap/Main debug route, formal F5 smoke, graphical QA evidence, ordered regression, `git diff --check`, and an isolated staged-tree check.
+
+### Read-only findings and scope boundary
+
+- Preflight is `master` at `8ca0a80` with Phase 2A committed. Existing Chapter I/shared tuning, QA-image and generated UID changes remain user-owned, out of scope and must not be staged.
+- Bellchain Penitent already establishes the Chapter III scene/config/Poise/loot conventions and is the first of six. The remaining roles need distinct locomotion and attack contracts; they will share only bounded infrastructure, not one copied enemy script per role.
+- Authorized: five remaining enemy prototypes, their original assets/animations/configs/scenes/AI, Chapter III-local projectiles/hazards/modifiers, one combination test room, Main acceptance instances, tests, QA evidence and current Chapter III documentation.
+- Not authorized: Chapter III Boss, formal encounter progression, final chapter environment, new Player abilities, weapon/stat rebalance, Chapter I/II changes, loot-table redesign or unrelated refactors.
+
+### Delivered implementation
+
+- Completed the roster in the approved order: Bellchain Penitent (existing Phase 2A), Censer Executioner, Silent Chorister, Stained-Glass Seraph, Confessional Wraith and Thirteenth Scribe. The five new roles add 345 locally authored transparent 64×64 frames and five saved SpriteFrames resources; all six retain the Phase 1 signature objects at 48 px readability scale.
+- Added one typed `Chapter03SpecialistConfig` and one bounded role-driven controller rather than cloning five scripts. The configs preserve distinct HP/Poise/action names/timing: Executioner heavy sweep/crush/smoke, Chorister wave/hymn/Hush, Seraph shared-ledger volley/dive/shatter, Wraith hidden reveal/slash/dash/scream, and Scribe lance/Binding/Seal/Paper Ward.
+- Added Chapter III-local world-blocked projectile and timed-field scenes. Seraph shards explicitly share one target ledger, smoke uses bounded timed ticks, Hush keys a nonstacking stamina-regeneration modifier, Binding keys a temporary movement modifier, and owner death clears live fields. Base Player speed, jump, gravity, Dash, stamina rates and 14/28 weapon damage remain unchanged.
+- Every new enemy composes existing Health, Hurtbox, two Hitboxes, Chapter III Poise and LootDrop contracts and has a chapter-local tuning and loot Resource. No second Health/damage source or global gameplay singleton was introduced.
+- Expanded the Chapter III entry acceptance prototype and start profile to 4200 px with separated Phase2A, Phase2B, Phase2CDE and Phase2F encounter groups plus `CH3_BELLCHAIN_TEST`, `CH3_EXECUTIONER_TEST`, `CH3_CHOIR_TEST` and `CH3_SCRIBE_TEST`. Added `chapter_03_enemy_combination_test_room.tscn` with one instance of each role. This is enemy acceptance content, not the formal Chapter III map or final Encounter distribution.
+
+### Verification and QA evidence
+
+- Exact engine: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version` → `4.7.1.stable.official.a13da4feb`.
+- Asset generation/import: `CH3 PHASE2B-2F ASSETS | PASS roles=5 frames=345`; SpriteFrames `PASS roles=5 frames=345`; saved scenes `PASS roles=5`; headless editor import exited 0 without parser/resource errors.
+- Focused tests: Chapter III concept assets PASS (12); Bellchain Phase 2A PASS (70 frames); full roster PASS (`roles=6 remaining_frames=345 main=6 combination_room=1`); Hitbox/Hurtbox dedup PASS; continuous Dash/stamina PASS.
+- Runtime stability: both the six-enemy combination room and Chapter III Main acceptance scene ran for 600 frames headlessly (`CH3_LONG_SMOKE: PASS combination=600 main=600`). MainBootstrap graphical capture printed `DEBUG CHAPTER START ACTIVE` and `CH3_PHASE2_MAIN_QA: PASS captures=5`.
+- Full deterministic suite: 62 scripts executed; 61 passed on the first ordered run. `test_player_death_presentation.gd` produced one load-sensitive early-completion failure, then passed independently three consecutive times and also passes on the untouched `HEAD` baseline. Nine older Chapter II/Main tests emit shutdown-only Resource/RID diagnostics while returning PASS; the floor-transition test reproduces the identical 47 ObjectDB/30 Resource/2 Shape/4 texture diagnostic set in an isolated `git archive HEAD`, so it is recorded as pre-existing cleanup debt rather than this milestone's regression.
+- QA screenshots: `docs/qa/chapter_03_enemy_phase_02/01_censer_executioner_overhead_main.png` through `05_thirteenth_scribe_seal_main.png`, all 1280×720 and captured from the actual Bootstrap-routed Chapter III scene.
+- Isolated staged tree `/tmp/nocturne-ch3-phase2.iY1sSC`: exact-engine import exit 0, roster test PASS and shared Hitbox/Hurtbox regression PASS with no red diagnostics. The staged file list contains zero Chapter I/shared tuning paths, proving the commit does not depend on preserved user-owned worktree changes.
+
+### Known limits and manual acceptance
+
+- The current Chapter III entry remains a deliberately simple enemy acceptance prototype. Formal chapel environments, the Phase 3 station-based Trial Hall, the planned 44-enemy Encounter distribution, Boss, audio and final combat VFX are not claimed.
+- Automated verification proves saved values, frames, collision/dedup contracts, Main composition and long-run stability; visual timing, target-priority fairness, smoke/Hush/Seal legibility and six-role combination pressure still require the user's manual review.
+
 ## 2026-07-27 — Chapter II Phase 2 enemy prototypes (preflight)
 
 Status: complete — Phase 2 implementation, Main integration and automated/graphical verification passed; manual combat-feel acceptance pending

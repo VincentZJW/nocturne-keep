@@ -1,0 +1,116 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_enemy.gd" id="1_adm4y"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_enemy_projectile.tscn" id="2_36hth"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_timed_field.tscn" id="3_g3x3m"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/enemies/censer_executioner_data.tres" id="4_dspai"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/animations/censer_executioner_sprite_frames.tres" id="5_2xkhm"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="6_n7vpa"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/components/chapter_03_poise_component.gd" id="7_fwh1b"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="8_jl8ss"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="9_adi33"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="10_e3711"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/enemies/censer_executioner_loot.tres" id="11_4r5og"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="12_xjp3i"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_75mcl"]
+size = Vector2(26, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_26e1i"]
+size = Vector2(30, 52)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c46dq"]
+size = Vector2(44, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x38m2"]
+size = Vector2(58, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qnv6f"]
+radius = 225.0
+
+[node name="CenserExecutioner" type="CharacterBody2D" unique_id=1053511442]
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 6.0
+script = ExtResource("1_adm4y")
+projectile_scene = ExtResource("2_36hth")
+field_scene = ExtResource("3_g3x3m")
+config = ExtResource("4_dspai")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1947759590]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=542413637]
+texture_filter = 1
+sprite_frames = ExtResource("5_2xkhm")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1904752468]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_75mcl")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1984433438]
+script = ExtResource("6_n7vpa")
+
+[node name="PoiseComponent" type="Node" parent="." unique_id=1401621441]
+script = ExtResource("7_fwh1b")
+max_poise = 82
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1694690878]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("8_jl8ss")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1505749555]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_26e1i")
+
+[node name="FacingRoot" type="Node2D" parent="." unique_id=279920811]
+
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1383431599]
+position = Vector2(35, -2)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("9_adi33")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=1685023240]
+shape = SubResource("RectangleShape2D_c46dq")
+disabled = true
+
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1136388929]
+position = Vector2(43, -1)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("9_adi33")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=44483644]
+shape = SubResource("RectangleShape2D_x38m2")
+disabled = true
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1104883185]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=10392349]
+shape = SubResource("CircleShape2D_qnv6f")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=933356215]
+position = Vector2(0, 4)
+target_position = Vector2(-22, 0)
+
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=2078686076]
+position = Vector2(-19, 20)
+target_position = Vector2(0, 28)
+
+[node name="LootDropComponent" type="Node" parent="." unique_id=1860857994]
+script = ExtResource("10_e3711")
+profile = ExtResource("11_4r5og")
+dynamic_profile = ExtResource("12_xjp3i")

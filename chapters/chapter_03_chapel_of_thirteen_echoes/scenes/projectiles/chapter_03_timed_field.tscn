@@ -1,0 +1,33 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/components/chapter_03_timed_field.gd" id="1_cvrax"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="2_vs3v7"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_s5uhr"]
+size = Vector2(88, 48)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_soe5u"]
+size = Vector2(88, 48)
+
+[node name="Chapter03TimedField" type="Area2D" unique_id=1243979967]
+collision_layer = 0
+collision_mask = 8
+script = ExtResource("1_cvrax")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=2107920064]
+color = Color(0.42, 0.25, 0.36, 0.28)
+polygon = PackedVector2Array(-44, 18, -40, -8, -20, -20, 0, -24, 20, -20, 40, -8, 44, 18)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1353175275]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_s5uhr")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=1264779701]
+collision_layer = 64
+collision_mask = 8
+script = ExtResource("2_vs3v7")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=170017788]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_soe5u")

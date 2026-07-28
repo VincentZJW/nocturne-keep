@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="Chapter03SpecialistConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_config.gd" id="1_2x301"]
+
+[resource]
+script = ExtResource("1_2x301")
+archetype = 2
+chapter_max_health = 76
+max_poise = 30
+primary_action = &"shard_volley"
+secondary_action = &"dive"
+secondary_damage = 13
+secondary_range = 180.0
+secondary_windup = 0.6
+secondary_active_duration = 0.22
+secondary_recovery = 0.7
+special_action = &"shatter_burst"
+special_damage = 8
+special_range = 62.0
+special_windup = 0.62
+special_active_duration = 0.12
+airborne = true
+hover_height = 112.0
+hover_amplitude = 8.0
+projectile_speed = 235.0
+display_name = &"Stained Glass Seraph"
+max_health = 76
+attack_damage = 9
+patrol_speed = 46.0
+chase_speed = 72.0
+ground_acceleration = 330.0
+ground_deceleration = 500.0
+gravity = 0.0
+patrol_half_width = 132.0
+platform_height_tolerance = 120.0
+detection_range = 285.0
+lose_target_range = 330.0
+attack_range = 220.0
+attack_windup = 0.58
+attack_active_duration = 0.12
+attack_recovery = 0.68
+patrol_turn_pause = 0.28

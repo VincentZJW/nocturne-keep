@@ -1,0 +1,30 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/components/chapter_03_enemy_projectile.gd" id="1_im3x1"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="2_xuera"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_po3ql"]
+size = Vector2(15, 6)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pj7ly"]
+size = Vector2(15, 6)
+
+[node name="Chapter03EnemyProjectile" type="Area2D" unique_id=80403521]
+collision_layer = 0
+script = ExtResource("1_im3x1")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=379681021]
+color = Color(0.7254902, 0.8509804, 0.8392157, 1)
+polygon = PackedVector2Array(-7, -2, 8, 0, -7, 2)
+
+[node name="WorldCollisionShape2D" type="CollisionShape2D" parent="." unique_id=651242554]
+shape = SubResource("RectangleShape2D_po3ql")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=923496353]
+collision_layer = 64
+collision_mask = 8
+script = ExtResource("2_xuera")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1030572728]
+shape = SubResource("RectangleShape2D_pj7ly")

@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Chapter03SpecialistConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_config.gd" id="1_1xx2o"]
+
+[resource]
+script = ExtResource("1_1xx2o")
+archetype = 1
+chapter_max_health = 84
+max_poise = 36
+primary_action = &"silent_wave"
+secondary_action = &"crescent_hymn"
+secondary_damage = 12
+secondary_range = 240.0
+secondary_windup = 0.68
+special_action = &"hush_field"
+special_damage = 0
+special_range = 190.0
+special_duration = 2.5
+airborne = true
+hover_height = 92.0
+projectile_speed = 205.0
+display_name = &"Silent Chorister"
+max_health = 84
+attack_damage = 10
+patrol_speed = 34.0
+chase_speed = 52.0
+ground_acceleration = 330.0
+ground_deceleration = 500.0
+gravity = 0.0
+patrol_half_width = 132.0
+platform_height_tolerance = 120.0
+detection_range = 275.0
+lose_target_range = 330.0
+attack_range = 205.0
+attack_windup = 0.55
+attack_recovery = 0.64
+patrol_turn_pause = 0.28

@@ -1,0 +1,374 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/alert/alert_01.png" id="1_sta3u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/alert/alert_02.png" id="2_33hbs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/alert/alert_03.png" id="3_daqeu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/death/death_01.png" id="4_gf33b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/death/death_02.png" id="5_f8wmw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/death/death_03.png" id="6_dcre6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/death/death_04.png" id="7_7oud7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/death/death_05.png" id="8_25317"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/death/death_06.png" id="9_1xoud"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/hurt/hurt_01.png" id="10_6qxir"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/hurt/hurt_02.png" id="11_fwglu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/hurt/hurt_03.png" id="12_xctlu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/idle/idle_01.png" id="13_hmpkr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/idle/idle_02.png" id="14_2uedg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/idle/idle_03.png" id="15_8co1l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/idle/idle_04.png" id="16_3ew5i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/light_hit/light_hit_01.png" id="17_q0cxe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/light_hit/light_hit_02.png" id="18_61axb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_active/overhead_crush_active_01.png" id="19_dr1lf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_active/overhead_crush_active_02.png" id="20_1lche"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_01.png" id="21_od0d2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_02.png" id="22_aivsa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_03.png" id="23_qsh2l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_04.png" id="24_scc0e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_05.png" id="25_582t4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_06.png" id="26_fkwar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_recovery/overhead_crush_recovery_07.png" id="27_5ydfm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_01.png" id="28_fmwfi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_02.png" id="29_uu6lg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_03.png" id="30_oleyf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_04.png" id="31_l7w6h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_05.png" id="32_va14m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_06.png" id="33_m2arp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/overhead_crush_windup/overhead_crush_windup_07.png" id="34_kuk1f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_active/primary_active_01.png" id="35_6eows"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_active/primary_active_02.png" id="36_x480n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_recovery/primary_recovery_01.png" id="37_yj6ot"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_recovery/primary_recovery_02.png" id="38_raxnp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_recovery/primary_recovery_03.png" id="39_45by2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_recovery/primary_recovery_04.png" id="40_p1iuh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_recovery/primary_recovery_05.png" id="41_si52n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_windup/primary_windup_01.png" id="42_iw84u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_windup/primary_windup_02.png" id="43_u0b76"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_windup/primary_windup_03.png" id="44_vv833"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_windup/primary_windup_04.png" id="45_ha437"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/primary_windup/primary_windup_05.png" id="46_ytuxi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_active/smoke_release_active_01.png" id="47_tc55u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_active/smoke_release_active_02.png" id="48_ioyts"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_recovery/smoke_release_recovery_01.png" id="49_3f8ed"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_recovery/smoke_release_recovery_02.png" id="50_y7rx3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_recovery/smoke_release_recovery_03.png" id="51_qo3n5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_recovery/smoke_release_recovery_04.png" id="52_kvmgw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_recovery/smoke_release_recovery_05.png" id="53_tbadr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_windup/smoke_release_windup_01.png" id="54_a3yhd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_windup/smoke_release_windup_02.png" id="55_oadql"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_windup/smoke_release_windup_03.png" id="56_vci5o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_windup/smoke_release_windup_04.png" id="57_bnchx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/smoke_release_windup/smoke_release_windup_05.png" id="58_6geqo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/stagger/stagger_01.png" id="59_efiv8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/stagger/stagger_02.png" id="60_1vxkg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/stagger/stagger_03.png" id="61_1dgxb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/stagger/stagger_04.png" id="62_k37bq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/turn/turn_01.png" id="63_s5ag8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/turn/turn_02.png" id="64_cowb1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/turn/turn_03.png" id="65_v6p84"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/walk/walk_01.png" id="66_qjd85"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/walk/walk_02.png" id="67_hi87i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/walk/walk_03.png" id="68_xxmrn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/walk/walk_04.png" id="69_8bmst"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/walk/walk_05.png" id="70_qwmmw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/censer_executioner/sprites/walk/walk_06.png" id="71_4u240"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_sta3u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_33hbs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_daqeu")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_gf33b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f8wmw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_dcre6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_7oud7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_25317")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_1xoud")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_6qxir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_fwglu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_xctlu")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_hmpkr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_2uedg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_8co1l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_3ew5i")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_q0cxe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_61axb")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_dr1lf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_1lche")
+}],
+"loop": 0,
+"name": &"overhead_crush_active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_od0d2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_aivsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_qsh2l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_scc0e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_582t4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_fkwar")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_5ydfm")
+}],
+"loop": 0,
+"name": &"overhead_crush_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_fmwfi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_uu6lg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_oleyf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_l7w6h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_va14m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_m2arp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_kuk1f")
+}],
+"loop": 0,
+"name": &"overhead_crush_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("35_6eows")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_x480n")
+}],
+"loop": 0,
+"name": &"primary_active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_yj6ot")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_raxnp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_45by2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_p1iuh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_si52n")
+}],
+"loop": 0,
+"name": &"primary_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("42_iw84u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_u0b76")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_vv833")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_ha437")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_ytuxi")
+}],
+"loop": 0,
+"name": &"primary_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_tc55u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_ioyts")
+}],
+"loop": 0,
+"name": &"smoke_release_active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_3f8ed")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_y7rx3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_qo3n5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_kvmgw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_tbadr")
+}],
+"loop": 0,
+"name": &"smoke_release_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("54_a3yhd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_oadql")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_vci5o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_bnchx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_6geqo")
+}],
+"loop": 0,
+"name": &"smoke_release_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_efiv8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_1vxkg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_1dgxb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_k37bq")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_s5ag8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_cowb1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_v6p84")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("66_qjd85")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_hi87i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_xxmrn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_8bmst")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_qwmmw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_4u240")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
+}]

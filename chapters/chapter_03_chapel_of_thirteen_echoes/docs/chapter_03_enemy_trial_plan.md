@@ -1,6 +1,6 @@
 # Chapter III Enemy Trial Hall Plan / 第三章敌人试炼厅计划
 
-Status: **Phase 0 plan — scene and spawn ids are not implemented**
+Status: **Phase 2 combination harness available; full Phase 3 station-based Trial Hall is not implemented**
 
 ## Purpose and boundary
 
@@ -17,9 +17,9 @@ It must instantiate the existing shared `ChapterGameplayRuntime` so Main creates
 - `run/main_scene`: `res://scenes/bootstrap/main_bootstrap.tscn`.
 - Chapter III registry/profile already exists and is Debug-ready.
 - Current profile target: `scenes/level/chapter_03_entry_placeholder.tscn`.
-- Current spawn ids: `chapter_03_start`, `Chapter03PlayerSpawn` only.
+- Current spawn ids: base start plus `CH3_BELLCHAIN_TEST`, `CH3_EXECUTIONER_TEST`, `CH3_CHOIR_TEST` and `CH3_SCRIBE_TEST`.
 - The current profile already completes prior chapters, owns all three dagger sets, equips `crimson_masque_stilettos`, starts at full 100 HP and does not write a disk save.
-- Therefore Phase 3 should extend the saved Chapter III profile only after the Trial Hall exists and passes resource validation. Phase 0 does not add nonresolving spawn ids.
+- Phase 2 added only spawn ids that resolve inside the saved entry acceptance scene. Phase 3 may add the separate Trial Hall ids below only after that scene exists and passes resource validation; no nonresolving id is permitted.
 
 ## Planned profile integration
 
@@ -117,16 +117,16 @@ Phase 4 minimums:
 7. Enter `CH3_TEST_COMBINATIONS` and run all eight groups.
 8. Restore the project default Debug start setting after the QA capture.
 
-Fixed acceptance answer for Phase 0: **this procedure is not available yet**. F5 currently enters the Chapter III entry placeholder because the Trial Hall and `CH3_*` spawn ids do not exist. Claiming otherwise would be false.
+Current Phase 2 acceptance: F5 can route through MainBootstrap to the Chapter III entry and the four saved direct spawns above. The separate `chapter_03_enemy_combination_test_room.tscn` contains all six enemies for stability/interaction smoke testing. The eight-station `CH3_ENEMY_TRIAL_START` procedure remains unavailable until Phase 3 and is not falsely claimed by the combination room.
 
 ## QA evidence plan
 
 Target folder: `res://docs/qa/chapter_03_enemy_trial/`.
 
-The final enemy milestone requires at least 18 real screenshots:
+The final Phase 4 enemy milestone requires at least 18 real screenshots:
 
 - six concept images (one per enemy);
 - six Main/F5 single-enemy combat frames;
 - at least six combination/state/Hitbox frames covering all required groups collectively.
 
-The QA report records exact command, 1280×720 capture path, byte size, dimensions and SHA-256, plus separate human acceptance items. Phase 0 generates no screenshots because no enemy visual/runtime exists.
+Phase 1 already preserves six concept comparisons. Phase 2 adds five 1280×720 Main/F5 action captures under `docs/qa/chapter_03_enemy_phase_02/`; Bellchain retains its Phase 2A capture set. The later Trial Hall must add the required combination/Hitbox evidence rather than reuse these as a false Phase 4 completion claim.

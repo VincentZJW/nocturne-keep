@@ -84,6 +84,7 @@ var _last_horizontal_input: float = 0.0
 var _landed_during_action: bool = false
 var _life_state: LifeState = LifeState.ALIVE
 var _input_profile: InputProfile = InputProfile.FULL
+var _movement_speed_modifiers: Dictionary[StringName, float] = {}
 
 
 func _ready() -> void:
@@ -232,6 +233,7 @@ func respawn_at(global_spawn_position: Vector2) -> bool:
 	_last_horizontal_input = 0.0
 	_landed_during_action = false
 	action_controller.cancel_all_actions()
+	_movement_speed_modifiers.clear()
 	_restore_air_jumps()
 	stamina_component.reset_to_full()
 	health_component.reset_to_full()
@@ -295,7 +297,11 @@ func _apply_horizontal_velocity(horizontal_input: float, delta: float, was_on_fl
 		var acceleration: float = (
 			movement_config.ground_acceleration if was_on_floor else movement_config.air_acceleration
 		)
-		velocity.x = move_toward(velocity.x, horizontal_input * movement_config.move_speed, acceleration * delta)
+		velocity.x = move_toward(
+			velocity.x,
+			horizontal_input * movement_config.move_speed * get_movement_speed_multiplier(),
+			acceleration * delta
+		)
 		animation_controller.set_facing_left(horizontal_input < 0.0)
 	elif was_on_floor:
 		velocity.x = move_toward(velocity.x, 0.0, movement_config.ground_deceleration * delta)
@@ -392,6 +398,22 @@ func _reset_animation_lock_to_idle() -> void:
 
 func _is_double_jump_enabled() -> bool:
 	return has_double_jump or debug_enable_double_jump
+
+
+func set_movement_speed_modifier(source_id: StringName, multiplier: float) -> void:
+	if not source_id.is_empty():
+		_movement_speed_modifiers[source_id] = clampf(multiplier, 0.1, 1.0)
+
+
+func clear_movement_speed_modifier(source_id: StringName) -> void:
+	_movement_speed_modifiers.erase(source_id)
+
+
+func get_movement_speed_multiplier() -> float:
+	var multiplier: float = 1.0
+	for value: float in _movement_speed_modifiers.values():
+		multiplier *= clampf(value, 0.1, 1.0)
+	return multiplier
 
 
 func _restore_air_jumps() -> void:

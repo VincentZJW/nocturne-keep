@@ -1,0 +1,86 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="1_runtime"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/chapter_03_enemy_combination_test_room.gd" id="2_script"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="3_penitent"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="4_executioner"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="5_chorister"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="6_seraph"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="7_wraith"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="8_scribe"]
+
+[sub_resource type="RectangleShape2D" id="floor"]
+size = Vector2(2600, 108)
+
+[sub_resource type="RectangleShape2D" id="wall"]
+size = Vector2(64, 720)
+
+[sub_resource type="StyleBoxFlat" id="panel"]
+bg_color = Color(0.03, 0.035, 0.055, 0.88)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.55, 0.48, 0.34, 0.85)
+
+[node name="Chapter03EnemyCombinationTestRoom" type="Node2D"]
+script = ExtResource("2_script")
+
+[node name="Backdrop" type="Polygon2D" parent="."]
+z_index = -10
+polygon = PackedVector2Array(0, 0, 2600, 0, 2600, 720, 0, 720)
+color = Color(0.025, 0.03, 0.045, 1)
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(1300, 666)
+shape = SubResource("floor")
+
+[node name="Face" type="Polygon2D" parent="Floor"]
+polygon = PackedVector2Array(0, 612, 2600, 612, 2600, 720, 0, 720)
+color = Color(0.14, 0.15, 0.20, 1)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2(-32, 360)
+shape = SubResource("wall")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+position = Vector2(2632, 360)
+shape = SubResource("wall")
+
+[node name="ChapterRuntime" parent="." instance=ExtResource("1_runtime")]
+
+[node name="PlayerSpawn" type="Marker2D" parent="."]
+position = Vector2(220, 584)
+
+[node name="Enemies" type="Node2D" parent="."]
+[node name="BellchainPenitent" parent="Enemies" instance=ExtResource("3_penitent")]
+position = Vector2(650, 584)
+[node name="CenserExecutioner" parent="Enemies" instance=ExtResource("4_executioner")]
+position = Vector2(1000, 584)
+[node name="SilentChorister" parent="Enemies" instance=ExtResource("5_chorister")]
+position = Vector2(1350, 450)
+[node name="StainedGlassSeraph" parent="Enemies" instance=ExtResource("6_seraph")]
+position = Vector2(1650, 410)
+[node name="ConfessionalWraith" parent="Enemies" instance=ExtResource("7_wraith")]
+position = Vector2(1950, 584)
+[node name="ThirteenthScribe" parent="Enemies" instance=ExtResource("8_scribe")]
+position = Vector2(2300, 584)
+
+[node name="Instructions" type="PanelContainer" parent="."]
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 850.0
+offset_bottom = 84.0
+theme_override_styles/panel = SubResource("panel")
+[node name="Label" type="Label" parent="Instructions"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "CHAPTER III · PHASE 2 SIX-ENEMY COMBINATION TEST\nPenitent · Executioner · Chorister · Seraph · Wraith · Scribe"

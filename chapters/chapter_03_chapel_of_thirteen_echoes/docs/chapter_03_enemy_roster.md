@@ -1,6 +1,6 @@
 # Chapter III Enemy Roster / 第三章敌人名册
 
-Status: **Phase 2A — Bellchain Penitent implemented; five enemies remain at concept stage**
+Status: **Phase 2A–2F complete — all six normal enemies implemented and Main-accessible; Phase 3 Trial Hall and Phase 4 forced balance QA remain**
 
 ## Chapter function
 
@@ -20,7 +20,7 @@ Player experience pillars:
 - Chapter registry: `res://scripts/systems/chapter/chapter_registry.gd`.
 - Current Chapter III destination: `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`.
 - Current profile: `res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/chapter/chapter_03_start_profile.tres`.
-- Current Chapter III runtime content: the entry prototype contains one saved solo Bellchain Penitent encounter and `CH3_BELLCHAIN_TEST`. The formal map, Trial Hall and five later enemy implementations do not exist yet.
+- Current Chapter III runtime content: the entry prototype contains all six saved enemy scenes in four separated acceptance encounter groups plus four direct test spawns. The formal map and station-based Trial Hall do not exist yet.
 - Verified starting weapon: `Crimson Masque Stilettos / 绯幕礼刺`, `res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_stilettos.tres`, 14 Normal / 28 Dash Attack.
 
 ## Six-enemy roster
@@ -34,9 +34,9 @@ Player experience pillars:
 | `confessional_wraith` | Confessional Wraith / 忏悔亡魂 | telegraphed ambush | 82 | 38 | emergence, short dash, scream | observe door, evade locked lane, punish retreat |
 | `thirteenth_scribe` | Thirteenth Scribe / 十三响司录者 | delayed zone control | 98 | 46 | ink lance, delayed seal, brief slow, ward | leave marked floor, break ward with Dash Attack |
 
-All values above are the approved Phase 0 `baseline_v1`. They are real target values, not runtime claims; Phase 2 implementation and Phase 4 twenty-kill/combination testing must verify them before final balance acceptance.
+All values above are the implemented `baseline_v1` saved in Chapter III tuning Resources. Phase 4 twenty-kill/combination testing must still verify feel before final balance acceptance.
 
-Runtime status: `bellchain_penitent` implements 70 HP / 32 Poise / 11 Lash / 13 Slam / 8 Pull with 17 animation families and 70 transparent 64×64 frames. Every other roster row remains a design target only.
+Runtime status: `bellchain_penitent` owns 70 frames; Executioner, Chorister, Seraph, Wraith and Scribe collectively own 345 additional transparent 64×64 frames. All six compose Health/Hitbox/Hurtbox/Poise/Loot, have saved scenes and are referenced by the Bootstrap-routed Chapter III acceptance scene.
 
 ## World and visual identity
 
@@ -106,7 +106,7 @@ Forbidden default combination: Executioner + Scribe + Chorister + Seraph. It con
 
 - Phase 0: this roster, art bible, combat/balance contract and file/Trial Hall plan.
 - Phase 1: twelve real concept/silhouette PNGs and authenticity QA only.
-- Phase 2A–2F: one production enemy at a time, each with F6 and F5 Main verification, then stop.
+- Phase 2A–2F: complete in roster order with independent scenes, Main references, graphical evidence and unified verification.
 - Phase 3: Debug-only Enemy Trial Hall and combination harness.
 - Phase 4: forced QA, at least 20 kills per enemy, at least 15 triggers per attack and five runs per required combination.
 
@@ -114,15 +114,15 @@ No Chapter III formal map, formal Encounter distribution, Boss, weapon, skill tr
 
 ## Planned production file manifest
 
-All paths below are relative to `res://chapters/chapter_03_chapel_of_thirteen_echoes/` and intentionally do not exist in Phase 0.
+All paths below are relative to `res://chapters/chapter_03_chapel_of_thirteen_echoes/` and now exist.
 
 | Enemy | Scene | Controller | EnemyData | SpriteFrames |
 |---|---|---|---|---|
 | Penitent | `scenes/enemies/bellchain_penitent.tscn` | `scripts/enemies/bellchain_penitent.gd` | `resources/enemies/bellchain_penitent_data.tres` | `assets/enemies/bellchain_penitent/animations/bellchain_penitent_sprite_frames.tres` |
-| Executioner | `scenes/enemies/censer_executioner.tscn` | `scripts/enemies/censer_executioner.gd` | `resources/enemies/censer_executioner_data.tres` | `assets/enemies/censer_executioner/animations/censer_executioner_sprite_frames.tres` |
-| Chorister | `scenes/enemies/silent_chorister.tscn` | `scripts/enemies/silent_chorister.gd` | `resources/enemies/silent_chorister_data.tres` | `assets/enemies/silent_chorister/animations/silent_chorister_sprite_frames.tres` |
-| Seraph | `scenes/enemies/stained_glass_seraph.tscn` | `scripts/enemies/stained_glass_seraph.gd` | `resources/enemies/stained_glass_seraph_data.tres` | `assets/enemies/stained_glass_seraph/animations/stained_glass_seraph_sprite_frames.tres` |
-| Wraith | `scenes/enemies/confessional_wraith.tscn` | `scripts/enemies/confessional_wraith.gd` | `resources/enemies/confessional_wraith_data.tres` | `assets/enemies/confessional_wraith/animations/confessional_wraith_sprite_frames.tres` |
-| Scribe | `scenes/enemies/thirteenth_scribe.tscn` | `scripts/enemies/thirteenth_scribe.gd` | `resources/enemies/thirteenth_scribe_data.tres` | `assets/enemies/thirteenth_scribe/animations/thirteenth_scribe_sprite_frames.tres` |
+| Executioner | `scenes/enemies/censer_executioner.tscn` | `scripts/enemies/chapter_03_specialist_enemy.gd` | `resources/enemies/censer_executioner_data.tres` | `assets/enemies/censer_executioner/animations/censer_executioner_sprite_frames.tres` |
+| Chorister | `scenes/enemies/silent_chorister.tscn` | `scripts/enemies/chapter_03_specialist_enemy.gd` | `resources/enemies/silent_chorister_data.tres` | `assets/enemies/silent_chorister/animations/silent_chorister_sprite_frames.tres` |
+| Seraph | `scenes/enemies/stained_glass_seraph.tscn` | `scripts/enemies/chapter_03_specialist_enemy.gd` | `resources/enemies/stained_glass_seraph_data.tres` | `assets/enemies/stained_glass_seraph/animations/stained_glass_seraph_sprite_frames.tres` |
+| Wraith | `scenes/enemies/confessional_wraith.tscn` | `scripts/enemies/chapter_03_specialist_enemy.gd` | `resources/enemies/confessional_wraith_data.tres` | `assets/enemies/confessional_wraith/animations/confessional_wraith_sprite_frames.tres` |
+| Scribe | `scenes/enemies/thirteenth_scribe.tscn` | `scripts/enemies/chapter_03_specialist_enemy.gd` | `resources/enemies/thirteenth_scribe_data.tres` | `assets/enemies/thirteenth_scribe/animations/thirteenth_scribe_sprite_frames.tres` |
 
-Each enemy root will additionally own populated `sprites/` and `effects/` subfolders. An `audio/` folder is created only when an actual original/licensed audio file exists; empty directory theater is not delivery. Loot quantity Resources remain chapter-local under `resources/enemies/`, while the shared dynamic probability table is referenced unchanged.
+Each enemy root owns populated `sprites/` and `animations/` folders. Effects are represented by saved Chapter III projectile/field scenes rather than empty folders. Loot quantity Resources remain chapter-local under `resources/enemies/`, while the shared dynamic probability table is referenced unchanged.

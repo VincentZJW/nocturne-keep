@@ -1,6 +1,6 @@
 # Chapter III Enemy Art Bible / 第三章敌人美术规范
 
-Status: **Phase 1 complete — twelve concept/silhouette PNGs generated and authenticity-checked; gameplay Sprite production remains Phase 2A–2F**
+Status: **Phase 2A–2F complete — twelve concepts plus 415 runtime 64×64 frames across all six enemies are saved and Main-referenced**
 
 ## Art pillars
 
@@ -112,7 +112,7 @@ All paths are relative to `res://chapters/chapter_03_chapel_of_thirteen_echoes/`
 - `docs/qa/chapter_03_enemy_phase_01/` preserves one concept/silhouette/48 px comparison sheet per enemy plus the six-enemy overview and the full authenticity manifest.
 - These concepts are the mandatory visual source for the later Phase 2A–2F 64×64 SpriteFrames. A later Sprite that abandons the signature silhouette/object contract fails the handoff gate.
 
-## Planned animation families
+## Implemented animation families
 
 Common where applicable: `idle`, `move` or `hover`, `alert`, `turn`, `light_hit`, `stagger`, `hurt`, `death`. Each named attack uses distinct `_windup`, `_active` and `_recovery` animations so the state/Hurtbox QA can identify its phase without guessing from a monolithic clip.
 
@@ -123,7 +123,9 @@ Common where applicable: `idle`, `move` or `hover`, `alert`, `turn`, `light_hit`
 - Wraith: `hidden`, `door_telegraph`, `emerge`, `emerging_slash_*`, `spectral_dash_*`, `scream_*`, `retreat`.
 - Scribe: `ink_lance_*`, `seal_write`, `seal_delay`, `seal_activate`, `binding_script_*`, `paper_ward`.
 
-## Authenticity QA gate before Phase 2A
+The Phase 2 runtime assets live under each enemy's `sprites/` and `animations/` directories. Bellchain Penitent owns 70 frames; the remaining five roles own 345 frames. The deterministic builders preserve transparency, fixed 64×64 canvases and nearest-neighbor Sprite display. Main/F5 evidence is under `res://docs/qa/chapter_03_enemy_phase_02/`.
+
+## Authenticity QA gate used for Phase 2
 
 For every required PNG, QA must record path, dimensions, byte size, SHA-256, alpha bounds and opaque/nontransparent pixel count. PASS also requires:
 
@@ -134,4 +136,4 @@ For every required PNG, QA must record path, dimensions, byte size, SHA-256, alp
 5. no first/second-chapter recolor and no protected character copy;
 6. nearest-neighbor screenshot evidence.
 
-Phase 1 must stop after this gate. A folder, empty PNG, geometric dummy, concept unused by the production Sprite, or Sprite remaining absent from Main is a FAIL—not “done.”
+Phase 2 passed this gate: every role has non-empty runtime PNGs, a saved SpriteFrames resource, a saved enemy scene and a real Main acceptance instance. Final animation polish remains subject to manual combat review; that is not a reason to relabel these assets as final environment art.

@@ -1,0 +1,38 @@
+[gd_resource type="Resource" script_class="Chapter03SpecialistConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_config.gd" id="1_0e5vu"]
+
+[resource]
+script = ExtResource("1_0e5vu")
+archetype = 4
+chapter_max_health = 98
+max_poise = 46
+primary_action = &"ink_lance"
+secondary_action = &"binding_script"
+secondary_damage = 8
+secondary_range = 190.0
+secondary_windup = 0.58
+secondary_cooldown = 3.0
+special_action = &"thirteenth_seal"
+special_damage = 13
+special_range = 220.0
+special_windup = 0.82
+special_active_duration = 0.1
+special_recovery = 0.82
+special_duration = 1.05
+projectile_speed = 220.0
+display_name = &"Thirteenth Scribe"
+max_health = 98
+attack_damage = 10
+patrol_speed = 28.0
+chase_speed = 48.0
+ground_acceleration = 330.0
+ground_deceleration = 500.0
+patrol_half_width = 132.0
+platform_height_tolerance = 120.0
+detection_range = 270.0
+lose_target_range = 330.0
+attack_range = 210.0
+attack_windup = 0.52
+attack_recovery = 0.62
+patrol_turn_pause = 0.28

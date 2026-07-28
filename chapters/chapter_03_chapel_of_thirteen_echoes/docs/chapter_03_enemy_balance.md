@@ -1,6 +1,6 @@
 # Chapter III Enemy Balance / 第三章敌人数值基线
 
-Status: **Phase 0 baseline_v1 — implementation and playtest pending**
+Status: **Phase 2 baseline_v1 implemented — automated contracts pass; manual and Phase 4 balance playtest pending**
 
 ## Verified Player baseline
 
@@ -61,7 +61,7 @@ Kill counts use `ceil(HP / damage)` and assume every hit resolves, no Paper Ward
 | Scribe · Thirteenth Seal | 13 | 8 | write + 0.75–0.90 s delay | one activation | max 2 active |
 | Scribe · Binding Script | 8 | 13 | Phase 2F tune | one hit | 3.0 s cooldown |
 
-Times explicitly marked “Phase 2 tune” were not fixed by the prompt and remain `[PLAYTEST_REQUIRED]`; inventing hidden precision in Phase 0 would be misleading.
+Times previously marked “Phase 2 tune” are now concentrated in the five role Resources. They are implemented prototype timings, not final balance acceptance; manual and Phase 4 combination tests may revise them without changing the HP/damage baseline silently.
 
 ## Control and defense limits
 
@@ -74,9 +74,9 @@ Times explicitly marked “Phase 2 tune” were not fixed by the prompt and rema
 
 ## Poise model decision
 
-The project has no shared Poise component. Chapter II stores Poise locally and uses 1/2 pressure on a 4-point scale. Phase 2 should introduce one Chapter III-local composed Poise component with typed signals rather than copy six counters.
+Chapter III now composes `Chapter03PoiseComponent` for all six enemies while Chapter II remains unchanged.
 
-Phase 0 hypothesis for the 30–82 scale: accepted Player HP damage also supplies Poise pressure (14 Normal / 28 Dash). This yields approximately 3/2 pressure hits for light units and 6/3 for the Executioner. The component must restore only after Stagger/recovery and include protection against immediate repeated Stagger. This model is `[PLAYTEST_REQUIRED]` and cannot be claimed until Phase 2A and Phase 4 tests.
+Accepted Player attacks supply 14 Normal / 28 Dash Poise pressure. Automated tests verify component wiring and Stagger recovery; the 30–82 scale remains `[PLAYTEST_REQUIRED]` for combat feel until Phase 4.
 
 ## Broken-state definitions for Phase 4
 
@@ -93,4 +93,4 @@ Balance fails if any of these occur:
 - remote units remain unreachable or four-unit combinations erase all safe routes;
 - time-to-kill feels like health padding rather than role mastery.
 
-No value is written into a runtime `.tres` during Phase 0.
+All table values are now written into chapter-local runtime `.tres` files. No Player, weapon, Chapter I or Chapter II balance value was changed by this implementation.

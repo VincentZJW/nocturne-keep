@@ -1,0 +1,379 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/alert/alert_01.png" id="1_ux3qq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/alert/alert_02.png" id="2_1ev34"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/alert/alert_03.png" id="3_emjs1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_active/confession_scream_active_01.png" id="4_hoydg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_active/confession_scream_active_02.png" id="5_qisc0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_recovery/confession_scream_recovery_01.png" id="6_6youd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_recovery/confession_scream_recovery_02.png" id="7_0okdx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_recovery/confession_scream_recovery_03.png" id="8_hkx0w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_recovery/confession_scream_recovery_04.png" id="9_xe0l8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_recovery/confession_scream_recovery_05.png" id="10_4531c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_windup/confession_scream_windup_01.png" id="11_i8djl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_windup/confession_scream_windup_02.png" id="12_d2bar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_windup/confession_scream_windup_03.png" id="13_qra6k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_windup/confession_scream_windup_04.png" id="14_a07u4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/confession_scream_windup/confession_scream_windup_05.png" id="15_efy1y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/death/death_01.png" id="16_jlmrl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/death/death_02.png" id="17_c62hc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/death/death_03.png" id="18_g460h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/death/death_04.png" id="19_euc7u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/death/death_05.png" id="20_bbo2r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/death/death_06.png" id="21_0n8ov"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_active/emerging_slash_active_01.png" id="22_axgkp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_active/emerging_slash_active_02.png" id="23_xotxw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_recovery/emerging_slash_recovery_01.png" id="24_o2wo7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_recovery/emerging_slash_recovery_02.png" id="25_yrrd6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_recovery/emerging_slash_recovery_03.png" id="26_seml8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_recovery/emerging_slash_recovery_04.png" id="27_phhru"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_recovery/emerging_slash_recovery_05.png" id="28_g23hb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_windup/emerging_slash_windup_01.png" id="29_wg7ic"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_windup/emerging_slash_windup_02.png" id="30_bqhij"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_windup/emerging_slash_windup_03.png" id="31_55gw7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_windup/emerging_slash_windup_04.png" id="32_4fjfe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/emerging_slash_windup/emerging_slash_windup_05.png" id="33_ujan4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hidden/hidden_01.png" id="34_171jf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hidden/hidden_02.png" id="35_njtme"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hidden/hidden_03.png" id="36_x4gfh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hidden/hidden_04.png" id="37_qk08s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hurt/hurt_01.png" id="38_jd7w6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hurt/hurt_02.png" id="39_cd5hp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/hurt/hurt_03.png" id="40_57qii"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/idle/idle_01.png" id="41_71qei"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/idle/idle_02.png" id="42_rvyax"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/idle/idle_03.png" id="43_1d8sn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/idle/idle_04.png" id="44_v5fso"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/light_hit/light_hit_01.png" id="45_qf6wt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/light_hit/light_hit_02.png" id="46_5gk5o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_active/spectral_dash_active_01.png" id="47_exxfk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_active/spectral_dash_active_02.png" id="48_rxw6u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_recovery/spectral_dash_recovery_01.png" id="49_54k3e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_recovery/spectral_dash_recovery_02.png" id="50_sdjl2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_recovery/spectral_dash_recovery_03.png" id="51_dvuhc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_recovery/spectral_dash_recovery_04.png" id="52_gxn0s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_recovery/spectral_dash_recovery_05.png" id="53_nub1y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_windup/spectral_dash_windup_01.png" id="54_1po7j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_windup/spectral_dash_windup_02.png" id="55_dslo3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_windup/spectral_dash_windup_03.png" id="56_ick17"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_windup/spectral_dash_windup_04.png" id="57_gfssa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/spectral_dash_windup/spectral_dash_windup_05.png" id="58_hd1an"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/stagger/stagger_01.png" id="59_ehotk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/stagger/stagger_02.png" id="60_ld3t6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/stagger/stagger_03.png" id="61_rmnu4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/stagger/stagger_04.png" id="62_v5wyx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/turn/turn_01.png" id="63_ch2y8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/turn/turn_02.png" id="64_d5wa1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/turn/turn_03.png" id="65_e1dys"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/walk/walk_01.png" id="66_j4ldb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/walk/walk_02.png" id="67_g1q8n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/walk/walk_03.png" id="68_fliik"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/walk/walk_04.png" id="69_aj1ox"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/walk/walk_05.png" id="70_0uikc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/confessional_wraith/sprites/walk/walk_06.png" id="71_kd202"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ux3qq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_1ev34")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_emjs1")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_hoydg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_qisc0")
+}],
+"loop": 0,
+"name": &"confession_scream_active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_6youd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_0okdx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_hkx0w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_xe0l8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_4531c")
+}],
+"loop": 0,
+"name": &"confession_scream_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_i8djl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_d2bar")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_qra6k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_a07u4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_efy1y")
+}],
+"loop": 0,
+"name": &"confession_scream_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_jlmrl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_c62hc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_g460h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_euc7u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_bbo2r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_0n8ov")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_axgkp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_xotxw")
+}],
+"loop": 0,
+"name": &"emerging_slash_active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_o2wo7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_yrrd6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_seml8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_phhru")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_g23hb")
+}],
+"loop": 0,
+"name": &"emerging_slash_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_wg7ic")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_bqhij")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_55gw7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_4fjfe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_ujan4")
+}],
+"loop": 0,
+"name": &"emerging_slash_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_171jf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_njtme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_x4gfh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_qk08s")
+}],
+"loop": 1,
+"name": &"hidden",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_jd7w6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_cd5hp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_57qii")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_71qei")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_rvyax")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_1d8sn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_v5fso")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_qf6wt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_5gk5o")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_exxfk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_rxw6u")
+}],
+"loop": 0,
+"name": &"spectral_dash_active",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_54k3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_sdjl2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_dvuhc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_gxn0s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_nub1y")
+}],
+"loop": 0,
+"name": &"spectral_dash_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("54_1po7j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_dslo3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_ick17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_gfssa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_hd1an")
+}],
+"loop": 0,
+"name": &"spectral_dash_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_ehotk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_ld3t6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_rmnu4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_v5wyx")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_ch2y8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_d5wa1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_e1dys")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("66_j4ldb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_g1q8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_fliik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_aj1ox")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_0uikc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_kd202")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
+}]

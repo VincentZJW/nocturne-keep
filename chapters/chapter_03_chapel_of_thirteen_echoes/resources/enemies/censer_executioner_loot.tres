@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="LootDropProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/items/loot_drop_profile.gd" id="1_pl211"]
+
+[resource]
+script = ExtResource("1_pl211")
+enemy_type = &"CenserExecutioner"
+coin_min = 2
+coin_max = 5

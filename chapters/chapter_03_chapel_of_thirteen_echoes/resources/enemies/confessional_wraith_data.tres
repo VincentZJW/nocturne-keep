@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Chapter03SpecialistConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_config.gd" id="1_u82n8"]
+
+[resource]
+script = ExtResource("1_u82n8")
+archetype = 3
+chapter_max_health = 82
+max_poise = 38
+primary_action = &"emerging_slash"
+secondary_action = &"spectral_dash"
+secondary_damage = 11
+secondary_range = 130.0
+secondary_windup = 0.52
+secondary_active_duration = 0.18
+special_action = &"confession_scream"
+special_damage = 10
+special_range = 75.0
+special_windup = 0.68
+special_active_duration = 0.14
+starts_hidden = true
+display_name = &"Confessional Wraith"
+max_health = 82
+attack_damage = 12
+patrol_speed = 30.0
+chase_speed = 62.0
+ground_acceleration = 330.0
+ground_deceleration = 500.0
+patrol_half_width = 132.0
+platform_height_tolerance = 120.0
+detection_range = 220.0
+lose_target_range = 330.0
+attack_range = 58.0
+attack_windup = 0.44
+attack_active_duration = 0.12
+attack_recovery = 0.58
+patrol_turn_pause = 0.28

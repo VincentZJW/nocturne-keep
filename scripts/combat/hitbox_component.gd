@@ -16,6 +16,8 @@ var attack_id: int = 0
 var is_active: bool = false
 var attacker: Node2D
 var _hit_target_ids: Dictionary[int, bool] = {}
+var _shared_target_ids: Dictionary[int, bool]
+var _uses_shared_target_ledger: bool = false
 
 
 func _ready() -> void:
@@ -63,7 +65,15 @@ func end_attack() -> void:
 func has_hit_target(target: HurtboxComponent) -> bool:
 	if target == null:
 		return false
-	return _hit_target_ids.has(target.get_instance_id())
+	var target_id: int = target.get_instance_id()
+	return _hit_target_ids.has(target_id) or (
+		_uses_shared_target_ledger and _shared_target_ids.has(target_id)
+	)
+
+
+func set_shared_target_ledger(shared_target_ids: Dictionary[int, bool]) -> void:
+	_shared_target_ids = shared_target_ids
+	_uses_shared_target_ledger = true
 
 
 func get_source_position() -> Vector2:
@@ -82,11 +92,15 @@ func try_hit(target: HurtboxComponent) -> bool:
 	if not is_active or target == null or not is_instance_valid(target):
 		return false
 	var target_id: int = target.get_instance_id()
-	if _hit_target_ids.has(target_id):
+	if _hit_target_ids.has(target_id) or (
+		_uses_shared_target_ledger and _shared_target_ids.has(target_id)
+	):
 		return false
 	if not target.receive_hit(self):
 		return false
 	_hit_target_ids[target_id] = true
+	if _uses_shared_target_ledger:
+		_shared_target_ids[target_id] = true
 	hit_confirmed.emit(target, damage, attack_id)
 	return true
 

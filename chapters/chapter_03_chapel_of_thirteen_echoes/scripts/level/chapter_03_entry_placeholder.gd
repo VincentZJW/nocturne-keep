@@ -12,6 +12,13 @@ const FLAG_CHAPTER_03_STARTED: StringName = &"chapter_03_started"
 @onready var bellchain_penitent: BellchainPenitent = (
 	$GameplayWorld/Phase2AEncounter/Enemies/BellchainPenitent as BellchainPenitent
 )
+@onready var specialists: Array[Chapter03SpecialistEnemy] = [
+	$GameplayWorld/Phase2BEncounter/Enemies/CenserExecutioner as Chapter03SpecialistEnemy,
+	$GameplayWorld/Phase2CDEEncounter/Enemies/SilentChorister as Chapter03SpecialistEnemy,
+	$GameplayWorld/Phase2CDEEncounter/Enemies/StainedGlassSeraph as Chapter03SpecialistEnemy,
+	$GameplayWorld/Phase2CDEEncounter/Enemies/ConfessionalWraith as Chapter03SpecialistEnemy,
+	$GameplayWorld/Phase2FEncounter/Enemies/ThirteenthScribe as Chapter03SpecialistEnemy,
+]
 @onready var title_trigger: Area2D = $NarrativeTriggers/ChapterTitleTrigger as Area2D
 @onready var title_card: Control = $GameplayWorld/ChapterRuntime/HUD/ChapterTitleCard as Control
 
@@ -40,10 +47,14 @@ func _ready() -> void:
 	player.global_position = selected_spawn.global_position
 	player.velocity = Vector2.ZERO
 	bellchain_penitent.configure_movement_bounds(1040.0, 1540.0)
+	specialists[0].configure_movement_bounds(1600.0, 2080.0)
+	for index: int in range(1, 4):
+		specialists[index].configure_movement_bounds(1940.0, 2860.0)
+	specialists[4].configure_movement_bounds(3160.0, 3820.0)
 	respawn_controller.set_spawn_point($Checkpoints/Chapter03CP01 as Marker2D)
 	if player.player_camera != null:
 		player.player_camera.limit_left = 0
-		player.player_camera.limit_right = 1800
+		player.player_camera.limit_right = 4200
 		player.player_camera.limit_top = 0
 		player.player_camera.limit_bottom = 720
 		player.player_camera.reset_smoothing()

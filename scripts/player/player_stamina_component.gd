@@ -15,6 +15,7 @@ signal stamina_insufficient
 
 var current_stamina: float = 100.0
 var stamina_regen_timer: float = 0.0
+var _regeneration_modifiers: Dictionary[StringName, float] = {}
 
 
 func _ready() -> void:
@@ -39,7 +40,28 @@ func advance(delta: float, is_grounded: bool, regeneration_blocked: bool) -> voi
 
 
 func get_regeneration_rate(is_grounded: bool) -> float:
-	return stamina_regen_rate if is_grounded else stamina_regen_rate * airborne_stamina_regen_multiplier
+	var base_rate: float = (
+		stamina_regen_rate
+		if is_grounded
+		else stamina_regen_rate * airborne_stamina_regen_multiplier
+	)
+	var multiplier: float = 1.0
+	for value: float in _regeneration_modifiers.values():
+		multiplier *= clampf(value, 0.0, 1.0)
+	return base_rate * multiplier
+
+
+func set_regeneration_modifier(source_id: StringName, multiplier: float) -> void:
+	if not source_id.is_empty():
+		_regeneration_modifiers[source_id] = clampf(multiplier, 0.0, 1.0)
+
+
+func clear_regeneration_modifier(source_id: StringName) -> void:
+	_regeneration_modifiers.erase(source_id)
+
+
+func clear_external_modifiers() -> void:
+	_regeneration_modifiers.clear()
 
 
 func can_afford_dash() -> bool:
@@ -64,6 +86,7 @@ func refund_dash_charge() -> void:
 
 
 func reset_to_full() -> void:
+	clear_external_modifiers()
 	current_stamina = max_stamina
 	stamina_regen_timer = 0.0
 	stamina_changed.emit(current_stamina, max_stamina)

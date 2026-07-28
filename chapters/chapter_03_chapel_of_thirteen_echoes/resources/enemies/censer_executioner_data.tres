@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="Chapter03SpecialistConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_config.gd" id="1_agksi"]
+
+[resource]
+script = ExtResource("1_agksi")
+chapter_max_health = 126
+max_poise = 82
+stagger_duration = 0.78
+turn_duration = 0.34
+secondary_action = &"overhead_crush"
+secondary_damage = 17
+secondary_range = 55.0
+secondary_windup = 0.82
+secondary_active_duration = 0.16
+secondary_recovery = 1.05
+special_action = &"smoke_release"
+special_range = 115.0
+special_windup = 0.72
+special_recovery = 0.85
+protected_active_frames = true
+display_name = &"Censer Executioner"
+max_health = 100
+attack_damage = 14
+patrol_speed = 25.0
+chase_speed = 46.0
+ground_acceleration = 330.0
+ground_deceleration = 500.0
+patrol_half_width = 132.0
+platform_height_tolerance = 120.0
+detection_range = 225.0
+lose_target_range = 330.0
+attack_range = 74.0
+attack_windup = 0.66
+attack_active_duration = 0.18
+attack_recovery = 0.9
+patrol_turn_pause = 0.28

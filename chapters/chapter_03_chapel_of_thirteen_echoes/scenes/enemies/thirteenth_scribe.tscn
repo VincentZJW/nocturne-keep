@@ -1,0 +1,122 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/chapter_03_specialist_enemy.gd" id="1_t5ks3"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_enemy_projectile.tscn" id="2_xd0te"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_timed_field.tscn" id="3_c6xpn"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/enemies/thirteenth_scribe_data.tres" id="4_hhbdu"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/thirteenth_scribe/animations/thirteenth_scribe_sprite_frames.tres" id="5_qdvjw"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="6_105me"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/components/chapter_03_poise_component.gd" id="7_3ma46"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="8_fst8e"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/components/chapter_03_scribe_ward_policy.gd" id="9_2klb5"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="10_q1o8c"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="11_hmrv2"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/enemies/thirteenth_scribe_loot.tres" id="12_drom4"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="13_f3a1s"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6taaa"]
+size = Vector2(26, 50)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8nj0q"]
+size = Vector2(30, 52)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_o6ddg"]
+size = Vector2(44, 18)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_cux83"]
+size = Vector2(58, 20)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_5ee43"]
+radius = 270.0
+
+[node name="ThirteenthScribe" type="CharacterBody2D" unique_id=735940418]
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 6.0
+script = ExtResource("1_t5ks3")
+ward_policy_path = NodePath("WardPolicy")
+projectile_scene = ExtResource("2_xd0te")
+field_scene = ExtResource("3_c6xpn")
+config = ExtResource("4_hhbdu")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=926039867]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=2018307685]
+texture_filter = 1
+sprite_frames = ExtResource("5_qdvjw")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=407238246]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_6taaa")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=512681814]
+script = ExtResource("6_105me")
+
+[node name="PoiseComponent" type="Node" parent="." unique_id=1388627412]
+script = ExtResource("7_3ma46")
+max_poise = 46
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1269091182]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("8_fst8e")
+faction = &"enemy"
+hit_policy_path = NodePath("../WardPolicy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=376856916]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_8nj0q")
+
+[node name="WardPolicy" type="Node" parent="." unique_id=1722957035]
+script = ExtResource("9_2klb5")
+
+[node name="FacingRoot" type="Node2D" parent="." unique_id=1891406269]
+
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1331624862]
+position = Vector2(35, -2)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("10_q1o8c")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=953819228]
+shape = SubResource("RectangleShape2D_o6ddg")
+disabled = true
+
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=151478232]
+position = Vector2(43, -1)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("10_q1o8c")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=936763596]
+shape = SubResource("RectangleShape2D_cux83")
+disabled = true
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=142145349]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1937278573]
+shape = SubResource("CircleShape2D_5ee43")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=477429015]
+position = Vector2(0, 4)
+target_position = Vector2(-22, 0)
+
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=247570590]
+position = Vector2(-19, 20)
+target_position = Vector2(0, 28)
+
+[node name="LootDropComponent" type="Node" parent="." unique_id=1165146631]
+script = ExtResource("11_hmrv2")
+profile = ExtResource("12_drom4")
+dynamic_profile = ExtResource("13_f3a1s")
