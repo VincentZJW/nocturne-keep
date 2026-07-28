@@ -9,6 +9,9 @@ const FLAG_CHAPTER_03_STARTED: StringName = &"chapter_03_started"
 	$GameplayWorld/ChapterRuntime/PlayerRespawnController as PlayerRespawnController
 )
 @onready var player_spawn: Marker2D = $SpawnPoints/Chapter03PlayerSpawn as Marker2D
+@onready var bellchain_penitent: BellchainPenitent = (
+	$GameplayWorld/Phase2AEncounter/Enemies/BellchainPenitent as BellchainPenitent
+)
 @onready var title_trigger: Area2D = $NarrativeTriggers/ChapterTitleTrigger as Area2D
 @onready var title_card: Control = $GameplayWorld/ChapterRuntime/HUD/ChapterTitleCard as Control
 
@@ -24,12 +27,19 @@ func _ready() -> void:
 	if room_name != null:
 		room_name.text = "CHAPTER III · CHAPEL VESTIBULE / 十三响礼拜堂前庭"
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
+	var selected_spawn_id: StringName = DEFAULT_SPAWN_ID
 	if session != null:
-		session.consume_pending_spawn(DEFAULT_SPAWN_ID)
+		selected_spawn_id = session.consume_pending_spawn(DEFAULT_SPAWN_ID)
 		session.current_chapter_id = ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES
 		session.set_story_flag(FLAG_CHAPTER_03_STARTED)
-	player.global_position = player_spawn.global_position
+	var selected_spawn: Marker2D = get_node_or_null(
+		"SpawnPoints/%s" % selected_spawn_id
+	) as Marker2D
+	if selected_spawn == null:
+		selected_spawn = player_spawn
+	player.global_position = selected_spawn.global_position
 	player.velocity = Vector2.ZERO
+	bellchain_penitent.configure_movement_bounds(1040.0, 1540.0)
 	respawn_controller.set_spawn_point($Checkpoints/Chapter03CP01 as Marker2D)
 	if player.player_camera != null:
 		player.player_camera.limit_left = 0

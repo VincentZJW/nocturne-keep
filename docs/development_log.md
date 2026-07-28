@@ -4931,3 +4931,50 @@ Status: complete — twelve original concept/silhouette PNGs delivered and authe
 - Phase 1 intentionally adds no gameplay SpriteFrames, enemy scene, EnemyData, AI, attack, projectile, field, Trial Hall, Encounter, Main spawn or Chapter III formal map. The concepts are not yet visible in F5/Main and this is stated explicitly in the QA report.
 - Phase 2A is the next allowed milestone after user approval: create only Bellchain Penitent's 64×64 production animation set, combat prototype, independent F6 validation and saved Main/F5 integration, then stop again.
 - Existing user-owned Chapter I/shared/Player tuning, old QA image edits and two UID sidecars remain preserved and excluded from this milestone.
+
+## 2026-07-28 — Chapter III normal enemies Phase 2A preflight
+
+Status: in progress — Bellchain Penitent production Sprite, combat prototype and Main integration approved
+
+### Goal, files, tests and scope check
+
+- Implement only the first enemy, `Bellchain Penitent / 钟链忏者`, as the Chapter III baseline mid-range pressure unit. Preserve the approved 256 px concept's wrapped mask, sealed mouth, copper throat bell, separate prayer bell/short chain, stooped robe and pendulum motion in original 64×64 production frames.
+- Add the enemy's typed Resource/config, AI script, saved scene, dynamic-loot profile, SpriteFrames and 17 animation families: idle, movement, alert, turn, split Windup/Active/Recovery clips for Chain Lash, Bell Slam and Short Chain Pull, light-hit, stagger, hurt and death.
+- Reuse `GroundEnemyBase`, `EnemyCombatant`, `HealthComponent`, `HitboxComponent`, `HurtboxComponent`, `LootDropComponent` and current collision/faction conventions. Phase 2A may add a narrow Chapter III hit/Poise policy or Penitent-local typed state logic, but will not copy the Chapter II multi-role script or create an inheritance tree for the other five enemies prematurely.
+- Target tuning remains HP 70, Poise 32, Chain Lash 11 at 0.42/0.12/0.52 s, Bell Slam 13 at 0.62/0.14/0.76 s, and Short Chain Pull 8 with 3.0 s cooldown and collision-safe 20–30 px target displacement. Unspecified approach/turn/pull phase values remain `[PLAYTEST_REQUIRED]` and will be centralized in the Penitent config.
+- Add one independently runnable Chapter III Bellchain test room and one saved prototype Encounter inside the actual Chapter III entry scene. Add `CH3_BELLCHAIN_TEST` to the Start Profile and make the scene consume the pending spawn id without changing formal `run/main_scene` or committing the global Debug switch enabled.
+- Planned exact-engine validation: deterministic Image generator, import/parse, SpriteFrames builder, frame/dimension/alpha test, state/attack/damage/dedup/Poise/pull/death test, independent test-room smoke, Chapter start regression, saved Chapter III Main-integration test, Debug MainBootstrap graphical QA and formal Bootstrap smoke. Visual evidence belongs under `docs/qa/chapter_03_enemy_phase_02a/`.
+- Phase 2B–2F, the six-enemy Trial Hall, combination Encounters, formal Chapter III map/Boss and any Chapter I/II/Player/Crimson Masque tuning are out of scope. Completion must stop after one commit and human feel/visual acceptance steps.
+- Work begins on `master` at `cfb5c8c`. Existing user-owned Chapter I/shared/Player tuning, old QA-image edits and two UID sidecars remain preserved and excluded.
+
+## 2026-07-28 — Chapter III normal enemies Phase 2A completion
+
+Status: complete — Bellchain Penitent production enemy, solo test room and saved Chapter III Main prototype encounter delivered; Phase 2B not started
+
+### Delivered scope
+
+- Generated 70 original transparent 64×64 frames across 17 animation families: Idle, Walk, Alert, Turn, split Windup/Active/Recovery clips for Chain Lash, Bell Slam and Short Chain Pull, plus Light Hit, Stagger, Hurt and Death. The wrapped mask, sealed mouth, copper throat bell, separate prayer bell and pendulum chain remain recognizable from the approved concept.
+- Added typed `BellchainPenitentConfig`, `BellchainPenitent`, and composed `Chapter03PoiseComponent`. Reused GroundEnemyBase, Health, Hitbox, Hurtbox, Encounter and Loot contracts without changing Player, weapon, loot probability or earlier-chapter behavior.
+- Implemented HP 70 / Poise 32; Chain Lash 11 at 0.42/0.12/0.52 s; Bell Slam 13 at 0.62/0.14/0.76 s; Short Chain Pull 8 at 0.48/0.10/0.60 s with 3.0 s cooldown. Every Active owns a unique attack id, front-only shape and one-hit target ledger. Windup is light-hit interruptible; Active/Recovery are not permanently reset; Poise break enters distinct Stagger.
+- Added independently runnable `bellchain_penitent_test_room.tscn`. Added one saved `Phase2AEncounter` and `CH3_BELLCHAIN_TEST` to the actual Chapter III entry target loaded through MainBootstrap. Committed Debug defaults remain disabled.
+- Added deterministic coverage for SpriteFrames, configuration, three exact once-only damages, Poise break, Death, Hurtbox/Hitbox shutdown, one-shot death/loot resolution, cleanup, standalone room and Main composition. Added five MainBootstrap screenshots and one animation sheet under `docs/qa/chapter_03_enemy_phase_02a/`.
+
+### Exact commands and actual results
+
+1. `Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_bellchain_penitent_assets.gd` — PASS, `frames=70 animations=17`.
+2. Exact 4.7.1 import/parse (`/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit`) — exit 0; PNGs, typed classes, scenes and resources imported with no error.
+3. SpriteFrames builder (`build_bellchain_penitent_sprite_frames.gd`) — PASS, `animations=17 frames=70`.
+4. `test_bellchain_penitent_phase2a.gd` — PASS: `animations=17 frames=70 hp=70 poise=32 attacks=3 solo_test=1 main_encounter=1 spawn=CH3_BELLCHAIN_TEST`; Lash/Slam/Pull dealt 11/13/8 exactly once, and Death/loot emitted once.
+5. Independent room smoke: exact Godot 4.7.1 with `--headless --quit-after 180 bellchain_penitent_test_room.tscn` — exit 0, no Output/Debugger error.
+6. Graphical MainBootstrap QA (`capture_bellchain_penitent_phase2a_qa.gd`) — final clean rerun PASS, `captures=5 route=MainBootstrap spawn=CH3_BELLCHAIN_TEST attacks=3 stagger=1`; no runtime red error. An initial QA-harness-only print-format error was corrected before the recorded rerun.
+7. Phase 1 art regression (`test_chapter_03_enemy_concept_assets.gd`) — PASS, `files=12 concepts=6 silhouettes=6 unique_silhouettes=6`.
+8. Chapter registry/profile regression (`test_chapter_start_foundation.gd`) — PASS, `7 entries, Chapters I/II/III-entry ready, Bootstrap preserved`.
+9. Main route regression (`test_main_bootstrap_flow.gd`) — PASS for formal Opening and Debug Chapter II. The harness retains its known two ObjectDB instances during forced test teardown; no parser/resource/runtime assertion failed.
+10. Formal F5-equivalent smoke (`Godot --path . --quit-after 240`) — exit 0, `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; default Debug routing remains disabled.
+
+### Manual acceptance and remaining gate
+
+- F5 direct test: temporarily configure Chapter III + `CH3_BELLCHAIN_TEST`, then verify J/Dash Attack interruption pressure, jumping over Bell Slam, 3-second Pull cadence, short collision-safe Pull, both facings, death and loot. Restore the Debug switch afterward.
+- The Chapter III destination is still an explicitly labeled entry prototype. Its solo encounter is saved and F5-playable, but is not claimed as the formal Chapter III map or final encounter placement.
+- Phase 2B (Censer Executioner) and all later enemies remain untouched. Short Pull distance, approach speed, Poise mapping 14/28 and encounter feel remain human `[PLAYTEST_REQUIRED]` values.
+- Game-design guidance shaped the telegraph/counterplay split; Godot gameplay guidance shaped typed composition, active-only hitboxes and exact-engine verification. Pre-existing user-owned dirty files remain preserved and excluded.

@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="BellchainPenitentConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/bellchain_penitent_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name = &"Bellchain Penitent"
+max_health = 70
+attack_damage = 11
+patrol_speed = 36.0
+chase_speed = 68.0
+ground_acceleration = 360.0
+ground_deceleration = 560.0
+patrol_half_width = 128.0
+platform_height_tolerance = 54.0
+detection_range = 210.0
+lose_target_range = 282.0
+attack_range = 64.0
+attack_windup = 0.42
+attack_active_duration = 0.12
+attack_recovery = 0.52
+hurt_duration = 0.18
+knockback_speed = 104.0
+initial_idle_duration = 0.62
+patrol_turn_pause = 0.28
+max_poise = 32
+normal_attack_poise_damage = 14
+dash_attack_poise_damage = 28
+stagger_duration = 0.56
+poise_recovery_delay = 1.2
+bell_slam_damage = 13
+bell_slam_range = 38.0
+bell_slam_windup = 0.62
+bell_slam_active_duration = 0.14
+bell_slam_recovery = 0.76
+chain_pull_damage = 8
+chain_pull_min_range = 50.0
+chain_pull_max_range = 82.0
+chain_pull_windup = 0.48
+chain_pull_active_duration = 0.1
+chain_pull_recovery = 0.6
+chain_pull_cooldown = 3.0
+chain_pull_speed = 100.0
+alert_duration = 0.24
+turn_duration = 0.24
+light_hit_duration = 0.16

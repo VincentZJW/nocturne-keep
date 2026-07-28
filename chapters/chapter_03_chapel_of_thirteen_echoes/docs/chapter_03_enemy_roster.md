@@ -1,6 +1,6 @@
 # Chapter III Enemy Roster / 第三章敌人名册
 
-Status: **Phase 0 design baseline — no runtime enemies or art delivered yet**
+Status: **Phase 2A — Bellchain Penitent implemented; five enemies remain at concept stage**
 
 ## Chapter function
 
@@ -20,7 +20,7 @@ Player experience pillars:
 - Chapter registry: `res://scripts/systems/chapter/chapter_registry.gd`.
 - Current Chapter III destination: `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`.
 - Current profile: `res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/chapter/chapter_03_start_profile.tres`.
-- Current Chapter III runtime content: entry placeholder only; no enemy scenes, resources, assets, Trial Hall or trial spawn ids exist.
+- Current Chapter III runtime content: the entry prototype contains one saved solo Bellchain Penitent encounter and `CH3_BELLCHAIN_TEST`. The formal map, Trial Hall and five later enemy implementations do not exist yet.
 - Verified starting weapon: `Crimson Masque Stilettos / 绯幕礼刺`, `res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_stilettos.tres`, 14 Normal / 28 Dash Attack.
 
 ## Six-enemy roster
@@ -35,6 +35,8 @@ Player experience pillars:
 | `thirteenth_scribe` | Thirteenth Scribe / 十三响司录者 | delayed zone control | 98 | 46 | ink lance, delayed seal, brief slow, ward | leave marked floor, break ward with Dash Attack |
 
 All values above are the approved Phase 0 `baseline_v1`. They are real target values, not runtime claims; Phase 2 implementation and Phase 4 twenty-kill/combination testing must verify them before final balance acceptance.
+
+Runtime status: `bellchain_penitent` implements 70 HP / 32 Poise / 11 Lash / 13 Slam / 8 Pull with 17 animation families and 70 transparent 64×64 frames. Every other roster row remains a design target only.
 
 ## World and visual identity
 

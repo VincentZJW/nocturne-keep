@@ -1,0 +1,370 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/alert/alert_01.png" id="1_wmvuj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/alert/alert_02.png" id="2_rbf55"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/alert/alert_03.png" id="3_w6vss"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_active/bell_slam_active_01.png" id="4_k8bl5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_active/bell_slam_active_02.png" id="5_7bx8c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_recovery/bell_slam_recovery_01.png" id="6_ft082"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_recovery/bell_slam_recovery_02.png" id="7_3geno"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_recovery/bell_slam_recovery_03.png" id="8_7m1wq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_recovery/bell_slam_recovery_04.png" id="9_tdv3r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_recovery/bell_slam_recovery_05.png" id="10_ro4qg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_recovery/bell_slam_recovery_06.png" id="11_c4jwh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_01.png" id="12_y8qj3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_02.png" id="13_ahobn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_03.png" id="14_lmqpb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_04.png" id="15_vg6by"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_05.png" id="16_80550"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_06.png" id="17_7kh0l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/bell_slam_windup/bell_slam_windup_07.png" id="18_2uh44"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_active/chain_lash_active_01.png" id="19_j78su"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_active/chain_lash_active_02.png" id="20_q12ia"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_recovery/chain_lash_recovery_01.png" id="21_e8b61"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_recovery/chain_lash_recovery_02.png" id="22_yofk4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_recovery/chain_lash_recovery_03.png" id="23_vmjxm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_recovery/chain_lash_recovery_04.png" id="24_62jaw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_recovery/chain_lash_recovery_05.png" id="25_72vif"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_windup/chain_lash_windup_01.png" id="26_rv71j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_windup/chain_lash_windup_02.png" id="27_dc825"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_windup/chain_lash_windup_03.png" id="28_0ixxm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_windup/chain_lash_windup_04.png" id="29_c34ce"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_lash_windup/chain_lash_windup_05.png" id="30_oii58"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_active/chain_pull_active_01.png" id="31_1gudv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_active/chain_pull_active_02.png" id="32_jy7og"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_recovery/chain_pull_recovery_01.png" id="33_ot365"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_recovery/chain_pull_recovery_02.png" id="34_k0qct"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_recovery/chain_pull_recovery_03.png" id="35_ira40"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_recovery/chain_pull_recovery_04.png" id="36_1r10k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_recovery/chain_pull_recovery_05.png" id="37_may4o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_windup/chain_pull_windup_01.png" id="38_e74ky"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_windup/chain_pull_windup_02.png" id="39_arm3d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_windup/chain_pull_windup_03.png" id="40_53bgo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_windup/chain_pull_windup_04.png" id="41_gnxwp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/chain_pull_windup/chain_pull_windup_05.png" id="42_p320j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/death/death_01.png" id="43_v4k1f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/death/death_02.png" id="44_64l20"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/death/death_03.png" id="45_s46q4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/death/death_04.png" id="46_3qp2j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/death/death_05.png" id="47_o5tm5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/death/death_06.png" id="48_rjoo6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/hurt/hurt_01.png" id="49_b110l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/hurt/hurt_02.png" id="50_uaqfi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/hurt/hurt_03.png" id="51_ff5x4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/idle/idle_01.png" id="52_in2ue"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/idle/idle_02.png" id="53_aptnu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/idle/idle_03.png" id="54_pwlqp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/idle/idle_04.png" id="55_d4y52"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/light_hit/light_hit_01.png" id="56_v633a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/light_hit/light_hit_02.png" id="57_37120"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/stagger/stagger_01.png" id="58_bivo8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/stagger/stagger_02.png" id="59_euc8c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/stagger/stagger_03.png" id="60_n2h8q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/stagger/stagger_04.png" id="61_ikptx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/turn/turn_01.png" id="62_u8etb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/turn/turn_02.png" id="63_clbl8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/turn/turn_03.png" id="64_lwd8l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/walk/walk_01.png" id="65_qi1jm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/walk/walk_02.png" id="66_17rnv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/walk/walk_03.png" id="67_5onsh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/walk/walk_04.png" id="68_e6eim"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/walk/walk_05.png" id="69_3jmuq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/sprites/walk/walk_06.png" id="70_k2mm0"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_wmvuj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_rbf55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_w6vss")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_k8bl5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7bx8c")
+}],
+"loop": 0,
+"name": &"bell_slam_active",
+"speed": 14.29
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_ft082")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_3geno")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_7m1wq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_tdv3r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_ro4qg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_c4jwh")
+}],
+"loop": 0,
+"name": &"bell_slam_recovery",
+"speed": 7.89
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_y8qj3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_ahobn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lmqpb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_vg6by")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_80550")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_7kh0l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_2uh44")
+}],
+"loop": 0,
+"name": &"bell_slam_windup",
+"speed": 11.29
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_j78su")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_q12ia")
+}],
+"loop": 0,
+"name": &"chain_lash_active",
+"speed": 16.67
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_e8b61")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_yofk4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_vmjxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_62jaw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_72vif")
+}],
+"loop": 0,
+"name": &"chain_lash_recovery",
+"speed": 9.62
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_rv71j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_dc825")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_0ixxm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_c34ce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_oii58")
+}],
+"loop": 0,
+"name": &"chain_lash_windup",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_1gudv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_jy7og")
+}],
+"loop": 0,
+"name": &"chain_pull_active",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_ot365")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_k0qct")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_ira40")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_1r10k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_may4o")
+}],
+"loop": 0,
+"name": &"chain_pull_recovery",
+"speed": 8.33
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_e74ky")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_arm3d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_53bgo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_gnxwp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_p320j")
+}],
+"loop": 0,
+"name": &"chain_pull_windup",
+"speed": 10.42
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_v4k1f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_64l20")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_s46q4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_3qp2j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_o5tm5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_rjoo6")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_b110l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_uaqfi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_ff5x4")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_in2ue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_aptnu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_pwlqp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_d4y52")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_v633a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_37120")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_bivo8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_euc8c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_n2h8q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_ikptx")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_u8etb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_clbl8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_lwd8l")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_qi1jm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_17rnv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_5onsh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_e6eim")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_3jmuq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_k2mm0")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]

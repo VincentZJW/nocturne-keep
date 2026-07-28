@@ -58,7 +58,7 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn
 ```
 
-第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。Boss固定掉落第三阶`Crimson Masque Stilettos / 绯幕礼刺`；靠近后按E会加入唯一武器库存、自动装备、把HUD更新为14/28并写入章节奖励旗标。随后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`。第三章Debug Start会模拟三把武器均已拥有并装备绯幕礼刺；第三章场景目前仍只实现安全的礼拜堂前庭入口，不包含正式地图、敌人或Boss。
+第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。Boss固定掉落第三阶`Crimson Masque Stilettos / 绯幕礼刺`；靠近后按E会加入唯一武器库存、自动装备、把HUD更新为14/28并写入章节奖励旗标。随后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`。第三章Debug Start会模拟三把武器均已拥有并装备绯幕礼刺。当前入口仍是正式地图之前的原型，但已保存Phase 2A单体铃链忏悔者遭遇；将Debug章节设为`CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES`、出生点设为`CH3_BELLCHAIN_TEST`后按F5，可直接验证链鞭、铃砸、短链牵引、Poise崩解、受击、死亡和掉落。独立快速测试房为`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/bellchain_penitent_test_room.tscn`。其余五敌人、Trial Hall、正式第三章地图与Boss尚未实现。
 
 正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。
 

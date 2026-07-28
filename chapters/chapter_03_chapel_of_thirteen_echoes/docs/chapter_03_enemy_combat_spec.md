@@ -1,6 +1,6 @@
 # Chapter III Enemy Combat Specification / 第三章敌人战斗规格
 
-Status: **Phase 0 architecture and state contract — no implementation yet**
+Status: **Phase 2A implemented — Bellchain Penitent complete; Phase 2B not started**
 
 ## Required project audit ledger
 
@@ -13,7 +13,7 @@ Status: **Phase 0 architecture and state contract — no implementation yet**
 | Chapter III registered | yes, `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` |
 | Current Chapter III scene | `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn` |
 | Chapter III profile | `res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/chapter/chapter_03_start_profile.tres`, `debug_ready=true` |
-| Chapter III profile target/spawns | entry placeholder; `chapter_03_start`, `Chapter03PlayerSpawn` only |
+| Chapter III profile target/spawns | entry prototype; `chapter_03_start`, `Chapter03PlayerSpawn`, `CH3_BELLCHAIN_TEST` |
 | Boss reward weapon | Crimson Masque Stilettos / 绯幕礼刺 |
 | WeaponData | `res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_stilettos.tres` |
 | Chapter III equipment | owns Veilbound/Ravenfang/Crimson Masque and equips `crimson_masque_stilettos` |
@@ -28,7 +28,7 @@ Status: **Phase 0 architecture and state contract — no implementation yet**
 | Shared ground base | `res://shared/scripts/enemies/ground_enemy_base.gd` |
 | Health/Hitbox/Hurtbox | `res://scripts/combat/health_component.gd`, `hitbox_component.gd`, `hurtbox_component.gd` |
 | AttackContext | absent; `HitboxComponent` owns runtime id/source/faction/dedup data |
-| Poise/Stagger | no shared component; Chapter II-specific implementation only |
+| Poise/Stagger | Chapter III owns `Chapter03PoiseComponent`; Chapter II remains unchanged |
 | Loot | `res://scripts/items/loot_drop_component.gd`; one roll on `enemy_died` |
 | Encounter | `res://scripts/encounters/encounter_group.gd`; one-shot group, up to 4 attackers by authored limit |
 | Edge handling | GroundEnemyBase floor/wall RayCasts plus optional movement bounds |
@@ -120,7 +120,18 @@ HP zero → Death
 - Lash: 0.42/0.12/0.52 s, 11 damage, horizontal front-only lane.
 - Slam: 0.62/0.14/0.76 s, 13 damage, ground/close lane with jump counter.
 - Pull: 8 damage, 3.0 s cooldown, same-floor precheck, 20–30 px collision-safe pull. The later Player-facing pull API is a scoped dependency and may not alter base movement values.
-- First formal encounter remains one Penitent alone, but no placement occurs in this task.
+- The saved Chapter III entry prototype now contains one solo Penitent EncounterGroup and a `CH3_BELLCHAIN_TEST` direct spawn. This is a Phase 2A F5 acceptance encounter, not the later formal map population.
+
+### Phase 2A implementation paths
+
+- scene: `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn`
+- AI/config: `scripts/enemies/bellchain_penitent.gd`, `bellchain_penitent_config.gd`
+- composed Poise: `scripts/enemies/components/chapter_03_poise_component.gd`
+- tuning/loot: `resources/enemies/bellchain_penitent_data.tres`, `bellchain_penitent_loot.tres`
+- SpriteFrames: `assets/enemies/bellchain_penitent/animations/bellchain_penitent_sprite_frames.tres`
+- independent room: `scenes/tests/bellchain_penitent_test_room.tscn`
+
+Short Chain Pull applies a 100 px/s horizontal velocity only after a confirmed same-floor hit. Player displacement remains under `CharacterBody2D.move_and_slide()`; the enemy never writes Player `global_position` or vertical velocity. The final 20–30 px feel remains `[PLAYTEST_REQUIRED]`.
 
 ## Censer Executioner state machine
 

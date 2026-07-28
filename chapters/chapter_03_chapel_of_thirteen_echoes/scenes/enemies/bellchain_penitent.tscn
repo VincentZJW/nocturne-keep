@@ -1,0 +1,137 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/bellchain_penitent.gd" id="1_enemy"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/enemies/bellchain_penitent_data.tres" id="2_config"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies/bellchain_penitent/animations/bellchain_penitent_sprite_frames.tres" id="3_frames"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="7_loot"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/enemies/bellchain_penitent_loot.tres" id="8_loot_profile"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="9_dynamic_loot"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/enemies/components/chapter_03_poise_component.gd" id="10_poise"]
+
+[sub_resource type="RectangleShape2D" id="body"]
+size = Vector2(22, 48)
+
+[sub_resource type="RectangleShape2D" id="hurt"]
+size = Vector2(26, 50)
+
+[sub_resource type="RectangleShape2D" id="lash"]
+size = Vector2(48, 16)
+
+[sub_resource type="RectangleShape2D" id="slam"]
+size = Vector2(38, 12)
+
+[sub_resource type="RectangleShape2D" id="pull"]
+size = Vector2(56, 14)
+
+[sub_resource type="CircleShape2D" id="detect"]
+radius = 210.0
+
+[node name="BellchainPenitent" type="CharacterBody2D"]
+floor_snap_length = 6.0
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_enemy")
+config = ExtResource("2_config")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+texture_filter = 1
+sprite_frames = ExtResource("3_frames")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 5)
+shape = SubResource("body")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_health")
+
+[node name="PoiseComponent" type="Node" parent="."]
+script = ExtResource("10_poise")
+max_poise = 32
+recovery_delay = 1.2
+
+[node name="Hurtbox" type="Area2D" parent="."]
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5_hurtbox")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2(0, 5)
+shape = SubResource("hurt")
+
+[node name="FacingRoot" type="Node2D" parent="."]
+
+[node name="ChainLashHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(37, -3)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"enemy_chain_lash"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/ChainLashHitbox"]
+disabled = true
+shape = SubResource("lash")
+
+[node name="BellSlamHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(28, 18)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"enemy_bell_slam"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/BellSlamHitbox"]
+disabled = true
+shape = SubResource("slam")
+
+[node name="ChainPullHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(50, -4)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"enemy_chain_pull"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/ChainPullHitbox"]
+disabled = true
+shape = SubResource("pull")
+
+[node name="DetectionArea" type="Area2D" parent="."]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea"]
+shape = SubResource("detect")
+
+[node name="WallCheck" type="RayCast2D" parent="."]
+position = Vector2(0, 4)
+target_position = Vector2(-20, 0)
+collision_mask = 1
+enabled = true
+
+[node name="FloorCheck" type="RayCast2D" parent="."]
+position = Vector2(-18, 20)
+target_position = Vector2(0, 24)
+collision_mask = 1
+enabled = true
+
+[node name="LootDropComponent" type="Node" parent="."]
+script = ExtResource("7_loot")
+profile = ExtResource("8_loot_profile")
+dynamic_profile = ExtResource("9_dynamic_loot")

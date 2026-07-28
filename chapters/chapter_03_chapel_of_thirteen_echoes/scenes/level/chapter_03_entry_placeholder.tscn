@@ -1,8 +1,10 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="1_runtime"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_entry_placeholder.gd" id="2_level"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_entry_art.gd" id="3_art"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="4_penitent"]
+[ext_resource type="Script" path="res://scripts/encounters/encounter_group.gd" id="5_encounter"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_ground"]
 size = Vector2(1800, 108)
@@ -15,6 +17,9 @@ size = Vector2(260, 360)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_camera"]
 size = Vector2(1800, 720)
+
+[sub_resource type="RectangleShape2D" id="Rectangle_encounter"]
+size = Vector2(440, 300)
 
 [sub_resource type="StyleBoxFlat" id="Style_title"]
 bg_color = Color(0.025, 0.025, 0.04, 0.88)
@@ -62,6 +67,25 @@ shape = SubResource("Rectangle_wall")
 
 [node name="ChapterRuntime" parent="GameplayWorld" instance=ExtResource("1_runtime")]
 
+[node name="Phase2AEncounter" type="Node2D" parent="GameplayWorld"]
+script = ExtResource("5_encounter")
+encounter_name = &"CH3_PHASE2A_BELLCHAIN"
+region_name = &"Chapel Vestibule Prototype"
+simultaneous_attack_limit = 1
+
+[node name="ActivationArea" type="Area2D" parent="GameplayWorld/Phase2AEncounter"]
+position = Vector2(940, 472)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="GameplayWorld/Phase2AEncounter/ActivationArea"]
+shape = SubResource("Rectangle_encounter")
+
+[node name="Enemies" type="Node2D" parent="GameplayWorld/Phase2AEncounter"]
+
+[node name="BellchainPenitent" parent="GameplayWorld/Phase2AEncounter/Enemies" instance=ExtResource("4_penitent")]
+position = Vector2(1260, 584)
+
 [node name="ChapterTitleCard" type="Panel" parent="GameplayWorld/ChapterRuntime/HUD"]
 layout_mode = 3
 anchors_preset = 8
@@ -97,6 +121,9 @@ position = Vector2(240, 584)
 
 [node name="chapter_03_start" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(240, 584)
+
+[node name="CH3_BELLCHAIN_TEST" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(820, 584)
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
@@ -135,5 +162,5 @@ offset_right = 1180.0
 offset_bottom = 566.0
 theme_override_colors/font_color = Color(0.72, 0.74, 0.80, 0.85)
 theme_override_font_sizes/font_size = 13
-text = "ENTRY PLACEHOLDER ONLY / 仅第三章入口占位\nNO ENEMIES · NO ENCOUNTERS · NO BOSS"
+text = "CHAPTER III ENTRY PROTOTYPE / 第三章入口原型\nPHASE 2A · BELLCHAIN PENITENT SOLO ENCOUNTER"
 horizontal_alignment = 1
