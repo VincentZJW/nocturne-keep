@@ -5020,3 +5020,65 @@ Status: complete — Bellchain Penitent production enemy, solo test room and sav
 - The Chapter III destination is still an explicitly labeled entry prototype. Its solo encounter is saved and F5-playable, but is not claimed as the formal Chapter III map or final encounter placement.
 - Phase 2B (Censer Executioner) and all later enemies remain untouched. Short Pull distance, approach speed, Poise mapping 14/28 and encounter feel remain human `[PLAYTEST_REQUIRED]` values.
 - Game-design guidance shaped the telegraph/counterplay split; Godot gameplay guidance shaped typed composition, active-only hitboxes and exact-engine verification. Pre-existing user-owned dirty files remain preserved and excluded.
+## 2026-07-28 — 全章节敌人美术重制 Stage 0 + Stage 1 preflight
+
+Status: in progress — 全章节只读资产审计与第三章六敌人正式像素美术重制获批；第一、二章只审计不改动
+
+### 目标、范围与质量门
+
+- 本里程碑先记录 Chapter I–III 已存在的普通敌人、特殊敌人、Boss、概念图、SpriteFrames、场景和 Main 引用，再只重制 Chapter III 的 Bellchain Penitent、Censer Executioner、Silent Chorister、Stained-Glass Seraph、Confessional Wraith、Thirteenth Scribe。
+- 第三章当前十二张 256/192 px 概念与剪影经原尺寸检查具备明确设定识别，继续作为权威视觉来源；真正不达标的是运行时 64×64 Phase 2 帧：方块头、矩形躯干、直线武器和几乎不变的攻击姿势，与概念落差明显。本轮必须替换所有 415 张运行帧，而非只修 idle。
+- 每个角色必须在章节自有目录中保留 `concept_art/`、新 `sprites/`、`animations/`，并补齐有实际内容的 `effects/`、`docs/`。旧 Phase 2 运行帧整体归档到 `reference/deprecated_phase_2/`，不得继续被 SpriteFrames 或 Main 引用。
+- 保留现有战斗数值、AI、Hitbox/Hurtbox、掉落、Player、武器、Chapter I/II 运行内容和 `project.godot` 正式入口。只允许为视觉验收增加第三章试炼厅、QA脚本、文档和 MainBootstrap 可达的 Chapter III Debug 测试证据。
+- 完成状态使用 PASS/PARTIAL/FAIL。正式 Sprite 或 Main 集成未通过时不得写完成；QA必须包含六张概念证据、六张Sprite预览、六张Main实机、攻击动作、组合战斗和旧版对比。
+
+### 只读基线
+
+- Work starts on `master` at `79dc8636ac67199fc48ed7976d791aaf0dded5e0`. Existing user-owned Chapter I/shared/Player tuning, old QA PNG edits and two UID sidecars remain preserved and excluded from this commit.
+- F5 remains `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter III target remains `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`. All six enemy scenes already use `AnimatedSprite2D` and chapter-local SpriteFrames, and the saved Chapter III target references all six PackedScenes.
+- Current runtime inventory is 415 transparent 64×64 PNGs: Bellchain 70, Executioner 71, Chorister 69, Seraph 67, Wraith 71, Scribe 67. Nearest-neighbor is enforced by per-sprite `texture_filter` and project default filter 0; viewport is 1280×720.
+- Visual inspection of all six idle and representative active frames confirms the acceptance failure: body/limbs/weapons are primarily rectangles and straight lines, with attack active frames often visually indistinguishable from idle. These files are classified as `deprecated_phase_2`, not formal art.
+
+### Planned verification
+
+- Generate all six role-specific, non-template 64×64 animation sets with hard alpha and stable anchors; rebuild SpriteFrames; run dimension/alpha/animation/hash/reference tests; run every independent enemy scene, the combination room and the saved trial hall.
+- Use the exact `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot` 4.7.1 executable for import/parse, automated tests, F5-equivalent MainBootstrap routing and screenshot capture. Record actual commands/results and preserve all evidence under `docs/qa/chapter_03_enemy_art_rework/`.
+- Update the Chapter III art bible and add `chapter_03_enemy_sprite_quality_spec.md`, Stage 0 audit, per-role art notes, mapping/animation/legacy tables. Create one isolated commit and stop for review; do not begin Chapter I/II art replacement.
+
+## 2026-07-28 — 全章节敌人美术重制 Stage 0 + Stage 1 completion
+
+Status: complete for the authorized Stage 0 audit and Chapter III Stage 1 replacement; Chapter I/II replacement not started
+
+### Delivered scope
+
+- Audited the real Chapter I–III enemy/Boss assets, scenes, SpriteFrames, runtime references and Main route. Chapter I and II remain audit-only; no existing gameplay or art file in those chapters was changed by this milestone.
+- Retained the six accepted Chapter III 256×256 concepts and 192×192 silhouette sheets as the authoritative source. Added one role-specific action-production reference and one effect/material reference per enemy rather than generating unrelated replacement concepts.
+- Replaced every one of the 415 formal Chapter III runtime PNGs in place: Bellchain Penitent 70, Censer Executioner 71, Silent Chorister 69, Stained-Glass Seraph 67, Confessional Wraith 71 and Thirteenth Scribe 67. The new frames use role-specific layered silhouettes, separated limbs, garment/armor layers and distinct cloth, iron, copper, bone/parchment, glass, timber, ink and spectral materials.
+- Archived all 415 superseded Phase 2 runtime frames under each role's `reference/deprecated_phase_2/sprites/`. Existing SpriteFrames continue to use the stable formal `sprites/` paths, and deterministic tests reject any archived path in runtime animation resources.
+- Populated each role's required `concept_art/`, `sprites/`, `animations/`, `effects/` and `docs/` directories with real content. Added `chapter_03_enemy_sprite_quality_spec.md`, per-role production notes and the Stage 0 audit.
+- Added the saved `chapter_03_enemy_trial_hall.tscn` alias for six-role review. The actual Main integration remains the existing Chapter III saved destination loaded through `res://scenes/bootstrap/main_bootstrap.tscn`, with all six enemy PackedScenes inside four saved Encounter groups.
+- Produced 27 QA PNGs: six concept/old/new boards, six animation previews, a six-role overview, old-vs-new overview, six Main idle screenshots, six Main attack screenshots and one three-role combination screenshot. The authoritative result and mapping tables are in `docs/qa/chapter_03_enemy_art_rework/qa_report.md`.
+- No Player, enemy AI, combat timing, damage, Hitbox/Hurtbox, loot, weapon, Chapter I/II runtime, Chapter III routing or `project.godot` value was changed.
+
+### Exact commands and actual results
+
+1. Formal art generator: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_chapter_03_enemy_art_v2.gd` — PASS, `roles=6 frames=415`.
+2. Exact import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on Godot 4.7.1; 842 new/formal/archive images imported without parser, resource or autoload errors.
+3. QA board generator: exact Godot 4.7.1 running `build_chapter_03_enemy_art_qa.gd` — PASS, `roles=6 boards=14`.
+4. Formal art/reference test: exact Godot 4.7.1 running `test_chapter_03_enemy_art_rework.gd` — PASS, `roles=6 frames=415 archives=415 main_refs=6`.
+5. Concept regression: `test_chapter_03_enemy_concept_assets.gd` — PASS, `files=12 concepts=6 silhouettes=6 unique_silhouettes=6`.
+6. Six-role Phase 2 regression: `test_chapter_03_phase_2_enemy_roster.gd` — PASS, `roles=6 remaining_frames=345 main=6 combination_room=1`.
+7. Bellchain combat regression: `test_bellchain_penitent_phase2a.gd` — PASS, `animations=17 frames=70 hp=70 poise=32 attacks=3 solo_test=1 main_encounter=1`.
+8. Chapter start regression: `test_chapter_start_foundation.gd` — PASS, `7 entries, Chapters I/II/III-entry ready, Bootstrap preserved`.
+9. Bootstrap regression: `test_main_bootstrap_flow.gd` — PASS for formal Opening and Debug Chapter II. Forced test teardown still reports its existing two ObjectDB fixture instances; no assertion, parser, resource or runtime red error.
+10. Six independent enemy scene smokes plus `chapter_03_enemy_trial_hall.tscn`: exact Godot 4.7.1 with `--headless --quit-after 30` — all seven exit 0 with no Output/Debugger error.
+11. Main graphical QA: exact Godot 4.7.1 running `capture_chapter_03_enemy_art_rework_qa.gd` — PASS, `captures=13 route=MainBootstrap enemies=6 attacks=6 combination=1`; the script restores the Debug Start setting after capture.
+12. Formal F5-equivalent smoke: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --quit-after 240` — exit 0, `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`.
+13. Whitespace validation will run after final documentation edits with `git diff --check` before the isolated commit.
+
+### Acceptance and known limits
+
+- Third chapter audit, concepts, silhouettes, formal sprites, all animation families, scene replacement, Main integration and automated tests are PASS. The old rectangular/line-based frames are no longer referenced by the six formal SpriteFrames.
+- Bellchain's curved chain is readable in the integer-scale asset preview but remains the densest/finest feature in a 1280×720 full-scene screenshot; it is explicitly listed for human 1× playtest review rather than hidden behind a generic PASS claim.
+- The Chapter III destination remains an explicitly labeled enemy acceptance prototype, not a finished Chapter III environment. Environment completion was not authorized by this art milestone.
+- Chapter I/II audit is PASS, but their concepts, formal enemy/Boss replacements and Main replacement are FAIL/not started by scope. Stop after this isolated commit and wait for the user's third-chapter art acceptance before any Chapter I/II replacement.

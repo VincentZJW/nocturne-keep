@@ -1,6 +1,6 @@
 # Chapter III Enemy Art Bible / 第三章敌人美术规范
 
-Status: **Phase 2A–2F complete — twelve concepts plus 415 runtime 64×64 frames across all six enemies are saved and Main-referenced**
+Status: **Stage 1 formal-art replacement complete — accepted concepts retained; all 415 Phase 2 runtime frames replaced by layered role-specific v2 art and verified through MainBootstrap**
 
 ## Art pillars
 
@@ -123,7 +123,9 @@ Common where applicable: `idle`, `move` or `hover`, `alert`, `turn`, `light_hit`
 - Wraith: `hidden`, `door_telegraph`, `emerge`, `emerging_slash_*`, `spectral_dash_*`, `scream_*`, `retreat`.
 - Scribe: `ink_lance_*`, `seal_write`, `seal_delay`, `seal_activate`, `binding_script_*`, `paper_ward`.
 
-The Phase 2 runtime assets live under each enemy's `sprites/` and `animations/` directories. Bellchain Penitent owns 70 frames; the remaining five roles own 345 frames. The deterministic builders preserve transparency, fixed 64×64 canvases and nearest-neighbor Sprite display. Main/F5 evidence is under `res://docs/qa/chapter_03_enemy_phase_02/`.
+The formal Stage 1 runtime assets live under each enemy's `sprites/` and `animations/` directories. Bellchain Penitent owns 70 frames; the remaining five roles own 345 frames. Every previous Phase 2 PNG was copied to the corresponding `reference/deprecated_phase_2/sprites/` tree before replacement. The deterministic v2 generator uses hand-authored role polygons, clustered material highlights, curved chains, pierced objects, irregular cloth hems and equipment-specific effects rather than the former rectangular masks. It also writes one three-pose action reference and one effects reference per role.
+
+The formal SpriteFrames paths are unchanged intentionally: scenes already referenced the correct chapter-local resources, so replacing every source PNG at the stable formal path updates isolated tests and the Main route together. No SpriteFrames points into the deprecated archive. Current acceptance evidence belongs under `res://docs/qa/chapter_03_enemy_art_rework/`.
 
 ## Authenticity QA gate used for Phase 2
 
@@ -136,4 +138,4 @@ For every required PNG, QA must record path, dimensions, byte size, SHA-256, alp
 5. no first/second-chapter recolor and no protected character copy;
 6. nearest-neighbor screenshot evidence.
 
-Phase 2 passed this gate: every role has non-empty runtime PNGs, a saved SpriteFrames resource, a saved enemy scene and a real Main acceptance instance. Final animation polish remains subject to manual combat review; that is not a reason to relabel these assets as final environment art.
+The earlier Phase 2 set passed file/scene existence but fails the later visual-quality gate because geometry dominated the body and representative active frames lacked readable action change. Stage 1 therefore treats it as deprecated rather than retroactively calling it formal art. The v2 set must pass both deterministic integrity and the new concept/old/new/Main screenshot review defined in `chapter_03_enemy_sprite_quality_spec.md`; subjective final acceptance remains with the user.

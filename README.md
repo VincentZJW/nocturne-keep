@@ -134,6 +134,8 @@ Main开发调试快捷键：
 
 第二章正式城堡资产已接入F5保存场景：旧军械库、最后宴会厅、王室画像长廊、血烛礼拜堂、无声舞会前厅和无声舞会厅使用原创像素门拱、真实人物画像、兵器架、铠甲、家具、帷幔与定时烛火，不再依赖交叉直线、空画框或细线拱门。绯幕礼刺拥有世界陈列、基座、拾取和背包四种清晰形态。Boss门现在执行淡出→全黑搬运→淡入→五句对白→双语标题→战斗；死亡重试保留缩短演出。详见[第二章正式城堡环境规格](chapters/chapter_02_silent_court/docs/chapter_02_castle_environment_spec.md)。
 
+第三章六种敌人的415张正式运行帧已完成第一轮全量美术重制，旧Phase 2几何占位帧按角色归档且不再被SpriteFrames引用。F5仍从`MainBootstrap`进入；开发验收时临时选择Chapter III Debug Start，并使用`CH3_BELLCHAIN_TEST`、`CH3_EXECUTIONER_TEST`、`CH3_CHOIR_TEST`、`CH3_SCRIBE_TEST`逐组查看，测试后恢复Debug Start关闭。完整的新旧对比、Main单体/攻击/组合截图和PASS/FAIL边界见[第三章敌人美术重制强制QA报告](docs/qa/chapter_03_enemy_art_rework/qa_report.md)。第一、二章美术仅完成审计，尚未重制。
+
 连续按J使用同一个四帧基础突刺组成最多三段的有限攻击链，而不是无限连招树。首个J立即响应并约0.05秒进入有效帧；0.10–0.20秒合法窗口只锁存一个0.08秒输入且不会被乱按刷新。每段完整播放后以0.32秒最短起手间隔衔接，第三段结束固定进入0.34秒强制收招；收招结束前不能开始新的第一段。每段拥有独立attack_id，过早或窗口外连按不会重置第1帧。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。
 
 ## 文档
@@ -159,6 +161,8 @@ Main开发调试快捷键：
 - [第三章敌人战斗规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_combat_spec.md)
 - [第三章敌人平衡基线](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_balance.md)
 - [第三章敌人美术规范](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_art_bible.md)
+- [第三章敌人正式像素质量规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_sprite_quality_spec.md)
+- [第三章敌人美术重制强制 QA 报告](docs/qa/chapter_03_enemy_art_rework/qa_report.md)
 - [第三章敌人Trial Hall计划](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_trial_plan.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
