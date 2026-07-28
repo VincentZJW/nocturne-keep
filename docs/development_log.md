@@ -4890,3 +4890,44 @@ Status: complete — real-project audit, six-enemy world/combat baseline, art bi
 - Chapter III still opens the explicitly labeled geometric entry placeholder. There are no enemy visuals, scenes, AI, trial spawns or Trial Hall in Main, so F6/F5 enemy combat, twenty-kill runs, loot/reset, combinations and screenshots are not claimed.
 - Phase 1 is the next allowed milestone: create exactly twelve original concept/silhouette PNGs, validate their content/dimensions/hashes/readability, report and stop. It must not start Phase 2A code without a further approval.
 - The game-design skill shaped the role/telegraph/counterplay and balance failure criteria; the Godot gameplay skill shaped composition, typed-signal and missing-contract boundaries. Pre-existing user-owned dirty files remain preserved and excluded.
+
+## 2026-07-28 — Chapter III normal enemies Phase 1 preflight
+
+Status: in progress — twelve concept/silhouette PNGs approved; generation and authenticity QA pending
+
+### Approved scope, files and tests
+
+- Execute only Phase 1: create one original full-body concept and one silhouette/proportion sheet for each of Bellchain Penitent, Censer Executioner, Silent Chorister, Stained-Glass Seraph, Confessional Wraith and Thirteenth Scribe.
+- Final assets will live under each enemy's Chapter III-owned `assets/enemies/<enemy>/concept_art/` directory. Concepts target 256×256 RGBA; silhouette sheets target 192×192 RGBA. Transparent background, complete signature object, distinct thumbnail silhouette and nearest-neighbor presentation are mandatory.
+- Use original generated raster concepts followed by local transparency cleanup and deterministic silhouette derivation. No downloaded third-party asset, prior-chapter recolor, protected commercial character or geometric runtime stand-in is allowed.
+- Task-owned documentation is this log, `chapter_03_enemy_art_bible.md`, and a Phase 1 QA manifest/report under Chapter III docs/QA. No gameplay `.gd`, enemy `.tscn`, EnemyData, SpriteFrames, Main route, Player/weapon value, Chapter I/II content, loot value or project input/render setting is in scope.
+- Authenticity QA will record path, dimensions, mode/alpha, byte size, SHA-256, visible bounds and nontransparent pixel count for all twelve PNGs; six contact sheets/screenshots will verify concept/silhouette relation and 48 px readability.
+- Verification uses the exact Godot 4.7.1 executable: headless import/parse, a dedicated asset integrity check, Chapter start regression and formal Main bootstrap smoke. Phase 1 will stop after reporting and one isolated commit; Phase 2A code remains unapproved.
+- Work begins on `master` at `9660451`. Existing Chapter I/shared/Player tuning, QA-image edits and two UID sidecars remain user-owned and excluded from this milestone.
+
+## 2026-07-28 — Chapter III normal enemies Phase 1 completion
+
+Status: complete — twelve original concept/silhouette PNGs delivered and authenticity-checked; human art-direction approval pending
+
+### Delivered Phase 1 scope
+
+- Created one complete 256×256 RGBA concept for each of Bellchain Penitent, Censer Executioner, Silent Chorister, Stained-Glass Seraph, Confessional Wraith and Thirteenth Scribe. Every concept includes the enemy's complete signature ritual object and uses a transparent background with hard alpha.
+- Created one 192×192 RGBA silhouette/proportion sheet per enemy. Each sheet includes the current 64 px Night Warden scale guide and a shared baseline; all six silhouette hashes are unique and remain distinguishable in the preserved 48 px nearest-neighbor previews.
+- Concepts were generated specifically from the approved Chapter III contracts with the built-in image generation workflow, then locally chroma-keyed, hard-alpha cleaned and nearest-neighbor fitted. No downloaded asset, protected commercial character, real religious portrait, prior-chapter enemy image or recolor was used as input.
+- Added six 768×384 per-enemy QA sheets and one 1536×1152 overview under `docs/qa/chapter_03_enemy_phase_01/`, plus a complete byte/hash/alpha-bound/visible-pixel manifest and a dedicated exact-engine resource test.
+- Updated the art bible from Phase 0 planning to the completed Phase 1 handoff. The accepted concepts are now binding visual sources for their later 64×64 gameplay sprites; Phase 2 must retain the signature object and silhouette rather than substitute a generic enemy.
+
+### Exact commands and actual results
+
+1. Local transparency cleanup used the Image Generation skill's installed `remove_chroma_key.py` with border auto-key, soft matte and despill; all six sources produced non-empty alpha foregrounds. Final repository PNGs were hard-alpha normalized and nearest-neighbor fitted to 256×256/192×192.
+2. Exact Godot import: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; all twelve PNGs imported with no parser, import or missing-resource error.
+3. Dedicated authenticity test: `Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_chapter_03_enemy_concept_assets.gd` — `PASS files=12 concepts=6 silhouettes=6 unique_silhouettes=6`; no final warning or error.
+4. Chapter registry regression: `test_chapter_start_foundation.gd` — `PASS (7 entries, Chapters I/II/III-entry ready, Bootstrap preserved)`.
+5. Formal F5-equivalent Main smoke: `Godot --path . --quit-after 240` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; no runtime, script or resource error.
+6. Visual QA: `chapter_03_enemy_concept_overview.png` and six per-enemy sheets were inspected at original resolution. Complete objects, transparent separation, distinct silhouettes and 48 px role readability pass; subjective art-direction acceptance remains with the user.
+
+### Scope and next gate
+
+- Phase 1 intentionally adds no gameplay SpriteFrames, enemy scene, EnemyData, AI, attack, projectile, field, Trial Hall, Encounter, Main spawn or Chapter III formal map. The concepts are not yet visible in F5/Main and this is stated explicitly in the QA report.
+- Phase 2A is the next allowed milestone after user approval: create only Bellchain Penitent's 64×64 production animation set, combat prototype, independent F6 validation and saved Main/F5 integration, then stop again.
+- Existing user-owned Chapter I/shared/Player tuning, old QA image edits and two UID sidecars remain preserved and excluded from this milestone.

@@ -1,6 +1,6 @@
 # Chapter III Enemy Art Bible / 第三章敌人美术规范
 
-Status: **Phase 0 specification — asset files do not exist yet**
+Status: **Phase 1 complete — twelve concept/silhouette PNGs generated and authenticity-checked; gameplay Sprite production remains Phase 2A–2F**
 
 ## Art pillars
 
@@ -102,7 +102,15 @@ Each enemy selects five to seven colors plus transparency and may add one role-s
 | Wraith | `assets/enemies/confessional_wraith/concept_art/confessional_wraith_concept.png` | `assets/enemies/confessional_wraith/concept_art/confessional_wraith_silhouette.png` |
 | Scribe | `assets/enemies/thirteenth_scribe/concept_art/thirteenth_scribe_concept.png` | `assets/enemies/thirteenth_scribe/concept_art/thirteenth_scribe_silhouette.png` |
 
-All paths are relative to `res://chapters/chapter_03_chapel_of_thirteen_echoes/`. Phase 0 intentionally creates none of these PNGs.
+All paths are relative to `res://chapters/chapter_03_chapel_of_thirteen_echoes/`. Phase 1 created all twelve PNGs at these exact paths. The concepts are 256×256 RGBA and the silhouette/proportion sheets are 192×192 RGBA.
+
+## Phase 1 provenance and production handoff
+
+- Each concept was generated specifically for this project from the enemy-specific contract above using the built-in image generation workflow; no downloaded art, commercial-game character, real religious portrait or previous-chapter enemy image was used as an input.
+- The source generation used a flat chroma-key field. The repository asset was locally keyed, hard-alpha cleaned, nearest-neighbor fitted to the 256×256 production canvas and visually inspected before acceptance.
+- Each silhouette sheet is deterministically derived from its accepted concept alpha, uses the planned native gameplay height, and includes the existing 64 px Night Warden silhouette as a blue-grey scale guide. The ochre line is a shared foot/hover baseline, not a runtime platform asset.
+- `docs/qa/chapter_03_enemy_phase_01/` preserves one concept/silhouette/48 px comparison sheet per enemy plus the six-enemy overview and the full authenticity manifest.
+- These concepts are the mandatory visual source for the later Phase 2A–2F 64×64 SpriteFrames. A later Sprite that abandons the signature silhouette/object contract fails the handoff gate.
 
 ## Planned animation families
 
