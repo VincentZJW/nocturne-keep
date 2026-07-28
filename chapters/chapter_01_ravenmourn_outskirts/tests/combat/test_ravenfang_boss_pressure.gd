@@ -4,7 +4,7 @@ extends SceneTree
 ## routing and ten simulated seconds of light-attack pressure.
 
 const MAIN_SCENE: PackedScene = preload("res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn")
-const RAVENFANG_ROOT: String = "res://assets/sprites/player/ravenfang"
+const RAVENFANG_ROOT: String = "res://shared/assets/player/animations/ravenfang"
 const RAVENFANG_FRAMES_PATH: String = "res://resources/player/ravenfang_player_sprite_frames.tres"
 
 var _failures: Array[String] = []

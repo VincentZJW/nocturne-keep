@@ -1,63 +1,111 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_end/air_dash_end_01.png" id="1_n0rhw"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_end/air_dash_end_02.png" id="2_ws57h"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_loop/air_dash_loop_01.png" id="3_h43qc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_loop/air_dash_loop_02.png" id="4_tpi2b"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_loop/air_dash_loop_03.png" id="5_hwnu4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_start/air_dash_start_01.png" id="6_otfvk"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/air_dash_start/air_dash_start_02.png" id="7_74p1k"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/attack/attack_01.png" id="8_mfxou"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/attack/attack_02.png" id="9_sdh0y"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/attack/attack_03.png" id="10_m1rsh"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/attack/attack_04.png" id="11_teugd"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_attack/dash_attack_01.png" id="12_k0xs2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_attack/dash_attack_02.png" id="13_h57j0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_attack/dash_attack_03.png" id="14_t3yee"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_attack/dash_attack_04.png" id="15_77h2g"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_attack/dash_attack_05.png" id="16_b8buh"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_end/dash_end_01.png" id="17_4vsdo"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_end/dash_end_02.png" id="18_amd3v"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_loop/dash_loop_01.png" id="19_emj1h"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_loop/dash_loop_02.png" id="20_gl6bc"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_loop/dash_loop_03.png" id="21_adtd3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_start/dash_start_01.png" id="22_k4274"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/dash_start/dash_start_02.png" id="23_m1x57"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/death/death_01.png" id="24_baj3m"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/death/death_02.png" id="25_b7isr"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/death/death_03.png" id="26_8lnd4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/death/death_04.png" id="27_be3gv"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/death/death_05.png" id="28_yioig"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/fall/fall_01.png" id="29_lcpkr"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/fall/fall_02.png" id="30_tcuxu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/hurt/hurt_01.png" id="31_appq4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/hurt/hurt_02.png" id="32_oae74"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/hurt/hurt_03.png" id="33_tq8yn"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/idle/idle_01.png" id="34_ch1pu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/idle/idle_02.png" id="35_t8e51"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/idle/idle_03.png" id="36_vvebn"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/idle/idle_04.png" id="37_udoa4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/jump_loop/jump_loop_01.png" id="38_i2kug"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/jump_loop/jump_loop_02.png" id="39_omftq"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/jump_start/jump_start_01.png" id="40_lk1m0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/jump_start/jump_start_02.png" id="41_ya5i0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/land/land_01.png" id="42_u8egu"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/land/land_02.png" id="43_20nm7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/run/run_01.png" id="44_5c5lk"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/run/run_02.png" id="45_rbfby"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/run/run_03.png" id="46_mb48f"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/run/run_04.png" id="47_kqmqj"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/run/run_05.png" id="48_5w3xv"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/ravenfang/run/run_06.png" id="49_q4vmh"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_end/air_dash_end_01.png" id="1_q4vmh"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_end/air_dash_end_02.png" id="2_8uspy"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_loop/air_dash_loop_01.png" id="3_wgiy6"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_loop/air_dash_loop_02.png" id="4_s0cjm"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_loop/air_dash_loop_03.png" id="5_fqonl"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_start/air_dash_start_01.png" id="6_j5qbc"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/air_dash_start/air_dash_start_02.png" id="7_x3gpj"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack/attack_01.png" id="8_botci"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack/attack_02.png" id="9_dee6y"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack/attack_03.png" id="10_c5qef"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack/attack_04.png" id="11_0e42f"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_1/attack_1_01.png" id="12_c06ud"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_1/attack_1_02.png" id="13_j0wvw"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_1/attack_1_03.png" id="14_3x0lc"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_1/attack_1_04.png" id="15_qjk3t"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_2/attack_2_01.png" id="16_rgpkq"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_2/attack_2_02.png" id="17_bq3cb"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_2/attack_2_03.png" id="18_2pdkq"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_2/attack_2_04.png" id="19_rj3wu"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_3/attack_3_01.png" id="20_7hqll"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_3/attack_3_02.png" id="21_qpuce"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_3/attack_3_03.png" id="22_5aj2c"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/attack_3/attack_3_04.png" id="23_qdvqp"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/combo_transition/combo_transition_01.png" id="24_2xnqm"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/combo_transition/combo_transition_02.png" id="25_v4cmf"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_attack/dash_attack_01.png" id="26_ry7w2"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_attack/dash_attack_02.png" id="27_qyrfu"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_attack/dash_attack_03.png" id="28_butjx"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_attack/dash_attack_04.png" id="29_ny82b"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_attack/dash_attack_05.png" id="30_beo2i"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_end/dash_end_01.png" id="31_lwle0"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_end/dash_end_02.png" id="32_cai8c"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_loop/dash_loop_01.png" id="33_2e36e"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_loop/dash_loop_02.png" id="34_ashce"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_loop/dash_loop_03.png" id="35_as8wk"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_start/dash_start_01.png" id="36_77p41"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/dash_start/dash_start_02.png" id="37_sjakj"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/death/death_01.png" id="38_hu2gv"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/death/death_02.png" id="39_2j4ps"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/death/death_03.png" id="40_46q13"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/death/death_04.png" id="41_del0i"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/death/death_05.png" id="42_vvkhp"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/double_jump/double_jump_01.png" id="43_2g5hd"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/double_jump/double_jump_02.png" id="44_gibug"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/double_jump/double_jump_03.png" id="45_5sygm"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/double_jump/double_jump_04.png" id="46_6g0ig"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/fall/fall_01.png" id="47_f8dk6"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/fall/fall_02.png" id="48_pec75"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt/hurt_01.png" id="49_pubpy"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt/hurt_02.png" id="50_gsuqi"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt/hurt_03.png" id="51_wsx8x"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_heavy/hurt_heavy_01.png" id="52_6cr2k"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_heavy/hurt_heavy_02.png" id="53_pqlg2"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_heavy/hurt_heavy_03.png" id="54_oifjj"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_heavy/hurt_heavy_04.png" id="55_8hb45"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_light/hurt_light_01.png" id="56_53qbu"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_light/hurt_light_02.png" id="57_vhgdb"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/hurt_light/hurt_light_03.png" id="58_cd8h3"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/idle/idle_01.png" id="59_5t3or"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/idle/idle_02.png" id="60_al1bp"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/idle/idle_03.png" id="61_482l3"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/idle/idle_04.png" id="62_f8j8j"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_apex/jump_apex_01.png" id="63_kgy4n"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_apex/jump_apex_02.png" id="64_28p5s"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_loop/jump_loop_01.png" id="65_e6uj6"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_loop/jump_loop_02.png" id="66_8bmcy"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_rise/jump_rise_01.png" id="67_nseh8"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_rise/jump_rise_02.png" id="68_kydqv"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_start/jump_start_01.png" id="69_x55j1"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/jump_start/jump_start_02.png" id="70_jir10"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/land/land_01.png" id="71_247r2"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/land/land_02.png" id="72_8hkmb"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/ready_idle/ready_idle_01.png" id="73_ahd0s"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/ready_idle/ready_idle_02.png" id="74_tvecw"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/ready_idle/ready_idle_03.png" id="75_qptht"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/ready_idle/ready_idle_04.png" id="76_586ye"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/run/run_01.png" id="77_fabue"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/run/run_02.png" id="78_r0bo4"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/run/run_03.png" id="79_eaaty"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/run/run_04.png" id="80_i0ne5"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/run/run_05.png" id="81_wbx14"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/run/run_06.png" id="82_jbmaa"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/start_move/start_move_01.png" id="83_x4nal"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/start_move/start_move_02.png" id="84_b3avq"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/start_move/start_move_03.png" id="85_p4tgh"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/stop_move/stop_move_01.png" id="86_l46uf"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/stop_move/stop_move_02.png" id="87_70wqh"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/stop_move/stop_move_03.png" id="88_7kfda"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/turn/turn_01.png" id="89_etsjp"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/turn/turn_02.png" id="90_4qa4b"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/turn/turn_03.png" id="91_vaheo"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/walk/walk_01.png" id="92_r8m06"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/walk/walk_02.png" id="93_fdirl"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/walk/walk_03.png" id="94_3ejj4"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/walk/walk_04.png" id="95_gqqe7"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/walk/walk_05.png" id="96_2ufw4"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/ravenfang/walk/walk_06.png" id="97_vlelu"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_n0rhw")
+"texture": ExtResource("1_q4vmh")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_ws57h")
+"texture": ExtResource("2_8uspy")
 }],
 "loop": 0,
 "name": &"air_dash_end",
@@ -65,13 +113,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_h43qc")
+"texture": ExtResource("3_wgiy6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_tpi2b")
+"texture": ExtResource("4_s0cjm")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_hwnu4")
+"texture": ExtResource("5_fqonl")
 }],
 "loop": 1,
 "name": &"air_dash_loop",
@@ -79,10 +127,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_otfvk")
+"texture": ExtResource("6_j5qbc")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_74p1k")
+"texture": ExtResource("7_x3gpj")
 }],
 "loop": 0,
 "name": &"air_dash_start",
@@ -90,16 +138,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("8_mfxou")
+"texture": ExtResource("8_botci")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_sdh0y")
+"texture": ExtResource("9_dee6y")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_m1rsh")
+"texture": ExtResource("10_c5qef")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_teugd")
+"texture": ExtResource("11_0e42f")
 }],
 "loop": 0,
 "name": &"attack",
@@ -107,19 +155,81 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("12_k0xs2")
+"texture": ExtResource("12_c06ud")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_h57j0")
+"texture": ExtResource("13_j0wvw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_t3yee")
+"texture": ExtResource("14_3x0lc")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_77h2g")
+"texture": ExtResource("15_qjk3t")
+}],
+"loop": 0,
+"name": &"attack_1",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_rgpkq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_b8buh")
+"texture": ExtResource("17_bq3cb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_2pdkq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_rj3wu")
+}],
+"loop": 0,
+"name": &"attack_2",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_7hqll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_qpuce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_5aj2c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_qdvqp")
+}],
+"loop": 0,
+"name": &"attack_3",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_2xnqm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_v4cmf")
+}],
+"loop": 0,
+"name": &"combo_transition",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_ry7w2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_qyrfu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_butjx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ny82b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_beo2i")
 }],
 "loop": 0,
 "name": &"dash_attack",
@@ -127,10 +237,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("17_4vsdo")
+"texture": ExtResource("31_lwle0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_amd3v")
+"texture": ExtResource("32_cai8c")
 }],
 "loop": 0,
 "name": &"dash_end",
@@ -138,13 +248,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("19_emj1h")
+"texture": ExtResource("33_2e36e")
 }, {
 "duration": 1.0,
-"texture": ExtResource("20_gl6bc")
+"texture": ExtResource("34_ashce")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_adtd3")
+"texture": ExtResource("35_as8wk")
 }],
 "loop": 1,
 "name": &"dash_loop",
@@ -152,10 +262,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("22_k4274")
+"texture": ExtResource("36_77p41")
 }, {
 "duration": 1.0,
-"texture": ExtResource("23_m1x57")
+"texture": ExtResource("37_sjakj")
 }],
 "loop": 0,
 "name": &"dash_start",
@@ -163,19 +273,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("24_baj3m")
+"texture": ExtResource("38_hu2gv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("25_b7isr")
+"texture": ExtResource("39_2j4ps")
 }, {
 "duration": 1.0,
-"texture": ExtResource("26_8lnd4")
+"texture": ExtResource("40_46q13")
 }, {
 "duration": 1.0,
-"texture": ExtResource("27_be3gv")
+"texture": ExtResource("41_del0i")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_yioig")
+"texture": ExtResource("42_vvkhp")
 }],
 "loop": 0,
 "name": &"death",
@@ -183,10 +293,27 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("29_lcpkr")
+"texture": ExtResource("43_2g5hd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("30_tcuxu")
+"texture": ExtResource("44_gibug")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_5sygm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_6g0ig")
+}],
+"loop": 0,
+"name": &"double_jump",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_f8dk6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_pec75")
 }],
 "loop": 1,
 "name": &"fall",
@@ -194,13 +321,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("31_appq4")
+"texture": ExtResource("49_pubpy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("32_oae74")
+"texture": ExtResource("50_gsuqi")
 }, {
 "duration": 1.0,
-"texture": ExtResource("33_tq8yn")
+"texture": ExtResource("51_wsx8x")
 }],
 "loop": 0,
 "name": &"hurt",
@@ -208,16 +335,47 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("34_ch1pu")
+"texture": ExtResource("52_6cr2k")
 }, {
 "duration": 1.0,
-"texture": ExtResource("35_t8e51")
+"texture": ExtResource("53_pqlg2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_vvebn")
+"texture": ExtResource("54_oifjj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("37_udoa4")
+"texture": ExtResource("55_8hb45")
+}],
+"loop": 0,
+"name": &"hurt_heavy",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_53qbu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_vhgdb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_cd8h3")
+}],
+"loop": 0,
+"name": &"hurt_light",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_5t3or")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_al1bp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_482l3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_f8j8j")
 }],
 "loop": 1,
 "name": &"idle",
@@ -225,10 +383,21 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("38_i2kug")
+"texture": ExtResource("63_kgy4n")
 }, {
 "duration": 1.0,
-"texture": ExtResource("39_omftq")
+"texture": ExtResource("64_28p5s")
+}],
+"loop": 1,
+"name": &"jump_apex",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_e6uj6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_8bmcy")
 }],
 "loop": 1,
 "name": &"jump_loop",
@@ -236,10 +405,21 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("40_lk1m0")
+"texture": ExtResource("67_nseh8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("41_ya5i0")
+"texture": ExtResource("68_kydqv")
+}],
+"loop": 1,
+"name": &"jump_rise",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("69_x55j1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_jir10")
 }],
 "loop": 0,
 "name": &"jump_start",
@@ -247,10 +427,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("42_u8egu")
+"texture": ExtResource("71_247r2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("43_20nm7")
+"texture": ExtResource("72_8hkmb")
 }],
 "loop": 0,
 "name": &"land",
@@ -258,24 +438,106 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("44_5c5lk")
+"texture": ExtResource("73_ahd0s")
 }, {
 "duration": 1.0,
-"texture": ExtResource("45_rbfby")
+"texture": ExtResource("74_tvecw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("46_mb48f")
+"texture": ExtResource("75_qptht")
 }, {
 "duration": 1.0,
-"texture": ExtResource("47_kqmqj")
+"texture": ExtResource("76_586ye")
+}],
+"loop": 1,
+"name": &"ready_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("77_fabue")
 }, {
 "duration": 1.0,
-"texture": ExtResource("48_5w3xv")
+"texture": ExtResource("78_r0bo4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("49_q4vmh")
+"texture": ExtResource("79_eaaty")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_i0ne5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_wbx14")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_jbmaa")
 }],
 "loop": 1,
 "name": &"run",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("83_x4nal")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_b3avq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_p4tgh")
+}],
+"loop": 0,
+"name": &"start_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("86_l46uf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_70wqh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_7kfda")
+}],
+"loop": 0,
+"name": &"stop_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("89_etsjp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_4qa4b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_vaheo")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("92_r8m06")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_fdirl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_3ejj4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_gqqe7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_2ufw4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_vlelu")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
 }]

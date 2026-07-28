@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Builder: Script = preload("res://scripts/tools/player_sprite_frames_builder.gd")
-const OUTPUT_ROOT: String = "res://assets/sprites/player/ravenfang"
+const OUTPUT_ROOT: String = "res://shared/assets/player/animations/ravenfang"
 const RESOURCE_PATH: String = "res://resources/player/ravenfang_player_sprite_frames.tres"
 
 
@@ -12,5 +12,5 @@ func _init() -> void:
 		push_error("Unable to save Ravenfang SpriteFrames: %s" % error_string(error))
 		quit(1)
 		return
-	print("RAVENFANG_SPRITE_FRAMES: PASS (16 animations)")
+	print("RAVENFANG_SPRITE_FRAMES: PASS animations=%d" % sprite_frames.get_animation_names().size())
 	quit()

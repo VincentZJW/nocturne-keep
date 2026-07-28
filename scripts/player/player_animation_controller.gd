@@ -10,23 +10,34 @@ signal facing_changed(facing_left: bool)
 const ATTACK_HIT_FRAMES: Array[int] = [1, 2]
 const DASH_ATTACK_HIT_FRAMES: Array[int] = [2, 3]
 const LOOP_ANIMATIONS: Array[StringName] = [
-	&"idle", &"run", &"jump_loop", &"fall", &"dash_loop", &"air_dash_loop",
+	&"idle", &"ready_idle", &"walk", &"run", &"jump_rise", &"jump_loop",
+	&"jump_apex", &"fall", &"dash_loop", &"air_dash_loop",
 ]
 const ONE_SHOT_ANIMATIONS: Array[StringName] = [
-	&"jump_start", &"land", &"dash_start", &"dash_end", &"air_dash_start", &"air_dash_end",
-	&"attack", &"dash_attack",
-	&"hurt", &"death",
+	&"turn", &"start_move", &"stop_move", &"jump_start", &"double_jump", &"land",
+	&"dash_start", &"dash_end", &"air_dash_start", &"air_dash_end",
+	&"attack", &"attack_1", &"attack_2", &"attack_3", &"combo_transition",
+	&"dash_attack", &"hurt", &"hurt_light", &"hurt_heavy", &"death",
 ]
 const FACING_LOCK_ANIMATIONS: Array[StringName] = [
 	&"dash_start", &"dash_loop", &"dash_end", &"air_dash_start", &"air_dash_loop",
-	&"air_dash_end", &"attack", &"dash_attack",
+	&"air_dash_end", &"attack", &"attack_1", &"attack_2", &"attack_3",
+	&"combo_transition", &"dash_attack",
 ]
 const PRIORITIES: Dictionary[StringName, int] = {
 	&"idle": 10,
+	&"ready_idle": 12,
+	&"walk": 18,
 	&"run": 20,
+	&"turn": 25,
+	&"start_move": 25,
+	&"stop_move": 25,
+	&"jump_rise": 40,
 	&"jump_loop": 40,
+	&"jump_apex": 40,
 	&"fall": 40,
 	&"jump_start": 50,
+	&"double_jump": 55,
 	&"land": 60,
 	&"dash_start": 70,
 	&"dash_loop": 70,
@@ -35,8 +46,14 @@ const PRIORITIES: Dictionary[StringName, int] = {
 	&"air_dash_loop": 70,
 	&"air_dash_end": 70,
 	&"attack": 80,
+	&"attack_1": 80,
+	&"attack_2": 80,
+	&"attack_3": 80,
+	&"combo_transition": 80,
 	&"dash_attack": 85,
 	&"hurt": 90,
+	&"hurt_light": 90,
+	&"hurt_heavy": 92,
 	&"death": 100,
 }
 
@@ -180,6 +197,26 @@ func reset_to_idle() -> void:
 		animated_sprite.stop()
 		animated_sprite.play(&"idle")
 		animation_changed.emit(&"idle")
+
+
+func select_attack_variant(combo_step: int) -> bool:
+	if animated_sprite == null or animated_sprite.sprite_frames == null:
+		return false
+	var source_animation: StringName = StringName("attack_%d" % clampi(combo_step, 1, 3))
+	var frames: SpriteFrames = animated_sprite.sprite_frames
+	if not frames.has_animation(&"attack") or not frames.has_animation(source_animation):
+		return false
+	var source_count: int = frames.get_frame_count(source_animation)
+	if source_count != frames.get_frame_count(&"attack"):
+		return false
+	for frame_index: int in range(source_count):
+		frames.set_frame(
+			&"attack",
+			frame_index,
+			frames.get_frame_texture(source_animation, frame_index),
+			frames.get_frame_duration(source_animation, frame_index)
+		)
+	return true
 
 
 func is_animation_locked() -> bool:

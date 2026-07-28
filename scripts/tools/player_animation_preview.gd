@@ -1,7 +1,7 @@
 class_name PlayerAnimationPreview
 extends Control
 
-## Internal sixteen-animation inspector. It is not the formal game Main scene.
+## Internal shared Player animation inspector. It is not the formal game Main scene.
 
 const SpriteFramesBuilder: Script = preload("res://scripts/tools/player_sprite_frames_builder.gd")
 
@@ -72,14 +72,29 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _connect_animation_buttons() -> void:
-	var buttons: Array[Button] = [
-		%IdleButton, %RunButton, %JumpStartButton, %JumpLoopButton, %FallButton,
-		%LandButton, %DashStartButton, %DashLoopButton, %DashEndButton,
-		%AirDashStartButton, %AirDashLoopButton, %AirDashEndButton,
-		%AttackButton, %DashAttackButton, %HurtButton, %DeathButton,
-	]
-	for index: int in range(buttons.size()):
-		buttons[index].pressed.connect(_play_selected.bind(SpriteFramesBuilder.ANIMATION_ORDER[index]))
+	var button_animations: Dictionary[Button, StringName] = {
+		%IdleButton: &"idle", %RunButton: &"run", %JumpStartButton: &"jump_start",
+		%JumpLoopButton: &"jump_loop", %FallButton: &"fall", %LandButton: &"land",
+		%DashStartButton: &"dash_start", %DashLoopButton: &"dash_loop",
+		%DashEndButton: &"dash_end", %AirDashStartButton: &"air_dash_start",
+		%AirDashLoopButton: &"air_dash_loop", %AirDashEndButton: &"air_dash_end",
+		%AttackButton: &"attack", %DashAttackButton: &"dash_attack",
+		%HurtButton: &"hurt", %DeathButton: &"death",
+	}
+	var connected_animations: Array[StringName] = []
+	for button: Button in button_animations:
+		var animation_name: StringName = button_animations[button]
+		button.pressed.connect(_play_selected.bind(animation_name))
+		connected_animations.append(animation_name)
+	var grid: GridContainer = %AnimationButtons
+	for animation_name: StringName in SpriteFramesBuilder.ANIMATION_ORDER:
+		if animation_name in connected_animations:
+			continue
+		var button: Button = Button.new()
+		button.text = str(animation_name)
+		button.custom_minimum_size = Vector2(136.0, 34.0)
+		button.pressed.connect(_play_selected.bind(animation_name))
+		grid.add_child(button)
 
 
 func _play_selected(animation_name: StringName) -> void:

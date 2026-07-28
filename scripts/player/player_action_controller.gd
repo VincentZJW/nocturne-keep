@@ -464,6 +464,7 @@ func _start_direct_dash_attack(started_airborne: bool, requested_direction: floa
 
 func _start_attack() -> bool:
 	_clear_attack_buffer()
+	animation_controller.select_attack_variant(1)
 	if not _start_action(ActionState.ATTACK, ATTACK_ANIMATION):
 		return false
 	_attack_elapsed = 0.0
@@ -497,12 +498,14 @@ func _finish_attack_recovery() -> void:
 	_attack_chain_queued = false
 	_attack_recovery_timer = 0.0
 	if should_chain:
+		var next_combo_step: int = _normal_combo_step + 1
+		animation_controller.select_attack_variant(next_combo_step)
 		if not animation_controller.replay_one_shot(ATTACK_ANIMATION):
 			_finish_action(ATTACK_ANIMATION)
 			return
 		_action_state = ActionState.ATTACK
 		_attack_elapsed = 0.0
-		_normal_combo_step += 1
+		_normal_combo_step = next_combo_step
 		_prepare_new_attack_id()
 		_deactivate_attack_hitboxes()
 		_reset_attack_response_measurement()

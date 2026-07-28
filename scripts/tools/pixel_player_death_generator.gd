@@ -168,6 +168,8 @@ static func _draw_dagger(
 		image: Image, handle: Vector2i, tip: Vector2i, is_main: bool,
 		weapon_style: StringName = &"veilbound"
 	) -> void:
+	if weapon_style == &"unarmed":
+		return
 	if weapon_style == &"ravenfang":
 		Renderer.draw_ravenfang_dagger(image, handle, tip, is_main)
 		return

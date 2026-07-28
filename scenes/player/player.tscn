@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://dfaarqq2cfogf" path="res://scripts/player/player_stamina_component.gd" id="7_stamina"]
 [ext_resource type="Script" uid="uid://c03efik0danmi" path="res://scripts/combat/health_component.gd" id="8_health"]
 [ext_resource type="Script" path="res://scripts/player/player_death_sequence.gd" id="9_death_sequence"]
-[ext_resource type="Texture2D" path="res://assets/sprites/player/assassin/death/ghost_hooded_face.png" id="10_ghost"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/effects/night_warden_ghost_hooded_face.png" id="10_ghost"]
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="11_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="12_hitbox"]
 [ext_resource type="Script" path="res://scripts/player/player_hurt_controller.gd" id="13_hurt_controller"]

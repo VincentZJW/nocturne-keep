@@ -1,5 +1,52 @@
 # Development Log
 
+## 2026-07-28 — Core character art rework Stage 1 (preflight)
+
+Status: complete — Player concept, formal pixel assets, animation integration, Prologue consistency and Main verification passed; Stage 2 visual acceptance remains
+
+### Goal, planned files, tests, and scope check
+
+- Rebuild the shared Player presentation as the last Veilbound Night Oath: a mature black-hooded gothic assassin with readable layered light armor, damaged short cape, soul-mark detail and three distinct dual-dagger weapon silhouettes. The visible body target is approximately equal to the Chapter I Castle Guard while preserving existing collision, movement, camera and combat reach.
+- Create original concept-art deliverables under `res://shared/assets/player/concept_art/`, then create deterministic nearest-neighbor runtime pixel frames under `res://shared/assets/player/` and update the three authoritative SpriteFrames resources used by Veilbound, Ravenfang and Crimson Masque.
+- Preserve current gameplay timing and damage contracts. Integrate distinct normal-combo presentations, double-jump presentation and the existing dash/dash-attack/hurt/death sequence through the current typed Player animation/action controllers without changing movement speeds, jump height, dash distance, attack reach, health, stamina or weapon damage.
+- Verify with the exact Godot 4.7.1 executable: deterministic generation, headless import/parse, focused Player animation/action/resource tests, shared Player scene startup, Bootstrap formal F5 smoke and representative chapter startup checks. Preserve existing unrelated Chapter I/shared-enemy tuning and QA edits and exclude them from this stage's commit.
+
+### Read-only baseline
+
+- Preflight is `master` at `f171426`. The worktree already contains unrelated modified Chapter I Boss/enemy tuning, Chapter I level, shared enemy resources, Ravenfang QA images, loot/action tuning and two generated UID files; these remain user-owned and out of scope.
+- The formal shared Player is `res://scenes/player/player.tscn`; it is instanced directly by the Prologue and Chapter I and through the shared chapter runtime in Chapter II/III. Its current visual authority is `Player/VisualRoot/AnimatedSprite2D`, with equipment-driven SpriteFrames swapping in `Player/VisualRoot/WeaponVisual`.
+- Existing gameplay exposes sixteen animation contracts. The normal combo already has three timed gameplay steps but visually replays one four-frame `attack`; double jump replays `jump_start`. Stage 1 will add distinct presentation resources and route these existing states without altering their timing or hitbox windows.
+- Current body collision is 24×52 at y=2, Hurtbox is 22×50 at y=2, normal attack area is 42×14 at x=29/y=-3 and Dash Attack area is 58×16 at x=37/y=-3. These gameplay shapes remain unchanged.
+
+### Scope boundary
+
+- Authorized: Player concept art, Player runtime sprite/effect assets, Veilbound/Ravenfang/Crimson Masque visual variants, Player animation/action presentation routing, focused tests, Player/Main QA evidence and documentation.
+- Not authorized: Candle Warden implementation, Prologue camera choreography, enemy/Boss changes, level art, movement/combat balance, hitbox geometry, HUD redesign, chapter progression or unrelated refactors.
+
+### Delivered implementation
+
+- Added two original high-detail Night Warden concept masters and ten production crops covering front, combat side, back, three-quarter, silhouette, Chapter I Guard scale, outfit, hood, dual-dagger handling and animation poses under `res://shared/assets/player/concept_art/`.
+- Rebuilt the 64×64 Player anatomy as a 57 px-tall adult hooded assassin with layered armor, separate limbs, short cape, belt/oath details, formed hands/boots and real blade/guard/grip silhouettes. The measured 57/58 ratio against the Chapter I Castle Guard is 98.28%; every formal grounded frame retains source-row y=60 as its foot baseline.
+- Generated three synchronized 30-animation production trees for Veilbound, Ravenfang and Crimson Masque. Added ready idle, walk, turn, start/stop, jump rise/apex, double jump, three normal-attack variants, combo transition and light/heavy hurt while retaining every existing runtime name and timing contract.
+- Added runtime attack-variant routing: the existing logical `attack` animation receives the authored Attack 1/2/3 textures before playback, so combo gameplay, effective frames, damage and tests remain unchanged. Legal air jumps now use the authored `double_jump` one-shot with `jump_start` as a defensive fallback.
+- Replaced the Prologue's geometric revival Player drawing with eight authored unarmed 64×64 textures and the same shared hooded ghost identity. Dialogue, revival cues, camera, dagger pickup and transition behavior remain unchanged.
+- Updated the three existing SpriteFrames resources, shared Player ghost reference and animation preview. Active resources now reference `res://shared/assets/player/`; historical frame trees remain unreferenced provenance material.
+
+### Verification and QA evidence
+
+- Exact asset run: `generate_player_stage_1_assets.gd` → `PASS styles=3 animations=30 concepts=10 revival=8`; exact headless editor import exited 0 with no parser, missing-resource or Invalid UID error; all three builders reported 30 animations/OK.
+- Focused tests PASS: Stage 1 art (`concepts=10 revival=8 resources=3 animations=30 collisions=preserved`), Player animation system, M1 movement, M1.5 actions, fast attack, Prologue flow, Ravenfang Boss pressure and Crimson Masque weapon integration.
+- Independent scene smoke PASS: `res://scenes/player/player.tscn` and `res://scenes/tools/player_animation_preview.tscn` both exit 0 without red diagnostics.
+- Formal F5-equivalent smoke PASS: MainBootstrap selected `res://scenes/cinematics/opening_cinematic.tscn`; exit 0. Bootstrap-routed Chapter I graphical QA produced nine Main captures and `PLAYER_STAGE_1_MAIN_QA: PASS`.
+- Formal composition regressions PASS for Chapter I (`34 enemies`), Chapter II (`rooms=9 enemies=38 player=1 hud=1`) and Chapter III (`roles=6 main=6`). The two Stage 0-recorded ObjectDB shutdown warnings remain in the Bootstrap/Chapter II test harnesses; the final windowed F5 run has no red diagnostic.
+- QA: `res://docs/qa/core_character_art_rework/stage_1/stage_1_report.md`, contact sheet and nine Main screenshots. Full design contract: `res://docs/design/player_core_character_art_spec.md`.
+
+### Known limits and next gate
+
+- Automated checks prove resource integrity, anchors, collisions and gameplay compatibility; native-scale animation weight and all three weapon-hand alignments remain Stage 2 manual/visual acceptance work.
+- Several newly authored presentation animations are available but intentionally not forced into gameplay states that currently have no corresponding selection rule.
+- Candle Warden concept, pixels, gestures, lantern lighting and Prologue camera choreography were not started. The next approved phase is Stage 2 Player strong QA, not Candle Warden Stage 3.
+
 ## 2026-07-28 — Chapter III Phase 2B–2F enemy implementation
 
 Status: complete — all six Chapter III normal enemies are saved, Main-accessible and verified; manual combat-feel review remains

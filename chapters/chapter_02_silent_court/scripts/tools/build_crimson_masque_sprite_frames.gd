@@ -2,7 +2,7 @@ extends SceneTree
 
 const Builder: Script = preload("res://scripts/tools/player_sprite_frames_builder.gd")
 const OUTPUT_ROOT: String = (
-	"res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player"
+	"res://shared/assets/player/animations/crimson_masque"
 )
 const RESOURCE_PATH: String = (
 	"res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_player_sprite_frames.tres"
@@ -23,5 +23,5 @@ func _init() -> void:
 		push_error("Unable to save Crimson Masque SpriteFrames: %s" % error_string(error))
 		quit(1)
 		return
-	print("CRIMSON_MASQUE_SPRITE_FRAMES: PASS animations=16 frames=49")
+	print("CRIMSON_MASQUE_SPRITE_FRAMES: PASS animations=%d" % sprite_frames.get_animation_names().size())
 	quit(0)

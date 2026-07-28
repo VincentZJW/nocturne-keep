@@ -343,10 +343,15 @@ func _try_consume_jump() -> bool:
 		_reset_animation_lock_to_idle()
 	elif _movement_state == MovementState.LAND:
 		_reset_animation_lock_to_idle()
-	_enter_state(MovementState.JUMP_START)
 	if can_air_jump:
+		if animation_controller.play_one_shot(DOUBLE_JUMP_ANIMATION):
+			_movement_state = MovementState.JUMP_START
+			movement_state_changed.emit(DOUBLE_JUMP_ANIMATION)
+		else:
+			_enter_state(MovementState.JUMP_START)
 		double_jump_performed.emit(air_jumps_remaining)
 	else:
+		_enter_state(MovementState.JUMP_START)
 		jump_performed.emit(from_coyote_time)
 	return true
 
@@ -433,7 +438,7 @@ func _resume_locomotion_after_action() -> void:
 
 
 func _on_one_shot_finished(animation_name: StringName) -> void:
-	if animation_name == &"jump_start" and not is_on_floor():
+	if animation_name in [&"jump_start", DOUBLE_JUMP_ANIMATION] and not is_on_floor():
 		_enter_state(MovementState.FALL if velocity.y >= 0.0 else MovementState.JUMP_LOOP)
 	elif animation_name == &"land" and is_on_floor():
 		_resume_locomotion_after_action()

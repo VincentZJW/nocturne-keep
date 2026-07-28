@@ -20,6 +20,17 @@ static func generate_frames(weapon_style: StringName = &"veilbound") -> Array[Im
 	return frames
 
 
+static func generate_light_frames(weapon_style: StringName = &"veilbound") -> Array[Image]:
+	return generate_frames(weapon_style)
+
+
+static func generate_heavy_frames(weapon_style: StringName = &"veilbound") -> Array[Image]:
+	var frames: Array[Image] = []
+	for pose: PixelAssassinPose in _heavy_hurt_poses():
+		frames.append(Renderer.draw(pose, weapon_style))
+	return frames
+
+
 static func save_all() -> Dictionary[String, int]:
 	var results: Dictionary[String, int] = {}
 	var output_error: Error = DirAccess.make_dir_recursive_absolute(
@@ -68,6 +79,15 @@ static func _hurt_poses() -> Array[PixelAssassinPose]:
 			Vector2i(29, 49), Vector2i(23, 58),
 			Vector2i(58, 31), Vector2i(9, 45), Vector2i(14, 30)
 		),
+	]
+
+
+static func _heavy_hurt_poses() -> Array[PixelAssassinPose]:
+	return [
+		Pose.new(Vector2i(25, 26), Vector2i(-2, -1), Vector2i(42, 37), Vector2i(18, 34), Vector2i(39, 49), Vector2i(46, 58), Vector2i(27, 50), Vector2i(20, 58), Vector2i(54, 42), Vector2i(7, 29), Vector2i(11, 27)),
+		Pose.new(Vector2i(22, 25), Vector2i(-4, -2), Vector2i(38, 35), Vector2i(14, 31), Vector2i(36, 48), Vector2i(43, 57), Vector2i(24, 49), Vector2i(16, 58), Vector2i(49, 45), Vector2i(4, 24), Vector2i(7, 24)),
+		Pose.new(Vector2i(21, 27), Vector2i(-4, -1), Vector2i(36, 37), Vector2i(13, 33), Vector2i(35, 49), Vector2i(42, 58), Vector2i(23, 50), Vector2i(15, 58), Vector2i(47, 46), Vector2i(3, 26), Vector2i(6, 25)),
+		Pose.new(Vector2i(26, 26), Vector2i(-1, 0), Vector2i(45, 35), Vector2i(20, 37), Vector2i(41, 49), Vector2i(47, 58), Vector2i(29, 49), Vector2i(23, 58), Vector2i(57, 31), Vector2i(9, 45), Vector2i(14, 30)),
 	]
 
 

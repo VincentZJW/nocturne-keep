@@ -22,12 +22,17 @@ const DEPRECATED_AIR_DASH_ROOT: String = (
 	"res://assets/sprites/player/assassin/reference/deprecated_air_dash_five_frame"
 )
 const ANIMATION_ORDER: Array[String] = [
-	"idle", "run", "dash_start", "dash_loop", "dash_end", "air_dash_start",
-	"air_dash_loop", "air_dash_end", "attack", "dash_attack",
+	"idle", "ready_idle", "walk", "run", "turn", "start_move", "stop_move",
+	"dash_start", "dash_loop", "dash_end", "air_dash_start",
+	"air_dash_loop", "air_dash_end", "attack", "attack_1", "attack_2", "attack_3",
+	"combo_transition", "dash_attack",
 ]
 const FRAME_COUNTS: Dictionary[String, int] = {
-	"idle": 4, "run": 6, "dash_start": 2, "dash_loop": 3, "dash_end": 2,
+	"idle": 4, "ready_idle": 4, "walk": 6, "run": 6, "turn": 3,
+	"start_move": 3, "stop_move": 3,
+	"dash_start": 2, "dash_loop": 3, "dash_end": 2,
 	"air_dash_start": 2, "air_dash_loop": 3, "air_dash_end": 2, "attack": 4,
+	"attack_1": 4, "attack_2": 4, "attack_3": 4, "combo_transition": 2,
 	"dash_attack": 5,
 }
 
@@ -35,14 +40,23 @@ const FRAME_COUNTS: Dictionary[String, int] = {
 static func generate_all(weapon_style: StringName = &"veilbound") -> Dictionary[String, Array]:
 	return {
 		"idle": _render_poses(_idle_poses(), weapon_style),
+		"ready_idle": _render_poses(_ready_idle_poses(), weapon_style),
+		"walk": _render_poses(_walk_poses(), weapon_style),
 		"run": _render_poses(_run_poses(), weapon_style),
+		"turn": _render_poses(_turn_poses(), weapon_style),
+		"start_move": _render_poses(_start_move_poses(), weapon_style),
+		"stop_move": _render_poses(_stop_move_poses(), weapon_style),
 		"dash_start": _render_poses(_dash_start_poses(), weapon_style),
 		"dash_loop": _render_poses(_dash_loop_poses(), weapon_style),
 		"dash_end": _render_poses(_dash_end_poses(), weapon_style),
 		"air_dash_start": _render_poses(_air_dash_start_poses(), weapon_style),
 		"air_dash_loop": _render_poses(_air_dash_loop_poses(), weapon_style),
 		"air_dash_end": _render_poses(_air_dash_end_poses(), weapon_style),
-		"attack": _render_poses(_attack_poses(), weapon_style),
+		"attack": _render_poses(_attack_1_poses(), weapon_style),
+		"attack_1": _render_poses(_attack_1_poses(), weapon_style),
+		"attack_2": _render_poses(_attack_2_poses(), weapon_style),
+		"attack_3": _render_poses(_attack_3_poses(), weapon_style),
+		"combo_transition": _render_poses(_combo_transition_poses(), weapon_style),
 		"dash_attack": _render_poses(_dash_attack_poses(), weapon_style),
 	}
 
@@ -273,6 +287,42 @@ static func _idle_poses() -> Array[PixelAssassinPose]:
 	]
 
 
+static func _ready_idle_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(28, 25), Vector2i(47, 32), Vector2i(23, 36), Vector2i(41, 48), Vector2i(47, 58), Vector2i(30, 49), Vector2i(24, 58), Vector2i(59, 25), Vector2i(12, 43), Vector2i(16, 30)),
+		_pose(Vector2i(28, 24), Vector2i(48, 31), Vector2i(23, 35), Vector2i(41, 47), Vector2i(47, 58), Vector2i(30, 48), Vector2i(24, 58), Vector2i(60, 24), Vector2i(12, 42), Vector2i(15, 29)),
+		_pose(Vector2i(28, 25), Vector2i(48, 32), Vector2i(22, 36), Vector2i(41, 48), Vector2i(47, 58), Vector2i(30, 49), Vector2i(24, 58), Vector2i(60, 25), Vector2i(11, 43), Vector2i(16, 30)),
+		_pose(Vector2i(28, 26), Vector2i(47, 33), Vector2i(23, 37), Vector2i(41, 49), Vector2i(47, 58), Vector2i(30, 50), Vector2i(24, 58), Vector2i(59, 26), Vector2i(12, 44), Vector2i(17, 31)),
+	]
+
+
+static func _walk_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(28, 25), Vector2i(48, 34), Vector2i(22, 36), Vector2i(42, 49), Vector2i(49, 58), Vector2i(29, 49), Vector2i(20, 58), Vector2i(61, 29), Vector2i(11, 44), Vector2i(16, 31)),
+		_pose(Vector2i(29, 24), Vector2i(49, 33), Vector2i(23, 37), Vector2i(41, 48), Vector2i(46, 58), Vector2i(30, 49), Vector2i(23, 57), Vector2i(62, 28), Vector2i(12, 45), Vector2i(16, 30)),
+		_pose(Vector2i(28, 25), Vector2i(49, 34), Vector2i(23, 37), Vector2i(39, 49), Vector2i(41, 58), Vector2i(31, 49), Vector2i(28, 58), Vector2i(62, 29), Vector2i(12, 45), Vector2i(17, 31)),
+		_pose(Vector2i(28, 25), Vector2i(47, 35), Vector2i(21, 35), Vector2i(31, 49), Vector2i(20, 58), Vector2i(42, 49), Vector2i(50, 58), Vector2i(60, 30), Vector2i(10, 43), Vector2i(15, 31)),
+		_pose(Vector2i(29, 24), Vector2i(48, 35), Vector2i(22, 34), Vector2i(33, 48), Vector2i(23, 57), Vector2i(42, 48), Vector2i(47, 58), Vector2i(61, 30), Vector2i(11, 42), Vector2i(15, 30)),
+		_pose(Vector2i(28, 25), Vector2i(49, 34), Vector2i(23, 37), Vector2i(31, 49), Vector2i(28, 58), Vector2i(39, 49), Vector2i(41, 58), Vector2i(62, 29), Vector2i(12, 45), Vector2i(17, 31)),
+	]
+
+
+static func _turn_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(28, 25), Vector2i(47, 34), Vector2i(22, 37), Vector2i(41, 48), Vector2i(47, 58), Vector2i(30, 49), Vector2i(24, 58), Vector2i(60, 29), Vector2i(11, 46), Vector2i(16, 31)),
+		_pose(Vector2i(27, 26), Vector2i(42, 35), Vector2i(20, 36), Vector2i(38, 49), Vector2i(44, 58), Vector2i(29, 50), Vector2i(23, 58), Vector2i(52, 30), Vector2i(10, 44), Vector2i(15, 32), Vector2i(-1, 0)),
+		_pose(Vector2i(28, 25), Vector2i(46, 34), Vector2i(23, 37), Vector2i(40, 48), Vector2i(46, 58), Vector2i(31, 49), Vector2i(25, 58), Vector2i(59, 29), Vector2i(12, 46), Vector2i(17, 31)),
+	]
+
+
+static func _start_move_poses() -> Array[PixelAssassinPose]:
+	return [_idle_poses()[0], _ready_idle_poses()[1], _run_poses()[0]]
+
+
+static func _stop_move_poses() -> Array[PixelAssassinPose]:
+	return [_run_poses()[5], _ready_idle_poses()[2], _idle_poses()[0]]
+
+
 static func _run_poses() -> Array[PixelAssassinPose]:
 	return [
 		_pose(Vector2i(29, 23), Vector2i(51, 32), Vector2i(22, 36), Vector2i(44, 47), Vector2i(54, 57), Vector2i(28, 49), Vector2i(17, 58), Vector2i(63, 27), Vector2i(10, 44), Vector2i(16, 29)),
@@ -328,17 +378,35 @@ static func _air_dash_end_poses() -> Array[PixelAssassinPose]:
 	]
 
 
-static func _attack_poses() -> Array[PixelAssassinPose]:
+static func _attack_1_poses() -> Array[PixelAssassinPose]:
 	return [
-		# Extremely short compression: both elbows gather without a held guard frame.
-		_pose(Vector2i(27, 28), Vector2i(36, 34), Vector2i(34, 38), Vector2i(40, 49), Vector2i(46, 58), Vector2i(28, 50), Vector2i(19, 58), Vector2i(50, 31), Vector2i(46, 36), Vector2i(13, 32)),
-		# First core frame: both hands and vertically separated blades snap forward.
-		_pose(Vector2i(30, 28), Vector2i(50, 34), Vector2i(48, 38), Vector2i(46, 48), Vector2i(54, 58), Vector2i(28, 50), Vector2i(14, 58), Vector2i(63, 30), Vector2i(60, 35), Vector2i(12, 30)),
-		# Held extension and maximum lean; this is the chain-open frame.
-		_pose(Vector2i(32, 29), Vector2i(52, 34), Vector2i(50, 38), Vector2i(48, 48), Vector2i(56, 58), Vector2i(27, 49), Vector2i(10, 58), Vector2i(63, 30), Vector2i(61, 35), Vector2i(10, 31), Vector2i(1, 0)),
-		# Fast retraction restores the compact stance without a long recovery hold.
-		_pose(Vector2i(29, 26), Vector2i(46, 35), Vector2i(43, 39), Vector2i(42, 49), Vector2i(48, 58), Vector2i(30, 50), Vector2i(22, 58), Vector2i(58, 31), Vector2i(54, 37), Vector2i(16, 32)),
+		_pose(Vector2i(27, 27), Vector2i(37, 33), Vector2i(27, 39), Vector2i(40, 49), Vector2i(46, 58), Vector2i(28, 50), Vector2i(19, 58), Vector2i(49, 27), Vector2i(14, 46), Vector2i(13, 31)),
+		_pose(Vector2i(29, 27), Vector2i(49, 29), Vector2i(28, 40), Vector2i(45, 48), Vector2i(53, 58), Vector2i(28, 50), Vector2i(15, 58), Vector2i(63, 20), Vector2i(14, 47), Vector2i(11, 29)),
+		_pose(Vector2i(31, 28), Vector2i(51, 35), Vector2i(30, 39), Vector2i(47, 48), Vector2i(55, 58), Vector2i(27, 49), Vector2i(11, 58), Vector2i(63, 41), Vector2i(15, 45), Vector2i(9, 31), Vector2i(1, 0)),
+		_pose(Vector2i(29, 26), Vector2i(45, 35), Vector2i(30, 38), Vector2i(42, 49), Vector2i(48, 58), Vector2i(30, 50), Vector2i(22, 58), Vector2i(57, 32), Vector2i(16, 44), Vector2i(16, 32)),
 	]
+
+
+static func _attack_2_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(28, 27), Vector2i(42, 36), Vector2i(31, 32), Vector2i(40, 49), Vector2i(47, 58), Vector2i(29, 50), Vector2i(20, 58), Vector2i(55, 40), Vector2i(18, 24), Vector2i(14, 31)),
+		_pose(Vector2i(30, 28), Vector2i(43, 38), Vector2i(49, 35), Vector2i(45, 49), Vector2i(53, 58), Vector2i(28, 50), Vector2i(14, 58), Vector2i(56, 43), Vector2i(63, 27), Vector2i(10, 30)),
+		_pose(Vector2i(31, 28), Vector2i(44, 37), Vector2i(51, 32), Vector2i(47, 48), Vector2i(55, 58), Vector2i(27, 49), Vector2i(10, 58), Vector2i(57, 42), Vector2i(63, 20), Vector2i(8, 31), Vector2i(1, 0)),
+		_pose(Vector2i(29, 26), Vector2i(45, 35), Vector2i(35, 37), Vector2i(42, 49), Vector2i(48, 58), Vector2i(30, 50), Vector2i(22, 58), Vector2i(58, 32), Vector2i(22, 44), Vector2i(16, 32)),
+	]
+
+
+static func _attack_3_poses() -> Array[PixelAssassinPose]:
+	return [
+		_pose(Vector2i(27, 29), Vector2i(37, 34), Vector2i(36, 40), Vector2i(41, 50), Vector2i(48, 58), Vector2i(27, 51), Vector2i(17, 58), Vector2i(50, 27), Vector2i(50, 45), Vector2i(12, 32)),
+		_pose(Vector2i(31, 29), Vector2i(50, 33), Vector2i(48, 38), Vector2i(47, 49), Vector2i(55, 58), Vector2i(27, 50), Vector2i(10, 58), Vector2i(63, 25), Vector2i(62, 43), Vector2i(8, 29), Vector2i(1, 0)),
+		_pose(Vector2i(33, 30), Vector2i(53, 34), Vector2i(51, 38), Vector2i(49, 49), Vector2i(58, 58), Vector2i(26, 49), Vector2i(6, 58), Vector2i(63, 28), Vector2i(63, 40), Vector2i(6, 29), Vector2i(1, 0)),
+		_pose(Vector2i(29, 27), Vector2i(46, 35), Vector2i(43, 39), Vector2i(43, 49), Vector2i(50, 58), Vector2i(29, 50), Vector2i(18, 58), Vector2i(58, 31), Vector2i(56, 40), Vector2i(14, 31)),
+	]
+
+
+static func _combo_transition_poses() -> Array[PixelAssassinPose]:
+	return [_attack_1_poses()[3], _attack_2_poses()[0]]
 
 
 static func _dash_attack_poses() -> Array[PixelAssassinPose]:

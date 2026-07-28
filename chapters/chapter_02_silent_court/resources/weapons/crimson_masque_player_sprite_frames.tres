@@ -1,63 +1,111 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_end/air_dash_end_01.png" id="1_itsob"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_end/air_dash_end_02.png" id="2_uwldy"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_loop/air_dash_loop_01.png" id="3_fxmdy"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_loop/air_dash_loop_02.png" id="4_0xoke"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_loop/air_dash_loop_03.png" id="5_mc011"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_start/air_dash_start_01.png" id="6_dkarx"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/air_dash_start/air_dash_start_02.png" id="7_1lfa5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_01.png" id="8_nr7it"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_02.png" id="9_lqj72"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_03.png" id="10_vx1ya"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/attack/attack_04.png" id="11_rkqxc"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_01.png" id="12_maxy5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_02.png" id="13_qoo0u"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_03.png" id="14_2ybls"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_04.png" id="15_3pdlf"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_attack/dash_attack_05.png" id="16_xu8fj"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_end/dash_end_01.png" id="17_tptxw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_end/dash_end_02.png" id="18_8drwm"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_loop/dash_loop_01.png" id="19_qxqfk"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_loop/dash_loop_02.png" id="20_lhekw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_loop/dash_loop_03.png" id="21_1t3oe"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_start/dash_start_01.png" id="22_lrukg"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/dash_start/dash_start_02.png" id="23_hoqeb"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_01.png" id="24_ahe37"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_02.png" id="25_x2k1y"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_03.png" id="26_30ngo"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_04.png" id="27_5bgnv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/death/death_05.png" id="28_o2iam"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/fall/fall_01.png" id="29_7dpuh"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/fall/fall_02.png" id="30_6n0a4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/hurt/hurt_01.png" id="31_e463s"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/hurt/hurt_02.png" id="32_p7rax"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/hurt/hurt_03.png" id="33_s4e80"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_01.png" id="34_pumoi"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_02.png" id="35_ov5iv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_03.png" id="36_d3i3n"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/idle/idle_04.png" id="37_meomr"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_loop/jump_loop_01.png" id="38_7a4sn"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_loop/jump_loop_02.png" id="39_po7bb"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_start/jump_start_01.png" id="40_cagsg"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/jump_start/jump_start_02.png" id="41_tykg0"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/land/land_01.png" id="42_32hkh"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/land/land_02.png" id="43_g3alj"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_01.png" id="44_nergt"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_02.png" id="45_2jh0w"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_03.png" id="46_x0k06"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_04.png" id="47_svd2y"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_05.png" id="48_acf2j"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/sprites/player/run/run_06.png" id="49_vwks7"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_end/air_dash_end_01.png" id="1_vwks7"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_end/air_dash_end_02.png" id="2_7h38k"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_loop/air_dash_loop_01.png" id="3_v0r2k"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_loop/air_dash_loop_02.png" id="4_jvhio"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_loop/air_dash_loop_03.png" id="5_ebsg1"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_start/air_dash_start_01.png" id="6_q6b3f"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/air_dash_start/air_dash_start_02.png" id="7_6ik44"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack/attack_01.png" id="8_fifra"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack/attack_02.png" id="9_lr85k"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack/attack_03.png" id="10_5tkbi"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack/attack_04.png" id="11_6qgu4"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_1/attack_1_01.png" id="12_ln82i"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_1/attack_1_02.png" id="13_hacyq"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_1/attack_1_03.png" id="14_6fg8o"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_1/attack_1_04.png" id="15_k68ia"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_2/attack_2_01.png" id="16_lynr6"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_2/attack_2_02.png" id="17_t1v8d"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_2/attack_2_03.png" id="18_t0sus"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_2/attack_2_04.png" id="19_cjs4c"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_3/attack_3_01.png" id="20_nrvm1"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_3/attack_3_02.png" id="21_ar0mp"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_3/attack_3_03.png" id="22_786yy"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/attack_3/attack_3_04.png" id="23_d35ce"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/combo_transition/combo_transition_01.png" id="24_yhkee"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/combo_transition/combo_transition_02.png" id="25_lmive"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_attack/dash_attack_01.png" id="26_kylbb"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_attack/dash_attack_02.png" id="27_2jcf7"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_attack/dash_attack_03.png" id="28_mio3r"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_attack/dash_attack_04.png" id="29_0cavj"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_attack/dash_attack_05.png" id="30_p4vhh"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_end/dash_end_01.png" id="31_ihl04"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_end/dash_end_02.png" id="32_rs5t3"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_loop/dash_loop_01.png" id="33_bcbu6"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_loop/dash_loop_02.png" id="34_0j0iy"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_loop/dash_loop_03.png" id="35_ccou5"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_start/dash_start_01.png" id="36_68t51"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/dash_start/dash_start_02.png" id="37_embsp"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/death/death_01.png" id="38_pj8l8"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/death/death_02.png" id="39_mny0c"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/death/death_03.png" id="40_d2g8y"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/death/death_04.png" id="41_j0617"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/death/death_05.png" id="42_ihjv3"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/double_jump/double_jump_01.png" id="43_8ivnj"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/double_jump/double_jump_02.png" id="44_dufyo"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/double_jump/double_jump_03.png" id="45_1jq5d"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/double_jump/double_jump_04.png" id="46_3427h"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/fall/fall_01.png" id="47_r2jo4"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/fall/fall_02.png" id="48_hq35m"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt/hurt_01.png" id="49_hk3fq"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt/hurt_02.png" id="50_ije06"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt/hurt_03.png" id="51_s3g5a"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_heavy/hurt_heavy_01.png" id="52_655tr"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_heavy/hurt_heavy_02.png" id="53_f82dg"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_heavy/hurt_heavy_03.png" id="54_i2pid"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_heavy/hurt_heavy_04.png" id="55_5bui6"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_light/hurt_light_01.png" id="56_dd6ie"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_light/hurt_light_02.png" id="57_2nv1n"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/hurt_light/hurt_light_03.png" id="58_0y507"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/idle/idle_01.png" id="59_d7lfr"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/idle/idle_02.png" id="60_dc5a1"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/idle/idle_03.png" id="61_elpkg"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/idle/idle_04.png" id="62_5b1dd"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_apex/jump_apex_01.png" id="63_0n0bu"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_apex/jump_apex_02.png" id="64_8in4d"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_loop/jump_loop_01.png" id="65_qj5il"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_loop/jump_loop_02.png" id="66_1l2ym"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_rise/jump_rise_01.png" id="67_pt87r"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_rise/jump_rise_02.png" id="68_nnyre"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_start/jump_start_01.png" id="69_htdn2"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/jump_start/jump_start_02.png" id="70_6dfku"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/land/land_01.png" id="71_gx586"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/land/land_02.png" id="72_t6blo"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/ready_idle/ready_idle_01.png" id="73_52prl"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/ready_idle/ready_idle_02.png" id="74_vgees"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/ready_idle/ready_idle_03.png" id="75_3vadr"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/ready_idle/ready_idle_04.png" id="76_63iae"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/run/run_01.png" id="77_5snnc"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/run/run_02.png" id="78_5h6wm"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/run/run_03.png" id="79_2nh6t"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/run/run_04.png" id="80_n4nlm"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/run/run_05.png" id="81_5ds4e"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/run/run_06.png" id="82_w6pas"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/start_move/start_move_01.png" id="83_myjvi"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/start_move/start_move_02.png" id="84_sv4hv"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/start_move/start_move_03.png" id="85_hay51"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/stop_move/stop_move_01.png" id="86_jx6f2"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/stop_move/stop_move_02.png" id="87_u0dq0"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/stop_move/stop_move_03.png" id="88_7bjlh"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/turn/turn_01.png" id="89_cgsdn"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/turn/turn_02.png" id="90_aoawk"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/turn/turn_03.png" id="91_r80ay"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/walk/walk_01.png" id="92_u5dxk"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/walk/walk_02.png" id="93_jgtux"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/walk/walk_03.png" id="94_jd4pd"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/walk/walk_04.png" id="95_l8v6o"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/walk/walk_05.png" id="96_qy0dl"]
+[ext_resource type="Texture2D" path="res://shared/assets/player/animations/crimson_masque/walk/walk_06.png" id="97_w3xe2"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_itsob")
+"texture": ExtResource("1_vwks7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_uwldy")
+"texture": ExtResource("2_7h38k")
 }],
 "loop": 0,
 "name": &"air_dash_end",
@@ -65,13 +113,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_fxmdy")
+"texture": ExtResource("3_v0r2k")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_0xoke")
+"texture": ExtResource("4_jvhio")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_mc011")
+"texture": ExtResource("5_ebsg1")
 }],
 "loop": 1,
 "name": &"air_dash_loop",
@@ -79,10 +127,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_dkarx")
+"texture": ExtResource("6_q6b3f")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_1lfa5")
+"texture": ExtResource("7_6ik44")
 }],
 "loop": 0,
 "name": &"air_dash_start",
@@ -90,16 +138,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("8_nr7it")
+"texture": ExtResource("8_fifra")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_lqj72")
+"texture": ExtResource("9_lr85k")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_vx1ya")
+"texture": ExtResource("10_5tkbi")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_rkqxc")
+"texture": ExtResource("11_6qgu4")
 }],
 "loop": 0,
 "name": &"attack",
@@ -107,19 +155,81 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("12_maxy5")
+"texture": ExtResource("12_ln82i")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_qoo0u")
+"texture": ExtResource("13_hacyq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_2ybls")
+"texture": ExtResource("14_6fg8o")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_3pdlf")
+"texture": ExtResource("15_k68ia")
+}],
+"loop": 0,
+"name": &"attack_1",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_lynr6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_xu8fj")
+"texture": ExtResource("17_t1v8d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_t0sus")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_cjs4c")
+}],
+"loop": 0,
+"name": &"attack_2",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_nrvm1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_ar0mp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_786yy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_d35ce")
+}],
+"loop": 0,
+"name": &"attack_3",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_yhkee")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_lmive")
+}],
+"loop": 0,
+"name": &"combo_transition",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_kylbb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_2jcf7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_mio3r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_0cavj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_p4vhh")
 }],
 "loop": 0,
 "name": &"dash_attack",
@@ -127,10 +237,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("17_tptxw")
+"texture": ExtResource("31_ihl04")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_8drwm")
+"texture": ExtResource("32_rs5t3")
 }],
 "loop": 0,
 "name": &"dash_end",
@@ -138,13 +248,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("19_qxqfk")
+"texture": ExtResource("33_bcbu6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("20_lhekw")
+"texture": ExtResource("34_0j0iy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_1t3oe")
+"texture": ExtResource("35_ccou5")
 }],
 "loop": 1,
 "name": &"dash_loop",
@@ -152,10 +262,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("22_lrukg")
+"texture": ExtResource("36_68t51")
 }, {
 "duration": 1.0,
-"texture": ExtResource("23_hoqeb")
+"texture": ExtResource("37_embsp")
 }],
 "loop": 0,
 "name": &"dash_start",
@@ -163,19 +273,19 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("24_ahe37")
+"texture": ExtResource("38_pj8l8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("25_x2k1y")
+"texture": ExtResource("39_mny0c")
 }, {
 "duration": 1.0,
-"texture": ExtResource("26_30ngo")
+"texture": ExtResource("40_d2g8y")
 }, {
 "duration": 1.0,
-"texture": ExtResource("27_5bgnv")
+"texture": ExtResource("41_j0617")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_o2iam")
+"texture": ExtResource("42_ihjv3")
 }],
 "loop": 0,
 "name": &"death",
@@ -183,10 +293,27 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("29_7dpuh")
+"texture": ExtResource("43_8ivnj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("30_6n0a4")
+"texture": ExtResource("44_dufyo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_1jq5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_3427h")
+}],
+"loop": 0,
+"name": &"double_jump",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_r2jo4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_hq35m")
 }],
 "loop": 1,
 "name": &"fall",
@@ -194,13 +321,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("31_e463s")
+"texture": ExtResource("49_hk3fq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("32_p7rax")
+"texture": ExtResource("50_ije06")
 }, {
 "duration": 1.0,
-"texture": ExtResource("33_s4e80")
+"texture": ExtResource("51_s3g5a")
 }],
 "loop": 0,
 "name": &"hurt",
@@ -208,16 +335,47 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("34_pumoi")
+"texture": ExtResource("52_655tr")
 }, {
 "duration": 1.0,
-"texture": ExtResource("35_ov5iv")
+"texture": ExtResource("53_f82dg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_d3i3n")
+"texture": ExtResource("54_i2pid")
 }, {
 "duration": 1.0,
-"texture": ExtResource("37_meomr")
+"texture": ExtResource("55_5bui6")
+}],
+"loop": 0,
+"name": &"hurt_heavy",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_dd6ie")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_2nv1n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_0y507")
+}],
+"loop": 0,
+"name": &"hurt_light",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_d7lfr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_dc5a1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_elpkg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_5b1dd")
 }],
 "loop": 1,
 "name": &"idle",
@@ -225,10 +383,21 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("38_7a4sn")
+"texture": ExtResource("63_0n0bu")
 }, {
 "duration": 1.0,
-"texture": ExtResource("39_po7bb")
+"texture": ExtResource("64_8in4d")
+}],
+"loop": 1,
+"name": &"jump_apex",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_qj5il")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_1l2ym")
 }],
 "loop": 1,
 "name": &"jump_loop",
@@ -236,10 +405,21 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("40_cagsg")
+"texture": ExtResource("67_pt87r")
 }, {
 "duration": 1.0,
-"texture": ExtResource("41_tykg0")
+"texture": ExtResource("68_nnyre")
+}],
+"loop": 1,
+"name": &"jump_rise",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("69_htdn2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_6dfku")
 }],
 "loop": 0,
 "name": &"jump_start",
@@ -247,10 +427,10 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("42_32hkh")
+"texture": ExtResource("71_gx586")
 }, {
 "duration": 1.0,
-"texture": ExtResource("43_g3alj")
+"texture": ExtResource("72_t6blo")
 }],
 "loop": 0,
 "name": &"land",
@@ -258,24 +438,106 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("44_nergt")
+"texture": ExtResource("73_52prl")
 }, {
 "duration": 1.0,
-"texture": ExtResource("45_2jh0w")
+"texture": ExtResource("74_vgees")
 }, {
 "duration": 1.0,
-"texture": ExtResource("46_x0k06")
+"texture": ExtResource("75_3vadr")
 }, {
 "duration": 1.0,
-"texture": ExtResource("47_svd2y")
+"texture": ExtResource("76_63iae")
+}],
+"loop": 1,
+"name": &"ready_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("77_5snnc")
 }, {
 "duration": 1.0,
-"texture": ExtResource("48_acf2j")
+"texture": ExtResource("78_5h6wm")
 }, {
 "duration": 1.0,
-"texture": ExtResource("49_vwks7")
+"texture": ExtResource("79_2nh6t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_n4nlm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_5ds4e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_w6pas")
 }],
 "loop": 1,
 "name": &"run",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("83_myjvi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_sv4hv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_hay51")
+}],
+"loop": 0,
+"name": &"start_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("86_jx6f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_u0dq0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_7bjlh")
+}],
+"loop": 0,
+"name": &"stop_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("89_cgsdn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_aoawk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_r80ay")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("92_u5dxk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_jgtux")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_jd4pd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_l8v6o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_qy0dl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_w3xe2")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
 }]

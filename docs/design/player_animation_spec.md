@@ -1,12 +1,22 @@
 # Player Animation Integration Specification
 
-Version: 1.9 — minimal combat-window integration
-Date: 2026-07-23
-Status: M1/M1.5 movement/action presentation plus player death presentation complete
+Version: 2.0 — Night Warden Stage 1 formal art integration
+Date: 2026-07-28
+Status: 30-animation, three-weapon formal Player presentation complete; Stage 2 visual QA pending
 
 ## Scope
 
-This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, M1.5 actions, approved death presentation, and the animation events now consumed by the minimal combat foundation. It covers sprite animation names, timing, loop behavior, priority arbitration, facing, Ground/Air Dash, normal Attack, Dash Attack, the five-frame body fall, and the hooded ghost visual. Hitbox/Hurtbox ownership and Castle Guard behavior are specified separately; this layer still owns no Health, invulnerability, combo, Boss, or production-level logic.
+This document defines the player presentation layer for The Night Warden, its M1 locomotion integration, M1.5 actions, approved death presentation, and the animation events consumed by the combat foundation. Stage 1 replaces active block-art sources with one shared 64×64 body model and three baked weapon variants. It adds authored presentation names without changing movement, damage, collision, attack reach, camera, Health or stamina tuning.
+
+Formal source roots:
+
+- `res://shared/assets/player/animations/veilbound/`
+- `res://shared/assets/player/animations/ravenfang/`
+- `res://shared/assets/player/animations/crimson_masque/`
+- `res://shared/assets/player/revival/`
+- `res://shared/assets/player/effects/`
+
+The active `SpriteFrames` resources still live at their established resource paths, so chapter and equipment contracts remain compatible. Historical sources under `res://assets/sprites/player/` remain references only and are no longer referenced by active Player frame resources.
 
 ## Node composition
 
@@ -26,11 +36,19 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 
 | Animation | Frames | FPS | Loop | Art status |
 | --- | ---: | ---: | :---: | --- |
-| `idle` | 4 | 5 | Yes | Production |
-| `run` | 6 | 10 | Yes | Production |
+| `idle` | 4 | 5 | Yes | Stage 1 production |
+| `ready_idle` | 4 | 5 | Yes | Stage 1 production |
+| `walk` | 6 | 7 | Yes | Stage 1 production |
+| `run` | 6 | 10 | Yes | Stage 1 production |
+| `turn` | 3 | 12 | No | Stage 1 production |
+| `start_move` | 3 | 12 | No | Stage 1 production |
+| `stop_move` | 3 | 12 | No | Stage 1 production |
 | `jump_start` | 2 | 12 | No | M1 production |
+| `jump_rise` | 2 | 4 | Yes | Stage 1 production |
 | `jump_loop` | 2 | 4 | Yes | M1 production |
+| `jump_apex` | 2 | 6 | Yes | Stage 1 production |
 | `fall` | 2 | 4 | Yes | M1 production |
+| `double_jump` | 4 | 16 | No | Stage 1 production |
 | `land` | 2 | 12 | No | M1 production |
 | `dash_start` | 2 | 20 | No | Production |
 | `dash_loop` | 3 | 20 | Yes | Production |
@@ -38,14 +56,18 @@ Resource: `res://resources/player/player_sprite_frames.tres`
 | `air_dash_start` | 2 | 20 | No | Production |
 | `air_dash_loop` | 3 | 20 | Yes | Production |
 | `air_dash_end` | 2 | 20 | No | Production |
-| `attack` | 4 | 20 | No | Production fast dual-dagger thrust |
+| `attack` | 4 | 20 | No | Runtime alias for current combo step |
+| `attack_1` | 4 | 20 | No | Main-hand short diagonal cut |
+| `attack_2` | 4 | 20 | No | Off-hand reverse cut |
+| `attack_3` | 4 | 20 | No | Crossed dual-dagger finisher |
+| `combo_transition` | 2 | 20 | No | Presentation-only bridge |
 | `dash_attack` | 5 | 20 | No | Production high-speed dual thrust |
-| `hurt` | 3 | 12 | No | Placeholder |
+| `hurt` | 3 | 16 | No | Production compatibility alias |
+| `hurt_light` | 3 | 16 | No | Stage 1 production |
+| `hurt_heavy` | 4 | 12 | No | Stage 1 production |
 | `death` | 5 | 11.111 | No | Production horizontal body fall, ~0.45 s |
 
-Only Hurt remains a placeholder. Its files live under `assets/sprites/player/assassin/placeholder/` and must not be treated as approved final art. The old eight `placeholder_death_*` files remain unreferenced historical material; active death art lives in `assets/sprites/player/assassin/death/`.
-
-The original front, side, static Dash, and static Attack reference images remain byte-identical in `assets/sprites/player/assassin/reference/`. The superseded sideways-slash Attack remains in `reference/deprecated_attack_slash/`. The immediately preceding six-frame thrust sequences remain in their deprecated directories. Replaced five-frame Ground and Air Dash sources are preserved byte-identically in `reference/deprecated_ground_dash_five_frame/` and `reference/deprecated_air_dash_five_frame/`.
+All 30 entries are formal Stage 1 art. The original front, side, static Dash and static Attack references and deprecated sequences remain preserved under `res://assets/sprites/player/assassin/reference/`, but active resources reference only the shared Stage 1 roots.
 
 ## Timing contracts
 
@@ -53,13 +75,15 @@ Ground Dash presentation is deliberately segmented. `dash_start` has two fast co
 
 Air Dash follows the same chain grammar: two-frame `air_dash_start`, three-frame locked `air_dash_loop`, and two-frame `air_dash_end`, all at 20 FPS. Only the first paid segment uses start; successful continuations remain in loop; the end phase occurs once after chaining stops. The body is horizontal, both feet stay clear of the ground line, both blades remain close and readable, and the mantle trails backward. It avoids the grounded rear-leg push and the Attack's extended paired blades.
 
-Attack is a synchronous four-frame dual-dagger thrust at 20 FPS: `attack_01` is the short compression, `attack_02` snaps both blades into the first core pose, `attack_03` holds maximum extension and opens the repeat window, and `attack_04` retracts quickly. Both blades point forward and remain vertically separated. The designed delay from J to `attack_02` is one 20-FPS frame, approximately 0.05 seconds. `PlayerAnimationController.is_attack_hit_window()` reports `attack_02/03`; `PlayerActionController` now uses that event to enable the separate one-damage narrow Hitbox and disables it for `01/04`.
+Normal Attack keeps the existing four-frame, 20 FPS gameplay timing and the logical animation name `attack`. `PlayerAnimationController.select_attack_variant()` copies the corresponding `attack_1`, `attack_2` or `attack_3` presentation into that logical slot before playback, preserving all existing state, hit-window and test contracts. The three silhouettes are now a main-hand diagonal cut, off-hand reverse cut and crossed dual-dagger finisher. `attack_02/03` remain the effective visual/hit frames; damage and mandatory recovery values are unchanged.
 
 Dash Attack uses one shared ground/air five-frame sequence at 20 FPS: `dash_attack_01` inherits Dash and retracts both elbows, `02` starts paired extension, `03` forms the full arrow-shaped core, `04` holds the narrow thrust, and `05` retracts while movement decelerates. Total presentation time is approximately 0.25 seconds. It has no lateral slash or broad effect arc. `dash_attack_03/04` now drive a separate two-damage narrow Hitbox; presentation still does not own damage calculation.
 
 Death uses five non-looping 64×64 frames at 11.111 FPS, approximately 0.45 seconds total. `death_01` breaks balance while both blades remain near the hands; `death_02` begins the backward fall; `death_03` approaches the floor and visibly separates both daggers; `death_04` reaches a horizontal grounded body; `death_05` is a still, fully horizontal corpse with the longer main dagger in front and shorter off-hand dagger on the opposite side. The final visible baseline is `y=60`, and its wide/low bounds are checked automatically at 64×64 and through nearest-neighbor 48×48 reduction.
 
-The separate `ghost_hooded_face.png` is not a SpriteFrames entry. It is a 64×64 transparent, pale-blue/white hooded front-face texture with two readable eye highlights and controlled partial-alpha glow. `PlayerDeathSequence` reveals it only after `death` finishes, moves it upward 14 pixels over 0.35 seconds, holds it for 0.50 seconds, then hides it before signaling respawn readiness.
+The separate `res://shared/assets/player/effects/night_warden_ghost_hooded_face.png` is not a SpriteFrames entry. It is a 64×64 transparent, pale-blue/white hooded front-face texture. `PlayerDeathSequence` keeps the established rise, hold and respawn timing.
+
+The Prologue's `RevivalPlayerArt` now draws eight authored 64×64 unarmed poses from `res://shared/assets/player/revival/` rather than constructing the protagonist from rectangles and lines. Dialogue, pose cue timing, soul-mark timing, camera and dagger-pickup transition remain unchanged.
 
 ## M1 locomotion art contract
 
@@ -154,7 +178,7 @@ Dedicated inputs extend the M1 map:
 - `air_jumps_remaining` is restored to one on landing when either flag enables the capability.
 - A ground or coyote-time jump does not consume the air jump. Only a jump after the first-jump coyote window consumes it.
 - The shared 0.12-second input buffer feeds both valid ground and air jump paths, but one physics input edge can produce at most one jump.
-- `double_jump` is reserved as the future independent animation name. The prototype deliberately resets and replays Jump Start as fallback art; no final double-jump animation is claimed.
+- A legal air jump now plays the four-frame `double_jump` one-shot and emits the existing capability signal. If the resource is unavailable, the controller retains `jump_start` as a defensive fallback. No jump velocity, air-jump count or unlock rule changed.
 
 ### Ground and air Dash
 
