@@ -32,6 +32,8 @@ Formal selectors include:
 - Platform-combat checks: `CH2_GALLERY`, `CH2_CHAPEL`, `CH2_ANTECHAMBER`
 - Existing room/Boss checks: `CH2_BANQUET`, `CH2_ARMORY`, `CH2_BOSS`, `CH2_FLOOR_2_START`, `CH2_FLOOR_3_START`
 
+`CH2_BOSS` now begins outside the saved formal Ballroom door. Walking into its threshold fades to black, relocates the existing Player behind the door, fades into the Ballroom and starts the first-entry five-line presentation. A respawn repeats the same threshold contract with the shortened Boss intro; it does not create a second Player, HUD or Camera.
+
 For normal F5 acceptance, enable the Chapter II debug start, choose `CH2_START`, then follow the snake route. The stair doors are the only continuation points; stepping into their threshold performs the black-screen relocation.
 
 ## Verification contract

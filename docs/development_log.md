@@ -4740,3 +4740,63 @@ Status: complete — saved Main layering/reliquary flow, measured transition opt
 - Boss quick acceptance: set `debug_start_chapter_id = CHAPTER_02_SILENT_COURT`, `debug_start_spawn_id = CH2_BOSS`, press F5, walk right from CP05, stand against the opening door to verify the Player is in front, defeat Seraphine, walk to x=5550, approach the small pedestal, observe two flame poses, press E, then use the revealed mirror passage.
 - Full-route acceptance: use `CH2_START`, press F5, verify Floor 1→2 and Floor 2→3 fades/landings, then continue through entrance, Intro, Phase 2, reliquary and Passage. Subjective transition feel, the one observed non-repeatable intro outlier and the preferred pedestal scale remain human-playtest items.
 - Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA images and two UID sidecars remain preserved and excluded from this commit.
+
+## 2026-07-28 — Chapter II formal environment assets and Boss threshold preflight
+
+Status: in progress — saved Main/room/Boss-entry audit complete; asset generation, integration, profiling and graphical acceptance pending
+
+### Goal and strict scope
+
+- Replace the proven Chapter II room placeholders with original, reusable pixel assets before scene integration: formal Crimson Masque crossed-stiletto displays, six inhabited royal portraits, distinct armory/chapel/ballroom doors and arches, candle fixtures and castle furniture/decoration.
+- Apply those assets to the saved F5 Main route in Old Armory Safe Room, Last Banquet Hall, Royal Portrait Gallery, Blood Candle Chapel, Silent Ballroom Antechamber and the Silent Ballroom threshold without changing Player/enemy/Boss balance, room collisions or Chapter III gameplay.
+- Replace the current walk-through Boss threshold with a short fade-out, collision-safe relocation to the saved Ballroom entry, fade-in and the existing five-line first-entry presentation. Preserve the shortened retry presentation.
+- Measure the existing floor/room/Boss/phase/reward/chapter-boundary frame-time probes before and after the art integration, then capture at least twelve real MainBootstrap frames and run exact-engine regression before one focused commit.
+
+### Read-only audit and planned task-owned files
+
+- Work begins on `master` at `771ccf81c59f2d8b8ad7d1371bda6b35ce683ea8`; the branch is nine commits ahead of `origin/master`. Pre-existing unstaged Chapter I/shared enemy tuning, Player/item Resources, old QA images and two untracked UID sidecars remain user-owned and outside this task.
+- `project.godot` resolves F5 through `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter II resolves to `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`.
+- The six saved room scenes are `old_armory_safe_room.tscn`, `last_banquet_hall.tscn`, `royal_portrait_gallery.tscn`, `blood_candle_chapel.tscn`, `silent_ballroom_antechamber.tscn` and `silent_ballroom.tscn` under `chapters/chapter_02_silent_court/scenes/rooms/`.
+- The supplied Main frames match the saved implementation: every audited room still exposes empty `BackgroundPlaceholder` and `PropsPlaceholder` nodes. `chapter_02_room_graybox.gd` draws Armory weapons as two five-pixel lines, Gallery portraits as empty rectangles, Chapel architecture/candles as arcs and vertical lines, Banquet furniture as rectangles and Antechamber identity as plain banners. There are no Chapter II portrait PNGs and no reusable room-door/arch/candlestick asset set.
+- The current Boss threshold is `SilentCourt/GameplayWorld/BossArea/DuchessBossEntrance`; its `ApproachArea` only tweens `door_open_progress` and disables `DoorBlocker`. The later `BossActivationArea` independently starts `HollowDuchessRoomController`, so walking through the opening can reach combat without a black-screen relocation. The existing `DuchessEncounterPresentation` already owns the required full five-line/short retry presentation and will be reused rather than duplicated.
+- Planned task-owned files include a deterministic Godot Image asset generator, generated PNGs under Chapter II `assets/environment`, `assets/props`, `assets/portraits`, `assets/doors`, `assets/weapons` and `assets/fx`, saved room Sprite2D compositions, a typed Boss-threshold transition controller, narrowly adjusted entrance/room-controller APIs, focused tests, graphical QA tooling/evidence and Chapter II environment/Boss documentation.
+- Verification baseline and completion commands use `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot` 4.7.1: exact import/parse, the Chapter II Stage A frame-time benchmark, focused saved-Main/Boss/route tests, full recursive `test_*.gd` regression, formal bootstrap smoke and at least twelve MainBootstrap screenshots covering all requested rooms and Boss entry phases.
+
+## 2026-07-28 — Chapter II formal castle assets, performance and Boss threshold completion
+
+Status: complete — saved Main art replacement, transition profiling, formal Boss entry, exact-engine regression and 18-image QA delivered; human visual/feel acceptance pending
+
+### Delivered scope
+
+- Added a deterministic Godot `Image` generator and 35 original pixel PNGs: four distinct Crimson Masque stiletto presentations, six inhabited royal portraits, five doors/arches, two architectural modules, fifteen furniture/armour/fixture props and three candle-flame frames. The Armory uses `world_display`, the Duchess reliquary uses `pedestal_display`, the story pickup uses `pickup_icon`, and `WeaponData` uses `inventory_icon_formal` (with the compact pickup art as its HUD icon). No external asset, online generator or uncertain license source was used.
+- Replaced the six audited room identities in their saved `.tscn` files. Old Armory now contains readable stilettos/racks/armour; Banquet contains tables, benches and remnants; Gallery has people rather than empty panels; Chapel uses full masonry doors/arches and an altar rather than line arcs; Antechamber and Ballroom now have coherent pillars, drapes, crests and candle fixtures.
+- Retained the existing room geometry, three-floor route, enemy placement and combat values. `chapter_02_room_graybox.gd` now exposes an explicit legacy fallback, while all six formal saved rooms disable it.
+- Added the reusable `Chapter02WallSconce`; its flames advance from a Timer and pause off-screen rather than creating a decorative per-frame workload.
+- Replaced the walk-through Boss placeholder with `DuchessBossThresholdTransition`: 0.24 s fade-out, 0.10 s fully black collision-safe relocation, 0.24 s fade-in, existing five-line first-entry dialogue, bilingual title and then combat. It locks Player input/velocity/facing, applies temporary invulnerability and reconfigures/reset the existing Camera before revealing the room.
+- Reused the existing `DuchessEncounterPresentation` and `intro_seen` contract. First entry remains 6.4 seconds/five lines; death retry remains the shortened 1.25-second presentation. No duplicate Player, HUD, Camera or dialogue controller was created.
+- Corrected the interior staging after visual review: the exterior door/armour group hides after opening, the arrival no longer overlaps a foreground pillar, and the 0.82 intro framing shows Player and Seraphine before returning to the saved combat zoom.
+
+### Performance audit and actual measurements
+
+- Pre-modification Stage A benchmark: Floor 1→2 max 17.545 ms, Floor 2→3 max 16.626 ms, Boss intro max 19.097 ms, Phase max 17.118 ms, Boss death→reliquary max 17.703 ms, reliquary→mirror max 18.038 ms, Chapter II→Passage max 11.528 ms and Passage→Chapter III max 11.855 ms; every segment had zero frames over 25 ms.
+- Post-integration benchmark command: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tests/benchmark_chapter_02_stage_a.gd` — `PASS`. Floor 1→2 max 13.365 ms, Floor 2→3 max 12.342 ms, Boss intro max 13.735 ms, Phase max 18.757 ms, Boss death→reliquary max 14.142 ms, reliquary→mirror max 13.566 ms, Chapter II→Passage max 13.439 ms and Passage→Chapter III max 13.475 ms. Every segment again had zero frames over 25 ms.
+- The result does not prove universal hardware performance, but it rejects the suspected synchronous import/scene-instantiation spike on the tested Apple M4 GL Compatibility path. Assets are pre-imported and saved in the Chapter scene; floor transitions still reuse the same Player/HUD/Camera and do not load room files at the transition boundary.
+
+### Exact commands and actual results
+
+1. Asset generator: `Godot --headless --path . --script res://chapters/chapter_02_silent_court/scripts/tools/generate_chapter_02_castle_assets.gd` — `PASS files=35`.
+2. Exact import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, import or missing-resource error.
+3. New saved-art/threshold contract: `test_chapter_02_formal_environment.gd` — `PASS assets=16 portraits=6 weapon_contexts=4 rooms=6 threshold=fade/relocate/intro`.
+4. Saved Boss/Main integration: `test_hollow_duchess_main_integration.gd` — `PASS boss=1 layers=1 entrance=1 presentation=1 cp05=1 hud=1 reliquary=1 candles=1 proximity=112 mirror=1`.
+5. Presentation timing: `test_hollow_duchess_presentation_phase.gd` — `PASS intro=5 transition=10 phase2=0.85/80`.
+6. Three-floor real-physics route: `test_chapter_02_three_floor_route.gd` — `PASS runs=3 softlocks=0` after disabling only the Boss threshold inside this route-only test.
+7. Full recursive exact-engine regression: sorted independent execution of every repository `test_*.gd` — `FULL_SUITE tests=53 failed=0`.
+8. MainBootstrap graphical QA: `Godot --path . --script res://chapters/chapter_02_silent_court/scripts/tests/capture_chapter_02_castle_qa.gd` — `PASS captures=19 rooms=6 threshold=fade/relocate/dialogue/title/combat reliquary=1 transitions=2`. Evidence/hashes are in `docs/qa/chapter_02_castle_polish/chapter_02_castle_polish_qa_report.md`.
+9. Formal F5-equivalent bootstrap smoke: `Godot --path . --quit-after 240` — exit 0, `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; no runtime, script or resource error.
+
+### Diagnostics, scope and manual acceptance
+
+- The graphical QA and benchmark intentionally call `SceneTree.quit()`; Godot 4.7.1 reports GL texture/RID/ObjectDB teardown diagnostics after each PASS. The formal F5 smoke exits cleanly without them. No script, parse, missing-resource, assertion or Debugger error occurred during runtime verification.
+- No Player/enemy/Boss combat value, room collision, chapter route, reward value, Chapter I or Chapter III gameplay was changed. The Godot Gameplay skill guided typed signal/controller separation and saved Sprite2D composition rather than placing transition control inside the Boss AI.
+- Full-route manual test: choose `CHAPTER_02_SILENT_COURT` + `CH2_START`, press F5, inspect Armory/Banquet on Floor 1, Gallery/Chapel on Floor 2, then Antechamber/Ballroom on Floor 3. Boss-only manual test: choose `CH2_BOSS`, press F5, walk right into the large double door, verify fade/black relocation/fade-in, five dialogue lines, title and combat; die once to check the shortened retry.
+- Human acceptance still owns subjective portrait polish, prop density, candle atmosphere, Boss entrance pacing and real combat readability. Pre-existing user-owned Chapter I/shared tuning, Player/item Resources, old QA images and two UID sidecars remain preserved and excluded from this milestone.

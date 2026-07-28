@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/duchess_reliquary.gd" id="1"]
-[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/reliquary_weapon_display.gd" id="2"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/transitions/reliquary_candle_flames.gd" id="3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/pedestal_display.png" id="4_weapon"]
 
 [sub_resource type="CircleShape2D" id="Circle_interaction"]
 radius = 112.0
@@ -15,7 +15,10 @@ script = ExtResource("1")
 [node name="WeaponDisplay" type="Node2D" parent="."]
 position = Vector2(0, -111)
 z_index = 1
-script = ExtResource("2")
+
+[node name="FormalStilettos" type="Sprite2D" parent="WeaponDisplay"]
+texture_filter = 1
+texture = ExtResource("4_weapon")
 
 [node name="PickupAnchor" type="Marker2D" parent="WeaponDisplay"]
 position = Vector2(0, 0)

@@ -3,6 +3,11 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_mocl5"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_rsu53"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_st2v6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/environment/architecture/stone_pillar.png" id="4_pillar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/ballroom_velvet_drape.png" id="5_drape"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/silent_court_royal_crest.png" id="6_crest"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/doors/ballroom_double_door.png" id="7_door"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/environment/chapter_02_wall_sconce.tscn" id="8_sconce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ryjs5"]
 size = Vector2(3712, 108)
@@ -19,8 +24,65 @@ bilingual_name = "Silent Ballroom / 无声舞会厅"
 room_index = 9
 room_size = Vector2i(3712, 720)
 accent_color = Color(0.5411765, 0.47058824, 0.5921569, 1)
+use_legacy_identity = false
 
 [node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=837969065]
+z_index = 5
+z_as_relative = false
+
+[node name="Pillar01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(520, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_pillar")
+
+[node name="Pillar02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1500, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_pillar")
+
+[node name="Pillar03" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2120, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_pillar")
+
+[node name="Pillar04" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2920, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_pillar")
+
+[node name="Drape01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(920, 205)
+texture_filter = 1
+texture = ExtResource("5_drape")
+
+[node name="Drape02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1720, 205)
+texture_filter = 1
+texture = ExtResource("5_drape")
+
+[node name="Drape03" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2520, 205)
+texture_filter = 1
+texture = ExtResource("5_drape")
+
+[node name="RoyalCrest" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1856, 330)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("6_crest")
+
+[node name="Sconce01" parent="BackgroundPlaceholder" instance=ExtResource("8_sconce")]
+position = Vector2(920, 336)
+
+[node name="Sconce02" parent="BackgroundPlaceholder" instance=ExtResource("8_sconce")]
+position = Vector2(1720, 336)
+
+[node name="Sconce03" parent="BackgroundPlaceholder" instance=ExtResource("8_sconce")]
+position = Vector2(2520, 336)
 
 [node name="Geometry" type="Node2D" parent="." unique_id=221560480]
 
@@ -41,6 +103,13 @@ room_width = 3712.0
 trim_color = Color(0.57788235, 0.5129412, 0.62478435, 1)
 
 [node name="PropsPlaceholder" type="Node2D" parent="." unique_id=420184059]
+z_index = 5
+z_as_relative = false
+
+[node name="BallroomExitDoor" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(3550, 484)
+texture_filter = 1
+texture = ExtResource("7_door")
 
 [node name="DoorAnchors" type="Node2D" parent="." unique_id=46001228]
 

@@ -26,6 +26,8 @@ func _run() -> void:
 		"ChapterSystems/HollowDuchessRoomController", "GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/HollowDuchessBossHud",
 		"ChapterSystems/Chapter02To03TransitionController", "GameplayWorld/BossArea/BallroomMirrorGate",
 		"GameplayWorld/BossArea/DuchessBossEntrance/DoorBlocker",
+		"GameplayWorld/BossArea/DuchessBossEntrance/ExteriorVisuals/DoorArtwork",
+		"ChapterSystems/DuchessBossThresholdTransition",
 		"GameplayWorld/BossArea/DuchessEncounterPresentation/AnimationPlayer",
 		"GameplayWorld/BossArea/DuchessReliquary/WeaponDisplay/PickupAnchor",
 		"GameplayWorld/BossArea/DuchessReliquary/CandleFlames/AnimationTimer",
@@ -42,6 +44,9 @@ func _run() -> void:
 	var entrance: Node2D = level.get_node_or_null(
 		"GameplayWorld/BossArea/DuchessBossEntrance"
 	) as Node2D
+	var threshold: DuchessBossThresholdTransition = level.get_node_or_null(
+		"ChapterSystems/DuchessBossThresholdTransition"
+	) as DuchessBossThresholdTransition
 	var reliquary: DuchessReliquary = level.get_node_or_null(
 		"GameplayWorld/BossArea/DuchessReliquary"
 	) as DuchessReliquary
@@ -62,6 +67,8 @@ func _run() -> void:
 		_expect(player.z_index == 12 and not player.z_as_relative, "Player layer contract changed")
 	if entrance != null:
 		_expect(entrance.z_index == 8 and not entrance.z_as_relative, "Boss entrance must remain behind Player")
+	if threshold != null:
+		_expect(threshold.get_transition_stage() == &"idle", "Boss threshold did not initialize idle")
 	if reliquary != null and player != null and interaction_prompt != null:
 		_expect(reliquary.z_index == 8 and not reliquary.z_as_relative, "Reliquary must remain behind Player")
 		_expect(interaction_prompt.z_index == 20 and not interaction_prompt.z_as_relative, "Reliquary prompt layer mismatch")

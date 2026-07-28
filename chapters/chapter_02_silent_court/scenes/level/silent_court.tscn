@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3]
+[gd_scene load_steps=49 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/silent_court.gd" id="1_level"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
@@ -41,6 +41,7 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_boss_entrance.tscn" id="39_boss_entrance"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_encounter_presentation.tscn" id="40_boss_presentation"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/transitions/duchess_reliquary.tscn" id="41_reliquary"]
+[ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/duchess_boss_threshold_transition.gd" id="42_boss_threshold"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 2520)
@@ -682,6 +683,17 @@ ballroom_fx_path = NodePath("../../GameplayWorld/BossArea/BallroomFx")
 presentation_path = NodePath("../../GameplayWorld/BossArea/DuchessEncounterPresentation")
 camera_left = 2688
 camera_right = 6400
+external_entry_flow_enabled = true
+
+[node name="DuchessBossThresholdTransition" type="Node" parent="ChapterSystems"]
+script = ExtResource("42_boss_threshold")
+level_path = NodePath("../..")
+player_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player")
+entrance_path = NodePath("../../GameplayWorld/BossArea/DuchessBossEntrance")
+destination_path = NodePath("../../GameplayWorld/BossArea/PlayerBossEntry")
+fade_rect_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/FloorTransitionFade")
+room_controller_path = NodePath("../HollowDuchessRoomController")
+respawn_controller_path = NodePath("../../GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/PlayerRespawnController")
 
 [node name="Chapter02To03TransitionController" type="Node" parent="ChapterSystems"]
 script = ExtResource("31_transition_controller")
@@ -792,7 +804,7 @@ position = Vector2(4700, -1188)
 position = Vector2(4700, -1188)
 
 [node name="PlayerBossEntry" type="Marker2D" parent="GameplayWorld/BossArea"]
-position = Vector2(3460, -1216)
+position = Vector2(4000, -1216)
 
 [node name="DuchessReliquary" parent="GameplayWorld/BossArea" instance=ExtResource("41_reliquary")]
 position = Vector2(5550, -1188)

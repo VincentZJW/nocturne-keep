@@ -3,6 +3,16 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_cwgo2"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_5h5s7"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_85dv3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/portraits/lady_secret_smile.png" id="4_portrait_01"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/portraits/stern_court_lord.png" id="5_portrait_02"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/portraits/royal_reader.png" id="6_portrait_03"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/portraits/elder_in_cape.png" id="7_portrait_04"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/portraits/rose_maiden.png" id="8_portrait_05"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/portraits/court_matron.png" id="9_portrait_06"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/environment/chapter_02_wall_sconce.tscn" id="10_sconce"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/environment/architecture/stone_pillar.png" id="11_pillar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/silent_court_royal_crest.png" id="12_crest"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/doors/royal_corridor_door.png" id="13_door"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_oq1dq"]
 size = Vector2(3200, 108)
@@ -31,9 +41,87 @@ bilingual_name = "Royal Portrait Gallery / 王室肖像长廊"
 room_index = 4
 room_size = Vector2i(3200, 720)
 accent_color = Color(0.45882353, 0.39215687, 0.49411765, 1)
+use_legacy_identity = false
 platform_rects = Array[Vector4]([Vector4(420, 500, 420, 24), Vector4(1040, 420, 420, 24), Vector4(1720, 420, 420, 24), Vector4(2380, 500, 420, 24)])
 
 [node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=134270877]
+
+[node name="Portrait01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(260, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_portrait_01")
+
+[node name="Portrait02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(650, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("5_portrait_02")
+
+[node name="Portrait03" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1040, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("6_portrait_03")
+
+[node name="Portrait04" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1430, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("7_portrait_04")
+
+[node name="Portrait05" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1820, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("8_portrait_05")
+
+[node name="Portrait06" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2210, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("9_portrait_06")
+
+[node name="Portrait07" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2600, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_portrait_01")
+
+[node name="Portrait08" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2940, 210)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("7_portrait_04")
+
+[node name="Sconce01" parent="BackgroundPlaceholder" instance=ExtResource("10_sconce")]
+position = Vector2(455, 292)
+
+[node name="Sconce02" parent="BackgroundPlaceholder" instance=ExtResource("10_sconce")]
+position = Vector2(1235, 292)
+
+[node name="Sconce03" parent="BackgroundPlaceholder" instance=ExtResource("10_sconce")]
+position = Vector2(2015, 292)
+
+[node name="Sconce04" parent="BackgroundPlaceholder" instance=ExtResource("10_sconce")]
+position = Vector2(2795, 292)
+
+[node name="Pillar01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(90, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("11_pillar")
+
+[node name="Pillar02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(3110, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("11_pillar")
+
+[node name="RoyalCrest" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1600, 360)
+texture_filter = 1
+texture = ExtResource("12_crest")
 
 [node name="Geometry" type="Node2D" parent="." unique_id=1740804623]
 
@@ -83,6 +171,16 @@ trim_color = Color(0.50211763, 0.44078434, 0.5345882, 1)
 platform_rects = Array[Vector4]([Vector4(420, 500, 420, 24), Vector4(1040, 420, 420, 24), Vector4(1720, 420, 420, 24), Vector4(2380, 500, 420, 24)])
 
 [node name="PropsPlaceholder" type="Node2D" parent="." unique_id=1915880521]
+
+[node name="EntryDoor" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(60, 524)
+texture_filter = 1
+texture = ExtResource("13_door")
+
+[node name="ExitDoor" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(3140, 524)
+texture_filter = 1
+texture = ExtResource("13_door")
 
 [node name="DoorAnchors" type="Node2D" parent="." unique_id=876500221]
 

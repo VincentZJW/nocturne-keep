@@ -3,6 +3,15 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_bcek7"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_rlhxi"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_fih5e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/environment/architecture/wall_niche.png" id="4_niche"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/world_display.png" id="5_stilettos"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/armory_weapon_rack.png" id="6_weapon_rack"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/armory_spear_rack.png" id="7_spear_rack"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/wall_shield_display.png" id="8_shield"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/knight_armor_statue.png" id="9_armor"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/crate_stack.png" id="10_crates"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/doors/armory_iron_door.png" id="11_door"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/environment/chapter_02_wall_sconce.tscn" id="12_sconce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmpee"]
 size = Vector2(1024, 108)
@@ -22,9 +31,40 @@ bilingual_name = "Old Armory Safe Room / 旧军械库安全室"
 room_index = 7
 room_size = Vector2i(1024, 720)
 accent_color = Color(0.4392157, 0.5019608, 0.54509807, 1)
+use_legacy_identity = false
 platform_rects = Array[Vector4]([Vector4(520, 500, 320, 24)])
 
 [node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=487288973]
+
+[node name="Niche01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(130, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_niche")
+
+[node name="Niche02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(370, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_niche")
+
+[node name="Niche03" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(610, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_niche")
+
+[node name="Niche04" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(850, 420)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_niche")
+
+[node name="Sconce01" parent="BackgroundPlaceholder" instance=ExtResource("12_sconce")]
+position = Vector2(250, 290)
+
+[node name="Sconce02" parent="BackgroundPlaceholder" instance=ExtResource("12_sconce")]
+position = Vector2(730, 290)
 
 [node name="Geometry" type="Node2D" parent="." unique_id=1865907734]
 
@@ -52,6 +92,41 @@ trim_color = Color(0.48407844, 0.54180396, 0.5814902, 1)
 platform_rects = Array[Vector4]([Vector4(520, 500, 320, 24)])
 
 [node name="PropsPlaceholder" type="Node2D" parent="." unique_id=992006703]
+
+[node name="CrossedStilettos" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(370, 414)
+texture_filter = 1
+texture = ExtResource("5_stilettos")
+
+[node name="WeaponRack" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(130, 552)
+texture_filter = 1
+texture = ExtResource("6_weapon_rack")
+
+[node name="SpearRack" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(860, 552)
+texture_filter = 1
+texture = ExtResource("7_spear_rack")
+
+[node name="ShieldDisplay" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(610, 418)
+texture_filter = 1
+texture = ExtResource("8_shield")
+
+[node name="KnightArmor" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(610, 540)
+texture_filter = 1
+texture = ExtResource("9_armor")
+
+[node name="CrateStack" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(746, 572)
+texture_filter = 1
+texture = ExtResource("10_crates")
+
+[node name="ArmoryIronDoor" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(955, 500)
+texture_filter = 1
+texture = ExtResource("11_door")
 
 [node name="DoorAnchors" type="Node2D" parent="." unique_id=2101660265]
 

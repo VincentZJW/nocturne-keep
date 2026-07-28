@@ -1,9 +1,9 @@
 [gd_resource type="Resource" script_class="WeaponData" load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/items/weapon_data.gd" id="1_weapon"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/icons/inventory_icon.png" id="2_icon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/inventory_icon_formal.png" id="2_icon"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/weapons/crimson_masque_stilettos_pickup.tscn" id="3_pickup"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/icons/hud_icon.png" id="4_hud_icon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/weapons/crimson_masque_stilettos/pickup_icon.png" id="4_hud_icon"]
 
 [resource]
 script = ExtResource("1_weapon")

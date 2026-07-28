@@ -51,6 +51,10 @@ func _prepare_route(level: SilentCourtLevel, player: Player) -> void:
 		body.collision_mask = 0
 	var activation: Area2D = level.get_node("GameplayWorld/BossArea/BossActivationArea") as Area2D
 	activation.monitoring = false
+	var threshold: DuchessBossThresholdTransition = level.get_node(
+		"ChapterSystems/DuchessBossThresholdTransition"
+	) as DuchessBossThresholdTransition
+	threshold.set_enabled_for_test(false)
 	var boss: CharacterBody2D = level.get_node("GameplayWorld/BossArea/HollowDuchess") as CharacterBody2D
 	boss.process_mode = Node.PROCESS_MODE_DISABLED
 	boss.collision_layer = 0

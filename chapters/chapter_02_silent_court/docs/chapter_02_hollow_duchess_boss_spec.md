@@ -97,6 +97,12 @@ Entering `BossArea/BossActivationArea` closes the rear and exit doors, sets CP05
 
 Player death uses the existing ghost/respawn sequence. On respawn the room controller resets Boss HP/phase/Poise/cooldowns/phantoms/position, reopens the rear approach, restores the closed exit and uses the one-second retry intro. Boss death disables all attack sources, plays `death`, delivers `你认识我？` / `不……但殿下一直在等你。`, opens both doors and fades the Boss HUD. The exit is a safe Chapter III transition placeholder only; no later chapter is implemented.
 
+### Formal threshold entry (2026-07-28)
+
+The saved Main route no longer begins combat by walking through an auto-opening placeholder. `GameplayWorld/BossArea/DuchessBossEntrance` requests `ChapterSystems/DuchessBossThresholdTransition`, which performs `0.24 s fade-out -> 0.10 s blackout relocation -> 0.24 s fade-in`. Only during blackout is the Player moved to `GameplayWorld/BossArea/PlayerBossEntry`; input, velocity and temporary invulnerability are controlled explicitly, and the existing Camera is reset to the third-floor limits before fade-in.
+
+The first encounter then uses the complete 6.4-second five-line presentation and bilingual title. `intro_seen` remains authoritative for the 1.25-second retry variant after respawn. The formal Main entry Camera temporarily uses a 0.82 framing scale so both combatants are visible, then restores its prior zoom when combat begins. No Boss damage, health, poise or attack cadence was changed by the threshold work.
+
 ## Verification boundary
 
 Automated evidence proves configuration, 70 attack cycles, phase/Poise/reset, five complete 222–226-second live-component simulations and Main composition. Graphical evidence was captured from the legal Bootstrap/CH2_BOSS path, not an isolated preview. Manual acceptance must still judge tell readability, punish-window feel, camera framing at arena extremes and whether phase-two lanes remain readable during real evasive play.

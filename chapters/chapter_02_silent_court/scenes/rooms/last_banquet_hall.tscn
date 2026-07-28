@@ -3,6 +3,14 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_ti5vr"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_sw80g"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_nbr4v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/ruined_banquet_table.png" id="4_table"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/royal_mourning_banner.png" id="5_banner"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/ballroom_velvet_drape.png" id="6_drape"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/environment/architecture/stone_pillar.png" id="7_pillar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/oak_bench.png" id="8_bench"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/wine_barrel_stack.png" id="9_barrels"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/floor_candelabrum.png" id="10_candelabrum"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/environment/chapter_02_wall_sconce.tscn" id="11_sconce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_npt51"]
 size = Vector2(2096, 108)
@@ -26,9 +34,54 @@ room_index = 3
 room_size = Vector2i(2096, 720)
 vertical_minimum = -120
 accent_color = Color(0.5019608, 0.35686275, 0.38431373, 1)
+use_legacy_identity = false
 platform_rects = Array[Vector4]([Vector4(360, 548, 480, 18), Vector4(680, 450, 320, 24)])
 
 [node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=919354010]
+
+[node name="Pillar01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(210, 430)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("7_pillar")
+
+[node name="Pillar02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1048, 430)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("7_pillar")
+
+[node name="Pillar03" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1886, 430)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("7_pillar")
+
+[node name="Drape01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(470, 205)
+texture_filter = 1
+texture = ExtResource("6_drape")
+
+[node name="Drape02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1500, 205)
+texture_filter = 1
+texture = ExtResource("6_drape")
+
+[node name="Banner01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(760, 205)
+texture_filter = 1
+texture = ExtResource("5_banner")
+
+[node name="Banner02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1310, 205)
+texture_filter = 1
+texture = ExtResource("5_banner")
+
+[node name="Sconce01" parent="BackgroundPlaceholder" instance=ExtResource("11_sconce")]
+position = Vector2(675, 305)
+
+[node name="Sconce02" parent="BackgroundPlaceholder" instance=ExtResource("11_sconce")]
+position = Vector2(1415, 305)
 
 [node name="Geometry" type="Node2D" parent="." unique_id=302171721]
 
@@ -63,6 +116,46 @@ trim_color = Color(0.54180396, 0.40831372, 0.43356863, 1)
 platform_rects = Array[Vector4]([Vector4(360, 548, 480, 18), Vector4(680, 450, 320, 24)])
 
 [node name="PropsPlaceholder" type="Node2D" parent="." unique_id=741473640]
+
+[node name="BanquetTable01" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(600, 568)
+texture_filter = 1
+texture = ExtResource("4_table")
+
+[node name="BanquetTable02" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1220, 568)
+texture_filter = 1
+texture = ExtResource("4_table")
+
+[node name="BanquetTable03" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1690, 568)
+texture_filter = 1
+texture = ExtResource("4_table")
+
+[node name="Bench01" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(870, 588)
+texture_filter = 1
+texture = ExtResource("8_bench")
+
+[node name="Bench02" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1450, 588)
+texture_filter = 1
+texture = ExtResource("8_bench")
+
+[node name="BarrelStack" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1950, 564)
+texture_filter = 1
+texture = ExtResource("9_barrels")
+
+[node name="FloorCandelabrum01" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(315, 556)
+texture_filter = 1
+texture = ExtResource("10_candelabrum")
+
+[node name="FloorCandelabrum02" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1810, 556)
+texture_filter = 1
+texture = ExtResource("10_candelabrum")
 
 [node name="DoorAnchors" type="Node2D" parent="." unique_id=464273823]
 

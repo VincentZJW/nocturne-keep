@@ -3,6 +3,14 @@
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_room_graybox.gd" id="1_xkhuk"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_surface_trim.gd" id="2_vyrhy"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/level/chapter_02_camera_bounds.gd" id="3_7nevq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/doors/blood_candle_chapel_arch.png" id="4_chapel_arch"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/blood_candle_altar.png" id="5_altar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/ballroom_velvet_drape.png" id="6_drape"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/floor_candelabrum.png" id="7_candelabrum"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/knight_armor_statue.png" id="8_armor"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/oak_bench.png" id="9_bench"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/props/silent_court_royal_crest.png" id="10_crest"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/environment/chapter_02_wall_sconce.tscn" id="11_sconce"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_b2dbe"]
 size = Vector2(2688, 108)
@@ -32,9 +40,62 @@ room_index = 5
 room_size = Vector2i(2688, 720)
 vertical_minimum = -120
 accent_color = Color(0.47843137, 0.2, 0.2627451, 1)
+use_legacy_identity = false
 platform_rects = Array[Vector4]([Vector4(920, 400, 440, 24), Vector4(1480, 400, 440, 24), Vector4(2040, 500, 360, 24), Vector4(1080, 560, 520, 52)])
 
 [node name="BackgroundPlaceholder" type="Node2D" parent="." unique_id=1377113260]
+
+[node name="ChapelArch01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(280, 388)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_chapel_arch")
+
+[node name="ChapelArch02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(808, 388)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_chapel_arch")
+
+[node name="ChapelArch03" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1344, 388)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_chapel_arch")
+
+[node name="ChapelArch04" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1880, 388)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_chapel_arch")
+
+[node name="ChapelArch05" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2408, 388)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("4_chapel_arch")
+
+[node name="Drape01" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(548, 188)
+texture_filter = 1
+texture = ExtResource("6_drape")
+
+[node name="Drape02" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(2140, 188)
+texture_filter = 1
+texture = ExtResource("6_drape")
+
+[node name="RoyalCrest" type="Sprite2D" parent="BackgroundPlaceholder"]
+position = Vector2(1344, 150)
+scale = Vector2(2, 2)
+texture_filter = 1
+texture = ExtResource("10_crest")
+
+[node name="Sconce01" parent="BackgroundPlaceholder" instance=ExtResource("11_sconce")]
+position = Vector2(1060, 250)
+
+[node name="Sconce02" parent="BackgroundPlaceholder" instance=ExtResource("11_sconce")]
+position = Vector2(1628, 250)
 
 [node name="Geometry" type="Node2D" parent="." unique_id=2137046553]
 
@@ -84,6 +145,41 @@ trim_color = Color(0.52015686, 0.264, 0.3217255, 1)
 platform_rects = Array[Vector4]([Vector4(920, 400, 440, 24), Vector4(1480, 400, 440, 24), Vector4(2040, 500, 360, 24), Vector4(1080, 560, 520, 52)])
 
 [node name="PropsPlaceholder" type="Node2D" parent="." unique_id=734646138]
+
+[node name="BloodCandleAltar" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1344, 558)
+texture_filter = 1
+texture = ExtResource("5_altar")
+
+[node name="Candelabrum01" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(980, 556)
+texture_filter = 1
+texture = ExtResource("7_candelabrum")
+
+[node name="Candelabrum02" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1708, 556)
+texture_filter = 1
+texture = ExtResource("7_candelabrum")
+
+[node name="ArmorStatue01" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(690, 540)
+texture_filter = 1
+texture = ExtResource("8_armor")
+
+[node name="ArmorStatue02" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(1998, 540)
+texture_filter = 1
+texture = ExtResource("8_armor")
+
+[node name="Bench01" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(430, 588)
+texture_filter = 1
+texture = ExtResource("9_bench")
+
+[node name="Bench02" type="Sprite2D" parent="PropsPlaceholder"]
+position = Vector2(2258, 588)
+texture_filter = 1
+texture = ExtResource("9_bench")
 
 [node name="DoorAnchors" type="Node2D" parent="." unique_id=234674364]
 

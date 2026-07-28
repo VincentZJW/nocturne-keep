@@ -21,6 +21,7 @@ signal room_cleared
 @export_node_path("DuchessEncounterPresentation") var presentation_path: NodePath
 @export var camera_left: int = 27520
 @export var camera_right: int = 32128
+@export var external_entry_flow_enabled: bool = false
 
 @onready var player: Player = get_node_or_null(player_path) as Player
 @onready var boss: HollowDuchess = get_node_or_null(boss_path) as HollowDuchess
@@ -54,7 +55,10 @@ func _ready() -> void:
 func _initialize_room() -> void:
 	if not _validate_dependencies():
 		return
-	activation_area.body_entered.connect(_on_activation_body_entered)
+	if external_entry_flow_enabled:
+		activation_area.set_deferred("monitoring", false)
+	else:
+		activation_area.body_entered.connect(_on_activation_body_entered)
 	boss.combat_started.connect(_on_boss_combat_started)
 	boss.boss_defeated.connect(_on_boss_defeated)
 	boss.intro_line_requested.connect(_on_intro_line_requested)
@@ -79,6 +83,17 @@ func _initialize_room() -> void:
 func _on_activation_body_entered(body: Node2D) -> void:
 	if body != player or encounter_started or room_is_cleared:
 		return
+	_begin_encounter()
+
+
+func begin_encounter_from_entrance() -> bool:
+	if encounter_started or room_is_cleared or player.is_dead():
+		return false
+	_begin_encounter()
+	return true
+
+
+func _begin_encounter() -> void:
 	encounter_started = true
 	respawn_controller.set_spawn_point(checkpoint)
 	_set_door_closed(rear_door, true)
@@ -95,6 +110,8 @@ func _on_activation_body_entered(body: Node2D) -> void:
 
 func _on_boss_combat_started() -> void:
 	intro_card.visible = false
+	var camera_tween: Tween = create_tween()
+	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom, 0.24)
 	player.set_input_profile(Player.InputProfile.FULL)
 
 
@@ -182,7 +199,7 @@ func _on_player_respawned(_spawn_position: Vector2) -> void:
 	encounter_started = false
 	_set_door_closed(rear_door, false)
 	_set_door_closed(exit_door, true)
-	activation_area.set_deferred("monitoring", true)
+	activation_area.set_deferred("monitoring", not external_entry_flow_enabled)
 	intro_card.visible = false
 	dialogue_label.visible = false
 	boss_hud.hide_immediately()
@@ -214,6 +231,7 @@ func _set_door_closed(door: StaticBody2D, closed: bool) -> void:
 func _lock_camera() -> void:
 	player.player_camera.limit_left = camera_left
 	player.player_camera.limit_right = camera_right
+	player.player_camera.zoom = _default_camera_zoom * 0.82
 	player.player_camera.reset_smoothing()
 
 
