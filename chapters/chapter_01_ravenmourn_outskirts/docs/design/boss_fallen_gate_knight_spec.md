@@ -1,11 +1,11 @@
 # Fallen Gate Knight Boss Specification
 
-Version: 1.4
-Last updated: 2026-07-26
+Version: 1.5
+Last updated: 2026-07-28
 
 ## Identity
 
-`Fallen Gate Knight / 堕落门卫骑士` is a 96×96, roughly 1.6× Player-scale Gothic knight with great sword and heavy shield. The generated pixel art is original. Death drops the sword, collapses, and dissolves; no ghost is spawned.
+`Fallen Gate Knight / 堕落守门骑士` is a 96×96, roughly 1.6× Player-scale Gothic gate knight with a crowned tower shield and complete broad greatsword. The v3 production art is original and independently redraws shielded and unshielded silhouettes; it does not scale the Cursed Shield Guard. Death drops the sword, collapses, and dissolves; no ghost is spawned.
 
 ## Shared combat authority
 
@@ -31,9 +31,13 @@ Shield presentation uses ratio bands without duplicating combat authority: above
 
 Phase 2 is faster, never restores Shield, and has no third phase or summons. Each attack owns one stable attack id and frame-bound Hitbox. ComboSlash has two authored steps but remains one Boss attack family, not a Player combo system.
 
-## Animation contract
+## Animation and art contract
 
 `idle_shielded`, `walk_shielded`, `turn_shielded`, `shield_block`, `shield_bash`, `sword_slash`, `heavy_overhead`, `hurt_shielded`, `shield_break`, `phase_transition`, `idle_unshielded`, `walk_unshielded`, `turn_unshielded`, `combo_slash_1`, `combo_slash_2`, `jump_smash`, `charge_thrust`, `shockwave_strike`, `hurt_unshielded`, `death`.
+
+These 20 stable Gameplay families retain their existing counts, FPS, active-frame indices and AI bindings. The same formal SpriteFrames resource also carries the art-contract families `dormant`, `intro`, `approach_shielded`, `shield_hit`, the shield-bash/sword-slash/thrust/heavy-overhead `windup`, `active` and `recovery` splits, `light_hit`, `hurt`, `death_start`, `combo_slash`, and `stagger`. Total: 41 animations / 165 production frames. They provide explicit authored poses without altering the current combat state machine.
+
+Phase 1 uses a shaped peaked tower shield with rim thickness, rivets and the crowned-raven gate crest. Damage overlays permanently progress intact → damaged → critical → broken. Phase 2 is independently redrawn with no shield, an exposed cursed left arm, two-handed grip, cracked crown helm, brighter soul-fire seams and a more severely torn cape. Full concept/equipment sheets and the runtime path are indexed in `../chapter_01_boss_art_bible.md`.
 
 At 60 physics ticks/s, the configured 0.33 + 0.80 sequence completes in 1.1333 s. The reaction cancels if the Player returns to the current front or center tolerance. The existing three-frame authored turn is runtime-scaled to exactly the 0.80-second animation stage; it narrows/twists the torso and draws shield/sword inward before visual and `FacingRoot` commit together at the 80% mark. `ShieldComponent` stores source/Boss position, facing and timestamp at resolution, so contact before that commit keeps the old rear route and subsequent contact uses the new front.
 

@@ -26,7 +26,7 @@ Scope is Chapter I only. Chapter II was not modified.
 | Spearman | `assets/enemies/decayed_spearman/concept_art/decayed_spearman_concept.png` | `sprites/attack_thrust/attack_thrust_04.png` | nasal helm, long haft and spearhead | PASS |
 | Crossbowman | `assets/enemies/fallen_crossbowman/concept_art/fallen_crossbowman_concept.png` | `sprites/shoot/shoot_02.png` | light armor, crossbow stock, quiver | PASS |
 | Gargoyle | `assets/enemies/gargoyle_sentinel/concept_art/gargoyle_sentinel_concept.png` | `sprites/hover/hover_01.png` | horned stone head, wings, claws | PASS |
-| Gate Knight | `assets/boss/fallen_gate_knight/concept_art/fallen_gate_knight_concept.png` | `sprites/idle_shielded/idle_shielded_01.png` | raven shield, gate sword, phase-two curse mantle | PASS |
+| Gate Knight | `assets/boss/fallen_gate_knight/concept_art/fallen_gate_knight_phase_01_concept.png` + `fallen_gate_knight_phase_02_concept.png` | `sprites/idle_shielded/idle_shielded_01.png` | crowned tower shield, full greatsword, independent two-handed Phase 2 | PASS v3 |
 
 Paths in the table are relative to `res://chapters/chapter_01_ravenmourn_outskirts/`.
 
@@ -75,8 +75,10 @@ The automated resource test rejects any runtime texture containing `deprecated` 
 ## Automated results
 
 - Art integrity: PASS — 6 roles, 271 formal frames, 290 archived frames, 6 saved Main references.
-- Existing asset validators: PASS — 24 Castle Guard frames; 124 variety frames; 137 Gargoyle/Boss action frames + 4 shield overlays.
+- Existing asset validators: PASS — 24 Castle Guard frames; 124 variety frames; 206 Gargoyle/Boss action frames + 4 shield overlays. The Gate Knight v3 resource contains 41 animations / 165 frames.
 - Gameplay regression: PASS — enemy variety, 18-group/34-enemy Main integration, Boss shield/phase/room reset.
+
+The focused Gate Knight v3 concepts, shield stages and nine current MainBootstrap captures are indexed at `docs/qa/fallen_gate_knight_art_v3/README.md`.
 - Main capture: PASS — actual `MainBootstrap` route, 6 roles, 15 runtime captures.
 - Godot 4.7.1 import/parse: PASS; no red parser/resource errors.
 

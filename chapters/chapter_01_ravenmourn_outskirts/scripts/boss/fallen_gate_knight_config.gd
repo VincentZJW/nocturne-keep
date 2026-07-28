@@ -6,7 +6,7 @@ extends Resource
 @export_category("Identity")
 @export var display_name: StringName = &"FallenGateKnight"
 @export var display_name_en: String = "FALLEN GATE KNIGHT"
-@export var display_name_zh: String = "堕落门卫骑士"
+@export var display_name_zh: String = "堕落守门骑士"
 
 @export_category("Vitals")
 @export_range(1, 999, 1) var max_health: int = 18

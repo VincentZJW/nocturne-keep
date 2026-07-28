@@ -5211,3 +5211,75 @@ Status: in progress — Chapter I only; Chapter II is explicitly not started
 - Chapter I art and runtime references only; Chapter II and Chapter III were not modified.
 - No gameplay values, AI behavior, map layout, player systems or combat timing changed.
 - Pre-existing unrelated working-tree edits were preserved and excluded from this milestone commit.
+
+## 2026-07-28 — Fallen Gate Knight focused visual rework preflight
+
+Status: in progress — real runtime audit complete; Boss-only concept, sprite, shield-state and Main QA replacement pending
+
+### Goal, scope and quality gate
+
+- Rebuild only `Fallen Gate Knight / 堕落守门骑士` as Chapter I's unique final gatekeeper: original Phase 1/Phase 2 concept sheets, silhouette/equipment studies, 96×96 formal runtime frames, four permanent shield-damage states, restrained break FX, saved Boss scene binding and MainBootstrap/F5 evidence.
+- Preserve current Boss AI, body/shield health, damage, cadence, turn timing, hitboxes, bridge bounds, reward, gate and Chapter flow. No ordinary enemy, Chapter II, Player, weapon or level-layout change is authorized.
+- Formal acceptance fails if the runtime still reads as a scaled Shield Guard, the tower shield is a rectangle, the greatsword collapses to a line, Phase 2 only hides the shield, shield damage is color-only, or Main still displays superseded art.
+
+### Read-only runtime audit
+
+- Work begins on `master` at `c1c30356580b9d142f7640f874d5c8ccbe8f915f`; the branch is six commits ahead of `origin/master`. Pre-existing unstaged Chapter I/shared enemy configuration serialization, the saved Chapter I level serialization, Player/loot Resources, old Ravenfang QA images and two untracked UID sidecars remain user-owned and outside this milestone.
+- F5 authority is `res://scenes/bootstrap/main_bootstrap.tscn`. Chapter I's saved level is `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`; its Boss bridge is `Main/World/CastleEntranceArea/WoodenBridge`, and its Boss instance is `Main/World/CastleEntranceArea/FallenGateKnight` from `res://chapters/chapter_01_ravenmourn_outskirts/scenes/boss/fallen_gate_knight.tscn`.
+- The Boss scene uses `VisualRoot/AnimatedSprite2D` plus `VisualRoot/ShieldDamageOverlay`, backed by `fallen_gate_knight_sprite_frames.tres` and `fallen_gate_knight_shield_damage_sprite_frames.tres`. The saved Main instance only overrides bridge bounds (`5650..6320`); it does not override sprite resources or combat tuning.
+- Runtime behavior is `fallen_gate_knight.gd`, with tuning in `fallen_gate_knight_config.gd` and `fallen_gate_knight_config.tres`. Actual current saved values are Body HP 180 and Shield HP 100. Existing attacks are Shield Bash, Sword Slash, Heavy Overhead, two-step Combo Slash, Charge Thrust, Jump Smash and Shockwave Strike. Current phases are shielded duty (Phase 1) and unshielded aggression (Phase 2).
+- The current SpriteFrames contain 96 Boss frames across 20 runtime families: `idle/walk/turn` shielded and unshielded, `shield_block`, `shield_bash`, `sword_slash`, `heavy_overhead`, `combo_slash_1/2`, `charge_thrust`, `jump_smash`, `shockwave_strike`, `shield_break`, `phase_transition`, phase-specific hurt and death. Shield condition is a separate four-state overlay (`intact`, `damaged`, `critical`, `broken`).
+- Existing concept art already communicates a strong knight fantasy, but native gameplay inspection shows the current formal frames remain simplified: the tower shield reads as a flat dark slab, the greatsword often becomes a thin pale line, armor lacks helm/pauldron/cuirass/greave separation, and the unshielded phase largely removes shield mass without a sufficiently different two-handed body pose. These are the task-owned failures.
+- Current concept assets are a combined concept, silhouette and action reference; separate Phase 1, Phase 2, comparison, shield, shield-damage, greatsword and attack-pose deliverables do not yet exist. There is no standalone shield or greatsword runtime sprite because both are painted into the Boss frames; that composition will remain, but both objects will be redrawn in every applicable frame.
+- Exact Godot 4.7.1 baseline import/parse exits 0. `test_first_level_boss.gd`, `validate_first_level_boss_assets.gd` and the independent Boss test-room smoke all pass. No parser, missing-resource, script or runtime red error was observed before modification.
+
+### Planned task-owned files and verification
+
+- Add a focused deterministic Boss-art generator and SpriteFrames builder under the Chapter I tools tree; generate only Boss-owned concepts, sprites, effects and QA boards. Replace the same formal runtime paths for existing gameplay animation names and add production-reference animation families without changing the AI state contract.
+- Update the Boss art bible and manifest, add a focused integrity/Main-reference test and a MainBootstrap QA capture tool. Evidence will include Phase 1/2 concepts, equipment/damage studies, shield states, Phase 1/2 runtime, shield break, greatsword attack, death and old/new comparison.
+- Verify with the exact `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot` 4.7.1 executable: generator, import/parse, Boss-art integrity, existing Boss combat regression, independent Boss scene/test room, saved Chapter I level, MainBootstrap Boss-checkpoint capture and formal F5-equivalent startup. Record actual outcomes, run `git diff --check`, create one isolated commit and stop.
+
+## 2026-07-28 — Fallen Gate Knight focused visual rework completion
+
+Status: complete — Boss-only v3 concept/formal art, permanent shield stages and actual Main evidence delivered
+
+### Delivered scope
+
+- Produced seven requested concept/design deliverables: separate Phase 1 and Phase 2 concepts, combined silhouette comparison, tower-shield front/side study, four-stage shield damage study, complete greatsword study and attack-pose sheet. The focused concepts establish the crowned gate-spire helm, Ravenmourn crest, heavy layered plate, torn oath cape and cold-blue curse language.
+- Replaced all 96 existing runtime frames in place and added 69 supplemental anticipation/active/recovery/reference frames. The formal Boss SpriteFrames now contains 41 animations / 165 original 96×96 frames. Stable Gameplay families retain their names, counts, FPS and active-frame contracts; no AI state, damage, hitbox, cadence or combat value changed.
+- Phase 1 now uses a tapered, rimmed and crested tower shield plus a complete wide greatsword. Phase 2 is independently redrawn with a shieldless two-handed silhouette, exposed cursed left arm, cracked crown helm, stronger soul fire and further-torn cape.
+- Replaced the live four-state shield overlays and added four standalone damage-stage images plus five restrained break-FX frames. Main evidence shows intact, 66%, 33% and break states; broken shield art never returns in Phase 2.
+- The previous 96-frame v2 production set is preserved as `reference/deprecated_v2/fallen_gate_knight_runtime_v2_frames.tar.gz`; its imported sidecars were intentionally excluded to prevent duplicate Godot UIDs. The formal SpriteFrames contains zero archive references.
+- Updated the focused art bible, Boss spec, global Chapter I art validator counts and a dedicated v3 QA index. Ordinary enemies, Chapter II, Player, map, Boss AI/config values and reward/gate flow were not changed.
+
+### Saved scene and Main result
+
+- F5 authority remains `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter I remains `res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`.
+- The live instance remains `World/CastleEntranceArea/FallenGateKnight` on `World/CastleEntranceArea/WoodenBridge`, sourced from `scenes/boss/fallen_gate_knight.tscn`.
+- `VisualRoot/AnimatedSprite2D` uses `resources/boss/fallen_gate_knight_sprite_frames.tres`; `VisualRoot/ShieldDamageOverlay` uses the same authoritative Shield signal and newly replaced overlay PNGs. The Main instance has no sprite/config Inspector override; its existing bridge-bound overrides remain untouched.
+- Graphical QA used `MainBootstrap`, Chapter I and runtime DebugRunConfig spawn `boss_checkpoint`; it captured nine actual Main images including both phases, three shield conditions, break/transition, greatsword active, death and old/new comparison. DebugRunConfig was restored before exit.
+
+### Exact commands and actual results
+
+1. `Godot --headless --path . --script res://chapters/chapter_01_ravenmourn_outskirts/scripts/tools/generate_fallen_gate_knight_art_v3.gd` — PASS: `animations=41 frames=165`.
+2. Exact Godot 4.7.1 headless editor import/parse — exit 0; no parser, resource, missing-script or duplicate-UID error after the archive was converted to a tarball.
+3. `test_fallen_gate_knight_art_v3.gd` — PASS: `animations=41 frames=165 concepts=7 shield_states=4 main=true`.
+4. `test_chapter_01_enemy_art_rework.gd` — PASS: six roles, `formal_frames=340 archived_frames=290 main_refs=6`.
+5. `validate_first_level_boss_assets.gd` — PASS: `206 action frames + 4 shield overlays` (41 Gargoyle + 165 Gate Knight).
+6. `test_first_level_boss.gd` — PASS: shield routing, phases, Main room lock/reset, death/exit; turn timing remained `1.1333 s`.
+7. Independent `fallen_gate_knight.tscn`, corrected `boss_test_room.tscn`, and saved Chapter I level headless smokes — all exit 0 with no red Output/Debugger error. One initial smoke command used the stale nonexistent path `scenes/tests/fallen_gate_knight_test_room.tscn`; this was recorded, corrected to `scenes/tests/boss_test_room.tscn`, and the real room then passed.
+8. `Godot --path . --script .../capture_fallen_gate_knight_art_v3_qa.gd` — PASS on OpenGL/Metal: actual MainBootstrap → Chapter I → `boss_checkpoint`, nine captures.
+9. Formal F5-equivalent `Godot --path . --quit-after 240` — exit 0 and entered `res://scenes/cinematics/opening_cinematic.tscn`, confirming the normal opening route was not replaced.
+
+### QA evidence and manual acceptance
+
+- Review index: `docs/qa/fallen_gate_knight_art_v3/README.md`.
+- Concepts: `chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/concept_art/`.
+- Runtime preview: `chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/animations/fallen_gate_knight_v3_runtime_preview.png`.
+- Subjective native-scale readability, animation weight and personal preference still require the user's manual F5 playtest. The automated and graphical quality gates have no unresolved FAIL item.
+
+### Post-review greatsword proportion correction
+
+- User review accepted the concept direction but identified the live greatsword as too short. The shared formal-frame renderer now extends the visible blade by a restrained 7 pixels inside the existing 96×96 cell and uses a longer two-stage taper with a sharper point. This applies consistently to Phase 1, Phase 2, idle/movement and every attack family.
+- The adjustment is presentation-only: Boss attack reach, hitboxes, AI, timing and combat values remain unchanged. Regenerated MainBootstrap evidence confirms the blade reads longer and sharper without exceeding the knight's body scale or dominating the shielded silhouette.
+- Re-ran the 165-frame generator, exact Godot import, focused art integrity, Boss combat regression and MainBootstrap nine-shot capture after the correction; all passed without a red Output/Debugger error.

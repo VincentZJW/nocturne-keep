@@ -17,7 +17,7 @@ func _initialize() -> void:
 		total += files.size()
 		for path: String in files:
 			_validate_png(path, ROOTS[root_path])
-	_expect(total == 137, "Expected 137 Gargoyle/Boss action frames, found %d" % total)
+	_expect(total == 206, "Expected 206 Gargoyle/Boss action frames, found %d" % total)
 	for state: String in ["intact", "damaged", "critical", "broken"]:
 		_validate_png(
 			"res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/effects/shield_%s_overlay.png" % state,
@@ -64,7 +64,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("FIRST_LEVEL_BOSS_ASSET_TEST: PASS (137 action frames + 4 shield overlays)")
+		print("FIRST_LEVEL_BOSS_ASSET_TEST: PASS (206 action frames + 4 shield overlays)")
 		quit(0)
 		return
 	for failure: String in _failures:

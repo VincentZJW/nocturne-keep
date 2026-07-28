@@ -16,7 +16,7 @@ const FRAME_COUNTS: Dictionary = {
 	"decayed_spearman": 25,
 	"fallen_crossbowman": 30,
 	"gargoyle_sentinel": 41,
-	"fallen_gate_knight": 96,
+	"fallen_gate_knight": 165,
 }
 const FRAME_RESOURCES: Dictionary = {
 	"castle_guard": CHAPTER_ROOT + "/resources/enemies/castle_guard_sprite_frames.tres",
@@ -85,7 +85,7 @@ func _initialize() -> void:
 		var sprite: AnimatedSprite2D = instance.get_node_or_null("VisualRoot/AnimatedSprite2D") as AnimatedSprite2D
 		_assert(sprite != null and sprite.sprite_frames == frames, "%s scene does not use formal SpriteFrames" % role)
 		instance.free()
-	_assert(total_frames == 271, "formal frame total is not 271")
+	_assert(total_frames == 340, "formal frame total is not 340")
 	_assert(archived_frames == 290, "legacy archive total is not 290")
 	var level_text: String = FileAccess.get_file_as_string(LEVEL_PATH)
 	_assert(level_text.contains("first_level_encounters.tscn"), "Main level does not instance first-level encounters")
@@ -98,7 +98,7 @@ func _initialize() -> void:
 	if _failed:
 		quit(1)
 		return
-	print("CH1_ENEMY_ART_REWORK_TEST: PASS roles=6 formal_frames=271 archived_frames=290 main_refs=6")
+	print("CH1_ENEMY_ART_REWORK_TEST: PASS roles=6 formal_frames=340 archived_frames=290 main_refs=6")
 	quit(0)
 
 
