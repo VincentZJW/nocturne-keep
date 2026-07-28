@@ -4837,3 +4837,56 @@ Status: complete — six mandatory gates, chapter asset ownership, Main/F5 accep
 - This milestone deliberately contains documentation/governance changes only; no visual asset was generated and no chapter content was altered. Full gameplay regression was not repeated because the runtime tree is unchanged; exact import and formal Main startup verify that policy files did not disturb project loading.
 - The policy does not auto-authorize Chapter III or any rework. Each new chapter still requires explicit approval and a separate milestone with audit, asset creation, saved Main integration, exact-engine verification and human visual acceptance.
 - Pre-existing user-owned Chapter I/shared/Player tuning changes, QA image edits and two UID sidecars remain preserved and excluded from this policy commit.
+
+## 2026-07-28 — Chapter III normal enemies Phase 0 preflight
+
+Status: in progress — real-project audit complete; enemy art/combat/file specifications and verification pending
+
+### Approved phase and strict scope
+
+- Execute only Phase 0 from the approved `Chapter III: Chapel of Thirteen Echoes` enemy milestone: audit the real project, lock the six-enemy world/combat/art direction, document target values and publish the exact future file/QA plan.
+- Do not create concept PNGs, SpriteFrames, enemy scenes, AI scripts, projectiles, fields, Trial Hall runtime, Main spawn ids or Encounter population in this phase. Those belong to Phase 1, Phase 2A–2F and Phase 3 and require separate approval after this report.
+- Task-owned files are the five new Chapter III enemy documents under `chapters/chapter_03_chapel_of_thirteen_echoes/docs/` plus this development-log entry. No Chapter I/II file, Player value, Crimson Masque value, loot probability, formal Chapter III map, Boss, Save foundation or `project.godot` setting will change.
+
+### Read-only audit baseline
+
+- Work starts on `master` at `88a28bf6311453d6af6e1dbf29a7604c76048367`. Pre-existing user-owned Chapter I/shared/Player tuning, old QA image changes and two UID sidecars remain outside the task.
+- `project.godot` resolves F5 to `res://scenes/bootstrap/main_bootstrap.tscn`. Chapter III is registered by `scripts/systems/chapter/chapter_registry.gd` and currently resolves to the explicit `chapter_03_entry_placeholder.tscn`, with a debug-ready Start Profile that owns/equips `Crimson Masque Stilettos / 绯幕礼刺` at the verified 14 Normal / 28 Dash damage.
+- The current Chapter III tree has only the entry placeholder, its two level scripts and one Start Profile. It has no enemy docs, enemy assets, enemy Resources, enemies, trial scene or trial spawn ids. The geometric `Chapter03EntryArt` is explicitly marked entry-placeholder content and is not evidence of a formal Chapter III map.
+- Existing reusable contracts are `EnemyCombatant`, `GroundEnemyBase`, `HealthComponent`, `HitboxComponent`, `HurtboxComponent`, `EnemyHitPolicyComponent`, `LootDropComponent` and `EncounterGroup`. Ground edge/wall protection already uses raycasts plus optional authored movement bounds.
+- No `AttackContext` class/resource and no generic shared Projectile base exist. Attack identity/dedup is implemented inside `HitboxComponent`; projectiles are concrete `CrossbowBolt` and `BloodCandleProjectile` implementations. Poise/Stagger exists only inside Chapter II enemy/Boss code and must not be misreported as a shared component.
+- Exact pre-modification import baseline: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0 on Godot `4.7.1.stable.official.a13da4feb`; no parser, resource or autoload error.
+
+### Planned verification
+
+- Validate Markdown/path tables and whitespace, rerun exact Godot 4.7.1 import, run the chapter-start foundation and Crimson Masque contract tests, and execute an F5-equivalent Main bootstrap smoke.
+- Because Phase 0 adds no enemy runtime, it cannot truthfully claim F6 enemy tests, Main enemy visibility, 20 kills per enemy, combo trials or 18 screenshots. Those remain explicit acceptance gates for their later phases.
+
+## 2026-07-28 — Chapter III normal enemies Phase 0 completion
+
+Status: complete — real-project audit, six-enemy world/combat baseline, art bible, balance and Trial Hall/file plan delivered; Phase 1 approval pending
+
+### Delivered Phase 0 scope
+
+- Added the Chapter III roster and narrative role contract for Bellchain Penitent, Censer Executioner, Silent Chorister, Stained-Glass Seraph, Confessional Wraith and Thirteenth Scribe, including the later 44-enemy population hypothesis and safe combination constraints without creating formal Encounters.
+- Added a native-pixel art bible with a restrained chapel palette, six silhouette contracts, exact Phase 1 concept/silhouette paths, 64×64 production rules, 48×48 readability and a file authenticity gate. No empty folder, PNG or claimed concept was created early.
+- Added the combat specification and complete audit ledger. Existing Health/Hitbox/Hurtbox/Loot/Encounter/GroundEnemy contracts are designated for reuse; the absent AttackContext/shared Projectile/Poise contracts are recorded honestly with narrow Chapter III-local plans rather than reported as existing.
+- Added `baseline_v1` HP, Poise, damage, timing and kill-count tables against the verified Crimson Masque 14/28 WeaponData. Prompt-defined values are locked as implementation targets; unspecified timing and the proposed 14/28 Poise-pressure mapping remain explicitly `[PLAYTEST_REQUIRED]`.
+- Added the Debug-only Trial Hall architecture, eight planned `CH3_*` spawn ids, required combination matrix, twenty-kill/fifteen-attack QA minimums, Main/F5 procedure and 18-image evidence plan. The document explicitly states that this F5 procedure is unavailable until Phase 3.
+- Added the exact future scene/controller/EnemyData/SpriteFrames manifest for all six enemies. No `.gd`, `.tscn`, `.tres`, PNG, `project.godot`, Main route, Player/weapon value, Chapter I/II content, loot probability, Chapter III map or Boss was changed.
+
+### Exact commands and actual results
+
+1. Pre- and post-document exact import: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — both exit 0 on `4.7.1.stable.official.a13da4feb`; no parser, missing-resource or autoload error.
+2. Chapter registry/profile: `Godot --headless --path . --script res://tests/systems/test_chapter_start_foundation.gd` — `PASS (7 entries, Chapters I/II/III-entry ready, Bootstrap preserved)`.
+3. Main routing: `test_main_bootstrap_flow.gd` — PASS for formal Opening and Debug Chapter II. The harness reports two ObjectDB instances during forced test exit after PASS; it is not present in formal Main startup.
+4. Weapon/profile contract: `test_crimson_masque_weapon.gd` — `PASS data=1 frames=49 damage=14/28 dedup=1 profile=1`.
+5. Chapter II→III saved route: `test_chapter_02_to_03_transition.gd` — `PASS dialogue=4 reliquary=1 mirror_after_reward=1 crimson=14/28 reload=2 passage=1 chapter3=1`. Its forced SceneTree teardown prints known Resource/RID diagnostics after PASS; no runtime assertion, parser or missing-resource failure occurred.
+6. Formal F5-equivalent smoke: `Godot --path . --quit-after 240` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; no Output/Debugger runtime, script or resource error.
+7. Documentation check: `git diff --check -- docs/development_log.md chapters/chapter_03_chapel_of_thirteen_echoes/docs` — exit 0 before the completion append; repeated before staging.
+
+### Known gaps and next approval
+
+- Chapter III still opens the explicitly labeled geometric entry placeholder. There are no enemy visuals, scenes, AI, trial spawns or Trial Hall in Main, so F6/F5 enemy combat, twenty-kill runs, loot/reset, combinations and screenshots are not claimed.
+- Phase 1 is the next allowed milestone: create exactly twelve original concept/silhouette PNGs, validate their content/dimensions/hashes/readability, report and stop. It must not start Phase 2A code without a further approval.
+- The game-design skill shaped the role/telegraph/counterplay and balance failure criteria; the Godot gameplay skill shaped composition, typed-signal and missing-contract boundaries. Pre-existing user-owned dirty files remain preserved and excluded.
