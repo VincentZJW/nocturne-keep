@@ -33,7 +33,7 @@ Every role must replace `idle`, `walk` or hover movement, `alert`, `turn`, all a
 - Production files are transparent RGBA 64×64 PNGs.
 - Runtime Sprite node: `AnimatedSprite2D`, Nearest filtering, whole-pixel scale/position.
 - No mipmap or smoothing dependency. Existing `.import` sidecars must reimport the replaced source bytes.
-- All formal frame textures must resolve under `assets/enemies/<role>/sprites/`; no formal SpriteFrames texture may resolve under `reference/deprecated_phase_2/`.
+- All formal frame textures must resolve under `assets/enemies/<role>/sprites/`; the deleted `reference/deprecated_phase_2/` tree must not be recreated or referenced.
 
 ## Evidence gate
 

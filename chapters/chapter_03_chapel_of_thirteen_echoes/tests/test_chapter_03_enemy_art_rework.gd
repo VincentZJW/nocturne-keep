@@ -27,19 +27,16 @@ func _initialize() -> void:
 	var total: int = 0
 	for role: String in ROLES:
 		var sprite_root: String = "%s/%s/sprites" % [ROOT,role]
-		var legacy_root: String = "%s/%s/reference/deprecated_phase_2/sprites" % [ROOT,role]
+		var legacy_root: String = "%s/%s/reference/deprecated_phase_2" % [ROOT,role]
 		var paths: PackedStringArray = _png_paths(sprite_root)
-		var legacy_paths: PackedStringArray = _png_paths(legacy_root)
 		_assert(paths.size()==int(EXPECTED_TOTALS[role]),"%s formal frame count" % role)
-		_assert(legacy_paths.size()==int(EXPECTED_TOTALS[role]),"%s archived frame count" % role)
+		_assert(not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(legacy_root)),"%s legacy archive still present" % role)
 		for path: String in paths:
 			var image: Image = Image.load_from_file(ProjectSettings.globalize_path(path))
 			_assert(image!=null and image.get_size()==Vector2i(64,64),"invalid formal frame %s" % path)
 			_assert(_nontransparent_pixels(image)>70,"under-drawn formal frame %s" % path)
 			total += 1
 		var new_idle: String = "%s/idle/idle_01.png" % sprite_root
-		var old_idle: String = "%s/idle/idle_01.png" % legacy_root
-		_assert(FileAccess.get_sha256(new_idle)!=FileAccess.get_sha256(old_idle),"%s idle still legacy" % role)
 		var idle_image: Image = Image.load_from_file(ProjectSettings.globalize_path(new_idle))
 		_assert(_unique_visible_colors(idle_image)>=8,"%s lacks material palette" % role)
 		var frames_path: String = "%s/%s/animations/%s_sprite_frames.tres" % [ROOT,role,role]
@@ -64,7 +61,7 @@ func _initialize() -> void:
 	for role: String in ROLES:
 		_assert(level_text.contains("scenes/enemies/%s.tscn" % role),"Main target missing %s" % role)
 	_assert(ResourceLoader.exists("res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/chapter_03_enemy_trial_hall.tscn"),"trial hall missing")
-	print("CH3_ENEMY_ART_REWORK_TEST: PASS roles=6 frames=415 archives=415 main_refs=6")
+	print("CH3_ENEMY_ART_REWORK_TEST: PASS roles=6 frames=415 legacy_dirs=0 main_refs=6")
 	quit(0)
 
 

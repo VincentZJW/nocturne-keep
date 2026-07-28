@@ -54,7 +54,7 @@
 
 ## 动画资源清单
 
-所有 415 帧均为本轮新重制的 64×64 RGBA PNG；旧 415 帧完整归档在每个角色的 `reference/deprecated_phase_2/sprites/`，SpriteFrames 不引用归档路径。
+所有 415 帧均为本轮新重制的 64×64 RGBA PNG；旧 415 帧源文件已经用户批准删除。旧版观感仅保留在本目录的静态新旧对比QA图与Git提交 `8d25810` 历史中，SpriteFrames只引用正式路径。
 
 | 角色 | 动画名（帧数） | 总帧数 | 是否新重制 | 质量状态 |
 |---|---|---:|---|---|
@@ -78,7 +78,7 @@ F5 正式入口是 `res://scenes/bootstrap/main_bootstrap.tscn`。Chapter III �
 | Confessional Wraith | `scenes/enemies/confessional_wraith.tscn` | `VisualRoot/AnimatedSprite2D` | `VisualRoot/AnimatedSprite2D` | `GameplayWorld/Phase2CDEEncounter/Enemies/ConfessionalWraith` | PASS |
 | Thirteenth Scribe | `scenes/enemies/thirteenth_scribe.tscn` | `VisualRoot/AnimatedSprite2D` | `VisualRoot/AnimatedSprite2D` | `GameplayWorld/Phase2FEncounter/Enemies/ThirteenthScribe` | PASS |
 
-每个 Sprite 节点继续使用 chapter-local `animations/<role>_sprite_frames.tres`；资源路径不变，因此已有场景无需复制或改绑为第二套 PackedScene。确定性测试验证了六个 SpriteFrames 没有任何 `deprecated_phase_2` 引用，并验证 Chapter III Main 目标包含六个正式 PackedScene。
+每个 Sprite 节点继续使用 chapter-local `animations/<role>_sprite_frames.tres`；资源路径不变，因此已有场景无需复制或改绑为第二套 PackedScene。确定性测试验证旧归档目录不存在、六个 SpriteFrames 全部使用正式路径，并验证 Chapter III Main 目标包含六个正式 PackedScene。
 
 ## 截图证据
 
@@ -91,6 +91,7 @@ F5 正式入口是 `res://scenes/bootstrap/main_bootstrap.tscn`。Chapter III �
 | 15–20 | 六角色经 MainBootstrap 进入 Chapter III 的实机截图 | `docs/qa/chapter_03_enemy_art_rework/15_*_main.png` 至 `20_*_main.png` |
 | 21–26 | 六角色在 Main 中的攻击动作截图 | `docs/qa/chapter_03_enemy_art_rework/21_*_attack_main.png` 至 `26_*_attack_main.png` |
 | 27 | Chorister + Seraph + Wraith 三角色组合 | `docs/qa/chapter_03_enemy_art_rework/27_three_role_combination_main.png` |
+| Formal 01–06 | 删除旧源图后可重复生成的概念、动作参考、效果参考与正式Sprite对照 | `docs/qa/chapter_03_enemy_art_rework/formal_*_concept_sprite.png` |
 
 截图脚本实际加载 `MainBootstrap`，临时选择 Chapter III Debug Start Profile，捕获后恢复 Debug 设置。它不把独立测试场景伪装成 Main 证据。
 
@@ -99,8 +100,8 @@ F5 正式入口是 `res://scenes/bootstrap/main_bootstrap.tscn`。Chapter III �
 | 验证 | 实际结果 |
 |---|---|
 | v2 资源生成 | PASS：`roles=6 frames=415` |
-| Godot 4.7.1 import/parse | PASS：842 个新/归档资源完成导入，无 parser/resource/autoload 错误 |
-| 美术真实性与引用测试 | PASS：`roles=6 frames=415 archives=415 main_refs=6` |
+| Godot 4.7.1 import/parse | PASS：删除旧源图及旧生成器后重新导入，无 parser/resource/autoload 错误 |
+| 美术真实性与引用测试 | PASS：`roles=6 frames=415 legacy_dirs=0 main_refs=6` |
 | 概念与剪影回归 | PASS：`files=12 concepts=6 silhouettes=6 unique_silhouettes=6` |
 | Phase 2 六角色阵容回归 | PASS：`roles=6 remaining_frames=345 main=6 combination_room=1` |
 | Bellchain 战斗回归 | PASS：`animations=17 frames=70 hp=70 poise=32 attacks=3 solo_test=1 main_encounter=1` |
@@ -110,6 +111,8 @@ F5 正式入口是 `res://scenes/bootstrap/main_bootstrap.tscn`。Chapter III �
 | Trial Hall | PASS：`chapter_03_enemy_trial_hall.tscn` exit 0 |
 | Main 图形 QA | PASS：`captures=13 route=MainBootstrap enemies=6 attacks=6 combination=1` |
 | F5 正式启动冒烟 | PASS：exit 0，进入 `res://scenes/cinematics/opening_cinematic.tscn` |
+
+旧版QA生成器已改为只读取概念、动作参考、效果参考与正式Sprite；旧版Phase 2素材生成脚本已删除，避免误操作覆盖正式素材。最初的旧版对比PNG作为不可执行的历史证据保留。
 
 ## 人工复核步骤
 

@@ -123,9 +123,11 @@ Common where applicable: `idle`, `move` or `hover`, `alert`, `turn`, `light_hit`
 - Wraith: `hidden`, `door_telegraph`, `emerge`, `emerging_slash_*`, `spectral_dash_*`, `scream_*`, `retreat`.
 - Scribe: `ink_lance_*`, `seal_write`, `seal_delay`, `seal_activate`, `binding_script_*`, `paper_ward`.
 
-The formal Stage 1 runtime assets live under each enemy's `sprites/` and `animations/` directories. Bellchain Penitent owns 70 frames; the remaining five roles own 345 frames. Every previous Phase 2 PNG was copied to the corresponding `reference/deprecated_phase_2/sprites/` tree before replacement. The deterministic v2 generator uses hand-authored role polygons, clustered material highlights, curved chains, pierced objects, irregular cloth hems and equipment-specific effects rather than the former rectangular masks. It also writes one three-pose action reference and one effects reference per role.
+The formal Stage 1 runtime assets live under each enemy's `sprites/` and `animations/` directories. Bellchain Penitent owns 70 frames; the remaining five roles own 345 frames. The previous Phase 2 sources were preserved for the initial comparison commit and then deleted after user approval; historical visual comparisons remain under `docs/qa/chapter_03_enemy_art_rework/`. The deterministic v2 generator uses hand-authored role polygons, clustered material highlights, curved chains, pierced objects, irregular cloth hems and equipment-specific effects rather than the former rectangular masks. It also writes one three-pose action reference and one effects reference per role.
 
-The formal SpriteFrames paths are unchanged intentionally: scenes already referenced the correct chapter-local resources, so replacing every source PNG at the stable formal path updates isolated tests and the Main route together. No SpriteFrames points into the deprecated archive. Current acceptance evidence belongs under `res://docs/qa/chapter_03_enemy_art_rework/`.
+The formal SpriteFrames paths are unchanged intentionally: scenes already referenced the correct chapter-local resources, so replacing every source PNG at the stable formal path updates isolated tests and the Main route together. The deprecated archive no longer exists and no SpriteFrames contains a legacy path. Current acceptance evidence belongs under `res://docs/qa/chapter_03_enemy_art_rework/`.
+
+The obsolete Phase 2A and Phase 2B–2F art generators were removed with the deleted sources so they cannot overwrite the formal v2 frames. `generate_chapter_03_enemy_art_v2.gd` is the only supported Chapter III enemy-art generator.
 
 ## Authenticity QA gate used for Phase 2
 

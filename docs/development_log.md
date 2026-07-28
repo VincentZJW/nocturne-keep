@@ -5082,3 +5082,64 @@ Status: complete for the authorized Stage 0 audit and Chapter III Stage 1 replac
 - Bellchain's curved chain is readable in the integer-scale asset preview but remains the densest/finest feature in a 1280×720 full-scene screenshot; it is explicitly listed for human 1× playtest review rather than hidden behind a generic PASS claim.
 - The Chapter III destination remains an explicitly labeled enemy acceptance prototype, not a finished Chapter III environment. Environment completion was not authorized by this art milestone.
 - Chapter I/II audit is PASS, but their concepts, formal enemy/Boss replacements and Main replacement are FAIL/not started by scope. Stop after this isolated commit and wait for the user's third-chapter art acceptance before any Chapter I/II replacement.
+
+## 2026-07-28 — Chapter III legacy enemy art removal preflight
+
+Status: in progress — user approved deletion of the superseded Chapter III Phase 2 archive and requested explicit Main verification
+
+### Goal and scope
+
+- Delete only the six tracked `reference/deprecated_phase_2/` trees created by commit `8d25810`; they contain 415 old PNGs plus their Godot import sidecars and are recoverable from Git history.
+- Preserve the accepted concepts, silhouettes, action references, effect references, 415 formal `sprites/` frames, chapter-local SpriteFrames, all enemy scenes, combat logic and the 27 already-generated QA images.
+- Update the art integrity test so deletion—not archive presence—is the invariant. Update the QA-board builder so future evidence regeneration no longer depends on deleted source files.
+- Reconfirm every formal SpriteFrames texture resolves under `assets/enemies/<role>/sprites/`, every enemy scene uses its chapter-local SpriteFrames, and the saved Chapter III Main target contains all six PackedScenes.
+- Do not touch Chapter I, shared enemy, Player, loot or pre-existing QA changes already present in the worktree.
+
+### Read-only audit before deletion
+
+- Work begins on `master` at `8d25810f755bfc9d369dd3901a55fb1238ab65da`; unrelated user-owned dirty files remain unstaged.
+- Six old archive roots exist and contain exactly 415 PNGs. No `animations/*.tres`, enemy scene, Chapter III level scene or `project.godot` entry references `reference/deprecated_phase_2`.
+- The six formal SpriteFrames contain exactly 70/71/69/67/71/67 texture references under their role-local formal `sprites/` paths. `chapter_03_entry_placeholder.tscn`, reached through `res://scenes/bootstrap/main_bootstrap.tscn`, references all six formal enemy scenes.
+
+### Planned verification
+
+- Remove the six tracked archive trees with `git rm -r`, then verify zero old archive files and zero runtime legacy references.
+- Run exact Godot 4.7.1 import/parse, the revised art integrity/Main-reference test, six-role roster regression, six independent enemy scene smokes, Trial Hall smoke, Main graphical capture and formal F5-equivalent startup.
+- Update the QA report, README/art documentation and this log; create one isolated cleanup commit and stop.
+
+## 2026-07-28 — Chapter III legacy enemy art removal completion
+
+Status: complete — superseded Phase 2 source art removed; formal v2 SpriteFrames and Main route verified
+
+### Delivered scope
+
+- Removed six `reference/deprecated_phase_2/` trees: 415 old PNGs and 415 `.import` sidecars. The deletion is recoverable from Git commit `8d25810`; the baked old-vs-new QA images remain as historical evidence.
+- Removed `generate_bellchain_penitent_assets.gd` and `generate_phase_2b_2f_enemy_assets.gd` plus their UID files because they could regenerate the obsolete geometric art over the formal source paths. `generate_chapter_03_enemy_art_v2.gd` remains the supported generator.
+- Revised `test_chapter_03_enemy_art_rework.gd` to require all six old archive directories to be absent while still validating 415 formal frames, SpriteFrames paths, scene bindings and six saved Main references.
+- Revised the QA board builder so it no longer reads deleted sources. It now builds six concept/action/effect/formal boards, six Sprite previews and the all-enemy formal overview; the previously generated old-vs-new board remains immutable historical evidence.
+- Updated README, art bible, sprite-quality contract, per-role production notes and the strong QA report. No gameplay code, AI, damage, collision, Player, loot, routing, `project.godot`, Chapter I or Chapter II runtime content changed.
+
+### Main integration result
+
+- F5 entry remains `res://scenes/bootstrap/main_bootstrap.tscn`.
+- The Chapter III saved target remains `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn` and contains all six formal enemy PackedScenes.
+- Each enemy scene still owns `VisualRoot/AnimatedSprite2D` with its role-local `animations/<role>_sprite_frames.tres`. Those resources contain 70/71/69/67/71/67 formal references under `assets/enemies/<role>/sprites/`, for a total of 415; no legacy reference exists.
+- Main graphical QA entered Chapter III through MainBootstrap and captured six enemies, six attacks and the three-role combination after deletion. The script restored Debug Start; a subsequent formal F5 smoke entered Opening Cinematic.
+
+### Exact commands and actual results
+
+1. Read-only inventory and reference audit: six legacy roots, 415 PNGs; zero SpriteFrames/Main/project references to `deprecated_phase_2`; formal references total 415.
+2. `git rm -r` on the six explicit `reference/deprecated_phase_2` roots — success; post-delete legacy file count `0`.
+3. Revised QA builder with exact Godot 4.7.1 — PASS: `roles=6 live_boards=13 historical_comparison_preserved=1`.
+4. Exact import/parse after deletion: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0; no parser/resource/autoload error.
+5. Revised art/reference/Main test — PASS: `roles=6 frames=415 legacy_dirs=0 main_refs=6`.
+6. Six-role roster regression — PASS: `roles=6 remaining_frames=345 main=6 combination_room=1`.
+7. Main graphical QA through MainBootstrap — PASS: `captures=13 route=MainBootstrap enemies=6 attacks=6 combination=1`.
+8. Six individual enemy scene smokes and `chapter_03_enemy_trial_hall.tscn`, exact Godot 4.7.1 with `--headless --quit-after 30` — all seven exit 0 without Output/Debugger errors.
+9. Formal F5-equivalent smoke: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --quit-after 240` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`.
+
+### Manual acceptance and recovery
+
+- Use the same Chapter III Debug Start ids documented in README to inspect each formal enemy through MainBootstrap; restore Debug Start afterward.
+- If the old source art is ever needed for forensic comparison, recover it from commit `8d25810` rather than reintroducing it into the runtime asset tree.
+- Pre-existing Chapter I/shared/Player/old-QA worktree changes remain preserved and excluded from this cleanup commit.
