@@ -5927,6 +5927,24 @@ Status: complete for approved R3 scope — R4/R5 remain pending
 
 **R3 is complete. Stop before R4 until explicitly approved.**
 
+## 2026-07-29 — Chapter III render-layer repair L0 preflight
+
+Status: in progress — audit only; stop before L1 structural repair
+
+### Goal, approved scope and ownership
+
+- Loaded the root contract, README, technical architecture, all four mandatory chapter-production standards, and the three user-supplied render-layer/maximum-QA specifications. The approved stage is the expanded **L0 runtime audit only**: identify the four supplied screenshots, inventory every Chapter III scene and runtime CanvasItem, inspect doors/foreground/actors/Y-sort/relative-z/script overrides through the saved MainBootstrap route, publish exact findings and stop before changing any formal scene layer.
+- The authoritative F5 entry remains `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter III is resolved through the registry/profile to `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn`.
+- L0-owned files are a debug-only runtime audit script, its generated text evidence, the L0 audit report and this log. No `.tscn`, gameplay script, art, collision, door behavior, Player behavior, AI, balance, HUD or startup configuration is owned by L0.
+- The worktree already contains unrelated Chapter I/shared enemy, loot/player resource, QA PNG and UID changes. They are preserved, not edited, and must not enter the L0 commit.
+
+### Planned audit and verification
+
+- Start the real MainBootstrap with the legal Chapter III Debug Start, load all eight formal RoomHost destinations, and record node path, type, parent, local z, computed effective z, `z_as_relative`, `y_sort_enabled`, visibility, CanvasLayer and global position.
+- Enumerate all Chapter III `.tscn` files as formal reachable, formal child/dependency, retired, or Debug; list every door, foreground, actor container and Y-sort container; trace every runtime `z_index`/`z_as_relative` write and reparent path.
+- Compare the four supplied screenshots against the exact saved/runtime nodes, separate screenshot-known defects from additional whole-chapter risks, and produce a prioritized L1 repair plan without applying it.
+- Run exact Godot 4.7.1 import/parse, the MainBootstrap runtime audit, existing R3/R5 regressions, scoped diff review and one L0 commit; then stop for explicit L1 approval.
+
 ## 2026-07-29 — Chapter III structural rework R4 preflight
 
 Status: in progress — R4 and R5 approved as one uninterrupted delivery; R4 remains a separate commit
@@ -6021,3 +6039,31 @@ Status: R5 execution complete; strict whole-chapter acceptance remains PARTIAL
 - Bell Confessor Edran combat, an authoritative Chapter III Boss reward and Chapter IV PackedScene remain absent. The report therefore states exactly: **第三章场景结构返修尚未通过最终验收。**
 - Manual route: F5 with `CH3_VESTIBULE` → `CH3_NAVE_ENTRY` → `CH3_CHOIR_GALLERY` → `CH3_BOSS_CHECKPOINT` → `CH3_BOSS_ANTE` → `CH3_BOSS`; verify player feel, enemy fairness and visible transition smoothness, then restore formal startup configuration.
 - Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the R5 commit.
+
+## 2026-07-29 — Chapter III render-layer repair L0 completion
+
+Status: L0 audit complete; whole repair remains FAIL/PENDING until L1–L3
+
+### Delivered audit scope
+
+- Entered the authoritative MainBootstrap route and loaded all eight formal Chapter III rooms through the real `RoomHost` transition authority. Recorded 411 runtime CanvasItems (149 drawable), effective z including relative parent accumulation, CanvasLayer, visibility, Y-sort, parent, global position, classification and script source.
+- Catalogued all 26 Chapter III scene files: one formal route, eight formal rooms, thirteen formal dependencies, one retired scene and three Debug scenes. The generated inventory includes formal reachability, room IDs, Spawn IDs, Actor/Door/Foreground flags and audit state.
+- Reproduced three supplied defects in the current Main render: Chapel Vestibule whole-door occlusion, Thirteen Confessions checkpoint-composite occlusion and Thirteenth Echo whole-gate occlusion. The Last Vigil checkpoint itself is already effective z=-30 on current HEAD and rendered correctly in the current capture, so it is retained as a required regression point rather than falsely reported as currently broken.
+- Whole-chapter scanning additionally reproduced the same whole-door defect in Nave, Choir and Boss Checkpoint, and a 768×96 LimitedForeground water composite that heavily hides the Player. Static spawn-path audit also found missing explicit Drop=13 and CombatFX=16 placement for generated pickups, projectiles and timed fields.
+- Published `chapter_03_render_layer_l0_audit.md`, exact TSV evidence and eight 1280×720 MainBootstrap/OpenGL images. No formal `.tscn`, gameplay behavior, collision, art, project setting or startup configuration was changed.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 headless editor import/parse — exit 0; no parse, missing-resource or script error.
+2. `audit_chapter_03_render_layers_l0.gd` through MainBootstrap — PASS, `rooms=8 canvas_items=411 anomalies=14 unknown_visible=0 drawable=149 foreground=2 actor_containers=4 y_sort=0 main_bootstrap=true`.
+3. `capture_chapter_03_render_layer_l0.gd` through graphical MainBootstrap/OpenGL — PASS, `captures=8 main_bootstrap=true`.
+4. `test_chapter_03_r3_layers_collisions.gd` — PASS, `stairs=8 platforms=8 doors=3 actor_z=10/12`. Its old whole-door z=14 assertion is now explicitly identified as an L1 test-contract defect.
+5. `test_chapter_03_r5_full_route.gd` — PASS, `transitions=40 cycles=10 persistent_runtime=true platform_combat=true boss_entity=partial reward=partial chapter4=partial`.
+6. Scoped `git diff --check` and status review — PASS for L0-owned files; pre-existing unrelated Chapter I/shared/resource/QA changes remain untouched and excluded.
+
+### Findings and stop gate
+
+- Fourteen machine-detected drawable rows collapse to eleven structural issue groups. Four additional static/visual generation findings bring the L0 total to fifteen issue groups; twelve are outside the three currently reproduced supplied defects.
+- Runtime Player is stable at effective z=12, weapon at 13, death/ghost presentation at 14; six enemies are stable at 10; HUD is CanvasLayer 1 and gate Fade is CanvasLayer 90; no runtime Y-sort is enabled and no Chapter III gameplay script reparents Player.
+- The first authorized L1 action is to establish `docs/production/render_layer_contract.md`, then split ordinary doors, the Boss checkpoint composite and Boss gate presentation instead of raising Player globally. L1 must also make Drop/CombatFX placement explicit and constrain underkeep water to the 0–4 px foot-only occlusion budget.
+- Stop here. No L1 repair has been applied; explicit user approval is required.

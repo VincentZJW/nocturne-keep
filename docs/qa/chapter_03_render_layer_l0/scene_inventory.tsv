@@ -1,0 +1,27 @@
+scene_file	category	main_reachable	room_id	spawn_ids	contains_actor	contains_door	contains_foreground	audit_status
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_antechamber.tscn	FormalDependency	true			false	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_gate_transition.tscn	FormalDependency	true			true	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_sanctum.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_post_boss_reliquary.tscn	FormalDependency	true			false	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_underkeep_descent.tscn	FormalDependency	true			true	true	true	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn	Retired	false		Chapter03PlayerSpawn,chapter_03_start,CH3_BELLCHAIN_TEST,CH3_EXECUTIONER_TEST,CH3_CHOIR_TEST,CH3_SCRIBE_TEST,CH3_BOSS_ANTE,CH3_BOSS,CH3_POST_BOSS,CH3_UNDERKEEP_DESCENT	true	true	false	CATALOGUED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn	FormalRoute	true			false	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_enemy_projectile.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_timed_field.tscn	FormalDependency	true			true	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_boss_ante_room.tscn	FormalRoom	true	CH3_BOSS_ANTE	EntryWest	false	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_boss_checkpoint.tscn	FormalRoom	true	CH3_BOSS_CHECKPOINT	EntryWest,BossCheckpoint	false	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_boss_sanctum_room.tscn	FormalRoom	true	CH3_BOSS	EntryWest	false	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_chapel_vestibule.tscn	FormalRoom	true	CH3_CHAPEL_VESTIBULE	EntryWest	false	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_choir_gallery.tscn	FormalRoom	true	CH3_CHOIR_GALLERY	EntryWest,EnemyTest	true	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_nave_entry.tscn	FormalRoom	true	CH3_NAVE_ENTRY	EntryWest,BellchainTest,ScribeTest	true	true	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_post_boss_room.tscn	FormalRoom	true	CH3_POST_BOSS	EntryWest	false	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/rooms/ch3_underkeep_room.tscn	FormalRoom	true	CH3_UNDERKEEP_DESCENT	EntryWest	false	false	false	AUDITED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/bellchain_penitent_test_room.tscn	Debug	false			true	false	false	CATALOGUED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/chapter_03_enemy_combination_test_room.tscn	Debug	false			true	false	false	CATALOGUED
+res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/chapter_03_enemy_trial_hall.tscn	Debug	false			true	false	false	CATALOGUED
