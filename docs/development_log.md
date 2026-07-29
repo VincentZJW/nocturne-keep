@@ -5974,3 +5974,50 @@ Status: complete for approved Boss-region environment/lifecycle scope — contin
 - Full R4 contract and acceptance table: `chapter_03_structural_rework_r4_boss_flow_report.md`.
 - R4 passes the approved Boss-region environment and lifecycle boundary. Boss combat/reward/Chapter IV cannot pass because their authoritative content is absent; R5 must preserve those explicit PARTIAL results.
 - Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the R4 commit.
+
+## 2026-07-29 — Chapter III structural rework R5 preflight
+
+Status: in progress — approved final structural QA milestone
+
+### Goal, audit and strict scope
+
+- R4 is sealed in commit `2560ced`; R5 now owns MainBootstrap full-route regression, Chapter II→III hand-off verification, repeated room-transition stress, platform-combat/readability checks, final QA evidence and the truthful acceptance matrix.
+- The authoritative F5 entry remains `res://scenes/bootstrap/main_bootstrap.tscn`, and Chapter III resolves through `ChapterRegistry` plus `chapter_03_start_profile.tres` to `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn`.
+- Preflight found the older Chapter II→III regression/capture still asserts the retired `Chapter03EntryPlaceholder` even though the registry correctly targets `Chapter03Route`. R5 will update only that acceptance boundary; no Chapter II gameplay, balance or presentation logic will change.
+- Bell Confessor Edran combat, an authoritative Chapter III Boss reward and a loadable Chapter IV scene still do not exist. R5 will not fabricate them. Those three critical items will remain `PARTIAL`, and the strict final verdict will remain not-passed until their owning milestones deliver real content.
+- Existing unrelated dirty Chapter I/shared/resource/QA files are explicitly excluded. R5 task-owned changes are focused tests/captures, Chapter II→III acceptance assertions, README, Chapter III R5 report/evidence and this log.
+
+### Planned verification
+
+- Run the formal route through MainBootstrap at every supported Chapter III start, exercise all ordinary room boundaries, repeat Vestibule→Nave, Nave→Choir, Choir→Checkpoint and Ante→Sanctum ten times, and assert one persistent Player/HUD, one active room, correct camera limits, restored input and no stuck Fade.
+- Re-run R2–R4, six-enemy roster and Chapter II→III regressions; capture Main evidence for exploration, platform combat, checkpoint, Boss threshold, Sanctum, post-Boss and explicit Chapter IV boundary.
+- Preserve exact Godot 4.7.1 commands/results, complete the strict PASS/PARTIAL/FAIL table, perform scoped diff review and create one separate R5 commit.
+
+## 2026-07-29 — Chapter III structural rework R5 completion
+
+Status: R5 execution complete; strict whole-chapter acceptance remains PARTIAL
+
+### Delivered regression scope
+
+- Updated the Chapter II→III test/capture boundary from the retired `Chapter03EntryPlaceholder` to the formal `Chapter03Route`, including its persistent Player/HUD, single RoomHost and Vestibule start assertion.
+- Added a focused R5 suite that validates MainBootstrap/Registry/profile routing, all direct Chapter III debug starts, two real platform-combat rooms, persistent runtime invariants and explicit terminal boundaries.
+- Exercised Vestibule→Nave, Nave→Choir, Choir→Checkpoint and Antechamber→Sanctum ten times each: 40/40 transitions retained one active room, one Player, one HUD, correct Camera limits, restored input and no stuck Fade.
+- Captured eight new 1280×720 MainBootstrap images covering Vestibule, Nave platform combat, Choir platform combat, checkpoint, Boss threshold, independent Sanctum, post-Boss reward boundary and the explicit planned Chapter IV terminal.
+- Added the strict 23-row QA matrix, 22-item screenshot mapping, exact manual F5 route and explicit PASS/PARTIAL boundaries in `chapter_03_structural_rework_r5_qa_report.md`.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 headless editor import/parse — exit 0; no parse or missing-resource error. Fast editor shutdown prints only `Scan thread aborted`.
+2. `test_chapter_03_r5_full_route.gd` — PASS, `transitions=40 cycles=10 persistent_runtime=true platform_combat=true boss_entity=partial reward=partial chapter4=partial`.
+3. R4 Boss flow, R3 layer/collision, R2 room structure, Boss environment and six-enemy roster regressions — PASS.
+4. Updated Chapter II→III functional regression — PASS, `formal_route=1`; its old large test harness still reports Resource/RID teardown leaks after `quit()`, recorded as a known test-cleanup debt instead of hidden.
+5. `capture_chapter_03_r5_full_route_qa.gd` through graphical MainBootstrap — PASS, eight images and no runtime error.
+6. Default F5/MainBootstrap headless smoke with `--quit-after 240` — PASS; formal Opening started and no red runtime error was emitted.
+7. `git diff --check` — PASS.
+
+### Acceptance boundary and manual check
+
+- R0–R4 scene structure, collisions, layers, room transitions, checkpoint, E-confirmed Boss threshold and independent Sanctum environment pass R5 regression.
+- Bell Confessor Edran combat, an authoritative Chapter III Boss reward and Chapter IV PackedScene remain absent. The report therefore states exactly: **第三章场景结构返修尚未通过最终验收。**
+- Manual route: F5 with `CH3_VESTIBULE` → `CH3_NAVE_ENTRY` → `CH3_CHOIR_GALLERY` → `CH3_BOSS_CHECKPOINT` → `CH3_BOSS_ANTE` → `CH3_BOSS`; verify player feel, enemy fairness and visible transition smoothness, then restore formal startup configuration.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the R5 commit.

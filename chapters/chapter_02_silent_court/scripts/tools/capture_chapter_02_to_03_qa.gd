@@ -91,11 +91,13 @@ func _run() -> void:
 	passage.player.player_camera.reset_smoothing()
 	await _capture("05_royal_processional_passage_main.png")
 	passage.debug_enter_chapter_three()
-	await _wait_for_scene("Chapter03EntryPlaceholder", 360)
+	await _wait_for_scene("Chapter03Route", 360)
 	await _wait_until(func() -> bool: return not manager.is_transitioning(), 240, "Chapter III fade-in")
-	var chapter_three: Chapter03EntryPlaceholder = current_scene as Chapter03EntryPlaceholder
+	var chapter_three: Chapter03Route = current_scene as Chapter03Route
 	if chapter_three != null:
-		chapter_three.player.global_position = Vector2(420, 584)
+		var chapter_three_player: Player = chapter_three.transition_controller.player
+		chapter_three_player.global_position = Vector2(420, 584)
+		chapter_three_player.player_camera.reset_smoothing()
 	await _capture("06_chapter_03_vestibule_main.png", 30)
 	_finish()
 

@@ -122,21 +122,30 @@ func _run() -> void:
 	if passage != null:
 		await _wait_until(func() -> bool: return not manager.is_transitioning(), 180, "passage fade-in")
 		passage.debug_enter_chapter_three()
-		await _wait_for_scene("Chapter03EntryPlaceholder", 240)
-	_expect(current_scene is Chapter03EntryPlaceholder, "Chapter III entry placeholder did not load")
+		await _wait_for_scene("Chapter03Route", 240)
+	var chapter_three: Chapter03Route = current_scene as Chapter03Route
+	_expect(chapter_three != null, "Formal Chapter III route did not load")
 	_expect(session.has_story_flag(&"chapter_03_started"), "Chapter III started flag missing")
 	await _wait_until(
 		func() -> bool: return not manager.is_scene_retirement_in_progress(),
 		300,
 		"incremental scene retirement"
 	)
-	if current_scene != null:
+	if chapter_three != null:
+		_expect(
+			chapter_three.transition_controller.active_room_id == &"CH3_CHAPEL_VESTIBULE",
+			"Chapter II hand-off did not enter the formal Chapel Vestibule"
+		)
 		for path: String in [
-			"SpawnPoints/Chapter03PlayerSpawn", "Checkpoints/Chapter03CP01", "CameraBounds",
-			"Doors/ChapelSideDoor", "NarrativeTriggers/ChapterTitleTrigger",
-			"GameplayWorld/Geometry/MainRouteExitPlaceholder",
+			"RoomHost", "PersistentRuntime/ChapterRuntime/Player",
+			"PersistentRuntime/ChapterRuntime/HUD", "RoomTransitionController",
 		]:
-			_expect(current_scene.get_node_or_null(path) != null, "Missing Chapter III node: %s" % path)
+			_expect(chapter_three.get_node_or_null(path) != null, "Missing formal Chapter III node: %s" % path)
+	if current_scene != null:
+		current_scene.queue_free()
+		current_scene = null
+	for _frame: int in range(8):
+		await process_frame
 	_finish()
 
 
@@ -180,7 +189,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CH2_TO_CH3_TRANSITION_TEST: PASS dialogue=4 reliquary=1 mirror_after_reward=1 crimson=14/28 reload=2 passage=1 chapter3=1")
+		print("CH2_TO_CH3_TRANSITION_TEST: PASS dialogue=4 reliquary=1 mirror_after_reward=1 crimson=14/28 reload=2 passage=1 formal_route=1")
 		quit(0)
 		return
 	for failure: String in _failures:
