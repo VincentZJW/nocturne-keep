@@ -1,0 +1,115 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_boss_antechamber.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_antechamber/boss_antechamber_backdrop.png" id="2_backdrop"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/chapter_03_boss_checkpoint.png" id="3_checkpoint"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/thirteen_confession_tablets.png" id="4_tablets"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/bell_saint_left.png" id="5_saint_left"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/bell_saint_right.png" id="6_saint_right"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_choir_stalls.png" id="7_stalls"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/confessor_lectern.png" id="8_lectern"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(1664, 108)
+
+[sub_resource type="RectangleShape2D" id="CheckpointShape"]
+size = Vector2(220, 180)
+
+[sub_resource type="StyleBoxFlat" id="TitleStyle"]
+bg_color = Color(0.025, 0.026, 0.045, 0.76)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.52, 0.43, 0.24, 0.7)
+
+[node name="BossAntechamber" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="Sprite2D" parent="."]
+z_index = -30
+position = Vector2(832, 360)
+texture_filter = 1
+texture = ExtResource("2_backdrop")
+
+[node name="Architecture" type="Node2D" parent="."]
+z_index = -10
+
+[node name="ConfessionTablets" type="Sprite2D" parent="Architecture"]
+position = Vector2(832, 323)
+texture_filter = 1
+texture = ExtResource("4_tablets")
+
+[node name="LeftBellSaint" type="Sprite2D" parent="Architecture"]
+position = Vector2(108, 420)
+texture_filter = 1
+texture = ExtResource("5_saint_left")
+
+[node name="RightBellSaint" type="Sprite2D" parent="Architecture"]
+position = Vector2(1556, 420)
+texture_filter = 1
+texture = ExtResource("6_saint_right")
+
+[node name="LeftChoirStalls" type="Sprite2D" parent="Architecture"]
+position = Vector2(432, 518)
+scale = Vector2(0.62, 0.62)
+texture_filter = 1
+texture = ExtResource("7_stalls")
+
+[node name="RightChoirStalls" type="Sprite2D" parent="Architecture"]
+position = Vector2(1232, 518)
+scale = Vector2(0.62, 0.62)
+texture_filter = 1
+texture = ExtResource("7_stalls")
+
+[node name="BrokenLectern" type="Sprite2D" parent="Architecture"]
+position = Vector2(824, 500)
+rotation = 0.0523599
+texture_filter = 1
+texture = ExtResource("8_lectern")
+
+[node name="CheckpointVisual" type="Sprite2D" parent="."]
+z_index = 2
+position = Vector2(214, 508)
+texture_filter = 1
+texture = ExtResource("3_checkpoint")
+
+[node name="CP_CH3_BOSS" type="Marker2D" parent="."]
+position = Vector2(214, 584)
+
+[node name="CheckpointArea" type="Area2D" parent="."]
+position = Vector2(214, 516)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CheckpointArea"]
+shape = SubResource("CheckpointShape")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(832, 666)
+shape = SubResource("FloorShape")
+
+[node name="AreaTitle" type="Panel" parent="."]
+z_index = 40
+offset_left = 574.0
+offset_top = 82.0
+offset_right = 1090.0
+offset_bottom = 132.0
+theme_override_styles/panel = SubResource("TitleStyle")
+
+[node name="Label" type="Label" parent="AreaTitle"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.78, 0.72, 0.58, 0.92)
+theme_override_font_sizes/font_size = 14
+text = "VESTIBULE OF THIRTEEN CONFESSIONS / 十三忏前厅"
+horizontal_alignment = 1
+vertical_alignment = 1

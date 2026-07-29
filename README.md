@@ -151,6 +151,8 @@ Main开发调试快捷键：
 
 第三章六种敌人的415张正式运行帧已完成第一轮全量美术重制，旧Phase 2几何占位源文件已删除；历史新旧对比仅保留为QA截图，SpriteFrames与Main只引用正式`sprites/`资源。F5仍从`MainBootstrap`进入；开发验收时临时选择Chapter III Debug Start，并使用`CH3_BELLCHAIN_TEST`、`CH3_EXECUTIONER_TEST`、`CH3_CHOIR_TEST`、`CH3_SCRIBE_TEST`逐组查看，测试后恢复Debug Start关闭。完整的新旧对比、Main单体/攻击/组合截图和PASS/FAIL边界见[第三章敌人美术重制强制QA报告](docs/qa/chapter_03_enemy_art_rework/qa_report.md)。第一章人物与Boss、第二章五种普通敌人与瑟芙琳Boss也已完成各自批准阶段的正式美术重制与Main绑定。
 
+第三章Boss环境路线已经接入同一正式Chapter III Main：`CH3_BOSS_ANTE`检查十三忏前厅、检查点、十三响门与Fade，`CH3_BOSS`检查第十三回响圣所、十三烛、香雾和入场镜头，`CH3_POST_BOSS`检查末次忏悔遗物室与奖励系统接口，`CH3_UNDERKEEP_DESCENT`检查向下墓窟、滴水、浅水和第四章终端。当前仓库尚无钟忏司祭·埃德兰Boss实体、权威Boss奖励和第四章PackedScene，因此这三项保持PARTIAL；环境不会伪造战斗、道具或章节跳转。详见[第三章Boss环境规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_boss_environment_spec.md)与[强制QA报告](docs/qa/chapter_03_boss_environment/report.md)。
+
 连续按J使用同一个四帧基础突刺组成最多三段的有限攻击链，而不是无限连招树。首个J立即响应并约0.05秒进入有效帧；0.10–0.20秒合法窗口只锁存一个0.08秒输入且不会被乱按刷新。每段完整播放后以0.32秒最短起手间隔衔接，第三段结束固定进入0.34秒强制收招；收招结束前不能开始新的第一段。每段拥有独立attack_id，过早或窗口外连按不会重置第1帧。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。
 
 ## 文档
@@ -185,6 +187,8 @@ Main开发调试快捷键：
 - [第三章敌人正式像素质量规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_sprite_quality_spec.md)
 - [第三章敌人美术重制强制 QA 报告](docs/qa/chapter_03_enemy_art_rework/qa_report.md)
 - [第三章敌人Trial Hall计划](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_trial_plan.md)
+- [第三章Boss环境规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_boss_environment_spec.md)
+- [第三章Boss区域强制 QA 报告](docs/qa/chapter_03_boss_environment/report.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
 - [世界观](docs/narrative/world_bible.md)

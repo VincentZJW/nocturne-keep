@@ -5684,3 +5684,56 @@ Status: complete — scene and character production workflows are permanent repo
 
 - From the next chapter task onward, the agent must begin with the checklist's short `工作流确认`, classify the task as scene/character/Boss/combined, name the approved stage and stop point, and then execute only that stage.
 - Final scoped status/diff must contain only `AGENTS.md`, `README.md`, `docs/design/chapter_scene_workflow_spec.md`, the four `docs/production/*.md` files and this log. All pre-existing dirty gameplay/resource/QA/UID files remain untouched and excluded.
+
+## 2026-07-29 — Chapter III Boss-area scene production preflight
+
+Status: in progress — approved specialist scene milestone; stop after Boss-area Main/F5 QA
+
+### Read-only audit and scope gate
+
+- F5 authority is `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter III is registered through `res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/chapter/chapter_03_start_profile.tres` and currently loads `scenes/level/chapter_03_entry_placeholder.tscn`.
+- The saved Chapter III route is a 4200×720 enemy-acceptance prototype with six accepted enemy scenes and runtime-drawn prototype architecture. Contrary to the prompt's inherited assumption, the repository contains no approved Chapter III environment PNG set, no Bell Confessor Edran Boss scene/data/script, and no Chapter IV scene directory. These absences are treated as factual integration constraints rather than silently replaced with placeholders.
+- This milestone owns the formal Boss-specific environment assets, five independently instantiable area scenes, typed gate/intro/post-Boss/descent controllers, four Chapter III debug spawn IDs, the saved Chapter III Main integration, focused QA tooling/evidence, Chapter III environment documentation, README and this log.
+- The milestone does not create or rebalance Edran, alter Chapter III ordinary enemies, build the Chapter IV map, or invent a final Boss reward. Boss-combat, reward-inventory and real Chapter IV scene-transfer rows will remain `PARTIAL` with explicit typed hooks until those authoritative systems exist.
+- Existing dirty Chapter I/shared enemy resources, player/loot Resources, Ravenfang QA evidence and UID sidecars predate this milestone and remain excluded from its commit.
+
+### Scene intent and planned verification
+
+- Pacing is rest/read → thirteen-bell threshold → controlled fade/teleport → ritual reveal → readable arena → quiet reliquary → downward damp ossuary endpoint. The memorable image is the thirteenfold stained glass above a flat, unobstructed ritual floor, followed by water appearing beneath the collapsed altar.
+- Formal art is generated first as deterministic hard-edged PNGs under the Chapter III asset tree. The scenes reference those textures directly; runtime geometry remains collision-only and will not be presented as finished art.
+- Verification will use exact Godot 4.7.1 generation/import, focused structure/state tests, independent scene smokes, MainBootstrap spawns `CH3_BOSS_ANTE`, `CH3_BOSS`, `CH3_POST_BOSS` and `CH3_UNDERKEEP_DESCENT`, graphical F5 capture, `git diff --check`, and manual image review. Any parser, missing-resource, collision-gate, stale-Main-reference or red runtime error blocks completion.
+
+## 2026-07-29 — Chapter III Boss-area scene production completion
+
+Status: complete for the approved environment scope — Boss/reward/Chapter IV authority honestly retained as PARTIAL
+
+### Delivered scene and environment scope
+
+- Created 42 original deterministic Chapter III assets: formal ante chamber, three-state thirteenfold gate, 3200×720 sanctuary apse, narrative stained glass, altar/choir/organ/ritual-floor props, animated candle/incense/resonance/death-response layers, reliquary, damp ossuary transition props and four mono WAV ambience/action cues. Every runtime image is chapter-local and nearest-neighbour; geometry nodes remain collision/trigger-only.
+- Added five independently instantiable typed scenes: `ch3_boss_antechamber`, `ch3_boss_gate_transition`, `ch3_boss_sanctum`, `ch3_post_boss_reliquary` and `ch3_underkeep_descent`. The gate owns one-shot input lock, thirteen bell/seal sequence, wax crack, sound, collision removal, fade and typed crossing. The sanctuary owns thirteen-candle intro, dedicated camera pan, incense/resonance, permanent glass/altar death response and a typed Edran integration anchor.
+- Extended the saved formal Chapter III Main target to 12784px and added all five areas beneath `GameplayWorld/Chapter03BossAreas`. Added and validated `CH3_BOSS_ANTE`, `CH3_BOSS`, `CH3_POST_BOSS` and `CH3_UNDERKEEP_DESCENT`; Boss checkpoint respawn and per-spawn environment state are restored by the level authority.
+- Kept architectural boundaries explicit: no Edran scene/data/controller exists, so combat/dialogue/title/death-signal binding remains PARTIAL; no Boss reward Resource exists, so the reliquary emits a typed collection request rather than granting an invented item; no Chapter IV PackedScene exists, so the downward terminal displays planned content rather than performing a fake transition.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_chapter_03_boss_environment_assets.gd` — PASS: `files=42 original=true nearest_ready=true`.
+2. Exact Godot 4.7.1 headless editor import/parse — exit 0; 42 Boss-route assets imported, scripts/classes registered, no parser or missing-resource error.
+3. `test_chapter_03_boss_environment.gd` — PASS: required dimensions, five scenes, four spawns, Main hierarchy, Boss hooks, nearest filter and planned Chapter IV boundary.
+4. `test_chapter_03_boss_route.gd` — PASS: four spawn positions, checkpoint binding, complete thirteen-bell sequence, collision-safe crossing, sanctum camera/environment intro and Player input restoration.
+5. Independent headless smokes for all five `scenes/areas/*.tscn` — exit 0, no runtime error.
+6. Graphical `capture_chapter_03_boss_environment_qa.gd` through real MainBootstrap — PASS: 20 Main captures at 1280×720, `boss_character=PARTIAL`, `chapter4_scene=PARTIAL`.
+7. Manual visual review — PASS for ante chamber density, thirteenfold identity, gate states, sanctuary battle-floor readability, stained-glass story, permanent death response, quiet reward space and downward water transition. A first capture pass exposed an asynchronous gate fade contaminating later frames; the runner now disables auto-trigger and resets the gate before deterministic presentation capture, and the regenerated evidence is clean.
+8. All six Chapter III regression tests — PASS: Bellchain prototype, Boss environment/route, 415-frame enemy art/Main bindings, six concept/silhouette sets and six-role roster all remained valid.
+9. Formal F5 Bootstrap smoke, `Godot --headless --path . --quit-after 8` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`.
+
+### QA evidence and manual acceptance
+
+- Formal specification: `chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_boss_environment_spec.md`.
+- Forced QA matrix: `docs/qa/chapter_03_boss_environment/report.md`.
+- Main evidence: `docs/qa/chapter_03_boss_environment/01_boss_antechamber_panorama_main.png` through `20_shallow_water_chapter_four_gate_main.png`.
+- Manual F5: select Chapter III and test the four Boss-route spawn IDs in order. Environment, gate, checkpoint, camera and downward route are ready for review. Edran combat, the inventory reward and real Chapter IV loading must wait for their separately approved authoritative milestones.
+
+### Scope and ownership
+
+- No Player movement/combat, normal enemy, Boss balance, existing Chapter I/II content or Chapter IV map was created or changed by this milestone.
+- Pre-existing dirty Chapter I/shared Resources, Player/loot Resources, Ravenfang screenshots and UID sidecars remain user-owned and excluded from the milestone commit.

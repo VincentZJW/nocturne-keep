@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="1_runtime"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_entry_placeholder.gd" id="2_level"]
@@ -10,6 +10,11 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="8_seraph"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="9_wraith"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="10_scribe"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_antechamber.tscn" id="11_ante"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_gate_transition.tscn" id="12_gate"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_sanctum.tscn" id="13_sanctum"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_post_boss_reliquary.tscn" id="14_reliquary"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_underkeep_descent.tscn" id="15_descent"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_ground"]
 size = Vector2(4200, 108)
@@ -21,7 +26,7 @@ size = Vector2(64, 720)
 size = Vector2(260, 360)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_camera"]
-size = Vector2(4200, 720)
+size = Vector2(12784, 720)
 
 [sub_resource type="RectangleShape2D" id="Rectangle_encounter"]
 size = Vector2(440, 300)
@@ -62,7 +67,7 @@ position = Vector2(-32, 360)
 shape = SubResource("Rectangle_wall")
 
 [node name="MainRouteExitPlaceholder" type="StaticBody2D" parent="GameplayWorld/Geometry"]
-position = Vector2(4200, 0)
+position = Vector2(12784, 0)
 collision_layer = 1
 collision_mask = 0
 
@@ -154,6 +159,23 @@ shape = SubResource("Rectangle_encounter")
 [node name="ThirteenthScribe" parent="GameplayWorld/Phase2FEncounter/Enemies" instance=ExtResource("10_scribe")]
 position = Vector2(3500, 584)
 
+[node name="Chapter03BossAreas" type="Node2D" parent="GameplayWorld"]
+
+[node name="BossAntechamber" parent="GameplayWorld/Chapter03BossAreas" instance=ExtResource("11_ante")]
+position = Vector2(4200, 0)
+
+[node name="BossGateTransition" parent="GameplayWorld/Chapter03BossAreas" instance=ExtResource("12_gate")]
+position = Vector2(5480, 0)
+
+[node name="BossSanctum" parent="GameplayWorld/Chapter03BossAreas" instance=ExtResource("13_sanctum")]
+position = Vector2(6000, 0)
+
+[node name="PostBossReliquary" parent="GameplayWorld/Chapter03BossAreas" instance=ExtResource("14_reliquary")]
+position = Vector2(9200, 0)
+
+[node name="UnderkeepDescent" parent="GameplayWorld/Chapter03BossAreas" instance=ExtResource("15_descent")]
+position = Vector2(10480, 0)
+
 [node name="ChapterTitleCard" type="Panel" parent="GameplayWorld/ChapterRuntime/HUD"]
 layout_mode = 3
 anchors_preset = 8
@@ -202,6 +224,18 @@ position = Vector2(2040, 584)
 [node name="CH3_SCRIBE_TEST" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(3160, 584)
 
+[node name="CH3_BOSS_ANTE" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(4414, 584)
+
+[node name="CH3_BOSS" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(6160, 584)
+
+[node name="CH3_POST_BOSS" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(9360, 584)
+
+[node name="CH3_UNDERKEEP_DESCENT" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(10640, 584)
+
 [node name="Checkpoints" type="Node2D" parent="."]
 
 [node name="Chapter03CP01" type="Marker2D" parent="Checkpoints"]
@@ -212,7 +246,7 @@ collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="CameraBounds"]
-position = Vector2(2100, 360)
+position = Vector2(6392, 360)
 shape = SubResource("Rectangle_camera")
 
 [node name="Doors" type="Node2D" parent="."]

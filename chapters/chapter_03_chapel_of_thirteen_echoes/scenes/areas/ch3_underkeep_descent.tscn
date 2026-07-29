@@ -1,0 +1,122 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_underkeep_descent.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/underkeep_descent_backdrop.png" id="2_backdrop"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/ossuary_stairs.png" id="3_stairs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/wet_arch.png" id="4_arch"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/rusted_gate.png" id="5_gate"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/shallow_water_edge.png" id="6_water"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/submerged_statue.png" id="7_statue"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/underkeep_water_drip.wav" id="8_drip"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(2304, 108)
+
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(260, 300)
+
+[node name="UnderkeepDescent" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="Sprite2D" parent="."]
+z_index = -40
+position = Vector2(1152, 360)
+texture_filter = 1
+texture = ExtResource("2_backdrop")
+
+[node name="OssuaryStairs" type="Sprite2D" parent="."]
+z_index = -5
+position = Vector2(478, 472)
+scale = Vector2(0.78, 0.78)
+texture_filter = 1
+texture = ExtResource("3_stairs")
+
+[node name="WetArch01" type="Sprite2D" parent="."]
+z_index = -12
+position = Vector2(712, 404)
+scale = Vector2(0.8, 0.8)
+texture_filter = 1
+texture = ExtResource("4_arch")
+
+[node name="WetArch02" type="Sprite2D" parent="."]
+z_index = -12
+position = Vector2(1450, 404)
+scale = Vector2(0.8, 0.8)
+texture_filter = 1
+texture = ExtResource("4_arch")
+
+[node name="SubmergedSaint" type="Sprite2D" parent="."]
+z_index = -6
+position = Vector2(1260, 490)
+rotation = 0.0698132
+texture_filter = 1
+texture = ExtResource("7_statue")
+
+[node name="UnderkeepGate" type="Sprite2D" parent="."]
+z_index = -2
+position = Vector2(2140, 424)
+scale = Vector2(0.82, 0.82)
+texture_filter = 1
+texture = ExtResource("5_gate")
+
+[node name="ShallowWater01" type="Sprite2D" parent="."]
+z_index = 3
+position = Vector2(1040, 620)
+texture_filter = 1
+texture = ExtResource("6_water")
+
+[node name="ShallowWater02" type="Sprite2D" parent="."]
+z_index = 3
+position = Vector2(1776, 620)
+texture_filter = 1
+texture = ExtResource("6_water")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(1152, 666)
+shape = SubResource("FloorShape")
+
+[node name="ChapterFourExitArea" type="Area2D" parent="."]
+position = Vector2(2150, 468)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ChapterFourExitArea"]
+shape = SubResource("ExitShape")
+
+[node name="WaterDrip" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(1420, 250)
+stream = ExtResource("8_drip")
+volume_db = -12.0
+max_distance = 1800.0
+
+[node name="WaterDripTimer" type="Timer" parent="."]
+wait_time = 3.4
+autostart = true
+
+[node name="TransitionPrompt" type="Label" parent="."]
+z_index = 40
+offset_left = 1750.0
+offset_top = 294.0
+offset_right = 2290.0
+offset_bottom = 356.0
+theme_override_colors/font_color = Color(0.69, 0.82, 0.84, 0.98)
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.07, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 14
+text = "E · DESCEND TO THE DROWNED UNDERKEEP / 下行至淹没地牢"
+horizontal_alignment = 1
+
+[node name="AreaTitle" type="Label" parent="."]
+z_index = 30
+offset_left = 790.0
+offset_top = 78.0
+offset_right = 1514.0
+offset_bottom = 126.0
+theme_override_colors/font_color = Color(0.61, 0.75, 0.78, 0.92)
+theme_override_font_sizes/font_size = 15
+text = "DESCENT OF THE DROWNED SAINTS / 溺圣下行道"
+horizontal_alignment = 1

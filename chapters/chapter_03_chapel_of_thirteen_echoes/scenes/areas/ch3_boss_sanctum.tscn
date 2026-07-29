@@ -1,0 +1,252 @@
+[gd_scene load_steps=18 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_boss_sanctum.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_apse.png" id="2_backdrop"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_stained_glass.png" id="3_glass"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_altar.png" id="4_altar"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_choir_stalls.png" id="5_stalls"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_ritual_floor.png" id="6_floor_art"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_pipe_organ.png" id="7_organ"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/single_blood_candle.png" id="8_candle"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/boss_censers.png" id="9_censer"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/confessor_lectern.png" id="10_lectern"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/ritual_registry.png" id="11_registry"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/fx/boss/boss_incense_02.png" id="12_incense"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/fx/boss/boss_resonance_fx.png" id="13_resonance"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/fx/boss/boss_stained_glass_crack.png" id="14_crack"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/fx/boss/boss_altar_collapse.png" id="15_collapse"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(3200, 108)
+
+[sub_resource type="RectangleShape2D" id="IntroShape"]
+size = Vector2(420, 300)
+
+[sub_resource type="RectangleShape2D" id="ExitBlockerShape"]
+size = Vector2(48, 420)
+
+[node name="BossSanctum" type="Node2D"]
+script = ExtResource("1_script")
+
+[node name="Backdrop" type="Sprite2D" parent="."]
+z_index = -40
+position = Vector2(1600, 360)
+texture_filter = 1
+texture = ExtResource("2_backdrop")
+
+[node name="DeepArchitecture" type="Node2D" parent="."]
+z_index = -25
+
+[node name="LeftOrgan" type="Sprite2D" parent="DeepArchitecture"]
+position = Vector2(470, 335)
+scale = Vector2(0.78, 0.78)
+texture_filter = 1
+texture = ExtResource("7_organ")
+
+[node name="RightOrgan" type="Sprite2D" parent="DeepArchitecture"]
+position = Vector2(2730, 335)
+scale = Vector2(-0.78, 0.78)
+texture_filter = 1
+texture = ExtResource("7_organ")
+
+[node name="ThirteenfoldAbsolution" type="Sprite2D" parent="DeepArchitecture"]
+position = Vector2(1600, 260)
+texture_filter = 1
+texture = ExtResource("3_glass")
+
+[node name="LeftChoirStalls" type="Sprite2D" parent="DeepArchitecture"]
+position = Vector2(970, 485)
+texture_filter = 1
+texture = ExtResource("5_stalls")
+
+[node name="RightChoirStalls" type="Sprite2D" parent="DeepArchitecture"]
+position = Vector2(2230, 485)
+scale = Vector2(-1, 1)
+texture_filter = 1
+texture = ExtResource("5_stalls")
+
+[node name="Presentation" type="Node2D" parent="."]
+
+[node name="RitualFloor" type="Sprite2D" parent="Presentation"]
+z_index = -2
+position = Vector2(1600, 548)
+texture_filter = 1
+texture = ExtResource("6_floor_art")
+
+[node name="Altar" type="Sprite2D" parent="Presentation"]
+z_index = -4
+position = Vector2(1600, 470)
+texture_filter = 1
+texture = ExtResource("4_altar")
+
+[node name="CollapsedAltar" type="Sprite2D" parent="Presentation"]
+visible = false
+z_index = -4
+position = Vector2(1600, 470)
+texture_filter = 1
+texture = ExtResource("15_collapse")
+
+[node name="ConfessorLectern" type="Sprite2D" parent="Presentation"]
+z_index = -1
+position = Vector2(1600, 435)
+texture_filter = 1
+texture = ExtResource("10_lectern")
+
+[node name="RitualRegistry" type="Sprite2D" parent="Presentation"]
+position = Vector2(1600, 392)
+rotation = -0.0872665
+texture_filter = 1
+texture = ExtResource("11_registry")
+
+[node name="LeftCensers" type="Sprite2D" parent="Presentation"]
+z_index = -8
+position = Vector2(1250, 250)
+texture_filter = 1
+texture = ExtResource("9_censer")
+
+[node name="RightCensers" type="Sprite2D" parent="Presentation"]
+z_index = -8
+position = Vector2(1950, 250)
+texture_filter = 1
+texture = ExtResource("9_censer")
+
+[node name="Candles" type="Node2D" parent="Presentation"]
+
+[node name="Candle01" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1208, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle02" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1274, 514)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle03" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1340, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle04" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1406, 510)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle05" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1472, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle06" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1538, 510)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle07" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1600, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle08" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1662, 510)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle09" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1728, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle10" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1794, 510)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle11" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1860, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle12" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1926, 514)
+texture_filter = 1
+texture = ExtResource("8_candle")
+[node name="Candle13" type="Sprite2D" parent="Presentation/Candles"]
+visible = false
+position = Vector2(1992, 526)
+texture_filter = 1
+texture = ExtResource("8_candle")
+
+[node name="Incense" type="Sprite2D" parent="Presentation"]
+z_index = 6
+position = Vector2(1180, 300)
+modulate = Color(1, 1, 1, 0.38)
+texture_filter = 1
+texture = ExtResource("12_incense")
+
+[node name="Resonance" type="Sprite2D" parent="Presentation"]
+visible = false
+z_index = 7
+position = Vector2(1600, 340)
+texture_filter = 1
+texture = ExtResource("13_resonance")
+
+[node name="StainedGlassCrack" type="Sprite2D" parent="Presentation"]
+visible = false
+z_index = -23
+position = Vector2(1600, 260)
+texture_filter = 1
+texture = ExtResource("14_crack")
+
+[node name="BossIntegrationAnchor" type="Marker2D" parent="."]
+position = Vector2(1680, 584)
+
+[node name="PlayerEntry" type="Marker2D" parent="."]
+position = Vector2(160, 584)
+
+[node name="IntroCamera" type="Camera2D" parent="."]
+position = Vector2(520, 360)
+enabled = false
+position_smoothing_enabled = true
+position_smoothing_speed = 5.0
+limit_left = 0
+limit_top = 0
+limit_right = 3200
+limit_bottom = 720
+
+[node name="IntroTrigger" type="Area2D" parent="."]
+position = Vector2(230, 450)
+collision_layer = 0
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IntroTrigger"]
+shape = SubResource("IntroShape")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(1600, 666)
+shape = SubResource("FloorShape")
+
+[node name="BossExitBlocker" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossExitBlocker"]
+position = Vector2(3176, 402)
+shape = SubResource("ExitBlockerShape")
+
+[node name="SanctumTitle" type="Label" parent="."]
+z_index = 30
+offset_left = 1290.0
+offset_top = 82.0
+offset_right = 1910.0
+offset_bottom = 132.0
+theme_override_colors/font_color = Color(0.79, 0.73, 0.6, 0.9)
+theme_override_font_sizes/font_size = 16
+text = "SANCTUM OF THE THIRTEENTH ECHO / 第十三回响圣所"
+horizontal_alignment = 1
+vertical_alignment = 1
