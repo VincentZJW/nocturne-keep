@@ -255,27 +255,27 @@ func _draw_hand(image: Image, center: Vector2i) -> void:
 func _crozier_pose(animation: StringName, frame: int, progress: float, x: int, y: int) -> Dictionary:
 	var hand: Vector2i = Vector2i(x+18,y+33)
 	var bottom: Vector2i = Vector2i(x+25,y+88)
-	var top: Vector2i = Vector2i(x+25,y-7)
+	var top: Vector2i = Vector2i(x+25,y+10)
 	if animation.begins_with("pontifical_sweep"):
 		if animation.ends_with("windup"):
 			hand = Vector2i(x+12-roundi(progress*12.0),y+31-roundi(progress*7.0))
-			bottom = Vector2i(x-16-roundi(progress*10.0),y+58)
-			top = Vector2i(x+23,y+4-roundi(progress*10.0))
+			bottom = Vector2i(x-15-roundi(progress*8.0),y+58)
+			top = Vector2i(x+22,y+15-roundi(progress*7.0))
 		elif animation.ends_with("active"):
-			hand = Vector2i(x+12,y+32); bottom = Vector2i(7,y+38+frame*2); top = Vector2i(91,y+28+frame*2)
+			hand = Vector2i(x+12,y+32); bottom = Vector2i(8,y+39+frame*2); top = Vector2i(80,y+29+frame*2)
 		else:
-			hand = Vector2i(x+14,y+33); bottom = Vector2i(9+roundi(progress*16.0),y+48+roundi(progress*36.0)); top = Vector2i(91-roundi(progress*65.0),y+33-roundi(progress*35.0))
+			hand = Vector2i(x+14,y+33); bottom = Vector2i(9+roundi(progress*17.0),y+48+roundi(progress*36.0)); top = Vector2i(80-roundi(progress*50.0),y+34-roundi(progress*24.0))
 	elif animation.begins_with("crozier_thrust"):
 		if animation.ends_with("windup"):
-			hand = Vector2i(x+10-roundi(progress*8.0),y+34); bottom = Vector2i(x-28,y+41); top = Vector2i(x+30,y+25)
+			hand = Vector2i(x+10-roundi(progress*8.0),y+34); bottom = Vector2i(x-25,y+42); top = Vector2i(x+26,y+26)
 		elif animation.ends_with("active"):
-			hand = Vector2i(x+18,y+34); bottom = Vector2i(x-25,y+40); top = Vector2i(94,y+25)
+			hand = Vector2i(x+18,y+34); bottom = Vector2i(x-25,y+41); top = Vector2i(80,y+26)
 		else:
-			hand = Vector2i(x+18-roundi(progress*3.0),y+34); bottom = Vector2i(x-25+roundi(progress*46.0),y+40+roundi(progress*48.0)); top = Vector2i(94-roundi(progress*69.0),y+25-roundi(progress*32.0))
+			hand = Vector2i(x+18-roundi(progress*3.0),y+34); bottom = Vector2i(x-25+roundi(progress*48.0),y+41+roundi(progress*47.0)); top = Vector2i(80-roundi(progress*50.0),y+26-roundi(progress*16.0))
 	elif animation in [&"litany_cast", &"summon_start", &"summon_loop", &"summon_success", &"thirteenfold_sentence"]:
-		hand = Vector2i(x+17,y+28); bottom = Vector2i(x+23,y+88); top = Vector2i(x+23,y-8)
+		hand = Vector2i(x+17,y+28); bottom = Vector2i(x+23,y+88); top = Vector2i(x+23,y+10)
 	elif animation == &"summon_interrupt":
-		hand = Vector2i(x+10,y+35); bottom = Vector2i(x+31,y+87); top = Vector2i(x-1,y+4)
+		hand = Vector2i(x+10,y+35); bottom = Vector2i(x+31,y+87); top = Vector2i(x+2,y+14)
 	return {&"hand":hand, &"bottom":bottom, &"top":top}
 
 
@@ -299,38 +299,86 @@ func _censer_pose(animation: StringName, frame: int, progress: float, x: int, y:
 
 
 func _draw_crozier(image: Image, bottom: Vector2i, top: Vector2i, hand: Vector2i) -> void:
-	_draw_segment(image, bottom, top, 5, OUTLINE)
-	_draw_segment(image, bottom, top, 3, COPPER)
-	_draw_segment(image, hand, top, 1, GOLD_LIGHT)
-	# Full end cap and grip bands.
-	_circle(image, bottom, 3, OUTLINE)
-	_fill(image, Rect2i(bottom.x-1,bottom.y-2,3,4), OLD_GOLD)
-	var shaft_direction: Vector2 = Vector2(top - hand).normalized()
-	for band: int in [-6, 6]:
-		var point: Vector2i = hand + Vector2i(
-			roundi(shaft_direction.x * float(band)),
-			roundi(shaft_direction.y * float(band))
-		)
-		_circle(image, point, 2, GOLD_LIGHT)
-	# Hollow bell-ring head with a black clapper and thirteen readable outer nodes.
-	var direction: Vector2 = Vector2(top - bottom).normalized()
-	var side: Vector2 = Vector2(-direction.y, direction.x)
-	var ring_center: Vector2i = top + Vector2i(roundi(direction.x*8.0),roundi(direction.y*8.0))
-	for index: int in range(16):
-		var angle: float = TAU * float(index) / 16.0
-		var ring_point: Vector2i = ring_center + Vector2i(roundi(cos(angle)*9.0),roundi(sin(angle)*9.0))
+	# The gameplay crozier mirrors the formal prop: a long, segmented black-iron
+	# shaft, oxblood grip, pointed finial, and a large seal-ring carrying a bell.
+	# `top` is the ring centre, which lets every action keep the head on-canvas.
+	var ring_center: Vector2i = Vector2i(clampi(top.x, 14, FRAME_SIZE-15), clampi(top.y, 14, FRAME_SIZE-15))
+	var axis: Vector2 = Vector2(ring_center - bottom).normalized()
+	if axis.length_squared() <= 0.01:
+		axis = Vector2.UP
+	var side: Vector2 = Vector2(-axis.y, axis.x)
+	var neck: Vector2i = _crozier_local(ring_center, axis, side, -10.0, 0.0)
+	_draw_segment(image, bottom, neck, 5, OUTLINE)
+	_draw_segment(image, bottom, neck, 3, IRON)
+	_draw_segment(image, bottom, neck, 1, STEEL)
+
+	# Oxblood leather grip and four metal divisions keep the shaft from reading
+	# as a featureless line in vertical, sweep, or thrust poses.
+	var hand_along: float = Vector2(hand - bottom).dot(axis)
+	for offset: float in [-8.0, -5.0, -2.0, 1.0, 4.0, 7.0]:
+		var grip_point: Vector2i = _crozier_local(bottom, axis, side, hand_along + offset, 0.0)
+		_circle(image, grip_point, 2, OUTLINE)
+		_circle(image, grip_point, 1, OXBLOOD_LIGHT if int(offset) % 2 == 0 else OXBLOOD)
+	for ratio: float in [0.16, 0.48, 0.76]:
+		var band_center_f: Vector2 = Vector2(bottom).lerp(Vector2(neck),ratio)
+		var band_center: Vector2i = Vector2i(roundi(band_center_f.x),roundi(band_center_f.y))
+		_draw_segment(image, _crozier_local(band_center, axis, side, 0.0, -3.0), _crozier_local(band_center, axis, side, 0.0, 3.0), 3, OUTLINE)
+		_draw_segment(image, _crozier_local(band_center, axis, side, 0.0, -2.0), _crozier_local(band_center, axis, side, 0.0, 2.0), 1, GOLD_LIGHT)
+
+	# Gothic spear-finial at the foot.
+	var tail_tip: Vector2i = _crozier_local(bottom, axis, side, -7.0, 0.0)
+	var tail_left: Vector2i = _crozier_local(bottom, axis, side, -1.0, -4.0)
+	var tail_right: Vector2i = _crozier_local(bottom, axis, side, -1.0, 4.0)
+	_poly(image, PackedVector2Array([tail_tip, tail_left, bottom, tail_right]), OUTLINE)
+	_poly(image, PackedVector2Array([_crozier_local(bottom, axis, side, -5.0, 0.0), _crozier_local(bottom, axis, side, -1.0, -2.0), bottom, _crozier_local(bottom, axis, side, -1.0, 2.0)]), OLD_GOLD)
+
+	# Layered neck and open pontifical ring.
+	_circle(image, neck, 4, OUTLINE)
+	_circle(image, neck, 2, OLD_GOLD)
+	for index: int in range(28):
+		var angle: float = TAU * float(index) / 28.0
+		# Leave a narrow opening beside the bell, matching the asymmetric relic.
+		if angle > 2.58 and angle < 3.72:
+			continue
+		var ring_point: Vector2i = _crozier_local(ring_center, axis, side, sin(angle)*11.0, cos(angle)*11.0)
 		_circle(image, ring_point, 2, OUTLINE)
 		_pixel(image, ring_point.x, ring_point.y, OLD_GOLD)
+		if index % 4 == 0:
+			_pixel(image, ring_point.x, ring_point.y, GOLD_LIGHT)
+
+	# Thirteen distinct seal medallions around the ring.
 	for seal: int in range(13):
 		var seal_angle: float = TAU * float(seal) / 13.0
-		var seal_point: Vector2i = ring_center + Vector2i(roundi(cos(seal_angle)*12.0),roundi(sin(seal_angle)*12.0))
-		_fill(image, Rect2i(seal_point.x-1,seal_point.y-1,3,3), WAX if seal%2 else GOLD_LIGHT)
-	var clapper: Vector2i = ring_center + Vector2i(roundi(direction.x*5.0),roundi(direction.y*5.0))
-	_draw_segment(image, ring_center, clapper, 2, IRON)
-	_circle(image, clapper, 3, VOID)
-	# Keep the head connected even when horizontal.
-	_draw_segment(image, top, ring_center - Vector2i(roundi(direction.x*8.0),roundi(direction.y*8.0)), 3, OLD_GOLD)
-	_pixel(image, ring_center.x+roundi(side.x), ring_center.y+roundi(side.y), GOLD_LIGHT)
+		var seal_point: Vector2i = _crozier_local(ring_center, axis, side, sin(seal_angle)*14.0, cos(seal_angle)*14.0)
+		_circle(image, seal_point, 2, OUTLINE)
+		_circle(image, seal_point, 1, OLD_GOLD)
+		_pixel(image, seal_point.x, seal_point.y, WAX if seal % 2 else GOLD_LIGHT)
+
+	# A proper bell occupies the open side: crown, flared bronze body, dark mouth,
+	# chain, and separate black clapper all remain readable at gameplay scale.
+	var bell_crown: Vector2i = _crozier_local(ring_center, axis, side, 5.0, -4.0)
+	var bell_center: Vector2i = _crozier_local(ring_center, axis, side, 0.0, -5.0)
+	_draw_segment(image, ring_center, bell_crown, 1, GOLD_LIGHT)
+	var bell_top_left: Vector2i = _crozier_local(bell_center, axis, side, 4.0, -3.0)
+	var bell_top_right: Vector2i = _crozier_local(bell_center, axis, side, 4.0, 3.0)
+	var bell_lip_right: Vector2i = _crozier_local(bell_center, axis, side, -4.0, 6.0)
+	var bell_lip_left: Vector2i = _crozier_local(bell_center, axis, side, -4.0, -6.0)
+	_poly(image, PackedVector2Array([bell_top_left, bell_top_right, bell_lip_right, bell_lip_left]), OUTLINE)
+	_poly(image, PackedVector2Array([_crozier_local(bell_center, axis, side, 3.0, -2.0), _crozier_local(bell_center, axis, side, 3.0, 2.0), _crozier_local(bell_center, axis, side, -3.0, 4.0), _crozier_local(bell_center, axis, side, -3.0, -4.0)]), COPPER)
+	_draw_segment(image, bell_lip_left, bell_lip_right, 3, OUTLINE)
+	_draw_segment(image, _crozier_local(bell_center, axis, side, -3.0, -5.0), _crozier_local(bell_center, axis, side, -3.0, 5.0), 1, COPPER_LIGHT)
+	var clapper_chain: Vector2i = _crozier_local(bell_center, axis, side, -5.0, 0.0)
+	var clapper: Vector2i = _crozier_local(bell_center, axis, side, -8.0, 0.0)
+	_draw_segment(image, bell_center, clapper_chain, 1, IRON)
+	_circle(image, clapper, 2, OUTLINE)
+	_pixel(image, clapper.x, clapper.y, VOID)
+
+
+func _crozier_local(origin: Vector2i, axis: Vector2, side: Vector2, along: float, lateral: float) -> Vector2i:
+	return origin + Vector2i(
+		roundi(axis.x * along + side.x * lateral),
+		roundi(axis.y * along + side.y * lateral)
+	)
 
 
 func _draw_chain_and_censer(image: Image, hand: Vector2i, center: Vector2i, animation: StringName, frame: int) -> void:

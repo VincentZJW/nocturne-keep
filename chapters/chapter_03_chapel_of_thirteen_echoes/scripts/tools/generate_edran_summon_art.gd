@@ -3,6 +3,7 @@ extends SceneTree
 const ROOT: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons"
 const SIZE: int = 64
 const OUTLINE: Color = Color("0c0d12")
+const VOID: Color = Color("05060a")
 const BONE: Color = Color("c8c0aa")
 const BONE_DARK: Color = Color("756f64")
 const METAL: Color = Color("4b4b50")
@@ -54,62 +55,88 @@ func _draw_penitent(animation: StringName, frame: int, count: int) -> Image:
 		_draw_seal(image, frame)
 		return image
 	var progress: float = float(frame) / float(maxi(1, count - 1))
-	var origin: Vector2i = Vector2i(31, 57)
-	if animation == &"rise": origin.y += roundi((1.0 - progress) * 24.0)
-	if animation in [&"idle", &"walk"]: origin.y += 1 if frame % 4 == 1 else 0
-	if animation == &"walk": origin.x += [-2, -1, 0, 2, 1, 0][frame]
-	if animation in [&"hurt", &"stagger"]: origin.x -= [2, 4, 1, 3][mini(frame, 3)]
+	var origin: Vector2i = Vector2i(31, 59)
+	if animation == &"rise":
+		origin.y += roundi((1.0 - progress) * 23.0)
+	if animation in [&"idle", &"walk"]:
+		origin.y += [0, 1, 1, 0, -1, 0][frame % 6]
+	if animation in [&"hurt", &"stagger"]:
+		origin.x -= [2, 5, 3, 1][mini(frame, 3)]
 	if animation == &"death":
-		origin.y += roundi(progress * 11.0)
-		origin.x -= roundi(progress * 7.0)
+		origin.y += roundi(progress * 8.0)
+		origin.x -= roundi(progress * 8.0)
 	var lean: int = 0
-	if animation in [&"claw_windup", &"lunge_windup"]: lean = -frame
-	if animation in [&"claw_active", &"lunge_active"]: lean = 5 + frame * 3
-	if animation in [&"claw_recovery", &"lunge_recovery"]: lean = 4 - frame
-	var torso: Vector2i = origin + Vector2i(lean, -24)
-	# Heavy shoulder reliquaries and ragged penitential mantle.
-	_fill(image, Rect2i(torso.x - 12, torso.y - 2, 24, 22), OUTLINE)
-	_fill(image, Rect2i(torso.x - 10, torso.y, 20, 18), BURGUNDY_DARK)
-	_fill(image, Rect2i(torso.x - 13, torso.y, 6, 11), BONE_DARK)
-	_fill(image, Rect2i(torso.x + 7, torso.y, 6, 11), BONE_DARK)
-	_fill(image, Rect2i(torso.x - 11, torso.y + 3, 5, 7), BONE)
-	_fill(image, Rect2i(torso.x + 6, torso.y + 3, 5, 7), BONE)
-	# Thirteen-seal chest chain, kept as readable brass beats.
-	for index: int in range(5):
-		_pixel(image, torso.x, torso.y + 2 + index * 3, BRASS)
-	# Mask and cold sockets.
-	_fill(image, Rect2i(torso.x - 6, torso.y - 12, 12, 12), OUTLINE)
-	_fill(image, Rect2i(torso.x - 5, torso.y - 11, 10, 10), BONE)
-	_fill(image, Rect2i(torso.x - 4, torso.y - 9, 8, 4), BONE_DARK)
-	_pixel(image, torso.x - 2, torso.y - 7, SOUL_LIGHT)
-	_pixel(image, torso.x + 2, torso.y - 7, SOUL_LIGHT)
-	_fill(image, Rect2i(torso.x - 1, torso.y - 4, 3, 3), OUTLINE)
-	# Shackled arms and asymmetric grave claws.
-	var left_hand: Vector2i = torso + Vector2i(-16, 14)
-	var right_hand: Vector2i = torso + Vector2i(17, 13)
-	if animation == &"claw_windup": right_hand = torso + Vector2i(10 - frame * 3, 6 - frame)
-	if animation == &"claw_active": right_hand = torso + Vector2i(24 + frame * 3, 8)
+	if animation in [&"claw_windup", &"lunge_windup"]:
+		lean = -frame
+	if animation in [&"claw_active", &"lunge_active"]:
+		lean = 3 + frame
+	if animation in [&"claw_recovery", &"lunge_recovery"]:
+		lean = 4 - frame
+	var torso: Vector2i = origin + Vector2i(lean, -27)
+	var stride: int = 0
+	if animation == &"walk":
+		stride = [-4, -2, 1, 4, 2, -1][frame]
+
+	# Broad, weight-bearing legs and slab-like grave feet establish the summon
+	# before any upper-body detail is added.
+	_draw_segment(image, torso + Vector2i(-7, 15), origin + Vector2i(-7 - stride, -2), 9, OUTLINE)
+	_draw_segment(image, torso + Vector2i(-7, 15), origin + Vector2i(-7 - stride, -3), 5, METAL)
+	_draw_segment(image, torso + Vector2i(7, 15), origin + Vector2i(8 + stride, -2), 9, OUTLINE)
+	_draw_segment(image, torso + Vector2i(7, 15), origin + Vector2i(8 + stride, -3), 5, BONE_DARK)
+	_poly(image, PackedVector2Array([origin+Vector2i(-15-stride,-4), origin+Vector2i(-3-stride,-4), origin+Vector2i(-1-stride,0), origin+Vector2i(-16-stride,0)]), OUTLINE)
+	_poly(image, PackedVector2Array([origin+Vector2i(2+stride,-4), origin+Vector2i(14+stride,-4), origin+Vector2i(16+stride,0), origin+Vector2i(1+stride,0)]), OUTLINE)
+	_fill(image, Rect2i(origin.x-12-stride, origin.y-3, 8, 2), BONE_DARK)
+	_fill(image, Rect2i(origin.x+4+stride, origin.y-3, 9, 2), BONE)
+
+	# Rear ossuary slab, seal stone, and layered penitential mantle. These are
+	# the concept's defining burden and remain visible in every animation.
+	_poly(image, PackedVector2Array([torso+Vector2i(-13,-13), torso+Vector2i(8,-16), torso+Vector2i(14,-8), torso+Vector2i(12,13), torso+Vector2i(-12,13), torso+Vector2i(-17,-4)]), OUTLINE)
+	_poly(image, PackedVector2Array([torso+Vector2i(-11,-11), torso+Vector2i(7,-14), torso+Vector2i(11,-7), torso+Vector2i(9,10), torso+Vector2i(-10,10), torso+Vector2i(-14,-3)]), BONE_DARK)
+	_fill(image, Rect2i(torso.x-7, torso.y-12, 13, 17), METAL)
+	_draw_seal_mark(image, torso + Vector2i(0,-4), 5)
+	_poly(image, PackedVector2Array([torso+Vector2i(-16,-5), torso+Vector2i(15,-6), torso+Vector2i(12,14), torso+Vector2i(5,20), torso+Vector2i(0,16), torso+Vector2i(-6,21), torso+Vector2i(-13,13)]), OUTLINE)
+	_poly(image, PackedVector2Array([torso+Vector2i(-14,-3), torso+Vector2i(13,-4), torso+Vector2i(10,12), torso+Vector2i(4,17), torso+Vector2i(0,13), torso+Vector2i(-5,18), torso+Vector2i(-11,11)]), BURGUNDY_DARK)
+	for tear: int in range(5):
+		var tear_x: int = torso.x - 10 + tear * 5
+		_draw_segment(image, Vector2i(tear_x,torso.y+8), Vector2i(tear_x-2+tear%2,torso.y+18+tear%3), 2, BONE_DARK if tear%2 else BURGUNDY)
+
+	# Heavy reliquary shoulders and a recessed ribbed chest.
+	_poly(image, PackedVector2Array([torso+Vector2i(-19,-6), torso+Vector2i(-10,-12), torso+Vector2i(-3,-7), torso+Vector2i(-8,3), torso+Vector2i(-18,4)]), OUTLINE)
+	_poly(image, PackedVector2Array([torso+Vector2i(19,-7), torso+Vector2i(10,-12), torso+Vector2i(3,-7), torso+Vector2i(8,3), torso+Vector2i(18,4)]), OUTLINE)
+	_fill(image, Rect2i(torso.x-16,torso.y-7,8,8),BONE)
+	_fill(image, Rect2i(torso.x+8,torso.y-8,8,8),BONE_DARK)
+	_fill(image,Rect2i(torso.x-9,torso.y-5,18,18),OUTLINE)
+	_fill(image,Rect2i(torso.x-7,torso.y-4,14,15),BURGUNDY_DARK)
+	for rib: int in range(4):
+		_draw_segment(image,torso+Vector2i(-6,-1+rib*3),torso+Vector2i(6,-2+rib*3),1,BONE_DARK)
+
+	# Hunched skull with recognisable brow, sockets, nasal cavity, and teeth.
+	var skull: Vector2i = torso + Vector2i(3,-15)
+	_draw_penitent_skull(image,skull)
+
+	# Long shackled arms end in deliberately oversized asymmetric grave claws.
+	var left_hand: Vector2i = torso + Vector2i(-18,14)
+	var right_hand: Vector2i = torso + Vector2i(18,12)
+	if animation == &"claw_windup":
+		right_hand = torso + Vector2i(12-frame*4,2-frame*2)
+	if animation == &"claw_active":
+		right_hand = torso + Vector2i(14+frame*2,5+frame*3)
+		left_hand = torso + Vector2i(-16,15)
 	if animation == &"lunge_windup":
-		left_hand = torso + Vector2i(-11, 5); right_hand = torso + Vector2i(-5, 9)
+		left_hand = torso + Vector2i(-12,4); right_hand = torso + Vector2i(-5,8)
 	if animation == &"lunge_active":
-		left_hand = torso + Vector2i(19 + frame * 4, 7); right_hand = torso + Vector2i(25 + frame * 4, 12)
-	_draw_segment(image, torso + Vector2i(-9, 7), left_hand, 4, OUTLINE)
-	_draw_segment(image, torso + Vector2i(-9, 7), left_hand, 2, METAL)
-	_draw_segment(image, torso + Vector2i(9, 7), right_hand, 4, OUTLINE)
-	_draw_segment(image, torso + Vector2i(9, 7), right_hand, 2, METAL)
-	_draw_claws(image, left_hand, -1, 3)
-	_draw_claws(image, right_hand, 1, 4)
-	# Split legs keep the silhouette readable.
-	var stride: int = 3 if animation == &"walk" and frame < 3 else -3 if animation == &"walk" else 1
-	_draw_segment(image, torso + Vector2i(-5, 17), origin + Vector2i(-5 - stride, 0), 6, OUTLINE)
-	_draw_segment(image, torso + Vector2i(-5, 17), origin + Vector2i(-5 - stride, 0), 3, BONE_DARK)
-	_draw_segment(image, torso + Vector2i(5, 17), origin + Vector2i(6 + stride, 0), 6, OUTLINE)
-	_draw_segment(image, torso + Vector2i(5, 17), origin + Vector2i(6 + stride, 0), 3, BONE_DARK)
-	_fill(image, Rect2i(origin.x - 12, origin.y - 2, 10, 4), OUTLINE)
-	_fill(image, Rect2i(origin.x + 2, origin.y - 2, 11, 4), OUTLINE)
+		left_hand = torso + Vector2i(10+frame*2,5); right_hand = torso + Vector2i(14+frame*2,12)
+	_draw_segment(image,torso+Vector2i(-13,0),left_hand,7,OUTLINE)
+	_draw_segment(image,torso+Vector2i(-13,0),left_hand,4,METAL)
+	_draw_segment(image,torso+Vector2i(13,0),right_hand,7,OUTLINE)
+	_draw_segment(image,torso+Vector2i(13,0),right_hand,4,BONE_DARK)
+	_draw_penitent_claw(image,left_hand,-1,7)
+	_draw_penitent_claw(image,right_hand,1,8)
+	_draw_chain_links(image,torso+Vector2i(-15,2),torso+Vector2i(15,6),6)
 	if animation in [&"rise", &"forced_dissolve"]:
 		_draw_seal(image, frame)
-	if animation == &"forced_dissolve": _dissolve(image, frame + 1)
+	if animation == &"forced_dissolve":
+		_dissolve(image, frame + 1)
 	return image
 
 
@@ -120,53 +147,153 @@ func _draw_husk(animation: StringName, frame: int, count: int) -> Image:
 		_draw_seal(image, frame)
 		return image
 	var progress: float = float(frame) / float(maxi(1, count - 1))
-	var origin: Vector2i = Vector2i(29, 54)
-	if animation == &"rise": origin.y += roundi((1.0 - progress) * 25.0)
-	if animation in [&"idle", &"drift"]: origin.y += roundi(sin(progress * TAU) * 2.0)
-	if animation == &"drift": origin.x += [-2, -1, 0, 1, 2, 0][frame]
-	if animation in [&"hurt", &"stagger"]: origin.x -= [2, 4, 1, 3][mini(frame, 3)]
-	if animation == &"death": origin.y += roundi(progress * 10.0)
-	var head: Vector2i = origin + Vector2i(0, -35)
-	# Narrow cracked funerary mask.
-	_fill(image, Rect2i(head.x - 6, head.y - 7, 12, 15), OUTLINE)
-	_fill(image, Rect2i(head.x - 5, head.y - 6, 10, 13), BONE)
-	_draw_segment(image, head + Vector2i(-1, -5), head + Vector2i(1, 5), 1, BONE_DARK)
-	_fill(image, Rect2i(head.x - 2, head.y, 4, 5), SOUL)
-	_pixel(image, head.x, head.y + 2, SOUL_LIGHT)
-	# Exposed rib cage and long choir stole with thirteen seal rhythm.
-	_fill(image, Rect2i(origin.x - 9, origin.y - 28, 18, 25), OUTLINE)
-	_fill(image, Rect2i(origin.x - 7, origin.y - 26, 14, 21), BURGUNDY_DARK)
-	for rib: int in range(4):
-		_draw_segment(image, origin + Vector2i(-6, -23 + rib * 4), origin + Vector2i(6, -23 + rib * 4), 1, BONE_DARK)
-	_fill(image, Rect2i(origin.x - 2, origin.y - 27, 4, 25), BONE_DARK)
-	for seal: int in range(6):
-		_pixel(image, origin.x, origin.y - 24 + seal * 4, BRASS)
-	# Tattered lower vestment.
-	for strip: int in range(5):
-		var strip_x: int = origin.x - 9 + strip * 4
-		var length: int = 10 + ((strip + frame) % 3) * 3
-		_fill(image, Rect2i(strip_x, origin.y - 8, 3, length), BURGUNDY if strip % 2 == 0 else BONE_DARK)
-	# Broken-chorister arms; aim/shoot reaches forward but remains fragile.
-	var left_hand: Vector2i = origin + Vector2i(-15, -14)
-	var right_hand: Vector2i = origin + Vector2i(15, -14)
-	if animation == &"aim": right_hand = origin + Vector2i(15 + frame * 2, -19)
-	if animation == &"shoot":
-		right_hand = origin + Vector2i(24, -20); left_hand = origin + Vector2i(17, -14)
-	_draw_segment(image, origin + Vector2i(-7, -22), left_hand, 3, OUTLINE)
-	_draw_segment(image, origin + Vector2i(-7, -22), left_hand, 1, BONE_DARK)
-	_draw_segment(image, origin + Vector2i(7, -22), right_hand, 3, OUTLINE)
-	_draw_segment(image, origin + Vector2i(7, -22), right_hand, 1, BONE_DARK)
-	_circle(image, origin + Vector2i(0, -27), 3, OUTLINE)
-	_circle(image, origin + Vector2i(0, -27), 2, BRASS)
+	var origin: Vector2i = Vector2i(29,56)
+	if animation == &"rise":
+		origin.y += roundi((1.0-progress)*25.0)
+	if animation in [&"idle",&"drift"]:
+		origin.y += [0,-1,-2,-1,0,1][frame%6]
+	if animation == &"drift":
+		origin.x += [-1,0,1,1,0,-1][frame]
+	if animation in [&"hurt",&"stagger"]:
+		origin.x -= [2,5,3,1][mini(frame,3)]
+	if animation == &"death":
+		origin.y += roundi(progress*9.0)
+	var cast_lean: int = 0
 	if animation == &"aim":
-		_circle(image, right_hand + Vector2i(7, 0), 2 + frame / 2, Color(SOUL, 0.65))
+		cast_lean = -mini(frame,3)
 	if animation == &"shoot":
-		var orb: Vector2i = right_hand + Vector2i(7 + frame * 5, 0)
-		_circle(image, orb, 4, Color(SOUL, 0.45))
-		_circle(image, orb, 2, SOUL_LIGHT)
-	if animation in [&"rise", &"forced_dissolve"]: _draw_seal(image, frame)
-	if animation == &"forced_dissolve": _dissolve(image, frame + 1)
+		cast_lean = 2+frame
+	var mask: Vector2i = origin+Vector2i(cast_lean,-40)
+
+	# Layered, torn choir vestments form a tapered floating silhouette instead
+	# of rectangular legs. Each strip has a different delayed sway phase.
+	_poly(image,PackedVector2Array([origin+Vector2i(-12,-29),origin+Vector2i(11,-29),origin+Vector2i(14,-10),origin+Vector2i(8,4),origin+Vector2i(2,-1),origin+Vector2i(-3,5),origin+Vector2i(-9,0),origin+Vector2i(-15,-11)]),OUTLINE)
+	_poly(image,PackedVector2Array([origin+Vector2i(-10,-27),origin+Vector2i(9,-27),origin+Vector2i(11,-11),origin+Vector2i(6,1),origin+Vector2i(2,-4),origin+Vector2i(-3,2),origin+Vector2i(-7,-2),origin+Vector2i(-12,-12)]),BURGUNDY_DARK)
+	for strip: int in range(7):
+		var strip_x: int = origin.x-10+strip*3
+		var sway: int = ((frame+strip)%3)-1
+		var strip_length: int = 12+(strip*2+frame)%7
+		var strip_color: Color = BONE_DARK if strip%3==0 else BURGUNDY if strip%2==0 else BURGUNDY_DARK
+		_draw_segment(image,Vector2i(strip_x,origin.y-12),Vector2i(strip_x+sway,origin.y-12+strip_length),2,OUTLINE)
+		_draw_segment(image,Vector2i(strip_x,origin.y-12),Vector2i(strip_x+sway,origin.y-12+strip_length-1),1,strip_color)
+
+	# Exposed ribs, funeral stole, and all thirteen vertical seal nodes.
+	_fill(image,Rect2i(origin.x-9,origin.y-31,18,22),OUTLINE)
+	_fill(image,Rect2i(origin.x-7,origin.y-29,14,19),BURGUNDY_DARK)
+	for rib: int in range(4):
+		_draw_segment(image,origin+Vector2i(-7,-26+rib*4),origin+Vector2i(7,-27+rib*4),1,BONE_DARK)
+	_draw_segment(image,origin+Vector2i(0,-31),origin+Vector2i(0,-8),3,OUTLINE)
+	_draw_segment(image,origin+Vector2i(0,-31),origin+Vector2i(0,-8),1,BRASS)
+	for seal: int in range(13):
+		var seal_y: int = origin.y-29+seal*2
+		_circle(image,Vector2i(origin.x,seal_y),1,OUTLINE)
+		_pixel(image,origin.x,seal_y,BRASS if seal%3 else BONE)
+
+	# Elongated cracked funerary mask and the throat bell.
+	_draw_husk_mask(image,mask)
+	var throat_bell: Vector2i = origin+Vector2i(cast_lean,-31)
+	_draw_husk_throat_bell(image,throat_bell)
+
+	# Long suspended arms trail behind movement and gather together for casting.
+	var left_hand: Vector2i = origin+Vector2i(-18,-12)
+	var right_hand: Vector2i = origin+Vector2i(18,-13)
+	if animation == &"drift":
+		left_hand += Vector2i(-2,frame%3); right_hand += Vector2i(-3,(frame+1)%3)
+	if animation == &"aim":
+		left_hand = origin+Vector2i(12+frame,-18-frame/2)
+		right_hand = origin+Vector2i(17+frame*2,-21)
+	if animation == &"shoot":
+		left_hand = origin+Vector2i(14,-17)
+		right_hand = origin+Vector2i(17,-21)
+	_draw_husk_arm(image,origin+Vector2i(-8,-25),left_hand)
+	_draw_husk_arm(image,origin+Vector2i(8,-25),right_hand)
+	if animation == &"aim":
+		var focus: Vector2i = right_hand+Vector2i(6,0)
+		_circle(image,focus,2+frame/2,Color(SOUL,0.50))
+		_circle(image,focus,1,SOUL_LIGHT)
+		for pulse: int in range(3):
+			_pixel(image,focus.x-4-pulse*3,focus.y-2+pulse*2,SOUL)
+	if animation == &"shoot":
+		var orb: Vector2i = right_hand+Vector2i(4+frame*2,0)
+		_circle(image,orb,5,Color(SOUL,0.35))
+		_circle(image,orb,3,SOUL)
+		_circle(image,orb,1,SOUL_LIGHT)
+		_draw_segment(image,right_hand,orb-Vector2i(3,0),1,SOUL_LIGHT)
+	if animation in [&"rise",&"forced_dissolve"]:
+		_draw_seal(image,frame)
+	if animation == &"forced_dissolve":
+		_dissolve(image,frame+1)
 	return image
+
+
+func _draw_penitent_skull(image: Image, center: Vector2i) -> void:
+	_poly(image,PackedVector2Array([center+Vector2i(-6,-6),center+Vector2i(4,-7),center+Vector2i(7,-3),center+Vector2i(5,6),center+Vector2i(1,9),center+Vector2i(-5,6),center+Vector2i(-7,-1)]),OUTLINE)
+	_poly(image,PackedVector2Array([center+Vector2i(-4,-5),center+Vector2i(3,-5),center+Vector2i(5,-2),center+Vector2i(3,5),center+Vector2i(0,7),center+Vector2i(-4,4),center+Vector2i(-5,-1)]),BONE)
+	_fill(image,Rect2i(center.x-4,center.y-2,3,3),VOID)
+	_fill(image,Rect2i(center.x+1,center.y-2,3,3),VOID)
+	_pixel(image,center.x-3,center.y-1,SOUL_LIGHT)
+	_pixel(image,center.x+2,center.y-1,SOUL_LIGHT)
+	_fill(image,Rect2i(center.x-1,center.y+1,2,3),BONE_DARK)
+	for tooth: int in range(4):
+		_pixel(image,center.x-3+tooth*2,center.y+5,BONE_DARK)
+
+
+func _draw_penitent_claw(image: Image, palm: Vector2i, direction: int, reach: int) -> void:
+	_circle(image,palm,4,OUTLINE)
+	_circle(image,palm,2,BONE_DARK)
+	for finger: int in range(3):
+		var knuckle: Vector2i = palm+Vector2i(direction*(3+finger),-2+finger*2)
+		var tip: Vector2i = palm+Vector2i(direction*(reach+finger*2),-5+finger*4)
+		_draw_segment(image,palm,knuckle,2,OUTLINE)
+		_draw_segment(image,palm,knuckle,1,BONE)
+		_draw_segment(image,knuckle,tip,2,OUTLINE)
+		_draw_segment(image,knuckle,tip,1,BONE)
+
+
+func _draw_chain_links(image: Image, start: Vector2i, finish: Vector2i, links: int) -> void:
+	for link: int in range(links+1):
+		var ratio: float = float(link)/float(maxi(1,links))
+		var point_f: Vector2 = Vector2(start).lerp(Vector2(finish),ratio)
+		var point: Vector2i = Vector2i(roundi(point_f.x),roundi(point_f.y))+Vector2i(0,roundi(sin(ratio*PI)*5.0))
+		_circle(image,point,1,OUTLINE)
+		_pixel(image,point.x,point.y,METAL if link%2 else BRASS)
+
+
+func _draw_seal_mark(image: Image, center: Vector2i, radius: int) -> void:
+	_circle(image,center,radius,OUTLINE)
+	_circle(image,center,radius-1,BONE_DARK)
+	_draw_segment(image,center+Vector2i(-3,0),center+Vector2i(3,0),1,BRASS)
+	_draw_segment(image,center+Vector2i(0,-3),center+Vector2i(0,3),1,BRASS)
+	_pixel(image,center.x,center.y,SOUL)
+
+
+func _draw_husk_mask(image: Image, center: Vector2i) -> void:
+	_poly(image,PackedVector2Array([center+Vector2i(-5,-8),center+Vector2i(4,-8),center+Vector2i(7,-4),center+Vector2i(5,8),center+Vector2i(0,12),center+Vector2i(-5,7),center+Vector2i(-7,-4)]),OUTLINE)
+	_poly(image,PackedVector2Array([center+Vector2i(-3,-6),center+Vector2i(3,-6),center+Vector2i(5,-3),center+Vector2i(3,7),center+Vector2i(0,10),center+Vector2i(-3,6),center+Vector2i(-5,-3)]),BONE)
+	_draw_segment(image,center+Vector2i(-1,-5),center+Vector2i(1,7),1,BONE_DARK)
+	_fill(image,Rect2i(center.x-1,center.y-1,3,7),SOUL)
+	_pixel(image,center.x,center.y+1,SOUL_LIGHT)
+	_pixel(image,center.x+2,center.y-5,OUTLINE)
+	_pixel(image,center.x-3,center.y+4,BONE_DARK)
+
+
+func _draw_husk_throat_bell(image: Image, center: Vector2i) -> void:
+	_draw_segment(image,center-Vector2i(0,3),center,1,BRASS)
+	_poly(image,PackedVector2Array([center+Vector2i(-2,-1),center+Vector2i(2,-1),center+Vector2i(4,4),center+Vector2i(-4,4)]),OUTLINE)
+	_poly(image,PackedVector2Array([center+Vector2i(-1,0),center+Vector2i(1,0),center+Vector2i(2,3),center+Vector2i(-2,3)]),BRASS)
+	_draw_segment(image,center+Vector2i(-3,4),center+Vector2i(3,4),1,BONE)
+	_pixel(image,center.x,center.y+5,VOID)
+
+
+func _draw_husk_arm(image: Image, shoulder: Vector2i, hand: Vector2i) -> void:
+	var elbow: Vector2i = Vector2i((shoulder.x+hand.x)/2,(shoulder.y+hand.y)/2+4)
+	_draw_segment(image,shoulder,elbow,4,OUTLINE)
+	_draw_segment(image,shoulder,elbow,2,BONE_DARK)
+	_draw_segment(image,elbow,hand,3,OUTLINE)
+	_draw_segment(image,elbow,hand,1,BONE)
+	_circle(image,hand,2,OUTLINE)
+	for finger: int in range(3):
+		_draw_segment(image,hand,hand+Vector2i(3+finger, -2+finger*2),1,BONE)
 
 
 func _write_previews() -> void:
@@ -212,6 +339,24 @@ func _blit_nearest(target: Image, source: Image, origin: Vector2i, scale: int) -
 			var color: Color = source.get_pixel(x, y)
 			if color.a > 0.0:
 				target.fill_rect(Rect2i(origin.x + x * scale, origin.y + y * scale, scale, scale), color)
+
+
+func _poly(image: Image, points: PackedVector2Array, color: Color) -> void:
+	if points.size() < 3:
+		return
+	var min_x: int = image.get_width()-1
+	var min_y: int = image.get_height()-1
+	var max_x: int = 0
+	var max_y: int = 0
+	for point: Vector2 in points:
+		min_x = mini(min_x,floori(point.x))
+		min_y = mini(min_y,floori(point.y))
+		max_x = maxi(max_x,ceili(point.x))
+		max_y = maxi(max_y,ceili(point.y))
+	for y: int in range(maxi(0,min_y),mini(image.get_height()-1,max_y)+1):
+		for x: int in range(maxi(0,min_x),mini(image.get_width()-1,max_x)+1):
+			if Geometry2D.is_point_in_polygon(Vector2(x,y),points):
+				image.set_pixel(x,y,color)
 
 
 func _fill(image: Image, rect: Rect2i, color: Color) -> void:

@@ -1,9 +1,19 @@
 # Chapter III Boss Specification — The Thirteenth Pontiff, Edran
 
-Status: **B0 design and combat baseline approved for implementation**
+Status: **B1–B3 implemented; Phase 1 production art and summons visually reworked; B4 remains pending**
 
 Scope owner: Chapter III Boss B0–B7
-Last updated: 2026-07-29
+Last updated: 2026-07-30
+
+## 0. 2026-07-30 production-art rework
+
+The production art for Edran Phase 1 and both existing summons has been overwritten in place so every saved scene and SpriteFrames reference continues to resolve without a compatibility alias.
+
+- Edran's 114 Phase 1 frames now use the complete Pontifical Hollow-Bell Crozier: large open ring, thirteen round seals, central bell and separate black clapper, segmented long shaft, wrapped grip, layered neck, and pointed finial. Every idle, locomotion, cast, sweep, thrust, hit, summon, and transition-start frame uses the same weapon construction.
+- Ossuary Penitent's 58 frames now preserve the concept identity through a skull, hunched broad frame, reliquary back slab, seals, ribs, chains, long arms, oversized claws, ragged material, and heavy feet.
+- Choir Husk's 50 frames now preserve the concept identity through a long cracked mask, blue slit, throat bell, thirteen chest nodes, long arms, layered ragged robe, and floating/casting motion language.
+- Body collision, Hurtbox, attack volumes, HP, Poise, damage, timings, summon caps, AI, Main routing, and the B4 boundary were not changed.
+- Formal evidence and commands are recorded in `docs/qa/chapter_03_edran_art_rework/report.md`.
 
 ## 1. Authority and milestone boundary
 

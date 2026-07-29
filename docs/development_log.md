@@ -6339,3 +6339,39 @@ Status: complete — formal Phase 1 gameplay/Main integration; B3 summons follow
 
 - Evidence: `docs/qa/chapter_03_boss_b2/01_edran_phase_01_idle_main.png`, `02_edran_pontifical_sweep_active_main.png` and `03_edran_b4_boundary_main.png`.
 - Manual F5 route: enable Chapter Debug Start for `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` / `CH3_BOSS`, then verify the environment intro unlocks Edran, HUD tracks 360 HP/110 Poise, all five Phase 1 actions are readable and 198 HP stops at the explicit B4 boundary.
+
+## 2026-07-30 — Edran crozier and summon production-art rework complete
+
+Status: complete — existing B1–B3 production assets overwritten; B4 not started
+
+### Goal and scope
+
+- Audit and replace the real runtime art for Edran's Pontifical Hollow-Bell Crozier, Ossuary Penitent, and Choir Husk so the Main/F5 result retains the approved concept identities during every existing animation.
+- Preserve the formal `main_bootstrap.tscn → chapter_03_route.tscn → CH3_BOSS` chain, existing Boss/summon scenes, AI, damage, HP, Poise, attack windows, collision shapes, summon caps, reward boundary, and Chapter IV boundary.
+- Overwrite the original frame paths as explicitly requested. Git history remains the recovery path; no parallel legacy art alias was introduced.
+
+### Delivered
+
+- Re-authored Edran's 114 existing 96×96 Phase 1 frames with a full ring-and-bell crozier: thirteen seals, black clapper, segmented iron shaft, grip wraps, layered head and pointed finial remain consistent in idle, movement, sweep, thrust, rites, hit and summon actions.
+- Re-authored Ossuary Penitent's 58 existing 64×64 frames with skull, reliquary back slab, seals, ribs, chains, long arms, oversized claws, ragged material, heavy feet and action-specific claw/lunge silhouettes.
+- Re-authored Choir Husk's 50 existing 64×64 frames with long cracked mask, blue slit, throat bell, thirteen chest nodes, layered robe, suspended lower silhouette and action-specific float/aim/shoot motion.
+- Added deterministic art-density/canvas/scene-reference/collision regression coverage and a MainBootstrap capture driver. Saved 8 formal Main screenshots under `docs/qa/chapter_03_edran_art_rework/` and recorded the full QA matrix in its `report.md`.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_edran_phase_01_art.gd` — PASS, `animations=27 frames=114`.
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_edran_summon_art.gd` — PASS, `actors=2 frames=108 canvas=64`.
+3. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS, exact Godot 4.7.1 import/parse completed without script/resource error.
+4. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/build_edran_phase_01_sprite_frames.gd` — PASS, `animations=27 frames=114`.
+5. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/build_edran_summon_sprite_frames.gd` — PASS, `actors=2 frames=108`.
+6. `test_edran_b1_assets.gd` — PASS, `concepts=9 animations=27`.
+7. `test_edran_b2_phase_01.gd` — PASS, `attacks=5 health=360 poise=110 main_room=true transition=B4_pending`.
+8. `test_edran_b3_summons.gd` — PASS, `actors=2 animations=25 cap=2 penitent_cap=1 interrupt=36 cleanup=true main_spawn=true`.
+9. `test_edran_art_rework.gd` — PASS, `boss_frames=114 summon_frames=108 main_spawn=true collisions_unchanged=true`.
+10. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_edran_art_rework_qa.gd` — PASS on OpenGL/Metal Compatibility, `captures=8 route=MainBootstrap boss=true summons=2`.
+
+### Known boundary and manual acceptance
+
+- Edran Phase 2 is not present in the current B1–B3 runtime and remains B4 work; this art pass does not fake Phase 2 frames or cross the milestone boundary.
+- Manual F5 acceptance: set Chapter Debug Start to `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` / `CH3_BOSS_SUMMON_TEST`; inspect crozier idle/sweep/thrust, force both summon types, verify Penitent claw/lunge and Husk float/cast, then confirm collision and attack ranges still match their unchanged debug shapes.
+- Pre-existing unrelated Chapter I/shared/resource/QA worktree changes were preserved and excluded from this milestone commit.
