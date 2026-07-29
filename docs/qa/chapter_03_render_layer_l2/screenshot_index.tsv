@@ -1,0 +1,80 @@
+capture	room_id	spawn_id	position	camera_center	camera_limit_right	player_visible	action	door_state	acceptance_target	status
+00_vestibule_runtime_collisions.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	collision_debug	closed	runtime collision overlay	CAPTURED
+01_vestibule_v01_entry_idle.png	CH3_CHAPEL_VESTIBULE	EntryWest	(160.0, 584.0)	(640.0, 360.0)	2048	true	idle	closed	V1 entrance	CAPTURED
+02_vestibule_v02_door_center.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	idle	closed	V2 door center	CAPTURED
+03_vestibule_v03_door_left.png	CH3_CHAPEL_VESTIBULE	NaveDoorLeft	(1404.0, 584.0)	(1404.0, 360.0)	2048	true	idle	closed	V3 left frame	CAPTURED
+04_vestibule_v04_door_right.png	CH3_CHAPEL_VESTIBULE	NaveDoorRight	(1532.0, 584.0)	(1408.0, 360.0)	2048	true	idle	closed	V4 right frame	CAPTURED
+05_vestibule_v05_bench.png	CH3_CHAPEL_VESTIBULE	LeftBench	(476.0, 584.0)	(640.0, 360.0)	2048	true	idle	closed	V5 bench	CAPTURED
+06_vestibule_v06_stairs.png	CH3_CHAPEL_VESTIBULE	EastStair	(1952.0, 644.0)	(1408.0, 360.0)	2048	true	fall	closed	V6 stair edge	CAPTURED
+07_vestibule_v07_jump.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 520.0)	(1408.0, 360.0)	2048	true	jump	closed	V7 jump	CAPTURED
+08_vestibule_v08_attack.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	normal_attack	closed	V8 weapon active	CAPTURED
+09_vestibule_v09_dash_attack.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	dash_attack	closed	V9 dash attack	CAPTURED
+10_vestibule_door_closed.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	idle	closed	door closed	CAPTURED
+10_vestibule_door_open_25.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	idle	25%	door partial	CAPTURED
+10_vestibule_door_open_50.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	idle	50%	door partial	CAPTURED
+10_vestibule_door_open_pass.png	CH3_CHAPEL_VESTIBULE	NaveDoor	(1468.0, 584.0)	(1408.0, 360.0)	2048	true	run	100%	door pass-through	CAPTURED
+14_nave_entry_run.png	CH3_NAVE_ENTRY	EntryWest	(160.0, 584.0)	(640.0, 360.0)	2304	true	run	closed	room entrance	CAPTURED
+15_nave_ground_dash.png	CH3_NAVE_ENTRY	NaveFloor	(780.0, 584.0)	(780.0, 360.0)	2304	true	ground_dash	closed	ground dash	CAPTURED
+16_nave_air_dash.png	CH3_NAVE_ENTRY	NaveAir	(1120.0, 500.0)	(1120.0, 360.0)	2304	true	air_dash	closed	air dash	CAPTURED
+17_nave_fall.png	CH3_NAVE_ENTRY	NaveCenter	(1420.0, 584.0)	(1420.0, 360.0)	2304	true	fall	closed	fall silhouette	CAPTURED
+enemy_nave_bellchain_penitent.png	CH3_NAVE_ENTRY	Bellchain Penitent	(624.0, 582.999)	(640.0, 360.0)	2304	true	enemy_idle	n/a	formal enemy actor layer	CAPTURED
+enemy_nave_confessional_wraith.png	CH3_NAVE_ENTRY	Confessional Wraith	(1164.0, 581.9589)	(1164.0, 360.0)	2304	true	enemy_idle	n/a	formal enemy actor layer	CAPTURED
+enemy_nave_thirteenth_scribe.png	CH3_NAVE_ENTRY	Thirteenth Scribe	(1731.692, 401.9899)	(1664.0, 360.0)	2304	true	enemy_idle	n/a	formal enemy actor layer	CAPTURED
+18_nave_door_closed.png	CH3_NAVE_ENTRY	ChoirDoor	(2180.0, 584.0)	(1664.0, 360.0)	2304	true	idle	closed	door closed	CAPTURED
+18_nave_door_open_25.png	CH3_NAVE_ENTRY	ChoirDoor	(2180.0, 584.0)	(1664.0, 360.0)	2304	true	idle	25%	door partial	CAPTURED
+18_nave_door_open_50.png	CH3_NAVE_ENTRY	ChoirDoor	(2180.0, 584.0)	(1664.0, 360.0)	2304	true	idle	50%	door partial	CAPTURED
+18_nave_door_open_pass.png	CH3_NAVE_ENTRY	ChoirDoor	(2180.0, 584.0)	(1664.0, 360.0)	2304	true	run	100%	door pass-through	CAPTURED
+22_choir_entry.png	CH3_CHOIR_GALLERY	EntryWest	(160.0, 584.0)	(640.0, 360.0)	2432	true	idle	closed	room entrance	CAPTURED
+23_choir_platform_jump.png	CH3_CHOIR_GALLERY	UpperGallery	(1808.0, 402.0)	(1792.0, 360.0)	2432	true	jump_apex	closed	platform actor	CAPTURED
+24_choir_platform_attack.png	CH3_CHOIR_GALLERY	UpperGallery	(1808.0, 402.0)	(1792.0, 360.0)	2432	true	normal_attack	closed	platform weapon	CAPTURED
+enemy_choir_censer_executioner.png	CH3_CHOIR_GALLERY	Censer Executioner	(684.0, 581.9998)	(684.0, 360.0)	2432	true	enemy_idle	n/a	formal enemy actor layer	CAPTURED
+enemy_choir_silent_chorister.png	CH3_CHOIR_GALLERY	Silent Chorister	(1084.0, 472.2877)	(1084.0, 360.0)	2432	true	enemy_idle	n/a	formal enemy actor layer	CAPTURED
+enemy_choir_stained_glass_seraph.png	CH3_CHOIR_GALLERY	Stained Glass Seraph	(1744.0, 364.4804)	(1744.0, 360.0)	2432	true	enemy_idle	n/a	formal enemy actor layer	CAPTURED
+drop_coin_runtime_z13.png	CH3_CHOIR_GALLERY	CoinPickup	(712.0, 580.7335)	(712.0, 360.0)	2432	true	idle	n/a	Drop z=13	CAPTURED
+combat_fx_runtime_z16.png	CH3_CHOIR_GALLERY	ProjectileAndField	(1420.0, 584.0)	(1420.0, 360.0)	2432	true	dash_attack	n/a	CombatFX z=16	CAPTURED
+25_choir_door_closed.png	CH3_CHOIR_GALLERY	CheckpointDoor	(2304.0, 584.0)	(1792.0, 360.0)	2432	true	idle	closed	door closed	CAPTURED
+25_choir_door_open_25.png	CH3_CHOIR_GALLERY	CheckpointDoor	(2304.0, 584.0)	(1792.0, 360.0)	2432	true	idle	25%	door partial	CAPTURED
+25_choir_door_open_50.png	CH3_CHOIR_GALLERY	CheckpointDoor	(2304.0, 584.0)	(1792.0, 360.0)	2432	true	idle	50%	door partial	CAPTURED
+25_choir_door_open_pass.png	CH3_CHOIR_GALLERY	CheckpointDoor	(2304.0, 584.0)	(1792.0, 360.0)	2432	true	run	100%	door pass-through	CAPTURED
+29_checkpoint_c01_left.png	CH3_BOSS_CHECKPOINT	CheckpointLeft	(214.0, 584.0)	(448.0, 360.0)	896	true	idle	closed	C1 left	CAPTURED
+30_checkpoint_c02_front.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 584.0)	(448.0, 360.0)	896	true	idle	closed	C2 front	CAPTURED
+31_checkpoint_c03_right.png	CH3_BOSS_CHECKPOINT	CheckpointRight	(382.0, 584.0)	(448.0, 360.0)	896	true	idle	closed	C3 right	CAPTURED
+32_checkpoint_c04_interaction.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 584.0)	(448.0, 360.0)	896	true	interact	closed	C4 interaction	CAPTURED
+33_checkpoint_c05_jump.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 520.0)	(448.0, 360.0)	896	true	double_jump	closed	C5 jump	CAPTURED
+34_checkpoint_c06_attack.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 584.0)	(448.0, 360.0)	896	true	normal_attack	closed	C6 attack	CAPTURED
+35_checkpoint_c07_hurt.png	CH3_BOSS_CHECKPOINT	CheckpointOverlap	(298.0, 584.0)	(448.0, 360.0)	896	true	hurt	closed	C7 overlap and hurt	CAPTURED
+36_checkpoint_death_body.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 584.0)	(448.0, 360.0)	896	true	death	closed	death body and daggers	CAPTURED
+37_checkpoint_ghost_release.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 584.0)	(448.0, 360.0)	896	true	ghost_release	closed	ghost above corpse	CAPTURED
+38_checkpoint_respawn.png	CH3_BOSS_CHECKPOINT	CheckpointFront	(298.0, 584.0)	(448.0, 360.0)	896	true	respawn	closed	C8 respawn stability	CAPTURED
+39_checkpoint_door_closed.png	CH3_BOSS_CHECKPOINT	ConfessionDoor	(790.0, 584.0)	(448.0, 360.0)	896	true	idle	closed	door closed	CAPTURED
+39_checkpoint_door_open_25.png	CH3_BOSS_CHECKPOINT	ConfessionDoor	(790.0, 584.0)	(448.0, 360.0)	896	true	idle	25%	door partial	CAPTURED
+39_checkpoint_door_open_50.png	CH3_BOSS_CHECKPOINT	ConfessionDoor	(790.0, 584.0)	(448.0, 360.0)	896	true	idle	50%	door partial	CAPTURED
+39_checkpoint_door_open_pass.png	CH3_BOSS_CHECKPOINT	ConfessionDoor	(790.0, 584.0)	(448.0, 360.0)	896	true	run	100%	door pass-through	CAPTURED
+43_ante_t01_statue.png	CH3_BOSS_ANTE	Statue	(160.0, 584.0)	(640.0, 360.0)	1664	true	idle	closed	T1 statue	CAPTURED
+44_ante_t02_shrine.png	CH3_BOSS_ANTE	CheckpointShrine	(214.0, 584.0)	(640.0, 360.0)	1664	true	idle	closed	T2 shrine	CAPTURED
+45_ante_t03_confession_boards.png	CH3_BOSS_ANTE	ConfessionBoards01	(510.0, 584.0)	(640.0, 360.0)	1664	true	run	closed	T3 boards	CAPTURED
+46_ante_t04_lectern_front.png	CH3_BOSS_ANTE	Lectern	(780.0, 584.0)	(780.0, 360.0)	1664	true	idle	closed	T4 lectern	CAPTURED
+47_ante_t05_lectern_jump.png	CH3_BOSS_ANTE	Lectern	(850.0, 584.0)	(850.0, 360.0)	1664	true	jump	closed	T5/T8 lectern overlap	CAPTURED
+48_ante_t06_attack.png	CH3_BOSS_ANTE	ConfessionBoards02	(1060.0, 584.0)	(1024.0, 360.0)	1664	true	normal_attack	closed	T6/T9 weapon	CAPTURED
+49_ante_t07_dash_attack.png	CH3_BOSS_ANTE	GroundDetail	(1120.0, 584.0)	(1024.0, 360.0)	1664	true	dash_attack	closed	T7/T10 ground detail	CAPTURED
+50_gate_b01_closed_front.png	CH3_BOSS_ANTE	BossGate	(1472.0, 584.0)	(1024.0, 360.0)	1664	true	idle	closed	B1 closed	CAPTURED
+51_gate_b02_closed_left.png	CH3_BOSS_ANTE	BossGateLeft	(1398.0, 584.0)	(1024.0, 360.0)	1664	true	idle	closed	B2 left	CAPTURED
+52_gate_b03_closed_right.png	CH3_BOSS_ANTE	BossGateRight	(1546.0, 584.0)	(1024.0, 360.0)	1664	true	idle	closed	B3 right	CAPTURED
+53_gate_b04_jump.png	CH3_BOSS_ANTE	BossGateLintel	(1472.0, 508.0)	(1024.0, 360.0)	1664	true	double_jump	closed	B4 lintel	CAPTURED
+54_gate_b05_prompt.png	CH3_BOSS_ANTE	BossGateTrigger	(1222.0, 584.0)	(1024.0, 360.0)	1664	true	interact	closed	B5 prompt	CAPTURED
+55_gate_b07_lit_and_cracked.png	CH3_BOSS_ANTE	BossGate	(1472.0, 584.0)	(1024.0, 360.0)	1664	true	idle	lit	B6/B7 sequence	CAPTURED
+55a_gate_b08_open_25.png	CH3_BOSS_ANTE	BossGate	(1472.0, 584.0)	(1024.0, 360.0)	1664	true	idle	25%	B8 partial	CAPTURED
+55b_gate_b09_open_50.png	CH3_BOSS_ANTE	BossGate	(1472.0, 584.0)	(1024.0, 360.0)	1664	true	idle	50%	B9 partial	CAPTURED
+56_gate_b10_open_pass.png	CH3_BOSS_ANTE	BossGate	(1472.0, 584.0)	(1024.0, 360.0)	1664	true	run	100%	B10 pass-through	CAPTURED
+56a_gate_b11_fade.png	CH3_BOSS_ANTE	BossGate	(1472.0, 584.0)	(1024.0, 360.0)	1664	true	run	fade	B11 CanvasLayer Fade	CAPTURED
+57_boss_room_entry.png	CH3_BOSS	EntryWest	(160.0, 584.0)	(640.0, 360.0)	3200	true	idle	open	Boss room entrance	CAPTURED
+58_boss_room_center_attack.png	CH3_BOSS	SanctumCenter	(1180.0, 584.0)	(1180.0, 360.0)	3200	true	normal_attack	open	Boss arena center	CAPTURED
+59_boss_room_air_dash.png	CH3_BOSS	SanctumEast	(1900.0, 520.0)	(1900.0, 360.0)	3200	true	air_dash	open	Boss arena east	CAPTURED
+60_post_boss_entry.png	CH3_POST_BOSS	EntryWest	(160.0, 584.0)	(640.0, 360.0)	1280	true	idle	open	post-Boss entrance	CAPTURED
+61_post_boss_reliquary.png	CH3_POST_BOSS	Reliquary	(660.0, 584.0)	(640.0, 360.0)	1280	true	interact	open	reward boundary	CAPTURED
+62_post_boss_exit.png	CH3_POST_BOSS	UnderkeepExit	(1120.0, 584.0)	(640.0, 360.0)	1280	true	run	open	post-Boss exit	CAPTURED
+63_underkeep_entry.png	CH3_UNDERKEEP_DESCENT	EntryWest	(160.0, 584.0)	(640.0, 360.0)	2304	true	idle	open	underkeep entrance	CAPTURED
+64_underkeep_water_idle.png	CH3_UNDERKEEP_DESCENT	WaterSurface01	(1040.0, 584.0)	(1040.0, 360.0)	2304	true	idle	open	4px water edge	CAPTURED
+65_underkeep_water_jump.png	CH3_UNDERKEEP_DESCENT	WaterSurface01	(1040.0, 520.0)	(1040.0, 360.0)	2304	true	jump	open	water jump	CAPTURED
+66_underkeep_water_attack.png	CH3_UNDERKEEP_DESCENT	WaterSurface02	(1600.0, 584.0)	(1600.0, 360.0)	2304	true	normal_attack	open	water weapon	CAPTURED
+67_underkeep_chapter4_boundary.png	CH3_UNDERKEEP_DESCENT	Chapter04Boundary	(2100.0, 584.0)	(1664.0, 360.0)	2304	true	interact	open	planned terminal	CAPTURED

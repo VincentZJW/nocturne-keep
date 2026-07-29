@@ -1,0 +1,1 @@
+CH3_RENDER_LAYER_L2_CAPTURE PASS captures=79 rooms=8 reloads=80 main_bootstrap=true boss_entity=partial reward=partial chapter4=partial

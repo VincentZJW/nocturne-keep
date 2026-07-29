@@ -6111,3 +6111,49 @@ Status: L1 structural repair complete; L2 full Main visual/action matrix pending
 - Post-repair runtime evidence: `docs/qa/chapter_03_render_layer_l1/`; its anomaly inventory contains only the header row.
 - L1 did not run or claim the full Main action-pose screenshot matrix. L2 must visually verify supplied and newly discovered viewpoints through idle, movement, jump/fall, attack, dash, hurt, death/ghost, open/closed doors, pickups and CombatFX.
 - Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the L1 commit.
+
+## 2026-07-29 — Chapter III render-layer repair L2 preflight
+
+Status: in progress — approved Main/F5 visual and action-matrix verification milestone
+
+### Goal, files, tests and scope check
+
+- Verify the L1 structural repair inside the saved `MainBootstrap` route rather than an isolated F6 scene. L2 will capture the four supplied problem viewpoints, the three additional ordinary doors, underkeep water, all eight formal rooms and the required Player/Enemy/Drop/CombatFX presentation states.
+- The visual matrix will exercise idle, movement/turn, jump/fall, ground/air dash, normal attack, dash attack, hurt, death body and ghost presentation. Door evidence will cover ordinary-door closed/open/pass-through states and the Boss gate closed/lit/partial/open/Fade sequence.
+- Add a Debug-only MainBootstrap capture driver and evidence index under `docs/qa/chapter_03_render_layer_l2/`. Runtime effective-z values and parent relationships will be recorded alongside images so saved-scene assumptions are not substituted for runtime evidence.
+- Re-run exact Godot 4.7.1 import/parse, L1/R3/R4/R5 and six-enemy regressions, plus twenty-cycle room reload stability. Any residual actor occlusion found by image review remains in L2 scope; no gameplay balance, AI, collision, room routing, chapter art redesign or Player z escalation is authorized.
+- The Thirteenth Pontiff Edran combat entity, authoritative Boss reward and loadable Chapter IV scene remain absent on current HEAD. L2 will not fabricate them and cannot mark those actor-specific checks PASS; their boundary remains `PARTIAL` until the owning content milestones exist.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain user-owned and must stay unstaged and unmodified by L2.
+
+## 2026-07-29 — Chapter III render-layer repair L2 completion
+
+Status: Main/F5-equivalent visual matrix complete for current HEAD; L3 final QA not started
+
+### Delivered Main evidence
+
+- Added a Debug-only `MainBootstrap` capture driver that enters the saved formal Chapter III route and records all eight rooms rather than opening isolated room scenes. The driver changes runtime state only and saves no gameplay scene or resource.
+- Generated 79 unique 1280x720 PNGs covering the four supplied viewpoints, every formal room, three ordinary doors, the full thirteen-bell Boss-gate sequence, all six formal enemies, Player movement/action/hurt/death/ghost states, Drop z=13, CombatFX z=16 and both underkeep 4 px water-surface risk points.
+- Added one clean Main collision-hint capture, then reloaded Main before the visual matrix so collision debug shapes cannot contaminate ordinary evidence.
+- Exported 530 live CanvasItem rows with exact runtime path, parent, local/effective z, z relativity, y-sort, CanvasLayer, visibility and position. Added Camera center/limit and Player visibility to every screenshot-index row.
+- The capture driver initially exposed stale viewport frames and a QA-only Boss-intro Camera race. It now forces each draw, waits for the real Boss intro to restore the Player Camera, and produces 79/79 unique screenshots. No formal gameplay code or scene was changed for either harness correction.
+- Four critical rooms (`CH3_CHAPEL_VESTIBULE`, `CH3_BOSS_CHECKPOINT`, `CH3_BOSS_ANTE`, `CH3_UNDERKEEP_DESCENT`) completed twenty swaps each: 80/80 reloads, one active room, Player effective z=12.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 editor import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0; no parser, missing-resource or autoload error.
+2. Main visual matrix: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_chapter_03_render_layer_l2.gd` — PASS, `captures=79 rooms=8 reloads=80 main_bootstrap=true`; no red runtime error.
+3. `test_chapter_03_render_layers_l1.gd` — PASS, `doors=4 checkpoint=1 gate_states=3 titles=5 water_edges=2 drop=13 combat_fx=16 y_sort=0`.
+4. `test_chapter_03_r3_layers_collisions.gd` — PASS, `stairs=8 platforms=8 doors=3 actor_z=10/12`.
+5. `test_chapter_03_r4_boss_flow.gd` — PASS for present content, with truthful `boss_entity=partial chapter4=partial` boundaries.
+6. `test_chapter_03_r5_full_route.gd` — PASS, `transitions=40 cycles=10 persistent_runtime=true platform_combat=true`; absent Boss/reward/Chapter IV remain partial.
+7. `test_chapter_03_phase_2_enemy_roster.gd` — PASS, `roles=6 remaining_frames=345 main=6 combination_room=1`.
+8. Default Main smoke: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`.
+
+### Evidence, limitations and stop gate
+
+- Evidence index and limitations: `docs/qa/chapter_03_render_layer_l2/README.md`.
+- Capture index: `docs/qa/chapter_03_render_layer_l2/screenshot_index.tsv`; runtime paths: `docs/qa/chapter_03_render_layer_l2/runtime_layer_samples.tsv`.
+- Representative visual review confirms Player, weapons, enemies, death body/ghost, prompts and limited water foreground retain the expected ordering at the supplied and additional high-risk viewpoints.
+- The current HEAD does not contain the Chapter III Boss entity, authoritative Boss reward or a loadable Chapter IV scene; L2 does not fabricate those and keeps the corresponding checks PARTIAL.
+- Computer Use/Remote Inspector control was unavailable in this Codex session. The runtime table supplies exact equivalent data, but the UI-only Remote Scene Tree screenshot remains PARTIAL for L3/manual capture.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the L2 commit. Stop after the isolated L2 commit; do not start L3 without approval.
