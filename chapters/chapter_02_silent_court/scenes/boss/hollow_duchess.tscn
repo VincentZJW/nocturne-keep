@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/hollow_duchess.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://chapters/chapter_02_silent_court/resources/boss/hollow_duchess_data.tres" id="2_config"]
-[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/animations/hollow_duchess_sprite_frames.tres" id="3_frames"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_01/hollow_duchess_phase_01_sprite_frames.tres" id="3_frames"]
 [ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]

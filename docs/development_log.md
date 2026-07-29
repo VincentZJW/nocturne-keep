@@ -5586,3 +5586,58 @@ Status: complete — Stage 1A–1E delivered continuously; Stage 2 Boss work not
 
 - No Player, combat value, Health, collision, Hitbox, AI, encounter placement, Chapter I or Duchess runtime resource changed. Pre-existing dirty user files remain excluded.
 - Stage 2 is not started. When approved, the Hollow Duchess will be rebuilt from the user's dedicated second attachment, covering Phase 1, full anatomical transition, Phase 2 and presentation/death as separate forced-QA units.
+
+## 2026-07-29 — Hollow Duchess art rework, Stage 2 preflight
+
+Status: in progress — user approved the complete Duchess Stage 2 milestone
+
+### Goal and fixed scope
+
+- Rebuild `The Hollow Duchess, Seraphine` from the dedicated Duchess specification: Phase 1 court hostess, the full mask/body/weapon transition, Phase 2 `Unmasked`, all combat/death presentation, phantom silhouettes and Main/F5 evidence.
+- Preserve the current 220 HP, 55% transition threshold, poise values, attack damage/timing, AI selection, collision, Boss-room placement, death dialogue, Crimson Masque reliquary and Chapter III passage flow. Chapter II ordinary enemies and Chapter III remain outside this milestone.
+- Produce original concept boards first, then deterministic 96×96 native-pixel runtime frames. Concept art is a design source only; the formal SpriteFrames remain transparent project-owned PNG sequences with nearest-neighbour import.
+
+### Read-only audit and planned files
+
+- F5 authority is `res://scenes/bootstrap/main_bootstrap.tscn`; formal Chapter II is `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`; Silent Ballroom is `res://chapters/chapter_02_silent_court/scenes/rooms/silent_ballroom.tscn`.
+- Main instantiates `res://chapters/chapter_02_silent_court/scenes/boss/hollow_duchess.tscn` at `GameplayWorld/BossArea/HollowDuchess` with position only and no art override. That scene binds Phase 1, transition and Phase 2 SpriteFrames separately, so replacing those authoritative resources reaches F5 Main.
+- Current P1 and P2 each contain 20 compatibility animations / 100 frames, with a separate five-frame transition. Audit confirms the legacy P1 gown/mask/weapons are block/line based and the P2 silhouette is mostly recolour plus short spine marks. Archive the complete old art sets before replacement.
+- Task-owned changes are limited to `chapters/chapter_02_silent_court/assets/boss/hollow_duchess/`, focused Chapter II Boss generator/build/test tooling, Duchess art documentation, Main QA evidence, README and this log. Pre-existing dirty Chapter I/shared resources and Ravenfang QA files remain excluded.
+
+### Planned verification
+
+- Exact Godot 4.7.1 generation, import/parse, SpriteFrames integrity, all required animation families, Phase transition continuity, Boss mechanics regression, Main integration, Chapter II-to-III reward regression, graphical Main capture and manual evidence review.
+- Required evidence includes Phase 1 identity/attack, mask crack/break, transition midpoint, Phase 2 identity/attack, phantom route, death and old/new comparison. Any parser, missing-resource, stale-runtime-art or Main-reference failure blocks completion.
+
+## 2026-07-29 — Hollow Duchess art rework, Stage 2 completion
+
+Status: complete — Stage 2A–2D concept, formal runtime art, Main binding and forced QA delivered
+
+### Delivered scope
+
+- Created nine original project-specific concept/weapon/mask/pose PNGs for masked Phase 1, the authored transformation and the Unmasked Phase 2. Concepts were made with the built-in image-generation workflow and are transparently documented as design inputs; no commercial-game art is used.
+- Generated 362 deterministic transparent 96×96 formal frames: 143 Phase 1, 39 transformation and 180 Phase 2. Phase 1 now has a layered black/oxblood court gown, porcelain mask, court rapier and blade fan; Phase 2 is a separately drawn faceless skeletal dancer with elongated limbs, torn gown, back/rib fan and bone weapons.
+- Rebuilt all three authoritative SpriteFrames Resources. Added the expanded art-bible families while retaining every animation name used by the existing AI. Rebound `hollow_duchess.tscn` Phase 1 to the new chapter-local resource; transition and Phase 2 paths were rebuilt in place.
+- Archived the former runtime set at `reference/deprecated_stage1/hollow_duchess_stage1_runtime_art.tar.gz`. No live scene references the old `animations/hollow_duchess_sprite_frames.tres`.
+- Preserved formal values and systems: 220 HP, 55% threshold, poise, damage/timing, seven-attack AI, collision/hitboxes, room placement, death dialogue, Crimson Masque reliquary and Chapter III passage.
+
+### Exact commands and actual results
+
+1. `Godot --headless --path . --script res://chapters/chapter_02_silent_court/scripts/tools/generate_hollow_duchess_art_v2.gd` — PASS: `phase1=143 phase2=180 transition=39 total=362`.
+2. Exact Godot 4.7.1 headless editor import/parse — exit 0 after SpriteFrames build, with no parser or missing-resource error.
+3. `build_hollow_duchess_sprite_frames_v2.gd` — PASS: `phase1=143 phase2=180 transition=39 total=362`.
+4. New `test_hollow_duchess_art_stage_2.gd` — PASS: concepts=9, all frame families/counts, 96×96 textures, phase distinction, scene/Main binding and archive.
+5. Existing Boss mechanics test — PASS: seven attack types, ten cycles each, 70 cycles total.
+6. Five deterministic full-fight simulations — PASS: 278 attacks total.
+7. Main integration test — PASS: Boss/layers/entrance/presentation/checkpoint/HUD/reliquary/candles/mirror.
+8. Presentation/phase test — PASS: intro=5, transition=10, Phase 2 `0.85/80` contract.
+9. Chapter II→III transition regression — PASS: dialogue, reliquary, Crimson Masque persistence, mirror passage and Chapter III.
+10. Graphical `capture_hollow_duchess_qa.gd` through MainBootstrap — PASS: 12 captures covering Phase 1, rapier, mask crack, transformation, Phase 2, attack, death, reliquary and reward. The runner emits teardown-only GLES/resource diagnostics after PASS; there was no gameplay parser/resource/runtime failure.
+11. Independent Boss room, saved Silent Court level and formal MainBootstrap headless smokes — exit 0; normal F5 still routes to the Opening when Debug Start is disabled.
+
+### Evidence, scope and manual acceptance
+
+- Forced-QA report: `docs/qa/chapter_02_enemy_boss_art_rework/stage_2_report.md`.
+- Main evidence: `docs/qa/chapter_02_enemy_boss_art_rework/stage_2/04_phase_1_main.png` through `12_crimson_masque_claimed_main.png`.
+- Manual F5 acceptance: enable Chapter II `CH2_BOSS`, review Phase 1, reduce Boss HP to the existing 121/220 threshold, review the full transformation/Phase 2/death, collect Crimson Masque and enter the mirror passage; then restore Debug Start defaults.
+- Chapter II ordinary enemies, Chapter III, gameplay parameters and all pre-existing dirty Chapter I/shared resources remain outside this Stage 2 commit.

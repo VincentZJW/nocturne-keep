@@ -4,7 +4,7 @@ extends SceneTree
 
 const BOOTSTRAP: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const LEVEL_PATH: String = "res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn"
-const OUTPUT_DIR: String = "res://docs/qa/chapter_02_hollow_duchess"
+const OUTPUT_DIR: String = "res://docs/qa/chapter_02_enemy_boss_art_rework/stage_2"
 
 var _capture_count: int = 0
 
@@ -60,24 +60,28 @@ func _run() -> void:
 	await _wait_process_frames(90)
 	_save_viewport("03_intro_dialogue_main.png")
 	await _wait_for_state(boss, &"Idle", 420)
+	await _focus_boss(player, boss)
 	await _save_frozen_boss_frame(boss, "04_phase_1_main.png")
+	await _capture_attack(boss, player, &"rapier_thrust", &"RapierThrustActive", "05_phase_1_rapier_main.png")
 
 	boss.debug_set_health(121)
 	await _wait_for_state(boss, &"PhaseTransition", 240)
+	await _focus_boss(player, boss)
 	await _wait_process_frames(12)
-	await _save_frozen_boss_frame(boss, "05_mask_crack_main.png")
+	await _save_frozen_boss_frame(boss, "06_mask_crack_main.png")
 	await _wait_process_frames(180)
-	await _save_frozen_boss_frame(boss, "06_phase_transformation_main.png")
+	await _focus_boss(player, boss)
+	await _save_frozen_boss_frame(boss, "07_phase_transformation_main.png")
 	await _wait_for_phase(boss, 2, 360)
 	await _wait_for_state(boss, &"Idle", 360)
-	player.global_position = boss.global_position + Vector2(-160.0, -28.0)
-	player.velocity = Vector2.ZERO
-	player.player_camera.reset_smoothing()
-	await _wait_process_frames(6)
-	await _save_frozen_boss_frame(boss, "07_phase_2_unmasked_main.png")
-	await _capture_attack(boss, player, &"double_waltz_lunge", &"DoubleLungeHit1", "08_phase_2_attack_main.png")
+	await _focus_boss(player, boss)
+	await _save_frozen_boss_frame(boss, "08_phase_2_unmasked_main.png")
+	await _capture_attack(boss, player, &"double_waltz_lunge", &"DoubleLungeHit1", "09_phase_2_attack_main.png")
 	boss.debug_set_health(0)
 	await _wait_for_state(boss, &"Death", 120)
+	await _focus_boss(player, boss)
+	await _wait_process_frames(18)
+	await _save_frozen_boss_frame(boss, "10_phase_2_death_main.png")
 	for _frame: int in range(600):
 		await physics_frame
 		if transition.get_reward_pickup() != null:
@@ -85,16 +89,19 @@ func _run() -> void:
 	player.global_position = Vector2(5600.0, -1216.0)
 	player.player_camera.reset_smoothing()
 	await _wait_process_frames(10)
-	_save_viewport("09_duchess_reliquary_main.png")
+	_save_viewport("11_duchess_reliquary_main.png")
 	var reward: WeaponPickup = transition.get_reward_pickup()
 	if reward == null:
 		_fail("Reliquary reward did not appear state=%s cleared=%s" % [boss.get_state_name(), controller.room_is_cleared])
 		return
 	reward.collect()
 	await _wait_process_frames(12)
-	_save_viewport("10_crimson_masque_claimed_main.png")
+	_save_viewport("12_crimson_masque_claimed_main.png")
 	debug_config.reset_to_defaults()
 	print("HOLLOW_DUCHESS_MAIN_QA: PASS captures=%d entrance=1 intro=1 phase2=1 reliquary=1 main=%s" % [_capture_count, level.scene_file_path])
+	current_scene.queue_free()
+	current_scene = null
+	await _wait_process_frames(8)
 	quit(0)
 
 
@@ -125,6 +132,13 @@ func _save_frozen_boss_frame(boss: HollowDuchess, file_name: String) -> void:
 	await _wait_process_frames(2)
 	_save_viewport(file_name)
 	boss.set_physics_process(true)
+
+
+func _focus_boss(player: Player, boss: HollowDuchess) -> void:
+	player.global_position = boss.global_position + Vector2(-150.0, -28.0)
+	player.velocity = Vector2.ZERO
+	player.player_camera.reset_smoothing()
+	await _wait_process_frames(8)
 
 
 func _wait_for_level() -> Node:

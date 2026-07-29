@@ -1,198 +1,375 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_01.png" id="1_i65le"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_02.png" id="2_4r1xt"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_03.png" id="3_dbi3y"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_04.png" id="4_w3eiq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_01.png" id="5_77qui"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_02.png" id="6_0hg3t"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_03.png" id="7_q8xmw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_04.png" id="8_cysa2"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_05.png" id="9_ia4cd"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_06.png" id="10_o07x3"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_07.png" id="11_akamc"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_01.png" id="12_ma41f"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_02.png" id="13_tkoo8"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_03.png" id="14_x3gvv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_04.png" id="15_s7rec"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_05.png" id="16_jjeo4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_06.png" id="17_pw28j"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_07.png" id="18_8p282"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_08.png" id="19_vtpfb"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_01.png" id="20_gptah"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_02.png" id="21_0pc6h"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_03.png" id="22_3p7s7"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_04.png" id="23_pub8d"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_05.png" id="24_dlolu"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_06.png" id="25_yrqy0"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_active/fan_slash_active_01.png" id="26_lgh06"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_active/fan_slash_active_02.png" id="27_as440"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_01.png" id="28_m0wl3"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_02.png" id="29_yd640"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_03.png" id="30_r3la0"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_04.png" id="31_tlple"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_05.png" id="32_nquto"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_01.png" id="33_vuylo"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_02.png" id="34_ltbhq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_03.png" id="35_iodu8"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_04.png" id="36_4rh7m"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_01.png" id="37_ueehw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_02.png" id="38_i3c7c"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_03.png" id="39_717bl"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_04.png" id="40_kfi32"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_05.png" id="41_matl1"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_06.png" id="42_dmvkq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_07.png" id="43_qrudr"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_08.png" id="44_b5mc7"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_01.png" id="45_ap0il"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_02.png" id="46_6oj5o"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_03.png" id="47_aby6q"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_04.png" id="48_g30ds"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_01.png" id="49_gdouy"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_02.png" id="50_ajv3l"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_03.png" id="51_ol7e1"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_04.png" id="52_jdiqq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_05.png" id="53_ih573"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_06.png" id="54_tl6gx"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/light_hit/light_hit_01.png" id="55_x7g2p"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/light_hit/light_hit_02.png" id="56_jp86a"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_01.png" id="57_3pqls"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_02.png" id="58_1oo6d"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_03.png" id="59_2vv2g"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_04.png" id="60_ifjro"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_05.png" id="61_e0uxo"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_06.png" id="62_3k6cw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_01.png" id="63_26nmw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_02.png" id="64_4ilga"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_03.png" id="65_55hf7"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_04.png" id="66_nx1ru"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_05.png" id="67_pyif3"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_06.png" id="68_jlbix"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_07.png" id="69_6t4au"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_08.png" id="70_pim7x"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_active/rapier_thrust_active_01.png" id="71_dv376"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_active/rapier_thrust_active_02.png" id="72_t6ya1"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_01.png" id="73_yotkp"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_02.png" id="74_3255e"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_03.png" id="75_7ulmv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_04.png" id="76_24p01"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_01.png" id="77_6wrv2"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_02.png" id="78_tmqmf"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_03.png" id="79_3lk3p"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_04.png" id="80_pfqd1"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_01.png" id="81_wbqdd"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_02.png" id="82_n7xcd"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_03.png" id="83_gwfvt"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_04.png" id="84_7hj0h"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_05.png" id="85_lyuf4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_06.png" id="86_pkpep"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_07.png" id="87_rij0e"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_08.png" id="88_aoab4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_01.png" id="89_0ay55"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_02.png" id="90_dxd6t"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_03.png" id="91_3qkil"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_04.png" id="92_ouvbo"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_01.png" id="93_371p5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_02.png" id="94_1m537"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_03.png" id="95_xodac"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_04.png" id="96_lr1rj"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_01.png" id="97_nvbwb"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_02.png" id="98_f32ge"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_03.png" id="99_eh07m"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_04.png" id="100_vvspj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_01.png" id="1_wbqdd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_02.png" id="2_n7xcd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_03.png" id="3_gwfvt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/backstep/backstep_04.png" id="4_7hj0h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_01.png" id="5_lyuf4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_02.png" id="6_pkpep"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_03.png" id="7_rij0e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_04.png" id="8_aoab4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_05.png" id="9_0ay55"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_06.png" id="10_dxd6t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_07.png" id="11_3qkil"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death/death_08.png" id="12_ouvbo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_collapse/death_collapse_01.png" id="13_371p5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_collapse/death_collapse_02.png" id="14_1m537"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_collapse/death_collapse_03.png" id="15_xodac"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_collapse/death_collapse_04.png" id="16_lr1rj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_dissolve/death_dissolve_01.png" id="17_nvbwb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_dissolve/death_dissolve_02.png" id="18_f32ge"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_dissolve/death_dissolve_03.png" id="19_eh07m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_dissolve/death_dissolve_04.png" id="20_vvspj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_dissolve/death_dissolve_05.png" id="21_uj1yy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_mask_shatter/death_mask_shatter_01.png" id="22_tul4t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_mask_shatter/death_mask_shatter_02.png" id="23_f3b3b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_mask_shatter/death_mask_shatter_03.png" id="24_ytht3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_start/death_start_01.png" id="25_pqm7s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_start/death_start_02.png" id="26_oalhy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/death_start/death_start_03.png" id="27_8ta8n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_01.png" id="28_68gvv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_02.png" id="29_8rh2c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_03.png" id="30_awrme"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_04.png" id="31_pqq3p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_05.png" id="32_jifuq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_06.png" id="33_m7q8k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_07.png" id="34_pe8vn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_lunge/double_lunge_08.png" id="35_6wspj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_01.png" id="36_yqvga"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_02.png" id="37_e4js3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_03.png" id="38_5htby"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_04.png" id="39_wql6h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_05.png" id="40_fhthd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_06.png" id="41_axmqv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_07.png" id="42_ka3cs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/double_waltz_lunge/double_waltz_lunge_08.png" id="43_icagk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_01.png" id="44_5f2i7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_02.png" id="45_1mr4v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_03.png" id="46_yixjt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_04.png" id="47_3rxvh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_05.png" id="48_c0p5y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/elegant_walk/elegant_walk_06.png" id="49_x347y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_active/fan_slash_active_01.png" id="50_qhrur"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_active/fan_slash_active_02.png" id="51_3yw2m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_01.png" id="52_5x3hm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_02.png" id="53_5lsev"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_03.png" id="54_e7dw6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_04.png" id="55_negv1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_recovery/fan_slash_recovery_05.png" id="56_lpmlq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_01.png" id="57_drb8s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_02.png" id="58_j4hjj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_03.png" id="59_giuqk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/fan_slash_windup/fan_slash_windup_04.png" id="60_4612c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_01.png" id="61_k551u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_02.png" id="62_g0nv3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_03.png" id="63_onrwk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_04.png" id="64_132xx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_05.png" id="65_avgyt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_06.png" id="66_0m68b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_07.png" id="67_rdd41"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz/final_waltz_08.png" id="68_12pv3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_01.png" id="69_e6xqv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_02.png" id="70_1wow5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_03.png" id="71_hunm4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_04.png" id="72_bq05l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_05.png" id="73_erch7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_06.png" id="74_ggi8k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_07.png" id="75_tsq48"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/final_waltz_crossing/final_waltz_crossing_08.png" id="76_2ak2i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_01.png" id="77_eehr6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_02.png" id="78_j1vju"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_03.png" id="79_bwg18"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/idle/idle_04.png" id="80_p30rl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_01.png" id="81_c7y38"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_02.png" id="82_ksqut"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_03.png" id="83_midef"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_04.png" id="84_x2hrt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_05.png" id="85_kyc7p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/intro/intro_06.png" id="86_5lqhg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/light_hit/light_hit_01.png" id="87_4kngx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/light_hit/light_hit_02.png" id="88_nvcej"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_01.png" id="89_hv1nf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_02.png" id="90_c2632"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_03.png" id="91_grlsr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_04.png" id="92_pqkdc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_05.png" id="93_dabgc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dance/phantom_dance_06.png" id="94_0hvsx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_01.png" id="95_3r4f1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_02.png" id="96_qo6y3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_03.png" id="97_nh5hb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_04.png" id="98_yx0lb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_05.png" id="99_dx65j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_06.png" id="100_6y2qx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phantom_dancer_sweep/phantom_dancer_sweep_07.png" id="101_7u36a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_backstep/phase_02_backstep_01.png" id="102_n7xbl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_backstep/phase_02_backstep_02.png" id="103_uly8b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_backstep/phase_02_backstep_03.png" id="104_jx700"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_backstep/phase_02_backstep_04.png" id="105_fmx2r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_fan_slash/phase_02_fan_slash_01.png" id="106_12jp8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_fan_slash/phase_02_fan_slash_02.png" id="107_jb2mq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_fan_slash/phase_02_fan_slash_03.png" id="108_memo6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_fan_slash/phase_02_fan_slash_04.png" id="109_qhq35"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_fan_slash/phase_02_fan_slash_05.png" id="110_k2cqo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_fan_slash/phase_02_fan_slash_06.png" id="111_pjljk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_hurt/phase_02_hurt_01.png" id="112_hgi8y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_hurt/phase_02_hurt_02.png" id="113_65ps6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_hurt/phase_02_hurt_03.png" id="114_pinki"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_idle/phase_02_idle_01.png" id="115_aduvp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_idle/phase_02_idle_02.png" id="116_8ro84"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_idle/phase_02_idle_03.png" id="117_d6u3t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_idle/phase_02_idle_04.png" id="118_1610x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_light_hit/phase_02_light_hit_01.png" id="119_pkvwi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_light_hit/phase_02_light_hit_02.png" id="120_60cln"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_rapier_thrust/phase_02_rapier_thrust_01.png" id="121_fs14d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_rapier_thrust/phase_02_rapier_thrust_02.png" id="122_y1axb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_rapier_thrust/phase_02_rapier_thrust_03.png" id="123_bmbdn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_rapier_thrust/phase_02_rapier_thrust_04.png" id="124_6hxt0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_rapier_thrust/phase_02_rapier_thrust_05.png" id="125_sc3gc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_rapier_thrust/phase_02_rapier_thrust_06.png" id="126_mytt1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_sidestep/phase_02_sidestep_01.png" id="127_xrqsc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_sidestep/phase_02_sidestep_02.png" id="128_6hc82"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_sidestep/phase_02_sidestep_03.png" id="129_vp7ot"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_sidestep/phase_02_sidestep_04.png" id="130_jydgo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_stagger/phase_02_stagger_01.png" id="131_e7dck"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_stagger/phase_02_stagger_02.png" id="132_mo2ky"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_stagger/phase_02_stagger_03.png" id="133_fsicr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_stagger/phase_02_stagger_04.png" id="134_ie415"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_turn/phase_02_turn_01.png" id="135_emnoa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_turn/phase_02_turn_02.png" id="136_lpx6p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_turn/phase_02_turn_03.png" id="137_73wwo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_turn/phase_02_turn_04.png" id="138_3n4ph"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_walk/phase_02_walk_01.png" id="139_n4qvj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_walk/phase_02_walk_02.png" id="140_p2agm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_walk/phase_02_walk_03.png" id="141_sqju0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_walk/phase_02_walk_04.png" id="142_n24u8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_walk/phase_02_walk_05.png" id="143_givcx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_walk/phase_02_walk_06.png" id="144_2chp1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_01.png" id="145_ii7d2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_02.png" id="146_vhshj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_03.png" id="147_4qrdw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_04.png" id="148_stua2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_05.png" id="149_v35kt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_transition/phase_transition_06.png" id="150_sot7e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_active/rapier_thrust_active_01.png" id="151_djsph"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_active/rapier_thrust_active_02.png" id="152_wuwao"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_01.png" id="153_4gwr4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_02.png" id="154_lt6rk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_03.png" id="155_8b5ao"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_recovery/rapier_thrust_recovery_04.png" id="156_k2cbt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_01.png" id="157_1pcmh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_02.png" id="158_n1v3c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_03.png" id="159_gh1aa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/rapier_thrust_windup/rapier_thrust_windup_04.png" id="160_vu716"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_01.png" id="161_t04uw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_02.png" id="162_bo3kp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_03.png" id="163_0iwfg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_04.png" id="164_crsbl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_05.png" id="165_0p7tl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_06.png" id="166_gqsuq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_07.png" id="167_rlylb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/riposte/riposte_08.png" id="168_fhdvp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_01.png" id="169_smjad"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_02.png" id="170_fmmww"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_03.png" id="171_dosoy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/sidestep/sidestep_04.png" id="172_r1v3h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_01.png" id="173_j8bea"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_02.png" id="174_5fnj5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_03.png" id="175_vb1rj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/stagger/stagger_04.png" id="176_85ts7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_01.png" id="177_fqnf8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_02.png" id="178_hu1j5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_03.png" id="179_e8ubu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/turn/turn_04.png" id="180_d8jua"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_i65le")
+"texture": ExtResource("1_wbqdd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_4r1xt")
+"texture": ExtResource("2_n7xcd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_dbi3y")
+"texture": ExtResource("3_gwfvt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_w3eiq")
+"texture": ExtResource("4_7hj0h")
 }],
 "loop": 0,
 "name": &"backstep",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_lyuf4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_pkpep")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_rij0e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_aoab4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_0ay55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_dxd6t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_3qkil")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_ouvbo")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_371p5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_1m537")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_xodac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_lr1rj")
+}],
+"loop": 0,
+"name": &"death_collapse",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_nvbwb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_f32ge")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_eh07m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_vvspj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_uj1yy")
+}],
+"loop": 0,
+"name": &"death_dissolve",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_tul4t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_f3b3b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_ytht3")
+}],
+"loop": 0,
+"name": &"death_mask_shatter",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_pqm7s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_oalhy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_8ta8n")
+}],
+"loop": 0,
+"name": &"death_start",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_68gvv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_8rh2c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_awrme")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_pqq3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_jifuq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_m7q8k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_pe8vn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_6wspj")
+}],
+"loop": 0,
+"name": &"double_lunge",
 "speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("5_77qui")
+"texture": ExtResource("36_yqvga")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_0hg3t")
+"texture": ExtResource("37_e4js3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_q8xmw")
+"texture": ExtResource("38_5htby")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_cysa2")
+"texture": ExtResource("39_wql6h")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_ia4cd")
+"texture": ExtResource("40_fhthd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_o07x3")
+"texture": ExtResource("41_axmqv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_akamc")
+"texture": ExtResource("42_ka3cs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_icagk")
 }],
 "loop": 0,
-"name": &"death",
-"speed": 8.0
+"name": &"double_waltz_lunge",
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("12_ma41f")
+"texture": ExtResource("44_5f2i7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_tkoo8")
+"texture": ExtResource("45_1mr4v")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_x3gvv")
+"texture": ExtResource("46_yixjt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_s7rec")
+"texture": ExtResource("47_3rxvh")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_jjeo4")
+"texture": ExtResource("48_c0p5y")
 }, {
 "duration": 1.0,
-"texture": ExtResource("17_pw28j")
-}, {
-"duration": 1.0,
-"texture": ExtResource("18_8p282")
-}, {
-"duration": 1.0,
-"texture": ExtResource("19_vtpfb")
-}],
-"loop": 0,
-"name": &"double_lunge",
-"speed": 11.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("20_gptah")
-}, {
-"duration": 1.0,
-"texture": ExtResource("21_0pc6h")
-}, {
-"duration": 1.0,
-"texture": ExtResource("22_3p7s7")
-}, {
-"duration": 1.0,
-"texture": ExtResource("23_pub8d")
-}, {
-"duration": 1.0,
-"texture": ExtResource("24_dlolu")
-}, {
-"duration": 1.0,
-"texture": ExtResource("25_yrqy0")
+"texture": ExtResource("49_x347y")
 }],
 "loop": 1,
 "name": &"elegant_walk",
@@ -200,76 +377,76 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("26_lgh06")
+"texture": ExtResource("50_qhrur")
 }, {
 "duration": 1.0,
-"texture": ExtResource("27_as440")
+"texture": ExtResource("51_3yw2m")
 }],
 "loop": 0,
 "name": &"fan_slash_active",
-"speed": 14.0
+"speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("28_m0wl3")
+"texture": ExtResource("52_5x3hm")
 }, {
 "duration": 1.0,
-"texture": ExtResource("29_yd640")
+"texture": ExtResource("53_5lsev")
 }, {
 "duration": 1.0,
-"texture": ExtResource("30_r3la0")
+"texture": ExtResource("54_e7dw6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("31_tlple")
+"texture": ExtResource("55_negv1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("32_nquto")
+"texture": ExtResource("56_lpmlq")
 }],
 "loop": 0,
 "name": &"fan_slash_recovery",
-"speed": 8.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("33_vuylo")
+"texture": ExtResource("57_drb8s")
 }, {
 "duration": 1.0,
-"texture": ExtResource("34_ltbhq")
+"texture": ExtResource("58_j4hjj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("35_iodu8")
+"texture": ExtResource("59_giuqk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_4rh7m")
+"texture": ExtResource("60_4612c")
 }],
 "loop": 0,
 "name": &"fan_slash_windup",
-"speed": 8.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("37_ueehw")
+"texture": ExtResource("61_k551u")
 }, {
 "duration": 1.0,
-"texture": ExtResource("38_i3c7c")
+"texture": ExtResource("62_g0nv3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("39_717bl")
+"texture": ExtResource("63_onrwk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("40_kfi32")
+"texture": ExtResource("64_132xx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("41_matl1")
+"texture": ExtResource("65_avgyt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("42_dmvkq")
+"texture": ExtResource("66_0m68b")
 }, {
 "duration": 1.0,
-"texture": ExtResource("43_qrudr")
+"texture": ExtResource("67_rdd41")
 }, {
 "duration": 1.0,
-"texture": ExtResource("44_b5mc7")
+"texture": ExtResource("68_12pv3")
 }],
 "loop": 0,
 "name": &"final_waltz",
@@ -277,16 +454,45 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("45_ap0il")
+"texture": ExtResource("69_e6xqv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("46_6oj5o")
+"texture": ExtResource("70_1wow5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("47_aby6q")
+"texture": ExtResource("71_hunm4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("48_g30ds")
+"texture": ExtResource("72_bq05l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_erch7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_ggi8k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_tsq48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_2ak2i")
+}],
+"loop": 0,
+"name": &"final_waltz_crossing",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("77_eehr6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_j1vju")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_bwg18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_p30rl")
 }],
 "loop": 1,
 "name": &"idle",
@@ -294,56 +500,56 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("49_gdouy")
+"texture": ExtResource("81_c7y38")
 }, {
 "duration": 1.0,
-"texture": ExtResource("50_ajv3l")
+"texture": ExtResource("82_ksqut")
 }, {
 "duration": 1.0,
-"texture": ExtResource("51_ol7e1")
+"texture": ExtResource("83_midef")
 }, {
 "duration": 1.0,
-"texture": ExtResource("52_jdiqq")
+"texture": ExtResource("84_x2hrt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("53_ih573")
+"texture": ExtResource("85_kyc7p")
 }, {
 "duration": 1.0,
-"texture": ExtResource("54_tl6gx")
+"texture": ExtResource("86_5lqhg")
 }],
 "loop": 0,
 "name": &"intro",
-"speed": 8.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("55_x7g2p")
+"texture": ExtResource("87_4kngx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("56_jp86a")
+"texture": ExtResource("88_nvcej")
 }],
 "loop": 0,
 "name": &"light_hit",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("57_3pqls")
+"texture": ExtResource("89_hv1nf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("58_1oo6d")
+"texture": ExtResource("90_c2632")
 }, {
 "duration": 1.0,
-"texture": ExtResource("59_2vv2g")
+"texture": ExtResource("91_grlsr")
 }, {
 "duration": 1.0,
-"texture": ExtResource("60_ifjro")
+"texture": ExtResource("92_pqkdc")
 }, {
 "duration": 1.0,
-"texture": ExtResource("61_e0uxo")
+"texture": ExtResource("93_dabgc")
 }, {
 "duration": 1.0,
-"texture": ExtResource("62_3k6cw")
+"texture": ExtResource("94_0hvsx")
 }],
 "loop": 0,
 "name": &"phantom_dance",
@@ -351,155 +557,354 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("63_26nmw")
+"texture": ExtResource("95_3r4f1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("64_4ilga")
+"texture": ExtResource("96_qo6y3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("65_55hf7")
+"texture": ExtResource("97_nh5hb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("66_nx1ru")
+"texture": ExtResource("98_yx0lb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("67_pyif3")
+"texture": ExtResource("99_dx65j")
 }, {
 "duration": 1.0,
-"texture": ExtResource("68_jlbix")
+"texture": ExtResource("100_6y2qx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("69_6t4au")
-}, {
-"duration": 1.0,
-"texture": ExtResource("70_pim7x")
+"texture": ExtResource("101_7u36a")
 }],
 "loop": 0,
-"name": &"phase_transition",
-"speed": 7.0
+"name": &"phantom_dancer_sweep",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("71_dv376")
+"texture": ExtResource("102_n7xbl")
 }, {
 "duration": 1.0,
-"texture": ExtResource("72_t6ya1")
+"texture": ExtResource("103_uly8b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_jx700")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_fmx2r")
 }],
 "loop": 0,
-"name": &"rapier_thrust_active",
-"speed": 14.0
+"name": &"phase_02_backstep",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("73_yotkp")
+"texture": ExtResource("106_12jp8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("74_3255e")
+"texture": ExtResource("107_jb2mq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("75_7ulmv")
+"texture": ExtResource("108_memo6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("76_24p01")
+"texture": ExtResource("109_qhq35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_k2cqo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_pjljk")
 }],
 "loop": 0,
-"name": &"rapier_thrust_recovery",
-"speed": 8.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("77_6wrv2")
-}, {
-"duration": 1.0,
-"texture": ExtResource("78_tmqmf")
-}, {
-"duration": 1.0,
-"texture": ExtResource("79_3lk3p")
-}, {
-"duration": 1.0,
-"texture": ExtResource("80_pfqd1")
-}],
-"loop": 0,
-"name": &"rapier_thrust_windup",
-"speed": 9.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("81_wbqdd")
-}, {
-"duration": 1.0,
-"texture": ExtResource("82_n7xcd")
-}, {
-"duration": 1.0,
-"texture": ExtResource("83_gwfvt")
-}, {
-"duration": 1.0,
-"texture": ExtResource("84_7hj0h")
-}, {
-"duration": 1.0,
-"texture": ExtResource("85_lyuf4")
-}, {
-"duration": 1.0,
-"texture": ExtResource("86_pkpep")
-}, {
-"duration": 1.0,
-"texture": ExtResource("87_rij0e")
-}, {
-"duration": 1.0,
-"texture": ExtResource("88_aoab4")
-}],
-"loop": 0,
-"name": &"riposte",
-"speed": 11.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": ExtResource("89_0ay55")
-}, {
-"duration": 1.0,
-"texture": ExtResource("90_dxd6t")
-}, {
-"duration": 1.0,
-"texture": ExtResource("91_3qkil")
-}, {
-"duration": 1.0,
-"texture": ExtResource("92_ouvbo")
-}],
-"loop": 0,
-"name": &"sidestep",
+"name": &"phase_02_fan_slash",
 "speed": 12.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("93_371p5")
+"texture": ExtResource("112_hgi8y")
 }, {
 "duration": 1.0,
-"texture": ExtResource("94_1m537")
+"texture": ExtResource("113_65ps6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("95_xodac")
-}, {
-"duration": 1.0,
-"texture": ExtResource("96_lr1rj")
+"texture": ExtResource("114_pinki")
 }],
 "loop": 0,
-"name": &"stagger",
+"name": &"phase_02_hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("115_aduvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("116_8ro84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("117_d6u3t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("118_1610x")
+}],
+"loop": 1,
+"name": &"phase_02_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("119_pkvwi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("120_60cln")
+}],
+"loop": 0,
+"name": &"phase_02_light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("121_fs14d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("122_y1axb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_bmbdn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_6hxt0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_sc3gc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("126_mytt1")
+}],
+"loop": 0,
+"name": &"phase_02_rapier_thrust",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("127_xrqsc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_6hc82")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_vp7ot")
+}, {
+"duration": 1.0,
+"texture": ExtResource("130_jydgo")
+}],
+"loop": 0,
+"name": &"phase_02_sidestep",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("131_e7dck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("132_mo2ky")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_fsicr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_ie415")
+}],
+"loop": 0,
+"name": &"phase_02_stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("135_emnoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_lpx6p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_73wwo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("138_3n4ph")
+}],
+"loop": 0,
+"name": &"phase_02_turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("139_n4qvj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_p2agm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_sqju0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_n24u8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("143_givcx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("144_2chp1")
+}],
+"loop": 1,
+"name": &"phase_02_walk",
 "speed": 9.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("97_nvbwb")
+"texture": ExtResource("145_ii7d2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("98_f32ge")
+"texture": ExtResource("146_vhshj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("99_eh07m")
+"texture": ExtResource("147_4qrdw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("100_vvspj")
+"texture": ExtResource("148_stua2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_v35kt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("150_sot7e")
+}],
+"loop": 0,
+"name": &"phase_transition",
+"speed": 2.3
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("151_djsph")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_wuwao")
+}],
+"loop": 0,
+"name": &"rapier_thrust_active",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("153_4gwr4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_lt6rk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_8b5ao")
+}, {
+"duration": 1.0,
+"texture": ExtResource("156_k2cbt")
+}],
+"loop": 0,
+"name": &"rapier_thrust_recovery",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("157_1pcmh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_n1v3c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_gh1aa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_vu716")
+}],
+"loop": 0,
+"name": &"rapier_thrust_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("161_t04uw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("162_bo3kp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("163_0iwfg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("164_crsbl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_0p7tl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_gqsuq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("167_rlylb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("168_fhdvp")
+}],
+"loop": 0,
+"name": &"riposte",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("169_smjad")
+}, {
+"duration": 1.0,
+"texture": ExtResource("170_fmmww")
+}, {
+"duration": 1.0,
+"texture": ExtResource("171_dosoy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("172_r1v3h")
+}],
+"loop": 0,
+"name": &"sidestep",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("173_j8bea")
+}, {
+"duration": 1.0,
+"texture": ExtResource("174_5fnj5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("175_vb1rj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("176_85ts7")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("177_fqnf8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("178_hu1j5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("179_e8ubu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("180_d8jua")
 }],
 "loop": 0,
 "name": &"turn",
-"speed": 9.0
+"speed": 10.0
 }]
