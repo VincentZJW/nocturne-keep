@@ -1,0 +1,155 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_edran.gd" id="1_boss"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/bosses/thirteenth_pontiff_edran_data.tres" id="2_config"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/animations/edran_phase_01_sprite_frames.tres" id="3_frames"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="4_health"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="5_hurtbox"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="6_hitbox"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_hit_policy.gd" id="7_policy"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_timed_field.tscn" id="8_field"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_boss_hud.gd" id="9_hud"]
+
+[sub_resource type="RectangleShape2D" id="BodyShape"]
+size = Vector2(36, 78)
+
+[sub_resource type="RectangleShape2D" id="HurtShape"]
+size = Vector2(40, 76)
+
+[sub_resource type="RectangleShape2D" id="SweepShape"]
+size = Vector2(88, 28)
+
+[sub_resource type="RectangleShape2D" id="ThrustShape"]
+size = Vector2(108, 16)
+
+[sub_resource type="RectangleShape2D" id="CenserShape"]
+size = Vector2(82, 24)
+
+[node name="ThirteenthPontiffEdran" type="CharacterBody2D" groups=["chapter_03_boss"]]
+z_index = 10
+floor_snap_length = 6.0
+collision_layer = 4
+collision_mask = 3
+script = ExtResource("1_boss")
+config = ExtResource("2_config")
+timed_field_scene = ExtResource("8_field")
+
+[node name="VisualRoot" type="Node2D" parent="."]
+position = Vector2(0, -44)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot"]
+texture_filter = 1
+sprite_frames = ExtResource("3_frames")
+animation = &"prayer_idle"
+autoplay = "prayer_idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -39)
+shape = SubResource("BodyShape")
+
+[node name="HealthComponent" type="Node" parent="."]
+script = ExtResource("4_health")
+max_health = 360
+
+[node name="Hurtbox" type="Area2D" parent="."]
+position = Vector2(0, -39)
+collision_layer = 16
+collision_mask = 32
+monitoring = false
+script = ExtResource("5_hurtbox")
+faction = &"enemy"
+hit_policy_path = NodePath("../HitPolicy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+shape = SubResource("HurtShape")
+
+[node name="HitPolicy" type="Node" parent="."]
+script = ExtResource("7_policy")
+
+[node name="FacingRoot" type="Node2D" parent="."]
+
+[node name="SweepHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(52, -34)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"edran_pontifical_sweep"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SweepHitbox"]
+disabled = true
+shape = SubResource("SweepShape")
+
+[node name="ThrustHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(72, -42)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"edran_crozier_thrust"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/ThrustHitbox"]
+disabled = true
+shape = SubResource("ThrustShape")
+
+[node name="CenserHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(48, -28)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"edran_censer_procession"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/CenserHitbox"]
+disabled = true
+shape = SubResource("CenserShape")
+
+[node name="BossHud" type="CanvasLayer" parent="."]
+layer = 28
+script = ExtResource("9_hud")
+
+[node name="Panel" type="PanelContainer" parent="BossHud"]
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 340.0
+offset_top = 18.0
+offset_right = -340.0
+offset_bottom = 92.0
+grow_horizontal = 2
+
+[node name="Margin" type="MarginContainer" parent="BossHud/Panel"]
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 6
+
+[node name="VBox" type="VBoxContainer" parent="BossHud/Panel/Margin"]
+theme_override_constants/separation = 2
+
+[node name="Name" type="Label" parent="BossHud/Panel/Margin/VBox"]
+theme_override_font_sizes/font_size = 12
+text = "THE THIRTEENTH PONTIFF, EDRAN / 第十三响教宗·埃德兰"
+horizontal_alignment = 1
+
+[node name="Health" type="ProgressBar" parent="BossHud/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 10)
+max_value = 360.0
+value = 360.0
+show_percentage = false
+
+[node name="Poise" type="ProgressBar" parent="BossHud/Panel/Margin/VBox"]
+custom_minimum_size = Vector2(0, 6)
+max_value = 110.0
+value = 110.0
+show_percentage = false
+
+[node name="State" type="Label" parent="BossHud/Panel/Margin/VBox"]
+theme_override_font_sizes/font_size = 9
+text = "PHASE I | DORMANT"
+horizontal_alignment = 1

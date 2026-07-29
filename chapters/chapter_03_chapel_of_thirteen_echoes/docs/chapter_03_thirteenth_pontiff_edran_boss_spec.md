@@ -298,12 +298,12 @@ The audit found no old Edran combat scene, Boss script, Data Resource, SpriteFra
 ## 12. Stage gates
 
 - **B0 complete:** audit, final numbers, identity, skills, summons, file plan and Main test plan only.
-- **B1:** Phase 1 concept/equipment art and formal Phase 1 Sprite.
-- **B2:** Phase 1 animation/combat and F5 test.
+- **B1 complete:** Phase 1 concept/equipment art and 114-frame formal 96×96 Phase 1 Sprite set.
+- **B2 complete:** typed Phase 1 Boss/Data/policy/HUD scene, five attack families, Poise/stagger, saved Boss-sanctum/Main integration and F5 evidence. The 198 HP boundary intentionally locks in `transition_pending`; B4 still owns the actual transition.
 - **B3:** both summons, rules, cleanup and F5 test.
 - **B4:** full structural Phase Transition.
 - **B5:** Phase 2 concept/Sprite/animation/combat and F5 test.
 - **B6:** intro, dialogue, death, authoritative reward and Chapter IV hand-off.
 - **B7:** full regression, summon stress, forced QA and final report.
 
-B0 stops here. No B1 asset generation or implementation is authorized by this document alone.
+Current approved execution stops after B3. B4 and later remain unimplemented and require a new approval.

@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_sanctum.tscn" id="2_area"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_boss_sanctum_room.gd" id="3_room"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_exit.gd" id="4_exit"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/thirteenth_pontiff_edran.tscn" id="5_boss"]
 [sub_resource type="RectangleShape2D" id="PostBossExitShape"]
 size = Vector2(220, 300)
 [node name="Ch3BossSanctumRoom" type="Node2D"]
@@ -11,6 +12,9 @@ bilingual_name = "CHAPTER III · THIRTEENTH ECHO SANCTUM / 第十三回响圣所
 room_size = Vector2i(3200, 720)
 [node name="BossSanctum" parent="." instance=ExtResource("2_area")]
 trigger_starts_intro = false
+[node name="BossActors" type="Node2D" parent="."]
+[node name="ThirteenthPontiffEdran" parent="BossActors" instance=ExtResource("5_boss")]
+position = Vector2(1680, 584)
 [node name="SpawnPoints" type="Node2D" parent="."]
 [node name="EntryWest" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(240, 584)

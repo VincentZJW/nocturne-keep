@@ -6280,3 +6280,27 @@ Status: complete — Phase 1 art production only; B2 gameplay integration follow
 
 - Evidence: `docs/qa/chapter_03_boss_b1/edran_phase_01_b1_contact_sheet.png` and the Boss asset `previews/` directory.
 - B1 is visually and structurally complete. Runtime/Main acceptance is intentionally not claimed until B2 creates the Boss scene/controller and saved Boss-sanctum instance.
+
+## 2026-07-29 — Chapter III Boss B2 complete
+
+Status: complete — formal Phase 1 gameplay/Main integration; B3 summons follow under the same approval
+
+### Delivered
+
+- Added a typed `ThirteenthPontiffEdranConfig` Resource and saved 360 HP / 198 HP transition boundary / 0.88 incoming multiplier / 110 Poise / 14 and 28 Poise-impact contract. Attack timings and damage remain centralized in that Resource.
+- Added the formal Edran `CharacterBody2D` scene with 96×96 nearest-neighbour SpriteFrames, body collision, target-owned damage policy, Player Hurtbox-compatible enemy attack volumes, Boss HUD, Phase 1 state controller and explicit dormant/idle/approach/turn/attack/stagger/transition-pending/dead states.
+- Implemented five Phase 1 attack families: Pontifical Sweep, Crozier Thrust, Censer Procession, Litany of Ash and Thirteenfold Sentence. Melee windows use shared `HitboxComponent` one-hit ledgers; the two rites instantiate existing chapter-local timed-seal fields. Normal and Dash attacks remove 14/28 Poise; stagger protection prevents repeated locks.
+- Saved exactly one formal Boss under `Ch3BossSanctumRoom/BossActors/ThirteenthPontiffEdran` at the existing sanctum anchor coordinate `(1680, 584)`. The room binds the existing environment intro signal to activation and the future defeat signal to the existing environment-collapse hook. Main/F5 uses `main_bootstrap.tscn -> chapter_03_route.tscn -> CH3_BOSS`; the retired continuous placeholder did not receive the Boss.
+- B2 deliberately clamps the Boss at 198 HP, disables further damage and emits `phase_transition_requested` once. This is an honest hand-off to B4, not a fake Phase Transition. B2 did not create summons, Phase 2, death presentation, reward or Chapter IV content.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --import` — PASS; all new typed scripts/Resources/scenes parsed and imported.
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --scene res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/thirteenth_pontiff_edran_test_room.tscn --quit-after 240` — PASS; isolated scene ran without script/resource error.
+3. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b2_phase_01.gd` — PASS, `attacks=5 health=360 poise=110 main_room=true transition=B4_pending`.
+4. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_edran_b2_main_qa.gd` — PASS on OpenGL/Metal Compatibility, `captures=3 route=MainBootstrap boss=Phase1 transition=B4_pending`.
+
+### QA and manual acceptance
+
+- Evidence: `docs/qa/chapter_03_boss_b2/01_edran_phase_01_idle_main.png`, `02_edran_pontifical_sweep_active_main.png` and `03_edran_b4_boundary_main.png`.
+- Manual F5 route: enable Chapter Debug Start for `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` / `CH3_BOSS`, then verify the environment intro unlocks Edran, HUD tracks 360 HP/110 Poise, all five Phase 1 actions are readable and 198 HP stops at the explicit B4 boundary.
