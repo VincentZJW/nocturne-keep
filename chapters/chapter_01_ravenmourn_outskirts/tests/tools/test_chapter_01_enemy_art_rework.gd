@@ -51,7 +51,7 @@ func _initialize() -> void:
 	var archived_frames: int = 0
 	for role: String in ROLES:
 		var role_root: String = _role_root(role)
-		var size: Vector2i = Vector2i(96, 96) if role == "fallen_gate_knight" else Vector2i(64, 64)
+		var size: Vector2i = Vector2i(128, 96) if role == "fallen_gate_knight" else Vector2i(64, 64)
 		var paths: PackedStringArray = _png_paths(role_root + "/sprites")
 		_assert(paths.size() == int(FRAME_COUNTS[role]), "%s formal frame count" % role)
 		for path: String in paths:

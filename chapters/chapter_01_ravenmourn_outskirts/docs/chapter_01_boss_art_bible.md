@@ -7,13 +7,13 @@ Last updated: 2026-07-28
 
 The Fallen Gate Knight is Ravenmourn's ruined threshold made animate: the last royal knight ordered to hold the gate and moat bridge. Seven years after the Empty Bell, awareness is gone but the final command remains. His dying recognition — “The bell… knows you.” — gives the fight a tragic, oath-bound character rather than a demonic one.
 
-He must read as a chapter-ending military monument, never an enlarged Cursed Shield Guard. The 96×96 authored canvas, crowned gate-spire helm, asymmetrical layered plate, raven-gate crest, tapered tower shield, broad greatsword and torn blood-dark cape establish a unique silhouette.
+He must read as a chapter-ending military monument, never an enlarged Cursed Shield Guard. The 128×96 authored canvas preserves the original body anchor while providing honest horizontal room for the long Gatewarden Greatsword; the crowned gate-spire helm, asymmetrical layered plate, raven-gate crest, tapered tower shield and torn blood-dark cape establish a unique silhouette.
 
 ## Phase 1 — the oath
 
 - Shield-led, upright and immovable silhouette.
 - Tapered tower shield has a peaked crown, layered rim, thickness, five rivets and the Ravenmourn crowned-raven crest; it is not a rectangle.
-- Greatsword remains a complete weapon behind/beside the shield: leather grip, gold pommel/crossguard, broad silver blade, fuller, chipped tip.
+- `Gatewarden Greatsword / 守门誓剑` remains complete behind/beside the shield: 84–88% of Boss height in neutral presentation, wrapped long grip, oath-seal pommel, gate-arch/raven-wing guard, layered old-silver blade planes, central ridge and a sharp restrained point.
 - Enclosed crown helm uses a narrow cold-blue soul-fire slit.
 - Pauldrons, cuirass ribs, waist crest, tassets, greaves and boots use separate material bands so the body remains readable behind the shield.
 - Cape is substantially intact but torn and dried-blood dark.
@@ -51,7 +51,7 @@ Phase 2 is independently redrawn, not Phase 1 minus one Sprite:
 - Runtime SpriteFrames: `resources/boss/fallen_gate_knight_sprite_frames.tres`
 - Previous production frames: `assets/boss/fallen_gate_knight/reference/deprecated_v2/fallen_gate_knight_runtime_v2_frames.tar.gz`
 
-All runtime frames are 96×96 RGBA PNG, nearest-neighbor, lossless, no mipmaps. The saved Boss scene and Main instance use the formal SpriteFrames path; archives have no runtime reference.
+All runtime body/weapon frames are 128×96 RGBA PNG, nearest-neighbor, lossless, no mipmaps. Shield-condition overlays remain 96×96 and retain the same world anchor. The saved Boss scene and Main instance use the formal SpriteFrames path; archives have no runtime reference.
 
 ## Animation contract
 

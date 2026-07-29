@@ -4,7 +4,7 @@ extends SceneTree
 
 const ROOTS: Dictionary[String, Vector2i] = {
 	"res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/gargoyle_sentinel/sprites": Vector2i(64, 64),
-	"res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites": Vector2i(96, 96),
+	"res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites": Vector2i(128, 96),
 }
 
 var _failures: Array[String] = []

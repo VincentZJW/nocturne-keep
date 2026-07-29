@@ -46,6 +46,7 @@ func _initialize() -> void:
 func _run() -> void:
 	_test_concepts()
 	_test_sprite_frames()
+	_test_gatewarden_greatsword()
 	_test_shield_states()
 	_test_main_reference()
 	if _failures.is_empty():
@@ -85,7 +86,7 @@ func _test_sprite_frames() -> void:
 			var texture: Texture2D = frames.get_frame_texture(animation, frame_index)
 			_expect(texture != null, "Null frame: %s[%d]" % [animation, frame_index])
 			if texture != null:
-				_expect(texture.get_size() == Vector2(96, 96), "Frame is not 96x96: %s[%d]" % [animation, frame_index])
+				_expect(texture.get_size() == Vector2(128, 96), "Frame is not 128x96: %s[%d]" % [animation, frame_index])
 	_expect(total == 165, "Total frame count is not 165")
 	var resource_text: String = FileAccess.get_file_as_string(SPRITE_FRAMES_PATH)
 	_expect(not resource_text.contains("reference/deprecated"), "Runtime SpriteFrames references archived art")
@@ -105,6 +106,37 @@ func _test_shield_states() -> void:
 	for frame_index: int in range(5):
 		var effect_path: String = ROOT + "/effects/shield_break_fx_%02d.png" % (frame_index + 1)
 		_expect(FileAccess.file_exists(effect_path), "Missing shield-break FX frame %d" % (frame_index + 1))
+
+
+func _test_gatewarden_greatsword() -> void:
+	var samples: Dictionary[String, int] = {
+		"idle_shielded/idle_shielded_01.png": 108,
+		"idle_unshielded/idle_unshielded_01.png": 108,
+		"sword_slash/sword_slash_03.png": 124,
+		"charge_thrust/charge_thrust_04.png": 124,
+		"heavy_overhead/heavy_overhead_05.png": 122,
+		"death/death_06.png": 122,
+	}
+	for relative_path: String in samples:
+		var path: String = ROOT + "/sprites/" + relative_path
+		var image: Image = Image.load_from_file(ProjectSettings.globalize_path(path))
+		_expect(not image.is_empty(), "Unreadable sword QA frame: %s" % relative_path)
+		if image.is_empty():
+			continue
+		var used_rect: Rect2i = image.get_used_rect()
+		_expect(used_rect.end.x - 1 >= samples[relative_path], "Sword remains too short in %s" % relative_path)
+		_expect(not _edge_has_alpha(image, image.get_width() - 1), "Sword clips the right edge in %s" % relative_path)
+	var concept: Image = Image.load_from_file(
+		ProjectSettings.globalize_path(ROOT + "/concept_art/fallen_gate_knight_greatsword_design.png")
+	)
+	_expect(concept.get_width() >= 1280 and concept.get_height() >= 900, "Gatewarden Greatsword concept is not production sized")
+
+
+func _edge_has_alpha(image: Image, x: int) -> bool:
+	for y: int in range(image.get_height()):
+		if image.get_pixel(x, y).a > 0.01:
+			return true
+	return false
 
 
 func _test_main_reference() -> void:

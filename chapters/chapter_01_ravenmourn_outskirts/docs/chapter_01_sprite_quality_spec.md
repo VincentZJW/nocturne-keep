@@ -3,7 +3,7 @@
 ## Acceptance gates
 
 1. Six roles have concept sheet, silhouette, action reference and effect reference.
-2. Five ordinary roles use 64×64 formal frames; the Boss uses 96×96.
+2. Five ordinary roles use 64×64 formal frames; the Fallen Gate Knight uses 128×96 formal body/weapon frames so the guard-longsword can remain complete without scaling the body. Shield overlays remain 96×96.
 3. Formal runtime total is 271 frames; archived v1 total is 290 PNGs.
 4. Every frame has alpha, stable canvas size, deliberate non-transparent mass and at least a role-appropriate limited material palette.
 5. Runtime `SpriteFrames` may only reference `assets/.../<role>/sprites/` or the new Chapter I effect folders—never `reference/deprecated_v1`.

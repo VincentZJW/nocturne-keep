@@ -1,6 +1,6 @@
 extends SceneTree
 
-## Deterministic 96x96 production-art generator for Fallen Gate Knight only.
+## Deterministic 128x96 production-art generator for Fallen Gate Knight only.
 ##
 ## The Boss keeps the existing gameplay animation names and frame counts, while
 ## the drawing is rebuilt around a shaped tower shield, complete greatsword,
@@ -11,7 +11,9 @@ const ROOT: String = "res://chapters/chapter_01_ravenmourn_outskirts/assets/boss
 const SPRITES: String = ROOT + "/sprites"
 const EFFECTS: String = ROOT + "/effects"
 const CONCEPTS: String = ROOT + "/concept_art"
-const SIZE: int = 96
+const FRAME_WIDTH: int = 128
+const FRAME_HEIGHT: int = 96
+const EFFECT_SIZE: int = 96
 const CLEAR: Color = Color(0.0, 0.0, 0.0, 0.0)
 const OUTLINE: Color = Color("070a0f")
 const DEEP_IRON: Color = Color("111821")
@@ -119,7 +121,7 @@ func _initialize() -> void:
 
 
 func _draw_frame(animation: StringName, frame: int, count: int) -> Image:
-	var image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+	var image: Image = Image.create(FRAME_WIDTH, FRAME_HEIGHT, false, Image.FORMAT_RGBA8)
 	image.fill(CLEAR)
 	if animation == &"death":
 		_draw_death(image, frame)
@@ -134,7 +136,9 @@ func _draw_frame(animation: StringName, frame: int, count: int) -> Image:
 func _draw_knight(
 	image: Image, animation: StringName, frame: int, count: int, phase_one: bool
 ) -> void:
-	var x: int = 50 if phase_one else 45
+	# The body preserves its previous world-space anchor: the wider production cell
+	# adds horizontal weapon room without changing feet, collision or gameplay reach.
+	var x: int = 66 if phase_one else 61
 	var y: int = 7
 	var stride: int = 0
 	var bob: int = 0
@@ -358,56 +362,58 @@ func _draw_exposed_curse_arm(image: Image, shoulder: Vector2i, hand: Vector2i) -
 func _get_sword_pose(
 	animation: StringName, frame: int, x: int, y: int, phase_one: bool
 ) -> Dictionary:
-	var grip: Vector2i = Vector2i(x + 18, y + 43)
-	var second_grip: Vector2i = Vector2i(x - 3, y + 37)
-	var tip: Vector2i = Vector2i(x + 40, y + 78)
+	# Gatewarden Greatsword: the default oath-rest pose presents an 82–88 px
+	# pommel-to-tip silhouette, roughly 84–88% of the authored knight height.
+	var grip: Vector2i = Vector2i(x + 10, y + 32) if phase_one else Vector2i(x + 5, y + 33)
+	var second_grip: Vector2i = grip - Vector2i(7, 3)
+	var tip: Vector2i = Vector2i(x + 46, y + 87) if phase_one else Vector2i(x + 48, y + 87)
 	if phase_one:
 		second_grip = grip
 	match animation:
 		&"sword_slash", &"combo_slash_1", &"sword_slash_active":
-			var grips: Array[Vector2i] = [Vector2i(x + 10, y + 31), Vector2i(x + 7, y + 18), Vector2i(x + 8, y + 37), Vector2i(x + 10, y + 51), Vector2i(x + 14, y + 45)]
-			var tips: Array[Vector2i] = [Vector2i(x + 17, y - 14), Vector2i(x + 40, y - 8), Vector2i(94, y + 32), Vector2i(93, y + 76), Vector2i(91, y + 81)]
+			var grips: Array[Vector2i] = [Vector2i(x + 2, y + 39), Vector2i(x - 2, y + 32), Vector2i(x - 10, y + 38), Vector2i(x - 6, y + 47), Vector2i(x + 5, y + 39)]
+			var tips: Array[Vector2i] = [Vector2i(x + 52, 1), Vector2i(x + 53, 1), Vector2i(FRAME_WIDTH - 2, y + 28), Vector2i(FRAME_WIDTH - 3, y + 79), Vector2i(x + 47, y + 85)]
 			var index: int = mini(frame, grips.size() - 1)
 			grip = grips[index]
 			tip = tips[index]
 		&"combo_slash_2":
-			var combo_grips: Array[Vector2i] = [Vector2i(x + 18, y + 48), Vector2i(x + 24, y + 54), Vector2i(x + 25, y + 39), Vector2i(x + 12, y + 19), Vector2i(x + 17, y + 43)]
-			var combo_tips: Array[Vector2i] = [Vector2i(x + 42, y + 80), Vector2i(91, y + 75), Vector2i(94, y + 32), Vector2i(x + 39, y - 8), Vector2i(x + 39, y + 76)]
+			var combo_grips: Array[Vector2i] = [Vector2i(x + 4, y + 43), Vector2i(x - 4, y + 48), Vector2i(x - 10, y + 38), Vector2i(x - 2, y + 31), Vector2i(x + 5, y + 39)]
+			var combo_tips: Array[Vector2i] = [Vector2i(x + 48, y + 87), Vector2i(FRAME_WIDTH - 4, y + 79), Vector2i(FRAME_WIDTH - 2, y + 28), Vector2i(x + 52, 1), Vector2i(x + 46, y + 85)]
 			grip = combo_grips[frame]
 			tip = combo_tips[frame]
 		&"combo_slash":
-			var combo6_tips: Array[Vector2i] = [Vector2i(x + 36, y + 77), Vector2i(x + 19, y - 10), Vector2i(93, y + 30), Vector2i(91, y + 71), Vector2i(x + 26, y - 10), Vector2i(x + 39, y + 77)]
-			grip = Vector2i(x + 15 + mini(frame, 3) * 3, y + 35 + (frame % 3) * 4)
+			var combo6_tips: Array[Vector2i] = [Vector2i(x + 46, y + 86), Vector2i(x + 50, 1), Vector2i(FRAME_WIDTH - 2, y + 28), Vector2i(FRAME_WIDTH - 4, y + 77), Vector2i(x + 55, 1), Vector2i(x + 47, y + 86)]
+			grip = Vector2i(x - 4 + mini(frame, 3) * 2, y + 36 + (frame % 3) * 4)
 			tip = combo6_tips[frame]
 		&"heavy_overhead", &"heavy_overhead_active":
-			var heavy_grips: Array[Vector2i] = [Vector2i(x + 10, y + 29), Vector2i(x + 5, y + 14), Vector2i(x, y + 7), Vector2i(x + 7, y + 33), Vector2i(x + 8, y + 53), Vector2i(x + 14, y + 46)]
-			var heavy_tips: Array[Vector2i] = [Vector2i(x + 15, y - 20), Vector2i(x + 10, y - 29), Vector2i(x + 7, y - 32), Vector2i(93, y + 19), Vector2i(93, y + 89), Vector2i(91, y + 82)]
+			var heavy_grips: Array[Vector2i] = [Vector2i(x + 1, y + 39), Vector2i(x - 3, y + 33), Vector2i(x - 6, y + 31), Vector2i(x - 10, y + 35), Vector2i(x - 6, y + 52), Vector2i(x + 4, y + 42)]
+			var heavy_tips: Array[Vector2i] = [Vector2i(x + 52, 1), Vector2i(x + 48, 1), Vector2i(x + 45, 1), Vector2i(FRAME_WIDTH - 2, y + 16), Vector2i(FRAME_WIDTH - 4, FRAME_HEIGHT - 3), Vector2i(x + 50, y + 86)]
 			var heavy_index: int = mini(frame, heavy_grips.size() - 1)
 			grip = heavy_grips[heavy_index]
 			tip = heavy_tips[heavy_index]
 		&"charge_thrust", &"thrust_active":
-			var thrust_tips: Array[Vector2i] = [Vector2i(72, y + 37), Vector2i(76, y + 36), Vector2i(91, y + 35), Vector2i(95, y + 34), Vector2i(88, y + 39)]
+			var thrust_tips: Array[Vector2i] = [Vector2i(FRAME_WIDTH - 23, y + 36), Vector2i(FRAME_WIDTH - 12, y + 35), Vector2i(FRAME_WIDTH - 3, y + 34), Vector2i(FRAME_WIDTH - 3, y + 33), Vector2i(FRAME_WIDTH - 10, y + 38)]
 			var thrust_index: int = mini(frame, thrust_tips.size() - 1)
-			grip = Vector2i(x + 3 + mini(frame, 3) * 2, y + 39)
+			grip = Vector2i(x - 12 + mini(frame, 3) * 2, y + 39)
 			second_grip = grip - Vector2i(9, 1)
 			tip = thrust_tips[thrust_index]
 		&"jump_smash":
-			var jump_grips: Array[Vector2i] = [Vector2i(x + 13, y + 25), Vector2i(x + 10, y + 15), Vector2i(x + 7, y + 10), Vector2i(x + 20, y + 24), Vector2i(x + 25, y + 59), Vector2i(x + 17, y + 44)]
-			var jump_tips: Array[Vector2i] = [Vector2i(x + 25, y - 20), Vector2i(x + 19, y - 29), Vector2i(x + 16, y - 33), Vector2i(81, y - 2), Vector2i(82, y + 87), Vector2i(x + 39, y + 79)]
+			var jump_grips: Array[Vector2i] = [Vector2i(x + 1, y + 37), Vector2i(x - 2, y + 31), Vector2i(x - 5, y + 30), Vector2i(x - 6, y + 37), Vector2i(x - 4, y + 55), Vector2i(x + 4, y + 41)]
+			var jump_tips: Array[Vector2i] = [Vector2i(x + 52, 1), Vector2i(x + 48, 1), Vector2i(x + 45, 1), Vector2i(FRAME_WIDTH - 4, y + 10), Vector2i(FRAME_WIDTH - 9, FRAME_HEIGHT - 3), Vector2i(x + 49, y + 86)]
 			grip = jump_grips[frame]
 			tip = jump_tips[frame]
 		&"shockwave_strike":
-			var shock_grips: Array[Vector2i] = [Vector2i(x + 12, y + 28), Vector2i(x + 7, y + 15), Vector2i(x + 4, y + 10), Vector2i(x + 19, y + 32), Vector2i(x + 24, y + 61), Vector2i(x + 17, y + 45)]
-			var shock_tips: Array[Vector2i] = [Vector2i(x + 24, y - 15), Vector2i(x + 16, y - 24), Vector2i(x + 12, y - 27), Vector2i(83, y + 22), Vector2i(83, y + 87), Vector2i(x + 39, y + 80)]
+			var shock_grips: Array[Vector2i] = [Vector2i(x + 1, y + 38), Vector2i(x - 3, y + 32), Vector2i(x - 6, y + 31), Vector2i(x - 5, y + 38), Vector2i(x - 3, y + 57), Vector2i(x + 4, y + 42)]
+			var shock_tips: Array[Vector2i] = [Vector2i(x + 50, 1), Vector2i(x + 47, 1), Vector2i(x + 44, 1), Vector2i(FRAME_WIDTH - 4, y + 18), Vector2i(FRAME_WIDTH - 10, FRAME_HEIGHT - 3), Vector2i(x + 49, y + 87)]
 			grip = shock_grips[frame]
 			tip = shock_tips[frame]
 		&"sword_slash_windup", &"heavy_overhead_windup", &"thrust_windup":
-			grip = Vector2i(x + 9 - frame * 2, y + 28 - frame * 5)
-			tip = Vector2i(x + 18 + frame * 5, y - 11 - frame * 4)
+			grip = Vector2i(x + 1 - frame * 2, y + 40 - frame * 4)
+			tip = Vector2i(x + 51 + frame * 2, 1)
 		&"sword_slash_recovery", &"heavy_overhead_recovery", &"thrust_recovery":
-			grip = Vector2i(x + 24 - frame * 3, y + 55 - frame * 4)
-			tip = Vector2i(88 - frame * 10, y + 73)
-	if not phase_one and second_grip == Vector2i(x - 3, y + 37):
+			grip = Vector2i(x - 2 - frame * 2, y + 48 - frame * 3)
+			tip = Vector2i(FRAME_WIDTH - 5 - frame * 5, y + 82)
+	if not phase_one and animation not in [&"charge_thrust", &"thrust_active"]:
 		second_grip = grip - Vector2i(8, 4)
 	return {&"grip": grip, &"second_grip": second_grip, &"tip": tip}
 
@@ -474,46 +480,64 @@ func _draw_greatsword(image: Image, grip: Vector2i, tip: Vector2i, cursed: bool)
 	if direction.length_squared() < 0.5:
 		return
 	var normal: Vector2 = Vector2(-direction.y, direction.x)
-	# Extend the authored blade slightly so the boss reads as a greatsword user at
-	# gameplay scale, while keeping every pose inside the 96 px production cell.
-	# Seven pixels is intentionally restrained: it lengthens the visible blade
-	# without letting it dominate the knight's silhouette or change hitbox reach.
-	var extended_tip: Vector2 = Vector2(tip) + direction * 7.0
-	extended_tip.x = clampf(extended_tip.x, 1.0, 95.0)
-	extended_tip.y = clampf(extended_tip.y, 1.0, 95.0)
-	var pommel: Vector2 = Vector2(grip) - direction * 5.0
-	var guard_center: Vector2 = Vector2(grip) + direction * 8.0
-	var blade_base: Vector2 = Vector2(grip) + direction * 14.0
-	var blade_tip: Vector2 = extended_tip - direction * 7.0
-	_draw_segment(image, Vector2i(pommel), Vector2i(guard_center), 8, OUTLINE)
-	_draw_segment(image, Vector2i(pommel), Vector2i(guard_center), 4, LEATHER_LIT)
-	_circle(image, Vector2i(pommel), 4, OUTLINE)
-	_circle(image, Vector2i(pommel), 2, OLD_GOLD)
-	_draw_segment(image, Vector2i(guard_center + normal * 13.0), Vector2i(guard_center - normal * 13.0), 6, OUTLINE)
-	_draw_segment(image, Vector2i(guard_center + normal * 10.0), Vector2i(guard_center - normal * 10.0), 3, OLD_GOLD)
-	# Wide complete blade with a longer two-stage taper and a decisive point.
+	var final_tip: Vector2 = Vector2(tip)
+	var pommel_center: Vector2 = Vector2(grip) - direction * 16.0
+	var guard_center: Vector2 = Vector2(grip) + direction * 4.0
+	var blade_base: Vector2 = Vector2(grip) + direction * 9.0
+	var blade_shoulder: Vector2 = final_tip - direction * 12.0
+	# Long wrapped hilt and faceted oath-seal pommel remain readable at native scale.
+	_draw_segment(image, Vector2i(pommel_center), Vector2i(guard_center), 7, OUTLINE)
+	_draw_segment(image, Vector2i(pommel_center), Vector2i(guard_center), 3, LEATHER_LIT)
+	for wrap_index: int in range(4):
+		var wrap_center: Vector2 = pommel_center + direction * float(4 + wrap_index * 4)
+		_draw_segment(image, Vector2i(wrap_center - normal * 2.0), Vector2i(wrap_center + normal * 2.0), 1, OLD_GOLD if wrap_index == 3 else LEATHER)
 	_poly(image, PackedVector2Array([
-		blade_base + normal * 7.0,
-		blade_tip + normal * 3.0,
-		extended_tip,
-		blade_tip - normal * 3.0,
-		blade_base - normal * 7.0,
+		pommel_center - direction * 5.0,
+		pommel_center + normal * 4.0,
+		pommel_center + direction * 3.0,
+		pommel_center - normal * 4.0,
 	]), OUTLINE)
 	_poly(image, PackedVector2Array([
-		blade_base + normal * 5.0,
-		blade_tip + normal * 1.5,
-		extended_tip - direction * 1.0,
-		blade_tip - normal * 1.5,
-		blade_base - normal * 5.0,
+		pommel_center - direction * 3.0,
+		pommel_center + normal * 2.0,
+		pommel_center + direction * 1.0,
+		pommel_center - normal * 2.0,
+	]), OLD_GOLD)
+	# Ravenmourn gate-arch guard: a formal crossguard with hooked wing terminals.
+	var guard_positive: Vector2 = guard_center + normal * 13.0 + direction * 2.0
+	var guard_negative: Vector2 = guard_center - normal * 13.0 + direction * 2.0
+	_draw_segment(image, Vector2i(guard_positive), Vector2i(guard_center), 6, OUTLINE)
+	_draw_segment(image, Vector2i(guard_negative), Vector2i(guard_center), 6, OUTLINE)
+	_draw_segment(image, Vector2i(guard_positive), Vector2i(guard_center), 3, OLD_SILVER)
+	_draw_segment(image, Vector2i(guard_negative), Vector2i(guard_center), 3, OLD_IRON)
+	_draw_segment(image, Vector2i(guard_positive), Vector2i(guard_positive - direction * 4.0), 3, OLD_GOLD)
+	_draw_segment(image, Vector2i(guard_negative), Vector2i(guard_negative - direction * 4.0), 3, OLD_GOLD)
+	_circle(image, Vector2i(guard_center), 3, OUTLINE)
+	_circle(image, Vector2i(guard_center), 1, GOLD_LIT)
+	# Moderately broad blade, distinct edge planes, central ridge and sharp point.
+	_poly(image, PackedVector2Array([
+		blade_base + normal * 6.0,
+		blade_shoulder + normal * 3.0,
+		final_tip,
+		blade_shoulder - normal * 3.0,
+		blade_base - normal * 6.0,
+	]), OUTLINE)
+	_poly(image, PackedVector2Array([
+		blade_base + normal * 4.0,
+		blade_shoulder + normal * 1.8,
+		final_tip - direction * 1.0,
+		blade_shoulder - normal * 1.8,
+		blade_base - normal * 4.0,
 	]), OLD_SILVER)
-	_draw_segment(image, Vector2i(blade_base + normal * 2.0), Vector2i(blade_tip + normal * 0.5), 2, PALE_STEEL)
-	_draw_segment(image, Vector2i(blade_base - normal * 2.0), Vector2i(blade_tip - normal * 0.5), 2, BLACK_STEEL)
-	var middle: Vector2i = Vector2i((blade_base + blade_tip) * 0.5)
-	_circle(image, middle, 3, OUTLINE)
-	_circle(image, middle, 1, OLD_GOLD)
+	_draw_segment(image, Vector2i(blade_base + normal * 2.0), Vector2i(blade_shoulder + normal * 0.7), 2, PALE_STEEL)
+	_draw_segment(image, Vector2i(blade_base - normal * 2.0), Vector2i(blade_shoulder - normal * 0.7), 2, BLACK_STEEL)
+	_draw_segment(image, Vector2i(blade_base), Vector2i(final_tip - direction * 4.0), 1, EDGE_STEEL)
+	var middle: Vector2i = Vector2i((blade_base + blade_shoulder) * 0.5)
+	_circle(image, middle, 2, OUTLINE)
+	_pixel(image, middle.x, middle.y, OLD_GOLD)
 	if cursed:
 		_draw_segment(image, Vector2i(blade_base), middle + Vector2i(roundi(direction.x * 4.0), roundi(direction.y * 4.0)), 1, SOUL_BLUE)
-		_draw_segment(image, middle, Vector2i(blade_tip - direction * 5.0), 1, SOUL_LIT)
+		_draw_segment(image, middle, Vector2i(blade_shoulder - direction * 3.0), 1, SOUL_LIT)
 
 
 func _draw_animation_fx(
@@ -553,20 +577,20 @@ func _draw_death(image: Image, frame: int) -> void:
 	if frame < 3:
 		_draw_knight(image, &"hurt", mini(frame, 2), 3, false)
 		return
-	_poly(image, _points([7, y + 4, 26, y - 8, 66, y - 8, 91, y + 4, 81, y + 20, 16, y + 22]), OUTLINE)
-	_poly(image, _points([13, y + 4, 30, y - 4, 63, y - 4, 84, y + 5, 75, y + 15, 22, y + 17]), OLD_IRON)
-	_poly(image, _points([28, y, 53, y - 4, 66, y + 9, 39, y + 14]), DRIED_BLOOD)
-	_draw_greatsword(image, Vector2i(60, y + 2), Vector2i(94, 91), true)
+	_poly(image, _points([23, y + 4, 42, y - 8, 82, y - 8, 107, y + 4, 97, y + 20, 32, y + 22]), OUTLINE)
+	_poly(image, _points([29, y + 4, 46, y - 4, 79, y - 4, 100, y + 5, 91, y + 15, 38, y + 17]), OLD_IRON)
+	_poly(image, _points([44, y, 69, y - 4, 82, y + 9, 55, y + 14]), DRIED_BLOOD)
+	_draw_greatsword(image, Vector2i(65, y - 2), Vector2i(124, 91), true)
 	for fragment: int in range(maxi(0, frame - 3) * 8):
-		var point: Vector2i = Vector2i(10 + (fragment * 13 + frame * 5) % 78, y - 9 + (fragment * 9) % 23)
+		var point: Vector2i = Vector2i(26 + (fragment * 13 + frame * 5) % 78, y - 9 + (fragment * 9) % 23)
 		_poly(image, _points([point.x - 2, point.y + 2, point.x, point.y - 3, point.x + 3, point.y, point.x + 1, point.y + 3]), SOUL_BLUE if fragment % 5 == 0 else OLD_SILVER)
 	if collapse > 0:
-		_draw_segment(image, Vector2i(20, y + 17), Vector2i(75, y + 17), 1, RUST)
+		_draw_segment(image, Vector2i(36, y + 17), Vector2i(91, y + 17), 1, RUST)
 
 
 func _write_shield_condition_art() -> void:
 	for state: StringName in [&"intact", &"damaged", &"critical", &"broken"]:
-		var overlay: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+		var overlay: Image = Image.create(EFFECT_SIZE, EFFECT_SIZE, false, Image.FORMAT_RGBA8)
 		overlay.fill(CLEAR)
 		var center: Vector2i = Vector2i(27, 54)
 		match state:
@@ -586,7 +610,7 @@ func _write_shield_condition_art() -> void:
 		overlay.save_png(ProjectSettings.globalize_path(output))
 	# Standalone 96px shield states for QA/design inspection.
 	for stage: int in range(4):
-		var state_image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+		var state_image: Image = Image.create(EFFECT_SIZE, EFFECT_SIZE, false, Image.FORMAT_RGBA8)
 		state_image.fill(CLEAR)
 		if stage < 3:
 			_draw_tower_shield(state_image, Vector2i(48, 50), stage > 0, 1 + stage * 2)
@@ -599,7 +623,7 @@ func _write_shield_condition_art() -> void:
 
 func _write_break_effects() -> void:
 	for frame: int in range(5):
-		var effect: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
+		var effect: Image = Image.create(EFFECT_SIZE, EFFECT_SIZE, false, Image.FORMAT_RGBA8)
 		effect.fill(CLEAR)
 		_draw_shield_fragments(effect, Vector2i(40, 50), frame)
 		if frame < 3:
@@ -613,7 +637,8 @@ func _write_concept_derivatives() -> void:
 	if not equipment.is_empty():
 		_crop_and_save(equipment, Rect2i(0, 0, 520, equipment.get_height()), CONCEPTS + "/fallen_gate_knight_shield_design.png")
 		_crop_and_save(equipment, Rect2i(500, 0, 340, equipment.get_height()), CONCEPTS + "/fallen_gate_knight_shield_damage_states.png")
-		_crop_and_save(equipment, Rect2i(815, 0, equipment.get_width() - 815, equipment.get_height()), CONCEPTS + "/fallen_gate_knight_greatsword_design.png")
+		# The Gatewarden Greatsword now owns a dedicated authored concept sheet;
+		# do not overwrite it with the legacy equipment-sheet crop.
 	var comparison: Image = Image.create(1920, 1080, false, Image.FORMAT_RGBA8)
 	comparison.fill(Color("11151b"))
 	_blit_fit(comparison, CONCEPTS + "/fallen_gate_knight_phase_01_concept.png", Rect2i(40, 40, 870, 930))
@@ -622,15 +647,15 @@ func _write_concept_derivatives() -> void:
 	var phase_two: Image = _draw_frame(&"idle_unshielded", 0, 4)
 	var silhouette_one: Image = _to_silhouette(phase_one)
 	var silhouette_two: Image = _to_silhouette(phase_two)
-	silhouette_one.resize(192, 192, Image.INTERPOLATE_NEAREST)
-	silhouette_two.resize(192, 192, Image.INTERPOLATE_NEAREST)
-	comparison.blend_rect(silhouette_one, Rect2i(0, 0, 192, 192), Vector2i(340, 868))
-	comparison.blend_rect(silhouette_two, Rect2i(0, 0, 192, 192), Vector2i(1390, 868))
+	silhouette_one.resize(256, 192, Image.INTERPOLATE_NEAREST)
+	silhouette_two.resize(256, 192, Image.INTERPOLATE_NEAREST)
+	comparison.blend_rect(silhouette_one, Rect2i(0, 0, 256, 192), Vector2i(310, 868))
+	comparison.blend_rect(silhouette_two, Rect2i(0, 0, 256, 192), Vector2i(1360, 868))
 	comparison.save_png(ProjectSettings.globalize_path(CONCEPTS + "/fallen_gate_knight_phase_comparison.png"))
 
 
 func _write_runtime_preview() -> void:
-	var board: Image = Image.create(768, 384, false, Image.FORMAT_RGBA8)
+	var board: Image = Image.create(1024, 384, false, Image.FORMAT_RGBA8)
 	board.fill(Color("11151b"))
 	var samples: Array[Dictionary] = [
 		{&"animation": &"idle_shielded", &"frame": 0},
@@ -647,8 +672,8 @@ func _write_runtime_preview() -> void:
 		var animation: StringName = entry[&"animation"] as StringName
 		var frame: int = int(entry[&"frame"])
 		var source: Image = _draw_frame(animation, frame, int(ANIMATIONS[animation]))
-		source.resize(192, 192, Image.INTERPOLATE_NEAREST)
-		board.blit_rect(source, Rect2i(0, 0, 192, 192), Vector2i((index % 4) * 192, (index / 4) * 192))
+		source.resize(256, 192, Image.INTERPOLATE_NEAREST)
+		board.blit_rect(source, Rect2i(0, 0, 256, 192), Vector2i((index % 4) * 256, (index / 4) * 192))
 	board.save_png(ProjectSettings.globalize_path(ROOT + "/animations/fallen_gate_knight_v3_runtime_preview.png"))
 
 

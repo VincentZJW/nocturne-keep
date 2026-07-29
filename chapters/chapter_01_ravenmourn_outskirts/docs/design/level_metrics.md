@@ -102,7 +102,7 @@ Because elevated surfaces are now solid, the valid route starts just beyond an e
 | Body Health | 180 | unchanged |
 | Shield Health | 100 | unchanged; Ravenfang 12/24 damage remains authoritative |
 | Turn reaction | 0.33 s | cancellable while Player returns to front/center |
-| Turn animation | 0.80 s | three authored 96×96 frames runtime-scaled; facing commits at 80% |
+| Turn animation | 0.80 s | three authored 128×96 frames runtime-scaled; facing commits at 80% |
 | Total turn | 1.13 s authored | 1.1333 s measured at 60 physics ticks/s; target 1.00–1.30 s |
 | Side threshold | 12 px | center-line hysteresis |
 | Turn cooldown | 0.14 s | prevents repeated left/right jitter |

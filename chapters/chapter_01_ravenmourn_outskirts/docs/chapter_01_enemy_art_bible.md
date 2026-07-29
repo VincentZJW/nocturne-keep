@@ -6,7 +6,7 @@ Chapter I moves from a desecrated roadside watch, through a damp black forest, t
 
 ## Shared production rules
 
-- Standard enemy canvas: 64×64 RGBA PNG; Boss canvas: 96×96 RGBA PNG.
+- Standard enemy canvas: 64×64 RGBA PNG; Fallen Gate Knight body/weapon canvas: 128×96 RGBA PNG, with 96×96 shield overlays.
 - Transparent background, nearest-neighbour display, stable foot anchor and right-facing source art.
 - Outline masses use near-black blue, not featureless pure black. Metal separates into shadow, midtone and edge light.
 - Attack readability comes from body weight and weapon direction. Effects support the contact point and never replace the weapon silhouette.
