@@ -5737,3 +5737,44 @@ Status: complete for the approved environment scope — Boss/reward/Chapter IV a
 
 - No Player movement/combat, normal enemy, Boss balance, existing Chapter I/II content or Chapter IV map was created or changed by this milestone.
 - Pre-existing dirty Chapter I/shared Resources, Player/loot Resources, Ravenfang screenshots and UID sidecars remain user-owned and excluded from the milestone commit.
+
+## 2026-07-29 — Chapter III structural rework R0 preflight
+
+Status: in progress — approved R0 read-only audit; stop before R1
+
+### Goal, workflow and strict scope
+
+- Loaded root `AGENTS.md`, README, technical architecture, the mandatory chapter scene workflow/checklist/QA standard and the supplied Chapter III structural-rework specification. This is a scene task using the Godot Gameplay boundary for Main/collision/transition authority and the Level Design boundary for spatial pacing, platform envelopes and room seams.
+- Audit the four user F5 screenshots against the real saved Chapter III Main target; locate exact nodes, collision, layer order, Camera bounds, Room/Area controllers, doors/transitions, enemy movement needs and current Debug spawns.
+- Re-run the shipping Player's deterministic movement measurement before proposing platform limits. Record all visual gaps, physical gaps and invisible blockers without treating an existing legacy test PASS as new structural acceptance.
+- R0 owns only this development-log entry and `chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r0_audit.md`. It does not modify `.gd`, `.tscn`, `.tres`, project settings, art, animation, Player, enemies, Boss systems, Input Map or balance.
+- Existing dirty Chapter I/shared enemy Resources, Chapter I scene serialization, Player/loot Resources, Ravenfang QA images and UID sidecars predate R0 and remain untouched/excluded.
+
+### Planned checks
+
+- Exact Godot 4.7.1 import/parse, direct saved Chapter III scene smoke, existing Chapter III Boss environment/route tests, deterministic Player movement measurement, scene/resource reference audit, `git diff --check` and task-owned diff review.
+- Stop after publishing the R0 findings and R1 structural proposal. Do not build rooms, platforms, doors, fades, Boss interaction or new Debug spawns.
+
+## 2026-07-29 — Chapter III structural rework R0 completion
+
+Status: complete for audit only — current formal Chapter III structure remains FAIL
+
+### Confirmed findings
+
+- F5 authority is `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter III resolves to `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`.
+- All four screenshots are regions of one `12784×720` scene, not separate rooms. The first 4200 px is still `chapter_03_entry_art.gd::_draw()` prototype geometry. Formal Boss modules are directly appended at world x4200, x5480, x6000, x9200 and x10480.
+- Located the screenshot-2 hard art join at x4200, the screenshot-3 136 px no-backdrop/no-floor gap at x5864..6000, and the screenshot-4 hard backdrop join plus invisible `48×420` Boss exit blocker at x9200.
+- Confirmed no elevated `StaticBody2D` platform exists in the Chapter III Main target; no formal vestibule/nave/choir room controllers or doors exist; the Boss gate is `auto_trigger=true` and teleports inside the same scene rather than waiting for E and loading an independent Boss room.
+- Confirmed inconsistent z contracts: Player/enemies share z0; whole gate visuals sit at z12; checkpoint, incense/resonance and water sit above actors in separate ad-hoc bands. No y-sort/top-level flag causes the problem; it is an unsplit-asset and missing layer-contract issue.
+- Deterministic Player values: single rise 83.77 px, double rise 167.10 px, forward single range 153.59 px, forward double range 281.92 px, one-Air-Dash routes 192.92/321.26 px, four Dash action distance 344.00 px, safe landing width 48 px. Proposed ordinary main-route limits are ≤62.83 px vertical and ≤107.51 px horizontal.
+
+### Commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version` — `4.7.1.stable.official.a13da4feb`.
+2. Exact Godot headless import/parse — exit 0; no parser, missing-resource or autoload error.
+3. Direct saved Chapter III scene smoke for six seconds — exit 0; no red runtime error.
+4. `test_chapter_03_boss_environment.gd` — PASS for its previous environment contract.
+5. `test_chapter_03_boss_route.gd` — PASS for its previous gate/teleport contract.
+6. `tests/player/measure_player_level_metrics.gd` — PASS at 60 Hz with the metrics above.
+
+The two prior Boss tests do not inspect the new structural requirements and therefore do not overturn the current FAIL. Full evidence, node paths, collision table, layer table, movement limits and R1 proposal are in the R0 audit document. No runtime file changed. **第三章场景结构返修尚未通过最终验收。**
