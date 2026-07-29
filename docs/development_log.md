@@ -6157,3 +6157,52 @@ Status: Main/F5-equivalent visual matrix complete for current HEAD; L3 final QA 
 - The current HEAD does not contain the Chapter III Boss entity, authoritative Boss reward or a loadable Chapter IV scene; L2 does not fabricate those and keeps the corresponding checks PARTIAL.
 - Computer Use/Remote Inspector control was unavailable in this Codex session. The runtime table supplies exact equivalent data, but the UI-only Remote Scene Tree screenshot remains PARTIAL for L3/manual capture.
 - Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the L2 commit. Stop after the isolated L2 commit; do not start L3 without approval.
+
+## 2026-07-29 — Chapter III render-layer repair L3 preflight
+
+Status: in progress — approved final QA/report milestone; no gameplay or scene mutation authorized
+
+### Goal, files, tests and scope check
+
+- Re-read the root contract, README, technical architecture, Godot Gameplay Scripter workflow and the three user-supplied render-layer/maximum-QA specifications. L3 owns only deterministic evidence validation, the final forced-QA report, README/log cross-links and its isolated verification record.
+- The authoritative F5 entry remains `res://scenes/bootstrap/main_bootstrap.tscn`; L2 already captured 79 unique 1280×720 images and 530 live CanvasItem samples from the saved Main route across all eight formal Chapter III rooms, plus 80/80 critical-room reloads.
+- L3 will validate that evidence set against the required room/action/door/layer matrix, rerun exact Godot 4.7.1 import and the L1/R3/R4/R5/roster regressions, then publish a strict `PASS`/`PARTIAL`/`FAIL` matrix. It will not alter Player, enemies, AI, collision, doors, rooms, assets, balance, startup routing or any chapter content.
+- Current HEAD still has no Thirteenth Pontiff Edran combat entity, authoritative Chapter III Boss reward or loadable Chapter IV scene. Their content-specific checks remain `PARTIAL`; L3 will not fabricate them. The Codex session also lacks Godot editor Remote-dock control, so the UI screenshot item remains `PARTIAL` even though exact runtime-equivalent node data exists.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain user-owned, untouched and excluded from the L3 commit.
+
+### Planned verification
+
+- Add one Debug-only evidence test that asserts the L2 index/file count, image dimensions and uniqueness, eight-room coverage, required Player actions, ordinary/Boss door states, six enemy captures, Drop/CombatFX evidence, critical runtime z bands and no y-sort.
+- Re-run the exact Godot 4.7.1 import/parse, the new L3 evidence test, L1/R3/R4/R5 and roster regressions, default MainBootstrap smoke, scoped `git diff --check` and final status review.
+- Publish the required final report sections, complete screenshot index reference, statistics, explicit manual F5 route and honest remaining `PARTIAL` items; create one clear L3 commit and stop.
+
+## 2026-07-29 — Chapter III render-layer repair L3 completion
+
+Status: L3 report and evidence validation complete; strict final acceptance remains PARTIAL
+
+### Delivered QA scope
+
+- Added a deterministic L3 evidence validator that checks the saved MainBootstrap contract, all 79 indexed PNGs, 1280×720 dimensions, 79 unique SHA-256 contents, eight formal rooms, fourteen Player action/state categories, ordinary/Boss door states and the required representative captures.
+- Validated all 530 live CanvasItem samples: Player root z=12 in all eight rooms, WeaponVisual z=13, GhostSprite z=14, all six formal enemy roots z=10, live Drop z=13, Projectile/TimedField z=16, limited water surfaces z=20 and zero runtime Y-sort.
+- Published `docs/qa/chapter_03_render_layer_l3/report.md` using the required forced-QA headings, complete scene/node/door/action/enemy/transition accounting, exact evidence references and manual F5/Remote verification route.
+- Current implemented layer scope has no known Player head/body, weapon, Enemy, Drop, CombatFX, door or water occlusion failure. The unified 23-item strict matrix contains 16 PASS, 7 PARTIAL and 0 FAIL.
+- The seven PARTIAL items are not hidden: no formal Chapter III NPC instance, incomplete all-boundary 10-cycle matrix, no Edran combat entity, no authoritative Boss reward, no Chapter IV PackedScene, no editor Remote Dock UI screenshot in this Codex session and no multi-resolution screenshot matrix. Therefore the report states exactly: **第三章图层叠放修复尚未通过最终验收。**
+- No `.tscn`, gameplay script, art, collision, AI, balance, Player, enemy or startup resource was changed in L3. Pre-existing unrelated Chapter I/shared/resource/QA changes remain untouched and excluded.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0; Godot 4.7.1 loaded all project scripts/resources with no parse or missing-resource error.
+2. `test_chapter_03_render_layer_l3_evidence.gd` — PASS, `captures=79 unique=79 rooms=8 runtime_samples=530 player_z=12 enemies=6 drop_z=13 fx_z=16 y_sort=0`; absent NPC/Boss/reward/Chapter IV/Remote UI remain explicit partials.
+3. `test_chapter_03_render_layers_l1.gd` — PASS, `doors=4 checkpoint=1 gate_states=3 titles=5 water_edges=2 drop=13 combat_fx=16 y_sort=0`.
+4. `test_chapter_03_r3_layers_collisions.gd` — PASS, `stairs=8 platforms=8 doors=3 actor_z=10/12`.
+5. `test_chapter_03_r4_boss_flow.gd` — PASS for present lifecycle scope; `boss_entity=partial chapter4=partial` remains truthful.
+6. `test_chapter_03_r5_full_route.gd` — PASS, `transitions=40 cycles=10 persistent_runtime=true platform_combat=true`; Boss/reward/Chapter IV remain partial.
+7. `test_chapter_03_phase_2_enemy_roster.gd` — PASS, `roles=6 remaining_frames=345 main=6 combination_room=1`.
+8. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — exit 0; default MainBootstrap printed `FORMAL NEW GAME` and started the formal Opening.
+
+### Evidence and manual acceptance
+
+- Final report: `docs/qa/chapter_03_render_layer_l3/report.md`.
+- Full image/index/runtime evidence: `docs/qa/chapter_03_render_layer_l2/`.
+- Manual check: use MainBootstrap/F5 with `chapter_03_start`, `CH3_BOSS_CHECKPOINT` and `CH3_BOSS_ANTE`; test Player actions at the four supplied risk areas, every Boss gate state, death/ghost/respawn and underkeep water. Open Godot Remote during the run to manually add the still-missing UI screenshot evidence and test default/maximized/Stretch window layouts.
+- Stop after the isolated L3 commit. Do not begin Boss, reward, Chapter IV or any later milestone without explicit approval.

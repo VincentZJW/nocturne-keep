@@ -193,6 +193,7 @@ Main开发调试快捷键：
 - [第三章结构返修 R3 图层与碰撞报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r3_layer_collision_report.md)
 - [第三章结构返修 R4 Boss流程报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r4_boss_flow_report.md)
 - [第三章结构返修 R5 Main回归与QA报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r5_qa_report.md)
+- [第三章图层叠放修复 L3 强制QA报告](docs/qa/chapter_03_render_layer_l3/report.md)
 - [游戏设计基线](docs/game_design.md)
 - [开发日志](docs/development_log.md)
 - [世界观](docs/narrative/world_bible.md)
