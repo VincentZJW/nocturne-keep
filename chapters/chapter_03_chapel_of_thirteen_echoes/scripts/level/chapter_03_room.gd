@@ -2,6 +2,7 @@ class_name Chapter03Room
 extends Node2D
 
 signal transition_requested(destination_room_id: StringName, destination_spawn_id: StringName)
+signal checkpoint_requested(checkpoint_id: StringName, spawn_marker: Marker2D)
 
 @export var room_id: StringName = &""
 @export var bilingual_name: String = ""
@@ -22,6 +23,14 @@ func _ready() -> void:
 		var room_exit := child as Chapter03RoomExit
 		if room_exit != null:
 			room_exit.transition_requested.connect(_on_transition_requested)
+	for child: Node in find_children("*", "Chapter03RoomCheckpoint", true, false):
+		var checkpoint := child as Chapter03RoomCheckpoint
+		if checkpoint != null:
+			checkpoint.checkpoint_activated.connect(_on_checkpoint_activated)
+	for child: Node in find_children("*", "Chapter03BossGate", true, false):
+		var boss_gate := child as Chapter03BossGate
+		if boss_gate != null:
+			boss_gate.crossing_requested.connect(_on_boss_gate_crossing_requested)
 
 
 func _apply_actor_layer_contract(root: Node) -> void:
@@ -45,3 +54,11 @@ func get_spawn(spawn_id: StringName) -> Marker2D:
 
 func _on_transition_requested(destination_room_id: StringName, destination_spawn_id: StringName) -> void:
 	transition_requested.emit(destination_room_id, destination_spawn_id)
+
+
+func _on_checkpoint_activated(checkpoint_id: StringName, spawn_marker: Marker2D) -> void:
+	checkpoint_requested.emit(checkpoint_id, spawn_marker)
+
+
+func _on_boss_gate_crossing_requested(_player: Player) -> void:
+	transition_requested.emit(&"CH3_BOSS", &"EntryWest")

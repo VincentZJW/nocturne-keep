@@ -250,3 +250,32 @@ theme_override_font_sizes/font_size = 16
 text = "SANCTUM OF THE THIRTEENTH ECHO / 第十三回响圣所"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BossIntroOverlay" type="CanvasLayer" parent="."]
+layer = 70
+
+[node name="BossTitle" type="VBoxContainer" parent="BossIntroOverlay"]
+visible = false
+offset_left = 318.0
+offset_top = 244.0
+offset_right = 962.0
+offset_bottom = 344.0
+theme_override_constants/separation = 4
+
+[node name="Name" type="Label" parent="BossIntroOverlay/BossTitle"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.88, 0.8, 0.62, 1)
+theme_override_colors/font_outline_color = Color(0.015, 0.015, 0.03, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 28
+text = "BELL CONFESSOR EDRAN / 钟忏司祭·埃德兰"
+horizontal_alignment = 1
+
+[node name="Epithet" type="Label" parent="BossIntroOverlay/BossTitle"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 0.7, 0.76, 1)
+theme_override_colors/font_outline_color = Color(0.015, 0.015, 0.03, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 13
+text = "THE THIRTEENTH CONFESSION REMAINS UNHEARD / 第十三次忏悔尚未被聆听"
+horizontal_alignment = 1

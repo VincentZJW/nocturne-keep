@@ -5926,3 +5926,51 @@ Status: complete for approved R3 scope — R4/R5 remain pending
 - R3 does not claim the R4 E-confirmed Boss entry/intro/post-Boss route or R5 full Chapter II→III→IV acceptance. Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded.
 
 **R3 is complete. Stop before R4 until explicitly approved.**
+
+## 2026-07-29 — Chapter III structural rework R4 preflight
+
+Status: in progress — R4 and R5 approved as one uninterrupted delivery; R4 remains a separate commit
+
+### Goal, audit and strict scope
+
+- Re-read the root contract, README, technical architecture, chapter-production standards, the supplied structural-rework specification and the committed R0–R3 reports. The active F5 target remains `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter III resolves to `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn`.
+- The formal route already owns an independent checkpoint room, an antechamber and a Sanctum room, but the normal route intentionally stops at the closed gate. The gate has no E-input path in the formal room, its legacy internal Fade conflicts with the room-swap Fade, the Sanctum intro can start while the room is still fading, and no typed post-death room-exit hand-off exists.
+- Repository audit reconfirmed that Bell Confessor Edran has no authoritative Boss scene/controller/data, Chapter III has no authoritative Boss reward Resource, and Chapter IV has no PackedScene. R4 will finish the environment and typed lifecycle boundaries without inventing combat, reward or Chapter IV content; those absences remain explicit PARTIAL items for R5.
+- Task-owned files are Chapter III gate/checkpoint/room-transition/Sanctum/post-Boss scripts and scenes, focused R4 tests/captures, R4/R5 reports, README and this log. Player feel, enemy/Boss AI and balance, Chapters I/II, shared combat/assets and the unrelated dirty working-tree files are excluded.
+
+### Planned verification
+
+- Verify a dedicated checkpoint activation, E-only gate sequence, collision-safe single RoomHost swap, Fade ordering, persistent Player/HUD, post-Fade Sanctum intro, title timing, death-response exit interface and reward-gated underkeep interface.
+- Run exact Godot 4.7.1 import/parse, focused R4 lifecycle tests, R2/R3 regressions, MainBootstrap captures and scoped diff review; commit R4 independently, then continue directly to R5 as explicitly approved.
+
+## 2026-07-29 — Chapter III structural rework R4 completion
+
+Status: complete for approved Boss-region environment/lifecycle scope — continuing directly to R5
+
+### Delivered scope
+
+- Added a typed, one-shot Last Vigil checkpoint that copies its room-local spawn into the persistent respawn anchor, records a runtime story flag and displays a compact activation response without covering the Player.
+- Converted the formal Thirteenth Echo gate from a closed non-interactive stop into an explicit Input Map `interact`/E threshold. Proximity only shows the bilingual prompt; E starts the thirteen-bell/seal/wax/door sequence once. The formal gate delegates Fade/swap/input restoration to the route controller, eliminating the legacy double-Fade race.
+- The route now loads the independent 3200×720 Sanctum, completes Fade In, then runs the thirteen-candle, incense, resonance, bounded-camera and bilingual Edran-title intro before restoring Player input. Direct `CH3_BOSS` Main debug starts use the same explicit intro authority.
+- Added typed post-death and post-reward saved-room exits. The Sanctum exit stays disabled until the environment death response finishes; the reliquary descent stays disabled until an authoritative reward caller invokes `notify_reward_collected()`.
+- Did not synthesize an Edran combatant, Boss HP/AI, reward item or Chapter IV PackedScene. The saved integration anchors/interfaces are real, while those absent systems remain documented PARTIAL boundaries.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 headless editor import/parse — exit 0; no parse or missing-resource error.
+2. `test_chapter_03_r4_boss_flow.gd` — PASS, `checkpoint=true e_gate=true room_swap=true intro=true post_boss_hook=true underkeep_hook=true boss_entity=partial chapter4=partial`.
+3. `test_chapter_03_r3_layers_collisions.gd` — PASS, `stairs=8 platforms=8 doors=3 actor_z=10/12`.
+4. `test_chapter_03_r2_room_structure.gd` — PASS, `rooms=8 swaps=4 persistent_player=1`.
+5. `test_chapter_03_boss_environment.gd` — PASS, environment assets/scenes and explicit partial hooks unchanged.
+6. `test_chapter_03_boss_route.gd` — PASS, legacy environment regression remains compatible.
+7. `test_chapter_03_phase_2_enemy_roster.gd` — PASS, six enemy roles unchanged.
+8. `capture_chapter_03_r4_boss_flow_qa.gd` through graphical MainBootstrap — PASS, five 1280×720 images.
+9. Default F5/MainBootstrap smoke with `--quit-after 240` — PASS; formal Opening starts and no red runtime error is emitted.
+10. `git diff --check` — PASS.
+
+### Evidence and stage boundary
+
+- Evidence: `docs/qa/chapter_03_r4_checkpoint_main.png`, `chapter_03_r4_boss_gate_prompt_main.png`, `chapter_03_r4_boss_gate_ritual_main.png`, `chapter_03_r4_boss_intro_title_main.png`, `chapter_03_r4_sanctum_main.png`.
+- Full R4 contract and acceptance table: `chapter_03_structural_rework_r4_boss_flow_report.md`.
+- R4 passes the approved Boss-region environment and lifecycle boundary. Boss combat/reward/Chapter IV cannot pass because their authoritative content is absent; R5 must preserve those explicit PARTIAL results.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the R4 commit.

@@ -4,7 +4,7 @@
 
 This specification owns the environment route from the last Chapter III combat area to the planned Chapter IV boundary. It does not own Bell Confessor Edran's AI, statistics, dialogue data, reward item, or the Chapter IV map.
 
-F5 remains authoritative through `res://scenes/bootstrap/main_bootstrap.tscn`. The formal Chapter III scene is `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_entry_placeholder.tscn`.
+F5 remains authoritative through `res://scenes/bootstrap/main_bootstrap.tscn`. The formal Chapter III scene is `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn`; the old single-canvas placeholder is retained only for legacy regression coverage.
 
 ## Narrative and spatial sequence
 
@@ -49,15 +49,15 @@ Runtime scenery uses texture assets; Godot geometry in these scenes is reserved 
 
 ### Gate
 
-`Chapter03BossGate` accepts one Player, locks input, runs thirteen bell/seal steps, cracks the wax, opens the gate, disables the blocker, fades out, emits `crossing_requested(player)`, fades in and restores full input. Re-entry cannot restart an active or completed sequence.
+`Chapter03BossGate` accepts one Player only after the formal `interact`/E confirmation, locks input, runs thirteen bell/seal steps, cracks the wax, opens the gate, disables the blocker and emits `crossing_requested(player)`. The formal `Chapter03RoomTransitionController` owns the single Fade, one-room swap and input restoration; the gate's internal Fade remains enabled only for the retired legacy-canvas regression. Re-entry cannot restart an active or completed sequence.
 
 ### Sanctum intro
 
-`Chapter03BossSanctum` locks the Player, lights thirteen candles sequentially, pans a dedicated bounded camera toward the altar/Boss anchor, gathers incense, pulses resonance, returns the camera and restores input. `BossIntegrationAnchor` is the typed hand-off for a future Edran scene.
+After the formal room Fade completes, `Chapter03BossSanctum` locks the Player, lights thirteen candles sequentially, pans a dedicated bounded camera toward the altar/Boss anchor, gathers incense, pulses resonance, presents Edran's bilingual title, returns the camera and restores input. `BossIntegrationAnchor` is the typed hand-off for a future Edran scene.
 
 ### Boss death response
 
-`notify_boss_defeated()` extinguishes the candles in reverse order, reveals permanent stained-glass cracks, replaces the intact altar with the collapsed state and opens the route to the reliquary. The signal is idempotent.
+`notify_boss_defeated()` extinguishes the candles in reverse order, reveals permanent stained-glass cracks, replaces the intact altar with the collapsed state and opens the typed route to the reliquary. `Chapter03BossSanctumRoom` enables its saved post-Boss exit only after this sequence finishes. The signal is idempotent.
 
 ### Reward and Chapter IV boundary
 

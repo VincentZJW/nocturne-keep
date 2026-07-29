@@ -74,9 +74,11 @@ func _run_transition(room_id: StringName, spawn_id: StringName) -> void:
 	fade_rect.visible = false
 	if not did_swap and active_room != null:
 		active_room.process_mode = Node.PROCESS_MODE_INHERIT
+	if did_swap and room_id == &"CH3_BOSS":
+		await play_active_boss_intro()
 	if player.hurtbox != null and not was_invulnerable:
 		player.hurtbox.set_invulnerable(false)
-	player.set_input_profile(previous_profile if did_swap else Player.InputProfile.FULL)
+	player.set_input_profile(Player.InputProfile.FULL if did_swap else previous_profile)
 	_transitioning = false
 
 
@@ -99,6 +101,7 @@ func _swap_room(room_id: StringName, spawn_id: StringName) -> bool:
 	active_room_id = room_id
 	room_host.add_child(active_room)
 	active_room.transition_requested.connect(request_room_change)
+	active_room.checkpoint_requested.connect(_on_checkpoint_requested)
 	var spawn: Marker2D = active_room.get_spawn(spawn_id)
 	if spawn == null:
 		push_error("Chapter III room has no valid spawn: %s / %s" % [room_id, spawn_id])
@@ -116,3 +119,25 @@ func _swap_room(room_id: StringName, spawn_id: StringName) -> bool:
 	room_name_label.text = active_room.bilingual_name
 	room_changed.emit(room_id, active_room)
 	return true
+
+
+func play_active_boss_intro() -> void:
+	if active_room_id != &"CH3_BOSS" or active_room == null:
+		return
+	var sanctum: Chapter03BossSanctum = active_room.find_child(
+		"BossSanctum", true, false
+	) as Chapter03BossSanctum
+	if sanctum == null or sanctum.is_intro_complete():
+		return
+	sanctum.play_intro_environment(player)
+	await sanctum.intro_environment_finished
+
+
+func _on_checkpoint_requested(_checkpoint_id: StringName, spawn_marker: Marker2D) -> void:
+	if spawn_marker == null:
+		return
+	respawn_anchor.global_position = spawn_marker.global_position
+	respawn_controller.set_spawn_point(respawn_anchor)
+	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
+	if session != null:
+		session.set_story_flag(&"chapter_03_boss_checkpoint_activated")

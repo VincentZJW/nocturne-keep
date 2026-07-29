@@ -9,6 +9,8 @@ signal death_environment_finished
 
 @export_range(0.02, 0.20, 0.01) var candle_step_duration: float = 0.07
 @export_range(0.10, 1.00, 0.05) var camera_reveal_duration: float = 0.65
+@export_range(0.20, 2.00, 0.10) var title_hold_duration: float = 0.70
+@export var trigger_starts_intro: bool = true
 
 @onready var intro_trigger: Area2D = $IntroTrigger as Area2D
 @onready var candles: Node2D = $Presentation/Candles as Node2D
@@ -19,6 +21,7 @@ signal death_environment_finished
 @onready var collapsed_altar: Sprite2D = $Presentation/CollapsedAltar as Sprite2D
 @onready var exit_blocker: CollisionShape2D = $BossExitBlocker/CollisionShape2D as CollisionShape2D
 @onready var intro_camera: Camera2D = $IntroCamera as Camera2D
+@onready var boss_title: Control = $BossIntroOverlay/BossTitle as Control
 
 var _intro_running: bool = false
 var _intro_complete: bool = false
@@ -43,6 +46,8 @@ func reset_environment() -> void:
 	intact_altar.visible = true
 	collapsed_altar.visible = false
 	exit_blocker.set_deferred("disabled", false)
+	boss_title.visible = false
+	boss_title.modulate.a = 0.0
 
 
 func skip_intro_to_combat_state() -> void:
@@ -86,6 +91,14 @@ func play_intro_environment(player: Player) -> void:
 	resonance_tween.tween_property(resonance, "modulate:a", 0.0, 0.42)
 	await reveal_tween.finished
 	resonance.visible = false
+	boss_title.visible = true
+	boss_title.modulate.a = 0.0
+	var title_tween: Tween = create_tween()
+	title_tween.tween_property(boss_title, "modulate:a", 1.0, 0.18)
+	title_tween.tween_interval(title_hold_duration)
+	title_tween.tween_property(boss_title, "modulate:a", 0.0, 0.24)
+	await title_tween.finished
+	boss_title.visible = false
 	var player_local_position: Vector2 = to_local(player.global_position)
 	var return_tween: Tween = create_tween()
 	return_tween.tween_property(
@@ -135,6 +148,8 @@ func is_death_response_complete() -> bool:
 
 
 func _on_intro_trigger_entered(body: Node2D) -> void:
+	if not trigger_starts_intro:
+		return
 	var player: Player = body as Player
 	if player != null:
 		play_intro_environment(player)

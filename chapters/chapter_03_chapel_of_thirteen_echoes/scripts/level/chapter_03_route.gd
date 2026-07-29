@@ -15,7 +15,10 @@ func _ready() -> void:
 		session.current_chapter_id = ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES
 		session.set_story_flag(FLAG_CHAPTER_03_STARTED)
 	var start: Dictionary = _resolve_start(selected_spawn_id)
-	transition_controller.initialize(start.room_id as StringName, start.spawn_id as StringName)
+	var start_room_id: StringName = start.room_id as StringName
+	transition_controller.initialize(start_room_id, start.spawn_id as StringName)
+	if start_room_id == &"CH3_BOSS":
+		transition_controller.play_active_boss_intro.call_deferred()
 
 
 func _resolve_start(spawn_id: StringName) -> Dictionary:

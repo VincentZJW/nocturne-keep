@@ -11,6 +11,7 @@ signal gate_sequence_finished
 @export_range(0.10, 1.00, 0.05) var door_open_duration: float = 0.55
 @export_range(0.10, 1.00, 0.05) var fade_duration: float = 0.35
 @export var auto_trigger: bool = true
+@export var use_internal_fade: bool = true
 
 @onready var trigger: Area2D = $GateTrigger as Area2D
 @onready var blocker: CollisionShape2D = $GateBlocker/CollisionShape2D as CollisionShape2D
@@ -24,14 +25,30 @@ signal gate_sequence_finished
 @onready var bell_audio: AudioStreamPlayer2D = $Audio/BellSequence as AudioStreamPlayer2D
 @onready var wax_audio: AudioStreamPlayer2D = $Audio/WaxBreak as AudioStreamPlayer2D
 @onready var door_audio: AudioStreamPlayer2D = $Audio/DoorOpen as AudioStreamPlayer2D
+@onready var interaction_prompt: Label = $InteractionPrompt as Label
 
 var _is_open: bool = false
 var _sequence_running: bool = false
+var _player_in_range: Player = null
 
 
 func _ready() -> void:
 	trigger.body_entered.connect(_on_trigger_body_entered)
+	trigger.body_exited.connect(_on_trigger_body_exited)
 	_reset_visuals()
+	interaction_prompt.visible = false
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if (
+		not auto_trigger
+		and event.is_action_pressed(&"interact")
+		and _player_in_range != null
+		and not _is_open
+		and not _sequence_running
+	):
+		run_sequence_for_player(_player_in_range)
+		get_viewport().set_input_as_handled()
 
 
 func open_immediately() -> void:
@@ -59,6 +76,7 @@ func run_sequence_for_player(player: Player) -> void:
 	if _sequence_running or _is_open or player == null:
 		return
 	_sequence_running = true
+	interaction_prompt.visible = false
 	player.set_input_profile(Player.InputProfile.LOCKED)
 	player.velocity = Vector2.ZERO
 	var bell_nodes: Array[Node] = bells.get_children()
@@ -90,18 +108,21 @@ func run_sequence_for_player(player: Player) -> void:
 	open_sprite.visible = true
 	blocker.set_deferred("disabled", true)
 	_is_open = true
-	fade_rect.visible = true
-	fade_rect.modulate.a = 0.0
-	var fade_out: Tween = create_tween()
-	fade_out.tween_property(fade_rect, "modulate:a", 1.0, fade_duration)
-	await fade_out.finished
-	crossing_requested.emit(player)
-	await get_tree().physics_frame
-	var fade_in: Tween = create_tween()
-	fade_in.tween_property(fade_rect, "modulate:a", 0.0, fade_duration)
-	await fade_in.finished
-	fade_rect.visible = false
-	player.set_input_profile(Player.InputProfile.FULL)
+	if use_internal_fade:
+		fade_rect.visible = true
+		fade_rect.modulate.a = 0.0
+		var fade_out: Tween = create_tween()
+		fade_out.tween_property(fade_rect, "modulate:a", 1.0, fade_duration)
+		await fade_out.finished
+		crossing_requested.emit(player)
+		await get_tree().physics_frame
+		var fade_in: Tween = create_tween()
+		fade_in.tween_property(fade_rect, "modulate:a", 0.0, fade_duration)
+		await fade_in.finished
+		fade_rect.visible = false
+		player.set_input_profile(Player.InputProfile.FULL)
+	else:
+		crossing_requested.emit(player)
 	_sequence_running = false
 	gate_sequence_finished.emit()
 
@@ -111,11 +132,21 @@ func is_gate_open() -> bool:
 
 
 func _on_trigger_body_entered(body: Node2D) -> void:
-	if not auto_trigger:
-		return
 	var player: Player = body as Player
-	if player != null:
+	if player == null:
+		return
+	_player_in_range = player
+	if auto_trigger:
 		run_sequence_for_player(player)
+	elif not _is_open and not _sequence_running:
+		interaction_prompt.visible = true
+
+
+func _on_trigger_body_exited(body: Node2D) -> void:
+	if body != _player_in_range:
+		return
+	_player_in_range = null
+	interaction_prompt.visible = false
 
 
 func _reset_visuals() -> void:
@@ -126,6 +157,7 @@ func _reset_visuals() -> void:
 	open_sprite.visible = true
 	open_sprite.modulate.a = 0.0
 	wax_crack.visible = false
+	interaction_prompt.visible = false
 	fade_rect.visible = false
 	fade_rect.modulate.a = 0.0
 	for child: Node in seal_lights.get_children():

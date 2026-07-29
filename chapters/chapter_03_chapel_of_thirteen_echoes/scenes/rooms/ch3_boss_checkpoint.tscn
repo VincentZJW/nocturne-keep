@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room.gd" id="1_room"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_door.gd" id="2_door"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/boss_vestry_door.png" id="4_door"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/chapter_03_boss_checkpoint.png" id="5_checkpoint"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/votive_lectern.png" id="6_lectern"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_checkpoint.gd" id="7_checkpoint_script"]
 
 [sub_resource type="RectangleShape2D" id="FloorShape"]
 size = Vector2(896, 108)
@@ -15,6 +16,8 @@ size = Vector2(48, 720)
 size = Vector2(64, 340)
 [sub_resource type="RectangleShape2D" id="DoorArea"]
 size = Vector2(220, 360)
+[sub_resource type="RectangleShape2D" id="CheckpointArea"]
+size = Vector2(180, 200)
 
 [node name="Ch3BossCheckpoint" type="Node2D"]
 script = ExtResource("1_room")
@@ -27,7 +30,7 @@ position = Vector2(448, 360)
 texture_filter = 1
 texture = ExtResource("3_backdrop")
 [node name="CheckpointVisual" type="Sprite2D" parent="."]
-z_index = 14
+z_index = -30
 position = Vector2(298, 508)
 texture_filter = 1
 texture = ExtResource("5_checkpoint")
@@ -77,3 +80,26 @@ theme_override_font_sizes/font_size = 12
 position = Vector2(128, 584)
 [node name="BossCheckpoint" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(298, 584)
+[node name="CheckpointArea" type="Area2D" parent="."]
+position = Vector2(298, 506)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("7_checkpoint_script")
+checkpoint_id = &"CH3_BOSS_CHECKPOINT"
+spawn_marker_path = NodePath("../SpawnPoints/BossCheckpoint")
+status_label_path = NodePath("../CheckpointStatus")
+visual_path = NodePath("../CheckpointVisual")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CheckpointArea"]
+shape = SubResource("CheckpointArea")
+[node name="CheckpointStatus" type="Label" parent="."]
+z_index = 14
+offset_left = 150.0
+offset_top = 338.0
+offset_right = 446.0
+offset_bottom = 378.0
+theme_override_colors/font_color = Color(0.9, 0.81, 0.57, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.035, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "LAST VIGIL AWAKENED / 末祷已铭记"
+horizontal_alignment = 1
