@@ -5778,3 +5778,51 @@ Status: complete for audit only — current formal Chapter III structure remains
 6. `tests/player/measure_player_level_metrics.gd` — PASS at 60 Hz with the metrics above.
 
 The two prior Boss tests do not inspect the new structural requirements and therefore do not overturn the current FAIL. Full evidence, node paths, collision table, layer table, movement limits and R1 proposal are in the R0 audit document. No runtime file changed. **第三章场景结构返修尚未通过最终验收。**
+
+## 2026-07-29 — Chapter III structural rework R1 preflight
+
+Status: in progress — approved R1 room-planning milestone; stop before R2
+
+### Goal, workflow and strict scope
+
+- Loaded root `AGENTS.md`, README, technical architecture, all four mandatory chapter-production documents, the R0 structural audit and the supplied Chapter III structural-rework specification. This is a scene-design milestone using the Godot Gameplay boundary for persistent Player/HUD/Camera ownership and the Level Design boundary for room scale, pacing, platform reachability and encounter readability.
+- R1 will replace the old one-canvas mental model with a build-ready route plan for `CH3_CHAPEL_VESTIBULE → CH3_NAVE_ENTRY → CH3_CHOIR_GALLERY → CH3_BOSS_CHECKPOINT → CH3_BOSS_ANTE → CH3_BOSS_GATE → CH3_BOSS`. It will define room dimensions, local Camera bounds, physical connectors, Fade points, spawn contracts, platform coordinates, encounter lanes, asset reuse/adaptation/new needs and the Boss-confirmation boundary.
+- R1 owns only this development-log entry and `chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r1_room_plan.md`. It does not modify `.gd`, `.tscn`, `.tres`, project settings, art/audio, collision, layers, Player, enemies, Boss logic, Input Map, Main/F5 routing or gameplay values.
+- Existing dirty Chapter I/shared enemy Resources, Chapter I scene serialization, Player/loot Resources, Ravenfang QA images and UID sidecars predate R1 and remain untouched/excluded.
+
+### Planned verification and stop point
+
+- Validate every required room, Debug spawn, connector, platform envelope, enemy role, Boss-entry condition and layer/collision ownership against the R0 measurements and current project architecture.
+- Run Markdown/link/path consistency checks, `git diff --check`, an exact Godot 4.7.1 headless import/parse and the unchanged Chapter III saved-scene smoke. Inspect the final scoped diff and create one R1 documentation commit.
+- Stop after the route plan is committed. Do not delete the 12784-pixel scene, create room scenes, generate assets, change Main, add platforms/doors/Fades, or enter R2 without explicit approval.
+
+## 2026-07-29 — Chapter III structural rework R1 completion
+
+Status: complete for room planning only — runtime structure remains FAIL pending R2–R5
+
+### Delivered planning scope
+
+- Published `chapter_03_structural_rework_r1_room_plan.md` with a complete route map, planned `Chapter03Route/RoomHost/PersistentRuntime` ownership, six independently instantiable primary rooms, a component-level `CH3_BOSS_GATE`, isolated post-Boss rooms and local Camera/spawn contracts.
+- Replanned the Chapel Vestibule as a `2048×720` arrival room: the actual hall occupies 1.2 viewports and a physical 512 px descending stair occupies the final 0.4 viewport. The left mirror-back entry, central thirteen-bell emblem and right nave door create an unambiguous left-to-right route without combat/platform clutter.
+- Split the Nave (`2304×720`) from the Choir Gallery (`2432×720`) and split both from the Boss approach. Planned a continuous floor route plus 60 px platform rises, 32–72 px jump gaps, 96 px traversal corbels and 144–192 px combat surfaces. Every planned remote/air punish route is reachable by ordinary single jumps rather than requiring an extreme double-jump/Air-Dash input.
+- Planned a dedicated `896×720` Boss checkpoint and retained a reduced `1664×720` confession antechamber. Normal walk distance from checkpoint spawn through the ante to the gate is approximately 8.76 seconds. The Boss gate is E-confirmed, the Sanctum is an independent `3200×720` room, and Boss AI/HP cannot begin before Fade and intro complete.
+- Selected eight physical transitions and explicitly rejected an elevator because this route has no meaningful vertical discontinuity. Defined the future local swap sequence so one Player/HUD persists while exactly one room is active; global `SceneTransitionManager` remains the cross-chapter authority.
+- Classified existing Boss/enemy/runtime assets as reuse/adapt and listed the missing formal vestibule, nave, choir, checkpoint, door, stair and platform assets required before R2 scene assembly. No runtime file or asset was created or changed in R1.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version` — `4.7.1.stable.official.a13da4feb`.
+2. Exact Godot headless editor import/parse — exit 0; no parser, missing-resource or autoload error.
+3. Direct six-second smoke of the unchanged `chapter_03_entry_placeholder.tscn` — exit 0; no red runtime error.
+4. `test_chapter_03_boss_environment.gd` — PASS for the pre-existing Boss environment contract.
+5. `test_chapter_03_boss_route.gd` — PASS for the pre-existing gate/sanctum contract; this does not claim the new room plan is implemented.
+6. The first R1 document-token validation correctly failed because the route table did not explicitly name component id `CH3_BOSS_GATE`. The table was corrected; the rerun passed with `rooms=6 gate=1 transitions=8 platform_tables=2 runtime_status=FAIL`.
+7. `git diff --check` — exit 0; no whitespace error.
+
+### Stop point and acceptance
+
+- R1 deliverable is the room plan only. The current F5 route still loads `chapter_03_entry_placeholder.tscn`; all R0 runtime seams, absent rooms/platforms and automatic same-canvas Boss crossing remain until an approved implementation stage changes them.
+- R2 may use this document as its asset/scene build contract. R1 does not authorize R3 layer QA, R4 Boss-flow finalization or R5 Main acceptance.
+- Existing dirty Chapter I/shared gameplay/resource/QA files remain untouched and excluded from the R1 commit.
+
+**第三章场景结构返修尚未通过最终验收。**
