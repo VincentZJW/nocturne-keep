@@ -300,7 +300,7 @@ The audit found no old Edran combat scene, Boss script, Data Resource, SpriteFra
 - **B0 complete:** audit, final numbers, identity, skills, summons, file plan and Main test plan only.
 - **B1 complete:** Phase 1 concept/equipment art and 114-frame formal 96×96 Phase 1 Sprite set.
 - **B2 complete:** typed Phase 1 Boss/Data/policy/HUD scene, five attack families, Poise/stagger, saved Boss-sanctum/Main integration and F5 evidence. The 198 HP boundary intentionally locks in `transition_pending`; B4 still owns the actual transition.
-- **B3:** both summons, rules, cleanup and F5 test.
+- **B3 complete:** original concept boards plus 108 formal 64×64 runtime frames for Ossuary Penitent and Choir Husk; typed summon scenes/AI/Data; safe telegraph/rise; bounded lifetime; two-actor/one-of-each Phase 1 caps; no loot/Encounter/persistence; interruptible 1.15-second Boss ritual; transition/death forced cleanup; saved Boss-room/MainBootstrap integration and graphical evidence.
 - **B4:** full structural Phase Transition.
 - **B5:** Phase 2 concept/Sprite/animation/combat and F5 test.
 - **B6:** intro, dialogue, death, authoritative reward and Chapter IV hand-off.

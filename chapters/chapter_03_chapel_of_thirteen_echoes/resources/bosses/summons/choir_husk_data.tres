@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="BossSummonConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/summons/boss_summon_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name_en = "CHOIR HUSK"
+display_name_zh = "圣咏空壳"
+actor_kind = &"choir_husk"
+max_health = 34
+max_poise = 16
+stagger_duration = 0.30
+move_speed = 34.0
+gravity = 0.0
+attack_range = 230.0
+preferred_range = 180.0
+primary_damage = 7
+secondary_damage = 7
+windup = 0.62
+active = 0.08
+recovery = 0.78
+attack_cooldown = 1.65
+projectile_speed = 150.0

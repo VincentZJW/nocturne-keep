@@ -1,5 +1,40 @@
 # Development Log
 
+## 2026-07-29 — Chapter III Boss B3 summons
+
+Status: complete — two Boss-exclusive summons, bounded ritual/interrupt rules and formal Main integration; B4 not started
+
+### Goal, planned files, tests, and scope check
+
+- Complete only approved B3 after the committed B1/B2 deliverables: design and implement `Ossuary Penitent / 圣骨忏者` and `Choir Husk / 唱诗尸壳`, their concept boards, native 64×64 runtime pixels, SpriteFrames, scenes, AI, typed Data Resources and Edran-owned summon director.
+- Add the `Raise the Absolved / 唤起赦免者` Phase 1 action with a 1.15-second interruptible ritual, explicit 36-Poise threshold, 0.65-second failed-ritual imbalance, partial cooldown, cap/lifetime/safe-spawn controls and transition/death cleanup. Preserve B2 combat values, 198 HP B4 boundary and all unrelated worktree edits.
+- Bind the director to the saved Edran scene already instanced by `ch3_boss_sanctum_room.tscn`, register `CH3_BOSS_SUMMON_TEST`, capture through `MainBootstrap`, and stop before B4 transformation, Phase 2, death/reward or Chapter IV work.
+
+### Delivered implementation
+
+- Added two original 1536×1024 concept boards and a deterministic Godot `Image` pipeline that generated 108 transparent 64×64 frames: 58 Penitent frames across fourteen animations and 50 Choir Husk frames across eleven animations. Generated SpriteFrames keep nearest-neighbour sampling and stable anchors.
+- Added independent typed summon scenes backed by shared Health/Hitbox/Hurtbox components. The Penitent alternates readable claw and lunge actions; the Husk repositions at range and fires a slow straight non-homing projectile. Both use visible telegraph → rise activation, only enable Hurtbox after emergence, expire after 14–18 seconds and have forced-dissolve/death cleanup.
+- Added an Edran-owned `ThirteenthPontiffSummonDirector`: fixed arena-relative candidates reject unsafe proximity, Phase 1 owns at most two summons and at most one of either type, all summons use `chapter_03_boss_summon`, and no loot, normal Encounter count or persistence component exists.
+- Added the independent SUMMON Boss state and formal ritual animation. Accumulating 36 Poise during windup cancels creation, gives 0.65 seconds imbalance and starts a partial cooldown; success starts the 8.5–10-second cooldown. Phase boundary and death force all living summons to dissolve. The formal saved Boss room receives this through its existing Edran PackedScene, so no room-local duplicate or Inspector override was introduced.
+- Added deterministic B3 QA, a MainBootstrap-routed graphical runner, five F5-equivalent captures and the B3 QA report. B1 and B2 remain separately committed as `8279dd7` and `ca3b133`.
+
+### Exact commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS; eight new/updated script classes imported and no parse/resource error.
+- `... --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b1_assets.gd` — `EDRAN_B1_ASSETS | PASS concepts=9 animations=27`.
+- `... --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b2_phase_01.gd` — `EDRAN_B2_PHASE_01 | PASS attacks=5 health=360 poise=110 main_room=true transition=B4_pending`.
+- `... --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b3_summons.gd` — `EDRAN_B3_SUMMONS | PASS actors=2 animations=25 cap=2 penitent_cap=1 interrupt=36 cleanup=true main_spawn=true`.
+- `... --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_edran_b3_main_qa.gd` — PASS on OpenGL/Metal; five 1280×720 captures from formal MainBootstrap/Chapter III/Boss room, mixed summons=2 and transition cleanup=true.
+- `... --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_chapter_03_r4_boss_flow.gd` — PASS; checkpoint, gate, room swap, intro and downstream hooks intact.
+- `... --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_chapter_03_r5_full_route.gd` — PASS; 40 transitions across ten cycles and persistent runtime stable.
+- `... --headless --path . --quit-after 300` — PASS; formal default Main still selects OpeningCinematic.
+
+### Known issues and manual acceptance
+
+- The R4/R5 legacy summaries still print `boss_entity=partial` because the complete B4–B6 Boss lifecycle is intentionally absent. B1–B3 themselves are complete and their focused tests are green.
+- For manual B3 review, enable Chapter III Debug Start with `CH3_BOSS_SUMMON_TEST`. Check the stationary 1.15-second ritual, safe floor warning, rise, one Penitent plus one Husk cap, readable slow attacks/projectile and automatic forced dissolve at the 198 HP boundary.
+- Current approved stopping point is B3. B4 Phase Transition, B5 Phase 2 and B6 entrance/death/reward remain unauthorized and unimplemented.
+
 ## 2026-07-28 — Core character art rework Stage 3 (preflight)
 
 Status: complete — Candle Warden concept, formal pixel acting, lantern light and Prologue integration only; Stage 4 strong QA not started

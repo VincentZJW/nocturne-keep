@@ -1,0 +1,260 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/aim/aim_01.png" id="1_pg7at"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/aim/aim_02.png" id="2_d4c8m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/aim/aim_03.png" id="3_a8ass"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/aim/aim_04.png" id="4_gsqu3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/aim/aim_05.png" id="5_p5rbe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/death/death_01.png" id="6_t6qms"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/death/death_02.png" id="7_b08il"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/death/death_03.png" id="8_syvpp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/death/death_04.png" id="9_clgo7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/death/death_05.png" id="10_7iktq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/death/death_06.png" id="11_jpqcg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/drift/drift_01.png" id="12_xxkbh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/drift/drift_02.png" id="13_23oew"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/drift/drift_03.png" id="14_qkpr3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/drift/drift_04.png" id="15_0frho"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/drift/drift_05.png" id="16_q0ic6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/drift/drift_06.png" id="17_lssba"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/forced_dissolve/forced_dissolve_01.png" id="18_bcj25"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/forced_dissolve/forced_dissolve_02.png" id="19_b26qw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/forced_dissolve/forced_dissolve_03.png" id="20_bqrer"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/forced_dissolve/forced_dissolve_04.png" id="21_tbwx6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/forced_dissolve/forced_dissolve_05.png" id="22_tu8kx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/hurt/hurt_01.png" id="23_su3wo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/hurt/hurt_02.png" id="24_fd2yi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/hurt/hurt_03.png" id="25_ojc8u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/idle/idle_01.png" id="26_5pvcr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/idle/idle_02.png" id="27_5np7i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/idle/idle_03.png" id="28_gfoke"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/idle/idle_04.png" id="29_ilamm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/recovery/recovery_01.png" id="30_7l0ko"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/recovery/recovery_02.png" id="31_iwoi0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/recovery/recovery_03.png" id="32_ucuhm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/recovery/recovery_04.png" id="33_i5728"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/rise/rise_01.png" id="34_4cje5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/rise/rise_02.png" id="35_0g5ko"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/rise/rise_03.png" id="36_2uwve"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/rise/rise_04.png" id="37_alrtt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/rise/rise_05.png" id="38_kvrq6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/rise/rise_06.png" id="39_81sie"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/shoot/shoot_01.png" id="40_padlw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/shoot/shoot_02.png" id="41_jy481"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/shoot/shoot_03.png" id="42_l3vk3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/stagger/stagger_01.png" id="43_nwf7o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/stagger/stagger_02.png" id="44_38fxg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/stagger/stagger_03.png" id="45_bbcow"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/stagger/stagger_04.png" id="46_u12ty"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/summon_telegraph/summon_telegraph_01.png" id="47_no1ba"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/summon_telegraph/summon_telegraph_02.png" id="48_r8s82"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/summon_telegraph/summon_telegraph_03.png" id="49_6sm18"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons/choir_husk/sprites/summon_telegraph/summon_telegraph_04.png" id="50_p04w6"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_pg7at")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_d4c8m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_a8ass")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gsqu3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_p5rbe")
+}],
+"loop": 0,
+"name": &"aim",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_t6qms")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_b08il")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_syvpp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_clgo7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_7iktq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_jpqcg")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_xxkbh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_23oew")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_qkpr3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_0frho")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_q0ic6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_lssba")
+}],
+"loop": 1,
+"name": &"drift",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("18_bcj25")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_b26qw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_bqrer")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_tbwx6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_tu8kx")
+}],
+"loop": 0,
+"name": &"forced_dissolve",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_su3wo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_fd2yi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_ojc8u")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_5pvcr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_5np7i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_gfoke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_ilamm")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30_7l0ko")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_iwoi0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_ucuhm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_i5728")
+}],
+"loop": 0,
+"name": &"recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_4cje5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_0g5ko")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_2uwve")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_alrtt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_kvrq6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_81sie")
+}],
+"loop": 0,
+"name": &"rise",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_padlw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_jy481")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_l3vk3")
+}],
+"loop": 0,
+"name": &"shoot",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_nwf7o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_38fxg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_bbcow")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_u12ty")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_no1ba")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_r8s82")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_6sm18")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_p04w6")
+}],
+"loop": 0,
+"name": &"summon_telegraph",
+"speed": 10.0
+}]

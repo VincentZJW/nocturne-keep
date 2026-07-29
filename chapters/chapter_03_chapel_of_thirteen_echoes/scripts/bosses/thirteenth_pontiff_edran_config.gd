@@ -71,3 +71,18 @@ extends Resource
 @export_range(1, 99, 1) var thirteenfold_damage: int = 14
 @export var thirteenfold_cooldown: float = 6.0
 @export var thirteenfold_wave_gap: float = 0.34
+
+@export_category("Raise the Unconfessed")
+@export var summon_windup: float = 1.15
+@export var summon_recovery: float = 0.72
+@export var summon_cooldown_min: float = 8.5
+@export var summon_cooldown_max: float = 10.0
+@export_range(1, 200, 1) var summon_interrupt_poise: int = 36
+@export var summon_interrupt_recovery: float = 0.65
+@export var post_summon_major_lock: float = 1.60
+@export_range(1, 4, 1) var phase_1_summon_cap: int = 2
+@export_range(0, 2, 1) var phase_1_penitent_cap: int = 1
+@export_range(0, 2, 1) var phase_1_choir_husk_cap: int = 1
+@export var summon_lifetime_min: float = 14.0
+@export var summon_lifetime_max: float = 18.0
+@export var summon_safe_distance: float = 64.0

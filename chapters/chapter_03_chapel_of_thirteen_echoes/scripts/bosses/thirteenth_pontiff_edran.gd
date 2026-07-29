@@ -13,6 +13,7 @@ enum State {
 	APPROACH,
 	TURN,
 	ATTACK,
+	SUMMON,
 	STAGGER,
 	TRANSITION_PENDING,
 	DEAD,
@@ -24,6 +25,7 @@ enum Attack {
 	CENSER,
 	LITANY,
 	THIRTEENFOLD,
+	SUMMON,
 }
 
 @export var config: ThirteenthPontiffEdranConfig
@@ -37,6 +39,7 @@ enum Attack {
 @onready var sweep_hitbox: HitboxComponent = $FacingRoot/SweepHitbox as HitboxComponent
 @onready var thrust_hitbox: HitboxComponent = $FacingRoot/ThrustHitbox as HitboxComponent
 @onready var censer_hitbox: HitboxComponent = $FacingRoot/CenserHitbox as HitboxComponent
+@onready var summon_director: ThirteenthPontiffSummonDirector = $SummonDirector as ThirteenthPontiffSummonDirector
 
 var current_state: State = State.DORMANT
 var current_poise: int = 0
@@ -48,6 +51,9 @@ var _stagger_protection_timer: float = 0.0
 var _censer_cooldown: float = 0.0
 var _litany_cooldown: float = 0.0
 var _thirteenfold_cooldown: float = 0.0
+var _summon_cooldown: float = 0.0
+var _summon_interrupt_progress: int = 0
+var _summon_sequence_id: int = 0
 var _attack_cursor: int = 0
 var _chain_count: int = 0
 var _action_locked: bool = false
@@ -83,7 +89,7 @@ func _physics_process(delta: float) -> void:
 		return
 	if target == null or not is_instance_valid(target):
 		target = get_tree().get_first_node_in_group("player") as Player
-	if current_state in [State.ATTACK, State.TURN, State.STAGGER] or _action_locked:
+	if current_state in [State.ATTACK, State.SUMMON, State.TURN, State.STAGGER] or _action_locked:
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 		move_and_slide()
 		return
@@ -130,6 +136,7 @@ func debug_force_attack(attack_name: StringName) -> bool:
 		&"censer_procession": _run_melee_attack(Attack.CENSER)
 		&"litany_of_ash": _run_litany()
 		&"thirteenfold_sentence": _run_thirteenfold()
+		&"raise_the_absolved", &"raise_the_unconfessed": _run_summon()
 		_: return false
 	return true
 
@@ -142,6 +149,14 @@ func get_current_poise() -> int:
 	return current_poise
 
 
+func get_summon_interrupt_progress() -> int:
+	return _summon_interrupt_progress
+
+
+func get_active_summon_count() -> int:
+	return summon_director.get_active_count() if summon_director != null else 0
+
+
 func is_transition_pending() -> bool:
 	return current_state == State.TRANSITION_PENDING
 
@@ -152,6 +167,7 @@ func _tick_cooldowns(delta: float) -> void:
 	_censer_cooldown = maxf(0.0, _censer_cooldown - delta)
 	_litany_cooldown = maxf(0.0, _litany_cooldown - delta)
 	_thirteenfold_cooldown = maxf(0.0, _thirteenfold_cooldown - delta)
+	_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
 
 
 func _start_selected_attack(distance: float) -> void:
@@ -166,6 +182,8 @@ func _start_selected_attack(distance: float) -> void:
 		candidates.append(Attack.LITANY)
 	if _thirteenfold_cooldown <= 0.0:
 		candidates.append(Attack.THIRTEENFOLD)
+	if _summon_cooldown <= 0.0 and summon_director != null and summon_director.can_summon_phase_1():
+		candidates.append(Attack.SUMMON)
 	if candidates.is_empty():
 		_attack_gap_timer = 0.20
 		return
@@ -174,6 +192,7 @@ func _start_selected_attack(distance: float) -> void:
 	match selected:
 		Attack.LITANY: _run_litany()
 		Attack.THIRTEENFOLD: _run_thirteenfold()
+		Attack.SUMMON: _run_summon()
 		_: _run_melee_attack(selected)
 
 
@@ -266,6 +285,51 @@ func _run_thirteenfold() -> void:
 	_end_action()
 
 
+func _run_summon() -> void:
+	if _action_locked or summon_director == null or not summon_director.can_summon_phase_1():
+		return
+	_action_locked = true
+	_summon_interrupt_progress = 0
+	_summon_sequence_id += 1
+	var sequence_id: int = _summon_sequence_id
+	_set_state(State.SUMMON, &"summon_start")
+	await get_tree().create_timer(config.summon_windup).timeout
+	if current_state != State.SUMMON or sequence_id != _summon_sequence_id:
+		return
+	summon_director.summon_phase_1(target)
+	_play_animation(&"summon_success")
+	await get_tree().create_timer(config.summon_recovery).timeout
+	if current_state != State.SUMMON or sequence_id != _summon_sequence_id:
+		return
+	_finish_summon_action(false)
+
+
+func _interrupt_summon() -> void:
+	if current_state != State.SUMMON:
+		return
+	_summon_sequence_id += 1
+	_end_all_hitboxes()
+	_play_animation(&"summon_interrupt")
+	await get_tree().create_timer(config.summon_interrupt_recovery).timeout
+	if current_state != State.SUMMON:
+		return
+	_finish_summon_action(true)
+
+
+func _finish_summon_action(interrupted: bool) -> void:
+	_summon_cooldown = (
+		config.summon_cooldown_min * 0.5
+		if interrupted
+		else randf_range(config.summon_cooldown_min, config.summon_cooldown_max)
+	)
+	_summon_interrupt_progress = 0
+	if not interrupted:
+		_thirteenfold_cooldown = maxf(_thirteenfold_cooldown, config.post_summon_major_lock)
+	_action_locked = false
+	_attack_gap_timer = config.summon_interrupt_recovery if interrupted else config.summon_recovery
+	_set_state(State.IDLE, &"phase_01_idle")
+
+
 func _spawn_field(position: Vector2, damage: int, delay: float) -> void:
 	if timed_field_scene == null:
 		return
@@ -303,6 +367,13 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 	if hitbox == null or current_state in [State.DORMANT, State.TRANSITION_PENDING, State.DEAD]:
 		return
 	var poise_damage: int = config.dash_attack_poise_damage if hitbox.attack_kind == &"dash_attack" else config.normal_attack_poise_damage
+	if current_state == State.SUMMON:
+		_summon_interrupt_progress += poise_damage
+		if _summon_interrupt_progress >= config.summon_interrupt_poise:
+			_interrupt_summon()
+		else:
+			_play_animation(&"light_hit")
+		return
 	current_poise = maxi(0, current_poise - poise_damage)
 	if current_poise <= 0 and _stagger_protection_timer <= 0.0:
 		_run_stagger()
@@ -334,6 +405,8 @@ func _on_health_changed(current: int, _maximum: int) -> void:
 	_action_locked = true
 	velocity = Vector2.ZERO
 	_end_all_hitboxes()
+	if summon_director != null:
+		summon_director.force_dissolve_all()
 	hurtbox.set_invulnerable(true)
 	_set_state(State.TRANSITION_PENDING, &"phase_transition_start")
 	phase_transition_requested.emit(config.phase_transition_health)
@@ -342,6 +415,8 @@ func _on_health_changed(current: int, _maximum: int) -> void:
 func _on_died() -> void:
 	_action_locked = true
 	_end_all_hitboxes()
+	if summon_director != null:
+		summon_director.force_dissolve_all()
 	hurtbox.set_enabled(false)
 	_set_state(State.DEAD, &"hurt")
 	defeated.emit()

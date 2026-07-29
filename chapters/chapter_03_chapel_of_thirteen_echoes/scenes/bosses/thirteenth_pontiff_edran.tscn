@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=18 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_edran.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/bosses/thirteenth_pontiff_edran_data.tres" id="2_config"]
@@ -9,6 +9,9 @@
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_hit_policy.gd" id="7_policy"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/projectiles/chapter_03_timed_field.tscn" id="8_field"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_boss_hud.gd" id="9_hud"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_summon_director.gd" id="10_summon_director"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/ossuary_penitent.tscn" id="11_penitent"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/choir_husk.tscn" id="12_husk"]
 
 [sub_resource type="RectangleShape2D" id="BodyShape"]
 size = Vector2(36, 78)
@@ -65,6 +68,11 @@ shape = SubResource("HurtShape")
 
 [node name="HitPolicy" type="Node" parent="."]
 script = ExtResource("7_policy")
+
+[node name="SummonDirector" type="Node" parent="."]
+script = ExtResource("10_summon_director")
+ossuary_penitent_scene = ExtResource("11_penitent")
+choir_husk_scene = ExtResource("12_husk")
 
 [node name="FacingRoot" type="Node2D" parent="."]
 

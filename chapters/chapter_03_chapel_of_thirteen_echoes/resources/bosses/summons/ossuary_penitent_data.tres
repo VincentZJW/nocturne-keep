@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="BossSummonConfig" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/summons/boss_summon_config.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+display_name_en = "OSSUARY PENITENT"
+display_name_zh = "骨坛忏悔者"
+actor_kind = &"ossuary_penitent"
+max_health = 42
+max_poise = 20
+stagger_duration = 0.36
+move_speed = 48.0
+attack_range = 76.0
+preferred_range = 48.0
+primary_damage = 8
+secondary_damage = 9
+windup = 0.44
+active = 0.11
+recovery = 0.62
+attack_cooldown = 1.25
