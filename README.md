@@ -4,6 +4,8 @@
 
 当前版本：`第二章 Boss 美术 Stage 2 · 空心公爵夫人·瑟芙琳`
 
+第三章Boss当前仅完成B0设计与战斗基线锁定：正式身份为`The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`，确定360 HP、55%转阶段阈值、单层防御倍率、分阶段Poise、两种受限尸骸召唤及Main/F5接入计划。Boss战斗实体、美术、动画、奖励和第四章跳转仍未实现，不能视为可玩Boss。权威规格见[第三章埃德兰Boss B0规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)，审计证据见[第三章Boss B0审计报告](docs/qa/chapter_03_boss_b0/report.md)。
+
 第二章普通敌人美术 Stage 1 已接入正式 Silent Court 路线：空壳侍从、王庭戟卫、哀悼铠甲、血烛侍祭与倒悬猎兽均通过 F5/Main 使用章节内正式概念图与扩展 64×64 SpriteFrames。验收索引见 `docs/qa/chapter_02_enemy_boss_art_rework/stage_1_report.md`。
 
 第二章Boss美术 Stage 2 已接入同一正式路线：瑟芙琳现在使用独立的96×96 Phase 1礼服/白瓷面具形态、39帧完整破面变身和无面骨扇Phase 2形态，共362张正式像素帧。原有220 HP、55%转阶段阈值、AI、攻击判定、遗物龛与第三章通道保持不变。强制QA见 `docs/qa/chapter_02_enemy_boss_art_rework/stage_2_report.md`。
@@ -189,6 +191,8 @@ Main开发调试快捷键：
 - [第三章敌人Trial Hall计划](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_trial_plan.md)
 - [第三章Boss环境规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_boss_environment_spec.md)
 - [第三章Boss区域强制 QA 报告](docs/qa/chapter_03_boss_environment/report.md)
+- [第三章埃德兰Boss B0规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)
+- [第三章Boss B0审计报告](docs/qa/chapter_03_boss_b0/report.md)
 - [第三章结构返修 R2 实装记录](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r2_implementation.md)
 - [第三章结构返修 R3 图层与碰撞报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r3_layer_collision_report.md)
 - [第三章结构返修 R4 Boss流程报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r4_boss_flow_report.md)

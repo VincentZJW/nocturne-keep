@@ -6206,3 +6206,41 @@ Status: L3 report and evidence validation complete; strict final acceptance rema
 - Full image/index/runtime evidence: `docs/qa/chapter_03_render_layer_l2/`.
 - Manual check: use MainBootstrap/F5 with `chapter_03_start`, `CH3_BOSS_CHECKPOINT` and `CH3_BOSS_ANTE`; test Player actions at the four supplied risk areas, every Boss gate state, death/ghost/respawn and underkeep water. Open Godot Remote during the run to manually add the still-missing UI screenshot evidence and test default/maximized/Stretch window layouts.
 - Stop after the isolated L3 commit. Do not begin Boss, reward, Chapter IV or any later milestone without explicit approval.
+
+## 2026-07-29 — Chapter III Boss B0 preflight
+
+Status: in progress — approved design and combat-baseline audit only
+
+### Goal, files, tests and scope check
+
+- Execute only B0 of the approved Chapter III Boss workflow: audit the current Main/Chapter III boundary, Chapter I and II Boss combat baselines, Player weapon damage, defense/Poise contracts and existing Chapter III Boss-room interfaces; then publish the authoritative Edran character, phase, skill, summon, asset and legacy-resource plan.
+- No concept art, SpriteFrames, Boss scene, combat script, AI, Hitbox, reward, Chapter IV content, project setting, scene or gameplay value will be created or changed in B0. The planned owned files are one Chapter III Boss design specification, one B0 audit report, README cross-links and this development-log entry.
+- The authoritative F5 entry must remain `res://scenes/bootstrap/main_bootstrap.tscn`. Existing Chapter III room flow and its truthful `boss_entity=partial`, `reward=partial`, `chapter4=partial` boundaries must remain unchanged.
+- Verification will use the exact Godot 4.7.1 executable for import/parse and current deterministic Chapter III route/Boss-flow regressions, plus scoped documentation diff review. B0 will not claim visual, animation or playable Boss acceptance.
+- The worktree contains pre-existing unrelated Chapter I/shared/resource/QA modifications. They remain user-owned and must be preserved, excluded from the B0 commit and reported separately from the clean committed baseline where they affect audited values.
+
+## 2026-07-29 — Chapter III Boss B0 complete
+
+Status: complete — design/audit gate only; B1 not started
+
+### Delivered
+
+- Added the authoritative B0 specification for `The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`, including identity, two structurally distinct phases, locked HP/defense/Poise values, Phase 1 and Phase 2 skill tables, bounded summon rules, summon values, file ownership, legacy handling and the Main/F5 integration plan.
+- Audited the actual formal runtime boundary: `run/main_scene` remains `res://scenes/bootstrap/main_bootstrap.tscn`, Chapter III remains `chapter_03_route.tscn`, and `Ch3BossSanctumRoom/BossSanctum/BossIntegrationAnchor` remains the one typed future Boss integration point.
+- Audited Chapter I Boss, Chapter II Boss, Player weapon damage, shared Health/Hitbox/Hurtbox, target-owned damage-policy and encounter cleanup contracts from their real Resources/scripts. The current repository contains no Edran combat scene, SpriteFrames, Data Resource, AI, summon, reward or Chapter IV PackedScene; these remain explicitly unimplemented.
+- Locked Edran at 360 HP, 55%/198 HP transition, 0.88/0.80 incoming-damage multipliers, 110/145 Poise and a single visible defense layer. Formal Chapter III Player basis is Crimson Masque 14/28 HP damage and 14/28 Poise impact.
+- Added `docs/qa/chapter_03_boss_b0/report.md` and README links. No scene, script, Resource, image, animation, project setting or gameplay value was modified by B0.
+
+### Actual verification
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — PASS, exit 0; Godot `4.7.1.stable.official.a13da4feb` imported and parsed the project without an error.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — PASS, exit 0; formal MainBootstrap selected `res://scenes/cinematics/opening_cinematic.tscn` for a formal new game.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_chapter_03_r4_boss_flow.gd` — PASS, exit 0; checkpoint, E gate, room swap, intro, post-Boss and underkeep hooks passed, while `boss_entity=partial` and `chapter4=partial` remained truthful.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_chapter_03_r5_full_route.gd` — PASS, exit 0; 40 transitions across 10 cycles passed with persistent runtime/platform combat, while `boss_entity=partial`, `reward=partial` and `chapter4=partial` remained truthful.
+- `git diff --check -- README.md docs/development_log.md chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md docs/qa/chapter_03_boss_b0/report.md` — required before commit; result recorded by the B0 commit review.
+
+### Known boundary and manual acceptance
+
+- B0 has no visual or playable Boss output. No concept board, silhouette, Sprite, animation, skill, summon, HUD, dialogue, reward or Chapter IV transition can be accepted yet.
+- The existing unrelated dirty Chapter I/shared/resource/QA files were preserved and excluded from this milestone commit.
+- Manual review for this gate is the two B0 documents and their arithmetic/skill/summon decisions. B1 may begin only after explicit approval and is limited to Phase 1 concept/equipment art and the formal Phase 1 Sprite.
