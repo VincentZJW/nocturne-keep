@@ -1,0 +1,140 @@
+[gd_scene load_steps=15 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room.gd" id="1_room"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_door.gd" id="2_door"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/nave_backdrop.png" id="3_backdrop"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/choir_screen_door.png" id="4_door"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/platform_160.png" id="5_p160"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/platform_96.png" id="6_p96"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/platform_144.png" id="7_p144"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/mourner_bench.png" id="8_bench"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/votive_lectern.png" id="9_lectern"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="10_bellchain"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="11_wraith"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="12_scribe"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(2304, 108)
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(48, 720)
+[sub_resource type="RectangleShape2D" id="DoorBlocker"]
+size = Vector2(64, 340)
+[sub_resource type="RectangleShape2D" id="DoorArea"]
+size = Vector2(220, 360)
+[sub_resource type="RectangleShape2D" id="Platform160"]
+size = Vector2(160, 24)
+[sub_resource type="RectangleShape2D" id="Platform96"]
+size = Vector2(96, 24)
+[sub_resource type="RectangleShape2D" id="Platform144"]
+size = Vector2(144, 24)
+
+[node name="Ch3NaveEntry" type="Node2D"]
+script = ExtResource("1_room")
+room_id = &"CH3_NAVE_ENTRY"
+bilingual_name = "CHAPTER III · PROCESSIONAL NAVE / 送葬正厅"
+room_size = Vector2i(2304, 720)
+[node name="Backdrop" type="Sprite2D" parent="."]
+z_index = -30
+position = Vector2(1152, 360)
+texture_filter = 1
+texture = ExtResource("3_backdrop")
+[node name="LeftBench" type="Sprite2D" parent="."]
+z_index = -7
+position = Vector2(390, 560)
+texture_filter = 1
+texture = ExtResource("8_bench")
+[node name="RightBench" type="Sprite2D" parent="."]
+z_index = -7
+position = Vector2(1190, 560)
+texture_filter = 1
+texture = ExtResource("8_bench")
+[node name="Lectern" type="Sprite2D" parent="."]
+z_index = -5
+position = Vector2(930, 540)
+texture_filter = 1
+texture = ExtResource("9_lectern")
+[node name="Geometry" type="Node2D" parent="."]
+[node name="Floor" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Floor"]
+position = Vector2(1152, 666)
+shape = SubResource("FloorShape")
+[node name="LeftWall" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/LeftWall"]
+position = Vector2(-24, 360)
+shape = SubResource("WallShape")
+[node name="WestSideGallery" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/WestSideGallery"]
+position = Vector2(600, 576)
+texture_filter = 1
+texture = ExtResource("5_p160")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/WestSideGallery"]
+position = Vector2(600, 564)
+shape = SubResource("Platform160")
+[node name="EastSideGallery" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/EastSideGallery"]
+position = Vector2(1480, 576)
+texture_filter = 1
+texture = ExtResource("5_p160")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/EastSideGallery"]
+position = Vector2(1480, 564)
+shape = SubResource("Platform160")
+[node name="EastAccessCorbel" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/EastAccessCorbel"]
+position = Vector2(1680, 516)
+texture_filter = 1
+texture = ExtResource("6_p96")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/EastAccessCorbel"]
+position = Vector2(1680, 504)
+shape = SubResource("Platform96")
+[node name="UpperArchiveLedge" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/UpperArchiveLedge"]
+position = Vector2(1832, 456)
+texture_filter = 1
+texture = ExtResource("7_p144")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/UpperArchiveLedge"]
+position = Vector2(1832, 444)
+shape = SubResource("Platform144")
+[node name="Doors" type="Node2D" parent="."]
+[node name="ChoirDoor" type="Area2D" parent="Doors"]
+position = Vector2(2180, 380)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_door")
+destination_room_id = &"CH3_CHOIR_GALLERY"
+destination_spawn_id = &"EntryWest"
+[node name="DoorVisual" type="Sprite2D" parent="Doors/ChoirDoor"]
+texture_filter = 1
+texture = ExtResource("4_door")
+[node name="Blocker" type="StaticBody2D" parent="Doors/ChoirDoor"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/ChoirDoor/Blocker"]
+position = Vector2(0, 66)
+shape = SubResource("DoorBlocker")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/ChoirDoor"]
+position = Vector2(-56, 66)
+shape = SubResource("DoorArea")
+[node name="Prompt" type="Label" parent="Doors/ChoirDoor"]
+position = Vector2(-100, -118)
+text = "E  ENTER CHOIR / 进入唱诗席"
+theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)
+theme_override_font_sizes/font_size = 12
+[node name="Enemies" type="Node2D" parent="."]
+[node name="BellchainPenitent" parent="Enemies" instance=ExtResource("10_bellchain")]
+position = Vector2(720, 584)
+[node name="ConfessionalWraith" parent="Enemies" instance=ExtResource("11_wraith")]
+position = Vector2(1260, 584)
+[node name="ThirteenthScribe" parent="Enemies" instance=ExtResource("12_scribe")]
+position = Vector2(1830, 386)
+[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="EntryWest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(128, 584)
+[node name="BellchainTest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(520, 584)
+[node name="ScribeTest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1520, 584)

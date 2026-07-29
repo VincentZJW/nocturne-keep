@@ -29,7 +29,7 @@ const CHAPTER_03_PROFILE_PATH: String = (
 )
 const CHAPTER_03_SCENE_PATH: String = (
 	"res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/"
-	+ "chapter_03_entry_placeholder.tscn"
+	+ "chapter_03_route.tscn"
 )
 const CHAPTER_04_SCENE_PATH: String = (
 	"res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn"

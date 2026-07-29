@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_route.gd" id="1_route"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_transition_controller.gd" id="2_transition"]
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="3_runtime"]
+
+[node name="Chapter03Route" type="Node2D"]
+script = ExtResource("1_route")
+[node name="RoomHost" type="Node2D" parent="."]
+[node name="PersistentRuntime" type="Node2D" parent="."]
+[node name="ChapterRuntime" parent="PersistentRuntime" instance=ExtResource("3_runtime")]
+[node name="ActiveRespawn" type="Marker2D" parent="PersistentRuntime"]
+[node name="RoomFade" type="ColorRect" parent="PersistentRuntime/ChapterRuntime/HUD"]
+visible = false
+offset_right = 1280.0
+offset_bottom = 720.0
+mouse_filter = 2
+color = Color(0.015, 0.018, 0.03, 1)
+[node name="RoomTransitionController" type="Node" parent="."]
+script = ExtResource("2_transition")

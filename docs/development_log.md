@@ -5826,3 +5826,52 @@ Status: complete for room planning only — runtime structure remains FAIL pendi
 - Existing dirty Chapter I/shared gameplay/resource/QA files remain untouched and excluded from the R1 commit.
 
 **第三章场景结构返修尚未通过最终验收。**
+
+## 2026-07-29 — Chapter III structural rework R2 preflight
+
+Status: in progress — approved R2 formal-room implementation; stop before R3
+
+### Goal, files and strict scope
+
+- Re-read the project contract, README, technical architecture, chapter-production workflow, R0 audit and approved R1 room plan. R2 will replace the active one-canvas Chapter III prototype with chapter-local formal environment PNGs, independently instantiable room scenes, one persistent Player/HUD runtime, a single active `RoomHost`, E-confirmed physical doors, short-stair/door exits, local Fade swaps and R1-safe traversal platforms.
+- Planned task-owned paths are limited to Chapter III `assets/environment`, `assets/doors`, `assets/props`, `scenes/rooms`, `scenes/level/chapter_03_route.tscn`, Chapter III room/route scripts and tests, plus the Chapter III start profile, `ChapterRegistry`, this log and R2 QA evidence. Existing Boss-area resources are reused through room wrappers; Boss gate final confirmation/intro logic remains R4 scope.
+- R2 does not enter R3's final layer/collision acceptance, R4's complete Boss checkpoint/gate performance, or R5's full-route regression. It does not modify Player feel, combat values, enemy balance, chapters I/II, shared character art or the existing unrelated dirty resources/QA evidence.
+
+### Planned verification
+
+- Generate and import chapter-local lossless pixel assets with hard edges; validate source dimensions and references.
+- Parse and independently instantiate every new room; verify one persistent Player/HUD and exactly one active room while exercising Vestibule → Nave → Choir → Boss Checkpoint → Boss Ante swaps.
+- Run exact Godot 4.7.1 headless import/parse, R2 structural tests, saved Main/F5 bootstrap smoke, `git diff --check`, scoped status review and visual QA capture where the graphical runner is available.
+- Record actual commands/results, commit only R2-owned changes as one commit, and stop for review.
+
+## 2026-07-29 — Chapter III structural rework R2 completion
+
+Status: complete for approved R2 scope — R3/R4/R5 remain pending
+
+### Delivered implementation
+
+- Replaced the active Chapter III Main target with `chapter_03_route.tscn`. `ChapterRegistry` and the Chapter III start profile no longer reference the legacy `chapter_03_entry_placeholder.tscn`; that file remains only as an inactive regression fixture.
+- Added eight independently instantiable room wrappers and a chapter-local room framework. The formal walk route now covers Chapel Vestibule, Processional Nave, Broken Choir Gallery, Last Vigil Checkpoint and Thirteen Confessions; Debug starts can independently load the pre-existing Sanctum, post-Boss reliquary and underkeep.
+- Added one persistent ChapterRuntime and one active RoomHost. Four tested room swaps preserved the exact Player instance and HUD while unloading the previous room, updating room label, respawn anchor and Camera limits, and restoring input after a 0.22 s out/in Fade.
+- Generated 20 original chapter-local PNG assets through Godot `Image`: four formal architectural backdrops, four doors, a 512 px physical stair, four platform widths, mourner bench, bell font/emblem, votive lectern, choir seat and two-layer organ. Godot imports are lossless (`compress/mode=0`) with mipmaps disabled; scene textures use nearest filtering.
+- Added E-confirmed door opening for Nave, Choir, checkpoint and confession thresholds. The Vestibule first raises the Nave door, then lets the Player walk down eight visible/physical stair courses before the exit Fade. The final Boss gate stays closed and non-automatic because its full interaction/intro contract is explicitly R4 scope.
+- Added R1-planned 60 px platform rises and 96–192 px landing surfaces. A review caught an initial 72 px physical rise caused by interpreting shape centers as surface coordinates; collision centers and visuals were corrected so the first surface is exactly y552 above the y612 floor.
+- MainBootstrap graphical QA produced `chapter_03_r2_vestibule_main.png`, `chapter_03_r2_nave_main.png` and `chapter_03_r2_choir_main.png`. These show the formal rooms rather than the removed blank prototype canvas or its hard x4200/x5864/x9200 joins.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version` — `4.7.1.stable.official.a13da4feb`.
+2. R2 asset generator — PASS, `files=20`.
+3. Exact headless editor import/parse — exit 0; import log contains no `SCRIPT ERROR`, `ERROR:`, `Parse Error` or invalid-resource line.
+4. `test_chapter_03_r2_room_structure.gd` — PASS, `rooms=8 swaps=4 persistent_player=1`; all rooms instantiate independently, the formal profile excludes the legacy canvas, RoomHost stays at one child and planned platform paths/surfaces resolve.
+5. Direct six-second saved `chapter_03_route.tscn` smoke — exit 0; no red runtime error.
+6. Graphical `capture_chapter_03_r2_rooms_qa.gd` — PASS, `images=3`; output confirms `MainBootstrap` selected `chapter_03_route.tscn`, so evidence was not captured from F6 room loading.
+7. `git diff --check` — exit 0.
+
+### Known stage boundary and manual acceptance
+
+- R2 demonstrates the new room architecture, doors, stairs, platforms, formal assets and Main routing. It does not claim R3 layer/visible-collision final acceptance, R4 Boss gate/Boss intro/post-Boss progression, or R5 full Chapter II→III→IV regression.
+- Manual review: choose Chapter III Debug Start with `chapter_03_start`, press F5, use E at the right-side doors, walk the vestibule stair and verify each Fade retains Player/HUD state. The intended R2 stop is the closed gate in Thirteen Confessions.
+- Existing dirty Chapter I/shared enemy, loot/Player Resource, Ravenfang screenshot and UID changes were not edited and are excluded from the R2 commit.
+
+**R2 is complete. Chapter III structural rework is not final until approved R3–R5 are completed.**

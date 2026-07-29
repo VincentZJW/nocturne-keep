@@ -1,0 +1,16 @@
+[gd_scene load_steps=4 format=3]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_antechamber.tscn" id="2_ante"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/areas/ch3_boss_gate_transition.tscn" id="3_gate"]
+[node name="Ch3BossAnteRoom" type="Node2D"]
+script = ExtResource("1_room")
+room_id = &"CH3_BOSS_ANTE"
+bilingual_name = "CHAPTER III · THIRTEEN CONFESSIONS / 十三忏前厅"
+room_size = Vector2i(1664, 720)
+[node name="BossAntechamber" parent="." instance=ExtResource("2_ante")]
+[node name="BossGate" parent="." instance=ExtResource("3_gate")]
+position = Vector2(1280, 104)
+auto_trigger = false
+[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="EntryWest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(160, 584)

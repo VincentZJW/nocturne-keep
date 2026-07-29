@@ -1,0 +1,37 @@
+class_name Chapter03Room
+extends Node2D
+
+signal transition_requested(destination_room_id: StringName, destination_spawn_id: StringName)
+
+@export var room_id: StringName = &""
+@export var bilingual_name: String = ""
+@export var room_size: Vector2i = Vector2i(1280, 720)
+@export var default_spawn_id: StringName = &"EntryWest"
+@export_node_path("Node2D") var spawn_points_path: NodePath = NodePath("SpawnPoints")
+
+@onready var spawn_points: Node2D = get_node_or_null(spawn_points_path) as Node2D
+
+
+func _ready() -> void:
+	for child: Node in find_children("*", "Chapter03RoomDoor", true, false):
+		var door := child as Chapter03RoomDoor
+		if door != null:
+			door.transition_requested.connect(_on_transition_requested)
+	for child: Node in find_children("*", "Chapter03RoomExit", true, false):
+		var room_exit := child as Chapter03RoomExit
+		if room_exit != null:
+			room_exit.transition_requested.connect(_on_transition_requested)
+
+
+func get_spawn(spawn_id: StringName) -> Marker2D:
+	if spawn_points == null:
+		return null
+	var selected_id: StringName = spawn_id if not spawn_id.is_empty() else default_spawn_id
+	var marker: Marker2D = spawn_points.get_node_or_null(NodePath(String(selected_id))) as Marker2D
+	if marker == null:
+		marker = spawn_points.get_node_or_null(NodePath(String(default_spawn_id))) as Marker2D
+	return marker
+
+
+func _on_transition_requested(destination_room_id: StringName, destination_spawn_id: StringName) -> void:
+	transition_requested.emit(destination_room_id, destination_spawn_id)

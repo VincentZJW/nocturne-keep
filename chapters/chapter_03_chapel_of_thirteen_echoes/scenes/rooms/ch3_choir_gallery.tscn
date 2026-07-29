@@ -1,0 +1,144 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room.gd" id="1_room"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_door.gd" id="2_door"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/choir_gallery_backdrop.png" id="3_backdrop"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/boss_vestry_door.png" id="4_door"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/platform_192.png" id="5_p192"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/platform_96.png" id="6_p96"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/platform_160.png" id="7_p160"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/organ_pipes_far.png" id="8_pipes"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/organ_case_behind.png" id="9_organ"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/choir_seat.png" id="10_seat"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="11_exec"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="12_chorister"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="13_seraph"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(2432, 108)
+[sub_resource type="RectangleShape2D" id="WallShape"]
+size = Vector2(48, 720)
+[sub_resource type="RectangleShape2D" id="DoorBlocker"]
+size = Vector2(64, 340)
+[sub_resource type="RectangleShape2D" id="DoorArea"]
+size = Vector2(220, 360)
+[sub_resource type="RectangleShape2D" id="Platform192"]
+size = Vector2(192, 24)
+[sub_resource type="RectangleShape2D" id="Platform96"]
+size = Vector2(96, 24)
+[sub_resource type="RectangleShape2D" id="Platform160"]
+size = Vector2(160, 24)
+
+[node name="Ch3ChoirGallery" type="Node2D"]
+script = ExtResource("1_room")
+room_id = &"CH3_CHOIR_GALLERY"
+bilingual_name = "CHAPTER III · BROKEN CHOIR GALLERY / 断声唱诗廊"
+room_size = Vector2i(2432, 720)
+[node name="Backdrop" type="Sprite2D" parent="."]
+z_index = -30
+position = Vector2(1216, 360)
+texture_filter = 1
+texture = ExtResource("3_backdrop")
+[node name="OrganPipesFar" type="Sprite2D" parent="."]
+z_index = -18
+position = Vector2(1900, 322)
+texture_filter = 1
+texture = ExtResource("8_pipes")
+[node name="OrganCaseBehind" type="Sprite2D" parent="."]
+z_index = -9
+position = Vector2(1900, 380)
+texture_filter = 1
+texture = ExtResource("9_organ")
+[node name="WestChoirSeat" type="Sprite2D" parent="."]
+z_index = -6
+position = Vector2(544, 560)
+texture_filter = 1
+texture = ExtResource("10_seat")
+[node name="EastChoirSeat" type="Sprite2D" parent="."]
+z_index = -6
+position = Vector2(1424, 560)
+texture_filter = 1
+texture = ExtResource("10_seat")
+[node name="Geometry" type="Node2D" parent="."]
+[node name="Floor" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Floor"]
+position = Vector2(1216, 666)
+shape = SubResource("FloorShape")
+[node name="LeftWall" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/LeftWall"]
+position = Vector2(-24, 360)
+shape = SubResource("WallShape")
+[node name="WestChoirSeatPlatform" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/WestChoirSeatPlatform"]
+position = Vector2(544, 576)
+texture_filter = 1
+texture = ExtResource("5_p192")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/WestChoirSeatPlatform"]
+position = Vector2(544, 564)
+shape = SubResource("Platform192")
+[node name="EastChoirSeatPlatform" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/EastChoirSeatPlatform"]
+position = Vector2(1424, 576)
+texture_filter = 1
+texture = ExtResource("5_p192")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/EastChoirSeatPlatform"]
+position = Vector2(1424, 564)
+shape = SubResource("Platform192")
+[node name="OrganAccessCorbel" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/OrganAccessCorbel"]
+position = Vector2(1632, 516)
+texture_filter = 1
+texture = ExtResource("6_p96")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/OrganAccessCorbel"]
+position = Vector2(1632, 504)
+shape = SubResource("Platform96")
+[node name="OrganMaintenanceDeck" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="Visual" type="Sprite2D" parent="Geometry/OrganMaintenanceDeck"]
+position = Vector2(1808, 456)
+texture_filter = 1
+texture = ExtResource("7_p160")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/OrganMaintenanceDeck"]
+position = Vector2(1808, 444)
+shape = SubResource("Platform160")
+[node name="Doors" type="Node2D" parent="."]
+[node name="CheckpointDoor" type="Area2D" parent="Doors"]
+position = Vector2(2304, 380)
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("2_door")
+destination_room_id = &"CH3_BOSS_CHECKPOINT"
+destination_spawn_id = &"EntryWest"
+[node name="DoorVisual" type="Sprite2D" parent="Doors/CheckpointDoor"]
+texture_filter = 1
+texture = ExtResource("4_door")
+[node name="Blocker" type="StaticBody2D" parent="Doors/CheckpointDoor"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/CheckpointDoor/Blocker"]
+position = Vector2(0, 66)
+shape = SubResource("DoorBlocker")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/CheckpointDoor"]
+position = Vector2(-58, 66)
+shape = SubResource("DoorArea")
+[node name="Prompt" type="Label" parent="Doors/CheckpointDoor"]
+position = Vector2(-122, -118)
+text = "E  ENTER VESTRY / 进入告解前室"
+theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)
+theme_override_font_sizes/font_size = 12
+[node name="Enemies" type="Node2D" parent="."]
+[node name="CenserExecutioner" parent="Enemies" instance=ExtResource("11_exec")]
+position = Vector2(780, 584)
+[node name="SilentChorister" parent="Enemies" instance=ExtResource("12_chorister")]
+position = Vector2(1180, 470)
+[node name="StainedGlassSeraph" parent="Enemies" instance=ExtResource("13_seraph")]
+position = Vector2(1840, 360)
+[node name="SpawnPoints" type="Node2D" parent="."]
+[node name="EntryWest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(128, 584)
+[node name="EnemyTest" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(620, 584)
