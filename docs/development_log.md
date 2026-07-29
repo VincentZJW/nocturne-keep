@@ -5504,3 +5504,39 @@ Status: complete — Boss-sword-only concept, formal frames, Main evidence and r
 - Concept: `chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/concept_art/fallen_gate_knight_greatsword_design.png`.
 - Runtime preview: `chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/animations/fallen_gate_knight_v3_runtime_preview.png`.
 - Manual F5 review should select Chapter I and the `boss_checkpoint` / `CH1_BOSS` start profile, then inspect shielded idle/walk/slash/thrust/heavy, the shield transition, Phase 2 two-handed attacks and death. Native-scale weight and personal visual preference remain manual acceptance items.
+
+## 2026-07-29 — Chapter II enemy and Boss art rework, Stage 0 audit
+
+Status: complete — authoritative runtime/art audit and Enemy/Boss Art Bible delivered; no character art replaced
+
+### Goal and fixed scope
+
+- Audit the five Chapter II-specific ordinary enemies and `The Hollow Duchess, Seraphine`, including formal scenes, scripts, data Resources, concept sources, SpriteFrames, animation coverage, Main spawn bindings, shared-enemy references, Inspector overrides and existing QA evidence.
+- Establish the reusable Chapter II Enemy/Boss Art Bible and an exact staged rework backlog. The dedicated Duchess specification is adopted as the detailed acceptance standard for later Stages 2A–2D.
+- Stage 0 is documentation/audit only. It does not authorize concept generation, Sprite replacement, scene rewiring, AI/timing/hitbox changes, balance changes, debug-spawn additions or Stage 1A implementation.
+
+### Read-only findings
+
+- F5 authority remains `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter II is the saved `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`. Its three floors are one formal world composed from room scenes, encounter spawn markers and short floor transitions.
+- The formal level directly references all five Chapter II enemy PackedScenes and the Duchess PackedScene. It authors 12 Hollow Retainers, 8 Court Halberdiers, 5 Mourning Armors, 4 Blood-Candle Acolytes and 4 Hanging Stalkers. It also intentionally reuses four shared Fallen Crossbowmen and one shared Gargoyle Sentinel.
+- Enemy spawn nodes override placement, encounter role and patrol bounds, not SpriteFrames. The live Duchess instance only overrides position. Later authoritative scene/SpriteFrames replacements therefore reach Main without per-instance art overrides.
+- Every ordinary enemy has 64×64 PNGs and one minimal SVG concept, but only 7–10 animation families / 31–45 frames. Visual inspection of the existing Main evidence confirms block-like bodies, line weapons and insufficient court-duty/material differentiation.
+- Duchess Phase 1 and Phase 2 are technically separate 96×96 SpriteFrames resources with 20 animations / 100 frames each; a dedicated 5-frame transition set bridges them. Runtime switches to P2 art at 2.75 seconds within the existing 4.40-second transition. Visual inspection confirms P1 remains a simple rectangular gown/line rapier and P2 is mainly a recolour with short spine lines rather than the required faceless anatomical transformation.
+- `CH2_ENEMY_ART_TRIAL` is not currently defined. The independent five-role prototype room exists, while formal Main verification uses floor start IDs and `CH2_BOSS`.
+
+### Delivered documentation
+
+- `chapters/chapter_02_silent_court/docs/chapter_02_enemy_boss_art_bible.md`: chapter palette/material language, per-role silhouettes, full target animation sets, Duchess P1/transition/P2 standards, asset ownership, compatibility rules and forced stage gates.
+- `docs/qa/chapter_02_enemy_boss_art_rework/stage_0_audit.md`: exact runtime paths, Main counts, current animation/frame inventory, legacy reference chain, visual failures, shared-enemy boundary and the approved Stage 1A–3 sequence.
+
+### Verification and scope check
+
+- Exact `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version` reported `4.7.1.stable.official.a13da4feb`; headless editor import/parse exited 0 with no parser, missing-resource or duplicate-UID error.
+- Five-role `phase_2_enemy_prototype_room.tscn` and `hollow_duchess_test_room.tscn` headless smokes both exited 0 without red Output/Debugger errors.
+- Saved `silent_court.tscn` headless smoke exited 0. It reports the existing non-fatal `2 ObjectDB instances were leaked at exit` cleanup warning; Stage 0 did not introduce or hide it.
+- `test_phase_2_enemy_prototypes.gd` passed (`enemies=5`); this proves the current gameplay/resource contract, not new-art acceptance.
+- `test_hollow_duchess_boss.gd` passed all seven attacks across 70 iterations and Phase 2. `test_hollow_duchess_main_integration.gd` passed Boss/entrance/presentation/checkpoint/HUD/reliquary/mirror bindings and reports one existing non-fatal ObjectDB cleanup warning.
+- Formal F5-equivalent Bootstrap startup exited 0 and entered `res://scenes/cinematics/opening_cinematic.tscn`, confirming Stage 0 did not replace the normal launch route.
+- `git diff --check` and the final scoped status audit must confirm Stage 0 changes only the two audit documents and this log.
+- Preserve and exclude all pre-existing dirty Chapter I/shared enemy Resources, Chapter I level serialization, Player/loot Resources, Ravenfang QA images and UID sidecars.
+- Create one Stage 0 audit commit and stop. Stage 1A remains blocked pending explicit approval.
