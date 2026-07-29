@@ -193,6 +193,7 @@ Main开发调试快捷键：
 - [第三章Boss区域强制 QA 报告](docs/qa/chapter_03_boss_environment/report.md)
 - [第三章埃德兰Boss B0规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)
 - [第三章Boss B0审计报告](docs/qa/chapter_03_boss_b0/report.md)
+- [第三章Boss B1美术QA](docs/qa/chapter_03_boss_b1/README.md)
 - [第三章结构返修 R2 实装记录](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r2_implementation.md)
 - [第三章结构返修 R3 图层与碰撞报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r3_layer_collision_report.md)
 - [第三章结构返修 R4 Boss流程报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r4_boss_flow_report.md)

@@ -6244,3 +6244,39 @@ Status: complete — design/audit gate only; B1 not started
 - B0 has no visual or playable Boss output. No concept board, silhouette, Sprite, animation, skill, summon, HUD, dialogue, reward or Chapter IV transition can be accepted yet.
 - The existing unrelated dirty Chapter I/shared/resource/QA files were preserved and excluded from this milestone commit.
 - Manual review for this gate is the two B0 documents and their arithmetic/skill/summon decisions. B1 may begin only after explicit approval and is limited to Phase 1 concept/equipment art and the formal Phase 1 Sprite.
+
+## 2026-07-29 — Chapter III Boss B1–B3 preflight
+
+Status: in progress — B1, B2 and B3 explicitly approved; stop before B4
+
+### Goals, owned files, tests and scope
+
+- B1 owns original Phase 1 concept/model/equipment/pose boards under `chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/concept_art/`, a deterministic 96×96 formal pixel-art source set and its SpriteFrames. Concept images are production references; formal runtime pixels are authored separately and may not be blurred reductions of the concept boards.
+- B2 owns the typed Edran Data Resource, single target-owned damage policy, Phase 1 Boss scene/controller, Phase 1 animation/attack windows, isolated test room, deterministic contract tests and saved Main/Chapter III Boss-sanctum integration at the existing `BossIntegrationAnchor`.
+- B3 owns original Ossuary Penitent and Choir Husk concept/Sprite/animation assets, typed summon configs/controllers/scenes, the Boss-owned summon director, cap/interrupt/lifetime/no-loot/no-Encounter-count/forced-dissolve rules, summon tests and Main/F5 evidence.
+- B1, B2 and B3 will each receive an isolated commit and exact Godot 4.7.1 import/parse plus stage-specific tests. User approval covers all three sequential stages, so work may continue across B1 and B2 without another approval; it must stop after B3 and may not create Phase Transition, Phase 2, reward or Chapter IV implementation.
+- Formal entry remains `res://scenes/bootstrap/main_bootstrap.tscn`; formal Chapter III route remains `chapter_03_route.tscn`; fast Main validation uses the approved Chapter III Debug Start targets. F6/test rooms remain supplemental.
+- Existing unrelated dirty Chapter I/shared/resource/QA changes are preserved and excluded from all three commits. No unlicensed or provenance-unknown asset will be introduced; generated concept sources are original outputs produced for this project and deterministic pixel sources are repository-owned GDScript output.
+
+## 2026-07-29 — Chapter III Boss B1 complete
+
+Status: complete — Phase 1 art production only; B2 gameplay integration follows under the same approval
+
+### Delivered
+
+- Produced original Phase 1 model, equipment and attack-pose boards for `The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`, plus dedicated front/side/back/silhouette, crown, vestment, hollow-bell crozier and censer references. Source provenance and the non-commercial visual-reference constraint are recorded beside the images.
+- Added a deterministic Godot `Image` authoring tool and separate SpriteFrames builder. The formal runtime set contains 114 transparent 96×96 PNGs across 27 named Phase 1 presentation, locomotion, attack, summon, hit and transition-start entries; it is original pixel construction, not a reduced concept image.
+- Preserved the B0 hierarchy: thirteen crown/seal accents, masked blue soul eyes, layered black/bone/burgundy vestment, full crozier head and chain-mounted censer remain readable at native size. Added integer-nearest 48/64 scale evidence and a 1280×800 B1 QA contact sheet.
+- No scene, Boss controller, Main instance, hitbox, AI, summon actor, Phase Transition, Phase 2, reward or Chapter IV content was changed in B1.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_edran_phase_01_art.gd` — PASS, `animations=27 frames=114`.
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --import` — PASS, all new concept and runtime PNG sources imported.
+3. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/build_edran_phase_01_sprite_frames.gd` — PASS, `animations=27 frames=114`.
+4. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b1_assets.gd` — PASS, `concepts=9 animations=27`; every runtime texture is present and 96×96.
+
+### QA and boundary
+
+- Evidence: `docs/qa/chapter_03_boss_b1/edran_phase_01_b1_contact_sheet.png` and the Boss asset `previews/` directory.
+- B1 is visually and structurally complete. Runtime/Main acceptance is intentionally not claimed until B2 creates the Boss scene/controller and saved Boss-sanctum instance.

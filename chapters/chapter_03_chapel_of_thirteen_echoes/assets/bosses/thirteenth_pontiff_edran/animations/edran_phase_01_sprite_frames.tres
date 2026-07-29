@@ -1,0 +1,596 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_active/censer_procession_active_01.png" id="1_fox1h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_active/censer_procession_active_02.png" id="2_hockb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_recovery/censer_procession_recovery_01.png" id="3_br5et"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_recovery/censer_procession_recovery_02.png" id="4_xlfaw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_recovery/censer_procession_recovery_03.png" id="5_tioic"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_recovery/censer_procession_recovery_04.png" id="6_i1jqa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_recovery/censer_procession_recovery_05.png" id="7_o6r61"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_windup/censer_procession_windup_01.png" id="8_ocvv6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_windup/censer_procession_windup_02.png" id="9_s8cgk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_windup/censer_procession_windup_03.png" id="10_vpp04"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_windup/censer_procession_windup_04.png" id="11_t5du0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/censer_procession_windup/censer_procession_windup_05.png" id="12_npkg6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_active/crozier_thrust_active_01.png" id="13_1pc77"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_active/crozier_thrust_active_02.png" id="14_qdicx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_recovery/crozier_thrust_recovery_01.png" id="15_iq2b8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_recovery/crozier_thrust_recovery_02.png" id="16_ly0x4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_recovery/crozier_thrust_recovery_03.png" id="17_7oh6o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_recovery/crozier_thrust_recovery_04.png" id="18_cddgh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_windup/crozier_thrust_windup_01.png" id="19_2e6ot"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_windup/crozier_thrust_windup_02.png" id="20_cnsal"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_windup/crozier_thrust_windup_03.png" id="21_22ttq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/crozier_thrust_windup/crozier_thrust_windup_04.png" id="22_acj5y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_01.png" id="23_d0g0v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_02.png" id="24_yvxef"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_03.png" id="25_vfr7v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_04.png" id="26_csb2h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/hurt/hurt_01.png" id="27_w5qnn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/hurt/hurt_02.png" id="28_igri1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/hurt/hurt_03.png" id="29_8nlmf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_01.png" id="30_2k6gx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_02.png" id="31_tmvq3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_03.png" id="32_bwxv7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_04.png" id="33_8qxgw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_01.png" id="34_6ety0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_02.png" id="35_80tsr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_03.png" id="36_k4c7l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_04.png" id="37_t3iim"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_05.png" id="38_81cxa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/light_hit/light_hit_01.png" id="39_tu0fn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/light_hit/light_hit_02.png" id="40_11glt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_01.png" id="41_m1b0g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_02.png" id="42_amxce"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_03.png" id="43_5km0b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_04.png" id="44_qmhij"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_05.png" id="45_m0n2c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_06.png" id="46_npruo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_01.png" id="47_hj0k6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_02.png" id="48_k56cq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_03.png" id="49_rnjmn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_04.png" id="50_ygql7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_transition_start/phase_transition_start_01.png" id="51_38t7w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_transition_start/phase_transition_start_02.png" id="52_1qn5d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_transition_start/phase_transition_start_03.png" id="53_6mru5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_transition_start/phase_transition_start_04.png" id="54_vgp1d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_active/pontifical_sweep_active_01.png" id="55_qplss"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_active/pontifical_sweep_active_02.png" id="56_or4u7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_recovery/pontifical_sweep_recovery_01.png" id="57_jnn1m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_recovery/pontifical_sweep_recovery_02.png" id="58_u61ki"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_recovery/pontifical_sweep_recovery_03.png" id="59_43c8s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_recovery/pontifical_sweep_recovery_04.png" id="60_igkt4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_recovery/pontifical_sweep_recovery_05.png" id="61_jtg6l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_01.png" id="62_jni8y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_02.png" id="63_535vy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_03.png" id="64_jgymr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_04.png" id="65_scg5m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_05.png" id="66_lgjo3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_01.png" id="67_2mhug"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_02.png" id="68_ka6fe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_03.png" id="69_fvs5n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_04.png" id="70_jaqlh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_01.png" id="71_6y2lg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_02.png" id="72_raykw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_03.png" id="73_jh8vm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_04.png" id="74_rh6qu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_05.png" id="75_wfl8e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_01.png" id="76_dxew2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_02.png" id="77_g4g72"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_03.png" id="78_ln4w3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_04.png" id="79_av1si"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_05.png" id="80_oa15m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_06.png" id="81_xp0cy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/stagger/stagger_01.png" id="82_qa7xh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/stagger/stagger_02.png" id="83_jmnpp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/stagger/stagger_03.png" id="84_k7si5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/stagger/stagger_04.png" id="85_e0mkl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_interrupt/summon_interrupt_01.png" id="86_5eaku"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_interrupt/summon_interrupt_02.png" id="87_krinj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_interrupt/summon_interrupt_03.png" id="88_oqcg0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_interrupt/summon_interrupt_04.png" id="89_1wn65"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_loop/summon_loop_01.png" id="90_6ax7f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_loop/summon_loop_02.png" id="91_8rpte"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_loop/summon_loop_03.png" id="92_2jek2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_loop/summon_loop_04.png" id="93_1yf1v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_start/summon_start_01.png" id="94_8bq54"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_start/summon_start_02.png" id="95_6l0rg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_start/summon_start_03.png" id="96_auvxc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_start/summon_start_04.png" id="97_pn0xq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_start/summon_start_05.png" id="98_rhmao"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_success/summon_success_01.png" id="99_73dyo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_success/summon_success_02.png" id="100_ub1cv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_success/summon_success_03.png" id="101_faemh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/summon_success/summon_success_04.png" id="102_8d77s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_01.png" id="103_evus4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_02.png" id="104_tcftp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_03.png" id="105_pf10d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_04.png" id="106_kntpj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_05.png" id="107_mjsw8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_06.png" id="108_rcvn1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_07.png" id="109_pge6g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/thirteenfold_sentence/thirteenfold_sentence_08.png" id="110_rek8o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/turn/turn_01.png" id="111_u1hsa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/turn/turn_02.png" id="112_wy0sy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/turn/turn_03.png" id="113_vlt1u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/turn/turn_04.png" id="114_nein8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_fox1h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_hockb")
+}],
+"loop": 0,
+"name": &"censer_procession_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_br5et")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_xlfaw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_tioic")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_i1jqa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_o6r61")
+}],
+"loop": 0,
+"name": &"censer_procession_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_ocvv6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_s8cgk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_vpp04")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_t5du0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_npkg6")
+}],
+"loop": 0,
+"name": &"censer_procession_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_1pc77")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_qdicx")
+}],
+"loop": 0,
+"name": &"crozier_thrust_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("15_iq2b8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_ly0x4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_7oh6o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_cddgh")
+}],
+"loop": 0,
+"name": &"crozier_thrust_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_2e6ot")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_cnsal")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_22ttq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_acj5y")
+}],
+"loop": 0,
+"name": &"crozier_thrust_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("23_d0g0v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_yvxef")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_vfr7v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_csb2h")
+}],
+"loop": 1,
+"name": &"dialogue_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_w5qnn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_igri1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_8nlmf")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30_2k6gx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_tmvq3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_bwxv7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_8qxgw")
+}],
+"loop": 0,
+"name": &"intro_back_facing",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_6ety0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_80tsr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_k4c7l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_t3iim")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_81cxa")
+}],
+"loop": 0,
+"name": &"intro_turn",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("39_tu0fn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_11glt")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_m1b0g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_amxce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_5km0b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_qmhij")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_m0n2c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_npruo")
+}],
+"loop": 0,
+"name": &"litany_cast",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_hj0k6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_k56cq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_rnjmn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_ygql7")
+}],
+"loop": 1,
+"name": &"phase_01_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_38t7w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_1qn5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_6mru5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_vgp1d")
+}],
+"loop": 0,
+"name": &"phase_transition_start",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("55_qplss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_or4u7")
+}],
+"loop": 0,
+"name": &"pontifical_sweep_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_jnn1m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_u61ki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_43c8s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_igkt4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_jtg6l")
+}],
+"loop": 0,
+"name": &"pontifical_sweep_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_jni8y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_535vy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_jgymr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_scg5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_lgjo3")
+}],
+"loop": 0,
+"name": &"pontifical_sweep_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_2mhug")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_ka6fe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_fvs5n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_jaqlh")
+}],
+"loop": 1,
+"name": &"prayer_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("71_6y2lg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_raykw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_jh8vm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_rh6qu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_wfl8e")
+}],
+"loop": 0,
+"name": &"scripture_writing",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_dxew2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_g4g72")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_ln4w3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_av1si")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_oa15m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_xp0cy")
+}],
+"loop": 0,
+"name": &"slow_walk",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("82_qa7xh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_jmnpp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_k7si5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_e0mkl")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("86_5eaku")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_krinj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_oqcg0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_1wn65")
+}],
+"loop": 0,
+"name": &"summon_interrupt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("90_6ax7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_8rpte")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_2jek2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_1yf1v")
+}],
+"loop": 1,
+"name": &"summon_loop",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("94_8bq54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_6l0rg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_auvxc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_pn0xq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_rhmao")
+}],
+"loop": 0,
+"name": &"summon_start",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("99_73dyo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_ub1cv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("101_faemh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_8d77s")
+}],
+"loop": 0,
+"name": &"summon_success",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("103_evus4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_tcftp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_pf10d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("106_kntpj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_mjsw8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_rcvn1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("109_pge6g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_rek8o")
+}],
+"loop": 0,
+"name": &"thirteenfold_sentence",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("111_u1hsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("112_wy0sy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("113_vlt1u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("114_nein8")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 8.0
+}]
