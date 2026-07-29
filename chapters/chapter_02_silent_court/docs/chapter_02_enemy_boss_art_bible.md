@@ -174,4 +174,6 @@ Automatic asset checks cannot approve material quality, animation weight, silhou
 9. Stage 2D — intro, afterimages/effects, death and reward handoff.
 10. Stage 3 — complete Chapter II Main regression and final forced QA.
 
-Every stage ends with exact Godot tests, Main evidence, one clear commit and a stop for approval. This Stage 0 document does not authorize Stage 1A implementation.
+The user authorized Stage 1A–1E as one continuous delivery on 2026-07-29. All five ordinary-enemy stages now have original concept sheets, deterministic formal pixel frames, expanded presentation families, authoritative SpriteFrames and Main evidence. Their implementation record is `res://docs/qa/chapter_02_enemy_boss_art_rework/stage_1_report.md`.
+
+Stage 2 remains separate. The dedicated Hollow Duchess attachment is the highest-priority design and acceptance source for Stage 2A–2D; ordinary-enemy completion does not authorize or substitute for that Boss work.

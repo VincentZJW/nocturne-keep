@@ -1,139 +1,291 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/alert/alert_01.png" id="1_bui37"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/alert/alert_02.png" id="2_omd4t"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_01.png" id="3_c8714"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_02.png" id="4_uomwo"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_03.png" id="5_eiyl6"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_04.png" id="6_kbx2d"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_05.png" id="7_6jrj7"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_06.png" id="8_dj2po"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_01.png" id="9_37oej"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_02.png" id="10_3wkrn"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_03.png" id="11_igebw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_04.png" id="12_yb4sy"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_01.png" id="13_u1rtx"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_02.png" id="14_e4pey"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_03.png" id="15_2hxq3"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_04.png" id="16_ltna2"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_05.png" id="17_fqyx7"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_06.png" id="18_2q6di"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/hurt/hurt_01.png" id="19_2enf4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/hurt/hurt_02.png" id="20_0csqb"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/hurt/hurt_03.png" id="21_ubgpq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_01.png" id="22_ir7cl"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_02.png" id="23_gyv4p"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_03.png" id="24_r0vcb"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_04.png" id="25_5d2bp"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_01.png" id="26_sxn0j"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_02.png" id="27_let85"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_03.png" id="28_pahhe"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_04.png" id="29_garp4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_05.png" id="30_cgdg6"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_06.png" id="31_5muqg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/alert/alert_01.png" id="1_k4q1j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/alert/alert_02.png" id="2_oetp2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/alert/alert_03.png" id="3_bxyok"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_end/ally_buff_end_01.png" id="4_yqjsb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_end/ally_buff_end_02.png" id="5_tj0kv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_end/ally_buff_end_03.png" id="6_iwlk6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_end/ally_buff_end_04.png" id="7_bt01l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_loop/ally_buff_loop_01.png" id="8_um2qg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_loop/ally_buff_loop_02.png" id="9_2i82p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_loop/ally_buff_loop_03.png" id="10_4rlaa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_loop/ally_buff_loop_04.png" id="11_2s6h5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_start/ally_buff_start_01.png" id="12_i8y32"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_start/ally_buff_start_02.png" id="13_nmsms"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_start/ally_buff_start_03.png" id="14_a4201"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ally_buff_start/ally_buff_start_04.png" id="15_ssnqy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_01.png" id="16_7rv7g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_02.png" id="17_r2k7a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_03.png" id="18_q8an6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_04.png" id="19_kg0m1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_05.png" id="20_yru0t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/attack_cast/attack_cast_06.png" id="21_2ven3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_01.png" id="22_lak2e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_02.png" id="23_uu28s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_03.png" id="24_5pjf2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/buff_channel/buff_channel_04.png" id="25_n731e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/candle_extinguish/candle_extinguish_01.png" id="26_e22ga"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/candle_extinguish/candle_extinguish_02.png" id="27_u4mfv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/candle_extinguish/candle_extinguish_03.png" id="28_arkst"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/candle_extinguish/candle_extinguish_04.png" id="29_gnyce"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/candle_extinguish/candle_extinguish_05.png" id="30_11ih1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_01.png" id="31_odxru"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_02.png" id="32_5v886"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_03.png" id="33_reum4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_04.png" id="34_mape8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_05.png" id="35_yp683"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_06.png" id="36_ekfti"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/death/death_07.png" id="37_jfyk8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ember_cast/ember_cast_01.png" id="38_ourtx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ember_cast/ember_cast_02.png" id="39_gdfv8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ember_cast/ember_cast_03.png" id="40_6f0qv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ember_cast/ember_cast_04.png" id="41_eemkl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/ember_cast/ember_cast_05.png" id="42_qliny"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/hurt/hurt_01.png" id="43_jkwk5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/hurt/hurt_02.png" id="44_7itb6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/hurt/hurt_03.png" id="45_7phdq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_01.png" id="46_6fip5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_02.png" id="47_a5sw4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_03.png" id="48_15s0j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/idle/idle_04.png" id="49_yricx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/light_hit/light_hit_01.png" id="50_xjva8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/light_hit/light_hit_02.png" id="51_wxtq2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/prayer_idle/prayer_idle_01.png" id="52_748pd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/prayer_idle/prayer_idle_02.png" id="53_am4ue"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/prayer_idle/prayer_idle_03.png" id="54_mvakl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/prayer_idle/prayer_idle_04.png" id="55_7ib6w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_active/projectile_cast_active_01.png" id="56_l8d6a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_active/projectile_cast_active_02.png" id="57_2blhl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_recovery/projectile_cast_recovery_01.png" id="58_dlltu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_recovery/projectile_cast_recovery_02.png" id="59_gw1i0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_recovery/projectile_cast_recovery_03.png" id="60_yfs35"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_recovery/projectile_cast_recovery_04.png" id="61_vcdox"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_recovery/projectile_cast_recovery_05.png" id="62_5hxg2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_windup/projectile_cast_windup_01.png" id="63_ghksk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_windup/projectile_cast_windup_02.png" id="64_24pv7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_windup/projectile_cast_windup_03.png" id="65_3rlx8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_windup/projectile_cast_windup_04.png" id="66_jtgj3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/projectile_cast_windup/projectile_cast_windup_05.png" id="67_sn6tb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/stagger/stagger_01.png" id="68_g1fin"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/stagger/stagger_02.png" id="69_i5vil"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/stagger/stagger_03.png" id="70_qcaai"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/stagger/stagger_04.png" id="71_vdto0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/turn/turn_01.png" id="72_7j6er"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/turn/turn_02.png" id="73_xufsn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/turn/turn_03.png" id="74_wochh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_01.png" id="75_ue2l0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_02.png" id="76_5lfw7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_03.png" id="77_4aqfc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_04.png" id="78_y2aec"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_05.png" id="79_3kfvt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk/walk_06.png" id="80_5bhr5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk_or_reposition/walk_or_reposition_01.png" id="81_7ehth"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk_or_reposition/walk_or_reposition_02.png" id="82_bmgte"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk_or_reposition/walk_or_reposition_03.png" id="83_ve6v4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk_or_reposition/walk_or_reposition_04.png" id="84_2v7dx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk_or_reposition/walk_or_reposition_05.png" id="85_6wi84"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/blood_candle_acolyte/sprites/walk_or_reposition/walk_or_reposition_06.png" id="86_0y47q"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_bui37")
+"texture": ExtResource("1_k4q1j")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_omd4t")
+"texture": ExtResource("2_oetp2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_bxyok")
 }],
 "loop": 0,
 "name": &"alert",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_c8714")
+"texture": ExtResource("4_yqjsb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_uomwo")
+"texture": ExtResource("5_tj0kv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_eiyl6")
+"texture": ExtResource("6_iwlk6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_kbx2d")
+"texture": ExtResource("7_bt01l")
+}],
+"loop": 0,
+"name": &"ally_buff_end",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_um2qg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_6jrj7")
+"texture": ExtResource("9_2i82p")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_dj2po")
+"texture": ExtResource("10_4rlaa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_2s6h5")
+}],
+"loop": 1,
+"name": &"ally_buff_loop",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_i8y32")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_nmsms")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_a4201")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_ssnqy")
+}],
+"loop": 0,
+"name": &"ally_buff_start",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_7rv7g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_r2k7a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_q8an6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_kg0m1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_yru0t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_2ven3")
 }],
 "loop": 0,
 "name": &"attack_cast",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("9_37oej")
+"texture": ExtResource("22_lak2e")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_3wkrn")
+"texture": ExtResource("23_uu28s")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_igebw")
+"texture": ExtResource("24_5pjf2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("12_yb4sy")
+"texture": ExtResource("25_n731e")
 }],
 "loop": 0,
 "name": &"buff_channel",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("13_u1rtx")
+"texture": ExtResource("26_e22ga")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_e4pey")
+"texture": ExtResource("27_u4mfv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_2hxq3")
+"texture": ExtResource("28_arkst")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_ltna2")
+"texture": ExtResource("29_gnyce")
 }, {
 "duration": 1.0,
-"texture": ExtResource("17_fqyx7")
+"texture": ExtResource("30_11ih1")
+}],
+"loop": 0,
+"name": &"candle_extinguish",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_odxru")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_2q6di")
+"texture": ExtResource("32_5v886")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_reum4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_mape8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_yp683")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_ekfti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_jfyk8")
 }],
 "loop": 0,
 "name": &"death",
-"speed": 9.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("19_2enf4")
+"texture": ExtResource("38_ourtx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("20_0csqb")
+"texture": ExtResource("39_gdfv8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_ubgpq")
+"texture": ExtResource("40_6f0qv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_eemkl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_qliny")
+}],
+"loop": 0,
+"name": &"ember_cast",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_jkwk5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_7itb6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_7phdq")
 }],
 "loop": 0,
 "name": &"hurt",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("22_ir7cl")
+"texture": ExtResource("46_6fip5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("23_gyv4p")
+"texture": ExtResource("47_a5sw4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("24_r0vcb")
+"texture": ExtResource("48_15s0j")
 }, {
 "duration": 1.0,
-"texture": ExtResource("25_5d2bp")
+"texture": ExtResource("49_yricx")
 }],
 "loop": 1,
 "name": &"idle",
@@ -141,24 +293,157 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("26_sxn0j")
+"texture": ExtResource("50_xjva8")
 }, {
 "duration": 1.0,
-"texture": ExtResource("27_let85")
+"texture": ExtResource("51_wxtq2")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_748pd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_pahhe")
+"texture": ExtResource("53_am4ue")
 }, {
 "duration": 1.0,
-"texture": ExtResource("29_garp4")
+"texture": ExtResource("54_mvakl")
 }, {
 "duration": 1.0,
-"texture": ExtResource("30_cgdg6")
+"texture": ExtResource("55_7ib6w")
+}],
+"loop": 1,
+"name": &"prayer_idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_l8d6a")
 }, {
 "duration": 1.0,
-"texture": ExtResource("31_5muqg")
+"texture": ExtResource("57_2blhl")
+}],
+"loop": 0,
+"name": &"projectile_cast_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_dlltu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_gw1i0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_yfs35")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_vcdox")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_5hxg2")
+}],
+"loop": 0,
+"name": &"projectile_cast_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_ghksk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_24pv7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_3rlx8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_jtgj3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_sn6tb")
+}],
+"loop": 0,
+"name": &"projectile_cast_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("68_g1fin")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_i5vil")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_qcaai")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_vdto0")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("72_7j6er")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_xufsn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_wochh")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("75_ue2l0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_5lfw7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_4aqfc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_y2aec")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_3kfvt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_5bhr5")
 }],
 "loop": 1,
 "name": &"walk",
-"speed": 8.0
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("81_7ehth")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_bmgte")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_ve6v4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_2v7dx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_6wi84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_0y47q")
+}],
+"loop": 1,
+"name": &"walk_or_reposition",
+"speed": 7.0
 }]

@@ -5540,3 +5540,49 @@ Status: complete — authoritative runtime/art audit and Enemy/Boss Art Bible de
 - `git diff --check` and the final scoped status audit must confirm Stage 0 changes only the two audit documents and this log.
 - Preserve and exclude all pre-existing dirty Chapter I/shared enemy Resources, Chapter I level serialization, Player/loot Resources, Ravenfang QA images and UID sidecars.
 - Create one Stage 0 audit commit and stop. Stage 1A remains blocked pending explicit approval.
+
+## 2026-07-29 — Chapter II ordinary-enemy art rework, Stage 1 preflight
+
+Status: in progress — user approved continuous Stage 1A–1E delivery without intermediate approval pauses
+
+### Goal and fixed scope
+
+- Rebuild the five Chapter II-specific ordinary enemies in order: Hollow Retainer, Court Halberdier, Mourning Armor, Blood-Candle Acolyte and Hanging Stalker.
+- For every role, deliver original concept art, role-specific formal pixel frames, complete presentation animation families, authoritative SpriteFrames replacement, Main/F5 evidence and visual QA. Preserve gameplay AI, damage, timing, collision, encounter placement and Chapter II route.
+- The Hollow Duchess is explicitly outside Stage 1. Her later Stage 2 rework will use the dedicated Duchess attachment as the highest-priority design specification.
+
+### Files, tests and scope controls
+
+- Task-owned art remains under `chapters/chapter_02_silent_court/assets/enemies/<role>/`; deterministic generation/build/QA scripts remain under the Chapter II scripts/tests folders. Legacy formal frames will be archived before replacement and must not remain referenced by live SpriteFrames.
+- Main authority is `res://scenes/bootstrap/main_bootstrap.tscn`; the formal Chapter II world is `res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`. Saved Main spawns have no per-instance SpriteFrames override, so authoritative enemy scene resources remain the single art integration path.
+- Verification will run exact Godot 4.7.1 import/parse, five-role scene/resource tests, new formal-art integrity checks, independent prototype-room smoke, formal Chapter II/Main graphical capture and visual review. Main encounters, animations, feet anchoring, facing, weapon continuity and layer readability are mandatory evidence.
+- Pre-existing dirty Chapter I/shared enemy Resources, Chapter I level serialization, Player/loot Resources, Ravenfang QA images and UID sidecars are user-owned and excluded from the Stage 1 commit.
+
+## 2026-07-29 — Chapter II ordinary-enemy art rework, Stage 1 completion
+
+Status: complete — Stage 1A–1E delivered continuously; Stage 2 Boss work not started
+
+### Delivered art and runtime integration
+
+- Created five original full concept sheets and five deterministic native-pixel runtime systems. Hollow Retainer now carries a complete guarded smallsword and split servant coat; Court Halberdier preserves point/axe/rear-hook geometry through attacks; Mourning Armor is a weaponless empty funerary shell; Blood-Candle Acolyte uses wax/candlestick ritual language; Hanging Stalker has distinct inverted and landed court-hunter anatomy.
+- Generated 453 formal 64×64 frames across 105 animation families: Retainer 83/20, Halberdier 91/21, Mourning Armor 98/21, Acolyte 86/20 and Stalker 95/23. Expanded presentation families coexist with the exact compatibility animation names used by current gameplay scripts.
+- Rebuilt the five authoritative SpriteFrames Resources in place. Each formal enemy scene continues to bind `VisualRoot/AnimatedSprite2D` to its Chapter-local resource, while saved `silent_court.tscn` spawn points continue to instantiate those formal PackedScenes without art overrides. No Main scene serialization or gameplay controller change was required.
+- Archived each prior runtime set under its role's `reference/deprecated_stage0/` before replacement. Added enlarged deterministic previews, a focused integrity test, a MainBootstrap graphical capture runner, ten Main evidence screenshots and the Stage 1 QA report.
+
+### Exact commands and actual results
+
+1. `Godot --headless --path . --script res://chapters/chapter_02_silent_court/scripts/tools/generate_chapter_02_enemy_art_v2.gd` — PASS: `roles=5 frames=453`.
+2. Exact Godot 4.7.1 headless editor import/parse — exit 0; 463 new/updated art inputs imported without parser, missing-resource or duplicate-UID errors.
+3. `build_chapter_02_enemy_sprite_frames_v2.gd` — PASS: `roles=5 frames=453`.
+4. `test_chapter_02_enemy_art_stage_1.gd` — PASS: `roles=5 frames=453 main=true`, including concepts, archives, non-empty 64×64 frames, animation counts, formal scene binding and Main references.
+5. Existing `test_phase_2_enemy_prototypes.gd` — PASS: `enemies=5 assets=original combat=validated`.
+6. Existing `test_phase_2_enemy_damage.gd` — PASS: damage values and attack-ID dedup unchanged.
+7. Independent `phase_2_enemy_prototype_room.tscn` headless smoke — exit 0.
+8. Formal `silent_court.tscn` headless smoke — exit 0; retained the pre-existing non-fatal `2 ObjectDB instances were leaked at exit` shutdown warning.
+9. `capture_chapter_02_enemy_art_stage_1_qa.gd` — graphical OpenGL/Metal PASS through MainBootstrap: ten formal-Main identity/action captures.
+10. Visual review of all concepts, previews and Main captures — PASS for role silhouette, weapon continuity, feet anchor, facing and formal scene visibility. Native-scale artistic preference remains user acceptance.
+
+### Scope and next gate
+
+- No Player, combat value, Health, collision, Hitbox, AI, encounter placement, Chapter I or Duchess runtime resource changed. Pre-existing dirty user files remain excluded.
+- Stage 2 is not started. When approved, the Hollow Duchess will be rebuilt from the user's dedicated second attachment, covering Phase 1, full anatomical transition, Phase 2 and presentation/death as separate forced-QA units.

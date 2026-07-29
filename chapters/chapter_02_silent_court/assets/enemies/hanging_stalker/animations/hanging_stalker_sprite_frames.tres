@@ -1,131 +1,337 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_01.png" id="1_0l1xe"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_02.png" id="2_tbdp5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_03.png" id="3_o8u61"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_04.png" id="4_qbysr"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_05.png" id="5_ku3qc"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_01.png" id="6_58c1e"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_02.png" id="7_t4qrl"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_03.png" id="8_joma4"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_04.png" id="9_33d7i"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_05.png" id="10_bdkq5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_06.png" id="11_5tlfk"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_01.png" id="12_5ibx5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_02.png" id="13_10xrh"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_03.png" id="14_stmsf"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_04.png" id="15_dcdsp"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ground_recovery/ground_recovery_01.png" id="16_85ji7"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ground_recovery/ground_recovery_02.png" id="17_q3au6"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ground_recovery/ground_recovery_03.png" id="18_w15ph"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_01.png" id="19_ij2pv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_02.png" id="20_xiyen"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_03.png" id="21_gagkv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_04.png" id="22_anc76"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hurt/hurt_01.png" id="23_6m7lq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hurt/hurt_02.png" id="24_oasse"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hurt/hurt_03.png" id="25_xvrhx"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_01.png" id="26_lbcxl"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_02.png" id="27_fsepm"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_03.png" id="28_gxnh5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_04.png" id="29_g5wyq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_01.png" id="30_1424k"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_02.png" id="31_iyg5d"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_03.png" id="32_m5ywh"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_04.png" id="33_unw3o"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_01.png" id="34_jhgia"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_02.png" id="35_vutr8"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_03.png" id="36_1wv12"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_04.png" id="37_cckyb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_hidden/ceiling_hidden_01.png" id="1_nwhgf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_hidden/ceiling_hidden_02.png" id="2_e6gfo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_hidden/ceiling_hidden_03.png" id="3_d85mn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_hidden/ceiling_hidden_04.png" id="4_014bi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_idle/ceiling_idle_01.png" id="5_f1csy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_idle/ceiling_idle_02.png" id="6_v07hq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_idle/ceiling_idle_03.png" id="7_w5b44"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_idle/ceiling_idle_04.png" id="8_615ai"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_track/ceiling_track_01.png" id="9_8x3ub"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_track/ceiling_track_02.png" id="10_0lrcs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_track/ceiling_track_03.png" id="11_wdc7v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ceiling_track/ceiling_track_04.png" id="12_teyip"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_01.png" id="13_v8r3r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_02.png" id="14_lr5sv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_03.png" id="15_byvwd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_04.png" id="16_1xns6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/claw/claw_05.png" id="17_sm8uc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_01.png" id="18_khfcg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_02.png" id="19_qf1ia"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_03.png" id="20_j33kn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_04.png" id="21_gr6o5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_05.png" id="22_itqiv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death/death_06.png" id="23_vyj3s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_fall/death_fall_01.png" id="24_qjh4w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_fall/death_fall_02.png" id="25_5ripa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_fall/death_fall_03.png" id="26_tcpkq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_fall/death_fall_04.png" id="27_dpgxo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_fall/death_fall_05.png" id="28_0qepm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_fall/death_fall_06.png" id="29_aj6dp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_ground/death_ground_01.png" id="30_j5kg7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_ground/death_ground_02.png" id="31_4j8rj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_ground/death_ground_03.png" id="32_epiq6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_ground/death_ground_04.png" id="33_37xhd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_ground/death_ground_05.png" id="34_kxbyg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/death_ground/death_ground_06.png" id="35_s54o3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/detach/detach_01.png" id="36_lwag1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/detach/detach_02.png" id="37_r3iyn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/detach/detach_03.png" id="38_ybn0m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_01.png" id="39_kmogg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_02.png" id="40_4163m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_03.png" id="41_7jg1x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop/drop_04.png" id="42_6ws7f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop_attack/drop_attack_01.png" id="43_6gitx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop_attack/drop_attack_02.png" id="44_tjs4e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop_attack/drop_attack_03.png" id="45_mne57"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/drop_attack/drop_attack_04.png" id="46_xekfm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/emerging_claw/emerging_claw_01.png" id="47_gpg4g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/emerging_claw/emerging_claw_02.png" id="48_8n4jo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/emerging_claw/emerging_claw_03.png" id="49_wxw0s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/emerging_claw/emerging_claw_04.png" id="50_aliky"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/emerging_claw/emerging_claw_05.png" id="51_rhhxb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ground_recovery/ground_recovery_01.png" id="52_d66hd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ground_recovery/ground_recovery_02.png" id="53_aaiwo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/ground_recovery/ground_recovery_03.png" id="54_k286l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_01.png" id="55_vvdvd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_02.png" id="56_57281"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_03.png" id="57_uap8n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hang/hang_04.png" id="58_h124v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hurt/hurt_01.png" id="59_u07c2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hurt/hurt_02.png" id="60_xo1kp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/hurt/hurt_03.png" id="61_467mu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/land/land_01.png" id="62_lbgmg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/land/land_02.png" id="63_a2co7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/land/land_03.png" id="64_g8rbh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/light_hit/light_hit_01.png" id="65_h4go7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/light_hit/light_hit_02.png" id="66_p6f3i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_01.png" id="67_7q4oe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_02.png" id="68_lkv1d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_03.png" id="69_krh0t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat/retreat_04.png" id="70_tipml"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat_or_reclimb/retreat_or_reclimb_01.png" id="71_ohcn8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat_or_reclimb/retreat_or_reclimb_02.png" id="72_nj3e2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat_or_reclimb/retreat_or_reclimb_03.png" id="73_2kn44"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/retreat_or_reclimb/retreat_or_reclimb_04.png" id="74_q54st"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_01.png" id="75_6nhhb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_02.png" id="76_hm8eb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_03.png" id="77_h2dpy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/return_to_anchor/return_to_anchor_04.png" id="78_ty3ah"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/short_chase/short_chase_01.png" id="79_t16ml"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/short_chase/short_chase_02.png" id="80_08e2e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/short_chase/short_chase_03.png" id="81_ef7qi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/short_chase/short_chase_04.png" id="82_jujsd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/short_chase/short_chase_05.png" id="83_nh6xv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/short_chase/short_chase_06.png" id="84_b8wti"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/stagger/stagger_01.png" id="85_jowtd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/stagger/stagger_02.png" id="86_fj1v5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/stagger/stagger_03.png" id="87_nsu4v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/stagger/stagger_04.png" id="88_fbm3n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_01.png" id="89_qld2h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_02.png" id="90_v4dk3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_03.png" id="91_t05ty"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/telegraph/telegraph_04.png" id="92_3wv7l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/turn/turn_01.png" id="93_aqv85"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/turn/turn_02.png" id="94_uhkd0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hanging_stalker/sprites/turn/turn_03.png" id="95_nv1xt"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_0l1xe")
+"texture": ExtResource("1_nwhgf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_tbdp5")
+"texture": ExtResource("2_e6gfo")
 }, {
 "duration": 1.0,
-"texture": ExtResource("3_o8u61")
+"texture": ExtResource("3_d85mn")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_qbysr")
+"texture": ExtResource("4_014bi")
+}],
+"loop": 1,
+"name": &"ceiling_hidden",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_f1csy")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_ku3qc")
+"texture": ExtResource("6_v07hq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_w5b44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_615ai")
+}],
+"loop": 1,
+"name": &"ceiling_idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_8x3ub")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_0lrcs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_wdc7v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_teyip")
+}],
+"loop": 1,
+"name": &"ceiling_track",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_v8r3r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_lr5sv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_byvwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_1xns6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_sm8uc")
 }],
 "loop": 0,
 "name": &"claw",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_58c1e")
+"texture": ExtResource("18_khfcg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_t4qrl")
+"texture": ExtResource("19_qf1ia")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_joma4")
+"texture": ExtResource("20_j33kn")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_33d7i")
+"texture": ExtResource("21_gr6o5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_bdkq5")
+"texture": ExtResource("22_itqiv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_5tlfk")
+"texture": ExtResource("23_vyj3s")
 }],
 "loop": 0,
 "name": &"death",
-"speed": 9.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("12_5ibx5")
+"texture": ExtResource("24_qjh4w")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_10xrh")
+"texture": ExtResource("25_5ripa")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_stmsf")
+"texture": ExtResource("26_tcpkq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_dcdsp")
+"texture": ExtResource("27_dpgxo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_0qepm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_aj6dp")
+}],
+"loop": 0,
+"name": &"death_fall",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30_j5kg7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_4j8rj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_epiq6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_37xhd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_kxbyg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_s54o3")
+}],
+"loop": 0,
+"name": &"death_ground",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_lwag1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_r3iyn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_ybn0m")
+}],
+"loop": 0,
+"name": &"detach",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("39_kmogg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_4163m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_7jg1x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_6ws7f")
 }],
 "loop": 0,
 "name": &"drop",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("16_85ji7")
+"texture": ExtResource("43_6gitx")
 }, {
 "duration": 1.0,
-"texture": ExtResource("17_q3au6")
+"texture": ExtResource("44_tjs4e")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_w15ph")
+"texture": ExtResource("45_mne57")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_xekfm")
+}],
+"loop": 0,
+"name": &"drop_attack",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_gpg4g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_8n4jo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_wxw0s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_aliky")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_rhhxb")
+}],
+"loop": 0,
+"name": &"emerging_claw",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_d66hd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_aaiwo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_k286l")
 }],
 "loop": 0,
 "name": &"ground_recovery",
-"speed": 12.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("19_ij2pv")
+"texture": ExtResource("55_vvdvd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("20_xiyen")
+"texture": ExtResource("56_57281")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_gagkv")
+"texture": ExtResource("57_uap8n")
 }, {
 "duration": 1.0,
-"texture": ExtResource("22_anc76")
+"texture": ExtResource("58_h124v")
 }],
 "loop": 1,
 "name": &"hang",
@@ -133,66 +339,162 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("23_6m7lq")
+"texture": ExtResource("59_u07c2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("24_oasse")
+"texture": ExtResource("60_xo1kp")
 }, {
 "duration": 1.0,
-"texture": ExtResource("25_xvrhx")
+"texture": ExtResource("61_467mu")
 }],
 "loop": 0,
 "name": &"hurt",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("26_lbcxl")
+"texture": ExtResource("62_lbgmg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("27_fsepm")
+"texture": ExtResource("63_a2co7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_gxnh5")
-}, {
-"duration": 1.0,
-"texture": ExtResource("29_g5wyq")
+"texture": ExtResource("64_g8rbh")
 }],
 "loop": 0,
-"name": &"retreat",
-"speed": 12.0
+"name": &"land",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("30_1424k")
+"texture": ExtResource("65_h4go7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("31_iyg5d")
+"texture": ExtResource("66_p6f3i")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_7q4oe")
 }, {
 "duration": 1.0,
-"texture": ExtResource("32_m5ywh")
+"texture": ExtResource("68_lkv1d")
 }, {
 "duration": 1.0,
-"texture": ExtResource("33_unw3o")
+"texture": ExtResource("69_krh0t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_tipml")
+}],
+"loop": 1,
+"name": &"retreat",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("71_ohcn8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_nj3e2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_2kn44")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_q54st")
+}],
+"loop": 0,
+"name": &"retreat_or_reclimb",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("75_6nhhb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_hm8eb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_h2dpy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_ty3ah")
 }],
 "loop": 0,
 "name": &"return_to_anchor",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("34_jhgia")
+"texture": ExtResource("79_t16ml")
 }, {
 "duration": 1.0,
-"texture": ExtResource("35_vutr8")
+"texture": ExtResource("80_08e2e")
 }, {
 "duration": 1.0,
-"texture": ExtResource("36_1wv12")
+"texture": ExtResource("81_ef7qi")
 }, {
 "duration": 1.0,
-"texture": ExtResource("37_cckyb")
+"texture": ExtResource("82_jujsd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_nh6xv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_b8wti")
+}],
+"loop": 1,
+"name": &"short_chase",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("85_jowtd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("86_fj1v5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_nsu4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_fbm3n")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("89_qld2h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_v4dk3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_t05ty")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_3wv7l")
 }],
 "loop": 0,
 "name": &"telegraph",
-"speed": 12.0
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("93_aqv85")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_uhkd0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_nv1xt")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
 }]

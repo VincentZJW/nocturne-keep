@@ -1,5 +1,7 @@
 # 第二章敌人名册与岗位
 
+> Art status (2026-07-29): the five Chapter II-specific ordinary roles use the Stage 1 formal concepts and 64×64 runtime sets under `assets/enemies/<role>/`. Existing combat values and behavior below were intentionally preserved. See `res://docs/qa/chapter_02_enemy_boss_art_rework/stage_1_report.md` for Main evidence and complete animation counts.
+
 Status: Phase 2 prototypes implemented and Main-testable; formal encounter population not started
 
 Ravenfang remains authoritative at Normal 12 / Dash Attack 24. This document does not alter Player or weapon tuning.

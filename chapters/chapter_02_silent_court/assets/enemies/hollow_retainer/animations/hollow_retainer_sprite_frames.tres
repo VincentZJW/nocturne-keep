@@ -1,143 +1,285 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/alert/alert_01.png" id="1_yrux0"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/alert/alert_02.png" id="2_y27rh"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_01.png" id="3_4arge"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_02.png" id="4_07ngk"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_03.png" id="5_nkcdf"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_04.png" id="6_m7f7o"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_05.png" id="7_sdsuv"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_06.png" id="8_wbsso"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_01.png" id="9_ym760"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_02.png" id="10_fns4s"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_03.png" id="11_c7105"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_04.png" id="12_jbk6f"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_05.png" id="13_xsk45"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_01.png" id="14_t7lhr"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_02.png" id="15_2h6do"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_03.png" id="16_yax4q"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_04.png" id="17_0bi5v"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_05.png" id="18_mqss8"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_06.png" id="19_2td64"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/hurt/hurt_01.png" id="20_pma28"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/hurt/hurt_02.png" id="21_4tktc"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/hurt/hurt_03.png" id="22_vpjgi"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_01.png" id="23_sw04i"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_02.png" id="24_7cg6y"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_03.png" id="25_41rrq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_04.png" id="26_rjgpe"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_01.png" id="27_1ie8s"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_02.png" id="28_h5xvn"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_03.png" id="29_wmov5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_04.png" id="30_pvifw"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_05.png" id="31_gjv2d"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_06.png" id="32_k1bdp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/alert/alert_01.png" id="1_kyrbt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/alert/alert_02.png" id="2_np6ll"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/alert/alert_03.png" id="3_x3wu0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/approach/approach_01.png" id="4_2458q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/approach/approach_02.png" id="5_mtxg4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/approach/approach_03.png" id="6_yda6y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/approach/approach_04.png" id="7_ohab3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/approach/approach_05.png" id="8_jlwka"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/approach/approach_06.png" id="9_qh706"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_01.png" id="10_e7seh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_02.png" id="11_43aou"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_03.png" id="12_l0ovf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_04.png" id="13_41e74"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_05.png" id="14_yh7nh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_combo/attack_combo_06.png" id="15_v5t6r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_01.png" id="16_boq4c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_02.png" id="17_lbcfv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_03.png" id="18_8s2t7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_04.png" id="19_p4fyg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/attack_single_stab/attack_single_stab_05.png" id="20_js5os"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/bow_or_service_idle/bow_or_service_idle_01.png" id="21_tgo2x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/bow_or_service_idle/bow_or_service_idle_02.png" id="22_gg84t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/bow_or_service_idle/bow_or_service_idle_03.png" id="23_wodx5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/bow_or_service_idle/bow_or_service_idle_04.png" id="24_u73ha"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_hit_01/combo_hit_01_01.png" id="25_hiq72"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_hit_01/combo_hit_01_02.png" id="26_86a6q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_hit_01/combo_hit_01_03.png" id="27_0jgia"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_hit_02/combo_hit_02_01.png" id="28_511rr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_hit_02/combo_hit_02_02.png" id="29_7rbxr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_hit_02/combo_hit_02_03.png" id="30_6477w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_recovery/combo_recovery_01.png" id="31_kufu5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_recovery/combo_recovery_02.png" id="32_8nwpw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_recovery/combo_recovery_03.png" id="33_fp1rq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/combo_recovery/combo_recovery_04.png" id="34_ir501"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_01.png" id="35_sbbu1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_02.png" id="36_4phj4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_03.png" id="37_a8stc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_04.png" id="38_1umtc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_05.png" id="39_rkfuq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_06.png" id="40_eouxi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/death/death_07.png" id="41_ng1rn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/hurt/hurt_01.png" id="42_ioemf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/hurt/hurt_02.png" id="43_fw6g2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/hurt/hurt_03.png" id="44_ns5k6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_01.png" id="45_lphkq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_02.png" id="46_db20t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_03.png" id="47_allk5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/idle/idle_04.png" id="48_fn1ls"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/light_hit/light_hit_01.png" id="49_i3kiw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/light_hit/light_hit_02.png" id="50_oigr5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/patrol/patrol_01.png" id="51_l5nm4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/patrol/patrol_02.png" id="52_27jaj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/patrol/patrol_03.png" id="53_g6d24"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/patrol/patrol_04.png" id="54_lk7jo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/patrol/patrol_05.png" id="55_cjt6b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/patrol/patrol_06.png" id="56_x1fdn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/retreat/retreat_01.png" id="57_7jeo2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/retreat/retreat_02.png" id="58_qwykk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/retreat/retreat_03.png" id="59_vkqti"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/retreat/retreat_04.png" id="60_k37ao"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_active/stab_active_01.png" id="61_o7kge"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_active/stab_active_02.png" id="62_i848r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_recovery/stab_recovery_01.png" id="63_rlvpe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_recovery/stab_recovery_02.png" id="64_aiijv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_recovery/stab_recovery_03.png" id="65_5mpcy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_recovery/stab_recovery_04.png" id="66_34lfi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_windup/stab_windup_01.png" id="67_55r28"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_windup/stab_windup_02.png" id="68_8cowv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_windup/stab_windup_03.png" id="69_o360v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stab_windup/stab_windup_04.png" id="70_plkk6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stagger/stagger_01.png" id="71_o75dv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stagger/stagger_02.png" id="72_ckjvb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stagger/stagger_03.png" id="73_lnshd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/stagger/stagger_04.png" id="74_lp5yb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/turn/turn_01.png" id="75_f2us6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/turn/turn_02.png" id="76_ictbc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/turn/turn_03.png" id="77_362pi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_01.png" id="78_fxb3k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_02.png" id="79_65cb5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_03.png" id="80_m8bsp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_04.png" id="81_61ski"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_05.png" id="82_5hg1l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_02_silent_court/assets/enemies/hollow_retainer/sprites/walk/walk_06.png" id="83_p0o5m"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("1_yrux0")
+"texture": ExtResource("1_kyrbt")
 }, {
 "duration": 1.0,
-"texture": ExtResource("2_y27rh")
+"texture": ExtResource("2_np6ll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_x3wu0")
 }],
 "loop": 0,
 "name": &"alert",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("3_4arge")
+"texture": ExtResource("4_2458q")
 }, {
 "duration": 1.0,
-"texture": ExtResource("4_07ngk")
+"texture": ExtResource("5_mtxg4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("5_nkcdf")
+"texture": ExtResource("6_yda6y")
 }, {
 "duration": 1.0,
-"texture": ExtResource("6_m7f7o")
+"texture": ExtResource("7_ohab3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_sdsuv")
+"texture": ExtResource("8_jlwka")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_wbsso")
+"texture": ExtResource("9_qh706")
+}],
+"loop": 1,
+"name": &"approach",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_e7seh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_43aou")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_l0ovf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_41e74")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_yh7nh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_v5t6r")
 }],
 "loop": 0,
 "name": &"attack_combo",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("9_ym760")
+"texture": ExtResource("16_boq4c")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_fns4s")
+"texture": ExtResource("17_lbcfv")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_c7105")
+"texture": ExtResource("18_8s2t7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("12_jbk6f")
+"texture": ExtResource("19_p4fyg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_xsk45")
+"texture": ExtResource("20_js5os")
 }],
 "loop": 0,
 "name": &"attack_single_stab",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("14_t7lhr")
+"texture": ExtResource("21_tgo2x")
 }, {
 "duration": 1.0,
-"texture": ExtResource("15_2h6do")
+"texture": ExtResource("22_gg84t")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_yax4q")
+"texture": ExtResource("23_wodx5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("17_0bi5v")
+"texture": ExtResource("24_u73ha")
+}],
+"loop": 1,
+"name": &"bow_or_service_idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_hiq72")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_mqss8")
+"texture": ExtResource("26_86a6q")
 }, {
 "duration": 1.0,
-"texture": ExtResource("19_2td64")
+"texture": ExtResource("27_0jgia")
+}],
+"loop": 0,
+"name": &"combo_hit_01",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_511rr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_7rbxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_6477w")
+}],
+"loop": 0,
+"name": &"combo_hit_02",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_kufu5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_8nwpw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_fp1rq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_ir501")
+}],
+"loop": 0,
+"name": &"combo_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("35_sbbu1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_4phj4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_a8stc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_1umtc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_rkfuq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_eouxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_ng1rn")
 }],
 "loop": 0,
 "name": &"death",
-"speed": 9.0
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("20_pma28")
+"texture": ExtResource("42_ioemf")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_4tktc")
+"texture": ExtResource("43_fw6g2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("22_vpjgi")
+"texture": ExtResource("44_ns5k6")
 }],
 "loop": 0,
 "name": &"hurt",
-"speed": 12.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("23_sw04i")
+"texture": ExtResource("45_lphkq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("24_7cg6y")
+"texture": ExtResource("46_db20t")
 }, {
 "duration": 1.0,
-"texture": ExtResource("25_41rrq")
+"texture": ExtResource("47_allk5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("26_rjgpe")
+"texture": ExtResource("48_fn1ls")
 }],
 "loop": 1,
 "name": &"idle",
@@ -145,24 +287,151 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("27_1ie8s")
+"texture": ExtResource("49_i3kiw")
 }, {
 "duration": 1.0,
-"texture": ExtResource("28_h5xvn")
+"texture": ExtResource("50_oigr5")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_l5nm4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("29_wmov5")
+"texture": ExtResource("52_27jaj")
 }, {
 "duration": 1.0,
-"texture": ExtResource("30_pvifw")
+"texture": ExtResource("53_g6d24")
 }, {
 "duration": 1.0,
-"texture": ExtResource("31_gjv2d")
+"texture": ExtResource("54_lk7jo")
 }, {
 "duration": 1.0,
-"texture": ExtResource("32_k1bdp")
+"texture": ExtResource("55_cjt6b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_x1fdn")
+}],
+"loop": 1,
+"name": &"patrol",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_7jeo2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_qwykk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_vkqti")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_k37ao")
+}],
+"loop": 1,
+"name": &"retreat",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_o7kge")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_i848r")
+}],
+"loop": 0,
+"name": &"stab_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_rlvpe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_aiijv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_5mpcy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_34lfi")
+}],
+"loop": 0,
+"name": &"stab_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_55r28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_8cowv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_o360v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_plkk6")
+}],
+"loop": 0,
+"name": &"stab_windup",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("71_o75dv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_ckjvb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_lnshd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_lp5yb")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("75_f2us6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_ictbc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_362pi")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("78_fxb3k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_65cb5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_m8bsp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_61ski")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_5hg1l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("83_p0o5m")
 }],
 "loop": 1,
 "name": &"walk",
-"speed": 8.0
+"speed": 7.0
 }]
