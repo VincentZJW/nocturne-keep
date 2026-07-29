@@ -33,6 +33,11 @@ var active_room_id: StringName = &""
 var _transitioning: bool = false
 
 
+func _ready() -> void:
+	player.z_index = Chapter03LayerContract.PLAYER
+	player.z_as_relative = true
+
+
 func initialize(room_id: StringName, spawn_id: StringName) -> bool:
 	if active_room != null:
 		return false

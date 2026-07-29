@@ -22,16 +22,17 @@ room_id = &"CH3_BOSS_CHECKPOINT"
 bilingual_name = "CHAPTER III · LAST VIGIL CHECKPOINT / 末祷检查点"
 room_size = Vector2i(896, 720)
 [node name="Backdrop" type="Sprite2D" parent="."]
-z_index = -30
+z_index = -100
 position = Vector2(448, 360)
 texture_filter = 1
 texture = ExtResource("3_backdrop")
 [node name="CheckpointVisual" type="Sprite2D" parent="."]
+z_index = 14
 position = Vector2(298, 508)
 texture_filter = 1
 texture = ExtResource("5_checkpoint")
 [node name="Lectern" type="Sprite2D" parent="."]
-z_index = -5
+z_index = -30
 position = Vector2(520, 540)
 texture_filter = 1
 texture = ExtResource("6_lectern")
@@ -48,6 +49,7 @@ position = Vector2(-24, 360)
 shape = SubResource("WallShape")
 [node name="Doors" type="Node2D" parent="."]
 [node name="ConfessionDoor" type="Area2D" parent="Doors"]
+z_index = 14
 position = Vector2(790, 380)
 collision_layer = 0
 collision_mask = 2

@@ -13,6 +13,7 @@ signal transition_requested(destination_room_id: StringName, destination_spawn_i
 
 
 func _ready() -> void:
+	_apply_actor_layer_contract(self)
 	for child: Node in find_children("*", "Chapter03RoomDoor", true, false):
 		var door := child as Chapter03RoomDoor
 		if door != null:
@@ -21,6 +22,15 @@ func _ready() -> void:
 		var room_exit := child as Chapter03RoomExit
 		if room_exit != null:
 			room_exit.transition_requested.connect(_on_transition_requested)
+
+
+func _apply_actor_layer_contract(root: Node) -> void:
+	for child: Node in root.get_children():
+		if child is EnemyCombatant:
+			var enemy_canvas := child as CanvasItem
+			enemy_canvas.z_index = Chapter03LayerContract.ENEMIES
+			enemy_canvas.z_as_relative = true
+		_apply_actor_layer_contract(child)
 
 
 func get_spawn(spawn_id: StringName) -> Marker2D:

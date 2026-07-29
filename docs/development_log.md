@@ -5875,3 +5875,54 @@ Status: complete for approved R2 scope — R3/R4/R5 remain pending
 - Existing dirty Chapter I/shared enemy, loot/Player Resource, Ravenfang screenshot and UID changes were not edited and are excluded from the R2 commit.
 
 **R2 is complete. Chapter III structural rework is not final until approved R3–R5 are completed.**
+
+## 2026-07-29 — Chapter III structural rework R3 preflight
+
+Status: in progress — approved R3 layer/collision milestone; stop before R4
+
+### Goal, audit and strict scope
+
+- Re-read the root contract, all four chapter-production standards, README, technical architecture, supplied structural-rework specification, R0 collision/layer audit, R1 route plan and committed R2 implementation. R3 owns the authoritative Chapter III z contract, actor visibility, visible/physical surface alignment, door blocker release, air-wall audit, platform/step collision verification and Visible Collision evidence.
+- Initial R3 inspection found the R2 vestibule stair art contains eight 64 px courses but only five fixed-height physics rectangles; its first visual tread is y612 while the first physical top is y620. It also found the reused Boss modules still use mixed z bands and fractional runtime scales (`0.62`, `0.72`, `0.78`, `0.80`, `0.82`) that conflict with the integer-grid requirement.
+- Planned task-owned files are Chapter III room/area/enemy scenes, Chapter III layer-contract/QA/tool scripts, chapter-local grid-aligned variants derived from existing original Chapter III art, R3 report/evidence and this log. Player behavior, enemy/Boss AI and balance, chapters I/II, shared art, R4 Boss interaction/transition and R5 full-route regression are out of scope.
+
+### Planned verification
+
+- Enforce `Far -100 / Architecture -60 / Props -30 / Ground -10 / Platforms 0 / Enemies 10 / Player 12 / Interactables 14 / Limited Foreground 20 / HUD CanvasLayer` across formal rooms and reused Boss modules.
+- Validate every floor/platform/stair top against the visible asset, verify decorative backgrounds own no blocking shape, verify closed doors/walls block and opened doors disable their exact blocker, and record every investigated air-wall path.
+- Run exact Godot 4.7.1 generation/import/parse, a focused R3 collision/layer test, R2 room-swap regression, saved route smoke, MainBootstrap graphical layer/Visible Collision capture, scoped diff review and one R3 commit; then stop.
+
+## 2026-07-29 — Chapter III structural rework R3 completion
+
+Status: complete for approved R3 scope — R4/R5 remain pending
+
+### Delivered layer and collision scope
+
+- Added `Chapter03LayerContract` and applied the authoritative `-100/-60/-30/-10/0/10/12/14/20` bands to formal rooms, reused Boss modules, Chapter III enemy roots and the persistent Player. HUD and room Fade remain in their existing CanvasLayer; no Y-sort or top-level exception was introduced.
+- Rebuilt the vestibule's physics stair from five mismatched 100 px rectangles into all eight visible 64 px courses. Physical tops now match art at y612 through y682 in exact 10 px increments, and the exit Area reaches the final courses.
+- Reverified all eight Nave/Choir platform tops against their visuals. The approved 60 px rise cadence and 96–192 px landing widths remain unchanged; Player movement parameters were not edited.
+- Verified that organ pipes/case and other background props own no blocking collision. Closed doors and seals retain matching blockers; Nave, Boss gate and post-Boss descent paths disable their exact blocker when opened.
+- Replaced runtime fractional scales in the reused Boss/transition environment with eight nearest-neighbour, grid-sized Chapter III PNG variants. Formal static props now use integer positions, scale 1 (or deliberate x flip) and zero rotation.
+- MainBootstrap graphical evidence was captured through the active `chapter_03_route.tscn`, including ordinary views and Godot Visible Collision Shapes for the complete stair and Choir platform/door geometry.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_chapter_03_r3_grid_assets.gd` — PASS, `variants=8 integer_grid=true`; source-image warnings are limited to this editor-time generator and no generator runs in exported gameplay.
+2. Exact Godot 4.7.1 headless editor import/parse — exit 0; no script parse or missing-resource error.
+3. `test_chapter_03_r3_layers_collisions.gd` — PASS, `stairs=8 platforms=8 doors=3 actor_z=10/12`.
+4. `test_chapter_03_r2_room_structure.gd` — PASS, `rooms=8 swaps=4 persistent_player=1`.
+5. `test_chapter_03_boss_environment.gd` — PASS, `visual_assets=8 audio_assets=4 scenes=5`.
+6. `test_chapter_03_boss_route.gd` — PASS, `gate_sequence=true sanctum_intro=true crossing=true input_restored=true`.
+7. `test_chapter_03_phase_2_enemy_roster.gd` — PASS, `roles=6`.
+8. Saved default F5/Main bootstrap smoke with `--quit-after 240` — exit 0; formal opening flow started and no red runtime error was printed.
+9. Graphical MainBootstrap capture without collision overlays — PASS, `mode=normal`; three 1280×720 images.
+10. Graphical MainBootstrap capture with `--debug-collisions` — PASS, `mode=visible_collisions`; two 1280×720 images.
+
+### Evidence, known boundary and manual acceptance
+
+- Evidence: `docs/qa/chapter_03_r3_vestibule_stair_main.png`, `chapter_03_r3_nave_platform_main.png`, `chapter_03_r3_choir_layers_main.png`, `chapter_03_r3_stair_visible_collisions_main.png`, and `chapter_03_r3_visible_collisions_main.png`.
+- Full node/collision tables and R3 acceptance matrix are in `chapter_03_structural_rework_r3_layer_collision_report.md`.
+- Manual check: select Chapter III Debug Start at `chapter_03_start`, press F5, walk the eight vestibule courses, open each E door, single-jump onto the Nave/Choir 60 px routes and inspect the organ area. The expected stop remains the closed Boss gate.
+- R3 does not claim the R4 E-confirmed Boss entry/intro/post-Boss route or R5 full Chapter II→III→IV acceptance. Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded.
+
+**R3 is complete. Stop before R4 until explicitly approved.**

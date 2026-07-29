@@ -1,6 +1,6 @@
 # Chapter III Structural Rework — R2 Implementation
 
-Status: R2 implemented; R3–R5 deliberately pending.
+Status: R2 implemented. R3 is now complete in the separate layer/collision report; R4–R5 remain pending.
 
 ## Runtime result
 
@@ -57,7 +57,7 @@ The capture route was entered through `main_bootstrap.tscn` with Chapter III Deb
 
 ## Pending by approved stage boundary
 
-- R3: authoritative foreground/actor layer contract, visible-collision pass, detailed collision sweep and final platform/air-wall acceptance.
+- R3: complete; see `chapter_03_structural_rework_r3_layer_collision_report.md`.
 - R4: Boss checkpoint semantics, E-confirmed gate performance, Boss intro, Boss exit and post-Boss route.
 - R5: full Chapter II→III→Boss→Chapter IV regression and forced visual acceptance.
 

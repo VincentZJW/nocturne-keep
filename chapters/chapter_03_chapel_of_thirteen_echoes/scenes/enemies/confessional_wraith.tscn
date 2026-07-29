@@ -29,6 +29,7 @@ size = Vector2(58, 20)
 radius = 220.0
 
 [node name="ConfessionalWraith" type="CharacterBody2D" unique_id=503268564]
+z_index = 10
 collision_layer = 4
 collision_mask = 3
 floor_snap_length = 6.0

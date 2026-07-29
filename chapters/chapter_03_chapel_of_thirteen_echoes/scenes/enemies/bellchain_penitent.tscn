@@ -30,6 +30,7 @@ size = Vector2(56, 14)
 radius = 210.0
 
 [node name="BellchainPenitent" type="CharacterBody2D"]
+z_index = 10
 floor_snap_length = 6.0
 collision_layer = 4
 collision_mask = 3

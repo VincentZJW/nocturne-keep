@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=19 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room.gd" id="1_room"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_door.gd" id="2_door"]
@@ -21,8 +21,22 @@ size = Vector2(64, 340)
 size = Vector2(220, 360)
 [sub_resource type="RectangleShape2D" id="ExitShape"]
 size = Vector2(72, 160)
-[sub_resource type="RectangleShape2D" id="StepShape"]
-size = Vector2(64, 100)
+[sub_resource type="RectangleShape2D" id="StepShape01"]
+size = Vector2(64, 108)
+[sub_resource type="RectangleShape2D" id="StepShape02"]
+size = Vector2(64, 98)
+[sub_resource type="RectangleShape2D" id="StepShape03"]
+size = Vector2(64, 88)
+[sub_resource type="RectangleShape2D" id="StepShape04"]
+size = Vector2(64, 78)
+[sub_resource type="RectangleShape2D" id="StepShape05"]
+size = Vector2(64, 68)
+[sub_resource type="RectangleShape2D" id="StepShape06"]
+size = Vector2(64, 58)
+[sub_resource type="RectangleShape2D" id="StepShape07"]
+size = Vector2(64, 48)
+[sub_resource type="RectangleShape2D" id="StepShape08"]
+size = Vector2(64, 38)
 
 [node name="Ch3ChapelVestibule" type="Node2D"]
 script = ExtResource("1_room")
@@ -31,37 +45,37 @@ bilingual_name = "CHAPTER III · CHAPEL VESTIBULE / 十三响礼拜堂前庭"
 room_size = Vector2i(2048, 720)
 
 [node name="Backdrop" type="Sprite2D" parent="."]
-z_index = -30
+z_index = -100
 position = Vector2(1024, 360)
 texture_filter = 1
 texture = ExtResource("4_backdrop")
 [node name="MirrorBackDoor" type="Sprite2D" parent="."]
-z_index = -8
+z_index = -60
 position = Vector2(108, 380)
 texture_filter = 1
 texture = ExtResource("5_mirror")
 [node name="BellEmblem" type="Sprite2D" parent="."]
-z_index = -8
+z_index = -60
 position = Vector2(780, 188)
 texture_filter = 1
 texture = ExtResource("8_emblem")
 [node name="LeftBench" type="Sprite2D" parent="."]
-z_index = -6
+z_index = -30
 position = Vector2(476, 560)
 texture_filter = 1
 texture = ExtResource("9_bench")
 [node name="RightBench" type="Sprite2D" parent="."]
-z_index = -6
+z_index = -30
 position = Vector2(1072, 560)
 texture_filter = 1
 texture = ExtResource("9_bench")
 [node name="BellFont" type="Sprite2D" parent="."]
-z_index = -5
+z_index = -30
 position = Vector2(780, 540)
 texture_filter = 1
 texture = ExtResource("10_font")
 [node name="Stair" type="Sprite2D" parent="."]
-z_index = -4
+z_index = 0
 position = Vector2(1792, 692)
 texture_filter = 1
 texture = ExtResource("7_stair")
@@ -80,31 +94,47 @@ shape = SubResource("WallShape")
 [node name="Step01" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step01"]
-position = Vector2(1568, 670)
-shape = SubResource("StepShape")
+position = Vector2(1568, 666)
+shape = SubResource("StepShape01")
 [node name="Step02" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step02"]
-position = Vector2(1632, 680)
-shape = SubResource("StepShape")
+position = Vector2(1632, 671)
+shape = SubResource("StepShape02")
 [node name="Step03" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step03"]
-position = Vector2(1696, 690)
-shape = SubResource("StepShape")
+position = Vector2(1696, 676)
+shape = SubResource("StepShape03")
 [node name="Step04" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step04"]
-position = Vector2(1760, 700)
-shape = SubResource("StepShape")
+position = Vector2(1760, 681)
+shape = SubResource("StepShape04")
 [node name="Step05" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step05"]
-position = Vector2(1824, 710)
-shape = SubResource("StepShape")
+position = Vector2(1824, 686)
+shape = SubResource("StepShape05")
+[node name="Step06" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step06"]
+position = Vector2(1888, 691)
+shape = SubResource("StepShape06")
+[node name="Step07" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step07"]
+position = Vector2(1952, 696)
+shape = SubResource("StepShape07")
+[node name="Step08" type="StaticBody2D" parent="Geometry"]
+collision_layer = 1
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Geometry/Step08"]
+position = Vector2(2016, 701)
+shape = SubResource("StepShape08")
 
 [node name="Doors" type="Node2D" parent="."]
 [node name="NaveDoor" type="Area2D" parent="Doors"]
+z_index = 14
 position = Vector2(1468, 380)
 collision_layer = 0
 collision_mask = 2
@@ -128,7 +158,8 @@ text = "E  OPEN NAVE DOOR / 开启正厅门"
 theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)
 theme_override_font_sizes/font_size = 12
 [node name="NaveExit" type="Area2D" parent="Doors"]
-position = Vector2(1998, 590)
+z_index = 14
+position = Vector2(1998, 640)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("3_exit")

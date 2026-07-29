@@ -34,22 +34,22 @@ room_id = &"CH3_NAVE_ENTRY"
 bilingual_name = "CHAPTER III · PROCESSIONAL NAVE / 送葬正厅"
 room_size = Vector2i(2304, 720)
 [node name="Backdrop" type="Sprite2D" parent="."]
-z_index = -30
+z_index = -100
 position = Vector2(1152, 360)
 texture_filter = 1
 texture = ExtResource("3_backdrop")
 [node name="LeftBench" type="Sprite2D" parent="."]
-z_index = -7
+z_index = -30
 position = Vector2(390, 560)
 texture_filter = 1
 texture = ExtResource("8_bench")
 [node name="RightBench" type="Sprite2D" parent="."]
-z_index = -7
+z_index = -30
 position = Vector2(1190, 560)
 texture_filter = 1
 texture = ExtResource("8_bench")
 [node name="Lectern" type="Sprite2D" parent="."]
-z_index = -5
+z_index = -30
 position = Vector2(930, 540)
 texture_filter = 1
 texture = ExtResource("9_lectern")
@@ -67,6 +67,7 @@ shape = SubResource("WallShape")
 [node name="WestSideGallery" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="Visual" type="Sprite2D" parent="Geometry/WestSideGallery"]
+z_index = 0
 position = Vector2(600, 576)
 texture_filter = 1
 texture = ExtResource("5_p160")
@@ -76,6 +77,7 @@ shape = SubResource("Platform160")
 [node name="EastSideGallery" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="Visual" type="Sprite2D" parent="Geometry/EastSideGallery"]
+z_index = 0
 position = Vector2(1480, 576)
 texture_filter = 1
 texture = ExtResource("5_p160")
@@ -85,6 +87,7 @@ shape = SubResource("Platform160")
 [node name="EastAccessCorbel" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="Visual" type="Sprite2D" parent="Geometry/EastAccessCorbel"]
+z_index = 0
 position = Vector2(1680, 516)
 texture_filter = 1
 texture = ExtResource("6_p96")
@@ -94,6 +97,7 @@ shape = SubResource("Platform96")
 [node name="UpperArchiveLedge" type="StaticBody2D" parent="Geometry"]
 collision_layer = 1
 [node name="Visual" type="Sprite2D" parent="Geometry/UpperArchiveLedge"]
+z_index = 0
 position = Vector2(1832, 456)
 texture_filter = 1
 texture = ExtResource("7_p144")
@@ -102,6 +106,7 @@ position = Vector2(1832, 444)
 shape = SubResource("Platform144")
 [node name="Doors" type="Node2D" parent="."]
 [node name="ChoirDoor" type="Area2D" parent="Doors"]
+z_index = 14
 position = Vector2(2180, 380)
 collision_layer = 0
 collision_mask = 2
@@ -126,10 +131,13 @@ theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)
 theme_override_font_sizes/font_size = 12
 [node name="Enemies" type="Node2D" parent="."]
 [node name="BellchainPenitent" parent="Enemies" instance=ExtResource("10_bellchain")]
+z_index = 10
 position = Vector2(720, 584)
 [node name="ConfessionalWraith" parent="Enemies" instance=ExtResource("11_wraith")]
+z_index = 10
 position = Vector2(1260, 584)
 [node name="ThirteenthScribe" parent="Enemies" instance=ExtResource("12_scribe")]
+z_index = 10
 position = Vector2(1830, 386)
 [node name="SpawnPoints" type="Node2D" parent="."]
 [node name="EntryWest" type="Marker2D" parent="SpawnPoints"]
