@@ -106,14 +106,15 @@ position = Vector2(1832, 444)
 shape = SubResource("Platform144")
 [node name="Doors" type="Node2D" parent="."]
 [node name="ChoirDoor" type="Area2D" parent="Doors"]
-z_index = 14
 position = Vector2(2180, 380)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_door")
 destination_room_id = &"CH3_CHOIR_GALLERY"
 destination_spawn_id = &"EntryWest"
-[node name="DoorVisual" type="Sprite2D" parent="Doors/ChoirDoor"]
+[node name="Presentation" type="Node2D" parent="Doors/ChoirDoor"]
+z_index = -30
+[node name="DoorVisual" type="Sprite2D" parent="Doors/ChoirDoor/Presentation"]
 texture_filter = 1
 texture = ExtResource("4_door")
 [node name="Blocker" type="StaticBody2D" parent="Doors/ChoirDoor"]
@@ -124,7 +125,9 @@ shape = SubResource("DoorBlocker")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/ChoirDoor"]
 position = Vector2(-56, 66)
 shape = SubResource("DoorArea")
-[node name="Prompt" type="Label" parent="Doors/ChoirDoor"]
+[node name="Interaction" type="Node2D" parent="Doors/ChoirDoor"]
+z_index = 14
+[node name="Prompt" type="Label" parent="Doors/ChoirDoor/Interaction"]
 position = Vector2(-100, -118)
 text = "E  ENTER CHOIR / 进入唱诗席"
 theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)

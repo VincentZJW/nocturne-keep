@@ -29,7 +29,7 @@ border_color = Color(0.51, 0.42, 0.23, 0.7)
 script = ExtResource("1_script")
 
 [node name="Visuals" type="Node2D" parent="."]
-z_index = 14
+z_index = -30
 
 [node name="GateClosed" type="Sprite2D" parent="Visuals"]
 position = Vector2(192, 356)
@@ -50,6 +50,7 @@ texture = ExtResource("4_open")
 
 [node name="WaxCrack" type="Sprite2D" parent="Visuals"]
 visible = false
+z_index = 46
 position = Vector2(192, 324)
 texture_filter = 1
 texture = ExtResource("7_wax")
@@ -110,6 +111,7 @@ texture_filter = 1
 texture = ExtResource("5_bell")
 
 [node name="SealLights" type="Node2D" parent="Visuals"]
+z_index = 46
 
 [node name="Seal01" type="Sprite2D" parent="Visuals/SealLights"]
 visible = false
@@ -214,7 +216,7 @@ volume_db = -8.0
 max_distance = 1500.0
 
 [node name="GateName" type="Panel" parent="."]
-z_index = 14
+visible = false
 offset_left = -56.0
 offset_top = 92.0
 offset_right = 440.0
@@ -236,7 +238,7 @@ vertical_alignment = 1
 
 [node name="InteractionPrompt" type="Label" parent="."]
 visible = false
-z_index = 14
+z_index = 16
 offset_left = -150.0
 offset_top = 472.0
 offset_right = 534.0

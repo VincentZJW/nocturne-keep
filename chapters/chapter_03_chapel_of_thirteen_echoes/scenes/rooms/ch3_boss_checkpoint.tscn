@@ -52,14 +52,15 @@ position = Vector2(-24, 360)
 shape = SubResource("WallShape")
 [node name="Doors" type="Node2D" parent="."]
 [node name="ConfessionDoor" type="Area2D" parent="Doors"]
-z_index = 14
 position = Vector2(790, 380)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_door")
 destination_room_id = &"CH3_BOSS_ANTE"
 destination_spawn_id = &"EntryWest"
-[node name="DoorVisual" type="Sprite2D" parent="Doors/ConfessionDoor"]
+[node name="Presentation" type="Node2D" parent="Doors/ConfessionDoor"]
+z_index = -30
+[node name="DoorVisual" type="Sprite2D" parent="Doors/ConfessionDoor/Presentation"]
 texture_filter = 1
 texture = ExtResource("4_door")
 [node name="Blocker" type="StaticBody2D" parent="Doors/ConfessionDoor"]
@@ -70,7 +71,9 @@ shape = SubResource("DoorBlocker")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/ConfessionDoor"]
 position = Vector2(-48, 66)
 shape = SubResource("DoorArea")
-[node name="Prompt" type="Label" parent="Doors/ConfessionDoor"]
+[node name="Interaction" type="Node2D" parent="Doors/ConfessionDoor"]
+z_index = 14
+[node name="Prompt" type="Label" parent="Doors/ConfessionDoor/Interaction"]
 position = Vector2(-154, -118)
 text = "E  ENTER THIRTEEN CONFESSIONS / 进入十三忏"
 theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)

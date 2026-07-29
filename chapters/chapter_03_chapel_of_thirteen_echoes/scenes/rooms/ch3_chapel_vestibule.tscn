@@ -134,14 +134,15 @@ shape = SubResource("StepShape08")
 
 [node name="Doors" type="Node2D" parent="."]
 [node name="NaveDoor" type="Area2D" parent="Doors"]
-z_index = 14
 position = Vector2(1468, 380)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_door")
 transition_on_open = false
 opening_offset = Vector2(0, -352)
-[node name="DoorVisual" type="Sprite2D" parent="Doors/NaveDoor"]
+[node name="Presentation" type="Node2D" parent="Doors/NaveDoor"]
+z_index = -30
+[node name="DoorVisual" type="Sprite2D" parent="Doors/NaveDoor/Presentation"]
 texture_filter = 1
 texture = ExtResource("6_door")
 [node name="Blocker" type="StaticBody2D" parent="Doors/NaveDoor"]
@@ -152,7 +153,9 @@ shape = SubResource("DoorBlocker")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/NaveDoor"]
 position = Vector2(-62, 66)
 shape = SubResource("DoorArea")
-[node name="Prompt" type="Label" parent="Doors/NaveDoor"]
+[node name="Interaction" type="Node2D" parent="Doors/NaveDoor"]
+z_index = 14
+[node name="Prompt" type="Label" parent="Doors/NaveDoor/Interaction"]
 position = Vector2(-94, -118)
 text = "E  OPEN NAVE DOOR / 开启正厅门"
 theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)

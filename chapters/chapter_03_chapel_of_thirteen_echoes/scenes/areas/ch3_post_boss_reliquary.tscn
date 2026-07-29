@@ -102,7 +102,7 @@ position = Vector2(640, 666)
 shape = SubResource("FloorShape")
 
 [node name="AreaTitle" type="Label" parent="."]
-z_index = 14
+visible = false
 offset_left = 334.0
 offset_top = 82.0
 offset_right = 946.0

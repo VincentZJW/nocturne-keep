@@ -246,6 +246,8 @@ func _spawn_pickup(kind: StringName, amount: int) -> void:
 	var enemy: Node2D = get_parent() as Node2D
 	var world_parent: Node = enemy.get_parent() if enemy != null else get_tree().current_scene
 	world_parent.add_child(pickup)
+	pickup.z_index = RenderLayerContract.DROPS
+	pickup.z_as_relative = true
 	var offset_x: float = _rng.randi_range(-10, 10)
 	pickup.global_position = enemy.global_position + Vector2(offset_x, -8.0)
 	pickup_spawned.emit(pickup)

@@ -355,6 +355,8 @@ func _classify_item(item: CanvasItem) -> String:
 		return "UI"
 	if _contains_any(path_text, ["projectile", "attackhitbox", "dashattack", "hitfx", "effect", "resonance"]):
 		return "CombatFX"
+	if "waterbodybehind" in path_text:
+		return "PropsBehind"
 	if _contains_any(path_text, ["foreground", "shallowwater", "trim"]):
 		return "LimitedForeground"
 	if _contains_any(path_text, ["door", "gate", "blocker", "seal", "checkpointarea", "interact", "prompt", "exit"]):

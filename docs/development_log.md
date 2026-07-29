@@ -6067,3 +6067,47 @@ Status: L0 audit complete; whole repair remains FAIL/PENDING until L1–L3
 - Runtime Player is stable at effective z=12, weapon at 13, death/ghost presentation at 14; six enemies are stable at 10; HUD is CanvasLayer 1 and gate Fade is CanvasLayer 90; no runtime Y-sort is enabled and no Chapter III gameplay script reparents Player.
 - The first authorized L1 action is to establish `docs/production/render_layer_contract.md`, then split ordinary doors, the Boss checkpoint composite and Boss gate presentation instead of raising Player globally. L1 must also make Drop/CombatFX placement explicit and constrain underkeep water to the 0–4 px foot-only occlusion budget.
 - Stop here. No L1 repair has been applied; explicit user approval is required.
+
+## 2026-07-29 — Chapter III render-layer repair L1 preflight
+
+Status: in progress — approved structural repair milestone
+
+### Goal, files, tests and scope check
+
+- Apply the L0 repair order without raising Player globally: establish a reusable render-layer contract; split four ordinary door presentations; move the antechamber checkpoint body and Boss gate panels behind actors while retaining bounded interaction FX; retire duplicate world-space area titles in favor of the persistent HUD; assign explicit Drop and CombatFX layers; and reduce underkeep foreground water to a four-pixel surface strip.
+- Planned formal scene changes are limited to the four affected room scenes and the Boss antechamber, Boss gate, Boss sanctum, post-Boss and underkeep area scenes. Supporting changes are limited to the layer contract, ordinary-door paths, Chapter III dynamic FX placement, generic pickup presentation z, focused tests, production documentation and this log.
+- Preserve all collision shapes, transition destinations, checkpoint authority, Boss-gate sequence timing, gameplay balance, player/enemy layers, assets and MainBootstrap registration. No Y-sort, CanvasLayer workaround, Player z escalation or unrelated chapter work is authorized.
+- Verification will use the exact Godot 4.7.1 executable for import/parse, a new effective-z structural regression, updated R3/R5 regressions and scoped diff review. Full action-pose/F5 screenshot-matrix acceptance remains L2 and will not be claimed in L1.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain user-owned and must stay unstaged and unmodified by this milestone.
+
+## 2026-07-29 — Chapter III render-layer repair L1 completion
+
+Status: L1 structural repair complete; L2 full Main visual/action matrix pending approval
+
+### Delivered structural repair
+
+- Added the shared `RenderLayerContract` and production contract document with explicit Enemy=10, NPC=11, Player=12, Drop=13, Interactable=14, CombatFX=16 and LimitedForeground=20 bands. `Chapter03LayerContract` now aliases that authority instead of maintaining an incomplete parallel table.
+- Rebuilt NaveDoor, ChoirDoor, CheckpointDoor and ConfessionDoor into z=0 interaction/collision authorities with moving door panels under z=-30 Presentation containers and compact prompts under z=14 Interaction containers. The same script still moves the panel, disables the blocker and emits the unchanged transition request.
+- Moved the Thirteen Confessions checkpoint composite from z=14 to z=-30. The current Last Vigil checkpoint remains at z=-30 as a passing regression.
+- Moved all three full Thirteenth Echo gate states and its bells to effective z=-30. Seal lights and the wax crack now resolve to CombatFX z=16; collision, thirteen-bell sequence, E threshold, Fade and room swap remain unchanged.
+- Hid five duplicate world-space title nodes while retaining the persistent CanvasLayer HUD as room-name authority.
+- Split each 768x96 underkeep foreground water sprite into a full body behind actors and a cropped 768x4 surface at z=20, enforcing the 0–4 pixel foot-only foreground budget.
+- Assigned generated pickups to Drop z=13 and Chapter III projectiles/timed fields to CombatFX z=16 before their first rendered frame. No damage, AI, movement, balance or drop-probability logic changed.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 headless editor import/parse — exit 0; no parse or missing-resource error.
+2. `test_chapter_03_render_layers_l1.gd` — PASS, `doors=4 checkpoint=1 gate_states=3 titles=5 water_edges=2 drop=13 combat_fx=16 y_sort=0`.
+3. MainBootstrap runtime layer audit after L1 — PASS, `rooms=8 canvas_items=421 anomalies=0 unknown_visible=0 drawable=151 doors=101 foreground=2 actor_containers=4 y_sort=0 main_bootstrap=true`.
+4. Updated `test_chapter_03_r3_layers_collisions.gd` — PASS, `stairs=8 platforms=8 doors=3 actor_z=10/12`.
+5. `test_chapter_03_r4_boss_flow.gd` — PASS, checkpoint, E gate, room swap, intro, post-Boss and underkeep hooks retained.
+6. `test_chapter_03_r5_full_route.gd` — PASS, `transitions=40 cycles=10 persistent_runtime=true platform_combat=true` with the pre-existing truthful Boss/reward/Chapter IV partial boundaries unchanged.
+7. `test_chapter_03_phase_2_enemy_roster.gd` — PASS, six roles and 345 frames retained.
+8. Default headless Main/F5 smoke with `--quit-after 240` — PASS; MainBootstrap entered the formal Opening with no red runtime error.
+
+### Evidence and stop gate
+
+- Full repair report: `chapter_03_render_layer_l1_repair_report.md`.
+- Post-repair runtime evidence: `docs/qa/chapter_03_render_layer_l1/`; its anomaly inventory contains only the header row.
+- L1 did not run or claim the full Main action-pose screenshot matrix. L2 must visually verify supplied and newly discovered viewpoints through idle, movement, jump/fall, attack, dash, hurt, death/ghost, open/closed doors, pickups and CombatFX.
+- Existing unrelated dirty Chapter I/shared/resource/QA files remain untouched and excluded from the L1 commit.

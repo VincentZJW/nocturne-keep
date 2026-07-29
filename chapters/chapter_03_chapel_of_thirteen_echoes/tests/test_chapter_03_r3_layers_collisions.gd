@@ -33,7 +33,9 @@ func _run() -> void:
 	_assert(controller.active_room_id == &"CH3_CHAPEL_VESTIBULE", "Main route starts in formal vestibule")
 	var vestibule: Chapter03Room = controller.active_room
 	_assert((vestibule.get_node("Backdrop") as CanvasItem).z_index == -100, "vestibule far backdrop z=-100")
-	_assert((vestibule.get_node("Doors/NaveDoor") as CanvasItem).z_index == 14, "door is interactable z=14")
+	_assert((vestibule.get_node("Doors/NaveDoor") as CanvasItem).z_index == 0, "door authority does not lift its complete presentation")
+	_assert((vestibule.get_node("Doors/NaveDoor/Presentation") as CanvasItem).z_index == Chapter03LayerContract.PROPS_BEHIND_ACTORS, "door panel stays behind actors")
+	_assert((vestibule.get_node("Doors/NaveDoor/Interaction") as CanvasItem).z_index == Chapter03LayerContract.INTERACTABLES, "door prompt retains interactable z=14")
 	for index: int in range(8):
 		var shape_path := "Geometry/Step%02d/CollisionShape2D" % (index + 1)
 		var shape_node: CollisionShape2D = vestibule.get_node(shape_path) as CollisionShape2D

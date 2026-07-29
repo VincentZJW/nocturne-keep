@@ -8,9 +8,9 @@ signal transition_requested(destination_room_id: StringName, destination_spawn_i
 @export var transition_on_open: bool = true
 @export var opening_offset: Vector2 = Vector2(0.0, -300.0)
 @export_range(0.05, 1.0, 0.05) var opening_duration: float = 0.25
-@export_node_path("Sprite2D") var door_visual_path: NodePath = NodePath("DoorVisual")
+@export_node_path("Sprite2D") var door_visual_path: NodePath = NodePath("Presentation/DoorVisual")
 @export_node_path("CollisionShape2D") var blocker_shape_path: NodePath = NodePath("Blocker/CollisionShape2D")
-@export_node_path("Label") var prompt_path: NodePath = NodePath("Prompt")
+@export_node_path("Label") var prompt_path: NodePath = NodePath("Interaction/Prompt")
 
 @onready var door_visual: Sprite2D = get_node_or_null(door_visual_path) as Sprite2D
 @onready var blocker_shape: CollisionShape2D = get_node_or_null(blocker_shape_path) as CollisionShape2D

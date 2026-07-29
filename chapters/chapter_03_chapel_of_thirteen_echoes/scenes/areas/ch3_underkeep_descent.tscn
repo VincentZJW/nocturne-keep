@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_underkeep_descent.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/underkeep_descent_backdrop.png" id="2_backdrop"]
@@ -14,6 +14,10 @@ size = Vector2(2304, 108)
 
 [sub_resource type="RectangleShape2D" id="ExitShape"]
 size = Vector2(260, 300)
+
+[sub_resource type="AtlasTexture" id="WaterSurfaceAtlas"]
+atlas = ExtResource("6_water")
+region = Rect2(0, 20, 768, 4)
 
 [node name="UnderkeepDescent" type="Node2D"]
 script = ExtResource("1_script")
@@ -54,17 +58,29 @@ position = Vector2(2140, 424)
 texture_filter = 1
 texture = ExtResource("5_gate")
 
-[node name="ShallowWater01" type="Sprite2D" parent="."]
-z_index = 20
+[node name="WaterBodyBehind01" type="Sprite2D" parent="."]
+z_index = -30
 position = Vector2(1040, 620)
 texture_filter = 1
 texture = ExtResource("6_water")
 
-[node name="ShallowWater02" type="Sprite2D" parent="."]
-z_index = 20
+[node name="WaterBodyBehind02" type="Sprite2D" parent="."]
+z_index = -30
 position = Vector2(1776, 620)
 texture_filter = 1
 texture = ExtResource("6_water")
+
+[node name="WaterSurfaceForeground01" type="Sprite2D" parent="."]
+z_index = 20
+position = Vector2(1040, 614)
+texture_filter = 1
+texture = SubResource("WaterSurfaceAtlas")
+
+[node name="WaterSurfaceForeground02" type="Sprite2D" parent="."]
+z_index = 20
+position = Vector2(1776, 614)
+texture_filter = 1
+texture = SubResource("WaterSurfaceAtlas")
 
 [node name="Floor" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -106,7 +122,7 @@ text = "E · DESCEND TO THE DROWNED UNDERKEEP / 下行至淹没地牢"
 horizontal_alignment = 1
 
 [node name="AreaTitle" type="Label" parent="."]
-z_index = 14
+visible = false
 offset_left = 790.0
 offset_top = 78.0
 offset_right = 1514.0

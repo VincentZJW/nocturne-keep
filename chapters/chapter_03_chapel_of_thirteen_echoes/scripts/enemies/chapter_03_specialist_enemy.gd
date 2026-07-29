@@ -276,6 +276,8 @@ func _spawn_projectiles() -> void:
 		if projectile == null:
 			continue
 		get_tree().current_scene.add_child(projectile)
+		projectile.z_index = Chapter03LayerContract.COMBAT_FX
+		projectile.z_as_relative = true
 		projectile.global_position = global_position + Vector2(facing_direction * 22.0, -8.0)
 		var base_direction: Vector2 = (target.global_position - projectile.global_position).normalized()
 		var angle_offset: float = deg_to_rad(float(index - 1) * 11.0) if count == 3 else 0.0
@@ -304,6 +306,8 @@ func _spawn_field() -> void:
 	else:
 		field.mode = Chapter03TimedField.Mode.DAMAGE
 	get_tree().current_scene.add_child(field)
+	field.z_index = Chapter03LayerContract.COMBAT_FX
+	field.z_as_relative = true
 	if active_action == &"hush_field":
 		field.global_position = global_position
 	elif active_action == &"thirteenth_seal":

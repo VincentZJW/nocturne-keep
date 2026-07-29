@@ -240,7 +240,7 @@ position = Vector2(3176, 402)
 shape = SubResource("ExitBlockerShape")
 
 [node name="SanctumTitle" type="Label" parent="."]
-z_index = 14
+visible = false
 offset_left = 1290.0
 offset_top = 82.0
 offset_right = 1910.0

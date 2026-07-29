@@ -112,14 +112,15 @@ position = Vector2(1808, 444)
 shape = SubResource("Platform160")
 [node name="Doors" type="Node2D" parent="."]
 [node name="CheckpointDoor" type="Area2D" parent="Doors"]
-z_index = 14
 position = Vector2(2304, 380)
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("2_door")
 destination_room_id = &"CH3_BOSS_CHECKPOINT"
 destination_spawn_id = &"EntryWest"
-[node name="DoorVisual" type="Sprite2D" parent="Doors/CheckpointDoor"]
+[node name="Presentation" type="Node2D" parent="Doors/CheckpointDoor"]
+z_index = -30
+[node name="DoorVisual" type="Sprite2D" parent="Doors/CheckpointDoor/Presentation"]
 texture_filter = 1
 texture = ExtResource("4_door")
 [node name="Blocker" type="StaticBody2D" parent="Doors/CheckpointDoor"]
@@ -130,7 +131,9 @@ shape = SubResource("DoorBlocker")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Doors/CheckpointDoor"]
 position = Vector2(-58, 66)
 shape = SubResource("DoorArea")
-[node name="Prompt" type="Label" parent="Doors/CheckpointDoor"]
+[node name="Interaction" type="Node2D" parent="Doors/CheckpointDoor"]
+z_index = 14
+[node name="Prompt" type="Label" parent="Doors/CheckpointDoor/Interaction"]
 position = Vector2(-122, -118)
 text = "E  ENTER VESTRY / 进入告解前室"
 theme_override_colors/font_color = Color(0.82, 0.75, 0.55, 1)
