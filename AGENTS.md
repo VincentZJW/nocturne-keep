@@ -25,9 +25,65 @@ After each milestone:
 4. Create one clear Git commit.
 5. Stop and wait for approval.
 
-## Mandatory chapter scene workflow
+## Chapter Production Standards / 章节生产规范
 
-The authoritative specification is `docs/design/chapter_scene_workflow_spec.md`. It applies to every formal Chapter III–VI scene milestone and to any formal Chapter I/II rework. Before beginning chapter scene work, read that specification and record compliance in `docs/development_log.md`.
+Repository naming note: the root guide retains the original “Nocturne Keep”
+prototype heading for history; the current project title is *Veil of
+Ravenmourn / 鸦泣之帷*. The legacy three-room prototype scope above applies only
+to that original prototype milestone. It does not override a later,
+user-approved chapter scope; each approved chapter task still has its own
+explicit boundary and stop point.
+
+The following documents are permanent repository policy for every new chapter,
+chapter expansion, and formal Chapter I/II rework:
+
+1. `docs/production/chapter_scene_workflow.md`
+2. `docs/production/chapter_character_workflow.md`
+3. `docs/production/chapter_production_checklist.md`
+4. `docs/production/chapter_qa_standard.md`
+
+Before any scene, ordinary-enemy, elite-enemy, Boss, important-NPC, or combined
+chapter task, read all four documents and record the loaded workflow, approved
+stage, owned files, tests, and stop point in `docs/development_log.md`. At the
+start of the user-facing work, provide the short **工作流确认** required by the
+checklist. A normal task prompt cannot silently waive these standards. A waiver
+or change must explicitly identify the affected rule and be approved by the
+user; safety, licensing, Main integration, and honest QA evidence remain
+mandatory.
+
+Permanent production gates:
+
+1. **Story first:** understand the place, its past, chapter truth, inhabitants,
+   Boss relationship, pacing, and adjacent-chapter contrast before design.
+2. **Assets before formal assembly:** if a suitable asset does not exist, create
+   an original or provenance-safe formal asset in the correct chapter tree.
+   Lines, flat rectangles, empty frames, and graybox geometry are not final art.
+3. **Concept and runtime parity:** refined concepts do not compensate for crude
+   sprites, incomplete animation, weak scene composition, or stale runtime art.
+4. **Independent chapter identity:** every chapter needs its own architecture,
+   palette, environmental narrative, character roster, Boss identity, and
+   signature visual language—not recolored copies of earlier content.
+5. **Main/F5 is the authority:** formal content must be reachable through the
+   saved `MainBootstrap` route (or its validated Debug Chapter Start). F6,
+   preview scenes, screenshots, and isolated test rooms are supporting evidence
+   only.
+6. **Forced QA:** use `PASS`, `PARTIAL`, or `FAIL`; preserve commands, Main route,
+   screenshots/logs, old-reference audit, Output/Debugger result, and manual
+   acceptance steps under `docs/qa/`. Placeholder-looking content is `FAIL`.
+
+These gates do not authorize a new milestone or broaden an approved scope. Work
+still stops at the approved stage boundary and follows the milestone approval
+rules above.
+
+## Mandatory chapter scene workflow (compatibility summary)
+
+The authoritative scene specification is now
+`docs/production/chapter_scene_workflow.md`, with completion and evidence gates
+defined by `docs/production/chapter_production_checklist.md` and
+`docs/production/chapter_qa_standard.md`. The older
+`docs/design/chapter_scene_workflow_spec.md` remains a compatibility reference,
+not a second authority. These standards apply to every formal Chapter III–VI
+scene milestone and to any formal Chapter I/II rework.
 
 Formal chapter scene work must pass these gates in order:
 

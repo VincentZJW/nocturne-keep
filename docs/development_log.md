@@ -5641,3 +5641,46 @@ Status: complete — Stage 2A–2D concept, formal runtime art, Main binding and
 - Main evidence: `docs/qa/chapter_02_enemy_boss_art_rework/stage_2/04_phase_1_main.png` through `12_crimson_masque_claimed_main.png`.
 - Manual F5 acceptance: enable Chapter II `CH2_BOSS`, review Phase 1, reduce Boss HP to the existing 121/220 threshold, review the full transformation/Phase 2/death, collect Crimson Masque and enter the mirror passage; then restore Debug Start defaults.
 - Chapter II ordinary enemies, Chapter III, gameplay parameters and all pre-existing dirty Chapter I/shared resources remain outside this Stage 2 commit.
+
+## 2026-07-29 — Project-level chapter production standards preflight
+
+Status: in progress — documentation-only policy milestone
+
+### Goal, files and strict scope
+
+- Promote the accepted chapter-scene and chapter-character workflows into permanent repository policy for every new chapter, expansion and formal old-chapter rework.
+- Preserve the existing `AGENTS.md` contract while adding a mandatory production entry point; create authoritative scene, character, checklist and QA documents under `docs/production/`; link them from README; retain the older scene specification as a compatibility reference rather than a competing authority.
+- Task-owned files are `AGENTS.md`, `README.md`, `docs/design/chapter_scene_workflow_spec.md`, the four new `docs/production/*.md` files and this development log. No `.gd`, `.tscn`, `.tres`, project setting, gameplay value, art, animation or runtime resource is in scope.
+- Pre-existing dirty Chapter I/shared enemy Resources, Chapter I level serialization, Player/loot Resources, Ravenfang QA images and UID sidecars remain user-owned and excluded from this milestone.
+
+### Planned verification
+
+- Validate required headings, cross-document links, canonical/compatibility wording, forbidden-placeholder rules, Main/F5 evidence requirements and fixed `PASS/PARTIAL/FAIL` semantics.
+- Run Markdown relative-link validation and `git diff --check`; inspect the final scoped diff and confirm no gameplay file changed.
+- Run an exact Godot 4.7.1 headless import/parse and formal Bootstrap smoke because the root agent contract requires milestone-level verification, while recording that this documentation-only change does not alter runtime behavior.
+
+## 2026-07-29 — Project-level chapter production standards completion
+
+Status: complete — scene and character production workflows are permanent repository policy
+
+### Delivered policy
+
+- Added `Chapter Production Standards / 章节生产规范` to root `AGENTS.md`, preserving the existing project contract while making four `docs/production/` documents mandatory before every chapter scene, ordinary/elite enemy, Boss, important NPC or combined chapter task.
+- Added authoritative S0–S6 scene workflow, C0–C6 character workflow, a stage/checklist gate and a forced QA standard. The policy covers story-first design, asset-first production, concept/runtime parity, independent chapter identity, chapter-local ownership, old-reference cleanup, Main/F5 authority and honest `PASS/PARTIAL/FAIL` reporting.
+- Added README navigation and an explicit warning that concept-only, F6-only, placeholder-looking or stale-runtime deliveries are not complete. Marked the older `docs/design/chapter_scene_workflow_spec.md` as a retained compatibility reference; `docs/production/` is now the single authority if wording differs.
+- Clarified that the original three-room Nocturne Keep scope line is historical to its prototype milestone. Current work still requires an explicit user-approved chapter scope and stop point; the new production policy does not authorize automatic milestone expansion.
+- No gameplay code, scenes, Resources, settings, art, animation, balancing or runtime route changed.
+
+### Exact commands and actual results
+
+1. Required-file, Markdown relative-link and mandatory-term validation using shell/`rg` — PASS: all eight policy/log inputs are non-empty; every local Markdown link resolves; S0–S6, C0–C6, workflow confirmation, `chapter_id`/`spawn_id`, Main/F5 and `PASS/PARTIAL/FAIL` contracts are present.
+2. Initial optional link-check attempts with `ruby` and `perl` — tools unavailable on this machine (`command not found`); no project change resulted. Replaced by a dependency-free Bash/`rg` validator, which passed.
+3. `git diff --check` — exit 0; no whitespace error.
+4. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version` — `4.7.1.stable.official.a13da4feb`.
+5. Exact headless editor import/parse: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --import --quit` — exit 0; no parser, missing-resource or autoload error.
+6. Formal Bootstrap smoke: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 8` — exit 0; `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`.
+
+### Scope and future use
+
+- From the next chapter task onward, the agent must begin with the checklist's short `工作流确认`, classify the task as scene/character/Boss/combined, name the approved stage and stop point, and then execute only that stage.
+- Final scoped status/diff must contain only `AGENTS.md`, `README.md`, `docs/design/chapter_scene_workflow_spec.md`, the four `docs/production/*.md` files and this log. All pre-existing dirty gameplay/resource/QA/UID files remain untouched and excluded.

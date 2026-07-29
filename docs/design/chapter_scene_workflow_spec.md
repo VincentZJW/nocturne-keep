@@ -1,5 +1,7 @@
 # 章节场景强制工作流规范
 
+> **兼容说明（2026-07-29）：** 本文保留前几章形成的场景工作流历史与详细背景。项目级唯一权威入口现为 `docs/production/chapter_scene_workflow.md`，并由 `docs/production/chapter_production_checklist.md` 与 `docs/production/chapter_qa_standard.md` 约束交付。若本文与上述生产规范存在差异，以 `docs/production/` 下的规范为准。
+
 - 状态：**Mandatory / repository policy**
 - 适用范围：Chapter 03、Chapter 04、Chapter 05、Chapter 06 的全部正式场景开发，以及 Chapter 01、Chapter 02 的任何正式返修
 - 执行入口：根目录 `AGENTS.md`

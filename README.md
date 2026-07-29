@@ -8,6 +8,17 @@
 
 第二章Boss美术 Stage 2 已接入同一正式路线：瑟芙琳现在使用独立的96×96 Phase 1礼服/白瓷面具形态、39帧完整破面变身和无面骨扇Phase 2形态，共362张正式像素帧。原有220 HP、55%转阶段阈值、AI、攻击判定、遗物龛与第三章通道保持不变。强制QA见 `docs/qa/chapter_02_enemy_boss_art_rework/stage_2_report.md`。
 
+## 章节生产规范
+
+任何新章节、章节扩展、正式场景返修、普通/精英敌人、Boss或重要NPC任务开始前，必须先读取根目录[AGENTS.md](AGENTS.md)以及以下四份项目级长期规范：
+
+- [章节场景设计工作流](docs/production/chapter_scene_workflow.md)
+- [章节人物设计工作流](docs/production/chapter_character_workflow.md)
+- [章节生产检查清单](docs/production/chapter_production_checklist.md)
+- [章节强制QA标准](docs/production/chapter_qa_standard.md)
+
+正式章节交付必须先理解背景故事、先补齐章节资产，再完成保存场景/人物、MainBootstrap/F5集成和强制QA。概念图精细但实装粗糙、只在F6或测试房可见、仍使用占位几何、运行时继续引用旧素材，均不能标记为完成。普通任务不能默认忽略这些规范；任何例外必须明确指出规则并获得用户批准。
+
 ## 当前范围
 
 F5首先播放70.2秒、8镜头、可长按ESC/Enter跳过的双语叙事开场，然后进入约69秒的`Veilbound Catacomb / 暮帷墓窟`剧情复苏。玩家在断魂祭坛复魂、与守烛人完成30句双语台词、拾回双匕首并自行穿过符文石门后，才进入正式Main的`DarkForestTutorialSpawn`。第一关现有11步非阻塞教程、18个一次性EncounterGroup和34只普通敌人。第二章现已重构为九房间、三楼层的蛇形古堡路线，包含15组正式Encounter、38只普通敌人、五种第二章敌人和完整接入Silent Ballroom的两阶段Boss空心公爵夫人·瑟芙琳；商店与最终环境精修仍未开始。
@@ -145,7 +156,11 @@ Main开发调试快捷键：
 ## 文档
 
 - [技术架构](docs/technical_architecture.md)
-- [章节场景强制工作流](docs/design/chapter_scene_workflow_spec.md)
+- [章节生产规范入口](docs/production/chapter_production_checklist.md)
+- [章节场景强制工作流（权威）](docs/production/chapter_scene_workflow.md)
+- [章节人物强制工作流（权威）](docs/production/chapter_character_workflow.md)
+- [章节强制QA标准](docs/production/chapter_qa_standard.md)
+- [旧章节场景规范（兼容参考）](docs/design/chapter_scene_workflow_spec.md)
 - [章节系统规格](docs/design/chapter_system_spec.md)
 - [Debug章节启动规格](docs/design/debug_chapter_start_spec.md)
 - [Session与存档边界](docs/design/save_and_session_spec.md)
