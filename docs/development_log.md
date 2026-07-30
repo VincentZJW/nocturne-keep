@@ -1,5 +1,47 @@
 # Development Log
 
+## 2026-07-30 — Chapter III enemy-density repair B0–B5
+
+Status: complete — nine saved combat regions, 20 bounded groups and exactly 72 normal enemies are integrated through MainBootstrap; manual combat-feel acceptance remains
+
+### Goal, planned files, tests, and scope check
+
+- Preserve the accepted Chapter I–II ranged-placement work and Chapter III underkeep transition art. Rework only the formal Chapter III normal-enemy route: retain the safe vestibule, make the next room the first real encounter, expand the combat route to nine authored combat regions and place exactly 72 non-Boss enemies across 20 bounded EncounterGroups.
+- Use the approved distribution (22 Bellchain Penitents, 8 Censer Executioners, 12 Silent Choristers, 10 Stained-Glass Seraphs, 10 Confessional Wraiths and 10 Thirteenth Scribes). Persist a fixed-seed development result in saved Resources; never randomize formal runtime positions.
+- Add typed spawn/encounter/room Resources, a chapter-owned encounter spawner and independently loadable formal room wrappers. Preserve existing enemy HP/damage, Player balance, Boss rooms, safe/checkpoint/ante/post-Boss rooms and the MainBootstrap authority.
+- Enforce ground-heavy/platform-ranged/air-anchor/confessional roles, reachable formal platforms, 2–4 enemies per activation group, current-room-only loading and disabled AI/animation before activation. Register the requested Main debug starts and capture all evidence through the F5 Main route.
+- Planned verification: exact Godot 4.7.1 editor import, focused manifest/distribution/activation tests, existing Chapter III route/Boss/render regressions, MainBootstrap startup, formal-room smoke runs and a Bootstrap-routed 17-image QA capture. Only this task's files will be staged; the pre-existing Chapter I/shared-resource/loot/Player/QA-image edits remain user-owned and excluded.
+
+### Read-only baseline
+
+- `project.godot` still points to `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter III loads `res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn` through the normal chapter router.
+- The formal room controller currently exposes only Vestibule, Nave Entry and Choir Gallery before the safe Boss checkpoint. Nave Entry contains three always-active enemies and Choir Gallery contains three, so the complete formal non-Boss roster is only six; the safe Vestibule contains zero and correctly serves title/transition rather than combat.
+- No saved Chapter III EncounterData exists. Enemy instances sit directly under room `Enemies` nodes, so all current-room AI starts immediately and there are no ActivationAreas. The approved six enemy scenes and their formal art/data are already present and will be reused without balance or animation changes.
+- Existing nave/choir backdrops, chapter props, doors and platform textures are formal saved pixel assets. They are sufficient to build the added combat regions without adding graybox visuals. The Boss checkpoint, Boss ante-room, Boss room, post-Boss reliquary and underkeep descent remain enemy-free by design.
+
+### Delivered implementation
+
+- Added typed Chapter III spawn, encounter, manifest and room-definition Resources plus a fixed-seed development generator (`31372026`). The saved result contains nine combat rooms, 20 EncounterGroups and exactly 72 enemies: Bellchain 22, Executioner 8, Chorister 12, Seraph 10, Wraith 10 and Scribe 10. Formal runtime never randomizes the saved positions.
+- Preserved the enemy-free vestibule as title/transition space and made the following `CH3_NAVE_ENTRY` the first formal combat room. Its first group is two Bellchain Penitents plus one platform Chorister; one Confessional Wraith is isolated in the later activation zone.
+- Added seven room wrappers and replaced the two previous direct-enemy rooms with the shared typed `Chapter03EncounterRoom`. Formal chapter props/backdrops/doors/platform textures compose every room; no new graybox artwork or Task A content was introduced.
+- Added role-constrained placement: 22 ranged enemies use reachable formal platforms, ten Seraphs use air anchors, ten Wraiths use ambush positions and eight heavy Executioners remain grounded. The prompt's internally inconsistent 9-Wraith/11-Scribe example was corrected in the final pre-Boss group to satisfy its authoritative 10/10 roster and 72 total.
+- Updated the shared EncounterGroup activation boundary so dormant enemies have process, physics and AI disabled until the Player enters that group's ActivationArea. Only the current room is loaded under `RoomHost`; transitions cannot leave prior-room AI active.
+- Registered all requested Main debug ids and updated route/Boss/render regression fixtures for the new formal room architecture. Added a deterministic structural test and a MainBootstrap-routed graphical QA runner that produced 17 inspected screenshots.
+
+### Exact commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS; exact 4.7.1 import/parse, no red parser/resource error.
+- `... --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_chapter_03_encounter_manifests.gd` — `CH3_ENCOUNTER_GENERATION PASS rooms=9 encounters=20 enemies=72 seed=31372026`.
+- `... --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_chapter_03_enemy_distribution_b0_b5.gd` — PASS with exact `22/8/12/10/10/10`, platform ranged 22, air 10, ambush 10 and heavy 8.
+- `... --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_chapter_03_enemy_distribution_b0_b5_qa.gd` — `CH3_ENEMY_DISTRIBUTION_MAIN_QA PASS captures=17 bootstrap=true rooms=9 enemies=72`; every capture was reviewed.
+- Existing Chapter III regressions PASS: R4 Boss flow, R5 50-transition route stress, L1 render layering and Chapter II→III formal transition.
+
+### Known issues and manual acceptance
+
+- Automated tests confirm the authored totals, spawn-role rules, saved seed, activation/process gating and Main route. They do not certify subjective pressure, attack overlap or encounter recovery; these remain manual playtest acceptance items.
+- Use the nine documented Chapter III debug starts through MainBootstrap and play west-to-east. Pay particular attention to the `3 + 1` opening, Confessional ambush timing, upper-platform accessibility, Seraph pursuit height and the three-group pre-Boss pressure room.
+- Existing unrelated Chapter I/shared enemy/loot/Player tuning and Ravenfang QA image changes were present before this task. They were neither edited for this milestone nor included in its commit.
+
 ## 2026-07-29 — Chapter III Boss B3 summons
 
 Status: complete — two Boss-exclusive summons, bounded ritual/interrupt rules and formal Main integration; B4 not started

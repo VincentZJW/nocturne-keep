@@ -9,8 +9,15 @@ const TRANSITION_TIMEOUT_FRAMES: int = 180
 
 const REQUIRED_STARTS: Array[StringName] = [
 	&"chapter_03_start",
+	&"CH3_OPENING_ENCOUNTER",
+	&"CH3_MAIN_NAVE",
+	&"CH3_CONFESSIONALS",
 	&"CH3_NAVE_ENTRY",
 	&"CH3_CHOIR_GALLERY",
+	&"CH3_STAINED_GLASS_HALL",
+	&"CH3_ARCHIVE",
+	&"CH3_BLOOD_CANDLE_ZONE",
+	&"CH3_PRE_BOSS_COMBAT",
 	&"CH3_BOSS_CHECKPOINT",
 	&"CH3_BOSS_ANTE",
 	&"CH3_BOSS",
@@ -26,13 +33,18 @@ const STRESS_BOUNDARIES: Array[Dictionary] = [
 	},
 	{
 		"source": &"CH3_NAVE_ENTRY",
-		"destination": &"CH3_CHOIR_GALLERY",
-		"label": "Nave->Choir",
+		"destination": &"CH3_MAIN_NAVE_FRONT",
+		"label": "Opening->MainNave",
 	},
 	{
 		"source": &"CH3_CHOIR_GALLERY",
+		"destination": &"CH3_STAINED_GLASS_HALL",
+		"label": "Choir->StainedGlass",
+	},
+	{
+		"source": &"CH3_PRE_BOSS_COMBAT",
 		"destination": &"CH3_BOSS_CHECKPOINT",
-		"label": "Choir->Checkpoint",
+		"label": "LastProcession->Checkpoint",
 	},
 	{
 		"source": &"CH3_BOSS_ANTE",
@@ -117,8 +129,15 @@ func _assert_project_contract() -> void:
 func _assert_direct_start_mapping(route: Chapter03Route) -> void:
 	var expected_rooms: Dictionary[StringName, StringName] = {
 		&"chapter_03_start": &"CH3_CHAPEL_VESTIBULE",
+		&"CH3_OPENING_ENCOUNTER": &"CH3_NAVE_ENTRY",
+		&"CH3_MAIN_NAVE": &"CH3_MAIN_NAVE_FRONT",
+		&"CH3_CONFESSIONALS": &"CH3_CONFESSIONALS",
 		&"CH3_NAVE_ENTRY": &"CH3_NAVE_ENTRY",
 		&"CH3_CHOIR_GALLERY": &"CH3_CHOIR_GALLERY",
+		&"CH3_STAINED_GLASS_HALL": &"CH3_STAINED_GLASS_HALL",
+		&"CH3_ARCHIVE": &"CH3_ARCHIVE_RELIQUARY",
+		&"CH3_BLOOD_CANDLE_ZONE": &"CH3_BLOOD_CANDLE_CHAPEL",
+		&"CH3_PRE_BOSS_COMBAT": &"CH3_PRE_BOSS_COMBAT",
 		&"CH3_BOSS_CHECKPOINT": &"CH3_BOSS_CHECKPOINT",
 		&"CH3_BOSS_ANTE": &"CH3_BOSS_ANTE",
 		&"CH3_BOSS": &"CH3_BOSS",
@@ -134,38 +153,31 @@ func _assert_direct_start_mapping(route: Chapter03Route) -> void:
 
 
 func _assert_platform_combat_contract() -> void:
-	for room_path: String in [
-		ROOT_PATH + "/scenes/rooms/ch3_nave_entry.tscn",
-		ROOT_PATH + "/scenes/rooms/ch3_choir_gallery.tscn",
+	for room_file: String in [
+		"ch3_nave_entry.tscn", "ch3_main_nave_front.tscn", "ch3_main_nave_rear.tscn",
+		"ch3_confessionals.tscn", "ch3_choir_gallery.tscn", "ch3_stained_glass_hall.tscn",
+		"ch3_archive_reliquary.tscn", "ch3_blood_candle_chapel.tscn",
+		"ch3_pre_boss_combat.tscn",
 	]:
+		var room_path: String = ROOT_PATH + "/scenes/rooms/" + room_file
 		var packed: PackedScene = load(room_path) as PackedScene
-		var room: Chapter03Room = packed.instantiate() as Chapter03Room if packed != null else null
+		var room: Chapter03EncounterRoom = packed.instantiate() as Chapter03EncounterRoom if packed != null else null
 		_expect(room != null, "combat room instantiates: %s" % room_path)
 		if room == null:
 			continue
 		root.add_child(room)
 		await process_frame
-		var enemies: Node = room.get_node_or_null("Enemies")
-		_expect(enemies != null, "combat room owns Enemies: %s" % room_path)
-		if enemies != null:
-			_expect(enemies.get_child_count() == 3, "combat room contains three readable roles: %s" % room_path)
-			var horizontal_bands: Dictionary[int, int] = {}
-			for child: Node in enemies.get_children():
-				var enemy: EnemyCombatant = child as EnemyCombatant
-				_expect(enemy != null, "%s is a live EnemyCombatant" % child.name)
-				if enemy == null:
-					continue
-				_expect(enemy.z_index == Chapter03LayerContract.ENEMIES, "%s stays above platforms" % child.name)
-				_expect(
-					enemy.get_health_component() != null,
-					"%s exposes authoritative combat health" % child.name
-				)
-				_expect(
-					not enemy.find_children("*", "HurtboxComponent", true, false).is_empty(),
-					"%s exposes a combat Hurtbox" % child.name
-				)
+		var groups: Array[EncounterGroup] = room.encounter_spawner.get_encounter_groups()
+		_expect(groups.size() == room.get_manifest().encounter_count(), "combat room owns persisted encounters: %s" % room_path)
+		var horizontal_bands: Dictionary[int, int] = {}
+		for group: EncounterGroup in groups:
+			_expect(group.get_enemies().size() <= 4, "%s remains a bounded activation group" % group.encounter_name)
+			for enemy: EnemyCombatant in group.get_enemies():
+				_expect(enemy.z_index == Chapter03LayerContract.ENEMIES, "%s stays above platforms" % enemy.name)
+				_expect(enemy.get_health_component() != null, "%s exposes authoritative combat health" % enemy.name)
+				_expect(not enemy.find_children("*", "HurtboxComponent", true, false).is_empty(), "%s exposes a combat Hurtbox" % enemy.name)
 				horizontal_bands[int(roundf(enemy.position.y / 64.0))] = 1
-			_expect(horizontal_bands.size() >= 2, "combat roles occupy ground/platform bands: %s" % room_path)
+		_expect(horizontal_bands.size() >= 2, "combat roles occupy ground/platform/air bands: %s" % room_path)
 		room.queue_free()
 		await process_frame
 

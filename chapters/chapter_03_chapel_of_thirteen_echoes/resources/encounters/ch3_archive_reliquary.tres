@@ -1,0 +1,118 @@
+[gd_resource type="Resource" script_class="Chapter03RoomDefinition" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/nave_backdrop.png" id="1_wtswg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/mirror_back_door.png" id="2_pcm87"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_data.gd" id="3_jgis1"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_enemy_spawn_data.gd" id="4_56pl3"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="5_uodv2"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="6_kq7db"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="7_uypvv"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="8_ba81b"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="9_ku31g"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_manifest.gd" id="10_ugi26"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/ritual_registry.png" id="11_gx4ic"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/votive_lectern.png" id="12_231x3"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_room_definition.gd" id="13_uqlji"]
+
+[sub_resource type="Resource" id="Resource_vxmdg"]
+script = ExtResource("4_56pl3")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_uodv2")
+local_position = Vector2(398, 584)
+movement_bounds = Vector2(290, 830)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_kam0y"]
+script = ExtResource("4_56pl3")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("6_kq7db")
+local_position = Vector2(498, 584)
+movement_bounds = Vector2(290, 830)
+
+[sub_resource type="Resource" id="Resource_yguv2"]
+script = ExtResource("4_56pl3")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("7_uypvv")
+local_position = Vector2(644, 426)
+movement_bounds = Vector2(562, 718)
+
+[sub_resource type="Resource" id="Resource_q61ln"]
+script = ExtResource("4_56pl3")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("8_ba81b")
+local_position = Vector2(834, 350)
+movement_bounds = Vector2(752, 908)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_3cvct"]
+script = ExtResource("3_jgis1")
+encounter_id = &"CH3_ARCHIVE_RELIQUARY_ENCOUNTER_01"
+region_name = &"CH3_ARCHIVE_RELIQUARY"
+activation_rect = Rect2(120, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_56pl3")]([SubResource("Resource_vxmdg"), SubResource("Resource_kam0y"), SubResource("Resource_yguv2"), SubResource("Resource_q61ln")])
+
+[sub_resource type="Resource" id="Resource_bp8yb"]
+script = ExtResource("4_56pl3")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_uodv2")
+local_position = Vector2(1478, 584)
+movement_bounds = Vector2(1370, 1910)
+
+[sub_resource type="Resource" id="Resource_2ltam"]
+script = ExtResource("4_56pl3")
+enemy_type = &"ConfessionalWraith"
+spawn_role = &"confessional_spawn"
+enemy_scene = ExtResource("9_ku31g")
+local_position = Vector2(1594, 584)
+movement_bounds = Vector2(1370, 1910)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_outy4"]
+script = ExtResource("4_56pl3")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("8_ba81b")
+local_position = Vector2(1720, 426)
+movement_bounds = Vector2(1642, 1798)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_fxydw"]
+script = ExtResource("4_56pl3")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("8_ba81b")
+local_position = Vector2(1914, 350)
+movement_bounds = Vector2(1832, 1988)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_4o6qq"]
+script = ExtResource("3_jgis1")
+encounter_id = &"CH3_ARCHIVE_RELIQUARY_ENCOUNTER_02"
+region_name = &"CH3_ARCHIVE_RELIQUARY"
+activation_rect = Rect2(1200, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_56pl3")]([SubResource("Resource_bp8yb"), SubResource("Resource_2ltam"), SubResource("Resource_outy4"), SubResource("Resource_fxydw")])
+
+[sub_resource type="Resource" id="Resource_s1kho"]
+script = ExtResource("10_ugi26")
+room_id = &"CH3_ARCHIVE_RELIQUARY"
+encounters = Array[ExtResource("3_jgis1")]([SubResource("Resource_3cvct"), SubResource("Resource_4o6qq")])
+
+[resource]
+script = ExtResource("13_uqlji")
+room_id = &"CH3_ARCHIVE_RELIQUARY"
+bilingual_name = "CHAPTER III · PRAYER ARCHIVE / 祷文档案圣器室"
+next_room_id = &"CH3_BLOOD_CANDLE_CHAPEL"
+door_prompt = "E  CONTINUE PROCESSION / 继续送葬"
+backdrop_texture = ExtResource("1_wtswg")
+door_texture = ExtResource("2_pcm87")
+prop_textures = Array[Texture2D]([ExtResource("11_gx4ic"), ExtResource("12_231x3")])
+prop_positions = Array[Vector2]([Vector2(1160, 384), Vector2(460, 540)])
+prop_z_indices = Array[int]([-45, -30])
+platform_positions = Array[Vector2]([Vector2(640, 484), Vector2(830, 408), Vector2(704, 484), Vector2(1720, 484), Vector2(1910, 408), Vector2(1784, 484)])
+platform_widths = Array[int]([192, 192, 96, 192, 192, 96])
+manifest = SubResource("Resource_s1kho")

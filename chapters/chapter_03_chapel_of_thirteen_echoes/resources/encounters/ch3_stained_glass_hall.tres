@@ -1,0 +1,116 @@
+[gd_resource type="Resource" script_class="Chapter03RoomDefinition" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/nave_backdrop.png" id="1_c44dx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/choir_screen_door.png" id="2_20m1b"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_data.gd" id="3_orb6l"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_enemy_spawn_data.gd" id="4_5twms"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="5_0ittx"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="6_e8h1d"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="7_rda2f"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="8_sqtp6"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_manifest.gd" id="9_r5wi4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_sanctum/boss_stained_glass.png" id="10_fb5uu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/bell_saint_left.png" id="11_jfun0"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_room_definition.gd" id="12_0twvv"]
+
+[sub_resource type="Resource" id="Resource_q6843"]
+script = ExtResource("4_5twms")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_0ittx")
+local_position = Vector2(402, 584)
+movement_bounds = Vector2(290, 830)
+
+[sub_resource type="Resource" id="Resource_c3mbi"]
+script = ExtResource("4_5twms")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("6_e8h1d")
+local_position = Vector2(664, 318)
+movement_bounds = Vector2(340, 820)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_w2gxb"]
+script = ExtResource("4_5twms")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("6_e8h1d")
+local_position = Vector2(652, 318)
+movement_bounds = Vector2(340, 820)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_ajwbi"]
+script = ExtResource("4_5twms")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("7_rda2f")
+local_position = Vector2(648, 426)
+movement_bounds = Vector2(562, 718)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_pfx46"]
+script = ExtResource("3_orb6l")
+encounter_id = &"CH3_STAINED_GLASS_HALL_ENCOUNTER_01"
+region_name = &"CH3_STAINED_GLASS_HALL"
+activation_rect = Rect2(120, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_5twms")]([SubResource("Resource_q6843"), SubResource("Resource_c3mbi"), SubResource("Resource_w2gxb"), SubResource("Resource_ajwbi")])
+
+[sub_resource type="Resource" id="Resource_6gu5b"]
+script = ExtResource("4_5twms")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_0ittx")
+local_position = Vector2(1494, 584)
+movement_bounds = Vector2(1370, 1910)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_yfyvp"]
+script = ExtResource("4_5twms")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("6_e8h1d")
+local_position = Vector2(1736, 318)
+movement_bounds = Vector2(1420, 1900)
+
+[sub_resource type="Resource" id="Resource_dqyo8"]
+script = ExtResource("4_5twms")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("6_e8h1d")
+local_position = Vector2(1744, 318)
+movement_bounds = Vector2(1420, 1900)
+
+[sub_resource type="Resource" id="Resource_jkuiy"]
+script = ExtResource("4_5twms")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("8_sqtp6")
+local_position = Vector2(1708, 426)
+movement_bounds = Vector2(1642, 1798)
+
+[sub_resource type="Resource" id="Resource_uj7e8"]
+script = ExtResource("3_orb6l")
+encounter_id = &"CH3_STAINED_GLASS_HALL_ENCOUNTER_02"
+region_name = &"CH3_STAINED_GLASS_HALL"
+activation_rect = Rect2(1200, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_5twms")]([SubResource("Resource_6gu5b"), SubResource("Resource_yfyvp"), SubResource("Resource_dqyo8"), SubResource("Resource_jkuiy")])
+
+[sub_resource type="Resource" id="Resource_1ppb1"]
+script = ExtResource("9_r5wi4")
+room_id = &"CH3_STAINED_GLASS_HALL"
+encounters = Array[ExtResource("3_orb6l")]([SubResource("Resource_pfx46"), SubResource("Resource_uj7e8")])
+
+[resource]
+script = ExtResource("12_0twvv")
+room_id = &"CH3_STAINED_GLASS_HALL"
+bilingual_name = "CHAPTER III · SHATTERED SAINTS / 碎彩圣像厅"
+next_room_id = &"CH3_ARCHIVE_RELIQUARY"
+door_prompt = "E  CONTINUE PROCESSION / 继续送葬"
+backdrop_texture = ExtResource("1_c44dx")
+door_texture = ExtResource("2_20m1b")
+prop_textures = Array[Texture2D]([ExtResource("10_fb5uu"), ExtResource("11_jfun0")])
+prop_positions = Array[Vector2]([Vector2(1152, 298), Vector2(420, 380)])
+prop_z_indices = Array[int]([-70, -45])
+platform_positions = Array[Vector2]([Vector2(640, 484), Vector2(1720, 484)])
+platform_widths = Array[int]([192, 192])
+manifest = SubResource("Resource_1ppb1")

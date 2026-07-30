@@ -58,7 +58,7 @@ func _run() -> void:
 	_expect(not gate.is_gate_open(), "proximity alone does not open Boss gate")
 	_expect(gate.interaction_prompt.visible, "Boss gate shows explicit E prompt")
 	gate.run_sequence_for_player(player)
-	await create_timer(5.20).timeout
+	await _wait_for_room_ready(controller, &"CH3_BOSS", 12.0)
 	_expect(controller.active_room_id == &"CH3_BOSS", "gate request swaps to independent Sanctum")
 	_expect(route.get_node("RoomHost").get_child_count() == 1, "Boss swap retains one active room")
 	var sanctum_room: Chapter03BossSanctumRoom = controller.active_room as Chapter03BossSanctumRoom
@@ -78,7 +78,7 @@ func _run() -> void:
 	_expect(sanctum.is_death_response_complete(), "Boss death environment hook is idempotent-ready")
 	_expect(sanctum_room.post_boss_exit.monitoring, "Boss death enables post-Boss exit")
 	(sanctum_room.post_boss_exit as Chapter03RoomExit)._on_body_entered(player)
-	await create_timer(0.60).timeout
+	await _wait_for_room_ready(controller, &"CH3_POST_BOSS", 2.0)
 	_expect(controller.active_room_id == &"CH3_POST_BOSS", "death exit reaches dedicated reliquary")
 	var post_room: Chapter03PostBossRoom = controller.active_room as Chapter03PostBossRoom
 	if post_room == null:
@@ -90,7 +90,7 @@ func _run() -> void:
 	await physics_frame
 	_expect(post_room.underkeep_exit.monitoring, "reward completion enables underkeep exit")
 	(post_room.underkeep_exit as Chapter03RoomExit)._on_body_entered(player)
-	await create_timer(0.60).timeout
+	await _wait_for_room_ready(controller, &"CH3_UNDERKEEP_DESCENT", 2.0)
 	_expect(
 		controller.active_room_id == &"CH3_UNDERKEEP_DESCENT",
 		"reward-gated exit reaches dedicated underkeep room"
@@ -106,6 +106,22 @@ func _run() -> void:
 	route.queue_free()
 	await process_frame
 	_finish()
+
+
+func _wait_for_room_ready(
+	controller: Chapter03RoomTransitionController,
+	room_id: StringName,
+	timeout_seconds: float
+) -> void:
+	var deadline: int = Time.get_ticks_msec() + roundi(timeout_seconds * 1000.0)
+	while Time.get_ticks_msec() < deadline:
+		await process_frame
+		if (
+			controller.active_room_id == room_id
+			and not controller._transitioning
+			and not controller.fade_rect.visible
+		):
+			return
 
 
 func _expect(condition: bool, message: String) -> void:

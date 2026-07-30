@@ -26,11 +26,31 @@ func _ready() -> void:
 func _resolve_start(spawn_id: StringName) -> Dictionary:
 	match spawn_id:
 		&"CH3_BELLCHAIN_TEST":
-			return {"room_id": &"CH3_NAVE_ENTRY", "spawn_id": &"BellchainTest"}
+			return {"room_id": &"CH3_NAVE_ENTRY", "spawn_id": &"EntryWest"}
 		&"CH3_SCRIBE_TEST":
-			return {"room_id": &"CH3_NAVE_ENTRY", "spawn_id": &"ScribeTest"}
+			return {"room_id": &"CH3_MAIN_NAVE_FRONT", "spawn_id": &"Inspection"}
 		&"CH3_EXECUTIONER_TEST", &"CH3_CHOIR_TEST":
-			return {"room_id": &"CH3_CHOIR_GALLERY", "spawn_id": &"EnemyTest"}
+			return {"room_id": &"CH3_CHOIR_GALLERY", "spawn_id": &"Inspection"}
+		&"CH3_START", &"CH3_CHAPEL_VESTIBULE":
+			return {"room_id": &"CH3_CHAPEL_VESTIBULE", "spawn_id": &"EntryWest"}
+		&"CH3_OPENING_ENCOUNTER", &"CH3_NAVE_ENTRY":
+			return {"room_id": &"CH3_NAVE_ENTRY", "spawn_id": &"EntryWest"}
+		&"CH3_MAIN_NAVE", &"CH3_MAIN_NAVE_FRONT":
+			return {"room_id": &"CH3_MAIN_NAVE_FRONT", "spawn_id": &"EntryWest"}
+		&"CH3_MAIN_NAVE_REAR":
+			return {"room_id": &"CH3_MAIN_NAVE_REAR", "spawn_id": &"EntryWest"}
+		&"CH3_CONFESSIONALS":
+			return {"room_id": &"CH3_CONFESSIONALS", "spawn_id": &"EntryWest"}
+		&"CH3_CHOIR_GALLERY":
+			return {"room_id": &"CH3_CHOIR_GALLERY", "spawn_id": &"EntryWest"}
+		&"CH3_STAINED_GLASS_HALL":
+			return {"room_id": &"CH3_STAINED_GLASS_HALL", "spawn_id": &"EntryWest"}
+		&"CH3_ARCHIVE", &"CH3_ARCHIVE_RELIQUARY":
+			return {"room_id": &"CH3_ARCHIVE_RELIQUARY", "spawn_id": &"EntryWest"}
+		&"CH3_BLOOD_CANDLE_ZONE", &"CH3_BLOOD_CANDLE_CHAPEL":
+			return {"room_id": &"CH3_BLOOD_CANDLE_CHAPEL", "spawn_id": &"EntryWest"}
+		&"CH3_PRE_BOSS_COMBAT":
+			return {"room_id": &"CH3_PRE_BOSS_COMBAT", "spawn_id": &"EntryWest"}
 		&"CH3_BOSS_ANTE":
 			return {"room_id": &"CH3_BOSS_ANTE", "spawn_id": &"EntryWest"}
 		&"CH3_BOSS", &"CH3_BOSS_SUMMON_TEST", &"CH3_BOSS_PHASE_02", \
@@ -41,10 +61,6 @@ func _resolve_start(spawn_id: StringName) -> Dictionary:
 			return {"room_id": &"CH3_POST_BOSS", "spawn_id": &"EntryWest"}
 		&"CH3_UNDERKEEP_DESCENT":
 			return {"room_id": &"CH3_UNDERKEEP_DESCENT", "spawn_id": &"EntryWest"}
-		&"CH3_NAVE_ENTRY":
-			return {"room_id": &"CH3_NAVE_ENTRY", "spawn_id": &"EntryWest"}
-		&"CH3_CHOIR_GALLERY":
-			return {"room_id": &"CH3_CHOIR_GALLERY", "spawn_id": &"EntryWest"}
 		&"CH3_BOSS_CHECKPOINT":
 			return {"room_id": &"CH3_BOSS_CHECKPOINT", "spawn_id": &"EntryWest"}
 	return {"room_id": &"CH3_CHAPEL_VESTIBULE", "spawn_id": &"EntryWest"}

@@ -14,9 +14,9 @@ func _run() -> void:
 	await _assert_room_door(
 		"scenes/rooms/ch3_chapel_vestibule.tscn", "Doors/NaveDoor"
 	)
-	await _assert_room_door("scenes/rooms/ch3_nave_entry.tscn", "Doors/ChoirDoor")
+	await _assert_room_door("scenes/rooms/ch3_nave_entry.tscn", "Doors/EastExitDoor")
 	await _assert_room_door(
-		"scenes/rooms/ch3_choir_gallery.tscn", "Doors/CheckpointDoor"
+		"scenes/rooms/ch3_choir_gallery.tscn", "Doors/EastExitDoor"
 	)
 	await _assert_room_door(
 		"scenes/rooms/ch3_boss_checkpoint.tscn", "Doors/ConfessionDoor"

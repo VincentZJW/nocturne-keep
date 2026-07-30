@@ -4,6 +4,8 @@
 
 当前版本：`第三章 Boss 元素魔法强化 · 第十三响教宗·埃德兰`
 
+第三章正式普通敌人路线现已完成B0–B5密度返修：安全前庭之后串联九个独立战斗区、20个ActivationArea遭遇组和72名固定布置的普通敌人。正式配置使用开发期固定Seed `31372026`写入保存Resource，运行时不会随机重排；只有当前房间被加载，未触发组的AI、物理与动画处理保持关闭。六类敌人数量为钟链忏者22、香炉行刑者8、无声唱诗灵12、彩窗圣骸10、忏悔亡魂10、十三响司录者10。完整分布见[第三章敌人分布规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_distribution_spec.md)，17张MainBootstrap证据和强制QA见[第三章敌人密度QA](docs/qa/chapter_03_enemy_distribution_b0_b5/report.md)。
+
 第三章Boss B1–B7已经接入正式Main路线：`The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`拥有360 HP Phase 1、198 HP保护式十一阶段变身、结构重绘的145 Poise Phase 2、两类受限召唤、六种Phase 2招式、完整死亡流程与遗物龛领取接口。开发直达点为`CH3_BOSS`、`CH3_BOSS_PHASE_02`、`CH3_BOSS_SUMMON_TEST`和`CH3_POST_BOSS`。第四章入口目前只是已解锁的计划边界，仓库尚无Chapter IV PackedScene；未虚构武器数值或声称完成跳转。权威规格见[第三章埃德兰Boss规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)，最终强制QA见[第三章Boss B4–B7报告](docs/qa/chapter_03_boss_b4_b7/report.md)。
 
 埃德兰现已追加正式元素魔法与召唤节奏：`Cinder Absolution`火焰弹、`Litany of Stillness`冰矛、`Mire of the Unburied`黑泥领域，以及Phase 1两只/Phase 2三只（唱诗尸壳最多一只）的召唤上限。玩家状态由统一组件管理，HUD以信号显示燃烧、冻结与黑泥减速；死亡、重生和跨房间会清理状态。开发直达点新增`CH3_BOSS_MAGIC_TEST`、`CH3_BOSS_FIRE_TEST`、`CH3_BOSS_ICE_TEST`、`CH3_BOSS_MIRE_TEST`和`CH3_BOSS_SUMMON_MAGIC_COMBO`。规格见[埃德兰元素魔法规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/edran_elemental_magic_spec.md)，Main强制QA见[元素魔法QA报告](docs/qa/chapter_03_edran_elemental_magic/report.md)。
@@ -158,6 +160,8 @@ Main开发调试快捷键：
 第三章Boss环境路线已经接入同一正式Chapter III Main：`CH3_BOSS_ANTE`检查十三忏前厅、检查点、十三响门与Fade，`CH3_BOSS`检查第十三回响圣所、十三烛、香雾和入场镜头，`CH3_POST_BOSS`检查末次忏悔遗物室与奖励系统接口，`CH3_UNDERKEEP_DESCENT`检查向下墓窟、滴水、浅水和第四章终端。早期环境专项报告中Boss实体、权威奖励和第四章PackedScene均为PARTIAL；Boss实体现已推进至B3，奖励和第四章交接仍保持PARTIAL。详见[第三章Boss环境规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_boss_environment_spec.md)与[强制QA报告](docs/qa/chapter_03_boss_environment/report.md)。
 
 第三章Boss B1–B7现已接入正式Chapter III Main：第十三响教宗·埃德兰拥有完整Phase 1、Boss HUD、韧性与198 HP阶段边界；圣骨忏者和唱诗尸壳维持两只总上限、每类最多一只及无掉落/Encounter/持久化规则。198 HP会执行5.20秒、十一阶段受保护结构变身并清理召唤；Phase 2使用独立94帧形态、145 Poise、0.80单层受伤倍率和六类攻击。正式死亡、遗物龛领取接口及下行入口已接通；`CH3_BOSS_PHASE_02`、`CH3_BOSS_SUMMON_TEST`和`CH3_POST_BOSS`可从Debug Chapter Start直达。Chapter IV PackedScene仍未创建，因此下行入口仅是诚实的计划边界。
+
+第三章普通敌人分区直达点：`CH3_START`进入安全前庭，`CH3_OPENING_ENCOUNTER`进入3+1分阶段开场，随后可用`CH3_MAIN_NAVE`、`CH3_CONFESSIONALS`、`CH3_CHOIR_GALLERY`、`CH3_STAINED_GLASS_HALL`、`CH3_ARCHIVE`、`CH3_BLOOD_CANDLE_ZONE`和`CH3_PRE_BOSS_COMBAT`逐区测试。所有直达点仍由`MainBootstrap`创建正式Player、HUD、武器和章节Route；它们不是独立测试房替代品。
 
 连续按J使用同一个四帧基础突刺组成最多三段的有限攻击链，而不是无限连招树。首个J立即响应并约0.05秒进入有效帧；0.10–0.20秒合法窗口只锁存一个0.08秒输入且不会被乱按刷新。每段完整播放后以0.32秒最短起手间隔衔接，第三段结束固定进入0.34秒强制收招；收招结束前不能开始新的第一段。每段拥有独立attack_id，过早或窗口外连按不会重置第1帧。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。
 

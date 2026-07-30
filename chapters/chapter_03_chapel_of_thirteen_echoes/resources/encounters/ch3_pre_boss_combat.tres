@@ -1,0 +1,151 @@
+[gd_resource type="Resource" script_class="Chapter03RoomDefinition" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/choir_gallery_backdrop.png" id="1_y5a0k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/nave_iron_door.png" id="2_mus4e"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_data.gd" id="3_kvjj1"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_enemy_spawn_data.gd" id="4_nnxog"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="5_dtkjn"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="6_fe07b"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="7_ictgp"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="8_v2iks"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="9_4tvqv"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="10_buh02"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_manifest.gd" id="11_g86rm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/bell_reliquary.png" id="12_77h8v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/thirteen_confession_tablets.png" id="13_e0xwy"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_room_definition.gd" id="14_7oqkm"]
+
+[sub_resource type="Resource" id="Resource_blfjc"]
+script = ExtResource("4_nnxog")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_dtkjn")
+local_position = Vector2(292, 584)
+movement_bounds = Vector2(160, 700)
+
+[sub_resource type="Resource" id="Resource_3w4f8"]
+script = ExtResource("4_nnxog")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("6_fe07b")
+local_position = Vector2(364, 584)
+movement_bounds = Vector2(160, 700)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_vlsk1"]
+script = ExtResource("4_nnxog")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("7_ictgp")
+local_position = Vector2(526, 318)
+movement_bounds = Vector2(210, 690)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_0hl38"]
+script = ExtResource("3_kvjj1")
+encounter_id = &"CH3_PRE_BOSS_COMBAT_ENCOUNTER_01"
+region_name = &"CH3_PRE_BOSS_COMBAT"
+activation_rect = Rect2(100, 0, 690, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_nnxog")]([SubResource("Resource_blfjc"), SubResource("Resource_3w4f8"), SubResource("Resource_vlsk1")])
+
+[sub_resource type="Resource" id="Resource_olcw6"]
+script = ExtResource("4_nnxog")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_dtkjn")
+local_position = Vector2(1054, 584)
+movement_bounds = Vector2(930, 1470)
+
+[sub_resource type="Resource" id="Resource_mwgod"]
+script = ExtResource("4_nnxog")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("6_fe07b")
+local_position = Vector2(1154, 584)
+movement_bounds = Vector2(930, 1470)
+
+[sub_resource type="Resource" id="Resource_fhhs7"]
+script = ExtResource("4_nnxog")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("8_v2iks")
+local_position = Vector2(1284, 426)
+movement_bounds = Vector2(1202, 1358)
+
+[sub_resource type="Resource" id="Resource_8ks8i"]
+script = ExtResource("4_nnxog")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("9_4tvqv")
+local_position = Vector2(1462, 350)
+movement_bounds = Vector2(1392, 1548)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_mm6md"]
+script = ExtResource("3_kvjj1")
+encounter_id = &"CH3_PRE_BOSS_COMBAT_ENCOUNTER_02"
+region_name = &"CH3_PRE_BOSS_COMBAT"
+activation_rect = Rect2(870, 0, 690, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_nnxog")]([SubResource("Resource_olcw6"), SubResource("Resource_mwgod"), SubResource("Resource_fhhs7"), SubResource("Resource_8ks8i")])
+
+[sub_resource type="Resource" id="Resource_6s2l4"]
+script = ExtResource("4_nnxog")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("6_fe07b")
+local_position = Vector2(1828, 584)
+movement_bounds = Vector2(1700, 2240)
+
+[sub_resource type="Resource" id="Resource_kyanq"]
+script = ExtResource("4_nnxog")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("7_ictgp")
+local_position = Vector2(2070, 318)
+movement_bounds = Vector2(1750, 2230)
+
+[sub_resource type="Resource" id="Resource_ag6rs"]
+script = ExtResource("4_nnxog")
+enemy_type = &"ConfessionalWraith"
+spawn_role = &"confessional_spawn"
+enemy_scene = ExtResource("10_buh02")
+local_position = Vector2(1912, 584)
+movement_bounds = Vector2(1700, 2240)
+
+[sub_resource type="Resource" id="Resource_25ufy"]
+script = ExtResource("4_nnxog")
+enemy_type = &"ConfessionalWraith"
+spawn_role = &"confessional_spawn"
+enemy_scene = ExtResource("10_buh02")
+local_position = Vector2(2004, 584)
+movement_bounds = Vector2(1700, 2240)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_k8h5o"]
+script = ExtResource("3_kvjj1")
+encounter_id = &"CH3_PRE_BOSS_COMBAT_ENCOUNTER_03"
+region_name = &"CH3_PRE_BOSS_COMBAT"
+activation_rect = Rect2(1640, 0, 792, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_nnxog")]([SubResource("Resource_6s2l4"), SubResource("Resource_kyanq"), SubResource("Resource_ag6rs"), SubResource("Resource_25ufy")])
+
+[sub_resource type="Resource" id="Resource_hfmah"]
+script = ExtResource("11_g86rm")
+room_id = &"CH3_PRE_BOSS_COMBAT"
+encounters = Array[ExtResource("3_kvjj1")]([SubResource("Resource_0hl38"), SubResource("Resource_mm6md"), SubResource("Resource_k8h5o")])
+
+[resource]
+script = ExtResource("14_7oqkm")
+room_id = &"CH3_PRE_BOSS_COMBAT"
+bilingual_name = "CHAPTER III · LAST PROCESSION / 最后送葬高压区"
+room_size = Vector2i(2432, 720)
+next_room_id = &"CH3_BOSS_CHECKPOINT"
+door_prompt = "E  ENTER LAST VIGIL / 进入末祷"
+backdrop_texture = ExtResource("1_y5a0k")
+door_texture = ExtResource("2_mus4e")
+prop_textures = Array[Texture2D]([ExtResource("12_77h8v"), ExtResource("13_e0xwy")])
+prop_positions = Array[Vector2]([Vector2(1216, 380), Vector2(520, 474)])
+prop_z_indices = Array[int]([-60, -40])
+platform_positions = Array[Vector2]([Vector2(1280, 484), Vector2(1470, 408), Vector2(1344, 484)])
+platform_widths = Array[int]([192, 192, 96])
+manifest = SubResource("Resource_hfmah")

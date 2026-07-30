@@ -1,7 +1,7 @@
 # Technical Architecture
 
-Version: 0.2.0
-Last updated: 2026-07-27
+Version: 0.2.1
+Last updated: 2026-07-30
 
 ## Goals
 
@@ -77,6 +77,20 @@ Chapter II Silent Ballroom
 Every chapter destination composes one shared gameplay runtime instance. Cross-scene travel never moves Player by absolute global coordinates and never duplicates Player, HUD or session services.
 
 Weapon acquisition remains composed rather than chapter-local: WeaponData owns immutable tuning/presentation, WeaponInventory owns unique run-lifetime ids, EquipmentManager owns the equipped id and damage resolution, PlayerWeaponVisual swaps one complete SpriteFrames resource, and the HUD observes typed equipment signals. Chapter III Start Profile applies required ownership and equipped weapon through this same chain.
+
+## Chapter III authored encounters
+
+Chapter III normal-enemy distribution is resource-driven and deterministic. Nine
+`Chapter03RoomDefinition` Resources own fixed visual composition, platforms, room
+transitions and one `Chapter03EncounterManifest`. Each manifest owns bounded
+EncounterGroups and typed `Chapter03EnemySpawnData` entries. The development-only
+generator uses seed `31372026` and saves the result; runtime never rerolls positions.
+
+`Chapter03RoomTransitionController` keeps one room under `RoomHost`, while
+`Chapter03EncounterSpawner` instantiates the saved manifest. Each EncounterGroup
+begins disabled and enables process, physics processing and AI only when its local
+ActivationArea is entered. Cross-room pursuit, infinite respawning and whole-chapter
+AI processing are therefore excluded by composition rather than global flags.
 
 ## Testing layers
 

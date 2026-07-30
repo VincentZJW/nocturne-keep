@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_encounter_room.gd" id="1_room"]
-[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/encounters/ch3_nave_entry.tres" id="2_definition"]
+[ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/encounters/ch3_archive_reliquary.tres" id="2_definition"]
 
-[node name="Ch3NaveEntry" type="Node2D"]
+[node name="Ch3ArchiveReliquary" type="Node2D"]
 script = ExtResource("1_room")
 definition = ExtResource("2_definition")

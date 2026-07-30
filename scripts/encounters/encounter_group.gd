@@ -28,6 +28,7 @@ func _ready() -> void:
 	activation_area.body_entered.connect(_on_activation_body_entered)
 	for enemy: EnemyCombatant in get_enemies():
 		enemy.set_ai_active(false)
+		enemy.process_mode = Node.PROCESS_MODE_DISABLED
 		if not enemy.enemy_died.is_connected(_on_enemy_died):
 			enemy.enemy_died.connect(_on_enemy_died)
 	if start_activated:
@@ -40,6 +41,7 @@ func activate(player: Player = null) -> bool:
 	is_activated = true
 	activation_area.set_deferred("monitoring", false)
 	for enemy: EnemyCombatant in get_enemies():
+		enemy.process_mode = Node.PROCESS_MODE_INHERIT
 		enemy.set_ai_active(true)
 		if (
 			player != null

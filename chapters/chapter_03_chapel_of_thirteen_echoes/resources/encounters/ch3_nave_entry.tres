@@ -1,0 +1,80 @@
+[gd_resource type="Resource" script_class="Chapter03RoomDefinition" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/nave_backdrop.png" id="1_uinn6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/nave_iron_door.png" id="2_nadkk"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_data.gd" id="3_3cnrb"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_enemy_spawn_data.gd" id="4_7m2jr"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="5_clhin"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="6_2caak"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="7_r5wf2"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_manifest.gd" id="8_gmw78"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/mourner_bench.png" id="9_i330l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/votive_lectern.png" id="10_ysaqh"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_room_definition.gd" id="11_k0h45"]
+
+[sub_resource type="Resource" id="Resource_50skx"]
+script = ExtResource("4_7m2jr")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_clhin")
+local_position = Vector2(402, 584)
+movement_bounds = Vector2(290, 830)
+
+[sub_resource type="Resource" id="Resource_eckvj"]
+script = ExtResource("4_7m2jr")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_clhin")
+local_position = Vector2(518, 584)
+movement_bounds = Vector2(290, 830)
+
+[sub_resource type="Resource" id="Resource_q3mh6"]
+script = ExtResource("4_7m2jr")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("6_2caak")
+local_position = Vector2(652, 426)
+movement_bounds = Vector2(562, 718)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_ru7wc"]
+script = ExtResource("3_3cnrb")
+encounter_id = &"CH3_NAVE_ENTRY_ENCOUNTER_01"
+region_name = &"CH3_NAVE_ENTRY"
+activation_rect = Rect2(120, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_7m2jr")]([SubResource("Resource_50skx"), SubResource("Resource_eckvj"), SubResource("Resource_q3mh6")])
+
+[sub_resource type="Resource" id="Resource_npnvr"]
+script = ExtResource("4_7m2jr")
+enemy_type = &"ConfessionalWraith"
+spawn_role = &"confessional_spawn"
+enemy_scene = ExtResource("7_r5wf2")
+local_position = Vector2(1502, 584)
+movement_bounds = Vector2(1370, 1910)
+
+[sub_resource type="Resource" id="Resource_qhvsi"]
+script = ExtResource("3_3cnrb")
+encounter_id = &"CH3_NAVE_ENTRY_ENCOUNTER_02"
+region_name = &"CH3_NAVE_ENTRY"
+activation_rect = Rect2(1200, 0, 900, 720)
+simultaneous_attack_limit = 1
+spawns = Array[ExtResource("4_7m2jr")]([SubResource("Resource_npnvr")])
+
+[sub_resource type="Resource" id="Resource_5p4fh"]
+script = ExtResource("8_gmw78")
+room_id = &"CH3_NAVE_ENTRY"
+encounters = Array[ExtResource("3_3cnrb")]([SubResource("Resource_ru7wc"), SubResource("Resource_qhvsi")])
+
+[resource]
+script = ExtResource("11_k0h45")
+room_id = &"CH3_NAVE_ENTRY"
+bilingual_name = "CHAPTER III · OPENING PROCESSIONAL / 开场送葬列阵"
+next_room_id = &"CH3_MAIN_NAVE_FRONT"
+door_prompt = "E  CONTINUE PROCESSION / 继续送葬"
+backdrop_texture = ExtResource("1_uinn6")
+door_texture = ExtResource("2_nadkk")
+prop_textures = Array[Texture2D]([ExtResource("9_i330l"), ExtResource("10_ysaqh")])
+prop_positions = Array[Vector2]([Vector2(340, 560), Vector2(1240, 540)])
+prop_z_indices = Array[int]([-30, -30])
+platform_positions = Array[Vector2]([Vector2(640, 484)])
+platform_widths = Array[int]([192])
+manifest = SubResource("Resource_5p4fh")

@@ -1,0 +1,136 @@
+[gd_resource type="Resource" script_class="Chapter03RoomDefinition" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/choir_gallery_backdrop.png" id="1_xy2xo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/nave_iron_door.png" id="2_nt22d"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_data.gd" id="3_f2dhk"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_enemy_spawn_data.gd" id="4_2tqxj"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="5_bn8p2"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="6_qyw5n"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="7_fmq6u"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="8_dys2y"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/thirteenth_scribe.tscn" id="9_fpb1b"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_manifest.gd" id="10_vyy05"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/organ_pipes_far.png" id="11_3fvyi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/organ_case_behind.png" id="12_12b31"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/structural_r2/choir_seat.png" id="13_ja26s"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_room_definition.gd" id="14_tu7p8"]
+
+[sub_resource type="Resource" id="Resource_1cc5n"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_bn8p2")
+local_position = Vector2(268, 584)
+movement_bounds = Vector2(160, 700)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_dfpyt"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("6_qyw5n")
+local_position = Vector2(518, 426)
+movement_bounds = Vector2(432, 588)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_r8dhu"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("6_qyw5n")
+local_position = Vector2(704, 350)
+movement_bounds = Vector2(622, 778)
+
+[sub_resource type="Resource" id="Resource_wbswo"]
+script = ExtResource("3_f2dhk")
+encounter_id = &"CH3_CHOIR_GALLERY_ENCOUNTER_01"
+region_name = &"CH3_CHOIR_GALLERY"
+activation_rect = Rect2(100, 0, 690, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_2tqxj")]([SubResource("Resource_1cc5n"), SubResource("Resource_dfpyt"), SubResource("Resource_r8dhu")])
+
+[sub_resource type="Resource" id="Resource_26k0w"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("7_fmq6u")
+local_position = Vector2(1038, 584)
+movement_bounds = Vector2(930, 1470)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_88qs2"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("6_qyw5n")
+local_position = Vector2(1284, 426)
+movement_bounds = Vector2(1202, 1358)
+
+[sub_resource type="Resource" id="Resource_chvrf"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("8_dys2y")
+local_position = Vector2(1292, 318)
+movement_bounds = Vector2(980, 1460)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_3g87o"]
+script = ExtResource("3_f2dhk")
+encounter_id = &"CH3_CHOIR_GALLERY_ENCOUNTER_02"
+region_name = &"CH3_CHOIR_GALLERY"
+activation_rect = Rect2(870, 0, 690, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_2tqxj")]([SubResource("Resource_26k0w"), SubResource("Resource_88qs2"), SubResource("Resource_chvrf")])
+
+[sub_resource type="Resource" id="Resource_8jwo0"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_bn8p2")
+local_position = Vector2(1816, 584)
+movement_bounds = Vector2(1700, 2240)
+
+[sub_resource type="Resource" id="Resource_u32qi"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("9_fpb1b")
+local_position = Vector2(2050, 426)
+movement_bounds = Vector2(1972, 2128)
+
+[sub_resource type="Resource" id="Resource_sv7nm"]
+script = ExtResource("4_2tqxj")
+enemy_type = &"ThirteenthScribe"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("9_fpb1b")
+local_position = Vector2(2244, 350)
+movement_bounds = Vector2(2162, 2318)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_t0aox"]
+script = ExtResource("3_f2dhk")
+encounter_id = &"CH3_CHOIR_GALLERY_ENCOUNTER_03"
+region_name = &"CH3_CHOIR_GALLERY"
+activation_rect = Rect2(1640, 0, 792, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_2tqxj")]([SubResource("Resource_8jwo0"), SubResource("Resource_u32qi"), SubResource("Resource_sv7nm")])
+
+[sub_resource type="Resource" id="Resource_myqc8"]
+script = ExtResource("10_vyy05")
+room_id = &"CH3_CHOIR_GALLERY"
+encounters = Array[ExtResource("3_f2dhk")]([SubResource("Resource_wbswo"), SubResource("Resource_3g87o"), SubResource("Resource_t0aox")])
+
+[resource]
+script = ExtResource("14_tu7p8")
+room_id = &"CH3_CHOIR_GALLERY"
+bilingual_name = "CHAPTER III · BROKEN CHOIR GALLERY / 断声唱诗回廊"
+room_size = Vector2i(2432, 720)
+next_room_id = &"CH3_STAINED_GLASS_HALL"
+door_prompt = "E  CONTINUE PROCESSION / 继续送葬"
+backdrop_texture = ExtResource("1_xy2xo")
+door_texture = ExtResource("2_nt22d")
+prop_textures = Array[Texture2D]([ExtResource("11_3fvyi"), ExtResource("12_12b31"), ExtResource("13_ja26s")])
+prop_positions = Array[Vector2]([Vector2(1940, 322), Vector2(1940, 380), Vector2(640, 560)])
+prop_z_indices = Array[int]([-100, -60, -30])
+platform_positions = Array[Vector2]([Vector2(510, 484), Vector2(700, 408), Vector2(574, 484), Vector2(1280, 484), Vector2(2050, 484), Vector2(2240, 408), Vector2(2114, 484)])
+platform_widths = Array[int]([192, 192, 96, 192, 192, 192, 96])
+manifest = SubResource("Resource_myqc8")

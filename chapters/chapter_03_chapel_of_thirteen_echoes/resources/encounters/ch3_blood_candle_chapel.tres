@@ -1,0 +1,115 @@
+[gd_resource type="Resource" script_class="Chapter03RoomDefinition" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/structural_r2/nave_backdrop.png" id="1_v8eud"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/doors/structural_r2/boss_vestry_door.png" id="2_2g0tr"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_data.gd" id="3_7yxjh"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_enemy_spawn_data.gd" id="4_c8a6c"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/bellchain_penitent.tscn" id="5_q4b5t"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/censer_executioner.tscn" id="6_nkmaa"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/silent_chorister.tscn" id="7_pgtgw"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/stained_glass_seraph.tscn" id="8_mc1mv"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/enemies/confessional_wraith.tscn" id="9_n3nvp"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_encounter_manifest.gd" id="10_oih2o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/thirteen_blood_candle_array_02.png" id="11_uwrhu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/boss_censers.png" id="12_sj3rb"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/encounters/chapter_03_room_definition.gd" id="13_hx8kn"]
+
+[sub_resource type="Resource" id="Resource_rbqh7"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_q4b5t")
+local_position = Vector2(422, 584)
+movement_bounds = Vector2(290, 830)
+
+[sub_resource type="Resource" id="Resource_t51q6"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_q4b5t")
+local_position = Vector2(510, 584)
+movement_bounds = Vector2(290, 830)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_6uj2f"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("6_nkmaa")
+local_position = Vector2(594, 584)
+movement_bounds = Vector2(290, 830)
+
+[sub_resource type="Resource" id="Resource_4u7tl"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"SilentChorister"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("7_pgtgw")
+local_position = Vector2(652, 426)
+movement_bounds = Vector2(562, 718)
+
+[sub_resource type="Resource" id="Resource_nkxfb"]
+script = ExtResource("3_7yxjh")
+encounter_id = &"CH3_BLOOD_CANDLE_CHAPEL_ENCOUNTER_01"
+region_name = &"CH3_BLOOD_CANDLE_CHAPEL"
+activation_rect = Rect2(120, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_c8a6c")]([SubResource("Resource_rbqh7"), SubResource("Resource_t51q6"), SubResource("Resource_6uj2f"), SubResource("Resource_4u7tl")])
+
+[sub_resource type="Resource" id="Resource_up72k"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"BellchainPenitent"
+enemy_scene = ExtResource("5_q4b5t")
+local_position = Vector2(1498, 584)
+movement_bounds = Vector2(1370, 1910)
+
+[sub_resource type="Resource" id="Resource_b4fon"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"CenserExecutioner"
+spawn_role = &"ground_heavy"
+enemy_scene = ExtResource("6_nkmaa")
+local_position = Vector2(1574, 584)
+movement_bounds = Vector2(1370, 1910)
+
+[sub_resource type="Resource" id="Resource_0yy8p"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"StainedGlassSeraph"
+spawn_role = &"air_anchor"
+enemy_scene = ExtResource("8_mc1mv")
+local_position = Vector2(1740, 318)
+movement_bounds = Vector2(1420, 1900)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_rja0c"]
+script = ExtResource("4_c8a6c")
+enemy_type = &"ConfessionalWraith"
+spawn_role = &"confessional_spawn"
+enemy_scene = ExtResource("9_n3nvp")
+local_position = Vector2(1670, 584)
+movement_bounds = Vector2(1370, 1910)
+facing_direction = 1.0
+
+[sub_resource type="Resource" id="Resource_vu72p"]
+script = ExtResource("3_7yxjh")
+encounter_id = &"CH3_BLOOD_CANDLE_CHAPEL_ENCOUNTER_02"
+region_name = &"CH3_BLOOD_CANDLE_CHAPEL"
+activation_rect = Rect2(1200, 0, 900, 720)
+simultaneous_attack_limit = 3
+spawns = Array[ExtResource("4_c8a6c")]([SubResource("Resource_up72k"), SubResource("Resource_b4fon"), SubResource("Resource_0yy8p"), SubResource("Resource_rja0c")])
+
+[sub_resource type="Resource" id="Resource_cgynb"]
+script = ExtResource("10_oih2o")
+room_id = &"CH3_BLOOD_CANDLE_CHAPEL"
+encounters = Array[ExtResource("3_7yxjh")]([SubResource("Resource_nkxfb"), SubResource("Resource_vu72p")])
+
+[resource]
+script = ExtResource("13_hx8kn")
+room_id = &"CH3_BLOOD_CANDLE_CHAPEL"
+bilingual_name = "CHAPTER III · BLOOD-CANDLE CHAPEL / 血烛祈祷区"
+next_room_id = &"CH3_PRE_BOSS_COMBAT"
+door_prompt = "E  CONTINUE PROCESSION / 继续送葬"
+backdrop_texture = ExtResource("1_v8eud")
+door_texture = ExtResource("2_2g0tr")
+prop_textures = Array[Texture2D]([ExtResource("11_uwrhu"), ExtResource("12_sj3rb")])
+prop_positions = Array[Vector2]([Vector2(1152, 474), Vector2(430, 310)])
+prop_z_indices = Array[int]([-40, -45])
+platform_positions = Array[Vector2]([Vector2(640, 484)])
+platform_widths = Array[int]([192])
+manifest = SubResource("Resource_cgynb")
