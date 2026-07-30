@@ -6547,3 +6547,54 @@ Status: complete — audit/design gate only; MU1 not started
 - No new track, empty placeholder, silent file, fake music, Bus, MusicManager, Boss binding, Main debug entry or listening/loop claim was created in MU0.
 - MU1 may begin only after explicit approval. Its approved default scope is the original Chapter II Phase 2 composition, seamless loop, shared music foundation needed to play it, Chapter II event integration and Main/F5 evidence; it may not silently add a fourth full Duchess Phase 1 composition.
 - Pre-existing unrelated Chapter I/shared/resource/QA worktree modifications remain user-owned, preserved and excluded from the MU0 commit.
+
+## 2026-07-30 — Boss music MU1 preflight
+
+Status: in progress — Chapter II Phase 2 music and integration only; stop before MU2
+
+### Goal, owned files, tests and scope
+
+- Produce one original production-length Chapter II Phase 2 score, `The Final Waltz, Unmasked / 无面的最后华尔兹`, as a deterministic fixed-seed 48 kHz stereo composition. Preserve the audited D–F–E–C–E-flat–D melody, D/C/E-flat/D bass and 3/4 dance identity while recomposing them at 132 BPM into a roughly 131-second high-pressure loop.
+- Retain project-owned source and Standard MIDI, render with local NumPy/SciPy and FFmpeg Vorbis only, and introduce no remote service, third-party sample, real hymn or copyrighted melody. The existing 6.6-second Broken Waltz remains the Chapter II Phase 1 intro/motif source and is not falsely relabelled as a production-length score.
+- Add the minimum reusable native-Godot music foundation required by MU1: typed track definitions/registry, a two-deck global MusicManager, `Music/SFX/Ambient/UI` buses and focused deterministic tests. Music state remains globally owned; Boss AI only emits/forwards typed lifecycle events.
+- Replace the Duchess presentation's direct formal music ownership with room-controller event binding: intro/Phase 1, transition attenuation, one-shot reveal crossfade to Phase 2, defeat fade and retry reset. Add Main-routed Chapter II music debug starts without changing formal save data or replacing `main_bootstrap.tscn`.
+- Planned owned paths: `scripts/audio/`, `resources/audio/`, `default_bus_layout.tres`, Chapter II Boss audio/source/spec Resources, Duchess presentation/room controller/level/start-profile files, audio tests, `docs/qa/boss_music/mu1/`, README and this log. Third章 music, Edran scripts/scenes, MU2–MU5 and unrelated gameplay/art/balance are excluded.
+- Required validation: exact Godot 4.7.1 import/parse; FFprobe and waveform/RMS/peak/loop-boundary checks; focused MusicManager and Duchess flow tests; at least ten minutes continuous loop playback simulation; at least twenty one-shot transition regressions; formal MainBootstrap route captures/logs for Phase 1, transition and Phase 2; Output/Debugger scan; `git diff --check`; one isolated MU1 commit.
+
+### Read-only baseline and ownership boundary
+
+- MU1 begins on `master` at `cd7791e`. `run/main_scene` is `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter II is `silent_court.tscn`; the formal Boss is `GameplayWorld/BossArea/HollowDuchess` and presentation is `GameplayWorld/BossArea/DuchessEncounterPresentation`.
+- No MusicManager or formal Bus layout exists. `DuchessEncounterPresentation/BrokenWaltzPlayer` directly plays the 6.6-second Phase 1 cue on `Master`, then stops it at transition start. No Phase 2 music exists.
+- Existing typed Boss lifecycle hooks are sufficient: `combat_started`, `phase_transition_started`, `phase_transition_completed`, `boss_defeated` and respawn. The presentation's 68% transition marker is the saved mask/reveal title beat and will expose one typed reveal signal for the music strong-beat entry.
+- Pre-existing Chapter I/shared/resource/loot/Player/QA-image modifications and two UID sidecars remain user-owned. MU1 will not stage, revert or rewrite them.
+
+## 2026-07-30 — Boss music MU1 complete
+
+Status: complete — Chapter II Phase 2 score, shared music foundation, formal Boss binding and Main/F5 QA passed; MU2 not started
+
+### Delivered
+
+- Authored the original fixed-seed score `The Final Waltz, Unmasked / 无面的最后华尔兹`: 132 BPM, 3/4, 96 bars, 130.909333-second final OGG, 48 kHz stereo, 1,464 score events. Retained project-owned Python source, JSON event score, Standard MIDI and analysis metadata; no samples, remote generation service, existing waltz or real hymn were used.
+- Preserved and transformed the audited Duchess motif D–F–E–C–E-flat–D and D/C/E-flat/D bass. Final audio measures -3.10 dBFS peak and -18.65 dBFS RMS; endpoint delta is 0.000206 (approximately -73.7 dBFS). SHA-256 is `971a386a616ca30416cb546fe9f3212f4f44f4bd6f54ae188d878ba4fb354d92`.
+- Added the typed two-deck `MusicManager`, stable track registry/definitions and Master/Music/SFX/Ambient/UI bus layout. Removed the Duchess presentation's duplicate scene-local player; the room controller now owns Phase 1 start, transition duck, saved 68% reveal crossfade, one-shot guard, defeat fade, retry reset and scene-exit safety fade.
+- Added formal MainBootstrap Chapter II debug routes `CH2_BOSS_MUSIC_PHASE_01`, `CH2_BOSS_MUSIC_TRANSITION` and `CH2_BOSS_MUSIC_PHASE_02`, plus a closable runtime overlay showing track ID, position, Music Bus gain, deck count and switch count.
+- Preserved every unrelated Chapter I/shared/resource/loot/Player/QA-image worktree change and excluded it from MU1 ownership.
+
+### Exact commands and actual results
+
+1. `/opt/anaconda3/bin/python3 chapters/chapter_02_silent_court/assets/audio/music/boss/hollow_duchess/source/generate_hollow_duchess_phase_02.py` — PASS, 1,464 events, 130.909083-second raw render, -3.10 dBFS peak, -18.65 dBFS RMS, endpoint delta 0.000206.
+2. `/opt/homebrew/bin/ffprobe -v error -show_entries format=duration,size,bit_rate -show_entries stream=codec_name,sample_rate,channels <track>` — PASS: Vorbis, 48,000 Hz, stereo, 130.909333 seconds, 1,363,013 bytes, 83,295 bit/s.
+3. `/opt/homebrew/bin/ffmpeg -v error -stream_loop 4 -i <track> -t 600 -f null -` — PASS; five source passes decoded without error. `ffplay` system-output and seam-excerpt auditions also exited 0.
+4. `test_music_manager_mu1.gd` — PASS: buses=5, decks=2, transitions=20, duplicate guard PASS.
+5. `test_hollow_duchess_music_mu1.gd` — PASS through MainBootstrap: Phase 1=1, reveal=1, Phase 2=1, overlay=1; retry and defeat cleanup assertions passed.
+6. `test_music_manager_long_play.gd` — PASS after 600.0 real seconds: wraps=4, maximum players=1, static memory start/end/peak=30,244,858/30,241,946/30,246,666 bytes, growth=-2,912 bytes.
+7. Existing Silent Court graybox, Duchess presentation/phase, 70-attack Boss and formal Main integration suites — PASS. Legacy SceneTree suites retain small ObjectDB exit warnings but produced no red script/resource error.
+8. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS using exact Godot 4.7.1; import/parse completed without script/resource error.
+9. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script chapters/chapter_02_silent_court/scripts/tests/capture_hollow_duchess_music_mu1_qa.gd` — PASS on OpenGL/Metal Compatibility: three formal Main route screenshots, Phase 1/transition/Phase 2 all observed.
+10. `git diff --check` — PASS before staging.
+
+### QA, manual acceptance and boundary
+
+- Evidence and forced matrix: `docs/qa/boss_music/mu1/report.md`; runtime screenshots and waveform/spectrogram are under `docs/qa/boss_music/mu1/`.
+- Manual F5 acceptance: enable Chapter II Debug Start and select the three `CH2_BOSS_MUSIC_*` entries, then run `CH2_BOSS` for the unforced full fight. Judge musical taste, dialogue/SFX masking and fight pressure at the user's listening volume; automation cannot certify those subjective properties.
+- The existing 6.6-second Phase 1 Broken Waltz remains truthfully documented as an intro/motif loop. Chapter III Phase 1/2 composition and integration are MU2/MU3 and were not started.

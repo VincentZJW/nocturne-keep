@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MusicTrackDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/audio/music_track_definition.gd" id="1_definition"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_02_silent_court/assets/audio/music/boss/hollow_duchess/hollow_duchess_phase_02_unmasked.ogg" id="2_stream"]
+
+[resource]
+script = ExtResource("1_definition")
+track_id = &"CH2_BOSS_MUSIC_PHASE_02"
+display_name = "The Final Waltz, Unmasked / 无面的最后华尔兹"
+stream = ExtResource("2_stream")
+bpm = 132.0
+beats_per_bar = 3
+beat_unit = 4
+default_volume_db = -9.0
+loops = true
+loop_end_seconds = 130.909083

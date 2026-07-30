@@ -31,3 +31,7 @@ secrets/
 # Local logs and test artifacts
 logs/
 test-results/
+
+# Generated Python bytecode
+__pycache__/
+*.py[cod]

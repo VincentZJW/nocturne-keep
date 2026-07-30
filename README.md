@@ -73,11 +73,18 @@ res://chapters/chapter_02_silent_court/scenes/tests/phase_2_enemy_prototype_room
 
 使用F6或`"$GODOT_BIN" --path . <scene path>`运行。房间从左到右依次为侍从、戟卫、铠甲、侍祭和倒悬猎兽；它只验证原型，不替代Bootstrap/第二章Main验收。
 
-第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05向右看到白瓷裂面徽记、双雕像、黑红地毯和“最后一支舞，不容缺席”的Boss门；玩家与角色武器始终绘制在门板之前。接近后门在0.90秒内开启，短距离抵达Intro Trigger。首次播放6.40秒原创破损华尔兹与五句入场对白，死亡重试缩短为1.25秒；华尔兹在变身开始时停止。瑟芙琳在121/220 HP进入4.40秒变身，切换为独立的`The Hollow Duchess, Unmasked / 无面公爵夫人`逐帧美术与80 Poise。击败后向右约850px（0.66个1280px视口）到小型`Duchess's Reliquary / 公爵夫人遗物台`；进入112px交互范围后出现“按 E 拾取 绯幕礼刺”，台座双烛以三帧像素火焰动态摆动。按E取得绯幕礼刺后展示武器与提示消失，镜墙才产生十三道裂纹并允许进入王室礼拜秘门。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
+第二章Boss直达验收：保持`debug_start_chapter_id = CHAPTER_02_SILENT_COURT`，将`debug_start_spawn_id`设为`&"CH2_BOSS"`后按F5。玩家从CP05向右看到白瓷裂面徽记、双雕像、黑红地毯和“最后一支舞，不容缺席”的Boss门；玩家与角色武器始终绘制在门板之前。接近后门在0.90秒内开启，短距离抵达Intro Trigger。首次播放6.40秒原创破损华尔兹动机循环与五句入场对白，死亡重试缩短为1.25秒；瑟芙琳在121/220 HP进入4.40秒变身时，Phase 1会在0.90秒内衰减，并在68%揭面关键帧以1.10秒交叉淡化进入132 BPM、3/4、130.91秒的原创Phase 2曲`The Final Waltz, Unmasked / 无面的最后华尔兹`。切换由全局双Deck `MusicManager`执行且每次战斗只触发一次。击败后向右约850px（0.66个1280px视口）到小型`Duchess's Reliquary / 公爵夫人遗物台`；进入112px交互范围后出现“按 E 拾取 绯幕礼刺”，台座双烛以三帧像素火焰动态摆动。按E取得绯幕礼刺后展示武器与提示消失，镜墙才产生十三道裂纹并允许进入王室礼拜秘门。正式验收路径仍是`MainBootstrap`，独立快速测试房仅用于动作排查：
 
 ```text
 res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tscn
 ```
+
+第二章Boss音乐Main/F5专项入口（均使用正式`MainBootstrap`、正式Boss场景与全局`MusicManager`，不会写正式存档）：
+
+- `CH2_BOSS_MUSIC_PHASE_01`：自动进入Boss Intro并显示Phase 1曲目状态；
+- `CH2_BOSS_MUSIC_TRANSITION`：自动进入Boss并在开战后触发正式变身流程；
+- `CH2_BOSS_MUSIC_PHASE_02`：同样保留完整变身演出，随后验证Phase 2曲目；
+- 屏幕顶部音乐调试条显示`track_id`、播放位置、Music Bus音量、活跃播放器数与切换次数，仅在以上入口开启。
 
 第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。Boss固定掉落第三阶`Crimson Masque Stilettos / 绯幕礼刺`；靠近后按E会加入唯一武器库存、自动装备、把HUD更新为14/28并写入章节奖励旗标。随后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn`。第三章R2已把旧12784×720单画布原型从Main引用中移除：现在以持久Player/HUD、单一RoomHost和局部Fade串联礼拜堂前庭、送葬正厅、断声唱诗廊、末祷检查点与十三忏前厅；门扉使用E开启，前庭至正厅包含实体短石阶。R3完成正式图层和碰撞终验；R4完成末祷检查点、E确认十三响门、单一Fade独立圣所换房、十三烛/镜头/双语Boss标题演出，以及Boss死亡和奖励系统未来可调用的遗物室/溺圣下行道类型化接口。R5已从MainBootstrap完成40次关键转场压力回归和8张正式路线截图，并把第二章转场验收更新到正式`Chapter03Route`。仓库仍没有钟忏司祭·埃德兰战斗实体、权威Boss奖励或第四章PackedScene，因此Boss战、奖励授予和第四章加载保持明确PARTIAL，不以假内容替代；严格终验结论见第三章R5 QA报告。
 
@@ -189,6 +196,8 @@ Main开发调试快捷键：
 - [第二章Boss房规划](chapters/chapter_02_silent_court/docs/chapter_02_boss_room_plan.md)
 - [空心公爵夫人Boss规格](chapters/chapter_02_silent_court/docs/chapter_02_hollow_duchess_boss_spec.md)
 - [空心公爵夫人入口、无面阶段与遗物龛规格](docs/design/hollow_duchess_boss_spec.md)
+- [Boss音乐MU0审计与制作计划](docs/design/boss_music_mu0_audit_and_plan.md)
+- [第二章Boss音乐MU1 QA](docs/qa/boss_music/mu1/report.md)
 - [第二章至第三章转场规格](chapters/chapter_02_silent_court/docs/chapter_02_to_03_transition_spec.md)
 - [第三章敌人名册](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_roster.md)
 - [第三章敌人战斗规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_enemy_combat_spec.md)

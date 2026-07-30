@@ -210,6 +210,15 @@ position = Vector2(3340, 584)
 [node name="CH2_BOSS" type="Marker2D" parent="PlayerSpawnPoints"]
 position = Vector2(2500, -1216)
 
+[node name="CH2_BOSS_MUSIC_PHASE_01" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(2500, -1216)
+
+[node name="CH2_BOSS_MUSIC_TRANSITION" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(2500, -1216)
+
+[node name="CH2_BOSS_MUSIC_PHASE_02" type="Marker2D" parent="PlayerSpawnPoints"]
+position = Vector2(2500, -1216)
+
 [node name="CH2_FLOOR_1_START" type="Marker2D" parent="PlayerSpawnPoints"]
 position = Vector2(384, 584)
 

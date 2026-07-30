@@ -30,10 +30,9 @@ func _run() -> void:
 	var presentation: DuchessEncounterPresentation = level.get_node(
 		"GameplayWorld/BossArea/DuchessEncounterPresentation"
 	) as DuchessEncounterPresentation
-	_expect(presentation.broken_waltz_player != null, "Saved presentation is missing BrokenWaltzPlayer")
-	_expect(presentation.broken_waltz_player.stream is AudioStreamWAV, "Broken waltz must use the saved original WAV stream")
-	var waltz_stream: AudioStreamWAV = presentation.broken_waltz_player.stream as AudioStreamWAV
-	_expect(waltz_stream.loop_mode == AudioStreamWAV.LOOP_FORWARD, "Broken waltz must loop through Phase 1")
+	var music_manager: MusicManagerService = root.get_node_or_null("MusicManager") as MusicManagerService
+	_expect(music_manager != null, "MusicManager autoload is missing")
+	_expect(presentation.get_node_or_null("BrokenWaltzPlayer") == null, "Presentation still owns a duplicate music player")
 	presentation.dialogue_requested.connect(func(_speaker: String, _text: String, _duration: float) -> void: _dialogue_count += 1)
 	presentation.title_requested.connect(func(_title: String, _subtitle: String) -> void: _title_count += 1)
 	for iteration: int in range(5):

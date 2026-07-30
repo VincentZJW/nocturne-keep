@@ -1,0 +1,11 @@
+{
+  "sample_rate": 48000,
+  "channels": 2,
+  "sample_count": 6283636,
+  "duration_seconds": 130.90908333333334,
+  "peak_dbfs": -3.0980393476346837,
+  "rms_dbfs": -18.64705015618611,
+  "boundary_delta": 0.0002063277643173933,
+  "boundary_rms_20ms": 0.13307541103201787,
+  "sha256": "971a386a616ca30416cb546fe9f3212f4f44f4bd6f54ae188d878ba4fb354d92"
+}

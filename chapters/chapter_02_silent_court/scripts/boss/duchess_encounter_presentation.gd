@@ -5,11 +5,10 @@ extends Node2D
 
 signal dialogue_requested(speaker: String, text: String, duration: float)
 signal title_requested(title: String, subtitle: String)
+signal phase_02_revealed
 
 @export_node_path("AnimationPlayer") var animation_player_path: NodePath = NodePath("AnimationPlayer")
-@export_node_path("AudioStreamPlayer") var broken_waltz_player_path: NodePath = NodePath("BrokenWaltzPlayer")
 @onready var animation_player: AnimationPlayer = get_node_or_null(animation_player_path) as AnimationPlayer
-@onready var broken_waltz_player: AudioStreamPlayer = get_node_or_null(broken_waltz_player_path) as AudioStreamPlayer
 
 var intro_progress: float = 0.0:
 	set(value):
@@ -29,9 +28,6 @@ func _ready() -> void:
 	if animation_player == null:
 		push_error("DuchessEncounterPresentation requires AnimationPlayer")
 		return
-	if broken_waltz_player == null:
-		push_error("DuchessEncounterPresentation requires BrokenWaltzPlayer")
-		return
 	_install_animation(&"intro_full", 6.4, &"intro_progress")
 	_install_animation(&"intro_retry", 1.25, &"intro_progress")
 	_install_animation(&"phase_transition_full", 4.4, &"phase_progress")
@@ -43,7 +39,6 @@ func play_intro(retry: bool) -> void:
 	_intro_marker = 0
 	intro_progress = 0.0
 	set_process(true)
-	broken_waltz_player.play()
 	animation_player.play(&"intro_retry" if retry else &"intro_full")
 
 
@@ -51,13 +46,11 @@ func play_phase_transition() -> void:
 	_phase_marker = 0
 	phase_progress = 0.0
 	set_process(true)
-	broken_waltz_player.stop()
 	animation_player.play(&"phase_transition_full")
 
 
 func reset_presentation() -> void:
 	animation_player.stop()
-	broken_waltz_player.stop()
 	intro_progress = 0.0
 	phase_progress = 0.0
 	set_process(false)
@@ -95,6 +88,7 @@ func _process_phase_markers() -> void:
 		dialogue_requested.emit("瑟芙琳", "礼仪已经结束。", 0.85)
 	if _phase_marker == 1 and phase_progress >= 0.68:
 		_phase_marker = 2
+		phase_02_revealed.emit()
 		title_requested.emit("THE HOLLOW DUCHESS, UNMASKED", "无面公爵夫人")
 
 

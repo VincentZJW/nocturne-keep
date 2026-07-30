@@ -3,6 +3,9 @@ extends Node2D
 
 const CHAPTER_WIDTH: int = 7168
 const DEFAULT_SPAWN_ID: StringName = &"CH2_START"
+const MUSIC_PHASE_01_SPAWN_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
+const MUSIC_TRANSITION_SPAWN_ID: StringName = &"CH2_BOSS_MUSIC_TRANSITION"
+const MUSIC_PHASE_02_SPAWN_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
 
 @onready var player: Player = $GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/Player as Player
 @onready var respawn_controller: PlayerRespawnController = (
@@ -12,6 +15,8 @@ const DEFAULT_SPAWN_ID: StringName = &"CH2_START"
 @onready var room_name_label: Label = (
 	$GameplayWorld/PlayerAnchorOrRuntimeActors/ChapterRuntime/HUD/RoomName as Label
 )
+
+var _music_debug_active: bool = false
 
 
 func _ready() -> void:
@@ -47,6 +52,43 @@ func _apply_debug_start_profile() -> void:
 	respawn_controller.set_spawn_point(marker)
 	var floor_limits: Vector2i = _floor_limits_for_y(marker.global_position.y)
 	_configure_camera_for_floor(marker.global_position.y, floor_limits)
+	if _is_music_debug_spawn(spawn_id):
+		call_deferred("_start_boss_music_debug_entry", spawn_id)
+
+
+func _is_music_debug_spawn(spawn_id: StringName) -> bool:
+	return spawn_id in [MUSIC_PHASE_01_SPAWN_ID, MUSIC_TRANSITION_SPAWN_ID, MUSIC_PHASE_02_SPAWN_ID]
+
+
+func _start_boss_music_debug_entry(spawn_id: StringName) -> void:
+	_music_debug_active = true
+	var music_manager: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
+	var threshold: DuchessBossThresholdTransition = (
+		$ChapterSystems/DuchessBossThresholdTransition as DuchessBossThresholdTransition
+	)
+	var boss: HollowDuchess = $GameplayWorld/BossArea/HollowDuchess as HollowDuchess
+	if music_manager != null:
+		music_manager.set_debug_overlay_enabled(true)
+	if threshold == null or not threshold.request_entry():
+		push_warning("Chapter II music debug entry could not start the boss threshold transition")
+		return
+	if spawn_id == MUSIC_PHASE_01_SPAWN_ID:
+		return
+	if not boss.combat_started.is_connected(_on_music_debug_combat_started):
+		boss.combat_started.connect(_on_music_debug_combat_started.bind(boss), CONNECT_ONE_SHOT)
+
+
+func _on_music_debug_combat_started(boss: HollowDuchess) -> void:
+	# The public debug health hook preserves the production transition sequence.
+	boss.debug_set_health(121)
+
+
+func _exit_tree() -> void:
+	if not _music_debug_active:
+		return
+	var music_manager: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
+	if music_manager != null:
+		music_manager.set_debug_overlay_enabled(false)
 
 
 func _reset_disposable_debug_state(config: DebugRunConfigState) -> void:

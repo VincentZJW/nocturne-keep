@@ -7,6 +7,10 @@ signal room_locked
 signal room_reset
 signal room_cleared
 
+const PHASE_01_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
+const PHASE_02_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
+const PHASE_SWITCH_GUARD: StringName = &"CH2_DUCHESS_PHASE_02_ONCE"
+
 @export_node_path("Player") var player_path: NodePath
 @export_node_path("HollowDuchess") var boss_path: NodePath
 @export_node_path("Area2D") var activation_area_path: NodePath
@@ -37,6 +41,7 @@ signal room_cleared
 @onready var presentation: DuchessEncounterPresentation = get_node_or_null(
 	presentation_path
 ) as DuchessEncounterPresentation
+@onready var music_manager: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
 
 var encounter_started: bool = false
 var room_is_cleared: bool = false
@@ -68,6 +73,7 @@ func _initialize_room() -> void:
 	boss.phase_transition_completed.connect(_on_phase_transition_completed)
 	presentation.dialogue_requested.connect(_on_presentation_dialogue_requested)
 	presentation.title_requested.connect(_on_presentation_title_requested)
+	presentation.phase_02_revealed.connect(_on_phase_02_revealed)
 	respawn_controller.player_respawned.connect(_on_player_respawned)
 	boss_hud.bind_boss(boss)
 	_default_camera_left = player.player_camera.limit_left
@@ -95,6 +101,9 @@ func begin_encounter_from_entrance() -> bool:
 
 func _begin_encounter() -> void:
 	encounter_started = true
+	if music_manager != null:
+		music_manager.clear_phase_switch_guard(PHASE_SWITCH_GUARD)
+		music_manager.play_music(PHASE_01_TRACK_ID, 0.35)
 	respawn_controller.set_spawn_point(checkpoint)
 	_set_door_closed(rear_door, true)
 	_set_door_closed(exit_door, true)
@@ -157,6 +166,15 @@ func _on_phase_transition_started() -> void:
 	var camera_tween: Tween = create_tween()
 	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom * 1.08, 0.45)
 	presentation.play_phase_transition()
+	if music_manager != null:
+		music_manager.duck_for_dialogue(10.0, 0.90)
+
+
+func _on_phase_02_revealed() -> void:
+	if music_manager == null or room_is_cleared:
+		return
+	music_manager.restore_after_dialogue(0.0)
+	music_manager.phase_switch_once(PHASE_SWITCH_GUARD, PHASE_02_TRACK_ID, 1.10)
 
 
 func _on_phase_transition_completed() -> void:
@@ -174,6 +192,8 @@ func _on_boss_defeated() -> void:
 	_set_door_closed(rear_door, false)
 	_set_door_closed(exit_door, false)
 	_release_camera()
+	if music_manager != null:
+		music_manager.fade_out(1.50)
 	room_cleared.emit()
 
 
@@ -189,6 +209,8 @@ func apply_persisted_clear_state() -> void:
 	boss_hud.hide_immediately()
 	presentation.reset_presentation()
 	boss.apply_persisted_defeat()
+	if music_manager != null:
+		music_manager.stop_music()
 	_release_camera()
 
 
@@ -196,6 +218,9 @@ func _on_player_respawned(_spawn_position: Vector2) -> void:
 	if room_is_cleared or not encounter_started:
 		return
 	boss.reset_boss()
+	if music_manager != null:
+		music_manager.stop_music()
+		music_manager.clear_phase_switch_guard(PHASE_SWITCH_GUARD)
 	encounter_started = false
 	_set_door_closed(rear_door, false)
 	_set_door_closed(exit_door, true)
@@ -205,6 +230,14 @@ func _on_player_respawned(_spawn_position: Vector2) -> void:
 	boss_hud.hide_immediately()
 	_release_camera()
 	room_reset.emit()
+
+
+func _exit_tree() -> void:
+	if music_manager == null:
+		return
+	var current_track: StringName = music_manager.get_current_track_id()
+	if current_track == PHASE_01_TRACK_ID or current_track == PHASE_02_TRACK_ID:
+		music_manager.fade_out(0.20)
 
 
 func _show_dialogue(text: String, duration: float) -> void:
