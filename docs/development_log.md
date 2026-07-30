@@ -6514,3 +6514,36 @@ Status: complete — implementation, MainBootstrap evidence and regression matri
 - Full manual route: Chapter III Debug Start `CH3_BOSS`. Focused routes: `CH3_BOSS_FIRE_TEST`, `CH3_BOSS_ICE_TEST`, `CH3_BOSS_MIRE_TEST` and `CH3_BOSS_SUMMON_MAGIC_COMBO`.
 - Manual acceptance is still required for visual comfort, reaction windows and full-fight difficulty. Automated cadence models certify legal state/cooldown/cap behavior, not subjective fairness.
 - Existing Chapter IV PackedScene absence is unchanged and outside this task.
+
+## 2026-07-30 — Boss music MU0 audit and production plan complete
+
+Status: complete — audit/design gate only; MU1 not started
+
+### Goals, scope and audited baseline
+
+- Audited the formal MainBootstrap route, Chapter II Duchess room/presentation/Boss signals, Chapter III Edran room/environment/Boss signals, scene fade authority, existing audio files/import policy, Bus setup and music ownership. MU0 changed documentation only and did not create audio, change a scene/script/Resource, alter a Bus or start MU1.
+- Confirmed that no `MusicManager`/`AudioManager` or `default_bus_layout.tres` currently exists. The project relies on `Master`; Chapter II directly owns one scene-local `BrokenWaltzPlayer`, while Chapter III has no Boss music player or Boss music asset.
+- Analysed `broken_waltz_intro.tres` and its deterministic generator: 16-bit mono 22,050 Hz, 6.60 seconds, 109.09 BPM, 3/4, four bars, forward loop sample 0–145,530, D-modal/minor six-note motif D–F–E–C–E-flat–D and D/C/E-flat/D bass. Transition start stops it immediately, so Chapter II Phase 2 is silent.
+- Recorded the truthful quality boundary: the existing cue is a valid original intro motif but is too short to pass as a formal Phase 1 Boss composition under the new task's final standards. Extending it is not silently included in the requested three-track MU0 scope.
+- Confirmed local deterministic production capability: Python 3 + NumPy/SciPy, FFmpeg/FFprobe with Vorbis, Godot 4.7.1 and macOS audio tools are available; GarageBand is installed for optional audition. No SoundFont, FluidSynth, TiMidity or MIDI package is available, so the planned pipeline is sample-free synthesis plus a project-owned minimal MIDI writer—no remote service or provenance-unknown sample library.
+
+### Locked plans and owned future files
+
+- Chapter II Phase 2: `The Final Waltz, Unmasked / 无面的最后华尔兹`, 3/4 at 132 BPM, approximately 130.91 seconds, D-centred transformed Broken Waltz motif and bass, broken harpsichord/low strings/glass/percussion.
+- Chapter III Phase 1: `Litany of the Thirteenth Bell / 第十三钟祷`, 6/8 at 92 dotted-quarter BPM, approximately 125.22 seconds, original thirteen-tone ritual motif, additive organ/nonsemantic choir/low strings/bell/drum/chain.
+- Chapter III Phase 2: `The Bell Within the Bone / 骨中之钟`, 6/8 at 124 dotted-quarter BPM, approximately 125.81 seconds, reworked Phase 1 organ/bell/choir materials in thirteen-bar pressure cycles.
+- Runtime target is 48 kHz stereo OGG Vorbis with exact whole-bar loops, typed metadata, retained MIDI/source scripts, fixed seed, no third-party samples and approximately -3 dBFS peak headroom. Planned shared work is a typed two-deck MusicManager Autoload and formal `Music/SFX/Ambient/UI` buses; planned Boss binding stays in room/presentation controllers rather than AI/attack polling.
+- Full audit, file plan, event plan, risks and Main/F5 music-entry plan: `docs/design/boss_music_mu0_audit_and_plan.md`.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit` — PASS, exit 0; Godot `4.7.1.stable.official.a13da4feb` imported and parsed the current project without a script/resource error.
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — PASS, exit 0; `MainBootstrap` selected `res://scenes/cinematics/opening_cinematic.tscn` for the formal new-game route.
+3. Main log scan for `ERROR`, `SCRIPT ERROR`, `Parse Error`, `Invalid` and `WARNING` — PASS; none reported during the 240-frame baseline run.
+4. Local tool audit — PASS for Python/NumPy/SciPy, FFmpeg/FFprobe Vorbis, Godot, GarageBand and macOS audio tools; SoundFont/FluidSynth/TiMidity/MIDI packages were explicitly absent.
+
+### Boundary and next approval
+
+- No new track, empty placeholder, silent file, fake music, Bus, MusicManager, Boss binding, Main debug entry or listening/loop claim was created in MU0.
+- MU1 may begin only after explicit approval. Its approved default scope is the original Chapter II Phase 2 composition, seamless loop, shared music foundation needed to play it, Chapter II event integration and Main/F5 evidence; it may not silently add a fourth full Duchess Phase 1 composition.
+- Pre-existing unrelated Chapter I/shared/resource/QA worktree modifications remain user-owned, preserved and excluded from the MU0 commit.
