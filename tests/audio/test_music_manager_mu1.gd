@@ -2,6 +2,7 @@ extends SceneTree
 
 const PHASE_01: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
 const PHASE_02: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
+const CH3_PHASE_01: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
 const GUARD: StringName = &"MU1_TEST_PHASE_SWITCH"
 
 var _failures: Array[String] = []
@@ -24,6 +25,7 @@ func _run() -> void:
 	_expect(AudioServer.get_bus_index(&"UI") >= 0, "UI bus is missing")
 	_expect(manager.preload_track(PHASE_01), "Phase 1 definition is missing")
 	_expect(manager.preload_track(PHASE_02), "Phase 2 definition is missing")
+	_expect(manager.preload_track(CH3_PHASE_01), "Chapter III Phase 1 definition is missing")
 	var deck_count: int = manager.find_children("MusicDeck*", "AudioStreamPlayer", false, false).size()
 	_expect(deck_count == 2, "MusicManager must own exactly two reusable decks")
 
@@ -37,6 +39,7 @@ func _run() -> void:
 
 	for iteration: int in range(20):
 		manager.stop_music()
+		await create_timer(0.02, true, false, true).timeout
 		manager.clear_phase_switch_guard(GUARD)
 		_expect(manager.play_music(PHASE_01, 0.0, true), "Cycle %d Phase 1 failed" % iteration)
 		_expect(manager.phase_switch_once(GUARD, PHASE_02, 0.0), "Cycle %d Phase 2 failed" % iteration)
@@ -44,7 +47,9 @@ func _run() -> void:
 		_expect(manager.get_current_track_id() == PHASE_02, "Cycle %d track id mismatch" % iteration)
 		_expect(manager.get_active_player_count() == 1, "Cycle %d leaked a playing deck" % iteration)
 	manager.stop_music()
+	await create_timer(0.10, true, false, true).timeout
 	manager.clear_phase_switch_guard(GUARD)
+	manager.queue_free()
 	for _frame: int in range(5):
 		await process_frame
 	_finish()

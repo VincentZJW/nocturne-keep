@@ -1,5 +1,46 @@
 # Development Log
 
+## 2026-07-30 — Boss music MU2 (preflight)
+
+Status: complete — original Chapter III Boss Phase 1 score, seamless loop, formal Main binding and MU2 QA passed; MU3 Phase 2/transition music remains out of scope
+
+### Goal, planned files, tests, and scope check
+
+- Author the original, sample-free `Litany of the Thirteenth Bell / 第十三钟祷` for Edran Phase 1 at the MU0-locked 92 BPM dotted-quarter pulse, 6/8 meter, D Phrygian/minor centre and 96-bar (~125.22 second) circular form. Deliver editable score/source, Standard MIDI, 48 kHz stereo OGG, loop metadata and objective audio analysis under the Chapter III-owned Boss music directory.
+- Register `CH3_BOSS_MUSIC_PHASE_01` in the existing typed MusicManager registry and orchestrate it from the saved Chapter III Boss-room controller: restrained intro level, formal combat level when Edran activates, and an honest fade before the still-unimplemented MU3 Phase 2 transition score.
+- Add a guarded MainBootstrap debug start for Phase 1 music, focused deterministic integration tests and Main-routed visual evidence. Preserve the default Opening-first F5 route and avoid scene-local AudioStreamPlayer duplication.
+- Verify with exact Godot 4.7.1 import/parse, focused music and Chapter III Boss regressions, graphical Main capture, real audio audition, seam/codec analysis and at least ten minutes of continuous Godot playback of the new track. Record exact commands and outcomes, make one isolated MU2 commit and stop.
+
+### Read-only baseline and scope boundary
+
+- Baseline is `master` at `e674f4c`; `project.godot` continues to point at `res://scenes/bootstrap/main_bootstrap.tscn`. The formal Chapter III route, sanctum room and Edran Boss already expose typed intro/activation/phase signals but contain no music player or registered Chapter III Boss track.
+- The committed persistent two-deck `MusicManager`, Music bus, track definition/registry and deterministic synthesis helper from MU1 are the authority to extend. Boss AI remains music-agnostic; the room controller owns score event timing.
+- Pre-existing Chapter I/shared-enemy/loot/Player tuning, Ravenfang QA images and generated UID sidecars remain user-owned and will be excluded from this milestone. MU2 does not author Edran Phase 2 music, the black-bell crossfade, dialogue ducking, reward/exit stingers or the complete death/retry lifecycle reserved for MU3–MU4.
+
+### Delivered implementation
+
+- Authored `Litany of the Thirteenth Bell / 第十三钟祷`: a fixed-seed 96-bar, 125.217396-second A–B–C–A' score with the original thirteen-tone D–E-flat–F–A-flat–G–F–E-flat–C–D–B-flat–A-flat–E-flat–D litany. The local sample-free orchestra adds pipe organ, non-semantic formant choir, low strings, old-bronze bell, bass drum, chain/censer and cold pad voices to the shared deterministic renderer.
+- Retained the complete 1,120-event JSON score, 11-track Standard MIDI and generator beside the final 48 kHz stereo Vorbis. The final encoded file is 868,233 bytes with SHA-256 `455cb6499a10fee0f7c901796c058fdbe6c38b1d6d3a396e9c1a7d76fc4350ac`, -3.10 dBFS PCM peak and -16.42 dBFS RMS.
+- Added a transparent 8 ms raised-cosine boundary treatment after measuring Vorbis packet-edge behaviour. Final decoded endpoint discontinuity is 0.00038285 (-68.34 dBFS), improved from the rejected intermediate -42.01 dBFS boundary; the authored whole-bar form and 125.217396-second PCM duration are unchanged.
+- Registered `CH3_BOSS_MUSIC_PHASE_01` in the typed shared registry. The formal saved Boss room now starts the cue from the sanctum's typed intro event at -18 dB, restores -10 dB on Edran's `activated` signal, starts only once and fades over 0.90 seconds when the MU3-owned phase transition begins. No scene-local Music player or Boss-AI HP polling was added.
+- Added the MainBootstrap debug start `CH3_BOSS_MUSIC_PHASE_01`, the MusicManager overlay, focused formal-route test, graphical capture driver, waveform/spectrogram evidence and Chapter III music documentation. Default F5 remains Opening-first.
+
+### Exact commands and actual results
+
+- `python3 .../source/generate_thirteenth_pontiff_phase_01.py` — PASS, 1,120 events, 125.217396 seconds, -3.10 dBFS peak, -16.42 dBFS RMS and final hash above.
+- `ffprobe ...thirteenth_pontiff_phase_01_litany.ogg` — Vorbis, 48 kHz, stereo, 125.218667 encoded seconds, 55,469 b/s. Five-pass/600-second FFmpeg continuous decode exited 0.
+- `ffplay -nodisp -autoexit -t 15 <track>` and an eight-second two-copy excerpt spanning 122–130 seconds — completed through the system output device; no playback error or audible seam was observed.
+- `test_music_manager_mu1.gd` — PASS, five buses, two reusable decks, 20 transition cycles and duplicate guard; the fixture now yields between rapid stop/start cycles so the Godot audio thread exits without leaked-playback red diagnostics.
+- `test_thirteenth_pontiff_music_mu2.gd` — `PASS main=Bootstrap track_once=1 meter=6/8 loop=125.217 intro_low=1 combat=-10 transition_fade=1`.
+- Final real-time `MU_LONG_PLAY_SECONDS=600 MU_LONG_PLAY_TRACK_ID=CH3_BOSS_MUSIC_PHASE_01 ... test_music_manager_long_play.gd` — PASS, four loop wraps, maximum one player, static memory 31,389,757 → 31,386,869 bytes, peak 31,391,589, growth -2,888 bytes.
+- Existing Edran B4–B7, elemental magic (986 assertions / 20 cadence battles) and Chapter III 50-transition route stress tests all PASS. Exact 4.7.1 editor import/parse and formal default Bootstrap startup (`OpeningCinematic`) exited 0; independent saved Boss room smoke exited 0.
+- Graphical MainBootstrap driver — PASS, three formal 1280×720 captures for intro, Phase 1 combat and transition yield. Full evidence and manual acceptance steps: `res://docs/qa/boss_music/mu2/report.md`.
+
+### Known boundary and next gate
+
+- Automated and device-output checks prove format, registry, event timing, loop stability and resource behaviour. Subjective balance against all Boss SFX/dialogue and musical taste still require the user's normal-volume F5 audition.
+- The transition intentionally fades to silence in MU2. `black_bell_reveal`, the Phase 2 score/crossfade, full dialogue ducking, death/retry/reward/exit lifecycle and final three-track pressure matrix remain MU3–MU5 and were not falsely marked complete.
+
 ## 2026-07-30 — Chapter III enemy-density repair B0–B5
 
 Status: complete — nine saved combat regions, 20 bounded groups and exactly 72 normal enemies are integrated through MainBootstrap; manual combat-feel acceptance remains

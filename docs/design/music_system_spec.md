@@ -37,10 +37,20 @@ Event contract:
 
 Chapter II debug spawn IDs `CH2_BOSS_MUSIC_PHASE_01`, `CH2_BOSS_MUSIC_TRANSITION` and `CH2_BOSS_MUSIC_PHASE_02` route through `MainBootstrap`, request the formal Boss entrance and show a small overlay with track ID, playback position, Music Bus gain, active deck count and switch count. The overlay is disabled outside these explicit debug entries and does not write formal save data.
 
+## Chapter III — The Thirteenth Pontiff (MU2)
+
+| Track ID | Cue | Tempo/meter | Runtime gain | Loop |
+| --- | --- | --- | --- | --- |
+| `CH3_BOSS_MUSIC_PHASE_01` | Litany of the Thirteenth Bell / 第十三钟祷 | dotted-quarter 92 BPM, 6/8 | Intro -18 dB; combat -10 dB | 0.000–125.217396 s |
+
+The formal `Chapter03BossSanctumRoom` is the event authority. `intro_environment_started` begins the score at restrained level; Edran's typed `activated` signal restores combat level. `phase_transition_started` fades the Phase 1 track over 0.90 seconds rather than allowing Phase 1 music to masquerade as an unimplemented Phase 2 cue. MU3 will replace that honest silence with the black-bell reveal and Phase 2 crossfade.
+
+`CH3_BOSS_MUSIC_PHASE_01` is a guarded MainBootstrap debug start that loads the saved Chapter III route/Boss room and enables the shared MusicManager diagnostic overlay. It is not an independent audio test scene and does not change the formal default Opening-first F5 route.
+
 ## Source and provenance
 
 The Phase 2 score is a fixed-seed project-owned composition rendered with local NumPy/SciPy oscillators and FFmpeg Vorbis. It uses no downloaded samples, real hymn, existing waltz or remote generation service. The generator, event score JSON and Standard MIDI are retained next to the chapter-local OGG so future work remains reproducible.
 
-## MU1 boundary
+## Current milestone boundary
 
-Only Chapter II Phase 2 and the shared foundation required to play it are complete. Chapter III Phase 1/2 production and their event bindings are MU2/MU3. Dialogue/reward/chapter-exit polish across both bosses and final three-track pressure QA remain MU4/MU5.
+Chapter II Phase 2 and Chapter III Phase 1 are complete. Chapter III Phase 2, its black-bell transition and complete crossfade remain MU3. Dialogue/reward/chapter-exit polish across both Bosses and final three-track pressure QA remain MU4/MU5.

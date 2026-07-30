@@ -3,9 +3,10 @@ extends SceneTree
 ## Real-time runtime endurance test.  Default is 600 seconds; the environment
 ## variable MU1_LONG_PLAY_SECONDS may shorten local smoke runs, never formal QA.
 
-const TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
+const DEFAULT_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
 
 var _duration_seconds: float = 600.0
+var _track_id: StringName = DEFAULT_TRACK_ID
 var _failures: Array[String] = []
 var _maximum_players: int = 0
 var _wrap_count: int = 0
@@ -19,17 +20,22 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var override: String = OS.get_environment("MU1_LONG_PLAY_SECONDS")
+	var override: String = OS.get_environment("MU_LONG_PLAY_SECONDS")
+	if override.is_empty():
+		override = OS.get_environment("MU1_LONG_PLAY_SECONDS")
 	if override.is_valid_float():
 		_duration_seconds = maxf(1.0, override.to_float())
+	var track_override: String = OS.get_environment("MU_LONG_PLAY_TRACK_ID")
+	if not track_override.is_empty():
+		_track_id = StringName(track_override)
 	var manager: MusicManagerService = root.get_node_or_null("MusicManager") as MusicManagerService
 	if manager == null:
 		_failures.append("MusicManager is missing")
 		_finish()
 		return
 	manager.stop_music()
-	if not manager.play_music(TRACK_ID, 0.0, true):
-		_failures.append("Phase 2 track did not start")
+	if not manager.play_music(_track_id, 0.0, true):
+		_failures.append("Selected endurance track did not start: %s" % _track_id)
 		_finish()
 		return
 	_starting_static_memory_bytes = int(Performance.get_monitor(Performance.MEMORY_STATIC))
@@ -45,7 +51,7 @@ func _run() -> void:
 		if player_count != 1:
 			_failures.append("Active player count changed to %d" % player_count)
 			break
-		if manager.get_current_track_id() != TRACK_ID:
+		if manager.get_current_track_id() != _track_id:
 			_failures.append("Track id changed during endurance playback")
 			break
 		var current_position: float = manager.get_playback_position()
@@ -68,7 +74,8 @@ func _run() -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("MUSIC_MANAGER_LONG_PLAY: PASS seconds=%.1f wraps=%d max_players=%d memory_start=%d memory_end=%d memory_peak=%d memory_growth=%d" % [
+		print("MUSIC_MANAGER_LONG_PLAY: PASS track=%s seconds=%.1f wraps=%d max_players=%d memory_start=%d memory_end=%d memory_peak=%d memory_growth=%d" % [
+			_track_id,
 			_duration_seconds,
 			_wrap_count,
 			_maximum_players,

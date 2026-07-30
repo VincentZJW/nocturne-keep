@@ -5,6 +5,7 @@ extends Node2D
 ## Boss combat connects to these typed hooks without making this scene own AI.
 
 signal intro_environment_finished
+signal intro_environment_started
 signal phase_transition_environment_finished
 signal death_environment_finished
 
@@ -70,6 +71,7 @@ func play_intro_environment(player: Player, boss: ThirteenthPontiffEdran = null)
 	if _intro_complete or _intro_running or player == null:
 		return
 	_intro_running = true
+	intro_environment_started.emit()
 	player.set_input_profile(Player.InputProfile.LOCKED)
 	player.velocity = Vector2.ZERO
 	var player_camera: Camera2D = player.player_camera

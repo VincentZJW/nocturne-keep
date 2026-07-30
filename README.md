@@ -86,6 +86,8 @@ res://chapters/chapter_02_silent_court/scenes/tests/hollow_duchess_test_room.tsc
 - `CH2_BOSS_MUSIC_PHASE_02`：同样保留完整变身演出，随后验证Phase 2曲目；
 - 屏幕顶部音乐调试条显示`track_id`、播放位置、Music Bus音量、活跃播放器数与切换次数，仅在以上入口开启。
 
+第三章Boss音乐MU2专项入口：`CH3_BOSS_MUSIC_PHASE_01`。它通过正式`MainBootstrap → Chapter03Route → Ch3BossSanctumRoom`播放125.217秒原创6/8曲`Litany of the Thirteenth Bell / 第十三钟祷`，Intro保持克制音量，埃德兰激活后恢复正式战斗音量并显示共享音乐调试条。Phase 2音乐与黑钟交叉淡化属于MU3，当前在阶段切换点会诚实淡出而不会伪用Phase 1音乐。
+
 第二章至第三章转场已经接入同一F5路径。击败瑟芙琳后会播放四句死亡对白，舞会厅镜墙恢复并出现十三道裂纹，随后露出王室礼拜秘门。Boss固定掉落第三阶`Crimson Masque Stilettos / 绯幕礼刺`；靠近后按E会加入唯一武器库存、自动装备、把HUD更新为14/28并写入章节奖励旗标。随后在秘门前按E，穿过无敌人的王室礼拜回廊，再在尽头按E即可抵达`res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn`。第三章R2已把旧12784×720单画布原型从Main引用中移除：现在以持久Player/HUD、单一RoomHost和局部Fade串联礼拜堂前庭、送葬正厅、断声唱诗廊、末祷检查点与十三忏前厅；门扉使用E开启，前庭至正厅包含实体短石阶。R3完成正式图层和碰撞终验；R4完成末祷检查点、E确认十三响门、单一Fade独立圣所换房、十三烛/镜头/双语Boss标题演出，以及Boss死亡和奖励系统未来可调用的遗物室/溺圣下行道类型化接口。R5已从MainBootstrap完成40次关键转场压力回归和8张正式路线截图，并把第二章转场验收更新到正式`Chapter03Route`。仓库仍没有钟忏司祭·埃德兰战斗实体、权威Boss奖励或第四章PackedScene，因此Boss战、奖励授予和第四章加载保持明确PARTIAL，不以假内容替代；严格终验结论见第三章R5 QA报告。
 
 正式人工测试：保持Debug开关关闭并按F5，确认Bootstrap自动进入Opening；等待动画自然结束或在提示出现后长按ESC/Enter 0.75秒，确认只进入一次暮帷墓窟而不是直接进入第一章。完成复苏、守烛人对话、双匕首回收和石门流程后，第一章暗黑森林教程才开始。

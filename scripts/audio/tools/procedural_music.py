@@ -145,12 +145,104 @@ def synth_timpani(frequency: float, duration: float, seed: int) -> np.ndarray:
     return result * 0.42
 
 
+def synth_pipe_organ(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Restrained additive chapel organ; no recorded pipe samples."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    result = np.zeros(length, dtype=np.float32)
+    detune = rng.uniform(-0.0014, 0.0014)
+    for ratio, gain in ((0.5, 0.16), (1.0, 0.58), (2.0, 0.24), (3.0, 0.11), (4.01, 0.06)):
+        phase = rng.uniform(-math.pi, math.pi)
+        result += np.sin(time * math.tau * frequency * ratio * (1.0 + detune) + phase) * gain
+    breath = signal.lfilter(
+        [0.025], [1.0, -0.985], rng.standard_normal(length).astype(np.float32)
+    ).astype(np.float32)
+    result += breath * 0.028
+    result *= _envelope(length, min(0.12, duration * 0.18), min(0.20, duration * 0.24))
+    return result * 0.25
+
+
+def synth_formant_choir(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Non-semantic vowel-like choir synthesized from oscillators and formants."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    vibrato = np.sin(time * math.tau * rng.uniform(4.0, 4.8)) * 0.0021
+    phase = np.cumsum(frequency * (1.0 + vibrato), dtype=np.float64) * (math.tau / SAMPLE_RATE)
+    source = (
+        np.sin(phase) * 0.64
+        + np.sin(phase * 2.0 + 0.2) * 0.21
+        + np.sin(phase * 3.0 + 0.5) * 0.10
+        + np.sin(phase * 4.0 + 0.7) * 0.05
+    ).astype(np.float32)
+    # Static vowel colouring.  The result evokes a distant choir without text or samples.
+    low = signal.butter(2, 950.0, btype="lowpass", fs=SAMPLE_RATE, output="sos")
+    high = signal.butter(2, 180.0, btype="highpass", fs=SAMPLE_RATE, output="sos")
+    result = signal.sosfilt(high, signal.sosfilt(low, source)).astype(np.float32)
+    result += rng.standard_normal(length).astype(np.float32) * 0.0025
+    result *= _envelope(length, min(0.32, duration * 0.26), min(0.42, duration * 0.30))
+    return result * 0.30
+
+
+def synth_bronze_bell(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Old, slightly inharmonic bronze bell synthesized additively."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    result = np.zeros(length, dtype=np.float32)
+    partials = (
+        (0.50, 0.22, 1.35), (1.00, 0.46, 1.65), (1.19, 0.26, 2.10),
+        (1.51, 0.19, 2.55), (2.01, 0.13, 3.10), (2.74, 0.08, 4.20),
+    )
+    for ratio, gain, decay in partials:
+        result += (
+            np.sin(time * math.tau * frequency * ratio + rng.uniform(-math.pi, math.pi))
+            * gain * np.exp(-time * decay)
+        ).astype(np.float32)
+    strike = rng.standard_normal(length).astype(np.float32) * np.exp(-time * 55.0).astype(np.float32)
+    result += strike * 0.028
+    result *= _envelope(length, 0.001, min(0.20, duration * 0.20))
+    return result * 0.38
+
+
+def synth_cold_pad(frequency: float, duration: float, seed: int) -> np.ndarray:
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    result = np.zeros(length, dtype=np.float32)
+    for cents, gain in ((-8.0, 0.25), (0.0, 0.42), (7.0, 0.25), (12.0, 0.08)):
+        ratio = 2.0 ** (cents / 1200.0)
+        result += np.sin(time * math.tau * frequency * ratio + rng.uniform(-math.pi, math.pi)) * gain
+    result *= _envelope(length, min(0.45, duration * 0.24), min(0.55, duration * 0.30))
+    return result * 0.19
+
+
+def synth_chain(frequency: float, duration: float, seed: int) -> np.ndarray:
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    noise = rng.standard_normal(length).astype(np.float32)
+    metallic = np.zeros(length, dtype=np.float32)
+    for ratio, gain in ((5.7, 0.22), (8.2, 0.17), (11.1, 0.10)):
+        metallic += np.sin(time * math.tau * frequency * ratio + rng.uniform(-math.pi, math.pi)) * gain
+    result = metallic + signal.lfilter([0.18, -0.18], [1.0, -0.72], noise).astype(np.float32) * 0.08
+    result *= np.exp(-time * 8.2).astype(np.float32)
+    result *= _envelope(length, 0.001, min(0.08, duration * 0.30))
+    return result * 0.26
+
+
 SYNTHS: dict[str, Callable[[float, float, int], np.ndarray]] = {
     "harpsichord": synth_harpsichord,
     "strings": synth_bowed_string,
     "bass": synth_low_string,
     "glass": synth_glass,
     "timpani": synth_timpani,
+    "organ": synth_pipe_organ,
+    "choir": synth_formant_choir,
+    "bell": synth_bronze_bell,
+    "pad": synth_cold_pad,
+    "chain": synth_chain,
 }
 
 
@@ -160,6 +252,11 @@ TRACK_GAIN: dict[str, float] = {
     "bass": 0.78,
     "glass": 0.55,
     "timpani": 0.70,
+    "organ": 0.67,
+    "choir": 0.53,
+    "bell": 0.56,
+    "pad": 0.48,
+    "chain": 0.44,
 }
 
 
@@ -317,8 +414,14 @@ def write_standard_midi(
         (0, 1, b"\xFF\x51\x03" + tempo.to_bytes(3, "big")),
         (0, 2, bytes([0xFF, 0x58, 0x04, numerator, denominator_power, 24, 8])),
     ]
-    channel_map = {"harpsichord": 0, "strings": 1, "bass": 2, "glass": 3, "timpani": 9}
-    program_map = {"harpsichord": 6, "strings": 48, "bass": 43, "glass": 14, "timpani": 47}
+    channel_map = {
+        "harpsichord": 0, "strings": 1, "bass": 2, "glass": 3, "timpani": 9,
+        "organ": 4, "choir": 5, "bell": 6, "pad": 7, "chain": 8,
+    }
+    program_map = {
+        "harpsichord": 6, "strings": 48, "bass": 43, "glass": 14, "timpani": 47,
+        "organ": 19, "choir": 52, "bell": 14, "pad": 89, "chain": 115,
+    }
     grouped: dict[str, list[ScoreEvent]] = {name: [] for name in channel_map}
     for event in score_events:
         grouped[event.track].append(event)

@@ -1,0 +1,9005 @@
+{
+  "title": "Litany of the Thirteenth Bell / 第十三钟祷",
+  "seed": 31309213,
+  "pulse_bpm": 92.0,
+  "midi_quarter_bpm": 138.0,
+  "time_signature": "6/8",
+  "pulse_unit": "dotted_quarter",
+  "bars": 96,
+  "sections": {
+    "A": [
+      1,
+      24
+    ],
+    "B": [
+      25,
+      48
+    ],
+    "C": [
+      49,
+      72
+    ],
+    "A_prime": [
+      73,
+      96
+    ]
+  },
+  "thirteen_tone_motif": [
+    62,
+    63,
+    65,
+    68,
+    67,
+    65,
+    63,
+    60,
+    62,
+    58,
+    56,
+    51,
+    50
+  ],
+  "sample_provenance": "fully synthesized; no samples or external services",
+  "events": [
+    {
+      "track": "organ",
+      "start_beat": 0.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 0.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 0.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 0.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 0.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 0.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 0.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 35,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 0.08,
+      "duration_beats": 7.68,
+      "midi_note": 69,
+      "velocity": 31,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 0.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 0.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 1.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 1.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 73,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 2.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 2.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 3.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 3.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 4.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 4.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 5.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 5.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 6.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 2.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 2.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 2.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 2.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 2.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 2.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 3.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 4.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 4.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 4.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 4.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 4.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 4.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 4.0,
+      "duration_beats": 3.86,
+      "midi_note": 67,
+      "velocity": 38,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 4.1,
+      "duration_beats": 3.72,
+      "midi_note": 70,
+      "velocity": 35,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 6.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 6.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 6.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 6.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 6.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 6.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 7.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 8.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 8.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 8.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 8.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 8.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 8.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 8.0,
+      "duration_beats": 7.82,
+      "midi_note": 60,
+      "velocity": 35,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 8.08,
+      "duration_beats": 7.68,
+      "midi_note": 67,
+      "velocity": 31,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 8.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 8.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 9.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 9.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 73,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 10.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 10.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 11.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 11.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 12.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 12.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 13.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 13.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 14.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 10.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 10.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 10.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 10.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 10.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 10.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 11.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 12.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 12.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 12.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 12.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 12.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 12.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 12.0,
+      "duration_beats": 3.86,
+      "midi_note": 62,
+      "velocity": 38,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 12.1,
+      "duration_beats": 3.72,
+      "midi_note": 65,
+      "velocity": 35,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 14.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 14.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 14.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 14.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 14.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 14.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 15.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 16.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 16.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 16.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 16.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 16.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 16.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 16.0,
+      "duration_beats": 7.82,
+      "midi_note": 56,
+      "velocity": 35,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 16.08,
+      "duration_beats": 7.68,
+      "midi_note": 63,
+      "velocity": 31,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 16.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 16.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 17.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 17.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 73,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 18.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 18.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 19.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 19.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 20.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 20.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 21.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 21.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 22.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 18.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 18.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 18.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 18.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 18.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 18.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 19.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 20.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 20.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 20.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 20.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 20.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 20.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 20.0,
+      "duration_beats": 3.86,
+      "midi_note": 65,
+      "velocity": 38,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 20.1,
+      "duration_beats": 3.72,
+      "midi_note": 68,
+      "velocity": 35,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 22.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 22.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 22.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 22.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 22.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 22.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 23.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 24.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 24.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 24.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 24.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 24.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 24.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 24.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 35,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 24.08,
+      "duration_beats": 7.68,
+      "midi_note": 69,
+      "velocity": 31,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 24.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 24.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 25.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 25.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 73,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 26.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 26.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 27.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 27.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 28.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 28.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 29.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 29.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 30.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 26.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 26.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 26.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 26.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 26.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 26.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 27.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 28.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 28.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 28.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 28.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 28.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 28.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 28.0,
+      "duration_beats": 3.86,
+      "midi_note": 67,
+      "velocity": 38,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 28.1,
+      "duration_beats": 3.72,
+      "midi_note": 70,
+      "velocity": 35,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 30.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 30.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 30.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 30.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 30.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 30.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 31.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 32.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 32.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 32.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 32.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 32.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 32.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 32.0,
+      "duration_beats": 7.82,
+      "midi_note": 60,
+      "velocity": 35,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 32.08,
+      "duration_beats": 7.68,
+      "midi_note": 67,
+      "velocity": 31,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 32.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 32.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 33.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 33.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 73,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 34.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 34.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 35.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 35.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 36.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 36.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 37.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 37.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 38.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 34.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 34.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 34.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 34.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 34.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 34.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 35.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 36.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 36.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 36.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 36.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 36.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 36.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 36.0,
+      "duration_beats": 3.86,
+      "midi_note": 62,
+      "velocity": 38,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 36.1,
+      "duration_beats": 3.72,
+      "midi_note": 65,
+      "velocity": 35,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 38.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 38.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 38.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 38.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 38.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 38.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 39.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 40.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 40.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 40.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 40.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 40.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 40.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 40.0,
+      "duration_beats": 7.82,
+      "midi_note": 56,
+      "velocity": 35,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 40.08,
+      "duration_beats": 7.68,
+      "midi_note": 63,
+      "velocity": 31,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 40.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 40.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 41.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 41.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 73,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 42.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 42.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 43.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 43.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 44.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 44.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 45.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 61,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 45.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 61,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 46.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 73,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 42.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 42.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 42.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 42.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 42.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 42.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 43.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 44.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 44.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 44.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 44.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 44.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 44.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 44.0,
+      "duration_beats": 3.86,
+      "midi_note": 65,
+      "velocity": 38,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 44.1,
+      "duration_beats": 3.72,
+      "midi_note": 68,
+      "velocity": 35,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 46.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 42,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 46.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 38,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 46.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 46.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 38,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 46.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 42,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 46.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 64,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 47.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 46,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 48.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 48.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 48.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 48.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 48.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 48.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 48.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 37,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 48.08,
+      "duration_beats": 7.68,
+      "midi_note": 69,
+      "velocity": 33,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 48.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 48.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 49.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 49.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 75,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 50.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 50.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 51.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 51.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 52.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 52.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 53.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 53.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 54.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 50.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 50.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 50.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 50.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 50.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 50.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 51.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 52.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 52.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 52.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 52.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 52.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 52.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "organ",
+      "start_beat": 54.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 54.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 54.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 54.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 54.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 54.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 55.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "chain",
+      "start_beat": 55.5,
+      "duration_beats": 0.42,
+      "midi_note": 79,
+      "velocity": 34,
+      "pan": 0.52
+    },
+    {
+      "track": "organ",
+      "start_beat": 56.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 56.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 56.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 56.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 56.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 56.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 56.0,
+      "duration_beats": 7.82,
+      "midi_note": 60,
+      "velocity": 37,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 56.08,
+      "duration_beats": 7.68,
+      "midi_note": 67,
+      "velocity": 33,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 56.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 56.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 57.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 57.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 75,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 58.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 58.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 59.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 59.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 60.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 60.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 61.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 61.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 62.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 56.0,
+      "duration_beats": 2.65,
+      "midi_note": 50,
+      "velocity": 76,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 58.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 58.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 58.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 58.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 58.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 58.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 59.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "bell",
+      "start_beat": 58.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 60.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 60.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 60.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 60.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 60.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 60.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bell",
+      "start_beat": 60.0,
+      "duration_beats": 2.65,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 62.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 62.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 62.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 62.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 62.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 62.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 63.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "bell",
+      "start_beat": 62.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "chain",
+      "start_beat": 63.5,
+      "duration_beats": 0.42,
+      "midi_note": 79,
+      "velocity": 34,
+      "pan": 0.52
+    },
+    {
+      "track": "organ",
+      "start_beat": 64.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 64.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 64.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 64.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 64.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 64.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 64.0,
+      "duration_beats": 7.82,
+      "midi_note": 56,
+      "velocity": 37,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 64.08,
+      "duration_beats": 7.68,
+      "midi_note": 63,
+      "velocity": 33,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 64.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 64.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 65.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 65.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 75,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 66.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 66.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 67.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 67.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 68.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 68.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 69.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 69.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 70.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 64.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 66.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 66.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 66.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 66.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 66.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 66.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 67.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "bell",
+      "start_beat": 66.0,
+      "duration_beats": 2.65,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 68.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 68.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 68.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 68.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 68.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 68.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bell",
+      "start_beat": 68.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 70.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 70.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 70.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 70.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 70.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 70.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 71.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "bell",
+      "start_beat": 70.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "chain",
+      "start_beat": 71.5,
+      "duration_beats": 0.42,
+      "midi_note": 79,
+      "velocity": 34,
+      "pan": 0.52
+    },
+    {
+      "track": "organ",
+      "start_beat": 72.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 72.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 72.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 72.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 72.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 72.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 72.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 37,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 72.08,
+      "duration_beats": 7.68,
+      "midi_note": 69,
+      "velocity": 33,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 72.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 72.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 73.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 73.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 75,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 74.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 74.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 75.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 75.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 76.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 76.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 77.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 77.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 78.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 72.0,
+      "duration_beats": 2.65,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 74.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 74.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 74.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 74.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 74.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 74.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 75.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "bell",
+      "start_beat": 74.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 76.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 76.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 76.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 76.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 76.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 76.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bell",
+      "start_beat": 76.0,
+      "duration_beats": 2.65,
+      "midi_note": 46,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 78.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 78.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 78.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 78.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 78.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 78.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 79.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "bell",
+      "start_beat": 78.0,
+      "duration_beats": 2.65,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.0
+    },
+    {
+      "track": "chain",
+      "start_beat": 79.5,
+      "duration_beats": 0.42,
+      "midi_note": 79,
+      "velocity": 34,
+      "pan": 0.52
+    },
+    {
+      "track": "organ",
+      "start_beat": 80.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 80.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 80.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 80.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 80.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 80.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 80.0,
+      "duration_beats": 7.82,
+      "midi_note": 60,
+      "velocity": 37,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 80.08,
+      "duration_beats": 7.68,
+      "midi_note": 67,
+      "velocity": 33,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 80.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 80.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 81.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 81.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 75,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 82.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 82.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 83.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 83.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 84.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 84.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 85.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 85.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 86.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 80.0,
+      "duration_beats": 2.65,
+      "midi_note": 50,
+      "velocity": 76,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 82.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 82.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 82.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 82.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 82.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 82.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 83.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 84.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 84.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 84.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 84.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 84.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 84.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "organ",
+      "start_beat": 86.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 86.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 86.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 86.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 86.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 86.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 87.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "chain",
+      "start_beat": 87.5,
+      "duration_beats": 0.42,
+      "midi_note": 79,
+      "velocity": 34,
+      "pan": 0.52
+    },
+    {
+      "track": "organ",
+      "start_beat": 88.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 88.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 88.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 88.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 88.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 88.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 88.0,
+      "duration_beats": 7.82,
+      "midi_note": 56,
+      "velocity": 37,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 88.08,
+      "duration_beats": 7.68,
+      "midi_note": 63,
+      "velocity": 33,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 88.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 88.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 89.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 89.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 75,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 90.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 90.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 91.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 91.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 92.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 92.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 93.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 63,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 93.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 63,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 94.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 75,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 90.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 90.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 90.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 90.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 90.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 90.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 91.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 92.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 92.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 92.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 92.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 92.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 92.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "organ",
+      "start_beat": 94.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 45,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 94.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 42,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 94.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 45,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 94.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 42,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 94.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 45,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 94.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 68,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 95.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 49,
+      "pan": 0.08
+    },
+    {
+      "track": "chain",
+      "start_beat": 95.5,
+      "duration_beats": 0.42,
+      "midi_note": 79,
+      "velocity": 34,
+      "pan": 0.52
+    },
+    {
+      "track": "organ",
+      "start_beat": 96.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 96.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 96.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 96.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 96.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 96.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 96.0,
+      "duration_beats": 7.82,
+      "midi_note": 63,
+      "velocity": 39,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 96.08,
+      "duration_beats": 7.68,
+      "midi_note": 70,
+      "velocity": 35,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 96.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 96.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 97.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 97.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 77,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 98.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 98.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 99.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 99.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 100.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 100.5,
+      "duration_beats": 0.42,
+      "midi_note": 46,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 101.0,
+      "duration_beats": 0.42,
+      "midi_note": 44,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 101.5,
+      "duration_beats": 0.42,
+      "midi_note": 39,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 102.0,
+      "duration_beats": 0.42,
+      "midi_note": 38,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "choir",
+      "start_beat": 96.0,
+      "duration_beats": 3.8,
+      "midi_note": 63,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 96.15,
+      "duration_beats": 3.56,
+      "midi_note": 67,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 96.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 96.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 98.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 98.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 98.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 98.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 98.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 98.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 99.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 98.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 99.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 99.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 100.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 100.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 100.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 100.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 100.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 100.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 100.0,
+      "duration_beats": 3.8,
+      "midi_note": 60,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 100.15,
+      "duration_beats": 3.56,
+      "midi_note": 63,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 100.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 100.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 102.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 102.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 102.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 102.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 102.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 102.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 103.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 102.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 103.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 103.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 104.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 104.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 104.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 104.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 104.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 104.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 104.0,
+      "duration_beats": 7.82,
+      "midi_note": 58,
+      "velocity": 39,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 104.08,
+      "duration_beats": 7.68,
+      "midi_note": 65,
+      "velocity": 35,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 104.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 104.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 105.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 105.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 77,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 106.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 106.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 107.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 107.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 108.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 108.5,
+      "duration_beats": 0.42,
+      "midi_note": 46,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 109.0,
+      "duration_beats": 0.42,
+      "midi_note": 44,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 109.5,
+      "duration_beats": 0.42,
+      "midi_note": 39,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 110.0,
+      "duration_beats": 0.42,
+      "midi_note": 38,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "choir",
+      "start_beat": 104.0,
+      "duration_beats": 3.8,
+      "midi_note": 58,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 104.15,
+      "duration_beats": 3.56,
+      "midi_note": 62,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 104.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 104.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 106.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 106.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 106.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 106.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 106.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 106.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 107.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 106.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 107.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 107.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 108.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 108.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 108.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 108.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 108.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 108.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 108.0,
+      "duration_beats": 3.8,
+      "midi_note": 56,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 108.15,
+      "duration_beats": 3.56,
+      "midi_note": 60,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 108.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 108.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 110.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 110.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 110.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 110.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 110.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 110.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 111.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 110.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 111.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 111.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 112.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 112.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 112.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 112.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 112.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 112.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 112.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 39,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 112.08,
+      "duration_beats": 7.68,
+      "midi_note": 68,
+      "velocity": 35,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 112.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 112.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 113.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 113.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 77,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 114.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 114.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 115.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 115.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 116.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 116.5,
+      "duration_beats": 0.42,
+      "midi_note": 46,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 117.0,
+      "duration_beats": 0.42,
+      "midi_note": 44,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 117.5,
+      "duration_beats": 0.42,
+      "midi_note": 39,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 118.0,
+      "duration_beats": 0.42,
+      "midi_note": 38,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "choir",
+      "start_beat": 112.0,
+      "duration_beats": 3.8,
+      "midi_note": 62,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 112.15,
+      "duration_beats": 3.56,
+      "midi_note": 65,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 112.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 112.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 114.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 114.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 114.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 114.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 114.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 114.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 115.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 114.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 115.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 115.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 116.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 116.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 116.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 116.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 116.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 116.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 116.0,
+      "duration_beats": 3.8,
+      "midi_note": 62,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 116.15,
+      "duration_beats": 3.56,
+      "midi_note": 65,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 116.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 116.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 118.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 118.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 118.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 118.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 118.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 118.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 119.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 118.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 119.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 119.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 120.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 120.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 120.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 120.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 120.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 120.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 120.0,
+      "duration_beats": 7.82,
+      "midi_note": 63,
+      "velocity": 39,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 120.08,
+      "duration_beats": 7.68,
+      "midi_note": 70,
+      "velocity": 35,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 120.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 120.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 121.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 121.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 77,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 122.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 122.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 123.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 123.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 124.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 124.5,
+      "duration_beats": 0.42,
+      "midi_note": 46,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 125.0,
+      "duration_beats": 0.42,
+      "midi_note": 44,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 125.5,
+      "duration_beats": 0.42,
+      "midi_note": 39,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 126.0,
+      "duration_beats": 0.42,
+      "midi_note": 38,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "choir",
+      "start_beat": 120.0,
+      "duration_beats": 3.8,
+      "midi_note": 63,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 120.15,
+      "duration_beats": 3.56,
+      "midi_note": 67,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 120.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 120.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 122.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 122.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 122.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 122.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 122.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 122.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 123.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 122.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 123.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 123.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 124.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 124.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 124.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 124.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 124.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 124.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 124.0,
+      "duration_beats": 3.8,
+      "midi_note": 60,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 124.15,
+      "duration_beats": 3.56,
+      "midi_note": 63,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 124.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 124.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 126.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 126.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 126.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 126.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 126.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 126.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 127.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 126.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 127.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 127.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 128.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 128.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 128.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 128.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 128.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 128.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 128.0,
+      "duration_beats": 7.82,
+      "midi_note": 58,
+      "velocity": 39,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 128.08,
+      "duration_beats": 7.68,
+      "midi_note": 65,
+      "velocity": 35,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 128.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 128.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 129.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 129.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 77,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 130.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 130.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 131.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 131.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 132.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 132.5,
+      "duration_beats": 0.42,
+      "midi_note": 46,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 133.0,
+      "duration_beats": 0.42,
+      "midi_note": 44,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 133.5,
+      "duration_beats": 0.42,
+      "midi_note": 39,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 134.0,
+      "duration_beats": 0.42,
+      "midi_note": 38,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "choir",
+      "start_beat": 128.0,
+      "duration_beats": 3.8,
+      "midi_note": 58,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 128.15,
+      "duration_beats": 3.56,
+      "midi_note": 62,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 128.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 128.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 130.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 130.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 130.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 130.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 130.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 130.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 131.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 130.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 131.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 131.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 132.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 132.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 132.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 132.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 132.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 132.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 132.0,
+      "duration_beats": 3.8,
+      "midi_note": 56,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 132.15,
+      "duration_beats": 3.56,
+      "midi_note": 60,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 132.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 132.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 134.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 134.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 134.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 134.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 134.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 134.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 135.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 134.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 135.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 135.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 136.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 136.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 136.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 136.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 136.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 136.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 136.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 39,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 136.08,
+      "duration_beats": 7.68,
+      "midi_note": 68,
+      "velocity": 35,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 136.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 136.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 137.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 137.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 77,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 138.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 138.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 139.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 139.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 140.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 140.5,
+      "duration_beats": 0.42,
+      "midi_note": 46,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 141.0,
+      "duration_beats": 0.42,
+      "midi_note": 44,
+      "velocity": 65,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 141.5,
+      "duration_beats": 0.42,
+      "midi_note": 39,
+      "velocity": 65,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 142.0,
+      "duration_beats": 0.42,
+      "midi_note": 38,
+      "velocity": 77,
+      "pan": -0.2
+    },
+    {
+      "track": "choir",
+      "start_beat": 136.0,
+      "duration_beats": 3.8,
+      "midi_note": 62,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 136.15,
+      "duration_beats": 3.56,
+      "midi_note": 65,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 136.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 136.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 138.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 138.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 138.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 138.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 138.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 138.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 139.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 138.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 139.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 139.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 140.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 140.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 140.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 140.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 140.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 140.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 140.0,
+      "duration_beats": 3.8,
+      "midi_note": 62,
+      "velocity": 48,
+      "pan": -0.3
+    },
+    {
+      "track": "choir",
+      "start_beat": 140.15,
+      "duration_beats": 3.56,
+      "midi_note": 65,
+      "velocity": 44,
+      "pan": 0.3
+    },
+    {
+      "track": "timpani",
+      "start_beat": 140.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "chain",
+      "start_beat": 140.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": -0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 142.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 55,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 142.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 46,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 142.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 55,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 142.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 46,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 142.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 55,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 142.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 72,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 143.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 52,
+      "pan": 0.08
+    },
+    {
+      "track": "timpani",
+      "start_beat": 142.0,
+      "duration_beats": 0.85,
+      "midi_note": 36,
+      "velocity": 63,
+      "pan": -0.1
+    },
+    {
+      "track": "timpani",
+      "start_beat": 143.0,
+      "duration_beats": 0.62,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.14
+    },
+    {
+      "track": "chain",
+      "start_beat": 143.5,
+      "duration_beats": 0.48,
+      "midi_note": 76,
+      "velocity": 45,
+      "pan": 0.58
+    },
+    {
+      "track": "organ",
+      "start_beat": 144.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 144.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 144.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 144.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 144.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 144.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 144.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 41,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 144.08,
+      "duration_beats": 7.68,
+      "midi_note": 69,
+      "velocity": 37,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 144.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 144.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 145.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 145.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 79,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 146.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 146.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 147.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 147.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 148.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 148.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 149.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 149.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 150.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 144.0,
+      "duration_beats": 2.5,
+      "midi_note": 50,
+      "velocity": 58,
+      "pan": 0.34
+    },
+    {
+      "track": "timpani",
+      "start_beat": 144.0,
+      "duration_beats": 0.78,
+      "midi_note": 36,
+      "velocity": 52,
+      "pan": -0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 146.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 146.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 146.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 146.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 146.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 146.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 147.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 148.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 148.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 148.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 148.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 148.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 148.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 148.0,
+      "duration_beats": 3.86,
+      "midi_note": 67,
+      "velocity": 47,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 148.1,
+      "duration_beats": 3.72,
+      "midi_note": 70,
+      "velocity": 44,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 150.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 150.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 150.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 150.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 150.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 150.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 151.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 152.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 152.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 152.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 152.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 152.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 152.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 152.0,
+      "duration_beats": 7.82,
+      "midi_note": 60,
+      "velocity": 41,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 152.08,
+      "duration_beats": 7.68,
+      "midi_note": 67,
+      "velocity": 37,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 152.0,
+      "duration_beats": 0.42,
+      "midi_note": 74,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 152.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 153.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 153.5,
+      "duration_beats": 0.42,
+      "midi_note": 80,
+      "velocity": 79,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 154.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 154.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 155.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 155.5,
+      "duration_beats": 0.42,
+      "midi_note": 72,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 156.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 156.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 157.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 157.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 158.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "timpani",
+      "start_beat": 152.0,
+      "duration_beats": 0.78,
+      "midi_note": 36,
+      "velocity": 52,
+      "pan": -0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 154.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 154.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 154.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 154.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 154.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 154.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 155.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 156.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 156.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 156.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 156.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 156.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 156.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 156.0,
+      "duration_beats": 3.86,
+      "midi_note": 62,
+      "velocity": 47,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 156.1,
+      "duration_beats": 3.72,
+      "midi_note": 65,
+      "velocity": 44,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 158.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 158.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 158.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 158.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 158.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 158.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 159.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 160.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 160.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 160.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 160.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 160.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 160.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 160.0,
+      "duration_beats": 7.82,
+      "midi_note": 56,
+      "velocity": 41,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 160.08,
+      "duration_beats": 7.68,
+      "midi_note": 63,
+      "velocity": 37,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 160.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 160.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 161.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 161.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 79,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 162.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 162.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 163.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 163.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 164.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 164.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 165.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 165.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 166.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 160.0,
+      "duration_beats": 2.5,
+      "midi_note": 50,
+      "velocity": 58,
+      "pan": 0.34
+    },
+    {
+      "track": "timpani",
+      "start_beat": 160.0,
+      "duration_beats": 0.78,
+      "midi_note": 36,
+      "velocity": 52,
+      "pan": -0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 162.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 162.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 162.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 162.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 162.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 162.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 163.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 164.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 164.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 164.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 164.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 164.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 164.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 164.0,
+      "duration_beats": 3.86,
+      "midi_note": 65,
+      "velocity": 47,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 164.1,
+      "duration_beats": 3.72,
+      "midi_note": 68,
+      "velocity": 44,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 166.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 166.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 166.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 166.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 166.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 166.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 167.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 168.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 168.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 168.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 168.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 168.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 168.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 168.0,
+      "duration_beats": 7.82,
+      "midi_note": 62,
+      "velocity": 41,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 168.08,
+      "duration_beats": 7.68,
+      "midi_note": 69,
+      "velocity": 37,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 168.0,
+      "duration_beats": 0.42,
+      "midi_note": 74,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 168.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 169.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 169.5,
+      "duration_beats": 0.42,
+      "midi_note": 80,
+      "velocity": 79,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 170.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 170.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 171.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 171.5,
+      "duration_beats": 0.42,
+      "midi_note": 72,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 172.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 172.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 173.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 173.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 174.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "timpani",
+      "start_beat": 168.0,
+      "duration_beats": 0.78,
+      "midi_note": 36,
+      "velocity": 52,
+      "pan": -0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 170.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 170.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 170.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 170.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 170.0,
+      "duration_beats": 1.94,
+      "midi_note": 57,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 170.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 171.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 172.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 172.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 172.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 172.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 172.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 172.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 172.0,
+      "duration_beats": 3.86,
+      "midi_note": 67,
+      "velocity": 47,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 172.1,
+      "duration_beats": 3.72,
+      "midi_note": 70,
+      "velocity": 44,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 174.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 174.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 174.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 174.0,
+      "duration_beats": 1.9,
+      "midi_note": 43,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 174.0,
+      "duration_beats": 1.94,
+      "midi_note": 58,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 174.0,
+      "duration_beats": 1.78,
+      "midi_note": 39,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 175.0,
+      "duration_beats": 0.78,
+      "midi_note": 46,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 176.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 176.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 176.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 176.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 176.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 176.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 176.0,
+      "duration_beats": 7.82,
+      "midi_note": 60,
+      "velocity": 41,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 176.08,
+      "duration_beats": 7.68,
+      "midi_note": 67,
+      "velocity": 37,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 176.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 176.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 177.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 177.5,
+      "duration_beats": 0.42,
+      "midi_note": 68,
+      "velocity": 79,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 178.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 178.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 179.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 179.5,
+      "duration_beats": 0.42,
+      "midi_note": 60,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 180.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 180.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 181.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 181.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 182.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "bell",
+      "start_beat": 176.0,
+      "duration_beats": 2.5,
+      "midi_note": 50,
+      "velocity": 58,
+      "pan": 0.34
+    },
+    {
+      "track": "timpani",
+      "start_beat": 176.0,
+      "duration_beats": 0.78,
+      "midi_note": 36,
+      "velocity": 52,
+      "pan": -0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 178.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 178.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 178.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 178.0,
+      "duration_beats": 1.9,
+      "midi_note": 39,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 178.0,
+      "duration_beats": 1.94,
+      "midi_note": 55,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 178.0,
+      "duration_beats": 1.78,
+      "midi_note": 36,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 179.0,
+      "duration_beats": 0.78,
+      "midi_note": 43,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 180.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 180.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 180.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 180.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 180.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 180.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 180.0,
+      "duration_beats": 3.86,
+      "midi_note": 62,
+      "velocity": 47,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 180.1,
+      "duration_beats": 3.72,
+      "midi_note": 65,
+      "velocity": 44,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 182.0,
+      "duration_beats": 1.94,
+      "midi_note": 46,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 182.0,
+      "duration_beats": 1.9,
+      "midi_note": 34,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 182.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 182.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 182.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 182.0,
+      "duration_beats": 1.78,
+      "midi_note": 34,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 183.0,
+      "duration_beats": 0.78,
+      "midi_note": 41,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 184.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 184.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 184.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 184.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 184.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 184.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "pad",
+      "start_beat": 184.0,
+      "duration_beats": 7.82,
+      "midi_note": 56,
+      "velocity": 41,
+      "pan": -0.38
+    },
+    {
+      "track": "pad",
+      "start_beat": 184.08,
+      "duration_beats": 7.68,
+      "midi_note": 63,
+      "velocity": 37,
+      "pan": 0.38
+    },
+    {
+      "track": "organ",
+      "start_beat": 184.0,
+      "duration_beats": 0.42,
+      "midi_note": 74,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 184.5,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 185.0,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 185.5,
+      "duration_beats": 0.42,
+      "midi_note": 80,
+      "velocity": 79,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 186.0,
+      "duration_beats": 0.42,
+      "midi_note": 67,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 186.5,
+      "duration_beats": 0.42,
+      "midi_note": 65,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 187.0,
+      "duration_beats": 0.42,
+      "midi_note": 63,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 187.5,
+      "duration_beats": 0.42,
+      "midi_note": 72,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 188.0,
+      "duration_beats": 0.42,
+      "midi_note": 62,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 188.5,
+      "duration_beats": 0.42,
+      "midi_note": 58,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 189.0,
+      "duration_beats": 0.42,
+      "midi_note": 56,
+      "velocity": 67,
+      "pan": -0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 189.5,
+      "duration_beats": 0.42,
+      "midi_note": 51,
+      "velocity": 67,
+      "pan": 0.2
+    },
+    {
+      "track": "organ",
+      "start_beat": 190.0,
+      "duration_beats": 0.42,
+      "midi_note": 50,
+      "velocity": 79,
+      "pan": -0.2
+    },
+    {
+      "track": "timpani",
+      "start_beat": 184.0,
+      "duration_beats": 0.78,
+      "midi_note": 36,
+      "velocity": 52,
+      "pan": -0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 186.0,
+      "duration_beats": 1.94,
+      "midi_note": 44,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 186.0,
+      "duration_beats": 1.9,
+      "midi_note": 32,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 186.0,
+      "duration_beats": 1.94,
+      "midi_note": 48,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 186.0,
+      "duration_beats": 1.9,
+      "midi_note": 36,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 186.0,
+      "duration_beats": 1.94,
+      "midi_note": 51,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 186.0,
+      "duration_beats": 1.78,
+      "midi_note": 32,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 187.0,
+      "duration_beats": 0.78,
+      "midi_note": 39,
+      "velocity": 55,
+      "pan": 0.08
+    },
+    {
+      "track": "organ",
+      "start_beat": 188.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 188.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 188.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 188.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 188.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 188.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "choir",
+      "start_beat": 188.0,
+      "duration_beats": 3.86,
+      "midi_note": 65,
+      "velocity": 47,
+      "pan": -0.24
+    },
+    {
+      "track": "choir",
+      "start_beat": 188.1,
+      "duration_beats": 3.72,
+      "midi_note": 68,
+      "velocity": 44,
+      "pan": 0.24
+    },
+    {
+      "track": "organ",
+      "start_beat": 190.0,
+      "duration_beats": 1.94,
+      "midi_note": 50,
+      "velocity": 51,
+      "pan": -0.32
+    },
+    {
+      "track": "strings",
+      "start_beat": 190.0,
+      "duration_beats": 1.9,
+      "midi_note": 38,
+      "velocity": 50,
+      "pan": -0.17600000000000002
+    },
+    {
+      "track": "organ",
+      "start_beat": 190.0,
+      "duration_beats": 1.94,
+      "midi_note": 53,
+      "velocity": 51,
+      "pan": 0.0
+    },
+    {
+      "track": "strings",
+      "start_beat": 190.0,
+      "duration_beats": 1.9,
+      "midi_note": 41,
+      "velocity": 50,
+      "pan": 0.0
+    },
+    {
+      "track": "organ",
+      "start_beat": 190.0,
+      "duration_beats": 1.94,
+      "midi_note": 56,
+      "velocity": 51,
+      "pan": 0.32
+    },
+    {
+      "track": "bass",
+      "start_beat": 190.0,
+      "duration_beats": 1.78,
+      "midi_note": 38,
+      "velocity": 76,
+      "pan": -0.05
+    },
+    {
+      "track": "bass",
+      "start_beat": 191.0,
+      "duration_beats": 0.78,
+      "midi_note": 45,
+      "velocity": 55,
+      "pan": 0.08
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="MusicTrackDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/audio/music_track_definition.gd" id="1_definition"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/music/boss/thirteenth_pontiff_edran/thirteenth_pontiff_phase_01_litany.ogg" id="2_stream"]
+
+[resource]
+script = ExtResource("1_definition")
+track_id = &"CH3_BOSS_MUSIC_PHASE_01"
+display_name = "Litany of the Thirteenth Bell / 第十三钟祷"
+stream = ExtResource("2_stream")
+bpm = 92.0
+beats_per_bar = 6
+beat_unit = 8
+default_volume_db = -10.0
+loops = true
+loop_end_seconds = 125.217396

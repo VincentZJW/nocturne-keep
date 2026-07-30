@@ -198,6 +198,10 @@ func get_active_player_count() -> int:
 	return int(_deck_a.playing) + int(_deck_b.playing)
 
 
+func get_current_volume_db() -> float:
+	return _active_deck.volume_db if _active_deck != null and _active_deck.playing else SILENCE_DB
+
+
 func get_switch_count() -> int:
 	return _switch_count
 
