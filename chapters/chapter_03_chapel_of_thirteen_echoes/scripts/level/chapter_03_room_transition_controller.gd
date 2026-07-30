@@ -129,7 +129,10 @@ func play_active_boss_intro() -> void:
 	) as Chapter03BossSanctum
 	if sanctum == null or sanctum.is_intro_complete():
 		return
-	sanctum.play_intro_environment(player)
+	var boss: ThirteenthPontiffEdran = active_room.find_child(
+		"ThirteenthPontiffEdran",true,false
+	) as ThirteenthPontiffEdran
+	sanctum.play_intro_environment(player,boss)
 	await sanctum.intro_environment_finished
 
 

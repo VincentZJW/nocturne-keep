@@ -28,14 +28,34 @@ func can_summon_phase_1() -> bool:
 func summon_phase_1(player: Player) -> bool:
 	if not can_summon_phase_1():
 		return false
+	return _summon_one(player)
+
+
+func can_summon_phase_2() -> bool:
+	_prune_invalid()
+	return boss != null and _active.size() < boss.config.phase_02_summon_cap
+
+
+func summon_phase_2(player: Player) -> int:
+	var spawned: int = 0
+	while can_summon_phase_2() and spawned < 2:
+		if not _summon_one(player):
+			break
+		spawned += 1
+	return spawned
+
+
+func _summon_one(player: Player) -> bool:
 	var kind: StringName = _next_kind
-	if kind == &"ossuary_penitent" and _count_kind(kind) >= boss.config.phase_1_penitent_cap:
+	var penitent_cap: int = boss.config.phase_1_penitent_cap if not boss.is_phase_02() else boss.config.phase_02_summon_cap
+	var husk_cap: int = boss.config.phase_1_choir_husk_cap if not boss.is_phase_02() else boss.config.phase_02_summon_cap
+	if kind == &"ossuary_penitent" and _count_kind(kind) >= penitent_cap:
 		kind = &"choir_husk"
-	if kind == &"choir_husk" and _count_kind(kind) >= boss.config.phase_1_choir_husk_cap:
+	if kind == &"choir_husk" and _count_kind(kind) >= husk_cap:
 		kind = &"ossuary_penitent"
 	if (
-		(kind == &"ossuary_penitent" and _count_kind(kind) >= boss.config.phase_1_penitent_cap)
-		or (kind == &"choir_husk" and _count_kind(kind) >= boss.config.phase_1_choir_husk_cap)
+		(kind == &"ossuary_penitent" and _count_kind(kind) >= penitent_cap)
+		or (kind == &"choir_husk" and _count_kind(kind) >= husk_cap)
 	):
 		return false
 	var scene: PackedScene = ossuary_penitent_scene if kind == &"ossuary_penitent" else choir_husk_scene

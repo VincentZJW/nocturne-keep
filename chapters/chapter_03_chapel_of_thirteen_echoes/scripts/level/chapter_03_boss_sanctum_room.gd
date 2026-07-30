@@ -14,6 +14,8 @@ func _ready() -> void:
 	sanctum.death_environment_finished.connect(_on_death_environment_finished)
 	sanctum.intro_environment_finished.connect(_on_intro_environment_finished)
 	boss.defeated.connect(_on_boss_defeated)
+	boss.phase_transition_started.connect(_on_phase_transition_started)
+	boss.death_sequence_started.connect(_on_death_sequence_started)
 	call_deferred("_activate_boss_if_intro_skipped")
 
 
@@ -33,6 +35,14 @@ func _activate_boss() -> void:
 
 func _on_boss_defeated() -> void:
 	sanctum.notify_boss_defeated()
+
+
+func _on_phase_transition_started() -> void:
+	sanctum.play_phase_transition_environment()
+
+
+func _on_death_sequence_started() -> void:
+	sanctum.play_death_dialogue()
 
 
 func _on_death_environment_finished() -> void:

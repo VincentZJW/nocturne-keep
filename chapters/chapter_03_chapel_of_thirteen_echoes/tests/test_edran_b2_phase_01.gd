@@ -75,9 +75,11 @@ func _run() -> void:
 	boss.health_component.set_current_health(190)
 	await process_frame
 	_check(boss.health_component.current_health == 198, "B2 clamps at the B4 boundary")
-	_check(boss.is_transition_pending(), "B2 exposes explicit transition-pending state")
 	_check(_transition_count == 1, "transition request emits exactly once")
-	_check(boss.hurtbox.is_invulnerable, "Boss cannot be killed before approved B4 transition implementation")
+	_check(boss.current_state in [ThirteenthPontiffEdran.State.TRANSITION_PENDING,ThirteenthPontiffEdran.State.PHASE_TRANSITION], "B4 consumes the explicit transition boundary")
+	await create_timer(boss.config.phase_transition_duration + boss.config.phase_02_ready_delay + 0.25).timeout
+	_check(boss.is_phase_02(), "approved B4 transition reaches Phase 2")
+	_check(not boss.hurtbox.is_invulnerable, "Boss is vulnerable after the protected transition")
 
 	hitbox.queue_free()
 	boss.queue_free()
@@ -96,7 +98,7 @@ func _on_transition_requested(_health: int) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("EDRAN_B2_PHASE_01 | PASS attacks=5 health=360 poise=110 main_room=true transition=B4_pending")
+		print("EDRAN_B2_PHASE_01 | PASS attacks=5 health=360 poise=110 main_room=true transition=B4_complete")
 		quit(0)
 		return
 	for failure: String in _failures:

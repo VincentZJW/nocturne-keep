@@ -6375,3 +6375,48 @@ Status: complete — existing B1–B3 production assets overwritten; B4 not star
 - Edran Phase 2 is not present in the current B1–B3 runtime and remains B4 work; this art pass does not fake Phase 2 frames or cross the milestone boundary.
 - Manual F5 acceptance: set Chapter Debug Start to `CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES` / `CH3_BOSS_SUMMON_TEST`; inspect crozier idle/sweep/thrust, force both summon types, verify Penitent claw/lunge and Husk float/cast, then confirm collision and attack ranges still match their unchanged debug shapes.
 - Pre-existing unrelated Chapter I/shared/resource/QA worktree changes were preserved and excluded from this milestone commit.
+
+## 2026-07-30 — Chapter III Boss B4–B7 preflight
+
+Status: in progress — B4, B5, B6 and B7 explicitly approved as one continuous production pass
+
+### Goals, owned files, tests and scope
+
+- B4 owns the 198 HP phase boundary, player/Boss protection and input lock, summon cleanup, 4.5–6.0 second structural transformation sequence, transition-only formal pixel animations and a saved Main/F5 `CH3_BOSS_PHASE_02` fast-start path.
+- B5 owns a structurally redrawn Phase 2 SpriteFrames set, phase-aware Data Resource tuning, six bounded Phase 2 actions, action selection constraints, Poise/stagger rules, child attack IDs, timed ground fields and Phase 2 summon caps. It must not implement Phase 2 as a recolour or as a Phase 1 pose with the shield/prop removed.
+- B6 owns the formal intro dialogue/title hand-off, multi-part death sequence, summon/hitbox cleanup, one-shot defeat signal, post-Boss reliquary collection interface and the existing registered Chapter IV transition boundary. No weapon statistics or unapproved inventory reward will be invented.
+- B7 owns deterministic phase/attack/death/reward regression tests, 20-run battle-state stress coverage, summon combination/interruption coverage, exact Godot 4.7.1 import/parse, MainBootstrap/F5 screenshot evidence and the forced QA matrix. Manual feel/fairness remains explicitly identified for user playtest.
+- Formal runtime chain remains `res://scenes/bootstrap/main_bootstrap.tscn -> chapter_03_route.tscn -> ch3_boss_sanctum_room.tscn`. Production scripts/scenes/resources, chapter-local art and QA evidence are in scope; Chapter I/shared unrelated dirty files are preserved and excluded.
+- Expected tests: B4 transition contract, B5 Phase 2 attack contract, B6 intro/death/reward contract, B7 20-run regression/stress script, isolated Boss scene, formal MainBootstrap captures, and Output/Debugger log inspection. One milestone commit will be created only after B7 passes.
+
+## 2026-07-30 — Chapter III Boss B4–B7 complete
+
+Status: complete — Boss implementation and Main QA passed; Chapter IV destination remains an explicit external boundary
+
+### Delivered
+
+- B4: implemented the protected 198 HP phase boundary as a 5.20-second, eleven-stage structural transformation. Player input/damage, Boss damage, attacks and summons are safely locked/cleared; Phase 2 only becomes vulnerable after its 0.42-second ready beat.
+- B5: generated 45 transition frames and 94 independent Phase 2 frames, two formal SpriteFrames resources and two concept boards. Phase 2 now has a separate silhouette, 145 Poise, a single 0.80 incoming multiplier and six bounded attacks: Bell-Bound Cleave, Hollow Toll, two-ID Censer Chain Judgment, Scripture Burial, Procession of the Unburied and the under-25% Fourteenth Seat.
+- B6: connected the nine-line intro, phase-transition dialogue/title, five-stage death, one-shot defeat signal, post-Boss reliquary collection and underkeep entrance unlock. No unapproved WeaponData or statistics were invented. The registered Chapter IV path has no PackedScene in the repository, so actual Chapter IV loading remains PARTIAL.
+- B7: added a deterministic full-Boss test with 20 battle-state regressions (10 wins, 5 player deaths, 5 Phase 2 retries), an actual MainBootstrap capture driver and a forced QA report. The report references 28 new B4–B7 Main captures plus 8 earlier B2/B3 Main continuity captures.
+- Preserved all unrelated Chapter I/shared/resource/QA worktree modifications and excluded them from this milestone.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_edran_phase_02_art.gd` — PASS, `animations=29 frames=139` (45 transition + 94 Phase 2).
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --import` — PASS.
+3. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/build_edran_phase_02_sprite_frames.gd` — PASS, `transition=45 phase_02=94`.
+4. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS using exact Godot 4.7.1; no script/resource error.
+5. `test_edran_b1_assets.gd` — PASS, `concepts=9 animations=27`.
+6. `test_edran_b2_phase_01.gd` — PASS, `attacks=5 health=360 poise=110 main_room=true transition=B4_complete`.
+7. `test_edran_b3_summons.gd` — PASS, `actors=2 animations=25 cap=2 penitent_cap=1 interrupt=36 cleanup=true main_spawn=true`.
+8. `test_edran_b4_b7_full_boss.gd` — PASS, `transition=true phase2_attacks=6 death=true reward_interface=true regressions=20`.
+9. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --scene chapters/chapter_03_chapel_of_thirteen_echoes/scenes/tests/thirteenth_pontiff_edran_test_room.tscn --quit-after 180` — PASS; isolated scene ran without errors.
+10. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_edran_b4_b7_main_qa.gd` — PASS on OpenGL/Metal Compatibility, `captures=28 route=MainBootstrap transition=true phase2=true death=true reward=true`; no red Output/Debugger error.
+
+### Manual acceptance and known boundary
+
+- Use Chapter III Debug Start with `CH3_BOSS` for the full fight, `CH3_BOSS_PHASE_02` for Phase 2, `CH3_BOSS_SUMMON_TEST` for summon pressure and `CH3_POST_BOSS` for reward/exit checks. Restore Debug Start to disabled afterwards.
+- User playtesting is still required for attack readability, overlap fairness and full-fight feel; deterministic tests cannot certify subjective combat feel.
+- `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` does not exist. The entrance unlock and chapter-complete flags are verified, but Chapter IV loading is not claimed.
+- Formal evidence and PASS/PARTIAL matrix: `docs/qa/chapter_03_boss_b4_b7/report.md`.

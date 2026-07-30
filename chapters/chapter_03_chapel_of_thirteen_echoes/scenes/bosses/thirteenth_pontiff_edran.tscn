@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=22 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_edran.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/bosses/thirteenth_pontiff_edran_data.tres" id="2_config"]
@@ -12,6 +12,8 @@
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_summon_director.gd" id="10_summon_director"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/ossuary_penitent.tscn" id="11_penitent"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/choir_husk.tscn" id="12_husk"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/animations/edran_phase_transition_sprite_frames.tres" id="13_transition_frames"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/animations/edran_phase_02_sprite_frames.tres" id="14_phase_02_frames"]
 
 [sub_resource type="RectangleShape2D" id="BodyShape"]
 size = Vector2(36, 78)
@@ -28,6 +30,12 @@ size = Vector2(108, 16)
 [sub_resource type="RectangleShape2D" id="CenserShape"]
 size = Vector2(82, 24)
 
+[sub_resource type="RectangleShape2D" id="Phase2CleaveShape"]
+size = Vector2(116, 32)
+
+[sub_resource type="RectangleShape2D" id="Phase2ChainShape"]
+size = Vector2(136, 24)
+
 [node name="ThirteenthPontiffEdran" type="CharacterBody2D" groups=["chapter_03_boss"]]
 z_index = 10
 floor_snap_length = 6.0
@@ -36,6 +44,8 @@ collision_mask = 3
 script = ExtResource("1_boss")
 config = ExtResource("2_config")
 timed_field_scene = ExtResource("8_field")
+phase_transition_frames = ExtResource("13_transition_frames")
+phase_02_frames = ExtResource("14_phase_02_frames")
 
 [node name="VisualRoot" type="Node2D" parent="."]
 position = Vector2(0, -44)
@@ -117,6 +127,34 @@ attack_kind = &"edran_censer_procession"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/CenserHitbox"]
 disabled = true
 shape = SubResource("CenserShape")
+
+[node name="Phase2CleaveHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(66, -38)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"edran_bell_bound_cleave"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/Phase2CleaveHitbox"]
+disabled = true
+shape = SubResource("Phase2CleaveShape")
+
+[node name="Phase2ChainHitbox" type="Area2D" parent="FacingRoot"]
+position = Vector2(76, -27)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("6_hitbox")
+faction = &"enemy"
+attack_kind = &"edran_censer_chain_judgment"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/Phase2ChainHitbox"]
+disabled = true
+shape = SubResource("Phase2ChainShape")
 
 [node name="BossHud" type="CanvasLayer" parent="."]
 layer = 28

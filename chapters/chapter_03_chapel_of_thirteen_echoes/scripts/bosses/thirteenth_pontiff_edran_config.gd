@@ -86,3 +86,68 @@ extends Resource
 @export var summon_lifetime_min: float = 14.0
 @export var summon_lifetime_max: float = 18.0
 @export var summon_safe_distance: float = 64.0
+
+@export_category("Phase Transition")
+@export_range(4.5, 6.0, 0.1) var phase_transition_duration: float = 5.2
+@export var phase_transition_center_tolerance: float = 18.0
+@export var phase_02_ready_delay: float = 0.42
+
+@export_category("Phase 2 Vitals")
+@export_range(0.1, 1.0, 0.01) var phase_02_incoming_damage_multiplier: float = 0.80
+@export_range(1, 999, 1) var phase_02_max_poise: int = 145
+@export_range(0.1, 2.0, 0.01) var phase_02_stagger_duration: float = 0.44
+@export_range(0.1, 10.0, 0.1) var phase_02_stagger_protection_duration: float = 3.5
+
+@export_category("Phase 2 Cadence")
+@export var phase_02_min_attack_gap: float = 0.74
+@export var phase_02_max_attack_gap: float = 0.94
+@export_range(1, 4, 1) var phase_02_chain_limit: int = 2
+@export var phase_02_chain_recovery_min: float = 0.96
+@export var phase_02_chain_recovery_max: float = 1.16
+@export var phase_02_turn_reaction_delay: float = 0.12
+@export var phase_02_turn_animation_duration: float = 0.58
+
+@export_category("Bell-Bound Cleave")
+@export var bell_cleave_windup: float = 0.52
+@export var bell_cleave_active: float = 0.15
+@export var bell_cleave_recovery: float = 0.68
+@export_range(1, 99, 1) var bell_cleave_damage: int = 18
+@export var bell_cleave_range: float = 118.0
+
+@export_category("Hollow Toll")
+@export var hollow_toll_windup: float = 0.76
+@export var hollow_toll_recovery: float = 0.82
+@export_range(1, 99, 1) var hollow_toll_damage: int = 16
+@export var hollow_toll_cooldown: float = 4.2
+
+@export_category("Censer Chain Judgment")
+@export var chain_judgment_windup: float = 0.56
+@export var chain_judgment_first_active: float = 0.12
+@export var chain_judgment_stage_gap: float = 0.28
+@export var chain_judgment_second_active: float = 0.14
+@export var chain_judgment_recovery: float = 0.88
+@export_range(1, 99, 1) var chain_judgment_first_damage: int = 14
+@export_range(1, 99, 1) var chain_judgment_second_damage: int = 17
+@export var chain_judgment_range: float = 136.0
+
+@export_category("Scripture Burial")
+@export var scripture_burial_cast: float = 0.72
+@export var scripture_burial_delay: float = 0.85
+@export_range(1, 2, 1) var scripture_burial_zone_count: int = 2
+@export_range(1, 99, 1) var scripture_burial_damage: int = 14
+@export var scripture_burial_cooldown: float = 4.8
+
+@export_category("Procession of the Unburied")
+@export var procession_windup: float = 1.0
+@export var procession_recovery: float = 0.68
+@export var procession_cooldown: float = 8.2
+@export_range(1, 3, 1) var phase_02_summon_cap: int = 2
+
+@export_category("Fourteenth Seat")
+@export var fourteenth_seat_health_ratio: float = 0.25
+@export var fourteenth_seat_warning: float = 1.05
+@export var fourteenth_seat_cooldown: float = 7.0
+@export_range(1, 99, 1) var fourteenth_seat_damage: int = 20
+
+@export_category("Death")
+@export_range(1.5, 6.0, 0.1) var death_sequence_duration: float = 3.4

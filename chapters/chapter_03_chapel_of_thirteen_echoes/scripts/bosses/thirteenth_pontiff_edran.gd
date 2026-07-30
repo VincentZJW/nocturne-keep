@@ -3,6 +3,10 @@ extends CharacterBody2D
 
 signal activated
 signal phase_transition_requested(current_health: int)
+signal phase_transition_started
+signal phase_changed(phase: int)
+signal phase_transition_finished
+signal death_sequence_started
 signal defeated
 signal state_changed(state_name: StringName)
 signal attack_window_changed(attack_name: StringName, active: bool)
@@ -16,6 +20,8 @@ enum State {
 	SUMMON,
 	STAGGER,
 	TRANSITION_PENDING,
+	PHASE_TRANSITION,
+	DEATH_SEQUENCE,
 	DEAD,
 }
 
@@ -26,10 +32,18 @@ enum Attack {
 	LITANY,
 	THIRTEENFOLD,
 	SUMMON,
+	BELL_CLEAVE,
+	HOLLOW_TOLL,
+	CHAIN_JUDGMENT,
+	SCRIPTURE_BURIAL,
+	PROCESSION,
+	FOURTEENTH_SEAT,
 }
 
 @export var config: ThirteenthPontiffEdranConfig
 @export var timed_field_scene: PackedScene
+@export var phase_transition_frames: SpriteFrames
+@export var phase_02_frames: SpriteFrames
 @export var auto_activate: bool = false
 
 @onready var sprite: AnimatedSprite2D = $VisualRoot/AnimatedSprite2D as AnimatedSprite2D
@@ -39,6 +53,8 @@ enum Attack {
 @onready var sweep_hitbox: HitboxComponent = $FacingRoot/SweepHitbox as HitboxComponent
 @onready var thrust_hitbox: HitboxComponent = $FacingRoot/ThrustHitbox as HitboxComponent
 @onready var censer_hitbox: HitboxComponent = $FacingRoot/CenserHitbox as HitboxComponent
+@onready var phase_02_cleave_hitbox: HitboxComponent = $FacingRoot/Phase2CleaveHitbox as HitboxComponent
+@onready var phase_02_chain_hitbox: HitboxComponent = $FacingRoot/Phase2ChainHitbox as HitboxComponent
 @onready var summon_director: ThirteenthPontiffSummonDirector = $SummonDirector as ThirteenthPontiffSummonDirector
 
 var current_state: State = State.DORMANT
@@ -59,6 +75,13 @@ var _chain_count: int = 0
 var _action_locked: bool = false
 var _next_attack_id: int = 1
 var _transition_emitted: bool = false
+var _phase: int = 1
+var _hollow_toll_cooldown: float = 0.0
+var _scripture_burial_cooldown: float = 0.0
+var _procession_cooldown: float = 0.0
+var _fourteenth_seat_cooldown: float = 0.0
+var _last_phase_02_attack: Attack = Attack.SWEEP
+var _defeat_emitted: bool = false
 
 
 func _ready() -> void:
@@ -83,7 +106,7 @@ func _physics_process(delta: float) -> void:
 	_tick_cooldowns(delta)
 	if not is_on_floor():
 		velocity.y += config.gravity * delta
-	if current_state in [State.DORMANT, State.TRANSITION_PENDING, State.DEAD]:
+	if current_state in [State.DORMANT, State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 		move_and_slide()
 		return
@@ -94,7 +117,7 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 	if target == null:
-		_set_state(State.IDLE, &"phase_01_idle")
+		_set_state(State.IDLE, _idle_animation())
 		move_and_slide()
 		return
 	var horizontal_distance: float = absf(target.global_position.x - global_position.x)
@@ -103,13 +126,16 @@ func _physics_process(delta: float) -> void:
 		_run_turn(desired_facing)
 		move_and_slide()
 		return
-	if _attack_gap_timer <= 0.0 and horizontal_distance <= config.thrust_range + 80.0:
-		_start_selected_attack(horizontal_distance)
+	if _attack_gap_timer <= 0.0 and horizontal_distance <= _selection_range():
+		if _phase == 2:
+			_start_selected_phase_02_attack(horizontal_distance)
+		else:
+			_start_selected_attack(horizontal_distance)
 	elif horizontal_distance > config.preferred_distance:
-		_set_state(State.APPROACH, &"slow_walk")
+		_set_state(State.APPROACH, &"distorted_walk" if _phase == 2 else &"slow_walk")
 		velocity.x = move_toward(velocity.x, facing * config.approach_speed, config.acceleration * delta)
 	else:
-		_set_state(State.IDLE, &"phase_01_idle")
+		_set_state(State.IDLE, _idle_animation())
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 	global_position.x = clampf(
 		global_position.x, _spawn_position.x - config.arena_half_width, _spawn_position.x + config.arena_half_width
@@ -128,7 +154,7 @@ func activate(player: Player = null) -> void:
 
 
 func debug_force_attack(attack_name: StringName) -> bool:
-	if current_state in [State.DORMANT, State.TRANSITION_PENDING, State.DEAD] or _action_locked:
+	if current_state in [State.DORMANT, State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD] or _action_locked:
 		return false
 	match attack_name:
 		&"pontifical_sweep": _run_melee_attack(Attack.SWEEP)
@@ -137,8 +163,48 @@ func debug_force_attack(attack_name: StringName) -> bool:
 		&"litany_of_ash": _run_litany()
 		&"thirteenfold_sentence": _run_thirteenfold()
 		&"raise_the_absolved", &"raise_the_unconfessed": _run_summon()
+		&"bell_bound_cleave": _run_phase_02_cleave()
+		&"hollow_toll": _run_hollow_toll()
+		&"censer_chain_judgment": _run_chain_judgment()
+		&"scripture_burial": _run_scripture_burial()
+		&"procession_of_the_unburied": _run_procession()
+		&"fourteenth_seat": _run_fourteenth_seat()
 		_: return false
 	return true
+
+
+func debug_force_phase_02() -> void:
+	if _phase == 2 or current_state == State.DEAD:
+		return
+	health_component.set_current_health(config.phase_transition_health)
+
+
+func debug_enter_phase_02_immediate() -> void:
+	if not OS.is_debug_build() or current_state == State.DEAD:
+		return
+	_transition_emitted = true
+	_phase = 2
+	health_component.set_current_health(config.phase_transition_health)
+	current_poise = config.phase_02_max_poise
+	if phase_02_frames != null:
+		sprite.sprite_frames = phase_02_frames
+	hurtbox.set_invulnerable(false)
+	_action_locked = false
+	_set_state(State.IDLE,&"phase_02_idle")
+	phase_changed.emit(2)
+
+
+func is_phase_02() -> bool:
+	return _phase == 2
+
+
+func get_phase() -> int:
+	return _phase
+
+
+func play_cinematic_animation(animation_name: StringName) -> void:
+	if current_state == State.DORMANT:
+		_play_animation(animation_name)
 
 
 func get_state_name() -> StringName:
@@ -168,6 +234,10 @@ func _tick_cooldowns(delta: float) -> void:
 	_litany_cooldown = maxf(0.0, _litany_cooldown - delta)
 	_thirteenfold_cooldown = maxf(0.0, _thirteenfold_cooldown - delta)
 	_summon_cooldown = maxf(0.0, _summon_cooldown - delta)
+	_hollow_toll_cooldown = maxf(0.0, _hollow_toll_cooldown - delta)
+	_scripture_burial_cooldown = maxf(0.0, _scripture_burial_cooldown - delta)
+	_procession_cooldown = maxf(0.0, _procession_cooldown - delta)
+	_fourteenth_seat_cooldown = maxf(0.0, _fourteenth_seat_cooldown - delta)
 
 
 func _start_selected_attack(distance: float) -> void:
@@ -196,21 +266,157 @@ func _start_selected_attack(distance: float) -> void:
 		_: _run_melee_attack(selected)
 
 
+func _start_selected_phase_02_attack(distance: float) -> void:
+	var candidates: Array[Attack] = []
+	if distance <= config.bell_cleave_range:
+		candidates.append(Attack.BELL_CLEAVE)
+	if distance <= config.chain_judgment_range:
+		candidates.append(Attack.CHAIN_JUDGMENT)
+	if _hollow_toll_cooldown <= 0.0:
+		candidates.append(Attack.HOLLOW_TOLL)
+	if _scripture_burial_cooldown <= 0.0 and _hollow_toll_cooldown > 0.0:
+		candidates.append(Attack.SCRIPTURE_BURIAL)
+	if _procession_cooldown <= 0.0 and summon_director != null and summon_director.can_summon_phase_2():
+		candidates.append(Attack.PROCESSION)
+	if (
+		float(health_component.current_health) / float(config.max_health) <= config.fourteenth_seat_health_ratio
+		and _fourteenth_seat_cooldown <= 0.0
+	):
+		candidates.append(Attack.FOURTEENTH_SEAT)
+	if candidates.size() > 1:
+		candidates.erase(_last_phase_02_attack)
+	if candidates.is_empty():
+		_attack_gap_timer = 0.18
+		return
+	var selected: Attack = candidates[_attack_cursor % candidates.size()]
+	_attack_cursor += 1
+	_last_phase_02_attack = selected
+	match selected:
+		Attack.BELL_CLEAVE: _run_phase_02_cleave()
+		Attack.CHAIN_JUDGMENT: _run_chain_judgment()
+		Attack.HOLLOW_TOLL: _run_hollow_toll()
+		Attack.SCRIPTURE_BURIAL: _run_scripture_burial()
+		Attack.PROCESSION: _run_procession()
+		Attack.FOURTEENTH_SEAT: _run_fourteenth_seat()
+
+
+func _run_phase_02_cleave() -> void:
+	if not _begin_phase_02_action(&"bell_bound_cleave"):
+		return
+	await get_tree().create_timer(config.bell_cleave_windup).timeout
+	if not _can_finish_action():
+		_end_action()
+		return
+	_next_attack_id += 1
+	phase_02_cleave_hitbox.begin_attack(_next_attack_id, config.bell_cleave_damage, facing, self)
+	attack_window_changed.emit(&"bell_bound_cleave", true)
+	await get_tree().create_timer(config.bell_cleave_active).timeout
+	phase_02_cleave_hitbox.end_attack()
+	attack_window_changed.emit(&"bell_bound_cleave", false)
+	await get_tree().create_timer(config.bell_cleave_recovery).timeout
+	_end_action()
+
+
+func _run_hollow_toll() -> void:
+	if not _begin_phase_02_action(&"hollow_toll"):
+		return
+	_hollow_toll_cooldown = config.hollow_toll_cooldown
+	await get_tree().create_timer(config.hollow_toll_windup).timeout
+	if _can_finish_action():
+		var field_position: Vector2 = target.global_position if target != null else global_position + Vector2(facing * 100.0,0.0)
+		_spawn_field(field_position,config.hollow_toll_damage,0.20)
+	await get_tree().create_timer(config.hollow_toll_recovery).timeout
+	_end_action()
+
+
+func _run_chain_judgment() -> void:
+	if not _begin_phase_02_action(&"censer_chain_hit_01"):
+		return
+	await get_tree().create_timer(config.chain_judgment_windup).timeout
+	if not _can_finish_action():
+		_end_action()
+		return
+	_next_attack_id += 1
+	phase_02_chain_hitbox.begin_attack(_next_attack_id,config.chain_judgment_first_damage,facing,self)
+	attack_window_changed.emit(&"censer_chain_judgment_01",true)
+	await get_tree().create_timer(config.chain_judgment_first_active).timeout
+	phase_02_chain_hitbox.end_attack()
+	attack_window_changed.emit(&"censer_chain_judgment_01",false)
+	await get_tree().create_timer(config.chain_judgment_stage_gap).timeout
+	if not _can_finish_action():
+		_end_action()
+		return
+	_play_animation(&"censer_chain_hit_02")
+	_next_attack_id += 1
+	phase_02_chain_hitbox.begin_attack(_next_attack_id,config.chain_judgment_second_damage,facing,self)
+	attack_window_changed.emit(&"censer_chain_judgment_02",true)
+	await get_tree().create_timer(config.chain_judgment_second_active).timeout
+	phase_02_chain_hitbox.end_attack()
+	attack_window_changed.emit(&"censer_chain_judgment_02",false)
+	await get_tree().create_timer(config.chain_judgment_recovery).timeout
+	_end_action()
+
+
+func _run_scripture_burial() -> void:
+	if not _begin_phase_02_action(&"scripture_burial"):
+		return
+	_scripture_burial_cooldown = config.scripture_burial_cooldown
+	await get_tree().create_timer(config.scripture_burial_cast).timeout
+	if _can_finish_action() and target != null:
+		for index: int in range(config.scripture_burial_zone_count):
+			var offset: float = -64.0 if index == 0 else 64.0
+			_spawn_field(target.global_position + Vector2(offset,0.0),config.scripture_burial_damage,config.scripture_burial_delay)
+	await get_tree().create_timer(0.72).timeout
+	_end_action()
+
+
+func _run_procession() -> void:
+	if not _begin_phase_02_action(&"procession_summon"):
+		return
+	_procession_cooldown = config.procession_cooldown
+	await get_tree().create_timer(config.procession_windup).timeout
+	if _can_finish_action() and summon_director != null:
+		summon_director.summon_phase_2(target)
+	await get_tree().create_timer(config.procession_recovery).timeout
+	_end_action()
+
+
+func _run_fourteenth_seat() -> void:
+	if not _begin_phase_02_action(&"fourteenth_seat"):
+		return
+	_fourteenth_seat_cooldown = config.fourteenth_seat_cooldown
+	await get_tree().create_timer(config.fourteenth_seat_warning).timeout
+	if _can_finish_action() and target != null:
+		_spawn_field(target.global_position,config.fourteenth_seat_damage,0.18)
+	await get_tree().create_timer(0.88).timeout
+	_end_action()
+
+
+func _begin_phase_02_action(animation_name: StringName) -> bool:
+	if _phase != 2 or _action_locked or current_state in [State.PHASE_TRANSITION,State.DEATH_SEQUENCE,State.DEAD]:
+		return false
+	_action_locked = true
+	_set_state(State.ATTACK,animation_name)
+	return true
+
+
 func _run_turn(desired_facing: float) -> void:
 	if _action_locked:
 		return
 	_action_locked = true
-	_set_state(State.TURN, &"turn")
-	await get_tree().create_timer(config.turn_reaction_delay).timeout
-	await get_tree().create_timer(config.turn_animation_duration * config.turn_facing_commit_ratio).timeout
+	_set_state(State.TURN, &"phase_02_turn" if _phase == 2 else &"turn")
+	var reaction_delay: float = config.phase_02_turn_reaction_delay if _phase == 2 else config.turn_reaction_delay
+	var duration: float = config.phase_02_turn_animation_duration if _phase == 2 else config.turn_animation_duration
+	await get_tree().create_timer(reaction_delay).timeout
+	await get_tree().create_timer(duration * config.turn_facing_commit_ratio).timeout
 	if current_state != State.TURN:
 		_action_locked = false
 		return
 	_set_facing(desired_facing)
-	await get_tree().create_timer(config.turn_animation_duration * (1.0 - config.turn_facing_commit_ratio)).timeout
+	await get_tree().create_timer(duration * (1.0 - config.turn_facing_commit_ratio)).timeout
 	_action_locked = false
 	if current_state == State.TURN:
-		_set_state(State.IDLE, &"phase_01_idle")
+		_set_state(State.IDLE, _idle_animation())
 
 
 func _run_melee_attack(attack: Attack) -> void:
@@ -345,26 +551,27 @@ func _spawn_field(position: Vector2, damage: int, delay: float) -> void:
 
 
 func _end_action() -> void:
-	for hitbox: HitboxComponent in [sweep_hitbox, thrust_hitbox, censer_hitbox]:
+	for hitbox: HitboxComponent in [sweep_hitbox, thrust_hitbox, censer_hitbox, phase_02_cleave_hitbox, phase_02_chain_hitbox]:
 		hitbox.end_attack()
 	_action_locked = false
 	if current_state != State.ATTACK:
 		return
 	_chain_count += 1
-	if _chain_count >= config.chain_limit:
+	var chain_limit: int = config.phase_02_chain_limit if _phase == 2 else config.chain_limit
+	if _chain_count >= chain_limit:
 		_chain_count = 0
-		_attack_gap_timer = config.chain_recovery
+		_attack_gap_timer = randf_range(config.phase_02_chain_recovery_min,config.phase_02_chain_recovery_max) if _phase == 2 else config.chain_recovery
 	else:
-		_attack_gap_timer = randf_range(config.phase_1_min_attack_gap, config.phase_1_max_attack_gap)
-	_set_state(State.IDLE, &"phase_01_idle")
+		_attack_gap_timer = randf_range(config.phase_02_min_attack_gap,config.phase_02_max_attack_gap) if _phase == 2 else randf_range(config.phase_1_min_attack_gap, config.phase_1_max_attack_gap)
+	_set_state(State.IDLE, _idle_animation())
 
 
 func _can_finish_action() -> bool:
-	return current_state == State.ATTACK and health_component.current_health > config.phase_transition_health
+	return current_state == State.ATTACK and health_component.current_health > (0 if _phase == 2 else config.phase_transition_health)
 
 
 func _on_hit_resolving(hitbox: HitboxComponent) -> void:
-	if hitbox == null or current_state in [State.DORMANT, State.TRANSITION_PENDING, State.DEAD]:
+	if hitbox == null or current_state in [State.DORMANT, State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
 		return
 	var poise_damage: int = config.dash_attack_poise_damage if hitbox.attack_kind == &"dash_attack" else config.normal_attack_poise_damage
 	if current_state == State.SUMMON:
@@ -382,23 +589,24 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 
 
 func _run_stagger() -> void:
-	if current_state in [State.TRANSITION_PENDING, State.DEAD]:
+	if current_state in [State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
 		return
 	_action_locked = true
 	_end_all_hitboxes()
 	_set_state(State.STAGGER, &"stagger")
-	await get_tree().create_timer(config.stagger_duration).timeout
+	var duration: float = config.phase_02_stagger_duration if _phase == 2 else config.stagger_duration
+	await get_tree().create_timer(duration).timeout
 	if current_state != State.STAGGER:
 		return
-	current_poise = config.max_poise
-	_stagger_protection_timer = config.stagger_protection_duration
+	current_poise = config.phase_02_max_poise if _phase == 2 else config.max_poise
+	_stagger_protection_timer = config.phase_02_stagger_protection_duration if _phase == 2 else config.stagger_protection_duration
 	_action_locked = false
 	_attack_gap_timer = 0.42
-	_set_state(State.IDLE, &"phase_01_idle")
+	_set_state(State.IDLE, _idle_animation())
 
 
 func _on_health_changed(current: int, _maximum: int) -> void:
-	if current > config.phase_transition_health or _transition_emitted or current_state == State.DEAD:
+	if _phase != 1 or current > config.phase_transition_health or _transition_emitted or current_state == State.DEAD:
 		return
 	_transition_emitted = true
 	health_component.set_current_health(config.phase_transition_health)
@@ -410,16 +618,83 @@ func _on_health_changed(current: int, _maximum: int) -> void:
 	hurtbox.set_invulnerable(true)
 	_set_state(State.TRANSITION_PENDING, &"phase_transition_start")
 	phase_transition_requested.emit(config.phase_transition_health)
+	call_deferred("_run_phase_transition")
+
+
+func _run_phase_transition() -> void:
+	if current_state != State.TRANSITION_PENDING:
+		return
+	_set_state(State.PHASE_TRANSITION)
+	phase_transition_started.emit()
+	var previous_input_profile: Player.InputProfile = Player.InputProfile.FULL
+	var player_was_invulnerable: bool = false
+	if target != null:
+		previous_input_profile = target.get_input_profile()
+		player_was_invulnerable = target.hurtbox != null and target.hurtbox.is_invulnerable
+		target.set_input_profile(Player.InputProfile.LOCKED)
+		target.velocity = Vector2.ZERO
+		if target.hurtbox != null:
+			target.hurtbox.set_invulnerable(true)
+	var center_tween: Tween = create_tween()
+	center_tween.tween_property(self,"global_position:x",_spawn_position.x,0.35).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	await center_tween.finished
+	if phase_transition_frames != null:
+		sprite.sprite_frames = phase_transition_frames
+	var sequence: Array[StringName] = [
+		&"seals_break",&"crown_crack",&"mask_void_reveal",&"vestment_split",&"chest_open",
+		&"rib_frame_extend",&"black_bell_reveal",&"arm_lengthen",&"crozier_fuse",
+		&"censer_chain_bind",&"phase_02_rise",
+	]
+	var step_duration: float = (config.phase_transition_duration - 0.35) / float(sequence.size())
+	for animation: StringName in sequence:
+		_play_animation(animation)
+		await get_tree().create_timer(step_duration).timeout
+	_phase = 2
+	current_poise = config.phase_02_max_poise
+	if phase_02_frames != null:
+		sprite.sprite_frames = phase_02_frames
+	_set_state(State.IDLE,&"phase_02_idle")
+	phase_changed.emit(2)
+	await get_tree().create_timer(config.phase_02_ready_delay).timeout
+	hurtbox.set_invulnerable(false)
+	_action_locked = false
+	_attack_gap_timer = config.phase_02_min_attack_gap
+	if target != null:
+		if target.hurtbox != null and not player_was_invulnerable:
+			target.hurtbox.set_invulnerable(false)
+		target.set_input_profile(previous_input_profile)
+	phase_transition_finished.emit()
 
 
 func _on_died() -> void:
+	if current_state in [State.DEATH_SEQUENCE,State.DEAD]:
+		return
+	call_deferred("_run_death_sequence")
+
+
+func _run_death_sequence() -> void:
 	_action_locked = true
 	_end_all_hitboxes()
 	if summon_director != null:
 		summon_director.force_dissolve_all()
 	hurtbox.set_enabled(false)
-	_set_state(State.DEAD, &"hurt")
-	defeated.emit()
+	velocity = Vector2.ZERO
+	_set_state(State.DEATH_SEQUENCE)
+	death_sequence_started.emit()
+	if phase_02_frames != null:
+		sprite.sprite_frames = phase_02_frames
+	var sequence: Array[StringName] = [
+		&"death_crozier_break",&"death_censer_drop",&"death_bell_fall",&"death_collapse",&"death_dissolve",
+	]
+	var step_duration: float = config.death_sequence_duration / float(sequence.size())
+	for animation: StringName in sequence:
+		_play_animation(animation)
+		await get_tree().create_timer(step_duration).timeout
+	_set_state(State.DEAD)
+	sprite.visible = false
+	if not _defeat_emitted:
+		_defeat_emitted = true
+		defeated.emit()
 
 
 func _set_state(next_state: State, animation_name: StringName = &"") -> void:
@@ -449,3 +724,13 @@ func _end_all_hitboxes() -> void:
 	sweep_hitbox.end_attack()
 	thrust_hitbox.end_attack()
 	censer_hitbox.end_attack()
+	phase_02_cleave_hitbox.end_attack()
+	phase_02_chain_hitbox.end_attack()
+
+
+func _idle_animation() -> StringName:
+	return &"phase_02_idle" if _phase == 2 else &"phase_01_idle"
+
+
+func _selection_range() -> float:
+	return config.chain_judgment_range + 80.0 if _phase == 2 else config.thrust_range + 80.0

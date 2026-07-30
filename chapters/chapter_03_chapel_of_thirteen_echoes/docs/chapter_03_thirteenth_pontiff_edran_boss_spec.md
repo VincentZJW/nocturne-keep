@@ -311,9 +311,9 @@ The audit found no old Edran combat scene, Boss script, Data Resource, SpriteFra
 - **B1 complete:** Phase 1 concept/equipment art and 114-frame formal 96×96 Phase 1 Sprite set.
 - **B2 complete:** typed Phase 1 Boss/Data/policy/HUD scene, five attack families, Poise/stagger, saved Boss-sanctum/Main integration and F5 evidence. The 198 HP boundary intentionally locks in `transition_pending`; B4 still owns the actual transition.
 - **B3 complete:** original concept boards plus 108 formal 64×64 runtime frames for Ossuary Penitent and Choir Husk; typed summon scenes/AI/Data; safe telegraph/rise; bounded lifetime; two-actor/one-of-each Phase 1 caps; no loot/Encounter/persistence; interruptible 1.15-second Boss ritual; transition/death forced cleanup; saved Boss-room/MainBootstrap integration and graphical evidence.
-- **B4:** full structural Phase Transition.
-- **B5:** Phase 2 concept/Sprite/animation/combat and F5 test.
-- **B6:** intro, dialogue, death, authoritative reward and Chapter IV hand-off.
-- **B7:** full regression, summon stress, forced QA and final report.
+- **B4 complete:** the 198 HP boundary now starts a protected 5.20-second, eleven-stage structural transformation. Player input/damage and Boss damage are locked, active hitboxes close, summons dissolve, and Phase 2 only becomes vulnerable after `phase_02_rise` plus the 0.42-second ready beat.
+- **B5 complete:** Phase 2 uses its own 94-frame structural redraw and 145-Poise combat profile. It provides `bell_bound_cleave`, `hollow_toll`, two-hit `censer_chain_judgment`, `scripture_burial`, capped `procession_of_the_unburied`, and the under-25% `fourteenth_seat`; incoming damage uses the single 0.80 target-owned multiplier.
+- **B6 complete within authoritative scope:** the formal nine-line intro, four-line transition exchange, five-stage death, summon/hitbox cleanup, one-shot defeat signal and post-Boss reliquary collection interface are connected. No weapon statistics were invented. The Chapter IV entrance is unlocked as a planned boundary; its PackedScene does not yet exist and is not claimed as implemented.
+- **B7 complete:** deterministic B1–B7 contracts, 20 battle-state regressions (10 Boss wins, 5 player deaths, 5 Phase 2 retries), summon/attack stress, isolated-scene execution, exact Godot 4.7.1 parse/import and MainBootstrap captures pass. Visual feel and fairness still require manual playtesting.
 
-Current approved execution stops after B3. B4 and later remain unimplemented and require a new approval.
+Fast Main/F5 starts are `CH3_BOSS`, `CH3_BOSS_PHASE_02`, `CH3_BOSS_SUMMON_TEST` and `CH3_POST_BOSS`. The forced QA matrix and 32+ Main screenshots are recorded in `res://docs/qa/chapter_03_boss_b4_b7/report.md`.

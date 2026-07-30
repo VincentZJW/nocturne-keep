@@ -24,6 +24,7 @@ func _bind_boss() -> void:
 	poise_bar.max_value = boss.config.max_poise
 	boss.health_component.health_changed.connect(_on_health_changed)
 	boss.state_changed.connect(_on_state_changed)
+	boss.phase_changed.connect(_on_phase_changed)
 	boss.activated.connect(_on_activated)
 	boss.defeated.connect(_on_defeated)
 	_on_health_changed(boss.health_component.current_health, boss.config.max_health)
@@ -42,7 +43,17 @@ func _on_health_changed(current: int, maximum: int) -> void:
 
 
 func _on_state_changed(state_name: StringName) -> void:
-	state_label.text = "PHASE I  |  %s" % String(state_name).to_upper()
+	state_label.text = "PHASE %s  |  %s" % ["II" if boss.is_phase_02() else "I",String(state_name).to_upper()]
+
+
+func _on_phase_changed(phase: int) -> void:
+	poise_bar.max_value = boss.config.phase_02_max_poise if phase == 2 else boss.config.max_poise
+	name_label.text = (
+		"THE HOLLOW PONTIFF, BELL-BOUND / 钟缚空教宗·埃德兰"
+		if phase == 2
+		else "%s / %s" % [boss.config.display_name_en,boss.config.display_name_zh]
+	)
+	_on_state_changed(boss.get_state_name())
 
 
 func _on_activated() -> void:

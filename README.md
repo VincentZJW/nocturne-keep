@@ -4,7 +4,7 @@
 
 当前版本：`第二章 Boss 美术 Stage 2 · 空心公爵夫人·瑟芙琳`
 
-第三章Boss当前仅完成B0设计与战斗基线锁定：正式身份为`The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`，确定360 HP、55%转阶段阈值、单层防御倍率、分阶段Poise、两种受限尸骸召唤及Main/F5接入计划。Boss战斗实体、美术、动画、奖励和第四章跳转仍未实现，不能视为可玩Boss。权威规格见[第三章埃德兰Boss B0规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)，审计证据见[第三章Boss B0审计报告](docs/qa/chapter_03_boss_b0/report.md)。
+第三章Boss B1–B7已经接入正式Main路线：`The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`拥有360 HP Phase 1、198 HP保护式十一阶段变身、结构重绘的145 Poise Phase 2、两类受限召唤、六种Phase 2招式、完整死亡流程与遗物龛领取接口。开发直达点为`CH3_BOSS`、`CH3_BOSS_PHASE_02`、`CH3_BOSS_SUMMON_TEST`和`CH3_POST_BOSS`。第四章入口目前只是已解锁的计划边界，仓库尚无Chapter IV PackedScene；未虚构武器数值或声称完成跳转。权威规格见[第三章埃德兰Boss规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)，最终强制QA见[第三章Boss B4–B7报告](docs/qa/chapter_03_boss_b4_b7/report.md)。
 
 第二章普通敌人美术 Stage 1 已接入正式 Silent Court 路线：空壳侍从、王庭戟卫、哀悼铠甲、血烛侍祭与倒悬猎兽均通过 F5/Main 使用章节内正式概念图与扩展 64×64 SpriteFrames。验收索引见 `docs/qa/chapter_02_enemy_boss_art_rework/stage_1_report.md`。
 
@@ -155,7 +155,7 @@ Main开发调试快捷键：
 
 第三章Boss环境路线已经接入同一正式Chapter III Main：`CH3_BOSS_ANTE`检查十三忏前厅、检查点、十三响门与Fade，`CH3_BOSS`检查第十三回响圣所、十三烛、香雾和入场镜头，`CH3_POST_BOSS`检查末次忏悔遗物室与奖励系统接口，`CH3_UNDERKEEP_DESCENT`检查向下墓窟、滴水、浅水和第四章终端。早期环境专项报告中Boss实体、权威奖励和第四章PackedScene均为PARTIAL；Boss实体现已推进至B3，奖励和第四章交接仍保持PARTIAL。详见[第三章Boss环境规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_boss_environment_spec.md)与[强制QA报告](docs/qa/chapter_03_boss_environment/report.md)。
 
-第三章Boss B1–B3现已接入正式Chapter III Main：第十三响教宗·埃德兰拥有完整Phase 1概念/96×96像素表现、五类正式攻击、Boss HUD、韧性与198 HP阶段边界；Boss专属圣骨忏者和唱诗尸壳拥有原创概念、108张64×64运行帧、独立AI、两只上限、每类最多一只、14–18秒寿命、无掉落/Encounter/持久化，以及阶段切换/死亡强制消散。`CH3_BOSS_SUMMON_TEST`可从Debug Chapter Start直达正式Boss房。B4结构变身、B5 Phase 2、B6死亡奖励仍未进入。
+第三章Boss B1–B7现已接入正式Chapter III Main：第十三响教宗·埃德兰拥有完整Phase 1、Boss HUD、韧性与198 HP阶段边界；圣骨忏者和唱诗尸壳维持两只总上限、每类最多一只及无掉落/Encounter/持久化规则。198 HP会执行5.20秒、十一阶段受保护结构变身并清理召唤；Phase 2使用独立94帧形态、145 Poise、0.80单层受伤倍率和六类攻击。正式死亡、遗物龛领取接口及下行入口已接通；`CH3_BOSS_PHASE_02`、`CH3_BOSS_SUMMON_TEST`和`CH3_POST_BOSS`可从Debug Chapter Start直达。Chapter IV PackedScene仍未创建，因此下行入口仅是诚实的计划边界。
 
 连续按J使用同一个四帧基础突刺组成最多三段的有限攻击链，而不是无限连招树。首个J立即响应并约0.05秒进入有效帧；0.10–0.20秒合法窗口只锁存一个0.08秒输入且不会被乱按刷新。每段完整播放后以0.32秒最短起手间隔衔接，第三段结束固定进入0.34秒强制收招；收招结束前不能开始新的第一段。每段拥有独立attack_id，过早或窗口外连按不会重置第1帧。Attack期间保持现有规则：Shift不能取消Attack。正式能力标记`has_double_jump`默认关闭。当前Player场景仅为试玩验证将`debug_enable_double_jump`默认开启；这不是正式解锁流程。Shift可在同一次滞空中继续触发Air Dash，实际次数只由Ground/Air共享耐力决定；满耐力最多支付四段。每次消耗后保留0.60秒延迟；延迟结束后地面回复35点/秒，普通空中状态默认回复14点/秒。Ground/Air Dash与Dash Attack期间延迟暂停且不回复；普通Attack、跳跃和二段跳当前不消耗耐力，因此不额外阻断。Dash Attack沿用当前Dash已支付的耐力、不重复扣费。受到非致命伤害时Hurt优先中断这些动作；死亡仍优先于Hurt。
 
@@ -198,6 +198,7 @@ Main开发调试快捷键：
 - [第三章Boss B1美术QA](docs/qa/chapter_03_boss_b1/README.md)
 - [第三章Boss B2 Phase 1/Main QA](docs/qa/chapter_03_boss_b2/README.md)
 - [第三章Boss B3召唤体系/Main QA](docs/qa/chapter_03_boss_b3/README.md)
+- [第三章Boss B4–B7完整Boss/Main强制QA](docs/qa/chapter_03_boss_b4_b7/report.md)
 - [第三章结构返修 R2 实装记录](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r2_implementation.md)
 - [第三章结构返修 R3 图层与碰撞报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r3_layer_collision_report.md)
 - [第三章结构返修 R4 Boss流程报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r4_boss_flow_report.md)

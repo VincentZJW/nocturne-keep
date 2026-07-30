@@ -19,6 +19,8 @@ func _ready() -> void:
 	transition_controller.initialize(start_room_id, start.spawn_id as StringName)
 	if start_room_id == &"CH3_BOSS":
 		transition_controller.play_active_boss_intro.call_deferred()
+	if selected_spawn_id == &"CH3_BOSS_PHASE_02":
+		call_deferred("_force_phase_02_after_intro")
 
 
 func _resolve_start(spawn_id: StringName) -> Dictionary:
@@ -31,7 +33,7 @@ func _resolve_start(spawn_id: StringName) -> Dictionary:
 			return {"room_id": &"CH3_CHOIR_GALLERY", "spawn_id": &"EnemyTest"}
 		&"CH3_BOSS_ANTE":
 			return {"room_id": &"CH3_BOSS_ANTE", "spawn_id": &"EntryWest"}
-		&"CH3_BOSS", &"CH3_BOSS_SUMMON_TEST":
+		&"CH3_BOSS", &"CH3_BOSS_SUMMON_TEST", &"CH3_BOSS_PHASE_02":
 			return {"room_id": &"CH3_BOSS", "spawn_id": &"EntryWest"}
 		&"CH3_POST_BOSS":
 			return {"room_id": &"CH3_POST_BOSS", "spawn_id": &"EntryWest"}
@@ -44,3 +46,15 @@ func _resolve_start(spawn_id: StringName) -> Dictionary:
 		&"CH3_BOSS_CHECKPOINT":
 			return {"room_id": &"CH3_BOSS_CHECKPOINT", "spawn_id": &"EntryWest"}
 	return {"room_id": &"CH3_CHAPEL_VESTIBULE", "spawn_id": &"EntryWest"}
+
+
+func _force_phase_02_after_intro() -> void:
+	await get_tree().create_timer(0.25).timeout
+	while transition_controller.active_room_id == &"CH3_BOSS":
+		var boss: ThirteenthPontiffEdran = transition_controller.active_room.find_child(
+			"ThirteenthPontiffEdran",true,false
+		) as ThirteenthPontiffEdran
+		if boss != null and boss.current_state != ThirteenthPontiffEdran.State.DORMANT:
+			boss.debug_enter_phase_02_immediate()
+			return
+		await get_tree().create_timer(0.20).timeout

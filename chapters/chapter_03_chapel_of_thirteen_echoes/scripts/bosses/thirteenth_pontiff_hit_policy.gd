@@ -9,4 +9,9 @@ extends EnemyHitPolicyComponent
 func resolve_damage(hitbox: HitboxComponent) -> int:
 	if hitbox == null or boss == null:
 		return 0
-	return maxi(1, roundi(float(hitbox.damage) * boss.config.incoming_damage_multiplier))
+	var multiplier: float = (
+		boss.config.phase_02_incoming_damage_multiplier
+		if boss.is_phase_02()
+		else boss.config.incoming_damage_multiplier
+	)
+	return maxi(1, roundi(float(hitbox.damage) * multiplier))
