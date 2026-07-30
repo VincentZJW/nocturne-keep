@@ -34,6 +34,7 @@ func _unhandled_input(event: InputEvent) -> void:
 	if (
 		event.is_action_pressed(&"interact")
 		and _player_in_range != null
+		and _player_in_range.can_process_gameplay_interaction()
 		and _is_revealed
 		and not _reward_collected
 	):

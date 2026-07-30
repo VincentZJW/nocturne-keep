@@ -18,6 +18,16 @@ enum State {
 	TURN,
 	ATTACK,
 	SUMMON,
+	FIRE_SPELL_WINDUP,
+	FIRE_SPELL_RELEASE,
+	FIRE_SPELL_RECOVERY,
+	ICE_SPELL_WINDUP,
+	ICE_SPELL_RELEASE,
+	ICE_SPELL_RECOVERY,
+	MIRE_SPELL_WINDUP,
+	MIRE_TARGET_LOCK,
+	MIRE_SPELL_ACTIVATE,
+	MIRE_SPELL_RECOVERY,
 	STAGGER,
 	TRANSITION_PENDING,
 	PHASE_TRANSITION,
@@ -38,12 +48,19 @@ enum Attack {
 	SCRIPTURE_BURIAL,
 	PROCESSION,
 	FOURTEENTH_SEAT,
+	FIRE_SPELL,
+	ICE_SPELL,
+	MIRE_SPELL,
 }
 
 @export var config: ThirteenthPontiffEdranConfig
 @export var timed_field_scene: PackedScene
 @export var phase_transition_frames: SpriteFrames
 @export var phase_02_frames: SpriteFrames
+@export var fireball_scene: PackedScene
+@export var ice_lance_scene: PackedScene
+@export var mire_telegraph_scene: PackedScene
+@export var mire_zone_scene: PackedScene
 @export var auto_activate: bool = false
 
 @onready var sprite: AnimatedSprite2D = $VisualRoot/AnimatedSprite2D as AnimatedSprite2D
@@ -81,7 +98,19 @@ var _scripture_burial_cooldown: float = 0.0
 var _procession_cooldown: float = 0.0
 var _fourteenth_seat_cooldown: float = 0.0
 var _last_phase_02_attack: Attack = Attack.SWEEP
+var _last_phase_01_attack: Attack = Attack.SWEEP
 var _defeat_emitted: bool = false
+var _fire_cooldown: float = 0.0
+var _ice_cooldown: float = 0.0
+var _mire_cooldown: float = 0.0
+var _magic_global_cooldown: float = 0.0
+var _frozen_major_grace: float = 0.0
+var _last_magic: Attack = Attack.SWEEP
+var _spell_sequence_id: int = 0
+var _mire_telegraph: PontiffMireTelegraph
+var _active_mire: PontiffMireZone
+var _debug_magic_mode: StringName = &""
+var _target_was_frozen: bool = false
 
 
 func _ready() -> void:
@@ -149,6 +178,7 @@ func activate(player: Player = null) -> void:
 	target = player if player != null else get_tree().get_first_node_in_group("player") as Player
 	hurtbox.set_enabled(true)
 	_attack_gap_timer = 0.45
+	_configure_debug_mode_from_run()
 	_set_state(State.IDLE, &"phase_01_idle")
 	activated.emit()
 
@@ -169,6 +199,9 @@ func debug_force_attack(attack_name: StringName) -> bool:
 		&"scripture_burial": _run_scripture_burial()
 		&"procession_of_the_unburied": _run_procession()
 		&"fourteenth_seat": _run_fourteenth_seat()
+		&"cinder_absolution": _run_fire_spell()
+		&"litany_of_stillness": _run_ice_spell()
+		&"mire_of_the_unburied": _run_mire_spell()
 		_: return false
 	return true
 
@@ -223,6 +256,22 @@ func get_active_summon_count() -> int:
 	return summon_director.get_active_count() if summon_director != null else 0
 
 
+func get_active_mire_count() -> int:
+	return 1 if _has_active_mire() else 0
+
+
+func get_magic_global_cooldown() -> float:
+	return _magic_global_cooldown
+
+
+func get_debug_magic_mode() -> StringName:
+	return _debug_magic_mode
+
+
+func configure_debug_magic_mode(mode: StringName) -> void:
+	_debug_magic_mode = mode
+
+
 func is_transition_pending() -> bool:
 	return current_state == State.TRANSITION_PENDING
 
@@ -238,9 +287,21 @@ func _tick_cooldowns(delta: float) -> void:
 	_scripture_burial_cooldown = maxf(0.0, _scripture_burial_cooldown - delta)
 	_procession_cooldown = maxf(0.0, _procession_cooldown - delta)
 	_fourteenth_seat_cooldown = maxf(0.0, _fourteenth_seat_cooldown - delta)
+	_fire_cooldown = maxf(0.0, _fire_cooldown - delta)
+	_ice_cooldown = maxf(0.0, _ice_cooldown - delta)
+	_mire_cooldown = maxf(0.0, _mire_cooldown - delta)
+	_magic_global_cooldown = maxf(0.0, _magic_global_cooldown - delta)
+	_frozen_major_grace = maxf(0.0, _frozen_major_grace - delta)
+	var frozen_now: bool = _target_is_frozen()
+	if _target_was_frozen and not frozen_now:
+		_frozen_major_grace = config.frozen_major_attack_grace
+	_target_was_frozen = frozen_now
 
 
 func _start_selected_attack(distance: float) -> void:
+	if not _debug_magic_mode.is_empty():
+		_start_debug_magic()
+		return
 	var candidates: Array[Attack] = []
 	if distance <= config.sweep_range:
 		candidates.append(Attack.SWEEP)
@@ -248,47 +309,70 @@ func _start_selected_attack(distance: float) -> void:
 		candidates.append(Attack.THRUST)
 	if distance <= config.censer_range and _censer_cooldown <= 0.0:
 		candidates.append(Attack.CENSER)
-	if _litany_cooldown <= 0.0:
+	if _litany_cooldown <= 0.0 and not _target_is_frozen() and _frozen_major_grace <= 0.0:
 		candidates.append(Attack.LITANY)
-	if _thirteenfold_cooldown <= 0.0:
+	if _thirteenfold_cooldown <= 0.0 and not _has_active_mire() and not _target_is_frozen() and _frozen_major_grace <= 0.0:
 		candidates.append(Attack.THIRTEENFOLD)
-	if _summon_cooldown <= 0.0 and summon_director != null and summon_director.can_summon_phase_1():
+	if _can_select_summon(false):
 		candidates.append(Attack.SUMMON)
+	_append_magic_candidates(candidates)
 	if candidates.is_empty():
 		_attack_gap_timer = 0.20
 		return
-	var selected: Attack = candidates[_attack_cursor % candidates.size()]
+	if candidates.size() > 1:
+		candidates.erase(_last_phase_01_attack)
+	if candidates.is_empty():
+		_attack_gap_timer = 0.20
+		return
+	var selected: Attack = _select_weighted_attack(candidates, false)
 	_attack_cursor += 1
+	_last_phase_01_attack = selected
 	match selected:
 		Attack.LITANY: _run_litany()
 		Attack.THIRTEENFOLD: _run_thirteenfold()
 		Attack.SUMMON: _run_summon()
+		Attack.FIRE_SPELL: _run_fire_spell()
+		Attack.ICE_SPELL: _run_ice_spell()
+		Attack.MIRE_SPELL: _run_mire_spell()
 		_: _run_melee_attack(selected)
 
 
 func _start_selected_phase_02_attack(distance: float) -> void:
+	if not _debug_magic_mode.is_empty():
+		_start_debug_magic()
+		return
 	var candidates: Array[Attack] = []
 	if distance <= config.bell_cleave_range:
 		candidates.append(Attack.BELL_CLEAVE)
 	if distance <= config.chain_judgment_range:
 		candidates.append(Attack.CHAIN_JUDGMENT)
-	if _hollow_toll_cooldown <= 0.0:
+	if _hollow_toll_cooldown <= 0.0 and not _target_is_frozen() and _frozen_major_grace <= 0.0:
 		candidates.append(Attack.HOLLOW_TOLL)
-	if _scripture_burial_cooldown <= 0.0 and _hollow_toll_cooldown > 0.0:
+	if (
+		_scripture_burial_cooldown <= 0.0
+		and _hollow_toll_cooldown > 0.0
+		and not _has_active_mire()
+		and not _target_is_frozen()
+		and _active_danger_zone_count() < 2
+	):
 		candidates.append(Attack.SCRIPTURE_BURIAL)
-	if _procession_cooldown <= 0.0 and summon_director != null and summon_director.can_summon_phase_2():
+	if _can_select_summon(true):
 		candidates.append(Attack.PROCESSION)
 	if (
 		float(health_component.current_health) / float(config.max_health) <= config.fourteenth_seat_health_ratio
 		and _fourteenth_seat_cooldown <= 0.0
+		and not _has_active_mire()
+		and not _target_is_frozen()
+		and _frozen_major_grace <= 0.0
 	):
 		candidates.append(Attack.FOURTEENTH_SEAT)
+	_append_magic_candidates(candidates)
 	if candidates.size() > 1:
 		candidates.erase(_last_phase_02_attack)
 	if candidates.is_empty():
 		_attack_gap_timer = 0.18
 		return
-	var selected: Attack = candidates[_attack_cursor % candidates.size()]
+	var selected: Attack = _select_weighted_attack(candidates, true)
 	_attack_cursor += 1
 	_last_phase_02_attack = selected
 	match selected:
@@ -298,6 +382,327 @@ func _start_selected_phase_02_attack(distance: float) -> void:
 		Attack.SCRIPTURE_BURIAL: _run_scripture_burial()
 		Attack.PROCESSION: _run_procession()
 		Attack.FOURTEENTH_SEAT: _run_fourteenth_seat()
+		Attack.FIRE_SPELL: _run_fire_spell()
+		Attack.ICE_SPELL: _run_ice_spell()
+		Attack.MIRE_SPELL: _run_mire_spell()
+
+
+func _append_magic_candidates(candidates: Array[Attack]) -> void:
+	if _magic_global_cooldown > 0.0:
+		return
+	var statuses: PlayerStatusEffectController = _target_status_controller()
+	if _fire_cooldown <= 0.0 and _last_magic != Attack.FIRE_SPELL:
+		if statuses == null or not statuses.is_burning():
+			candidates.append(Attack.FIRE_SPELL)
+	if _ice_cooldown <= 0.0 and _last_magic != Attack.ICE_SPELL and not _target_is_frozen():
+		if summon_director == null or summon_director.get_active_count() <= 1:
+			candidates.append(Attack.ICE_SPELL)
+	if (
+		_mire_cooldown <= 0.0
+		and _last_magic != Attack.MIRE_SPELL
+		and not _has_active_mire()
+		and _active_danger_zone_count() < 2
+	):
+		candidates.append(Attack.MIRE_SPELL)
+
+
+func _can_select_summon(phase_02: bool) -> bool:
+	if _target_is_frozen() or summon_director == null:
+		return false
+	if phase_02:
+		return (
+			_last_phase_02_attack != Attack.PROCESSION
+			and _procession_cooldown <= 0.0
+			and summon_director.can_summon_phase_2()
+		)
+	return (
+		_last_phase_01_attack != Attack.SUMMON
+		and _summon_cooldown <= 0.0
+		and summon_director.can_summon_phase_1()
+	)
+
+
+func _select_weighted_attack(candidates: Array[Attack], phase_02: bool) -> Attack:
+	var utility_count: int = 0
+	for candidate: Attack in candidates:
+		if candidate not in [Attack.SUMMON, Attack.PROCESSION, Attack.FIRE_SPELL, Attack.ICE_SPELL, Attack.MIRE_SPELL]:
+			utility_count += 1
+	var weights: Array[int] = []
+	var total_weight: int = 0
+	for candidate: Attack in candidates:
+		var weight: int = 1
+		match candidate:
+			Attack.SUMMON: weight = 22
+			Attack.PROCESSION: weight = 27
+			Attack.FIRE_SPELL: weight = 18
+			Attack.ICE_SPELL: weight = 13 if phase_02 else 10
+			Attack.MIRE_SPELL: weight = 15 if phase_02 else 10
+			_: weight = maxi(1, roundi(float(27 if phase_02 else 40) / float(maxi(1, utility_count))))
+		weights.append(weight)
+		total_weight += weight
+	var roll: int = randi_range(1, maxi(1, total_weight))
+	for index: int in range(candidates.size()):
+		roll -= weights[index]
+		if roll <= 0:
+			return candidates[index]
+	return candidates.back()
+
+
+func _active_danger_zone_count() -> int:
+	var count: int = 1 if _has_active_mire() else 0
+	if is_inside_tree():
+		count += get_tree().get_nodes_in_group(&"chapter_03_boss_danger_zone").size()
+	return count
+
+
+func _start_debug_magic() -> void:
+	if _action_locked:
+		return
+	match _debug_magic_mode:
+		&"fire": _run_fire_spell()
+		&"ice": _run_ice_spell()
+		&"mire": _run_mire_spell()
+		&"combo":
+			var cycle: int = _attack_cursor % 4
+			_attack_cursor += 1
+			match cycle:
+				0:
+					if _can_select_summon(_phase == 2):
+						if _phase == 2: _run_procession()
+						else: _run_summon()
+					else: _run_fire_spell()
+				1: _run_fire_spell()
+				2: _run_ice_spell() if not _target_is_frozen() else _run_fire_spell()
+				_: _run_mire_spell() if not _has_active_mire() else _run_fire_spell()
+		_:
+			var magic_cycle: int = _attack_cursor % 3
+			_attack_cursor += 1
+			if magic_cycle == 0: _run_fire_spell()
+			elif magic_cycle == 1: _run_ice_spell()
+			else: _run_mire_spell()
+
+
+func _run_fire_spell() -> void:
+	if not _begin_spell(State.FIRE_SPELL_WINDUP, &"fire_spell_windup", Attack.FIRE_SPELL):
+		return
+	_fire_cooldown = config.fire_cooldown
+	var sequence_id: int = _spell_sequence_id
+	if not await _spell_wait(config.fire_windup, sequence_id):
+		return
+	_set_state(State.FIRE_SPELL_RELEASE, &"fire_spell_release")
+	_spawn_status_projectile(fireball_scene, config.fire_impact_damage, true)
+	if not await _spell_wait(0.08, sequence_id):
+		return
+	_set_state(State.FIRE_SPELL_RECOVERY, &"fire_spell_recovery")
+	if not await _spell_wait(config.fire_recovery, sequence_id):
+		return
+	_finish_spell(Attack.FIRE_SPELL)
+
+
+func _run_ice_spell() -> void:
+	if _target_is_frozen():
+		_attack_gap_timer = 0.20
+		return
+	if not _begin_spell(State.ICE_SPELL_WINDUP, &"ice_spell_windup", Attack.ICE_SPELL):
+		return
+	_ice_cooldown = config.phase_2_ice_cooldown if _phase == 2 else config.phase_1_ice_cooldown
+	var sequence_id: int = _spell_sequence_id
+	if not await _spell_wait(config.ice_windup, sequence_id):
+		return
+	_set_state(State.ICE_SPELL_RELEASE, &"ice_spell_release")
+	_spawn_status_projectile(ice_lance_scene, config.ice_impact_damage, false)
+	if not await _spell_wait(0.08, sequence_id):
+		return
+	_set_state(State.ICE_SPELL_RECOVERY, &"ice_spell_recovery")
+	if not await _spell_wait(config.ice_recovery, sequence_id):
+		return
+	_finish_spell(Attack.ICE_SPELL)
+
+
+func _run_mire_spell() -> void:
+	if _has_active_mire():
+		_attack_gap_timer = 0.20
+		return
+	if not _begin_spell(State.MIRE_SPELL_WINDUP, &"mire_spell_windup", Attack.MIRE_SPELL):
+		return
+	_mire_cooldown = config.mire_cooldown
+	var sequence_id: int = _spell_sequence_id
+	if not await _spell_wait(config.mire_telegraph_delay, sequence_id):
+		return
+	_spawn_mire_telegraph()
+	var follow_time: float = config.mire_target_lock_time - config.mire_telegraph_delay
+	while follow_time > 0.0:
+		if not _can_continue_spell(sequence_id):
+			_cleanup_pending_magic()
+			return
+		if _mire_telegraph != null and target != null:
+			_mire_telegraph.follow_target(target.global_position)
+		var step: float = minf(0.05, follow_time)
+		await get_tree().create_timer(step).timeout
+		follow_time -= step
+	_set_state(State.MIRE_TARGET_LOCK, &"mire_spell_target_lock")
+	if _mire_telegraph != null:
+		_mire_telegraph.lock_target()
+	if not await _spell_wait(config.mire_cast_time - config.mire_target_lock_time, sequence_id):
+		return
+	_set_state(State.MIRE_SPELL_ACTIVATE, &"mire_spell_activate")
+	_activate_mire_zone()
+	if not await _spell_wait(0.10, sequence_id):
+		return
+	_set_state(State.MIRE_SPELL_RECOVERY, &"mire_spell_recovery")
+	if not await _spell_wait(config.mire_recovery, sequence_id):
+		return
+	_finish_spell(Attack.MIRE_SPELL)
+
+
+func _begin_spell(state: State, animation: StringName, attack: Attack) -> bool:
+	if _action_locked or current_state in [State.DORMANT, State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD, State.SUMMON]:
+		return false
+	_action_locked = true
+	_spell_sequence_id += 1
+	_last_magic = attack
+	_set_state(state, animation)
+	return true
+
+
+func _spell_wait(duration: float, sequence_id: int) -> bool:
+	var remaining: float = maxf(0.0, duration)
+	while remaining > 0.0:
+		var step: float = minf(0.05, remaining)
+		await get_tree().create_timer(step).timeout
+		remaining -= step
+		if not _can_continue_spell(sequence_id):
+			_cleanup_pending_magic()
+			return false
+	return true
+
+
+func _can_continue_spell(sequence_id: int) -> bool:
+	return (
+		sequence_id == _spell_sequence_id
+		and _is_spell_state(current_state)
+		and health_component.current_health > (0 if _phase == 2 else config.phase_transition_health)
+	)
+
+
+func _finish_spell(attack: Attack) -> void:
+	if not _is_spell_state(current_state):
+		return
+	_last_magic = attack
+	_magic_global_cooldown = randf_range(
+		config.phase_2_magic_global_cooldown_min if _phase == 2 else config.phase_1_magic_global_cooldown_min,
+		config.phase_2_magic_global_cooldown_max if _phase == 2 else config.phase_1_magic_global_cooldown_max
+	)
+	_action_locked = false
+	_chain_count = 0
+	_attack_gap_timer = 0.35
+	_set_state(State.IDLE, _idle_animation())
+
+
+func _spawn_status_projectile(scene: PackedScene, damage: int, fire: bool) -> void:
+	if scene == null:
+		return
+	var projectile: PontiffStatusProjectile = scene.instantiate() as PontiffStatusProjectile
+	if projectile == null:
+		return
+	projectile.impact_damage = damage
+	if fire:
+		projectile.status_duration = config.burn_duration
+		projectile.burn_tick_damage = config.burn_tick_damage
+		projectile.burn_tick_interval = config.burn_tick_interval
+	else:
+		projectile.status_duration = config.freeze_duration
+		projectile.freeze_immunity_duration = config.freeze_immunity_duration
+	_next_attack_id += 1
+	get_parent().add_child(projectile)
+	projectile.global_position = global_position + Vector2(facing * 42.0, -48.0)
+	projectile.initialize(facing, _next_attack_id, self)
+
+
+func _spawn_mire_telegraph() -> void:
+	if mire_telegraph_scene == null or target == null:
+		return
+	_cleanup_pending_magic()
+	_mire_telegraph = mire_telegraph_scene.instantiate() as PontiffMireTelegraph
+	if _mire_telegraph == null:
+		return
+	get_parent().add_child(_mire_telegraph)
+	_mire_telegraph.global_position = target.global_position
+
+
+func _activate_mire_zone() -> void:
+	if _mire_telegraph == null or mire_zone_scene == null:
+		_cleanup_pending_magic()
+		return
+	var locked_position: Vector2 = _mire_telegraph.global_position
+	_mire_telegraph.finish()
+	_mire_telegraph = null
+	_active_mire = mire_zone_scene.instantiate() as PontiffMireZone
+	if _active_mire == null:
+		return
+	_active_mire.duration = config.mire_duration
+	_active_mire.movement_multiplier = config.mire_move_multiplier
+	_active_mire.dash_multiplier = config.mire_dash_multiplier
+	get_parent().add_child(_active_mire)
+	_active_mire.global_position = locked_position
+	_active_mire.expired.connect(_on_mire_expired)
+
+
+func _cleanup_pending_magic() -> void:
+	if _mire_telegraph != null and is_instance_valid(_mire_telegraph):
+		_mire_telegraph.finish()
+	_mire_telegraph = null
+
+
+func _clear_all_magic() -> void:
+	_spell_sequence_id += 1
+	_cleanup_pending_magic()
+	if _active_mire != null and is_instance_valid(_active_mire):
+		_active_mire.force_expire()
+	_active_mire = null
+	var statuses: PlayerStatusEffectController = _target_status_controller()
+	if statuses != null:
+		statuses.clear_all()
+
+
+func _on_mire_expired() -> void:
+	_active_mire = null
+
+
+func _has_active_mire() -> bool:
+	return _active_mire != null and is_instance_valid(_active_mire) and not _active_mire.is_queued_for_deletion()
+
+
+func _target_status_controller() -> PlayerStatusEffectController:
+	return target.status_effect_controller if target != null and is_instance_valid(target) else null
+
+
+func _target_is_frozen() -> bool:
+	var statuses: PlayerStatusEffectController = _target_status_controller()
+	return statuses != null and statuses.is_frozen()
+
+
+func _is_spell_state(state: State) -> bool:
+	return state in [
+		State.FIRE_SPELL_WINDUP, State.FIRE_SPELL_RELEASE, State.FIRE_SPELL_RECOVERY,
+		State.ICE_SPELL_WINDUP, State.ICE_SPELL_RELEASE, State.ICE_SPELL_RECOVERY,
+		State.MIRE_SPELL_WINDUP, State.MIRE_TARGET_LOCK, State.MIRE_SPELL_ACTIVATE,
+		State.MIRE_SPELL_RECOVERY,
+	]
+
+
+func _configure_debug_mode_from_run() -> void:
+	if not OS.is_debug_build():
+		return
+	var debug: DebugRunConfigState = get_node_or_null("/root/DebugRunConfig") as DebugRunConfigState
+	if debug == null:
+		return
+	match debug.debug_start_spawn_id:
+		&"CH3_BOSS_FIRE_TEST": _debug_magic_mode = &"fire"
+		&"CH3_BOSS_ICE_TEST": _debug_magic_mode = &"ice"
+		&"CH3_BOSS_MIRE_TEST": _debug_magic_mode = &"mire"
+		&"CH3_BOSS_MAGIC_TEST": _debug_magic_mode = &"magic"
+		&"CH3_BOSS_SUMMON_MAGIC_COMBO": _debug_magic_mode = &"combo"
 
 
 func _run_phase_02_cleave() -> void:
@@ -373,9 +778,11 @@ func _run_scripture_burial() -> void:
 func _run_procession() -> void:
 	if not _begin_phase_02_action(&"procession_summon"):
 		return
-	_procession_cooldown = config.procession_cooldown
+	_procession_cooldown = randf_range(
+		config.phase_02_summon_cooldown_min, config.phase_02_summon_cooldown_max
+	)
 	await get_tree().create_timer(config.procession_windup).timeout
-	if _can_finish_action() and summon_director != null:
+	if _can_finish_action() and summon_director != null and not _target_is_frozen():
 		summon_director.summon_phase_2(target)
 	await get_tree().create_timer(config.procession_recovery).timeout
 	_end_action()
@@ -502,6 +909,9 @@ func _run_summon() -> void:
 	await get_tree().create_timer(config.summon_windup).timeout
 	if current_state != State.SUMMON or sequence_id != _summon_sequence_id:
 		return
+	if _target_is_frozen():
+		_finish_summon_action(true)
+		return
 	summon_director.summon_phase_1(target)
 	_play_animation(&"summon_success")
 	await get_tree().create_timer(config.summon_recovery).timeout
@@ -524,7 +934,7 @@ func _interrupt_summon() -> void:
 
 func _finish_summon_action(interrupted: bool) -> void:
 	_summon_cooldown = (
-		config.summon_cooldown_min * 0.5
+		config.summon_interrupt_cooldown
 		if interrupted
 		else randf_range(config.summon_cooldown_min, config.summon_cooldown_max)
 	)
@@ -546,6 +956,7 @@ func _spawn_field(position: Vector2, damage: int, delay: float) -> void:
 	field.duration = delay + 0.20
 	field.damage = damage
 	field.z_index = Chapter03LayerContract.COMBAT_FX
+	field.add_to_group(&"chapter_03_boss_danger_zone")
 	get_parent().add_child(field)
 	field.global_position = position
 
@@ -584,7 +995,7 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 	current_poise = maxi(0, current_poise - poise_damage)
 	if current_poise <= 0 and _stagger_protection_timer <= 0.0:
 		_run_stagger()
-	else:
+	elif not _is_spell_state(current_state):
 		_play_animation(&"light_hit")
 
 
@@ -592,6 +1003,8 @@ func _run_stagger() -> void:
 	if current_state in [State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
 		return
 	_action_locked = true
+	_spell_sequence_id += 1
+	_cleanup_pending_magic()
 	_end_all_hitboxes()
 	_set_state(State.STAGGER, &"stagger")
 	var duration: float = config.phase_02_stagger_duration if _phase == 2 else config.stagger_duration
@@ -613,6 +1026,7 @@ func _on_health_changed(current: int, _maximum: int) -> void:
 	_action_locked = true
 	velocity = Vector2.ZERO
 	_end_all_hitboxes()
+	_clear_all_magic()
 	if summon_director != null:
 		summon_director.force_dissolve_all()
 	hurtbox.set_invulnerable(true)
@@ -675,6 +1089,7 @@ func _on_died() -> void:
 func _run_death_sequence() -> void:
 	_action_locked = true
 	_end_all_hitboxes()
+	_clear_all_magic()
 	if summon_director != null:
 		summon_director.force_dissolve_all()
 	hurtbox.set_enabled(false)

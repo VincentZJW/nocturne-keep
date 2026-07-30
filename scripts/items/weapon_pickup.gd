@@ -26,7 +26,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		_collected
 		or not player_interaction_enabled
 		or _player_in_range == null
-		or _player_in_range.is_dead()
+		or not _player_in_range.can_process_gameplay_interaction()
 		or not event.is_action_pressed("interact")
 	):
 		return

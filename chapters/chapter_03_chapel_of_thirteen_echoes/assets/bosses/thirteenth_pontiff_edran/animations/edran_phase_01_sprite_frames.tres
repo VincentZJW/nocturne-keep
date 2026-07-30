@@ -26,28 +26,48 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_02.png" id="24_yvxef"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_03.png" id="25_vfr7v"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/dialogue_idle/dialogue_idle_04.png" id="26_csb2h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_recovery/fire_spell_recovery_01.png" id="27_6ety0"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/hurt/hurt_01.png" id="27_w5qnn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_recovery/fire_spell_recovery_02.png" id="28_80tsr"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/hurt/hurt_02.png" id="28_igri1"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/hurt/hurt_03.png" id="29_8nlmf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_recovery/fire_spell_recovery_03.png" id="29_k4c7l"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_01.png" id="30_2k6gx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_release/fire_spell_release_01.png" id="30_t3iim"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_release/fire_spell_release_02.png" id="31_81cxa"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_02.png" id="31_tmvq3"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_03.png" id="32_bwxv7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_release/fire_spell_release_03.png" id="32_tu0fn"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_back_facing/intro_back_facing_04.png" id="33_8qxgw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_windup/fire_spell_windup_01.png" id="33_11glt"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_01.png" id="34_6ety0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_windup/fire_spell_windup_02.png" id="34_m1b0g"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_02.png" id="35_80tsr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_windup/fire_spell_windup_03.png" id="35_amxce"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/fire_spell_windup/fire_spell_windup_04.png" id="36_5km0b"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_03.png" id="36_k4c7l"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_04.png" id="37_t3iim"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/intro_turn/intro_turn_05.png" id="38_81cxa"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/light_hit/light_hit_01.png" id="39_tu0fn"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/light_hit/light_hit_02.png" id="40_11glt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_recovery/ice_spell_recovery_01.png" id="40_qmhij"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_recovery/ice_spell_recovery_02.png" id="41_m0n2c"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_01.png" id="41_m1b0g"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_02.png" id="42_amxce"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_recovery/ice_spell_recovery_03.png" id="42_npruo"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_03.png" id="43_5km0b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_release/ice_spell_release_01.png" id="43_hj0k6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_release/ice_spell_release_02.png" id="44_k56cq"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_04.png" id="44_qmhij"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_05.png" id="45_m0n2c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_release/ice_spell_release_03.png" id="45_rnjmn"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/litany_cast/litany_cast_06.png" id="46_npruo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_windup/ice_spell_windup_01.png" id="46_ygql7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_windup/ice_spell_windup_02.png" id="47_38t7w"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_01.png" id="47_hj0k6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_windup/ice_spell_windup_03.png" id="48_1qn5d"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_02.png" id="48_k56cq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/ice_spell_windup/ice_spell_windup_04.png" id="49_6mru5"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_03.png" id="49_rnjmn"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_01_idle/phase_01_idle_04.png" id="50_ygql7"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/phase_transition_start/phase_transition_start_01.png" id="51_38t7w"]
@@ -67,18 +87,31 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_04.png" id="65_scg5m"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/pontifical_sweep_windup/pontifical_sweep_windup_05.png" id="66_lgjo3"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_01.png" id="67_2mhug"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_activate/mire_spell_activate_01.png" id="67_vgp1d"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_02.png" id="68_ka6fe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_activate/mire_spell_activate_02.png" id="68_qplss"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_03.png" id="69_fvs5n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_activate/mire_spell_activate_03.png" id="69_or4u7"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/prayer_idle/prayer_idle_04.png" id="70_jaqlh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_recovery/mire_spell_recovery_01.png" id="70_jnn1m"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_01.png" id="71_6y2lg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_recovery/mire_spell_recovery_02.png" id="71_u61ki"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_recovery/mire_spell_recovery_03.png" id="72_43c8s"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_02.png" id="72_raykw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_target_lock/mire_spell_target_lock_01.png" id="73_igkt4"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_03.png" id="73_jh8vm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_target_lock/mire_spell_target_lock_02.png" id="74_jtg6l"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_04.png" id="74_rh6qu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_target_lock/mire_spell_target_lock_03.png" id="75_jni8y"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/scripture_writing/scripture_writing_05.png" id="75_wfl8e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_windup/mire_spell_windup_01.png" id="76_535vy"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_01.png" id="76_dxew2"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_02.png" id="77_g4g72"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_windup/mire_spell_windup_02.png" id="77_jgymr"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_03.png" id="78_ln4w3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_windup/mire_spell_windup_03.png" id="78_scg5m"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_04.png" id="79_av1si"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_01/mire_spell_windup/mire_spell_windup_04.png" id="79_lgjo3"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_05.png" id="80_oa15m"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/slow_walk/slow_walk_06.png" id="81_xp0cy"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_01/stagger/stagger_01.png" id="82_qa7xh"]
@@ -232,6 +265,51 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": ExtResource("27_6ety0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_80tsr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_k4c7l")
+}],
+"loop": 0,
+"name": &"fire_spell_recovery",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("30_t3iim")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_81cxa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_tu0fn")
+}],
+"loop": 0,
+"name": &"fire_spell_release",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_11glt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_m1b0g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_amxce")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_5km0b")
+}],
+"loop": 0,
+"name": &"fire_spell_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": ExtResource("27_w5qnn")
 }, {
 "duration": 1.0,
@@ -242,6 +320,51 @@ animations = [{
 }],
 "loop": 0,
 "name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_qmhij")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_m0n2c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_npruo")
+}],
+"loop": 0,
+"name": &"ice_spell_recovery",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_hj0k6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_k56cq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_rnjmn")
+}],
+"loop": 0,
+"name": &"ice_spell_release",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("46_ygql7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_38t7w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_1qn5d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_6mru5")
+}],
+"loop": 0,
+"name": &"ice_spell_windup",
 "speed": 10.0
 }, {
 "frames": [{
@@ -314,6 +437,65 @@ animations = [{
 "loop": 0,
 "name": &"litany_cast",
 "speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_vgp1d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_qplss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_or4u7")
+}],
+"loop": 0,
+"name": &"mire_spell_activate",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("70_jnn1m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_u61ki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_43c8s")
+}],
+"loop": 0,
+"name": &"mire_spell_recovery",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("73_igkt4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_jtg6l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_jni8y")
+}],
+"loop": 0,
+"name": &"mire_spell_target_lock",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_535vy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_jgymr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_scg5m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_lgjo3")
+}],
+"loop": 0,
+"name": &"mire_spell_windup",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,

@@ -37,18 +37,19 @@ func can_summon_phase_2() -> bool:
 
 
 func summon_phase_2(player: Player) -> int:
-	var spawned: int = 0
-	while can_summon_phase_2() and spawned < 2:
-		if not _summon_one(player):
-			break
-		spawned += 1
-	return spawned
+	return 1 if can_summon_phase_2() and _summon_one(player) else 0
 
 
 func _summon_one(player: Player) -> bool:
 	var kind: StringName = _next_kind
-	var penitent_cap: int = boss.config.phase_1_penitent_cap if not boss.is_phase_02() else boss.config.phase_02_summon_cap
-	var husk_cap: int = boss.config.phase_1_choir_husk_cap if not boss.is_phase_02() else boss.config.phase_02_summon_cap
+	var penitent_cap: int = (
+		boss.config.phase_02_penitent_cap if boss.is_phase_02()
+		else boss.config.phase_1_penitent_cap
+	)
+	var husk_cap: int = (
+		boss.config.phase_02_choir_husk_cap if boss.is_phase_02()
+		else boss.config.phase_1_choir_husk_cap
+	)
 	if kind == &"ossuary_penitent" and _count_kind(kind) >= penitent_cap:
 		kind = &"choir_husk"
 	if kind == &"choir_husk" and _count_kind(kind) >= husk_cap:

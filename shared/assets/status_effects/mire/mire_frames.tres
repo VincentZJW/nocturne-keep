@@ -1,0 +1,47 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/mire_01.png" id="1_yk4h8"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/mire_02.png" id="2_wxre8"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/mire_03.png" id="3_eepcc"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/mire_04.png" id="4_kjr5a"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/fade_01.png" id="5_g8edo"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/fade_02.png" id="6_ss1hu"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/fade_03.png" id="7_cy3on"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/fade_04.png" id="8_ckswt"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_yk4h8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_wxre8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_eepcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_kjr5a")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_g8edo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_ss1hu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_cy3on")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_ckswt")
+}],
+"loop": 0,
+"name": &"fade",
+"speed": 12.0
+}]

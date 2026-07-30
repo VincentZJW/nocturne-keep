@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3]
+[gd_scene load_steps=26 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_edran.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/bosses/thirteenth_pontiff_edran_data.tres" id="2_config"]
@@ -14,6 +14,10 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/choir_husk.tscn" id="12_husk"]
 [ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/animations/edran_phase_transition_sprite_frames.tres" id="13_transition_frames"]
 [ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/animations/edran_phase_02_sprite_frames.tres" id="14_phase_02_frames"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_fireball.tscn" id="15_fireball"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_ice_lance.tscn" id="16_ice_lance"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_mire_telegraph.tscn" id="17_mire_telegraph"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_mire_zone.tscn" id="18_mire_zone"]
 
 [sub_resource type="RectangleShape2D" id="BodyShape"]
 size = Vector2(36, 78)
@@ -46,6 +50,10 @@ config = ExtResource("2_config")
 timed_field_scene = ExtResource("8_field")
 phase_transition_frames = ExtResource("13_transition_frames")
 phase_02_frames = ExtResource("14_phase_02_frames")
+fireball_scene = ExtResource("15_fireball")
+ice_lance_scene = ExtResource("16_ice_lance")
+mire_telegraph_scene = ExtResource("17_mire_telegraph")
+mire_zone_scene = ExtResource("18_mire_zone")
 
 [node name="VisualRoot" type="Node2D" parent="."]
 position = Vector2(0, -44)

@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/impact/impact_01.png" id="1_kr4g8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/impact/impact_02.png" id="2_haaq0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/impact/impact_03.png" id="3_cgtf1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/impact/impact_04.png" id="4_x3bp7"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_kr4g8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_haaq0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_cgtf1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_x3bp7")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 10.0
+}]

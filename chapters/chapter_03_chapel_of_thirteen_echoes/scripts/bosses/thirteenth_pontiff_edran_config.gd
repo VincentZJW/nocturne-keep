@@ -75,8 +75,9 @@ extends Resource
 @export_category("Raise the Unconfessed")
 @export var summon_windup: float = 1.15
 @export var summon_recovery: float = 0.72
-@export var summon_cooldown_min: float = 8.5
-@export var summon_cooldown_max: float = 10.0
+@export var summon_cooldown_min: float = 6.2
+@export var summon_cooldown_max: float = 7.4
+@export var summon_interrupt_cooldown: float = 3.0
 @export_range(1, 200, 1) var summon_interrupt_poise: int = 36
 @export var summon_interrupt_recovery: float = 0.65
 @export var post_summon_major_lock: float = 1.60
@@ -140,8 +141,48 @@ extends Resource
 @export_category("Procession of the Unburied")
 @export var procession_windup: float = 1.0
 @export var procession_recovery: float = 0.68
-@export var procession_cooldown: float = 8.2
-@export_range(1, 3, 1) var phase_02_summon_cap: int = 2
+@export var phase_02_summon_cooldown_min: float = 4.8
+@export var phase_02_summon_cooldown_max: float = 6.0
+@export_range(1, 3, 1) var phase_02_summon_cap: int = 3
+@export_range(0, 3, 1) var phase_02_penitent_cap: int = 3
+@export_range(0, 1, 1) var phase_02_choir_husk_cap: int = 1
+
+@export_category("Elemental Magic Cadence")
+@export var phase_1_magic_global_cooldown_min: float = 3.8
+@export var phase_1_magic_global_cooldown_max: float = 4.8
+@export var phase_2_magic_global_cooldown_min: float = 3.0
+@export var phase_2_magic_global_cooldown_max: float = 4.0
+
+@export_category("Cinder Absolution")
+@export var fire_windup: float = 0.58
+@export var fire_direction_lock: float = 0.18
+@export var fire_recovery: float = 0.72
+@export var fire_cooldown: float = 4.5
+@export_range(1, 99, 1) var fire_impact_damage: int = 8
+@export_range(1, 99, 1) var burn_tick_damage: int = 5
+@export var burn_duration: float = 3.0
+@export var burn_tick_interval: float = 1.0
+
+@export_category("Litany of Stillness")
+@export var ice_windup: float = 0.72
+@export var ice_direction_lock: float = 0.20
+@export var ice_recovery: float = 0.84
+@export var phase_1_ice_cooldown: float = 8.5
+@export var phase_2_ice_cooldown: float = 7.0
+@export_range(1, 99, 1) var ice_impact_damage: int = 7
+@export var freeze_duration: float = 3.0
+@export var freeze_immunity_duration: float = 5.0
+@export var frozen_major_attack_grace: float = 1.25
+
+@export_category("Mire of the Unburied")
+@export var mire_cast_time: float = 2.0
+@export var mire_telegraph_delay: float = 0.20
+@export var mire_target_lock_time: float = 1.15
+@export var mire_recovery: float = 0.70
+@export var mire_cooldown: float = 7.0
+@export var mire_duration: float = 4.5
+@export_range(0.1, 1.0, 0.05) var mire_move_multiplier: float = 0.35
+@export_range(0.1, 1.0, 0.05) var mire_dash_multiplier: float = 0.70
 
 @export_category("Fourteenth Seat")
 @export var fourteenth_seat_health_ratio: float = 0.25

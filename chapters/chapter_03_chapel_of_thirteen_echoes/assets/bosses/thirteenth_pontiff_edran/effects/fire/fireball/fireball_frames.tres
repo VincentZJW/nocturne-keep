@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/fireball/fireball_01.png" id="1_h3p6b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/fireball/fireball_02.png" id="2_4qubk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/fireball/fireball_03.png" id="3_75o0p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/fireball/fireball_04.png" id="4_rbydb"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_h3p6b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_4qubk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_75o0p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_rbydb")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 10.0
+}]

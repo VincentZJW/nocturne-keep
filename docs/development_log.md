@@ -6420,3 +6420,55 @@ Status: complete — Boss implementation and Main QA passed; Chapter IV destinat
 - User playtesting is still required for attack readability, overlap fairness and full-fight feel; deterministic tests cannot certify subjective combat feel.
 - `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` does not exist. The entrance unlock and chapter-complete flags are verified, but Chapter IV loading is not claimed.
 - Formal evidence and PASS/PARTIAL matrix: `docs/qa/chapter_03_boss_b4_b7/report.md`.
+
+## 2026-07-30 — Edran elemental-magic and summon-cadence preflight
+
+Status: in progress — M0 audit complete; user explicitly approved automatic continuation through implementation and QA
+
+### Audited baseline and scope
+
+- Formal runtime chain is `res://scenes/bootstrap/main_bootstrap.tscn -> chapter_03_route.tscn -> ch3_boss_sanctum_room.tscn`; the live Boss instance is `Ch3BossSanctumRoom/BossActors/ThirteenthPontiffEdran`.
+- Boss logic is `thirteenth_pontiff_edran.gd`, typed tuning is `thirteenth_pontiff_edran_config.gd` plus `thirteenth_pontiff_edran_data.tres`, and summons are owned by `ThirteenthPontiffSummonDirector`.
+- Current Phase 1 summon range is 8.5–10.0 seconds; interrupted summon retry is derived as half the minimum (4.25 seconds). Phase 2 Procession uses a fixed 8.2 seconds and can create two actors per cast. Current caps are 2/2, while Phase 2 does not enforce the required one-Choir-Husk cap.
+- Player has typed movement/action/stamina/health/hurt controllers but no unified status-effect controller, DOT system or status HUD. Movement modifiers already compose through `Player.set_movement_speed_modifier`; attacks close through `PlayerActionController.cancel_all_actions()`.
+- The formal Player and HUD are `res://scenes/player/player.tscn` and `res://scenes/runtime/chapter_gameplay_runtime.tscn`. Status state will remain gameplay-owned and signal-driven; the HUD will only present it.
+- Existing Chapter III timed fields and Chapter II projectiles provide collision/lifetime reference patterns, but their geometry visuals will not be reused as production magic art. New fire, ice and mire visuals will be deterministic transparent pixel PNGs shown through Sprite2D/AnimatedSprite2D.
+- Owned scope: shared Player status component/API and HUD; chapter-local spell projectiles/zones, Boss state/AI/config/summon changes, magic SpriteFrames and QA. No Player movement tuning, Boss base HP/damage, unrelated enemy, chapter layout or Chapter I/shared dirty work is included.
+
+### Planned verification
+
+- Exact Godot 4.7.1 import/parse, isolated Boss scene, deterministic 30× burn/freeze/mire contracts, 20 summon-cadence simulations and 10× combination-rule regressions.
+- MainBootstrap/F5 captures for cast, projectile, status, mire-zone, summon pressure and complete Boss flow; evidence and forced matrix will live under `docs/qa/chapter_03_edran_elemental_magic/`.
+
+## 2026-07-30 — Edran elemental magic and summon cadence complete
+
+Status: complete — implementation, MainBootstrap evidence and regression matrix passed; manual combat-feel acceptance pending
+
+### Delivered
+
+- Added a typed, signal-driven Player status owner for burn, freeze, freeze immunity and mire slow. Death, respawn and room transition clear every effect; freeze safely cancels actions/interactions, while mire composes with the existing movement modifier and dash-speed paths.
+- Added formal transparent nearest-neighbour pixel VFX, icons and exit animations. Boss art now contains phase-aware fire, ice and mire cast animations; projectiles and zones use Sprite2D/AnimatedSprite2D scenes rather than formal geometry placeholders.
+- Implemented Cinder Absolution (8 direct + 3×5 burn), Litany of Stillness (7 direct, 3.0 s freeze, 5.0 s immunity) and Mire of the Unburied (2.0 s cast, 1.15 s target lock, 4.5 s field, movement×0.35, dash×0.70).
+- Revised summon cadence to Phase 1 6.2–7.4 s / cap 2 and Phase 2 4.8–6.0 s / cap 3, with one actor per cast, Choir Husk cap 1 and 3.0 s interrupted retry.
+- Integrated weighted action eligibility, elemental/global cooldowns, no immediate elemental repeat, no fire-on-burn, no ice-on-freeze, summon/freeze and danger-zone interlocks, and phase/death/stagger cleanup.
+- Added signal-driven status HUD and five Main debug routes: `CH3_BOSS_MAGIC_TEST`, `CH3_BOSS_FIRE_TEST`, `CH3_BOSS_ICE_TEST`, `CH3_BOSS_MIRE_TEST`, `CH3_BOSS_SUMMON_MAGIC_COMBO`.
+- Preserved unrelated Chapter I/shared/resource/QA worktree modifications and excluded them from this milestone.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_edran_elemental_magic_art.gd` — PASS, `files=131 original_pixel=true`.
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/build_edran_elemental_magic_resources.gd` — PASS, `frames=128`.
+3. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_elemental_magic.gd` — PASS, `assertions=986 burn_hits=30 freeze_hits=30 mire_casts=30 cadence_battles=20`.
+4. `test_edran_b3_summons.gd` — PASS, `actors=2 animations=25 cap=2 penitent_cap=1 interrupt=36 cleanup=true main_spawn=true`.
+5. `test_edran_b4_b7_full_boss.gd` — PASS, `transition=true phase2_attacks=6 death=true reward_interface=true regressions=20`.
+6. `test_chapter_03_r5_full_route.gd` — PASS, `transitions=40 cycles=10 persistent_runtime=true platform_combat=true boss_entity=partial reward=partial chapter4=partial`.
+7. `test_m1_player_movement.gd`, `test_m15_player_actions.gd`, `test_player_death_state.gd`, `test_player_respawn.gd`, `test_player_health_hud.gd` — all PASS.
+8. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tests/capture_edran_elemental_magic_main_qa.gd` — PASS on OpenGL/Metal Compatibility, `captures=27 route=MainBootstrap fire=true ice=true mire=true summons=true`.
+9. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS using exact Godot 4.7.1; no script/resource errors.
+
+### QA and manual acceptance
+
+- Formal evidence and PASS/MANUAL matrix: `docs/qa/chapter_03_edran_elemental_magic/report.md`.
+- Full manual route: Chapter III Debug Start `CH3_BOSS`. Focused routes: `CH3_BOSS_FIRE_TEST`, `CH3_BOSS_ICE_TEST`, `CH3_BOSS_MIRE_TEST` and `CH3_BOSS_SUMMON_MAGIC_COMBO`.
+- Manual acceptance is still required for visual comfort, reaction windows and full-fight difficulty. Automated cadence models certify legal state/cooldown/cap behavior, not subjective fairness.
+- Existing Chapter IV PackedScene absence is unchanged and outside this task.

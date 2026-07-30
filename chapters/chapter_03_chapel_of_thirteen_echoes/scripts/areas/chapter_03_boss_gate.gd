@@ -44,6 +44,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		not auto_trigger
 		and event.is_action_pressed(&"interact")
 		and _player_in_range != null
+		and _player_in_range.can_process_gameplay_interaction()
 		and not _is_open
 		and not _sequence_running
 	):

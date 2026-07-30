@@ -16,7 +16,7 @@ signal transition_requested(destination_room_id: StringName, destination_spawn_i
 @onready var blocker_shape: CollisionShape2D = get_node_or_null(blocker_shape_path) as CollisionShape2D
 @onready var prompt: Label = get_node_or_null(prompt_path) as Label
 
-var _player_in_range: bool = false
+var _player_in_range: Player = null
 var _opened: bool = false
 var _opening: bool = false
 
@@ -29,7 +29,13 @@ func _ready() -> void:
 
 
 func _process(_delta: float) -> void:
-	if _player_in_range and not _opened and not _opening and Input.is_action_just_pressed("interact"):
+	if (
+		_player_in_range != null
+		and _player_in_range.can_process_gameplay_interaction()
+		and not _opened
+		and not _opening
+		and Input.is_action_just_pressed("interact")
+	):
 		_open()
 
 
@@ -53,7 +59,7 @@ func _open() -> void:
 func _on_body_entered(body: Node2D) -> void:
 	if body is not Player:
 		return
-	_player_in_range = true
+	_player_in_range = body as Player
 	if prompt != null and not _opened:
 		prompt.visible = true
 
@@ -61,6 +67,6 @@ func _on_body_entered(body: Node2D) -> void:
 func _on_body_exited(body: Node2D) -> void:
 	if body is not Player:
 		return
-	_player_in_range = false
+	_player_in_range = null
 	if prompt != null:
 		prompt.visible = false

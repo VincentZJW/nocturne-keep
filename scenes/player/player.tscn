@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://ilk7wlpsv544"]
+[gd_scene load_steps=24 format=3 uid="uid://ilk7wlpsv544"]
 
 [ext_resource type="Script" uid="uid://b67b3qhsr1bvs" path="res://scripts/player/player.gd" id="1_player"]
 [ext_resource type="Resource" path="res://resources/player/player_movement_config.tres" id="2_config"]
@@ -15,6 +15,10 @@
 [ext_resource type="Script" path="res://scripts/player/player_hurt_controller.gd" id="13_hurt_controller"]
 [ext_resource type="Resource" path="res://resources/player/player_hurt_config.tres" id="14_hurt_config"]
 [ext_resource type="Script" path="res://scripts/player/player_weapon_visual.gd" id="15_weapon_visual"]
+[ext_resource type="Script" path="res://scripts/player/player_status_effect_controller.gd" id="16_status_controller"]
+[ext_resource type="SpriteFrames" path="res://shared/assets/status_effects/burn/burn_frames.tres" id="17_burn_frames"]
+[ext_resource type="SpriteFrames" path="res://shared/assets/status_effects/freeze/freeze_frames.tres" id="18_freeze_frames"]
+[ext_resource type="SpriteFrames" path="res://shared/assets/status_effects/mire/mire_frames.tres" id="19_mire_frames"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_player"]
 size = Vector2(24, 52)
@@ -50,6 +54,27 @@ script = ExtResource("15_weapon_visual")
 
 [node name="DeathEffects" type="Node2D" parent="VisualRoot"]
 z_index = 2
+
+[node name="StatusEffects" type="Node2D" parent="VisualRoot"]
+z_index = 3
+
+[node name="BurnFX" type="AnimatedSprite2D" parent="VisualRoot/StatusEffects"]
+visible = false
+texture_filter = 1
+sprite_frames = ExtResource("17_burn_frames")
+animation = &"active"
+
+[node name="FreezeFX" type="AnimatedSprite2D" parent="VisualRoot/StatusEffects"]
+visible = false
+texture_filter = 1
+sprite_frames = ExtResource("18_freeze_frames")
+animation = &"active"
+
+[node name="MireFX" type="AnimatedSprite2D" parent="VisualRoot/StatusEffects"]
+visible = false
+texture_filter = 1
+sprite_frames = ExtResource("19_mire_frames")
+animation = &"active"
 
 [node name="GhostSprite" type="Sprite2D" parent="VisualRoot/DeathEffects"]
 visible = false
@@ -133,6 +158,10 @@ action_config = ExtResource("6_action_config")
 unique_name_in_owner = true
 script = ExtResource("13_hurt_controller")
 config = ExtResource("14_hurt_config")
+
+[node name="StatusEffectController" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("16_status_controller")
 
 [node name="DeathSequence" type="Node" parent="."]
 unique_name_in_owner = true

@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/spells/pontiff_mire_telegraph.gd" id="1_script"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/mire/summon_circle/summon_circle_frames.tres" id="2_frames"]
+
+[node name="PontiffMireTelegraph" type="Node2D"]
+z_index = 9
+script = ExtResource("1_script")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"active"

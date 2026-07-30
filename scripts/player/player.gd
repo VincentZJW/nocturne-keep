@@ -56,6 +56,7 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("HealthComponent")
 @export_node_path("HurtboxComponent") var hurtbox_path: NodePath = NodePath("Hurtbox")
 @export_node_path("PlayerHurtController") var hurt_controller_path: NodePath = NodePath("HurtController")
+@export_node_path("PlayerStatusEffectController") var status_effect_controller_path: NodePath = NodePath("StatusEffectController")
 @export_node_path("Camera2D") var camera_path: NodePath = NodePath("Camera2D")
 
 @onready var animation_controller: PlayerAnimationController = get_node_or_null(
@@ -74,6 +75,9 @@ const DOUBLE_JUMP_ANIMATION: StringName = &"double_jump"
 @onready var hurt_controller: PlayerHurtController = get_node_or_null(
 	hurt_controller_path
 ) as PlayerHurtController
+@onready var status_effect_controller: PlayerStatusEffectController = get_node_or_null(
+	status_effect_controller_path
+) as PlayerStatusEffectController
 @onready var player_camera: Camera2D = get_node_or_null(camera_path) as Camera2D
 
 var air_jumps_remaining: int = 0
@@ -116,6 +120,10 @@ func _ready() -> void:
 		push_error("Player requires a PlayerHurtController")
 		set_physics_process(false)
 		return
+	if status_effect_controller == null:
+		push_error("Player requires a PlayerStatusEffectController")
+		set_physics_process(false)
+		return
 	animation_controller.one_shot_finished.connect(_on_one_shot_finished)
 	action_controller.action_finished.connect(_on_action_finished)
 	hurt_controller.hurt_started.connect(_on_hurt_started)
@@ -138,6 +146,9 @@ func _physics_process(delta: float) -> void:
 		return
 	if is_hurt():
 		_process_hurt_motion(delta)
+		return
+	if status_effect_controller.is_input_locked():
+		_process_status_locked_motion(delta)
 		return
 	var was_on_floor: bool = is_on_floor()
 	var horizontal_input: float = (
@@ -170,7 +181,10 @@ func _physics_process(delta: float) -> void:
 	):
 		velocity.y = 0.0
 	if action_controller.is_dash_active() or action_controller.is_dash_attack_active():
-		velocity.x = action_controller.get_action_horizontal_velocity()
+		velocity.x = (
+			action_controller.get_action_horizontal_velocity()
+			* status_effect_controller.get_dash_multiplier()
+		)
 	else:
 		_apply_horizontal_velocity(horizontal_input, delta, was_on_floor)
 	_apply_gravity(delta, was_on_floor)
@@ -223,6 +237,15 @@ func is_hurt() -> bool:
 	return _life_state == LifeState.HURT
 
 
+func can_process_gameplay_interaction() -> bool:
+	return (
+		_life_state == LifeState.ALIVE
+		and _input_profile == InputProfile.FULL
+		and status_effect_controller != null
+		and not status_effect_controller.is_input_locked()
+	)
+
+
 func respawn_at(global_spawn_position: Vector2) -> bool:
 	if not is_dead():
 		return false
@@ -234,6 +257,7 @@ func respawn_at(global_spawn_position: Vector2) -> bool:
 	_landed_during_action = false
 	action_controller.cancel_all_actions()
 	_movement_speed_modifiers.clear()
+	status_effect_controller.clear_all()
 	_restore_air_jumps()
 	stamina_component.reset_to_full()
 	health_component.reset_to_full()
@@ -265,6 +289,20 @@ func _process_hurt_motion(delta: float) -> void:
 		velocity.y += movement_config.gravity * delta
 	else:
 		velocity.y = 0.0
+	move_and_slide()
+	_resolve_ceiling_collision()
+	if not was_on_floor and is_on_floor():
+		_restore_air_jumps()
+
+
+func _process_status_locked_motion(delta: float) -> void:
+	var was_on_floor: bool = is_on_floor()
+	velocity.x = move_toward(velocity.x, 0.0, movement_config.ground_deceleration * delta)
+	if not was_on_floor:
+		velocity.y += movement_config.gravity * delta
+	else:
+		velocity.y = 0.0
+	stamina_component.advance(delta, was_on_floor, false)
 	move_and_slide()
 	_resolve_ceiling_collision()
 	if not was_on_floor and is_on_floor():
@@ -421,6 +459,15 @@ func get_movement_speed_multiplier() -> float:
 	return multiplier
 
 
+func cancel_actions_for_status_lock() -> void:
+	action_controller.cancel_all_actions()
+	velocity.x = 0.0
+	_coyote_time_remaining = 0.0
+	_jump_buffer_remaining = 0.0
+	_landed_during_action = false
+	animation_controller.reset_to_idle()
+
+
 func _restore_air_jumps() -> void:
 	air_jumps_remaining = 1 if _is_double_jump_enabled() else 0
 
@@ -465,6 +512,7 @@ func _on_health_died() -> void:
 	_last_horizontal_input = 0.0
 	_landed_during_action = false
 	action_controller.cancel_all_actions()
+	status_effect_controller.clear_all()
 	hurt_controller.cancel_for_death()
 	animation_controller.reset_to_idle()
 	death_state_entered.emit()

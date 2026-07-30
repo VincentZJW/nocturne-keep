@@ -66,7 +66,7 @@ func _run() -> void:
 			timeout += 1.0/60.0
 		_check(timeout < 4.0,"%s resolves" % attack_name)
 		await process_frame
-	_check(boss.summon_director.get_active_count() <= 2,"Phase 2 summon cap remains two")
+	_check(boss.summon_director.get_active_count() <= 3,"Phase 2 summon cap is three")
 	boss.summon_director.force_dissolve_all()
 	await create_timer(0.58).timeout
 	_check(boss.summon_director.get_active_count() == 0,"transition/death cleanup path retires summons")

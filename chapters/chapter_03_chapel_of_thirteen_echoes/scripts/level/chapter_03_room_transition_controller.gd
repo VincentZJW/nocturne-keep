@@ -97,6 +97,8 @@ func _swap_room(room_id: StringName, spawn_id: StringName) -> bool:
 		return false
 	if active_room != null:
 		active_room.queue_free()
+	if player.status_effect_controller != null:
+		player.status_effect_controller.clear_all()
 	active_room = new_room
 	active_room_id = room_id
 	room_host.add_child(active_room)

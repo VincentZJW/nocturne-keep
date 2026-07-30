@@ -26,7 +26,11 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if not event.is_action_pressed(&"interact") or _player_in_range == null:
+	if (
+		not event.is_action_pressed(&"interact")
+		or _player_in_range == null
+		or not _player_in_range.can_process_gameplay_interaction()
+	):
 		return
 	if ResourceLoader.exists(CHAPTER_FOUR_SCENE, "PackedScene"):
 		chapter_four_transition_requested.emit(_player_in_range)

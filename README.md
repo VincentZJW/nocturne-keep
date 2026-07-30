@@ -2,9 +2,11 @@
 
 原创哥特风横版 2D 动作闯关游戏灰盒原型，使用 Godot Engine 4.7.1 标准版与 GDScript 开发。
 
-当前版本：`第二章 Boss 美术 Stage 2 · 空心公爵夫人·瑟芙琳`
+当前版本：`第三章 Boss 元素魔法强化 · 第十三响教宗·埃德兰`
 
 第三章Boss B1–B7已经接入正式Main路线：`The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`拥有360 HP Phase 1、198 HP保护式十一阶段变身、结构重绘的145 Poise Phase 2、两类受限召唤、六种Phase 2招式、完整死亡流程与遗物龛领取接口。开发直达点为`CH3_BOSS`、`CH3_BOSS_PHASE_02`、`CH3_BOSS_SUMMON_TEST`和`CH3_POST_BOSS`。第四章入口目前只是已解锁的计划边界，仓库尚无Chapter IV PackedScene；未虚构武器数值或声称完成跳转。权威规格见[第三章埃德兰Boss规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)，最终强制QA见[第三章Boss B4–B7报告](docs/qa/chapter_03_boss_b4_b7/report.md)。
+
+埃德兰现已追加正式元素魔法与召唤节奏：`Cinder Absolution`火焰弹、`Litany of Stillness`冰矛、`Mire of the Unburied`黑泥领域，以及Phase 1两只/Phase 2三只（唱诗尸壳最多一只）的召唤上限。玩家状态由统一组件管理，HUD以信号显示燃烧、冻结与黑泥减速；死亡、重生和跨房间会清理状态。开发直达点新增`CH3_BOSS_MAGIC_TEST`、`CH3_BOSS_FIRE_TEST`、`CH3_BOSS_ICE_TEST`、`CH3_BOSS_MIRE_TEST`和`CH3_BOSS_SUMMON_MAGIC_COMBO`。规格见[埃德兰元素魔法规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/edran_elemental_magic_spec.md)，Main强制QA见[元素魔法QA报告](docs/qa/chapter_03_edran_elemental_magic/report.md)。
 
 第二章普通敌人美术 Stage 1 已接入正式 Silent Court 路线：空壳侍从、王庭戟卫、哀悼铠甲、血烛侍祭与倒悬猎兽均通过 F5/Main 使用章节内正式概念图与扩展 64×64 SpriteFrames。验收索引见 `docs/qa/chapter_02_enemy_boss_art_rework/stage_1_report.md`。
 

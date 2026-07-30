@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/cast_circle/cast_circle_01.png" id="1_ev65p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/cast_circle/cast_circle_02.png" id="2_3xbb6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/cast_circle/cast_circle_03.png" id="3_puq12"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/fire/cast_circle/cast_circle_04.png" id="4_djh30"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ev65p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_3xbb6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_puq12")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_djh30")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 10.0
+}]

@@ -1,0 +1,51 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/freeze_01.png" id="1_0abwg"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/freeze_02.png" id="2_yq3g1"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/freeze_03.png" id="3_gyfc6"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/freeze_04.png" id="4_ap013"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/freeze_05.png" id="5_f5ali"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/shatter_01.png" id="6_f5ali"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/shatter_02.png" id="7_yf8oe"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/shatter_03.png" id="8_idwus"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/shatter_04.png" id="9_y1glm"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_0abwg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_yq3g1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_gyfc6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_ap013")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_f5ali")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_f5ali")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_yf8oe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_idwus")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_y1glm")
+}],
+"loop": 0,
+"name": &"shatter",
+"speed": 12.0
+}]

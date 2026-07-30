@@ -33,7 +33,9 @@ func _resolve_start(spawn_id: StringName) -> Dictionary:
 			return {"room_id": &"CH3_CHOIR_GALLERY", "spawn_id": &"EnemyTest"}
 		&"CH3_BOSS_ANTE":
 			return {"room_id": &"CH3_BOSS_ANTE", "spawn_id": &"EntryWest"}
-		&"CH3_BOSS", &"CH3_BOSS_SUMMON_TEST", &"CH3_BOSS_PHASE_02":
+		&"CH3_BOSS", &"CH3_BOSS_SUMMON_TEST", &"CH3_BOSS_PHASE_02", \
+		&"CH3_BOSS_MAGIC_TEST", &"CH3_BOSS_FIRE_TEST", &"CH3_BOSS_ICE_TEST", \
+		&"CH3_BOSS_MIRE_TEST", &"CH3_BOSS_SUMMON_MAGIC_COMBO":
 			return {"room_id": &"CH3_BOSS", "spawn_id": &"EntryWest"}
 		&"CH3_POST_BOSS":
 			return {"room_id": &"CH3_POST_BOSS", "spawn_id": &"EntryWest"}

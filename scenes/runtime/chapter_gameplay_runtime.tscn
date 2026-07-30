@@ -1,10 +1,14 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
 [ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="2_respawn"]
 [ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="3_stamina_hud"]
 [ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="4_health_hud"]
 [ext_resource type="Script" path="res://scripts/ui/run_inventory_hud.gd" id="5_inventory_hud"]
+[ext_resource type="Script" path="res://scripts/ui/player_status_hud.gd" id="6_status_hud"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/burn/burn_icon.png" id="7_burn_icon"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/freeze/freeze_icon.png" id="8_freeze_icon"]
+[ext_resource type="Texture2D" path="res://shared/assets/status_effects/mire/mire_icon.png" id="9_mire_icon"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBox_panel"]
 bg_color = Color(0.035, 0.045, 0.075, 0.82)
@@ -146,6 +150,86 @@ offset_bottom = 27.0
 texture_filter = 1
 expand_mode = 1
 stretch_mode = 5
+
+[node name="StatusHud" type="Control" parent="HUD"]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -212.0
+offset_top = 133.0
+offset_right = -18.0
+offset_bottom = 157.0
+grow_horizontal = 0
+script = ExtResource("6_status_hud")
+
+[node name="Burn" type="Control" parent="HUD/StatusHud"]
+layout_mode = 0
+offset_right = 56.0
+offset_bottom = 22.0
+
+[node name="Icon" type="TextureRect" parent="HUD/StatusHud/Burn"]
+layout_mode = 0
+offset_right = 18.0
+offset_bottom = 18.0
+texture_filter = 1
+texture = ExtResource("7_burn_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Time" type="Label" parent="HUD/StatusHud/Burn"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 56.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 10
+text = "3.0"
+
+[node name="Freeze" type="Control" parent="HUD/StatusHud"]
+layout_mode = 0
+offset_left = 62.0
+offset_right = 118.0
+offset_bottom = 22.0
+
+[node name="Icon" type="TextureRect" parent="HUD/StatusHud/Freeze"]
+layout_mode = 0
+offset_right = 18.0
+offset_bottom = 18.0
+texture_filter = 1
+texture = ExtResource("8_freeze_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Time" type="Label" parent="HUD/StatusHud/Freeze"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 56.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 10
+text = "3.0"
+
+[node name="Mire" type="Control" parent="HUD/StatusHud"]
+layout_mode = 0
+offset_left = 124.0
+offset_right = 194.0
+offset_bottom = 22.0
+
+[node name="Icon" type="TextureRect" parent="HUD/StatusHud/Mire"]
+layout_mode = 0
+offset_right = 18.0
+offset_bottom = 18.0
+texture_filter = 1
+texture = ExtResource("9_mire_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Time" type="Label" parent="HUD/StatusHud/Mire"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 68.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 10
+text = "AREA"
 
 [node name="RoomName" type="Label" parent="HUD"]
 layout_mode = 3

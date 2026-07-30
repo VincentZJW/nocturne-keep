@@ -1,0 +1,26 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/mire/summon_circle/summon_circle_01.png" id="1_247r5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/mire/summon_circle/summon_circle_02.png" id="2_m1xjm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/mire/summon_circle/summon_circle_03.png" id="3_ap3p7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/mire/summon_circle/summon_circle_04.png" id="4_7q2g5"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_247r5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_m1xjm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_ap3p7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_7q2g5")
+}],
+"loop": 1,
+"name": &"active",
+"speed": 10.0
+}]
