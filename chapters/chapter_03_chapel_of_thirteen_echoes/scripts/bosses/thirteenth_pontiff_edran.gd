@@ -4,6 +4,7 @@ extends CharacterBody2D
 signal activated
 signal phase_transition_requested(current_health: int)
 signal phase_transition_started
+signal phase_transition_stage_reached(stage_name: StringName)
 signal phase_changed(phase: int)
 signal phase_transition_finished
 signal death_sequence_started
@@ -1062,6 +1063,7 @@ func _run_phase_transition() -> void:
 	var step_duration: float = (config.phase_transition_duration - 0.35) / float(sequence.size())
 	for animation: StringName in sequence:
 		_play_animation(animation)
+		phase_transition_stage_reached.emit(animation)
 		await get_tree().create_timer(step_duration).timeout
 	_phase = 2
 	current_poise = config.phase_02_max_poise

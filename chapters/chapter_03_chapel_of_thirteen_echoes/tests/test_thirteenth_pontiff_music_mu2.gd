@@ -3,6 +3,7 @@ extends SceneTree
 const BOOTSTRAP: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const ROUTE_PATH: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn"
 const TRACK_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
+const PHASE_02_TRACK_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_02"
 
 var _failures: Array[String] = []
 var _track_start_count: int = 0
@@ -62,10 +63,11 @@ func _run() -> void:
 
 	room.boss.debug_force_phase_02()
 	await _wait_for_transition(room.boss, 180)
-	_expect(manager.get_current_track_id().is_empty(), "MU2 Phase 1 score did not yield at transition")
-	for _frame: int in range(40):
+	for _frame: int in range(180):
 		await process_frame
-	_expect(manager.get_active_player_count() == 0, "Phase transition fade left a playing deck")
+		if manager.get_current_track_id() == PHASE_02_TRACK_ID:
+			break
+	_expect(manager.get_current_track_id() == PHASE_02_TRACK_ID, "Phase 1 did not hand off to the approved MU3 score")
 	_cleanup(manager, config)
 
 
@@ -129,7 +131,7 @@ func _cleanup(manager: MusicManagerService, config: DebugRunConfigState) -> void
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("THIRTEENTH_PONTIFF_MUSIC_MU2: PASS main=Bootstrap track_once=1 meter=6/8 loop=125.217 intro_low=1 combat=-10 transition_fade=1")
+		print("THIRTEENTH_PONTIFF_MUSIC_MU2: PASS main=Bootstrap track_once=1 meter=6/8 loop=125.217 intro_low=1 combat=-10 mu3_handoff=1")
 		quit(0)
 		return
 	for failure: String in _failures:

@@ -6639,3 +6639,57 @@ Status: complete — Chapter II Phase 2 score, shared music foundation, formal B
 - Evidence and forced matrix: `docs/qa/boss_music/mu1/report.md`; runtime screenshots and waveform/spectrogram are under `docs/qa/boss_music/mu1/`.
 - Manual F5 acceptance: enable Chapter II Debug Start and select the three `CH2_BOSS_MUSIC_*` entries, then run `CH2_BOSS` for the unforced full fight. Judge musical taste, dialogue/SFX masking and fight pressure at the user's listening volume; automation cannot certify those subjective properties.
 - The existing 6.6-second Phase 1 Broken Waltz remains truthfully documented as an intro/motif loop. Chapter III Phase 1/2 composition and integration are MU2/MU3 and were not started.
+## 2026-07-31 — Boss music MU3 preflight
+
+Status: in progress — Chapter III Phase 2 composition, black-bell transition and Main/F5 validation only
+
+### Goal, owned files, tests and scope
+
+- Compose the original fixed-seed Phase 2 score `The Bell Within the Bone / 骨中之钟`: 124 dotted-quarter BPM, 6/8, approximately 126 seconds, retaining Edran Phase 1's organ, thirteen-tone litany, bell grouping and synthetic wordless choir while transforming them into denser thirteen-bar pressure cycles.
+- Retain the project-owned Python source, score JSON, Standard MIDI and audio analysis; render locally to 48 kHz stereo Vorbis without samples, remote generation or real religious text.
+- Register `CH3_BOSS_MUSIC_PHASE_02` in the typed shared registry. Add one typed Boss presentation signal for named transition stages and switch exactly once at `black_bell_reveal`; Boss AI remains unaware of track IDs and no HP polling is permitted.
+- Add formal MainBootstrap debug starts `CH3_BOSS_MUSIC_TRANSITION` and `CH3_BOSS_MUSIC_PHASE_02`, focused deterministic transition/registry tests, a formal-route capture driver, waveform/spectrogram evidence and a real ten-minute loop run.
+- Owned paths are the Chapter III Edran music directory, Chapter III Boss/room/route/start-profile files, shared track registry and new Phase 2 definition, focused audio QA/tests, README and this log. Dialogue Duck, death/retry/reward/exit lifecycle are reserved for the separately approved MU4 milestone.
+- Preserve and exclude every pre-existing Chapter I/shared/resource/loot/Player/QA-image modification and UID sidecar from both MU3 and MU4 commits.
+
+### Audited baseline
+
+- Work begins on `master` at `3286e0f`; formal F5 remains `res://scenes/bootstrap/main_bootstrap.tscn` and Chapter III runtime ownership remains `MainBootstrap -> Chapter03Route -> Ch3BossSanctumRoom`.
+- The accepted MU2 cue is the only Chapter III Boss track in the registry. `Ch3BossSanctumRoom` currently starts it at -18 dB for intro, restores -10 dB on activation and intentionally fades to silence at transition start.
+- Edran already runs an eleven-step 5.2-second protected transition containing `black_bell_reveal`, but only exposes transition start/finish. MU3 will expose that existing named stage as a typed signal rather than infer the reveal from elapsed time.
+- Shared `MusicManager` owns exactly two reusable `AudioStreamPlayer` decks, one-shot phase guards, volume fades and debug state. The transition implementation will reuse this authority and must keep maximum active players at two during the crossfade and one afterward.
+
+### Planned verification
+
+- Exact Godot 4.7.1 import/parse; FFprobe format/duration; synthesis analysis for peak/RMS/seam/hash; focused registry/Main route/one-shot black-bell transition assertions; existing Edran Boss and Chapter III route regressions; graphical MainBootstrap captures; ten-minute real final-OGG loop; `git diff --check`; one isolated MU3 commit.
+## 2026-07-31 — Boss music MU3 complete
+
+Status: complete — Chapter III Phase 2 score, black-bell transition, formal Main evidence and real-time loop QA passed; MU4 approved next
+
+### Delivered
+
+- Authored the original fixed-seed score `The Bell Within the Bone / 骨中之钟`: 124 dotted-quarter BPM, 6/8, 130 bars, ten thirteen-bar pressure cycles and 125.806667-second final Vorbis. The score contains 2,052 events and retains the Phase 1 thirteen-tone litany, organ, non-semantic choir and bell identity through inversion, reversal, register fracture and denser low-string/drum/chain writing.
+- Retained Python source, Standard MIDI, complete JSON event score and objective analysis. Final audio is 48 kHz stereo, -3.10 dBFS peak, -17.50 dBFS RMS, endpoint delta 0.0 and SHA-256 `5f1916b08f505bcfd7a8ad22c7d6523c47f420090d2f01de0da4248bac3e5bf4`; no samples, remote service, real hymn or semantic liturgical text were used.
+- Added the typed track definition/registry entry and formal Main debug starts `CH3_BOSS_MUSIC_TRANSITION` and `CH3_BOSS_MUSIC_PHASE_02`. Edran now emits a typed named transition-stage event; the room lowers Phase 1 to -24 dB at transition start and performs one guarded 1.10-second crossfade exactly at `black_bell_reveal`. Existing immediate Phase 2 debug remains compatible through a state-change fallback.
+- Updated historical MU2 coverage to require the approved handoff instead of the superseded intentional silence. Added focused MU3 route/guard tests, formal Main graphical capture, waveform/spectrogram evidence and truthful manual-listening boundary.
+- Preserved and excluded all pre-existing unrelated Chapter I/shared/resource/loot/Player/QA-image worktree changes and UID sidecars.
+
+### Exact commands and actual results
+
+1. `/opt/anaconda3/bin/python3 .../source/generate_hollow_pontiff_phase_02.py` — PASS: 2,052 events, 125.806458 s PCM, -3.10 dBFS peak, -17.50 dBFS RMS, boundary 0.0.
+2. `/opt/homebrew/bin/ffprobe ... hollow_pontiff_phase_02_bell_within_bone.ogg` — PASS: Vorbis, 48,000 Hz, stereo, 125.806667 s, 938,078 bytes.
+3. Exact Godot 4.7.1 headless editor import — final PASS without script/resource error after the new OGG completed its first import.
+4. `test_music_manager_mu1.gd` — PASS: buses=5, decks=2, transitions=20, duplicate guard PASS.
+5. `test_thirteenth_pontiff_music_mu2.gd` — PASS: Phase 1 starts once, intro/combat levels correct, MU3 handoff observed.
+6. `test_thirteenth_pontiff_music_mu3.gd` — PASS: black bell=1, formal Phase 2=1, duplicate-guard cycles=20, settled players=1, MainBootstrap route.
+7. `test_edran_b4_b7_full_boss.gd` — PASS: transition, six Phase 2 attacks, death/reward interface and 20 regressions.
+8. `test_chapter_03_r5_full_route.gd` — PASS: 50 transitions, 10 cycles, persistent runtime.
+9. Graphical `capture_thirteenth_pontiff_music_mu3_qa.gd` — PASS on OpenGL/Metal Compatibility: three formal Main captures.
+10. Real-time `MU_LONG_PLAY_SECONDS=600 MU_LONG_PLAY_TRACK_ID=CH3_BOSS_MUSIC_PHASE_02 ... test_music_manager_long_play.gd` — PASS: 4 wraps, max players 1, memory 32,600,269 -> 32,597,381 bytes, peak 32,602,101, growth -2,888.
+11. Configured MainBootstrap 240-frame headless startup — PASS, formal new game selected Opening; no red script/resource error.
+
+### QA and boundary
+
+- Evidence and matrix: `docs/qa/boss_music/mu3/report.md`.
+- Manual route: use `CH3_BOSS_MUSIC_TRANSITION` for the formal black-bell handoff, `CH3_BOSS_MUSIC_PHASE_02` for the same protected transition and Phase 2 continuation, then `CH3_BOSS` for the unforced full fight.
+- Human listening remains required for taste, fatigue and SFX masking. MU3 does not claim the MU4 dialogue/death/retry/reward/exit lifecycle or the MU5 full pressure matrix.

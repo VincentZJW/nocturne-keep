@@ -2,8 +2,12 @@ class_name Chapter03BossSanctumRoom
 extends Chapter03Room
 
 const PHASE_01_TRACK_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
+const PHASE_02_TRACK_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_02"
+const PHASE_SWITCH_GUARD: StringName = &"CH3_EDRAN_PHASE_02_ONCE"
 const INTRO_MUSIC_DB: float = -18.0
 const COMBAT_MUSIC_DB: float = -10.0
+const TRANSITION_MUSIC_DB: float = -24.0
+const PHASE_CROSSFADE_SECONDS: float = 1.10
 
 @onready var sanctum: Chapter03BossSanctum = $BossSanctum as Chapter03BossSanctum
 @onready var post_boss_exit: Chapter03RoomExit = $PostBossExit as Chapter03RoomExit
@@ -21,6 +25,8 @@ func _ready() -> void:
 	boss.activated.connect(_on_boss_activated)
 	boss.defeated.connect(_on_boss_defeated)
 	boss.phase_transition_started.connect(_on_phase_transition_started)
+	boss.phase_transition_stage_reached.connect(_on_phase_transition_stage_reached)
+	boss.phase_changed.connect(_on_phase_changed)
 	boss.death_sequence_started.connect(_on_death_sequence_started)
 	call_deferred("_activate_boss_if_intro_skipped")
 
@@ -61,12 +67,30 @@ func _on_boss_defeated() -> void:
 
 
 func _on_phase_transition_started() -> void:
-	# MU2 intentionally yields to silence here. MU3 will replace this fade with
-	# the black-bell reveal and the authored Phase 2 crossfade.
 	var music_manager: MusicManagerService = _get_music_manager()
 	if music_manager != null and music_manager.get_current_track_id() == PHASE_01_TRACK_ID:
-		music_manager.fade_out(0.90)
+		music_manager.set_music_volume(TRANSITION_MUSIC_DB, 0.75)
 	sanctum.play_phase_transition_environment()
+
+
+func _on_phase_transition_stage_reached(stage_name: StringName) -> void:
+	if stage_name != &"black_bell_reveal":
+		return
+	var music_manager: MusicManagerService = _get_music_manager()
+	if music_manager != null:
+		music_manager.phase_switch_once(
+			PHASE_SWITCH_GUARD, PHASE_02_TRACK_ID, PHASE_CROSSFADE_SECONDS
+		)
+
+
+func _on_phase_changed(phase: int) -> void:
+	# The normal route has already switched on the black-bell presentation beat.
+	# This fallback only serves the existing immediate Phase 2 debug route.
+	if phase != 2:
+		return
+	var music_manager: MusicManagerService = _get_music_manager()
+	if music_manager != null and music_manager.get_current_track_id() != PHASE_02_TRACK_ID:
+		music_manager.phase_switch_once(PHASE_SWITCH_GUARD, PHASE_02_TRACK_ID, 0.35)
 
 
 func _on_death_sequence_started() -> void:
@@ -82,7 +106,9 @@ func _on_death_environment_finished() -> void:
 
 func _exit_tree() -> void:
 	var music_manager: MusicManagerService = _get_music_manager()
-	if music_manager != null and music_manager.get_current_track_id() == PHASE_01_TRACK_ID:
+	if music_manager != null and music_manager.get_current_track_id() in [
+		PHASE_01_TRACK_ID, PHASE_02_TRACK_ID,
+	]:
 		music_manager.fade_out(0.35)
 
 

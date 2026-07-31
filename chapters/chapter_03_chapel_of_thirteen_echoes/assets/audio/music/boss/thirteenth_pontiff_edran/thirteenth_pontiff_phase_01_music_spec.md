@@ -22,7 +22,7 @@
 - Runtime asset: `thirteenth_pontiff_phase_01_litany.ogg`, Vorbis, 48 kHz, stereo.
 - Godot import: loop enabled, offset 0, BPM 92, beat count 192, bar pulse count 2. The importer uses the dotted-quarter pulse as its bar grid; the typed definition retains the authored 6/8 meter.
 - Entry: Boss intro begins at -18 dB; formal Phase 1 combat restores -10 dB.
-- Exit in MU2: the cue fades over 0.90 seconds when Phase Transition starts. MU3 owns the black-bell reveal and Phase 2 score/crossfade.
+- Exit after MU3: the cue attenuates to -24 dB over 0.75 seconds when Phase Transition starts, then crossfades for 1.10 seconds into `The Bell Within the Bone` when the typed `black_bell_reveal` stage fires.
 
 ## Editable deliverables
 

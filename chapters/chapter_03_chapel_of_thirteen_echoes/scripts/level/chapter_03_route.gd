@@ -4,6 +4,8 @@ extends Node2D
 const DEFAULT_SPAWN_ID: StringName = &"chapter_03_start"
 const FLAG_CHAPTER_03_STARTED: StringName = &"chapter_03_started"
 const MUSIC_PHASE_01_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
+const MUSIC_TRANSITION_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_TRANSITION"
+const MUSIC_PHASE_02_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_02"
 
 @onready var transition_controller: Chapter03RoomTransitionController = $RoomTransitionController
 
@@ -20,8 +22,12 @@ func _ready() -> void:
 	transition_controller.initialize(start_room_id, start.spawn_id as StringName)
 	if start_room_id == &"CH3_BOSS":
 		transition_controller.play_active_boss_intro.call_deferred()
-	if selected_spawn_id == MUSIC_PHASE_01_SPAWN_ID:
+	if selected_spawn_id in [
+		MUSIC_PHASE_01_SPAWN_ID, MUSIC_TRANSITION_SPAWN_ID, MUSIC_PHASE_02_SPAWN_ID,
+	]:
 		call_deferred("_enable_music_debug_overlay")
+	if selected_spawn_id in [MUSIC_TRANSITION_SPAWN_ID, MUSIC_PHASE_02_SPAWN_ID]:
+		call_deferred("_force_formal_phase_02_after_intro")
 	if selected_spawn_id == &"CH3_BOSS_PHASE_02":
 		call_deferred("_force_phase_02_after_intro")
 
@@ -57,7 +63,8 @@ func _resolve_start(spawn_id: StringName) -> Dictionary:
 		&"CH3_BOSS_ANTE":
 			return {"room_id": &"CH3_BOSS_ANTE", "spawn_id": &"EntryWest"}
 		&"CH3_BOSS", &"CH3_BOSS_SUMMON_TEST", &"CH3_BOSS_PHASE_02", \
-		&"CH3_BOSS_MUSIC_PHASE_01", \
+		&"CH3_BOSS_MUSIC_PHASE_01", &"CH3_BOSS_MUSIC_TRANSITION", \
+		&"CH3_BOSS_MUSIC_PHASE_02", \
 		&"CH3_BOSS_MAGIC_TEST", &"CH3_BOSS_FIRE_TEST", &"CH3_BOSS_ICE_TEST", \
 		&"CH3_BOSS_MIRE_TEST", &"CH3_BOSS_SUMMON_MAGIC_COMBO":
 			return {"room_id": &"CH3_BOSS", "spawn_id": &"EntryWest"}
@@ -90,5 +97,17 @@ func _force_phase_02_after_intro() -> void:
 		) as ThirteenthPontiffEdran
 		if boss != null and boss.current_state != ThirteenthPontiffEdran.State.DORMANT:
 			boss.debug_enter_phase_02_immediate()
+			return
+		await get_tree().create_timer(0.20).timeout
+
+
+func _force_formal_phase_02_after_intro() -> void:
+	await get_tree().create_timer(0.25).timeout
+	while transition_controller.active_room_id == &"CH3_BOSS":
+		var boss: ThirteenthPontiffEdran = transition_controller.active_room.find_child(
+			"ThirteenthPontiffEdran", true, false
+		) as ThirteenthPontiffEdran
+		if boss != null and boss.current_state != ThirteenthPontiffEdran.State.DORMANT:
+			boss.debug_force_phase_02()
 			return
 		await get_tree().create_timer(0.20).timeout
