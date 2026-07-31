@@ -6735,3 +6735,43 @@ Status: complete — Chapter III Phase 2 score, black-bell transition, formal Ma
 - Evidence and matrix: `docs/qa/boss_music/mu3/report.md`.
 - Manual route: use `CH3_BOSS_MUSIC_TRANSITION` for the formal black-bell handoff, `CH3_BOSS_MUSIC_PHASE_02` for the same protected transition and Phase 2 continuation, then `CH3_BOSS` for the unforced full fight.
 - Human listening remains required for taste, fatigue and SFX masking. MU3 does not claim the MU4 dialogue/death/retry/reward/exit lifecycle or the MU5 full pressure matrix.
+
+## 2026-07-31 — Chapter III Boss reward weapon W0 preflight
+
+Status: complete — audit and design/file/test plan only; stopped before W1 concept production
+
+### Goals, owned files, tests and scope
+
+- Audit the actual `MainBootstrap` route, Chapter II reward WeaponData, runtime inventory/equipment ownership, Player visual binding, Edran defeat signal, Chapter III post-Boss reliquary gate, Chapter IV boundary and current persistence contract before creating any reward asset or gameplay Resource.
+- Lock the narrative and visual direction for `Thirteenfold Absolution / 十三重赦刃` as one indivisible dual-dagger set: main-hand `Absolution / 赦罪` and off-hand `Penance / 忏悔`, with no real-world religious marks and no copied or provenance-unknown asset.
+- Produce one W0 audit/implementation plan under the Chapter III docs tree and update this log only. W0 must not create WeaponData, concept art, pixel sprites, animations, pickup scenes, save files, flags, runtime code or Main scene changes.
+- Preserve every pre-existing unrelated Chapter I/shared/resource/QA worktree modification and both untracked UID sidecars. They are user-owned and excluded from the W0 commit.
+- Planned verification: exact Godot 4.7.1 import/parse, formal MainBootstrap startup, existing Crimson Masque weapon test, existing Edran B4–B7 reward-interface regression, source/reference audit, `git diff --check`, and a single documentation-only W0 commit.
+
+### Stage boundary
+
+- W0 ends after the audited paths, actual values, current persistence limitation, final design summary, future file ownership and Main/F5 test plan are recorded. W1 concept art does not start without explicit approval.
+
+### Result
+
+- Created `chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w0_audit.md` with all 14 requested W0 outputs.
+- Confirmed the Chapter II authority resource is `crimson_masque_stilettos.tres`, tier 3, normal 14, Dash 28, and that Chapter III must use an independent WeaponData rather than share that Resource.
+- Confirmed Player weapon presentation swaps complete SpriteFrames on `Player/VisualRoot/AnimatedSprite2D`; there is no separate left/right weapon hardpoint to populate.
+- Confirmed Edran emits `defeated` once after its death sequence, while the current post-Boss reliquary is a B6 story-token integration hook that gates `UnderkeepExit` through `chapter_03_boss_reward_collected`.
+- Confirmed Inventory, Equipment and ChapterSession are runtime-persistent Autoloads only. No disk Save/Load service exists, so process-restart persistence must be implemented narrowly in W3 before it can pass.
+- Confirmed the planned Chapter IV PackedScene does not exist. W5 can prove Underkeep and saved equipment inheritance, but real Chapter IV scene entry remains PARTIAL until its separate chapter milestone supplies the scene.
+- No runtime code, scene, Resource, image, animation, flag, input, Main route or persisted save was changed in W0.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 headless editor import — PASS; exit 0, no script/resource error.
+2. `test_crimson_masque_weapon.gd` — PASS: `data=1 frames=49 damage=14/28 dedup=1 profile=1`.
+3. `test_edran_b4_b7_full_boss.gd` — PASS: transition, six Phase 2 attacks, death, reward interface and 20 regressions.
+4. `test_chapter_03_r5_full_route.gd` — PASS: 50 transitions, 10 cycles, runtime persistence; boss entity/reward/Chapter IV correctly remain PARTIAL.
+5. Configured MainBootstrap 240-frame headless startup — PASS: formal new game selected Opening; no red Output/Debugger error.
+6. `git diff --check` — recorded after final documentation review.
+
+### Manual acceptance
+
+- W0 is documentation-only. Review the locked design, actual architecture boundaries and W1–W5 ownership plan; no gameplay or visual acceptance is claimed yet.
+- Approving W1 authorizes concept-art production only, not SpriteFrames, WeaponData, Save, reward interaction or Boss runtime integration.
