@@ -6775,3 +6775,42 @@ Status: complete — audit and design/file/test plan only; stopped before W1 con
 
 - W0 is documentation-only. Review the locked design, actual architecture boundaries and W1–W5 ownership plan; no gameplay or visual acceptance is claimed yet.
 - Approving W1 authorizes concept-art production only, not SpriteFrames, WeaponData, Save, reward interaction or Boss runtime integration.
+
+## 2026-07-31 — Thirteenfold Absolution W1 concept-art preflight
+
+Status: complete — concept art only; stopped before W2 pixel production
+
+### Goals, owned files, tests and scope
+
+- Produce the twelve W0-locked concept deliverables for `Thirteenfold Absolution / 十三重赦刃` under the Chapter III weapon asset tree: pair, Absolution front/side, Penance front/side, silhouette, guard breakdown, thirteen seals, Player scale, combat pose, reforging sequence and reliquary.
+- Use the built-in image-generation workflow for original raster artwork, then copy every accepted project-bound output into the repository. No licensed or provenance-unknown third-party image is used.
+- Keep the shared design language consistent: bone-white/cold-silver blades, black-iron shadow planes, muted aged copper/dark gold, restrained dark-red prayer grooves, hollow-bell and thurible construction, thirteen extinguished seals plus one unlabeled empty seat, and no real-world religious symbols or writing.
+- W1 must not create WeaponData, pixel sprites, SpriteFrames, Player animation integration, Inventory/Equipment/Save logic, reward flags, pickup scenes, Boss sequence changes or Main scene changes.
+- Owned paths are `chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/concept_art/`, `chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w1_concept.md`, `docs/qa/chapter_03_thirteenfold_absolution/w1/`, and this log entry only.
+- Planned verification: inspect every generated image at native resolution, verify PNG dimensions/format/file size/SHA-256, compare silhouettes and construction across the twelve files, run an exact Godot 4.7.1 import/parse plus MainBootstrap startup, run `git diff --check`, create one W1 commit, and stop before W2.
+
+### Result
+
+- Created all twelve W0-locked project-bound concept images with the built-in image-generation workflow and copied the accepted outputs into the Chapter III weapon asset tree.
+- The accepted pair uses a long bone-white triangular Absolution blade with a thirteen-node oval hollow-bell guard and a shorter, broader Penance blade with thurible vents, shallow hook, perforated semicircular guard and one fixed ring.
+- Front/side production views prove both blades have real thickness and mechanically readable grip/guard assemblies. The silhouette sheet keeps the two blades distinct without relying on color.
+- The seal board records thirteen filled extinguished medallions plus one unlabeled empty recess. The Player scale and combat boards keep both hands visible and preserve a thrust-first gameplay silhouette.
+- The reforging board follows the repository Edran equipment design from broken crozier/thurible/seals through four beats to the final pair. The compact reliquary keeps the Player visible and remains below chest height.
+- Created `chapter_03_thirteenfold_absolution_w1_concept.md`, a deterministic 12-file Godot test, and a W1 QA report/contact sheet with dimensions, byte sizes and SHA-256 hashes.
+- No WeaponData, formal SpriteFrames, Player equipment visual registration, inventory, save, Boss reward sequence, interaction flag, scene, Main route or gameplay value changed.
+
+### Exact commands and actual results
+
+1. Built-in image generation — PASS: twelve original project-specific raster concepts generated and copied into the repository; no third-party image asset used.
+2. Native-resolution image inspection plus 4×3 contact sheet — PASS: twelve requested compositions present; pair, orthographic views, silhouette, construction, seals, Player scale/action, reforging and reliquary remain coherent.
+3. Exact Godot 4.7.1 headless editor import — PASS: all twelve PNGs imported; exit 0; no script/resource error.
+4. `test_thirteenfold_absolution_w1_concepts.gd` — PASS: `concepts=12 unique_hashes=12`.
+5. `test_crimson_masque_weapon.gd` — PASS: `data=1 frames=49 damage=14/28 dedup=1 profile=1`.
+6. Configured MainBootstrap 240-frame headless startup — PASS: formal new game selected Opening; no red Output/Debugger error.
+7. `git diff --check` — recorded after final scope review.
+
+### Manual acceptance and stop point
+
+- Review the pair master, main/off-hand orthographic sheets, silhouette, Player scale/action, reforging sequence and reliquary contact sheet.
+- Confirm whether the large oval main guard should be reduced slightly for the 64px translation, whether Penance is sufficiently distinct from Ravenfang, and whether the copper/bone-white balance is approved.
+- W1 is complete and stops here. W2 pixel sprites, complete Player SpriteFrames and Main visual integration require explicit approval.
