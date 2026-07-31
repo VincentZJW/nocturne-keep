@@ -156,6 +156,9 @@ static func _draw_dagger(
 	if weapon_style == &"crimson_masque":
 		draw_crimson_masque_stiletto(image, hand, tip, is_main)
 		return
+	if weapon_style == &"thirteenfold_absolution":
+		draw_thirteenfold_absolution_blade(image, hand, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - hand).normalized()
 	var normal: Vector2 = Vector2(-direction.y, direction.x)
 	var blade_start: Vector2i = hand + Vector2i(roundi(direction.x * 4.0), roundi(direction.y * 4.0))
@@ -281,3 +284,139 @@ static func draw_crimson_masque_stiletto(
 	var pommel_i: Vector2i = Vector2i(roundi(pommel.x), roundi(pommel.y))
 	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x - 1, pommel_i.y - 1, 3, 3), crimson)
 	PixelCanvas.fill_rect(image, Rect2i(pommel_i.x, pommel_i.y, 1, 1), porcelain)
+
+
+static func draw_thirteenfold_absolution_blade(
+		image: Image, hand: Vector2i, tip: Vector2i, is_main: bool
+	) -> void:
+	var delta: Vector2 = Vector2(tip - hand)
+	var length: float = maxf(1.0, delta.length())
+	var direction: Vector2 = delta / length
+	var normal: Vector2 = Vector2(-direction.y, direction.x)
+	var bone: Color = Color("d9d5c8")
+	var cold_edge: Color = Color("edf1ed")
+	var black_iron: Color = Color("18212a")
+	var shadow_steel: Color = Color("4e5d66")
+	var prayer_red: Color = Color("702833")
+	var old_copper: Color = Color("987543")
+	var dark_copper: Color = Color("5f472c")
+	var grip_black: Color = Color("090b0e")
+	var blade_length_scale: float = 1.0 if is_main else 0.80
+	var authored_tip: Vector2 = Vector2(hand) + delta * blade_length_scale
+	var blade_start: Vector2 = Vector2(hand) + direction * (5.0 if is_main else 4.0)
+	var start_i: Vector2i = Vector2i(roundi(blade_start.x), roundi(blade_start.y))
+	var tip_i: Vector2i = Vector2i(roundi(authored_tip.x), roundi(authored_tip.y))
+	if is_main:
+		# Absolution is a long triangular thrust blade: a black-iron back plane,
+		# bone-white face and one restrained prayer groove remain readable at 64 px.
+		PixelCanvas.draw_line(image, start_i, tip_i, black_iron, 5)
+		PixelCanvas.draw_line(image, start_i, tip_i, bone, 3)
+		var bright_start: Vector2 = blade_start + normal
+		PixelCanvas.draw_line(
+			image,
+			Vector2i(roundi(bright_start.x), roundi(bright_start.y)),
+			tip_i,
+			cold_edge,
+			1
+		)
+		var groove_start: Vector2 = blade_start + direction * 3.0 - normal
+		var groove_end: Vector2 = authored_tip - direction * 4.0 - normal
+		PixelCanvas.draw_line(
+			image,
+			Vector2i(roundi(groove_start.x), roundi(groove_start.y)),
+			Vector2i(roundi(groove_end.x), roundi(groove_end.y)),
+			prayer_red,
+			1
+		)
+	else:
+		# Penance is shorter and broader. A shallow hooked spine and perforated
+		# thurible face keep it distinct from Ravenfang's large hooked claws.
+		var shoulder: Vector2 = blade_start + direction * length * 0.36 - normal * 2.0
+		var hook: Vector2 = blade_start + direction * length * 0.64 - normal * 2.0
+		var shoulder_i: Vector2i = Vector2i(roundi(shoulder.x), roundi(shoulder.y))
+		var hook_i: Vector2i = Vector2i(roundi(hook.x), roundi(hook.y))
+		PixelCanvas.draw_line(image, start_i, shoulder_i, black_iron, 6)
+		PixelCanvas.draw_line(image, shoulder_i, hook_i, shadow_steel, 5)
+		PixelCanvas.draw_line(image, hook_i, tip_i, bone, 3)
+		PixelCanvas.draw_line(image, start_i, tip_i, cold_edge, 1)
+		for fraction: float in [0.28, 0.46, 0.62]:
+			var vent: Vector2 = blade_start + direction * length * fraction - normal
+			_set_safe_pixel(image, Vector2i(roundi(vent.x), roundi(vent.y)), black_iron)
+	# Both guards are real hollow constructions rather than solid color blocks.
+	var guard_center: Vector2i = Vector2i(
+		roundi(float(hand.x) + direction.x), roundi(float(hand.y) + direction.y)
+	)
+	if is_main:
+		_draw_hollow_guard(image, guard_center, direction, normal, old_copper, dark_copper, true)
+	else:
+		_draw_hollow_guard(image, guard_center, direction, normal, old_copper, dark_copper, false)
+	var grip_end: Vector2 = Vector2(hand) - direction * (5.0 if is_main else 4.0)
+	var grip_end_i: Vector2i = Vector2i(roundi(grip_end.x), roundi(grip_end.y))
+	PixelCanvas.draw_line(image, hand, grip_end_i, grip_black, 3)
+	var wrap_mid: Vector2 = Vector2(hand) - direction * 2.0
+	_set_safe_pixel(image, Vector2i(roundi(wrap_mid.x), roundi(wrap_mid.y)), prayer_red)
+	var pommel: Vector2 = grip_end - direction * 2.0
+	var pommel_i: Vector2i = Vector2i(roundi(pommel.x), roundi(pommel.y))
+	if is_main:
+		PixelCanvas.fill_rect(image, Rect2i(pommel_i.x - 1, pommel_i.y - 1, 3, 3), dark_copper)
+		_set_safe_pixel(image, pommel_i, bone)
+	else:
+		# Fixed chain ring: it never swings as a physics weapon.
+		_draw_ring_pixels(image, pommel_i, old_copper, grip_black)
+
+
+static func _draw_hollow_guard(
+		image: Image,
+		center: Vector2i,
+		direction: Vector2,
+		normal: Vector2,
+		outer: Color,
+		shadow: Color,
+		is_main: bool
+	) -> void:
+	var tangent_extent: int = 4 if is_main else 3
+	var axial_extent: int = 3 if is_main else 2
+	for sign: int in [-1, 1]:
+		for offset: int in range(-axial_extent + 1, axial_extent):
+			var point: Vector2 = (
+				Vector2(center)
+				+ normal * float(tangent_extent * sign)
+				+ direction * float(offset)
+			)
+			_set_safe_pixel(image, Vector2i(roundi(point.x), roundi(point.y)), outer)
+	for sign: int in [-1, 1]:
+		for offset: int in range(-tangent_extent + 1, tangent_extent):
+			var point: Vector2 = (
+				Vector2(center)
+				+ direction * float(axial_extent * sign)
+				+ normal * float(offset)
+			)
+			_set_safe_pixel(image, Vector2i(roundi(point.x), roundi(point.y)), outer)
+	_set_safe_pixel(image, center, Color(0.0, 0.0, 0.0, 0.0))
+	if is_main:
+		# Four readable seal bosses imply the full thirteen-node construction.
+		for point: Vector2i in [
+			center + Vector2i(tangent_extent, 0), center + Vector2i(-tangent_extent, 0),
+			center + Vector2i(0, axial_extent), center + Vector2i(0, -axial_extent),
+		]:
+			_set_safe_pixel(image, point, Color("c3a35d"))
+	else:
+		# Three dark vents make the semicircular thurible guard legible.
+		for offset: int in [-2, 0, 2]:
+			var vent: Vector2 = Vector2(center) + normal * float(offset) + direction
+			_set_safe_pixel(image, Vector2i(roundi(vent.x), roundi(vent.y)), shadow)
+
+
+static func _draw_ring_pixels(image: Image, center: Vector2i, outer: Color, inner: Color) -> void:
+	for offset: Vector2i in [
+		Vector2i(-1, -2), Vector2i(0, -2), Vector2i(1, -2),
+		Vector2i(-2, -1), Vector2i(2, -1), Vector2i(-2, 0), Vector2i(2, 0),
+		Vector2i(-2, 1), Vector2i(2, 1), Vector2i(-1, 2), Vector2i(0, 2), Vector2i(1, 2),
+	]:
+		_set_safe_pixel(image, center + offset, outer)
+	_set_safe_pixel(image, center, inner)
+
+
+static func _set_safe_pixel(image: Image, point: Vector2i, color: Color) -> void:
+	if Rect2i(Vector2i.ZERO, image.get_size()).has_point(point):
+		image.set_pixelv(point, color)

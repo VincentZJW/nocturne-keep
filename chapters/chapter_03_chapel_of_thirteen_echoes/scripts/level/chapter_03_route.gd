@@ -6,6 +6,7 @@ const FLAG_CHAPTER_03_STARTED: StringName = &"chapter_03_started"
 const MUSIC_PHASE_01_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
 const MUSIC_TRANSITION_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_TRANSITION"
 const MUSIC_PHASE_02_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_02"
+const REWARD_VISUAL_TEST_SPAWN_ID: StringName = &"CH3_REWARD_TEST"
 
 @onready var transition_controller: Chapter03RoomTransitionController = $RoomTransitionController
 
@@ -30,6 +31,8 @@ func _ready() -> void:
 		call_deferred("_force_formal_phase_02_after_intro")
 	if selected_spawn_id == &"CH3_BOSS_PHASE_02":
 		call_deferred("_force_phase_02_after_intro")
+	if selected_spawn_id == REWARD_VISUAL_TEST_SPAWN_ID:
+		call_deferred("_enable_reward_visual_test")
 
 
 func _resolve_start(spawn_id: StringName) -> Dictionary:
@@ -70,6 +73,8 @@ func _resolve_start(spawn_id: StringName) -> Dictionary:
 			return {"room_id": &"CH3_BOSS", "spawn_id": &"EntryWest"}
 		&"CH3_POST_BOSS":
 			return {"room_id": &"CH3_POST_BOSS", "spawn_id": &"EntryWest"}
+		&"CH3_REWARD_TEST":
+			return {"room_id": &"CH3_POST_BOSS", "spawn_id": &"EntryWest"}
 		&"CH3_UNDERKEEP_DESCENT":
 			return {"room_id": &"CH3_UNDERKEEP_DESCENT", "spawn_id": &"EntryWest"}
 		&"CH3_BOSS_CHECKPOINT":
@@ -81,6 +86,15 @@ func _enable_music_debug_overlay() -> void:
 	var music_manager: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
 	if music_manager != null:
 		music_manager.set_debug_overlay_enabled(true)
+
+
+func _enable_reward_visual_test() -> void:
+	await get_tree().process_frame
+	var visual: PlayerWeaponVisual = transition_controller.player.get_node_or_null(
+		"VisualRoot/WeaponVisual"
+	) as PlayerWeaponVisual
+	if visual == null or not visual.set_visual_preview(&"thirteenfold_absolution"):
+		push_error("CH3_REWARD_TEST could not apply Thirteenfold Absolution visual")
 
 
 func _exit_tree() -> void:

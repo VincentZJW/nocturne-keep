@@ -6814,3 +6814,49 @@ Status: complete — concept art only; stopped before W2 pixel production
 - Review the pair master, main/off-hand orthographic sheets, silhouette, Player scale/action, reforging sequence and reliquary contact sheet.
 - Confirm whether the large oval main guard should be reduced slightly for the 64px translation, whether Penance is sufficiently distinct from Ravenfang, and whether the copper/bone-white balance is approved.
 - W1 is complete and stops here. W2 pixel sprites, complete Player SpriteFrames and Main visual integration require explicit approval.
+
+## 2026-07-31 — Thirteenfold Absolution W2 pixel-production preflight
+
+Status: complete — formal pixel assets and complete Player visual only; stopped before W3
+
+### Workflow, scope and owned files
+
+- Loaded `AGENTS.md`, README, technical architecture, all four permanent chapter-production standards, W0 audit and accepted W1 concept package before editing.
+- W2 will translate the approved pair into deterministic hard-edged pixel art: presentation icons/world/reliquary assets, restrained effects, all 97 frames across the existing 30-animation Player contract, one formal SpriteFrames Resource and a non-persistent Main visual test route.
+- Existing Player movement poses, FPS, loop flags, collision, Hitbox range and action timing remain authoritative. W2 may only change weapon drawing, visual registration and debug-only visual selection.
+- W2 explicitly excludes WeaponData, 14/28 damage registration, Inventory ownership, Equipment acquisition, Save/Load, Boss death/reward logic, reliquary interaction and Chapter IV unlock.
+- Task-owned paths are the Chapter III `thirteenfold_absolution` sprite/animation/effect/resource/tool/test trees, `scripts/tools/pixel_assassin_renderer.gd`, `scripts/tools/pixel_player_death_generator.gd`, `scripts/player/player_weapon_visual.gd`, the minimum Chapter III debug-route/profile entries, W2 QA evidence and this log entry.
+- Pre-existing Chapter I/shared configuration, level, QA image and unrelated UID modifications remain outside W2 and must not be staged.
+
+### Planned verification
+
+- Exact Godot 4.7.1 generation, editor import and SpriteFrames build; deterministic checks for 97 unique expected files, 30 animation names/counts/FPS/loops, 64x64 transparency, foot baseline, icon/world sizes, visual registration and no WeaponData/Inventory mutation.
+- MainBootstrap route through `CH3_REWARD_TEST`, visual-only frame swap, native and enlarged screenshot evidence for idle/run/jump/three attacks/Dash Attack/hurt/death and left-facing flip.
+- Existing Crimson Masque visual/resource test and configured Main formal startup regression; Output/Debugger review, `git diff --check`, one W2 commit and stop before W3.
+
+### Result
+
+- Added the deterministic `thirteenfold_absolution` weapon renderer and reused the accepted Player pose generators to produce all 97 formal transparent 64×64 frames across the existing 30-animation contract.
+- Added five presentation sprites and three restrained effects. The main-hand blade keeps its bone-white triangular thrust face and hollow-bell guard; the shorter off-hand blade keeps its thurible vents, shallow hook and fixed ring.
+- Built `thirteenfold_absolution_player_sprite_frames.tres` with the same frame counts, FPS and loop flags as the existing Player authority. Movement, attack timing, Hitboxes, damage, stamina and collision were not changed.
+- Registered the visual ID in `PlayerWeaponVisual` and added `set_visual_preview()` for a visual-only W2 swap. It preserves the active animation/frame and never mutates Inventory, Equipment or Save.
+- Added the debug-only `CH3_REWARD_TEST` spawn. MainBootstrap resolves it to `CH3_POST_BOSS` and applies the W2 visual after the shared Player exists. The rendered test proves the visual is `thirteenfold_absolution` while the actual equipped item remains `crimson_masque_stilettos`.
+- Added a deterministic W2 contract test, rendered Main capture script, pixel contact sheet, ten Main screenshots, chapter-local pixel specification and QA report.
+- Preserved and excluded every pre-existing unrelated Chapter I/shared/resource/QA-image change and UID sidecar from W2 staging.
+
+### Exact commands and actual results
+
+1. Exact Godot 4.7.1 W2 generator — PASS: `animations=30 frames=97 presentation=5 effects=3 contact_sheet=1`.
+2. Exact Godot 4.7.1 headless editor import — PASS: 105 W2 PNGs imported; no script/resource error.
+3. Exact Godot 4.7.1 SpriteFrames builder — PASS: `animations=30 frames=97`.
+4. `test_thirteenfold_absolution_w2_visuals.gd` — PASS: `animations=30 frames=97 assets=8 preview=nonpersistent`.
+5. `test_player_stage_2_qa.gd` — PASS: existing three Player visual sets, 30-animation contract and shared Player authority unchanged.
+6. `test_main_bootstrap_flow.gd` — PASS: formal Opening and Debug Chapter II routes. The test retains its existing two ObjectDB teardown leak warning; no red gameplay/resource error.
+7. `test_chapter_03_r5_full_route.gd` — PASS: 50 transitions, 10 cycles, persistent runtime; reward and Chapter IV remain truthfully partial.
+8. Graphical `capture_thirteenfold_absolution_w2_main_qa.gd` — PASS on OpenGL/Metal Compatibility: 10 Main screenshots, `room=CH3_POST_BOSS`, `visual=thirteenfold_absolution`, `equipment=crimson_masque_stilettos`.
+9. Native pixel contact-sheet review — PASS: forward/off-hand silhouettes stay separate across locomotion, attack, hurt and death; transparent background and integer scaling confirmed.
+
+### Manual acceptance and stop point
+
+- Review `docs/qa/chapter_03_thirteenfold_absolution/w2/pixel_contact_sheet.png` and the ten Main screenshots for seal grouping, off-hand hook strength, copper balance, left-facing readability and trail restraint.
+- W2 is complete and stops here. `WeaponData`, 14/28 damage registration, Inventory ownership, Equipment acquisition, Save/Load, Boss reward formation, reliquary pickup and Chapter IV unlock remain W3–W5 and were not started.

@@ -8,6 +8,10 @@ const RAVENFANG_FRAMES_PATH: String = "res://resources/player/ravenfang_player_s
 const CRIMSON_MASQUE_FRAMES_PATH: String = (
 	"res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_player_sprite_frames.tres"
 )
+const THIRTEENFOLD_ABSOLUTION_FRAMES_PATH: String = (
+	"res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/weapons/"
+	+ "thirteenfold_absolution_player_sprite_frames.tres"
+)
 
 @export_node_path("AnimatedSprite2D") var animated_sprite_path: NodePath = NodePath("../AnimatedSprite2D")
 @export_node_path("PlayerAnimationController") var animation_controller_path: NodePath = NodePath(
@@ -25,6 +29,7 @@ var _visual_id: StringName = &"veilbound"
 var _veilbound_frames: SpriteFrames
 var _ravenfang_frames: SpriteFrames
 var _crimson_masque_frames: SpriteFrames
+var _thirteenfold_absolution_frames: SpriteFrames
 
 
 func _ready() -> void:
@@ -34,12 +39,18 @@ func _ready() -> void:
 	_veilbound_frames = animated_sprite.sprite_frames
 	_ravenfang_frames = load(RAVENFANG_FRAMES_PATH) as SpriteFrames
 	_crimson_masque_frames = load(CRIMSON_MASQUE_FRAMES_PATH) as SpriteFrames
+	_thirteenfold_absolution_frames = load(THIRTEENFOLD_ABSOLUTION_FRAMES_PATH) as SpriteFrames
 	if _ravenfang_frames == null:
 		push_error("PlayerWeaponVisual missing Ravenfang SpriteFrames: %s" % RAVENFANG_FRAMES_PATH)
 	if _crimson_masque_frames == null:
 		push_error(
 			"PlayerWeaponVisual missing Crimson Masque SpriteFrames: %s"
 			% CRIMSON_MASQUE_FRAMES_PATH
+		)
+	if _thirteenfold_absolution_frames == null:
+		push_error(
+			"PlayerWeaponVisual missing Thirteenfold Absolution SpriteFrames: %s"
+			% THIRTEENFOLD_ABSOLUTION_FRAMES_PATH
 		)
 	var equipment: PlayerEquipmentManager = _equipment()
 	if equipment != null:
@@ -91,7 +102,21 @@ func get_active_sprite_frames_path() -> String:
 			return RAVENFANG_FRAMES_PATH
 		&"crimson_masque":
 			return CRIMSON_MASQUE_FRAMES_PATH
+		&"thirteenfold_absolution":
+			return THIRTEENFOLD_ABSOLUTION_FRAMES_PATH
 	return PlayerSpriteFramesBuilder.RESOURCE_PATH
+
+
+func set_visual_preview(visual_id: StringName) -> bool:
+	## Debug-only W2 visual selection. It never mutates Inventory, Equipment or Save.
+	if not OS.is_debug_build():
+		return false
+	var selected_frames: SpriteFrames = _frames_for_visual(visual_id)
+	if selected_frames == null:
+		return false
+	_visual_id = visual_id
+	_swap_sprite_frames(selected_frames)
+	return true
 
 
 func _frames_for_visual(visual_id: StringName) -> SpriteFrames:
@@ -100,6 +125,8 @@ func _frames_for_visual(visual_id: StringName) -> SpriteFrames:
 			return _ravenfang_frames
 		&"crimson_masque":
 			return _crimson_masque_frames
+		&"thirteenfold_absolution":
+			return _thirteenfold_absolution_frames
 	return _veilbound_frames
 
 

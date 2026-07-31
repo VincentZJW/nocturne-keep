@@ -1,0 +1,543 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_end/air_dash_end_01.png" id="1_5rr7s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_end/air_dash_end_02.png" id="2_gv4n3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_loop/air_dash_loop_01.png" id="3_8088r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_loop/air_dash_loop_02.png" id="4_4maok"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_loop/air_dash_loop_03.png" id="5_yyq58"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_start/air_dash_start_01.png" id="6_nuwfd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/air_dash_start/air_dash_start_02.png" id="7_i4nga"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack/attack_01.png" id="8_vgh7f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack/attack_02.png" id="9_8txoj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack/attack_03.png" id="10_cgs4v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack/attack_04.png" id="11_uac0p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_1/attack_1_01.png" id="12_xoj5g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_1/attack_1_02.png" id="13_lnum6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_1/attack_1_03.png" id="14_1r7th"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_1/attack_1_04.png" id="15_r7gks"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_2/attack_2_01.png" id="16_u3rpe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_2/attack_2_02.png" id="17_f27xq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_2/attack_2_03.png" id="18_x2cws"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_2/attack_2_04.png" id="19_d5hjw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_3/attack_3_01.png" id="20_p6k1e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_3/attack_3_02.png" id="21_pdft4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_3/attack_3_03.png" id="22_erymh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/attack_3/attack_3_04.png" id="23_fxm1a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/combo_transition/combo_transition_01.png" id="24_guf7u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/combo_transition/combo_transition_02.png" id="25_nukvk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_attack/dash_attack_01.png" id="26_yrt4a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_attack/dash_attack_02.png" id="27_bnaix"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_attack/dash_attack_03.png" id="28_me2gb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_attack/dash_attack_04.png" id="29_jjixr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_attack/dash_attack_05.png" id="30_2pxg0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_end/dash_end_01.png" id="31_k7llq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_end/dash_end_02.png" id="32_21ky8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_loop/dash_loop_01.png" id="33_x0t1s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_loop/dash_loop_02.png" id="34_rrkep"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_loop/dash_loop_03.png" id="35_oylm0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_start/dash_start_01.png" id="36_h3nvg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/dash_start/dash_start_02.png" id="37_dht3k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/death/death_01.png" id="38_ttb6s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/death/death_02.png" id="39_l1kmk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/death/death_03.png" id="40_kul8u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/death/death_04.png" id="41_wuef3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/death/death_05.png" id="42_cpc4b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/double_jump/double_jump_01.png" id="43_cy16t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/double_jump/double_jump_02.png" id="44_hb3u8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/double_jump/double_jump_03.png" id="45_vacm8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/double_jump/double_jump_04.png" id="46_84d1p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/fall/fall_01.png" id="47_lywt1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/fall/fall_02.png" id="48_vshdo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt/hurt_01.png" id="49_e0iru"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt/hurt_02.png" id="50_22e1h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt/hurt_03.png" id="51_rk1pb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_heavy/hurt_heavy_01.png" id="52_b0b5k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_heavy/hurt_heavy_02.png" id="53_3kikw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_heavy/hurt_heavy_03.png" id="54_iky4w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_heavy/hurt_heavy_04.png" id="55_sok1i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_light/hurt_light_01.png" id="56_7j4uo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_light/hurt_light_02.png" id="57_g4in0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/hurt_light/hurt_light_03.png" id="58_p2rai"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/idle/idle_01.png" id="59_fyx2a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/idle/idle_02.png" id="60_utwji"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/idle/idle_03.png" id="61_ha7d8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/idle/idle_04.png" id="62_yoey8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_apex/jump_apex_01.png" id="63_cfit1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_apex/jump_apex_02.png" id="64_81fe1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_loop/jump_loop_01.png" id="65_vnxgd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_loop/jump_loop_02.png" id="66_vpe2a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_rise/jump_rise_01.png" id="67_nqboq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_rise/jump_rise_02.png" id="68_x6jmj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_start/jump_start_01.png" id="69_u27se"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/jump_start/jump_start_02.png" id="70_3vcu7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/land/land_01.png" id="71_fx158"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/land/land_02.png" id="72_kamtd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/ready_idle/ready_idle_01.png" id="73_m6n24"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/ready_idle/ready_idle_02.png" id="74_d6t83"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/ready_idle/ready_idle_03.png" id="75_y002w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/ready_idle/ready_idle_04.png" id="76_kx7r4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/run/run_01.png" id="77_wqsxj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/run/run_02.png" id="78_aqw1p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/run/run_03.png" id="79_66olb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/run/run_04.png" id="80_ei5l2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/run/run_05.png" id="81_kwbsa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/run/run_06.png" id="82_0s7n0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/start_move/start_move_01.png" id="83_8l2b8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/start_move/start_move_02.png" id="84_26vgv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/start_move/start_move_03.png" id="85_gawp0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/stop_move/stop_move_01.png" id="86_f4a82"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/stop_move/stop_move_02.png" id="87_8755j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/stop_move/stop_move_03.png" id="88_vmt8x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/turn/turn_01.png" id="89_02nqd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/turn/turn_02.png" id="90_rn2vi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/turn/turn_03.png" id="91_7pv46"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/walk/walk_01.png" id="92_uo3g8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/walk/walk_02.png" id="93_7q66k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/walk/walk_03.png" id="94_i01ji"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/walk/walk_04.png" id="95_ypthp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/walk/walk_05.png" id="96_tkfqr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/animations/player/walk/walk_06.png" id="97_qvx8d"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_5rr7s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_gv4n3")
+}],
+"loop": 0,
+"name": &"air_dash_end",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_8088r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_4maok")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_yyq58")
+}],
+"loop": 1,
+"name": &"air_dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_nuwfd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_i4nga")
+}],
+"loop": 0,
+"name": &"air_dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_vgh7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_8txoj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_cgs4v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_uac0p")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_xoj5g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_lnum6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_1r7th")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_r7gks")
+}],
+"loop": 0,
+"name": &"attack_1",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_u3rpe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_f27xq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_x2cws")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_d5hjw")
+}],
+"loop": 0,
+"name": &"attack_2",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_p6k1e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_pdft4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_erymh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_fxm1a")
+}],
+"loop": 0,
+"name": &"attack_3",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_guf7u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_nukvk")
+}],
+"loop": 0,
+"name": &"combo_transition",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_yrt4a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_bnaix")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_me2gb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_jjixr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_2pxg0")
+}],
+"loop": 0,
+"name": &"dash_attack",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_k7llq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_21ky8")
+}],
+"loop": 0,
+"name": &"dash_end",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_x0t1s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_rrkep")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_oylm0")
+}],
+"loop": 1,
+"name": &"dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_h3nvg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_dht3k")
+}],
+"loop": 0,
+"name": &"dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_ttb6s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_l1kmk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_kul8u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_wuef3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_cpc4b")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 11.111111
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_cy16t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_hb3u8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_vacm8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_84d1p")
+}],
+"loop": 0,
+"name": &"double_jump",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_lywt1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_vshdo")
+}],
+"loop": 1,
+"name": &"fall",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_e0iru")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_22e1h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_rk1pb")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_b0b5k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_3kikw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_iky4w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_sok1i")
+}],
+"loop": 0,
+"name": &"hurt_heavy",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_7j4uo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_g4in0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_p2rai")
+}],
+"loop": 0,
+"name": &"hurt_light",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_fyx2a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_utwji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_ha7d8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_yoey8")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_cfit1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_81fe1")
+}],
+"loop": 1,
+"name": &"jump_apex",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_vnxgd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_vpe2a")
+}],
+"loop": 1,
+"name": &"jump_loop",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_nqboq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_x6jmj")
+}],
+"loop": 1,
+"name": &"jump_rise",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("69_u27se")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_3vcu7")
+}],
+"loop": 0,
+"name": &"jump_start",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("71_fx158")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_kamtd")
+}],
+"loop": 0,
+"name": &"land",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("73_m6n24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_d6t83")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_y002w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_kx7r4")
+}],
+"loop": 1,
+"name": &"ready_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("77_wqsxj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_aqw1p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_66olb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_ei5l2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_kwbsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_0s7n0")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("83_8l2b8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_26vgv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_gawp0")
+}],
+"loop": 0,
+"name": &"start_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("86_f4a82")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_8755j")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_vmt8x")
+}],
+"loop": 0,
+"name": &"stop_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("89_02nqd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_rn2vi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_7pv46")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("92_uo3g8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_7q66k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_i01ji")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_ypthp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_tkfqr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_qvx8d")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
+}]
