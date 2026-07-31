@@ -10,6 +10,8 @@ signal room_cleared
 const PHASE_01_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
 const PHASE_02_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
 const PHASE_SWITCH_GUARD: StringName = &"CH2_DUCHESS_PHASE_02_ONCE"
+const DIALOGUE_DUCK_DB: float = 6.0
+const TRANSITION_MUSIC_DB: float = -20.0
 
 @export_node_path("Player") var player_path: NodePath
 @export_node_path("HollowDuchess") var boss_path: NodePath
@@ -167,7 +169,7 @@ func _on_phase_transition_started() -> void:
 	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom * 1.08, 0.45)
 	presentation.play_phase_transition()
 	if music_manager != null:
-		music_manager.duck_for_dialogue(10.0, 0.90)
+		music_manager.set_music_volume(TRANSITION_MUSIC_DB, 0.90)
 
 
 func _on_phase_02_revealed() -> void:
@@ -243,13 +245,21 @@ func _exit_tree() -> void:
 func _show_dialogue(text: String, duration: float) -> void:
 	if _dialogue_tween != null and _dialogue_tween.is_valid():
 		_dialogue_tween.kill()
+	if music_manager != null:
+		music_manager.duck_for_dialogue(DIALOGUE_DUCK_DB, 0.18)
 	dialogue_label.text = text
 	dialogue_label.modulate.a = 1.0
 	dialogue_label.visible = true
 	_dialogue_tween = create_tween()
 	_dialogue_tween.tween_interval(duration)
 	_dialogue_tween.tween_property(dialogue_label, "modulate:a", 0.0, 0.25)
-	_dialogue_tween.tween_callback(func() -> void: dialogue_label.visible = false)
+	_dialogue_tween.tween_callback(_finish_dialogue)
+
+
+func _finish_dialogue() -> void:
+	dialogue_label.visible = false
+	if music_manager != null:
+		music_manager.restore_after_dialogue(0.25)
 
 
 func _set_door_closed(door: StaticBody2D, closed: bool) -> void:

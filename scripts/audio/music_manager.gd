@@ -18,9 +18,12 @@ var _deck_b: AudioStreamPlayer
 var _active_deck: AudioStreamPlayer
 var _standby_deck: AudioStreamPlayer
 var _fade_tween: Tween
+var _duck_tween: Tween
 var _current_track_id: StringName = &""
 var _current_target_db: float = -10.0
 var _duck_amount_db: float = 0.0
+var _music_bus_index: int = -1
+var _music_bus_base_db: float = 0.0
 var _phase_switch_guards: Dictionary[StringName, bool] = {}
 var _switch_count: int = 0
 var _debug_layer: CanvasLayer
@@ -35,6 +38,9 @@ func _ready() -> void:
 	_active_deck = _deck_a
 	_standby_deck = _deck_b
 	_create_debug_overlay()
+	_music_bus_index = AudioServer.get_bus_index(&"Music")
+	if _music_bus_index >= 0:
+		_music_bus_base_db = AudioServer.get_bus_volume_db(_music_bus_index)
 	var registry_errors: PackedStringArray = REGISTRY.validate()
 	for message: String in registry_errors:
 		push_error(message)
@@ -128,6 +134,7 @@ func fade_out(duration: float = 1.0) -> void:
 	_current_track_id = &""
 	if duration <= 0.0:
 		_stop_decks()
+		_reset_dialogue_duck()
 		track_stopped.emit(stopped_id)
 		return
 	_fade_tween = create_tween()
@@ -136,6 +143,7 @@ func fade_out(duration: float = 1.0) -> void:
 	_fade_tween.tween_property(_deck_b, "volume_db", SILENCE_DB, duration)
 	_fade_tween.finished.connect(func() -> void:
 		_stop_decks()
+		_reset_dialogue_duck()
 		track_stopped.emit(stopped_id)
 	, CONNECT_ONE_SHOT)
 
@@ -145,6 +153,7 @@ func stop_music() -> void:
 	var stopped_id: StringName = _current_track_id
 	_current_track_id = &""
 	_stop_decks()
+	_reset_dialogue_duck()
 	if not stopped_id.is_empty():
 		track_stopped.emit(stopped_id)
 
@@ -166,12 +175,12 @@ func set_music_volume(volume_db: float, fade_seconds: float = 0.0) -> void:
 
 func duck_for_dialogue(attenuation_db: float = 8.0, duration: float = 0.25) -> void:
 	_duck_amount_db = maxf(0.0, attenuation_db)
-	_tween_active_volume(_effective_target_db(), duration)
+	_tween_dialogue_duck(_duck_amount_db, duration)
 
 
 func restore_after_dialogue(duration: float = 0.25) -> void:
 	_duck_amount_db = 0.0
-	_tween_active_volume(_effective_target_db(), duration)
+	_tween_dialogue_duck(0.0, duration)
 
 
 func preload_track(track_id: StringName) -> bool:
@@ -214,6 +223,10 @@ func is_phase_switch_used(guard_id: StringName) -> bool:
 	return _phase_switch_guards.get(guard_id, false)
 
 
+func get_dialogue_duck_db() -> float:
+	return _duck_amount_db
+
+
 func _start_on_active_deck(definition: MusicTrackDefinition, fade_seconds: float) -> void:
 	_cancel_fade()
 	_prepare_deck(_active_deck, definition)
@@ -253,7 +266,7 @@ func _swap_decks() -> void:
 
 
 func _effective_target_db() -> float:
-	return clampf(_current_target_db - _duck_amount_db, SILENCE_DB, 6.0)
+	return clampf(_current_target_db, SILENCE_DB, 6.0)
 
 
 func _tween_active_volume(target_db: float, duration: float) -> void:
@@ -273,11 +286,45 @@ func _cancel_fade() -> void:
 	_fade_tween = null
 
 
+func _tween_dialogue_duck(attenuation_db: float, duration: float) -> void:
+	if _music_bus_index < 0:
+		return
+	_cancel_duck_tween()
+	var target_db: float = _music_bus_base_db - maxf(0.0, attenuation_db)
+	if duration <= 0.0:
+		_set_music_bus_volume_db(target_db)
+		return
+	var start_db: float = AudioServer.get_bus_volume_db(_music_bus_index)
+	_duck_tween = create_tween()
+	_duck_tween.tween_method(_set_music_bus_volume_db, start_db, target_db, duration)
+
+
+func _set_music_bus_volume_db(volume_db: float) -> void:
+	if _music_bus_index >= 0:
+		AudioServer.set_bus_volume_db(_music_bus_index, volume_db)
+
+
+func _cancel_duck_tween() -> void:
+	if _duck_tween != null and _duck_tween.is_valid():
+		_duck_tween.kill()
+	_duck_tween = null
+
+
+func _reset_dialogue_duck() -> void:
+	_cancel_duck_tween()
+	_duck_amount_db = 0.0
+	_set_music_bus_volume_db(_music_bus_base_db)
+
+
 func _stop_decks() -> void:
 	for deck: AudioStreamPlayer in [_deck_a, _deck_b]:
 		deck.stop()
 		deck.volume_db = SILENCE_DB
 		deck.stream_paused = false
+
+
+func _exit_tree() -> void:
+	_reset_dialogue_duck()
 
 
 func _create_debug_overlay() -> void:
@@ -301,6 +348,7 @@ func _update_debug_overlay() -> void:
 		return
 	var bus_index: int = AudioServer.get_bus_index(&"Music")
 	var bus_db: float = AudioServer.get_bus_volume_db(bus_index) if bus_index >= 0 else -80.0
-	_debug_label.text = "MUSIC %s | POS %.2fs | BUS %.1fdB | PLAYERS %d | SWITCH %d" % [
-		_current_track_id, get_playback_position(), bus_db, get_active_player_count(), _switch_count,
+	_debug_label.text = "MUSIC %s | POS %.2fs | BUS %.1fdB | DUCK %.1fdB | PLAYERS %d | SWITCH %d" % [
+		_current_track_id, get_playback_position(), bus_db, _duck_amount_db,
+		get_active_player_count(), _switch_count,
 	]

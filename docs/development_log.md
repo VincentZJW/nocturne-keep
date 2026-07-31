@@ -1,5 +1,47 @@
 # Development Log
 
+## 2026-07-31 — Boss music MU4 (preflight)
+
+Status: complete — dialogue Duck, death/retry, Reward/exit cleanup and formal Main QA passed
+
+### Goal, planned files, tests, and scope check
+
+- Complete the already approved MU4 lifecycle for the Chapter II Duchess and Chapter III Edran scores: apply 4–8 dB dialogue ducking with deterministic restoration, begin a 1.2–2.0 second fade at Boss death, restart every failed Boss attempt from Phase 1, and guarantee silence/cleanup in Reward and chapter-exit states.
+- Keep Boss AI and authored combat values music-agnostic. Extend only the shared two-deck `MusicManager`, the two saved Boss-room/presentation controllers, Chapter III room retry routing, focused tests/QA, README/music specifications and this log.
+- Preserve the MU3 black-bell one-shot transition and both approved scores. Do not author new tracks, SFX, combat mechanics, rewards or Chapter IV content; MU5 remains the separate full pressure/listening matrix.
+- Verify with the exact Godot 4.7.1 executable: import/parse, shared MusicManager regressions, Chapter II and III lifecycle tests, existing Boss/route regressions, formal MainBootstrap smoke/capture, `git diff --check`, then create one isolated MU4 commit and stop.
+
+### Read-only baseline and scope boundary
+
+- Baseline is `master` at `31327cc`. MU3 is committed. The worktree still contains pre-existing Chapter I/shared-enemy/loot/Player tuning, Ravenfang QA images and two UID sidecars; they remain user-owned, unstaged and excluded from MU4.
+- Chapter II already stops and clears its transition guard on respawn, but dialogue display does not yet own Duck/restore. Chapter III has typed intro/transition/death presentation points, but no dialogue lifecycle signals, no death-start fade and no formal Boss-room reload on Player respawn.
+- Shared `MusicManager` currently lets active-volume ducking reuse the crossfade Tween. MU4 must separate those responsibilities so a dialogue restore cannot cancel the saved black-bell crossfade.
+
+### Delivered implementation
+
+- Moved dialogue attenuation to an independent Music-bus Tween. Both Chapter II and Chapter III use a restrained 6 dB Duck with 0.18-second attack and 0.25-second release; deck volume fades and crossfades no longer share or cancel that Tween. The debug overlay now reports the live Duck value.
+- Bound every Duchess dialogue line and all Edran intro/transition/death dialogue sequences to the shared Duck contract. The Duchess transition now has a separate -20 dB structural attenuation rather than misusing dialogue Duck as the whole transition fade.
+- Edran death starts a 1.50-second fade from either phase. The existing Duchess defeat uses the same duration. Fade completion stops both reusable decks and restores the Music bus, while room exit retains a short safety fade.
+- Connected Chapter III's persistent respawn controller to a saved-room retry: after the Player's existing death sequence completes, the formal Boss room is reconstructed, the Phase 2 guard is cleared, the already-seen long intro is skipped, and a fresh Phase 1 activates. Removing the prior room from `RoomHost` before queuing it for deletion prevents its exit callback from fading the newly started retry score.
+- Verified `CH3_POST_BOSS` and `CH3_UNDERKEEP_DESCENT` with empty Boss track IDs and zero active decks. No unapproved reward cue or Chapter IV score was invented.
+
+### Exact commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS; exact 4.7.1 import/class registration, no parser/resource error.
+- `test_music_manager_mu1.gd` — PASS: five buses, two decks and 20 guarded transitions.
+- `test_hollow_duchess_music_mu1.gd` — functional PASS through MainBootstrap: Phase 1/2 once, 6 dB dialogue binding, death fade and Phase 1 retry. Its existing Chapter II threaded-load teardown still reports two anonymous zero-reference `RefCounted` objects under verbose mode; investigation found no MusicManager, deck or MU4 resource among them.
+- `test_thirteenth_pontiff_music_mu2.gd` and `test_thirteenth_pontiff_music_mu3.gd` — PASS: intro/combat levels, black-bell switch once, 20 guard cycles and one settled deck remain intact.
+- `test_boss_music_mu4.gd` — `PASS duck=6dB crossfade_safe=1 death=1.5 retry=p1 reward=silent exit=silent main=Bootstrap`.
+- `test_edran_b4_b7_full_boss.gd` — PASS: protected transition, six Phase 2 attacks, death and reward interface.
+- `test_chapter_03_r5_full_route.gd` — PASS: 50 room transitions / 10 cycles after the explicit prior-room removal change.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — PASS; formal F5 authority remains `MainBootstrap -> OpeningCinematic`.
+- Graphical `capture_boss_music_mu4_qa.gd` — PASS: three inspected 1280×720 Main captures for transformation Dialogue Duck, Phase 1 retry and silent Reward state. Evidence: `res://docs/qa/boss_music/mu4/report.md`.
+
+### Known boundary and next gate
+
+- Automated tests verify bus/deck state, transition guards, retry ownership and formal-route cleanup. The long-standing two-object Chapter II teardown warning remains isolated and recorded; final focused MU4 and Chapter III runs contain no red error.
+- MU5 remains the approved final gate for normal-volume subjective listening, full Boss/SFX masking, ten complete fights per Boss and the final three-track pressure matrix. MU4 does not claim that acceptance and stops here.
+
 ## 2026-07-30 — Boss music MU2 (preflight)
 
 Status: complete — original Chapter III Boss Phase 1 score, seamless loop, formal Main binding and MU2 QA passed; MU3 Phase 2/transition music remains out of scope

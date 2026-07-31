@@ -44,6 +44,11 @@ func _run() -> void:
 	_expect(boss != null and presentation != null and controller != null, "Boss music scene composition is incomplete")
 	_expect(presentation.get_node_or_null("BrokenWaltzPlayer") == null, "Duplicate scene-local music player remains")
 	_expect(manager.is_debug_overlay_enabled(), "Music debug entry did not show its overlay")
+	if controller != null:
+		controller._show_dialogue("MU4 DUCK BINDING", 0.50)
+		_expect(is_equal_approx(manager.get_dialogue_duck_db(), 6.0), "Duchess dialogue did not apply 6 dB Duck")
+		controller._finish_dialogue()
+		_expect(is_zero_approx(manager.get_dialogue_duck_db()), "Duchess dialogue did not restore Duck")
 	if boss != null:
 		await _wait_for_phase_two(boss, manager, 900)
 	_expect(manager.get_current_track_id() == PHASE_02, "Phase 2 reveal did not select the Phase 2 score")

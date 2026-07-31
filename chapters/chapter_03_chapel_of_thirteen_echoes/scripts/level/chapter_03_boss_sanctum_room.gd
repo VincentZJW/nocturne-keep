@@ -8,6 +8,8 @@ const INTRO_MUSIC_DB: float = -18.0
 const COMBAT_MUSIC_DB: float = -10.0
 const TRANSITION_MUSIC_DB: float = -24.0
 const PHASE_CROSSFADE_SECONDS: float = 1.10
+const DIALOGUE_DUCK_DB: float = 6.0
+const DEATH_FADE_SECONDS: float = 1.50
 
 @onready var sanctum: Chapter03BossSanctum = $BossSanctum as Chapter03BossSanctum
 @onready var post_boss_exit: Chapter03RoomExit = $PostBossExit as Chapter03RoomExit
@@ -22,6 +24,8 @@ func _ready() -> void:
 	sanctum.death_environment_finished.connect(_on_death_environment_finished)
 	sanctum.intro_environment_started.connect(_on_intro_environment_started)
 	sanctum.intro_environment_finished.connect(_on_intro_environment_finished)
+	sanctum.dialogue_started.connect(_on_dialogue_started)
+	sanctum.dialogue_finished.connect(_on_dialogue_finished)
 	boss.activated.connect(_on_boss_activated)
 	boss.defeated.connect(_on_boss_defeated)
 	boss.phase_transition_started.connect(_on_phase_transition_started)
@@ -63,6 +67,11 @@ func _on_boss_activated() -> void:
 
 
 func _on_boss_defeated() -> void:
+	var music_manager: MusicManagerService = _get_music_manager()
+	if music_manager != null and music_manager.get_current_track_id() in [
+		PHASE_01_TRACK_ID, PHASE_02_TRACK_ID,
+	]:
+		music_manager.fade_out(DEATH_FADE_SECONDS)
 	sanctum.notify_boss_defeated()
 
 
@@ -95,6 +104,23 @@ func _on_phase_changed(phase: int) -> void:
 
 func _on_death_sequence_started() -> void:
 	sanctum.play_death_dialogue()
+	var music_manager: MusicManagerService = _get_music_manager()
+	if music_manager != null and music_manager.get_current_track_id() in [
+		PHASE_01_TRACK_ID, PHASE_02_TRACK_ID,
+	]:
+		music_manager.fade_out(DEATH_FADE_SECONDS)
+
+
+func _on_dialogue_started() -> void:
+	var music_manager: MusicManagerService = _get_music_manager()
+	if music_manager != null:
+		music_manager.duck_for_dialogue(DIALOGUE_DUCK_DB, 0.18)
+
+
+func _on_dialogue_finished() -> void:
+	var music_manager: MusicManagerService = _get_music_manager()
+	if music_manager != null:
+		music_manager.restore_after_dialogue(0.25)
 
 
 func _on_death_environment_finished() -> void:

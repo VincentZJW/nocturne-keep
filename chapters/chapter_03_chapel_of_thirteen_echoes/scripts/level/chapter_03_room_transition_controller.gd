@@ -43,6 +43,7 @@ var _transitioning: bool = false
 func _ready() -> void:
 	player.z_index = Chapter03LayerContract.PLAYER
 	player.z_as_relative = true
+	respawn_controller.player_respawned.connect(_on_player_respawned)
 
 
 func initialize(room_id: StringName, spawn_id: StringName) -> bool:
@@ -103,6 +104,7 @@ func _swap_room(room_id: StringName, spawn_id: StringName) -> bool:
 		push_error("Chapter III room root must be Chapter03Room: %s" % path)
 		return false
 	if active_room != null:
+		room_host.remove_child(active_room)
 		active_room.queue_free()
 	if player.status_effect_controller != null:
 		player.status_effect_controller.clear_all()
@@ -153,3 +155,51 @@ func _on_checkpoint_requested(_checkpoint_id: StringName, spawn_marker: Marker2D
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
 	if session != null:
 		session.set_story_flag(&"chapter_03_boss_checkpoint_activated")
+
+
+func _on_player_respawned(_spawn_position: Vector2) -> void:
+	if active_room_id != &"CH3_BOSS" or _transitioning:
+		return
+	var boss: ThirteenthPontiffEdran = active_room.find_child(
+		"ThirteenthPontiffEdran", true, false
+	) as ThirteenthPontiffEdran
+	if boss != null and boss.current_state == ThirteenthPontiffEdran.State.DEAD:
+		return
+	_reset_boss_room_after_respawn.call_deferred()
+
+
+func _reset_boss_room_after_respawn() -> void:
+	if active_room_id != &"CH3_BOSS" or _transitioning:
+		return
+	_transitioning = true
+	player.set_input_profile(Player.InputProfile.LOCKED)
+	player.velocity = Vector2.ZERO
+	if player.hurtbox != null:
+		player.hurtbox.set_invulnerable(true)
+	fade_rect.visible = true
+	fade_rect.modulate.a = 0.0
+	var fade_out: Tween = create_tween()
+	fade_out.tween_property(fade_rect, "modulate:a", 1.0, 0.18)
+	await fade_out.finished
+	var music_manager: MusicManagerService = get_node_or_null(
+		"/root/MusicManager"
+	) as MusicManagerService
+	if music_manager != null:
+		music_manager.stop_music()
+		music_manager.clear_phase_switch_guard(&"CH3_EDRAN_PHASE_02_ONCE")
+	var did_swap: bool = _swap_room(&"CH3_BOSS", &"EntryWest")
+	if did_swap:
+		var sanctum: Chapter03BossSanctum = active_room.find_child(
+			"BossSanctum", true, false
+		) as Chapter03BossSanctum
+		if sanctum != null:
+			sanctum.skip_intro_to_combat_state()
+	await get_tree().physics_frame
+	var fade_in: Tween = create_tween()
+	fade_in.tween_property(fade_rect, "modulate:a", 0.0, 0.22)
+	await fade_in.finished
+	fade_rect.visible = false
+	if player.hurtbox != null:
+		player.hurtbox.set_invulnerable(false)
+	player.set_input_profile(Player.InputProfile.FULL)
+	_transitioning = false

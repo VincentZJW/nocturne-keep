@@ -8,6 +8,8 @@ signal intro_environment_finished
 signal intro_environment_started
 signal phase_transition_environment_finished
 signal death_environment_finished
+signal dialogue_started
+signal dialogue_finished
 
 @export_range(0.02, 0.20, 0.01) var candle_step_duration: float = 0.07
 @export_range(0.10, 1.00, 0.05) var camera_reveal_duration: float = 0.65
@@ -112,6 +114,7 @@ func play_intro_environment(player: Player, boss: ThirteenthPontiffEdran = null)
 		"NIGHT WARDEN\n那第十四次呢？",
 		"EDRAN\n第十四次不需要死者。\n它需要一个已经死过，却仍能回来的人。",
 	]
+	dialogue_started.emit()
 	dialogue_panel.visible = true
 	for index: int in range(dialogue.size()):
 		dialogue_label.text = dialogue[index]
@@ -119,6 +122,7 @@ func play_intro_environment(player: Player, boss: ThirteenthPontiffEdran = null)
 			boss.play_cinematic_animation(&"intro_turn")
 		await get_tree().create_timer(0.72 if index < dialogue.size()-1 else 1.0).timeout
 	dialogue_panel.visible = false
+	dialogue_finished.emit()
 	boss_title.visible = true
 	boss_title.modulate.a = 0.0
 	var title_tween: Tween = create_tween()
@@ -165,11 +169,13 @@ func play_phase_transition_environment() -> void:
 		"EDRAN\n钟从不在高处鸣响。",
 		"EDRAN\n它在每一具未被埋葬的身体里鸣响。",
 	]
+	dialogue_started.emit()
 	dialogue_panel.visible = true
 	for line: String in transition_dialogue:
 		dialogue_label.text = line
 		await get_tree().create_timer(0.66).timeout
 	dialogue_panel.visible = false
+	dialogue_finished.emit()
 	phase_title.visible = true
 	phase_title.modulate.a = 0.0
 	var title_tween: Tween = create_tween()
@@ -183,12 +189,14 @@ func play_phase_transition_environment() -> void:
 
 
 func play_death_dialogue() -> void:
+	dialogue_started.emit()
 	dialogue_panel.visible = true
 	dialogue_label.text = "EDRAN\n向下去吧……"
 	await get_tree().create_timer(0.78).timeout
 	dialogue_label.text = "EDRAN\n王冠把未能被赦免的人……锁在水下。"
 	await get_tree().create_timer(1.05).timeout
 	dialogue_panel.visible = false
+	dialogue_finished.emit()
 
 
 func notify_boss_defeated() -> void:

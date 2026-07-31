@@ -28,22 +28,25 @@ The existing Phase 1 asset is deliberately documented as a short intro/motif loo
 Event contract:
 
 1. Room encounter begins: clear the encounter phase guard and start Phase 1 with a 0.35-second fade.
-2. `phase_transition_started`: attenuate Phase 1 by 10 dB over 0.90 seconds.
-3. Saved presentation reaches 68% mask reveal: emit `phase_02_revealed`, restore the duck target and crossfade from the start of Phase 2 over 1.10 seconds.
+2. `phase_transition_started`: attenuate Phase 1 to -20 dB over 0.90 seconds. Dialogue independently lowers the Music bus by another 6 dB and restores it after the final line.
+3. Saved presentation reaches 68% mask reveal: emit `phase_02_revealed`, restore the dialogue target and crossfade from the start of Phase 2 over 1.10 seconds.
 4. The `CH2_DUCHESS_PHASE_02_ONCE` guard prevents repeated HP/hit events from restarting Phase 2.
-5. Boss defeat: 1.50-second fade. Player respawn: immediate stop and phase-guard reset. Leaving the room/scene: short safety fade.
+5. Boss defeat: 1.50-second fade. Player respawn: immediate stop and phase-guard reset; the next encounter request always starts Phase 1. Leaving the room/scene: short safety fade, so its Reward route never retains battle music.
 
 ## Debug and diagnostics
 
 Chapter II debug spawn IDs `CH2_BOSS_MUSIC_PHASE_01`, `CH2_BOSS_MUSIC_TRANSITION` and `CH2_BOSS_MUSIC_PHASE_02` route through `MainBootstrap`, request the formal Boss entrance and show a small overlay with track ID, playback position, Music Bus gain, active deck count and switch count. The overlay is disabled outside these explicit debug entries and does not write formal save data.
 
-## Chapter III — The Thirteenth Pontiff (MU2)
+## Chapter III — The Thirteenth Pontiff
 
 | Track ID | Cue | Tempo/meter | Runtime gain | Loop |
 | --- | --- | --- | --- | --- |
 | `CH3_BOSS_MUSIC_PHASE_01` | Litany of the Thirteenth Bell / 第十三钟祷 | dotted-quarter 92 BPM, 6/8 | Intro -18 dB; combat -10 dB | 0.000–125.217396 s |
+| `CH3_BOSS_MUSIC_PHASE_02` | The Bell Within the Bone / 骨中之钟 | dotted-quarter 124 BPM, 6/8 | combat -10 dB | 0.000–125.806458 s |
 
-The formal `Chapter03BossSanctumRoom` is the event authority. `intro_environment_started` begins the score at restrained level; Edran's typed `activated` signal restores combat level. `phase_transition_started` fades the Phase 1 track over 0.90 seconds rather than allowing Phase 1 music to masquerade as an unimplemented Phase 2 cue. MU3 will replace that honest silence with the black-bell reveal and Phase 2 crossfade.
+The formal `Chapter03BossSanctumRoom` is the event authority. `intro_environment_started` begins the score at restrained level; Edran's typed `activated` signal restores combat level. `phase_transition_started` attenuates Phase 1 to -24 dB, and the existing named `black_bell_reveal` stage performs a guarded 1.10-second crossfade to Phase 2.
+
+Sanctum intro, transformation and death dialogue expose typed `dialogue_started` / `dialogue_finished` signals. They apply and restore a 6 dB Music-bus Duck without touching either deck's crossfade Tween. Edran's death sequence starts a 1.50-second fade; a Player respawn rebuilds the saved Boss room, clears the Phase 2 one-shot guard, skips the already-seen long intro and activates a fresh Phase 1. Transitioning to `CH3_POST_BOSS` or `CH3_UNDERKEEP_DESCENT` therefore has an empty track ID and zero playing Boss decks.
 
 `CH3_BOSS_MUSIC_PHASE_01` is a guarded MainBootstrap debug start that loads the saved Chapter III route/Boss room and enables the shared MusicManager diagnostic overlay. It is not an independent audio test scene and does not change the formal default Opening-first F5 route.
 
@@ -51,6 +54,6 @@ The formal `Chapter03BossSanctumRoom` is the event authority. `intro_environment
 
 The Phase 2 score is a fixed-seed project-owned composition rendered with local NumPy/SciPy oscillators and FFmpeg Vorbis. It uses no downloaded samples, real hymn, existing waltz or remote generation service. The generator, event score JSON and Standard MIDI are retained next to the chapter-local OGG so future work remains reproducible.
 
-## Current milestone boundary
+## Lifecycle and milestone boundary
 
-Chapter II Phase 2 and Chapter III Phase 1 are complete. Chapter III Phase 2, its black-bell transition and complete crossfade remain MU3. Dialogue/reward/chapter-exit polish across both Bosses and final three-track pressure QA remain MU4/MU5.
+MU1–MU4 are complete: the three new original tracks, both protected phase transitions, 6 dB dialogue Duck, 1.50-second death fades, Phase 1 retries and silent Reward/exit states are bound to formal Main routes. MU5 remains the separately approved full-fight, long-loop, SFX-masking and forced QA matrix; MU4 does not pre-claim that subjective acceptance.
