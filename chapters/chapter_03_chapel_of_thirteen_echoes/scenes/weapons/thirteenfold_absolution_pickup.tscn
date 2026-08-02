@@ -1,0 +1,45 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/sprites/world_pickup.png" id="2_weapon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/effects/reliquary_pickup_glow.png" id="3_glow"]
+
+[sub_resource type="RectangleShape2D" id="PickupShape"]
+size = Vector2(132, 116)
+
+[node name="ThirteenfoldAbsolutionPickup" type="Area2D"]
+z_index = 13
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_pickup")
+weapon_id = &"thirteenfold_absolution_blades"
+auto_equip = true
+
+[node name="GlowSprite" type="Sprite2D" parent="."]
+z_index = -1
+texture_filter = 1
+texture = ExtResource("3_glow")
+scale = Vector2(1.5, 1.5)
+modulate = Color(0.86, 0.77, 0.52, 0.66)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_weapon")
+scale = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 16)
+shape = SubResource("PickupShape")
+
+[node name="Prompt" type="Label" parent="."]
+z_index = 2
+offset_left = -270.0
+offset_top = -102.0
+offset_right = 270.0
+offset_bottom = -54.0
+theme_override_colors/font_color = Color(0.91, 0.85, 0.70, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.035, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 14
+text = "E · CLAIM THIRTEENFOLD ABSOLUTION / 取得十三重赦刃"
+horizontal_alignment = 1

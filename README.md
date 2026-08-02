@@ -8,7 +8,7 @@
 
 第三章Boss B1–B7已经接入正式Main路线：`The Thirteenth Pontiff, Edran / 第十三响教宗·埃德兰`拥有360 HP Phase 1、198 HP保护式十一阶段变身、结构重绘的145 Poise Phase 2、两类受限召唤、六种Phase 2招式、完整死亡流程与遗物龛领取接口。开发直达点为`CH3_BOSS`、`CH3_BOSS_PHASE_02`、`CH3_BOSS_SUMMON_TEST`和`CH3_POST_BOSS`。第四章入口目前只是已解锁的计划边界，仓库尚无Chapter IV PackedScene；未虚构武器数值或声称完成跳转。权威规格见[第三章埃德兰Boss规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenth_pontiff_edran_boss_spec.md)，最终强制QA见[第三章Boss B4–B7报告](docs/qa/chapter_03_boss_b4_b7/report.md)。
 
-第三章Boss固定武器`Thirteenfold Absolution / 十三重赦刃`已完成W3数据层：独立WeaponData、唯一库存ID、装备注册与`14/28`伤害权威均已建立，正式Player可从同一装备信号切换到W2的97帧视觉。新增的窄型进度服务只保存武器所有权、当前装备及必要章节恢复标记到`user://`；Debug Chapter Start禁用读写，正式New Game会清理旧进度。当前尚未进入W4，因此Boss死亡后的重铸演出、遗物龛拾取与正式奖励授予仍未实装。详见[W3数据与存档规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w3_progress.md)。
+第三章Boss固定武器`Thirteenfold Absolution / 十三重赦刃`已完成W4正式奖励闭环：埃德兰死亡后播放4.20秒碎片聚合、十三封印熄灭与双刃重铸演出；Boss环境和重铸都完成后才开放遗物龛通道。玩家在`Last Confession Reliquary`按E取得唯一武器，自动装备W2的97帧视觉和W3的`14/28`伤害，遗物龛永久变为空置状态并开放Underkeep下降口。正式存档沿用W3窄型进度服务，Debug Chapter Start仍不读写正式进度。详见[W4奖励规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w4_reward.md)与[W4 QA](docs/qa/chapter_03_thirteenfold_absolution/w4/report.md)。W5全路线/存档压力验收尚未开始，仓库仍没有Chapter IV PackedScene。
 
 埃德兰现已追加正式元素魔法与召唤节奏：`Cinder Absolution`火焰弹、`Litany of Stillness`冰矛、`Mire of the Unburied`黑泥领域，以及Phase 1两只/Phase 2三只（唱诗尸壳最多一只）的召唤上限。玩家状态由统一组件管理，HUD以信号显示燃烧、冻结与黑泥减速；死亡、重生和跨房间会清理状态。开发直达点新增`CH3_BOSS_MAGIC_TEST`、`CH3_BOSS_FIRE_TEST`、`CH3_BOSS_ICE_TEST`、`CH3_BOSS_MIRE_TEST`和`CH3_BOSS_SUMMON_MAGIC_COMBO`。规格见[埃德兰元素魔法规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/edran_elemental_magic_spec.md)，Main强制QA见[元素魔法QA报告](docs/qa/chapter_03_edran_elemental_magic/report.md)。
 
@@ -219,6 +219,7 @@ Main开发调试快捷键：
 - [第三章Boss B3召唤体系/Main QA](docs/qa/chapter_03_boss_b3/README.md)
 - [第三章Boss B4–B7完整Boss/Main强制QA](docs/qa/chapter_03_boss_b4_b7/report.md)
 - [十三重赦刃W3数据与存档规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w3_progress.md)
+- [十三重赦刃W4奖励与遗物龛规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w4_reward.md)
 - [第三章结构返修 R2 实装记录](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r2_implementation.md)
 - [第三章结构返修 R3 图层与碰撞报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r3_layer_collision_report.md)
 - [第三章结构返修 R4 Boss流程报告](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_structural_rework_r4_boss_flow_report.md)

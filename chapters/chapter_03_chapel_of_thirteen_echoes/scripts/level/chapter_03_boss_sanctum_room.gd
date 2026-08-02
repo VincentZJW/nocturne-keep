@@ -16,6 +16,12 @@ const DEATH_FADE_SECONDS: float = 1.50
 @onready var boss: ThirteenthPontiffEdran = (
 	$BossActors/ThirteenthPontiffEdran as ThirteenthPontiffEdran
 )
+@onready var reward_sequence: Chapter03RewardSequenceController = (
+	$RewardSequence as Chapter03RewardSequenceController
+)
+
+var _death_environment_done: bool = false
+var _reward_formation_done: bool = false
 
 
 func _ready() -> void:
@@ -32,6 +38,7 @@ func _ready() -> void:
 	boss.phase_transition_stage_reached.connect(_on_phase_transition_stage_reached)
 	boss.phase_changed.connect(_on_phase_changed)
 	boss.death_sequence_started.connect(_on_death_sequence_started)
+	reward_sequence.formation_finished.connect(_on_reward_formation_finished)
 	call_deferred("_activate_boss_if_intro_skipped")
 
 
@@ -73,6 +80,9 @@ func _on_boss_defeated() -> void:
 	]:
 		music_manager.fade_out(DEATH_FADE_SECONDS)
 	sanctum.notify_boss_defeated()
+	var player: Player = get_tree().get_first_node_in_group("player") as Player
+	if player == null or not reward_sequence.play_sequence(player):
+		push_error("Chapter III reward formation could not start after Edran's defeat")
 
 
 func _on_phase_transition_started() -> void:
@@ -124,10 +134,21 @@ func _on_dialogue_finished() -> void:
 
 
 func _on_death_environment_finished() -> void:
-	post_boss_exit.set_deferred("monitoring", true)
+	_death_environment_done = true
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
 	if session != null:
 		session.set_story_flag(&"chapter_03_boss_environment_defeated")
+	_try_open_post_boss_exit()
+
+
+func _on_reward_formation_finished() -> void:
+	_reward_formation_done = true
+	_try_open_post_boss_exit()
+
+
+func _try_open_post_boss_exit() -> void:
+	if _death_environment_done and _reward_formation_done:
+		post_boss_exit.set_deferred("monitoring", true)
 
 
 func _exit_tree() -> void:

@@ -37,7 +37,7 @@ func _init() -> void:
 		return
 	print(
 		"THIRTEENFOLD_W2_GENERATOR: PASS "
-		+ "animations=30 frames=97 presentation=5 effects=3 contact_sheet=1"
+		+ "animations=30 frames=97 presentation=6 effects=5 contact_sheet=1"
 	)
 	quit(0)
 
@@ -66,13 +66,14 @@ func _save_sequence(animation_name: StringName, frames: Array) -> int:
 
 func _save_presentation_assets() -> int:
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(SPRITE_ROOT)) != OK:
-		return 5
+		return 6
 	var assets: Dictionary[String, Image] = {
 		"inventory_icon.png": _draw_inventory_icon(Vector2i(32, 32)),
 		"hud_icon.png": _draw_inventory_icon(Vector2i(24, 24)),
 		"weapon_pair_reference.png": _draw_weapon_pair(Vector2i(64, 48)),
 		"world_pickup.png": _draw_world_pickup(),
 		"reliquary_display.png": _draw_reliquary_display(),
+		"reliquary_empty.png": _draw_reliquary_empty(),
 	}
 	var failures: int = 0
 	for file_name: String in assets:
@@ -83,11 +84,13 @@ func _save_presentation_assets() -> int:
 
 func _save_effects() -> int:
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(EFFECT_ROOT)) != OK:
-		return 3
+		return 5
 	var effects: Dictionary[String, Image] = {
 		"bone_gold_thrust_trail.png": _draw_thrust_trail(),
 		"hollow_bell_afterimage.png": _draw_bell_afterimage(),
 		"reliquary_pickup_glow.png": _draw_pickup_glow(),
+		"reforging_fragment.png": _draw_reforging_fragment(),
+		"extinguished_seal_node.png": _draw_extinguished_seal_node(),
 	}
 	var failures: int = 0
 	for file_name: String in effects:
@@ -205,6 +208,23 @@ func _draw_reliquary_display() -> Image:
 	return image
 
 
+func _draw_reliquary_empty() -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(96, 64))
+	PixelCanvas.fill_rect(image, Rect2i(8, 45, 80, 8), Color("252932"))
+	PixelCanvas.fill_rect(image, Rect2i(12, 42, 72, 4), Color("775b35"))
+	PixelCanvas.fill_rect(image, Rect2i(18, 39, 60, 3), Color("b08c4f"))
+	# A shallow bell-shaped recess keeps the empty state readable after collection.
+	PixelCanvas.fill_rect(image, Rect2i(38, 31, 20, 8), Color("11151a"))
+	PixelCanvas.fill_rect(image, Rect2i(41, 28, 14, 3), Color("252932"))
+	PixelCanvas.fill_rect(image, Rect2i(45, 26, 6, 2), Color("775b35"))
+	for index: int in range(13):
+		var x: int = 20 + index * 4
+		PixelCanvas.fill_rect(image, Rect2i(x, 47, 2, 2), Color("6f5836"))
+	# The fourteenth seat remains deliberately unfilled and nearly black.
+	PixelCanvas.fill_rect(image, Rect2i(74, 47, 3, 2), Color("11151a"))
+	return image
+
+
 func _draw_thrust_trail() -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(64, 32))
 	PixelCanvas.draw_line(image, Vector2i(5, 18), Vector2i(57, 8), Color(0.91, 0.92, 0.86, 0.58), 2)
@@ -237,4 +257,23 @@ func _draw_pickup_glow() -> Image:
 		PixelCanvas.draw_line(image, Vector2i(32, 6 + inset), Vector2i(52 - inset, 18), color, 1)
 		PixelCanvas.draw_line(image, Vector2i(12 + inset, 46), Vector2i(32, 58 - inset), color, 1)
 		PixelCanvas.draw_line(image, Vector2i(32, 58 - inset), Vector2i(52 - inset, 46), color, 1)
+	return image
+
+
+func _draw_reforging_fragment() -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(16, 16))
+	PixelCanvas.fill_rect(image, Rect2i(4, 6, 8, 4), Color("252932"))
+	PixelCanvas.fill_rect(image, Rect2i(6, 4, 5, 3), Color("765b35"))
+	PixelCanvas.fill_rect(image, Rect2i(8, 5, 3, 2), Color("b08c4f"))
+	PixelCanvas.fill_rect(image, Rect2i(5, 10, 4, 2), Color("d6d8d2"))
+	PixelCanvas.fill_rect(image, Rect2i(9, 10, 2, 1), Color("843743"))
+	return image
+
+
+func _draw_extinguished_seal_node() -> Image:
+	var image: Image = PixelCanvas.create_transparent(Vector2i(12, 12))
+	PixelCanvas.fill_rect(image, Rect2i(3, 2, 6, 8), Color("3b3028"))
+	PixelCanvas.fill_rect(image, Rect2i(2, 4, 8, 4), Color("765b35"))
+	PixelCanvas.fill_rect(image, Rect2i(4, 3, 4, 6), Color("16191f"))
+	PixelCanvas.fill_rect(image, Rect2i(5, 4, 2, 3), Color("2c333d"))
 	return image

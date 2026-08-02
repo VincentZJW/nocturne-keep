@@ -1,18 +1,16 @@
-[gd_scene load_steps=11 format=3]
+[gd_scene load_steps=12 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_post_boss_reliquary.gd" id="1_script"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/boss_reliquary/reliquary_backdrop.png" id="2_backdrop"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/bell_reliquary.png" id="3_reliquary"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/sprites/reliquary_empty.png" id="3_reliquary"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/boss/single_blood_candle.png" id="4_candle"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/props/r3_grid_aligned/bell_saint_left_120x240.png" id="5_saint"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/r3_grid_aligned/rusted_gate_232x264.png" id="6_gate"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/r3_grid_aligned/wet_arch_232x304.png" id="7_open"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/weapons/thirteenfold_absolution_pickup.tscn" id="8_pickup"]
 
 [sub_resource type="RectangleShape2D" id="FloorShape"]
 size = Vector2(1280, 108)
-
-[sub_resource type="RectangleShape2D" id="InteractShape"]
-size = Vector2(240, 220)
 
 [sub_resource type="RectangleShape2D" id="GateBlockerShape"]
 size = Vector2(50, 410)
@@ -26,29 +24,33 @@ position = Vector2(640, 360)
 texture_filter = 1
 texture = ExtResource("2_backdrop")
 
-[node name="LastConfessionReliquary" type="Sprite2D" parent="."]
-z_index = -30
-position = Vector2(590, 490)
-texture_filter = 1
-texture = ExtResource("3_reliquary")
-
 [node name="BrokenBellSaint" type="Sprite2D" parent="."]
 z_index = -30
 position = Vector2(258, 430)
 texture_filter = 1
 texture = ExtResource("5_saint")
 
+[node name="ReliquaryEmpty" type="Sprite2D" parent="."]
+z_index = -30
+position = Vector2(590, 520)
+texture_filter = 1
+texture = ExtResource("3_reliquary")
+scale = Vector2(3, 3)
+
 [node name="LeftCandle" type="Sprite2D" parent="."]
 z_index = -30
-position = Vector2(470, 536)
+position = Vector2(455, 536)
 texture_filter = 1
 texture = ExtResource("4_candle")
 
 [node name="RightCandle" type="Sprite2D" parent="."]
 z_index = -30
-position = Vector2(710, 536)
+position = Vector2(725, 536)
 texture_filter = 1
 texture = ExtResource("4_candle")
+
+[node name="ThirteenfoldAbsolutionPickup" parent="." instance=ExtResource("8_pickup")]
+position = Vector2(590, 442)
 
 [node name="DescentSeal" type="Node2D" parent="."]
 z_index = -30
@@ -63,27 +65,6 @@ visible = false
 position = Vector2(1110, 402)
 texture_filter = 1
 texture = ExtResource("7_open")
-
-[node name="RewardInteractArea" type="Area2D" parent="."]
-position = Vector2(590, 500)
-collision_layer = 0
-collision_mask = 2
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RewardInteractArea"]
-shape = SubResource("InteractShape")
-
-[node name="InteractionPrompt" type="Label" parent="."]
-z_index = 14
-offset_left = 350.0
-offset_top = 330.0
-offset_right = 830.0
-offset_bottom = 380.0
-theme_override_colors/font_color = Color(0.88, 0.81, 0.64, 0.98)
-theme_override_colors/font_outline_color = Color(0.02, 0.02, 0.04, 1)
-theme_override_constants/outline_size = 5
-theme_override_font_sizes/font_size = 15
-text = "E · INSPECT THE LAST CONFESSION / 检视末次忏悔遗物龛"
-horizontal_alignment = 1
 
 [node name="DescentBlocker" type="StaticBody2D" parent="."]
 collision_layer = 1

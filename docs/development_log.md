@@ -6913,3 +6913,61 @@ Status: complete — WeaponData, Inventory/Equipment registration and minimum di
 - W3 has no legitimate pickup interaction yet. `CH3_REWARD_TEST` remains the W2 non-persistent visual route and must not be interpreted as an acquired reward.
 - W4 may now implement Edran reward formation, the physical reliquary/pickup, one-shot acquisition and the formal reward flag transaction using this data/persistence authority.
 - W3 stops here. No Boss death sequence, reliquary interaction, acquisition UI/sound, Underkeep unlock or Chapter IV scene was added.
+
+## 2026-08-02 — Thirteenfold Absolution W4 preflight
+
+Status: in progress — Boss reward formation, formal reliquary pickup and post-reward gate only; stop before W5
+
+### Workflow, scope and owned files
+
+- Loaded `AGENTS.md`, README, technical architecture, the Godot Gameplay Scripter skill, all four permanent chapter-production standards, W0 delivery plan and the accepted W3 data/persistence authority before editing.
+- W4 will connect one independent reward-sequence controller to Edran's existing one-shot `defeated` signal, present a restrained 3.5–5.5 second reforging sequence, and preserve the Boss script as the sole death/AI/Hitbox cleanup authority.
+- Replace the B6 story-token placeholder with a formal Chapter III `WeaponPickup` for `thirteenfold_absolution_blades`, a Chapter III acquisition panel, authoritative unique inventory/equipment mutation, `spawned/collected/underkeep unlocked` flags and an empty-reliquary persisted state.
+- Keep the post-Boss descent physically and logically closed until pickup succeeds. Repeated interaction must not duplicate the item, repeat the sequence or reopen the acquisition transaction.
+- Reuse the approved W1/W2 original concepts, `world_pickup.png`, `reliquary_display.png` and restrained pickup effect; do not introduce third-party assets or placeholder geometry.
+- W4 explicitly excludes W5 full-route stress QA, a Continue/title flow, Chapter IV PackedScene, Player/Boss balance changes, Player action/Hitbox changes, new enemies and other chapter content.
+- Task-owned runtime paths are Chapter III reward controller/pickup/panel scripts and scenes, the Boss/Post-Boss room and reliquary scenes/scripts, focused W4 tests/docs/QA evidence, README and this log. The pre-existing dirty Chapter I/shared balancing/resources/QA images and UID sidecars remain outside scope and will not be staged.
+
+### Read-only baseline and planned verification
+
+- Work begins on `master` at `78d7d6cb83f1fdc0b0fa2350aec3f4e9f2020602`; F5 authority is `res://scenes/bootstrap/main_bootstrap.tscn`.
+- `Ch3BossSanctumRoom/BossActors/ThirteenthPontiffEdran.defeated` currently fades music and calls the existing Sanctum death environment. `Ch3PostBossRoom/PostBossReliquary` currently emits a placeholder collection request and its Room script sets a token without touching `WeaponInventory` or `EquipmentManager`.
+- W3 already registered the independent `thirteenfold_absolution_blades` Resource and narrow autosave service; W4 will consume those authorities instead of duplicating weapon data or persistence.
+- Planned checks: exact Godot 4.7.1 editor import; reward sequence one-shot/timing/input protection; post-Boss available/collected/reloaded states; duplicate rejection; 14/28 auto-equip and HUD signal path; locked-before/open-after descent; Boss/reward/route regressions; MainBootstrap `CH3_BOSS` and `CH3_POST_BOSS` captures; configured formal startup; Output/Debugger review; `git diff --check`; one isolated W4 commit.
+
+## 2026-08-02 — Thirteenfold Absolution W4 complete
+
+Status: complete — Boss reforging formation, formal reliquary pickup and Underkeep gate transaction passed; stopped before W5
+
+### Implemented scope
+
+- Added the independent `Chapter03RewardSequenceController` and connected it downstream of Edran's existing one-shot `defeated` signal. The existing Sanctum death environment and the new 4.20-second fragments/seals/blades/ready branch run in parallel; the post-Boss exit opens only after both finish.
+- Added three deterministic chapter-local pixel assets (`reliquary_empty.png`, `reforging_fragment.png`, `extinguished_seal_node.png`) and reused the approved W2 weapon pair, resonance and chapter-local original audio. All textures use lossless nearest-neighbour imports.
+- Replaced the B6 story-token placeholder with a formal composed `WeaponPickup`, bilingual prompt, low reliquary, empty collected state, acquisition panel and synchronized visual/physical Underkeep seal.
+- Successful interaction now adds the unique W3 weapon, auto-equips `thirteenfold_absolution_blades`, resolves `14/28` through EquipmentManager, selects the 97-frame W2 Player visual, marks spawned/collected/unlocked flags and Chapter III completion, then opens the descent. Repeated interaction and room reload cannot duplicate the item.
+- Kept Edran death/AI/Hitbox authority, Player combat/movement, balance, other enemies and Chapter IV outside W4. No Chapter IV PackedScene or false transition was added.
+- Visual QA caught an acquisition-panel Tween bug: assigning `position.y = -10` erased the scene's designed top offset and overlapped the chapter title. The panel now animates relative to its saved rest position and appears below the title.
+
+### Exact verification and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/tools/generate_thirteenfold_absolution_assets.gd` — PASS: `animations=30 frames=97 presentation=6 effects=5 contact_sheet=1`.
+2. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --editor --headless --path . --quit` — PASS: new global classes, scenes, PNG imports and resources parsed/imported without script or resource error.
+3. `test_thirteenfold_absolution_w4_reward.gd` — PASS: three W4 image dimensions, four ordered stages, one-shot guard, Player lock/protection restoration, unique pickup, equipped `14/28`, locked/open descent and empty reload state.
+4. `test_chapter_03_r4_boss_flow.gd` — PASS: existing Boss death environment plus W4 formation gate, real pickup and Underkeep route.
+5. `test_thirteenfold_absolution_w2_visuals.gd` — PASS: all 30 animations, 97 formal Player frames and accepted visual assets remain valid.
+6. Two-process `test_thirteenfold_absolution_w3_progress.gd` (`W3_PROGRESS_PHASE=write`, then `load`) — PASS: acquisition authority, fresh-process disk restore, Debug isolation and formal New Game cleanup remain intact.
+7. `test_edran_b4_b7_full_boss.gd` — PASS: transition, six Phase 2 attacks, death and reward interface regressions remain valid.
+8. `test_chapter_03_r5_full_route.gd` — PASS: 50 transitions/10 cycles. Its historical console label still reports `reward=partial` because final W5 route acceptance is deliberately not changed in W4.
+9. `test_crimson_masque_weapon.gd` — PASS: Chapter II weapon remains independent at 49 frames and `14/28`; no registry collision.
+10. `test_player_respawn.gd` — PASS: delay, reset, HUD, repeat cycle and input recovery.
+11. `test_main_bootstrap_flow.gd` — PASS: formal Opening and Debug Chapter II. The harness retains its previously documented two-instance ObjectDB forced-exit warning; the configured formal startup below does not reproduce it.
+12. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — PASS: formal MainBootstrap selected `res://scenes/cinematics/opening_cinematic.tscn`; no red runtime/script/resource error.
+13. Windowed `capture_thirteenfold_absolution_w4_main_qa.gd` — PASS: actual MainBootstrap `CH3_BOSS` → `CH3_POST_BOSS`, six 1280×720 captures, formation 4.20 s, unique pickup, equipped `14/28`, gate open. The first harness attempt correctly exposed Edran's protected Phase 1→2 transition rather than emitting defeat; the capture was fixed to enter Phase 2 through the Boss's existing debug API before lethal damage. Product logic was not bypassed or altered.
+14. `git diff --check` — PASS.
+
+### Evidence and manual acceptance
+
+- Specification: `chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_thirteenfold_absolution_w4_reward.md`.
+- QA matrix and six Main images: `docs/qa/chapter_03_thirteenfold_absolution/w4/`.
+- Manual F5 route: guarded Chapter III start at `CH3_BOSS`; complete the Boss death, judge the four-beat formation cadence, enter the Last Confession Reliquary, press E, verify the acquisition panel/empty altar/equipped visual and open descent.
+- Automated state and Main composition are PASS. Human feel/readability remains the intended acceptance step. W5 full-route/load stress has not started.

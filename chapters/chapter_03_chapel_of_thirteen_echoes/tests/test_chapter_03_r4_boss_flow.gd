@@ -72,11 +72,18 @@ func _run() -> void:
 		"typed Edran integration anchor remains available"
 	)
 
-	sanctum.notify_boss_defeated()
+	sanctum_room.reward_sequence.fragment_duration = 0.10
+	sanctum_room.reward_sequence.seal_duration = 0.10
+	sanctum_room.reward_sequence.forge_duration = 0.10
+	sanctum_room.reward_sequence.hold_duration = 0.10
+	sanctum_room.boss.defeated.emit()
 	await sanctum.death_environment_finished
+	while not sanctum_room.reward_sequence.is_complete():
+		await process_frame
 	await physics_frame
 	_expect(sanctum.is_death_response_complete(), "Boss death environment hook is idempotent-ready")
-	_expect(sanctum_room.post_boss_exit.monitoring, "Boss death enables post-Boss exit")
+	_expect(sanctum_room.reward_sequence.is_complete(), "Boss reward formation completes")
+	_expect(sanctum_room.post_boss_exit.monitoring, "Boss death and reward formation enable post-Boss exit")
 	(sanctum_room.post_boss_exit as Chapter03RoomExit)._on_body_entered(player)
 	await _wait_for_room_ready(controller, &"CH3_POST_BOSS", 2.0)
 	_expect(controller.active_room_id == &"CH3_POST_BOSS", "death exit reaches dedicated reliquary")
@@ -86,8 +93,13 @@ func _run() -> void:
 		return
 	_expect(post_room.reliquary.visible, "post-Boss reliquary is revealed on entry")
 	_expect(not post_room.underkeep_exit.monitoring, "descent stays closed before reward authority")
-	post_room.reliquary.notify_reward_collected()
+	_expect(post_room.reliquary.pickup.collect(), "formal WeaponPickup grants the Boss reward")
 	await physics_frame
+	var equipment: PlayerEquipmentManager = root.get_node_or_null("EquipmentManager") as PlayerEquipmentManager
+	_expect(
+		equipment != null and equipment.equipped_weapon_id == &"thirteenfold_absolution_blades",
+		"Boss reward auto-equips through EquipmentManager"
+	)
 	_expect(post_room.underkeep_exit.monitoring, "reward completion enables underkeep exit")
 	(post_room.underkeep_exit as Chapter03RoomExit)._on_body_entered(player)
 	await _wait_for_room_ready(controller, &"CH3_UNDERKEEP_DESCENT", 2.0)
@@ -133,7 +145,7 @@ func _finish() -> void:
 	if _failures.is_empty():
 		print(
 			"CH3_R4_BOSS_FLOW PASS checkpoint=true e_gate=true room_swap=true "
-			+ "intro=true post_boss_hook=true underkeep_hook=true boss_entity=partial chapter4=partial"
+			+ "intro=true reward_formation=true weapon_pickup=true underkeep_hook=true boss_entity=partial chapter4=partial"
 		)
 		quit(0)
 		return

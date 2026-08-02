@@ -49,6 +49,8 @@ M0 required no Autoload. The current project now uses narrow Autoloads only for 
 
 `PlayerProgressSaveService` starts disabled. `MainBootstrap` explicitly selects one lifetime: Debug starts keep persistence disabled, while formal New Game clears the prior file, resets runtime state and enables autosave. Loading is an explicit validated API reserved for a future Continue/title flow, so default F5 semantics remain New Game rather than silently resuming.
 
+Chapter III's W4 Boss reward uses two composed authorities rather than extending the Boss state machine. `Chapter03RewardSequenceController` listens downstream of Edran's one-shot `defeated` signal and owns only the temporary Player lock plus reforging presentation. `Chapter03PostBossReliquary` composes the generic `WeaponPickup`; Inventory/Equipment perform unique ownership and auto-equip, while ChapterSession stores only spawned/collected/descent flags. The Boss exit waits for both the existing death-environment completion and reward-formation completion, and the physical descent remains blocked until collection succeeds.
+
 ## Signal boundaries
 
 Planned public signals include `health_changed`, `died`, `damage_received`, `checkpoint_activated`, `ability_unlocked`, `boss_phase_changed`, `boss_defeated`, and `game_won`. Every signal will use typed parameters where it carries data.
