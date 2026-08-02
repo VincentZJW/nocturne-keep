@@ -6971,3 +6971,65 @@ Status: complete — Boss reforging formation, formal reliquary pickup and Under
 - QA matrix and six Main images: `docs/qa/chapter_03_thirteenfold_absolution/w4/`.
 - Manual F5 route: guarded Chapter III start at `CH3_BOSS`; complete the Boss death, judge the four-beat formation cadence, enter the Last Confession Reliquary, press E, verify the acquisition panel/empty altar/equipped visual and open descent.
 - Automated state and Main composition are PASS. Human feel/readability remains the intended acceptance step. W5 full-route/load stress has not started.
+
+## 2026-08-02 — Thirteenfold Absolution W5 preflight
+
+Status: in progress — final full-flow, process-restart persistence, debug-state mapping and forced QA only
+
+### Workflow, scope and owned files
+
+- Loaded `AGENTS.md`, README, technical architecture, the Godot Gameplay Scripter skill, W0 delivery plan and W1–W4 accepted contracts before editing. F5 authority remains `res://scenes/bootstrap/main_bootstrap.tscn`.
+- W5 will convert the four W0-planned Main debug states (`CH3_BOSS`, `CH3_POST_BOSS`, `CH3_REWARD_TEST`, `CH3_UNDERKEEP_DESCENT`) into truthful non-persistent reward states, without changing the formal Opening route or allowing Debug runs to write `user://` progress.
+- Add the focused two-process `test_thirteenfold_absolution_full_flow.gd`: real Boss defeat/formation, post-Boss pickup, unique ownership, 14/28 equipment/visual, Underkeep transition, death/respawn retention, fresh-process restore, empty-reliquary return, Debug isolation and New Game cleanup.
+- Add a final MainBootstrap capture script and W5 evidence/report/hash-path inventory, publish the final design specification, update the historical Chapter III R5 terminal labels from reward/Boss PARTIAL to their current real status, run the full regression matrix, create one isolated W5 commit and stop.
+- W5 does not create a Continue/title menu, a Chapter IV PackedScene, Chapter IV content, new Player/Boss behavior, balance changes, enemies, environment art or unrelated systems. Chapter IV transition stays explicitly PARTIAL until its separately approved milestone exists.
+- Task-owned files are the Chapter III route/profile debug mapping, W5 tests/capture/final specs/QA, the narrow canonical flag correction in the W3 test, README/architecture/log and the existing R5 terminal regression. All pre-existing Chapter I/shared/resource/QA-image modifications and UID sidecars remain excluded.
+
+### Read-only baseline and planned verification
+
+- Work begins on `master` at `536554032337a672634909a073668365186a4a6f`; the worktree still contains unrelated unstaged Chapter I/shared/resource/QA changes that will be preserved.
+- W4's runtime flow is complete and committed: Edran one-shot defeat → 4.20-second formation → formal pickup → unique Inventory/Equipment transaction → empty reliquary/open Underkeep. W3 already provides isolated versioned disk persistence.
+- `CH3_REWARD_TEST` is still the obsolete W2 visual-only preview and `CH3_UNDERKEEP_DESCENT` does not yet synthesize its approved debug owned/equipped state. The historical R5 route console label also still says `boss_entity=partial reward=partial` despite current runtime authorities.
+- Planned checks: exact Godot 4.7.1 import; W5 write/load in separate processes; all W2–W4 tests; Chapter III route/R4/R5/Boss regressions; Player respawn; Crimson Masque independence; MainBootstrap flow; formal 240-frame startup; windowed Main W5 captures; SHA-256 manifest; Output/Debugger scan; `git diff --check`; isolated commit and stop.
+
+## 2026-08-02 — Thirteenfold Absolution W5 complete
+
+Status: complete — W1–W5 final reward boundary, process-restart recovery, truthful Main debug starts and forced QA passed
+
+### Implemented scope
+
+- Replaced the obsolete `CH3_REWARD_TEST` visual-only spoof with the real post-Boss pickup state. `CH3_POST_BOSS` and `CH3_REWARD_TEST` now both mean formed/uncollected/locked; `CH3_UNDERKEEP_DESCENT` means uniquely owned/equipped/collected/unlocked/Chapter III complete. The route only synthesizes these states when `ChapterSession.is_debug_run`, so formal progress remains save-authoritative.
+- Added the two-process W5 test. Its write process traverses real Edran defeat, the independent formation, post-Boss room, formal unique pickup, 14/28 auto-equip, Underkeep and death/respawn, then writes validated JSON. Its load process restores in a fresh engine process, resumes in Underkeep, revisits an empty reliquary, rejects a duplicate and verifies debug-state save isolation by SHA-256.
+- Updated the historical Chapter III R5 terminal acceptance from false `boss_entity=partial reward=partial` labels to typed Edran, real reward pickup, open gate and Underkeep assertions. Chapter IV remains `partial` because its separately owned PackedScene does not exist.
+- Corrected the W3 test's historical Underkeep flag spelling to the canonical `chapter_03_underkeep_descent_unlocked` used by W4/W5 runtime.
+- Added ten rendered MainBootstrap frames covering uncollected reward, prompt, acquisition/HUD, normal attack, Dash Attack, left flip, Underkeep inheritance, death, respawn and empty return. Manual review confirmed readable tier-3/14/28 HUD state, ghost/death weapon retention and no return pickup.
+- Published the W1–W5 final design/runtime/save specification, final QA report, artifact-path manifest and verified SHA-256 screenshot manifest. Historical W2/W3 stage documents now explicitly identify the W5 runtime supersession without rewriting their accepted stage history.
+
+### Exact verification and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit-after 4` — PASS: W5 scripts imported and `.uid` sidecars created; no script/resource error. The editor reports only its normal early-quit scan-aborted warning.
+2. `test_thirteenfold_absolution_w1_concepts.gd` — PASS: 12 concepts and 12 unique hashes.
+3. `test_thirteenfold_absolution_w2_visuals.gd` — PASS: 30 animations, 97 formal Player frames and eight presentation/effect assets; the standalone visual-preview API remains non-mutating.
+4. Two-process `test_thirteenfold_absolution_w3_progress.gd` (`W3_PROGRESS_PHASE=write`, then `load`) — PASS: independent data, 14/28, disk restore and canonical Underkeep flag.
+5. `test_thirteenfold_absolution_w4_reward.gd` — PASS: four ordered formation stages, one unique pickup, 14/28, locked/open gate and empty reload.
+6. Two-process `test_thirteenfold_absolution_full_flow.gd` (`W5_FULL_FLOW_PHASE=write`, then `load`) — PASS in fresh processes: Boss, pickup, unique inventory, 14/28, disk, reload, respawn and debug isolation. No red error, leak or resource warning.
+7. `test_chapter_03_r4_boss_flow.gd` — PASS: checkpoint, gate, room swap, intro, reward formation, weapon pickup and Underkeep hook. Its historical Boss/Chapter IV partial fields remain owned by that earlier stage report.
+8. `test_chapter_03_r5_full_route.gd` — PASS: 50 transitions/10 cycles, persistent runtime, platform combat, `boss_entity=true`, `reward=true`, `chapter4=partial`.
+9. `test_chapter_03_boss_route.gd` — PASS: four spawns, gate sequence, Sanctum intro, crossing and input restoration.
+10. `test_chapter_03_boss_environment.gd` — PASS: eight visual assets, four audio assets, five scenes, four spawns and Main integration; its historical labels remain `boss_hook=partial chapter4=planned`.
+11. `test_edran_b4_b7_full_boss.gd` — PASS: transition, six Phase 2 attacks, death, reward interface and twenty regressions.
+12. `test_crimson_masque_weapon.gd` — PASS: independent Chapter II WeaponData, 49 frames, 14/28, dedup and profile.
+13. `test_player_respawn.gd` — PASS: delay, reset, HUD, repeated cycle and input recovery.
+14. `test_main_bootstrap_flow.gd` — PASS: formal Opening plus Debug Chapter II. It retains the previously documented two-instance forced-exit ObjectDB warning; product startup and W5 Main capture do not reproduce it.
+15. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — PASS: F5 authority selected formal New Game → `res://scenes/cinematics/opening_cinematic.tscn`; no red error.
+16. Windowed `capture_thirteenfold_absolution_qa.gd` — PASS on OpenGL Compatibility / Apple M4: ten 1280×720 MainBootstrap images, reward/Underkeep/return states, equipment 14/28, respawn retained and no duplicate.
+17. `cd docs/qa/chapter_03_thirteenfold_absolution/w5 && shasum -a 256 -c sha256_manifest.txt` — PASS: all ten files `OK`.
+18. `sips -g pixelWidth -g pixelHeight docs/qa/chapter_03_thirteenfold_absolution/w5/*.png` — PASS: all ten images are 1280×720.
+19. `git diff --check` — PASS.
+
+### Evidence, scope and manual acceptance
+
+- Final specification: `docs/design/chapter_03_thirteenfold_absolution_spec.md`.
+- Final report, manifests and ten Main frames: `docs/qa/chapter_03_thirteenfold_absolution/w5/`.
+- Manual route: enable Debug Chapter Start for Chapter III. `CH3_BOSS` proves the full fight-to-pickup flow; `CH3_REWARD_TEST` is the fast real pickup/action check; `CH3_UNDERKEEP_DESCENT` proves already-owned death/respawn. Confirm tier 3 and 14/28, gate locked before pickup/open after, empty return and honest planned Chapter IV prompt.
+- No Player timing/Hitbox/movement/stamina, Boss balance/AI, enemies, Chapter IV content, title/Continue UI or unrelated dirty worktree changes were modified. W5 is complete and stops here for user acceptance.

@@ -51,6 +51,8 @@ M0 required no Autoload. The current project now uses narrow Autoloads only for 
 
 Chapter III's W4 Boss reward uses two composed authorities rather than extending the Boss state machine. `Chapter03RewardSequenceController` listens downstream of Edran's one-shot `defeated` signal and owns only the temporary Player lock plus reforging presentation. `Chapter03PostBossReliquary` composes the generic `WeaponPickup`; Inventory/Equipment perform unique ownership and auto-equip, while ChapterSession stores only spawned/collected/descent flags. The Boss exit waits for both the existing death-environment completion and reward-formation completion, and the physical descent remains blocked until collection succeeds.
 
+W5 closes the reward boundary without adding another authority. `Chapter03Route` synthesizes four truthful states only when `ChapterSession.is_debug_run`: Boss unowned, post-Boss formed/uncollected, reward-test formed/uncollected and Underkeep owned/equipped/complete. Formal recovery still comes exclusively from validated `PlayerProgressSaveService` data. A two-process test proves Chapter III/Underkeep recovery, unique ownership, equipped 14/28 values, death/respawn retention, empty-reliquary return and byte-for-byte debug-save isolation. The nonexistent Chapter IV PackedScene remains an explicit terminal boundary rather than a fabricated transition.
+
 ## Signal boundaries
 
 Planned public signals include `health_changed`, `died`, `damage_received`, `checkpoint_activated`, `ability_unlocked`, `boss_phase_changed`, `boss_defeated`, and `game_won`. Every signal will use typed parameters where it carries data.

@@ -241,15 +241,45 @@ func _assert_terminal_boundaries(controller: Chapter03RoomTransitionController) 
 			"Edran integration anchor is typed and saved"
 		)
 		_expect(
-			boss_room.sanctum.find_children("*", "EnemyCombatant", true, false).is_empty(),
-			"no placeholder combatant is misrepresented as Edran"
+			boss_room.boss is ThirteenthPontiffEdran,
+			"formal Edran Boss entity is integrated"
 		)
 	_expect(controller._swap_room(&"CH3_POST_BOSS", &"EntryWest"), "post-Boss room loads")
 	await process_frame
+	await physics_frame
 	var post_room: Chapter03PostBossRoom = controller.active_room as Chapter03PostBossRoom
 	_expect(post_room != null, "post-Boss reward interface is saved")
 	if post_room != null:
 		_expect(not post_room.underkeep_exit.monitoring, "descent remains reward-gated")
+		_expect(post_room.reliquary.is_reward_available(), "formal reward is collectable")
+		_expect(post_room.reliquary.pickup.collect(), "formal reward pickup succeeds")
+		await process_frame
+		await physics_frame
+		var equipment: PlayerEquipmentManager = root.get_node_or_null(
+			"EquipmentManager"
+		) as PlayerEquipmentManager
+		_expect(equipment != null, "equipment service remains available")
+		if equipment != null:
+			_expect(
+				equipment.equipped_weapon_id == &"thirteenfold_absolution_blades",
+				"formal reward auto-equips"
+			)
+			_expect(
+				equipment.get_normal_attack_damage() == 14
+				and equipment.get_dash_attack_damage() == 28,
+				"formal reward damage is 14/28"
+			)
+		_expect(post_room.underkeep_exit.monitoring, "descent opens after reward")
+		_expect(post_room.reliquary.descent_blocker.disabled, "descent blocker is disabled")
+		_expect(
+			controller._swap_room(&"CH3_UNDERKEEP_DESCENT", &"EntryWest"),
+			"underkeep descent loads after collection"
+		)
+		await process_frame
+		_expect(
+			controller.active_room_id == &"CH3_UNDERKEEP_DESCENT",
+			"underkeep descent becomes active"
+		)
 	_expect(
 		not ResourceLoader.exists(ChapterRegistry.CHAPTER_04_SCENE_PATH, "PackedScene"),
 		"Chapter IV remains an explicit planned boundary"
@@ -265,7 +295,7 @@ func _finish() -> void:
 	if _failures.is_empty():
 		print((
 			"CH3_R5_FULL_ROUTE PASS transitions=%d cycles=%d persistent_runtime=true "
-			+ "platform_combat=true boss_entity=partial reward=partial chapter4=partial"
+			+ "platform_combat=true boss_entity=true reward=true chapter4=partial"
 		) % [_completed_transitions, STRESS_CYCLES])
 		quit(0)
 		return

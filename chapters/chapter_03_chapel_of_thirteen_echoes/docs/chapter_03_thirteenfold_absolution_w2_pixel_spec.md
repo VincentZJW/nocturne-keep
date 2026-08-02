@@ -79,6 +79,8 @@ Total: 30 animations and 97 transparent 64×64 frames. Player pose geometry, fra
 
 W2 adds `CH3_REWARD_TEST` as a debug-only Chapter III spawn. It resolves through the formal `MainBootstrap` route into `CH3_POST_BOSS`, then applies `set_visual_preview(&"thirteenfold_absolution")`. That method changes only the Player presentation and never calls Inventory, Equipment or Save.
 
+> Historical stage note (W5): this paragraph records the accepted W2 behavior. W5 supersedes the runtime route: `CH3_REWARD_TEST` now exposes the real uncollected pickup and uses the formal Inventory/Equipment transaction. It remains a disposable debug session and never writes formal progress.
+
 The W2 Main test proves that the actual equipped item remains `crimson_masque_stilettos`; therefore the HUD continues to display the existing tier-3 14/28 values until W3 formally registers the new WeaponData.
 
 ## QA and manual review

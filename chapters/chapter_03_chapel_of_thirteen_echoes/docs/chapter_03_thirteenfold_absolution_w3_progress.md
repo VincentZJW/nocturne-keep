@@ -45,4 +45,6 @@ Not implemented in W3:
 - formal `chapter_03_boss_reward_collected` grant transaction;
 - Underkeep/Chapter IV unlock or a Chapter IV PackedScene.
 
-Those remain W4–W5. `CH3_REWARD_TEST` is still the W2 visual-only preview and does not grant or persist the weapon.
+At W3 completion those remained W4–W5; `CH3_REWARD_TEST` was still the W2 visual-only preview and did not grant or persist the weapon.
+
+> Historical stage note (W5): W4 subsequently delivered the real reward transaction, and W5 replaced the visual-only debug route with a truthful uncollected formal pickup. The W3 data/save boundary above remains authoritative; the debug route itself is non-persistent.

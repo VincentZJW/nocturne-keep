@@ -55,7 +55,7 @@ func _run_write_phase() -> void:
 	_expect(equipment.get_dash_attack_damage() == 28, "Dash damage is not 28")
 	session.mark_chapter_completed(&"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES")
 	session.set_story_flag(&"chapter_03_boss_reward_collected")
-	session.set_story_flag(&"chapter_03_underkeep_unlocked")
+	session.set_story_flag(&"chapter_03_underkeep_descent_unlocked")
 	session.set_transition_target(
 		&"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES",
 		&"CH3_UNDERKEEP_DESCENT"
@@ -86,7 +86,10 @@ func _run_load_phase() -> void:
 	_expect(equipment.get_normal_attack_damage() == 14, "Loaded normal damage is not 14")
 	_expect(equipment.get_dash_attack_damage() == 28, "Loaded Dash damage is not 28")
 	_expect(session.has_story_flag(&"chapter_03_boss_reward_collected"), "Reward flag was not restored")
-	_expect(session.has_story_flag(&"chapter_03_underkeep_unlocked"), "Underkeep flag was not restored")
+	_expect(
+		session.has_story_flag(&"chapter_03_underkeep_descent_unlocked"),
+		"Underkeep flag was not restored"
+	)
 	_expect(
 		session.is_chapter_completed(&"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES"),
 		"Chapter completion was not restored"

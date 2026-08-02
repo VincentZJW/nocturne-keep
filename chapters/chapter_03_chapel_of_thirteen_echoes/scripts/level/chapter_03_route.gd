@@ -6,7 +6,10 @@ const FLAG_CHAPTER_03_STARTED: StringName = &"chapter_03_started"
 const MUSIC_PHASE_01_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
 const MUSIC_TRANSITION_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_TRANSITION"
 const MUSIC_PHASE_02_SPAWN_ID: StringName = &"CH3_BOSS_MUSIC_PHASE_02"
-const REWARD_VISUAL_TEST_SPAWN_ID: StringName = &"CH3_REWARD_TEST"
+const WEAPON_ID: StringName = &"thirteenfold_absolution_blades"
+const FLAG_REWARD_SPAWNED: StringName = &"chapter_03_boss_reward_spawned"
+const FLAG_REWARD_COLLECTED: StringName = &"chapter_03_boss_reward_collected"
+const FLAG_UNDERKEEP_UNLOCKED: StringName = &"chapter_03_underkeep_descent_unlocked"
 
 @onready var transition_controller: Chapter03RoomTransitionController = $RoomTransitionController
 
@@ -18,6 +21,7 @@ func _ready() -> void:
 		selected_spawn_id = session.consume_pending_spawn(DEFAULT_SPAWN_ID)
 		session.current_chapter_id = ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES
 		session.set_story_flag(FLAG_CHAPTER_03_STARTED)
+		_apply_debug_reward_state(session, selected_spawn_id)
 	var start: Dictionary = _resolve_start(selected_spawn_id)
 	var start_room_id: StringName = start.room_id as StringName
 	transition_controller.initialize(start_room_id, start.spawn_id as StringName)
@@ -31,8 +35,6 @@ func _ready() -> void:
 		call_deferred("_force_formal_phase_02_after_intro")
 	if selected_spawn_id == &"CH3_BOSS_PHASE_02":
 		call_deferred("_force_phase_02_after_intro")
-	if selected_spawn_id == REWARD_VISUAL_TEST_SPAWN_ID:
-		call_deferred("_enable_reward_visual_test")
 
 
 func _resolve_start(spawn_id: StringName) -> Dictionary:
@@ -88,13 +90,34 @@ func _enable_music_debug_overlay() -> void:
 		music_manager.set_debug_overlay_enabled(true)
 
 
-func _enable_reward_visual_test() -> void:
-	await get_tree().process_frame
-	var visual: PlayerWeaponVisual = transition_controller.player.get_node_or_null(
-		"VisualRoot/WeaponVisual"
-	) as PlayerWeaponVisual
-	if visual == null or not visual.set_visual_preview(&"thirteenfold_absolution"):
-		push_error("CH3_REWARD_TEST could not apply Thirteenfold Absolution visual")
+func _apply_debug_reward_state(session: ChapterSessionState, spawn_id: StringName) -> void:
+	if not session.is_debug_run:
+		return
+	match spawn_id:
+		&"CH3_POST_BOSS", &"CH3_REWARD_TEST":
+			# Boss defeated and the reliquary is ready, but the unique reward is
+			# deliberately still uncollected so pickup/gate behavior stays testable.
+			session.boss_reward_spawned = true
+			session.boss_reward_collected = false
+			session.set_story_flag(FLAG_REWARD_SPAWNED)
+			session.set_story_flag(FLAG_REWARD_COLLECTED, false)
+			session.set_story_flag(FLAG_UNDERKEEP_UNLOCKED, false)
+		&"CH3_UNDERKEEP_DESCENT":
+			# This debug entry represents a completed Chapter III reward flow. It
+			# mutates only the disposable debug session and never the formal save.
+			var equipment: PlayerEquipmentManager = get_node_or_null(
+				"/root/EquipmentManager"
+			) as PlayerEquipmentManager
+			if equipment == null or not equipment.acquire_and_equip(WEAPON_ID):
+				push_error("CH3_UNDERKEEP_DESCENT could not equip Thirteenfold Absolution")
+			session.boss_reward_spawned = true
+			session.boss_reward_collected = true
+			session.set_story_flag(FLAG_REWARD_SPAWNED)
+			session.set_story_flag(FLAG_REWARD_COLLECTED)
+			session.set_story_flag(FLAG_UNDERKEEP_UNLOCKED)
+			session.mark_chapter_completed(
+				ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES
+			)
 
 
 func _exit_tree() -> void:
