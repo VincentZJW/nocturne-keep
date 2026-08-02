@@ -58,10 +58,15 @@ func get_selected_start_scene_path() -> String:
 
 func _prepare_session(debug_run: bool, profile: ChapterStartProfile = null) -> void:
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
+	var save_service: PlayerProgressSaveServiceState = get_node_or_null(
+		"/root/PlayerProgressSaveService"
+	) as PlayerProgressSaveServiceState
 	if session == null:
 		push_warning("MainBootstrap could not find ChapterSession; continuing without session reset")
 		return
 	if debug_run:
+		if save_service != null:
+			save_service.begin_debug_session()
 		session.begin_debug_run()
 		var config: DebugRunConfigState = get_node_or_null(
 			"/root/DebugRunConfig"
@@ -69,7 +74,15 @@ func _prepare_session(debug_run: bool, profile: ChapterStartProfile = null) -> v
 		var spawn_override: StringName = config.debug_start_spawn_id if config != null else &""
 		session.apply_start_profile(profile, spawn_override)
 	else:
+		if save_service != null:
+			var clear_error: Error = save_service.begin_new_game()
+			if clear_error != OK:
+				push_warning("MainBootstrap could not clear prior progress save: %s" % error_string(clear_error))
 		session.begin_formal_new_game()
+		if save_service != null:
+			var enable_error: Error = save_service.enable_formal_persistence()
+			if enable_error != OK:
+				push_warning("MainBootstrap could not enable formal progress save: %s" % error_string(enable_error))
 
 
 func _change_to_scene(scene_path: String, route_name: String) -> void:

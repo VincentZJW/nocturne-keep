@@ -1,7 +1,7 @@
 # Technical Architecture
 
-Version: 0.2.1
-Last updated: 2026-07-30
+Version: 0.2.2
+Last updated: 2026-08-02
 
 ## Goals
 
@@ -45,7 +45,9 @@ This is the target decomposition, not functionality delivered in M0.
 
 M0 required no Autoload. The current project now uses narrow Autoloads only for genuine cross-scene concerns: `ChapterSession` for process-lifetime progression/story flags, `DebugRunConfig` for guarded development routing, `SceneTransitionManager` for fade-backed scene replacement, and the existing currency/inventory/equipment services. Movement, combat, AI, encounters, Player/HUD composition and presentation remain instanced nodes.
 
-`SceneTransitionManager` resolves chapter targets through `ChapterRegistry`, records the pending chapter/spawn in `ChapterSession`, fades, and replaces the active PackedScene. It does not own Player state or chapter gameplay. `ChapterSession` is runtime state, not a disk save; persistent storage remains a future `user://` concern.
+`SceneTransitionManager` resolves chapter targets through `ChapterRegistry`, records the pending chapter/spawn in `ChapterSession`, fades, and replaces the active PackedScene. It does not own Player state or chapter gameplay. `ChapterSession` remains the runtime authority; W3's `PlayerProgressSaveService` serializes only permanent weapon ownership/equipment and a minimum recovery snapshot to `user://`. It does not own or poll gameplay.
+
+`PlayerProgressSaveService` starts disabled. `MainBootstrap` explicitly selects one lifetime: Debug starts keep persistence disabled, while formal New Game clears the prior file, resets runtime state and enables autosave. Loading is an explicit validated API reserved for a future Continue/title flow, so default F5 semantics remain New Game rather than silently resuming.
 
 ## Signal boundaries
 
@@ -55,7 +57,9 @@ Planned public signals include `health_changed`, `died`, `damage_received`, `che
 
 - Character and combat values will use custom Resources or explicit exported typed values.
 - Session checkpoint state will store checkpoint position, double-jump unlock, defeated key enemies, boss state, and required flow flags.
-- Any future disk save must use `user://`; no absolute local path may enter runtime save logic.
+- W3 weapon-progress saves use versioned JSON at `user://player_progress_v1.json`; no absolute local path enters runtime save logic.
+- The save contains sorted unique owned weapon IDs, equipped ID and selected ChapterSession recovery fields. Currency, Health, live Boss state and Debug profiles are intentionally excluded.
+- Every loaded weapon ID is checked against `EquipmentManager` before runtime mutation; the equipped ID must be owned.
 
 ## Collision ownership (planned)
 

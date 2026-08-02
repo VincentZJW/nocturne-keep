@@ -41,6 +41,24 @@ func get_owned_weapon_ids() -> Array[StringName]:
 	return result
 
 
+func export_snapshot() -> Array[StringName]:
+	return get_owned_weapon_ids()
+
+
+func import_snapshot(weapon_ids: Array[StringName]) -> bool:
+	var imported_ids: Dictionary[StringName, bool] = {}
+	for weapon_id: StringName in weapon_ids:
+		if weapon_id.is_empty():
+			return false
+		imported_ids[weapon_id] = true
+	imported_ids[STARTING_WEAPON_ID] = true
+	_owned_weapon_ids = imported_ids
+	inventory_reset.emit()
+	for weapon_id: StringName in get_owned_weapon_ids():
+		weapon_added.emit(weapon_id)
+	return true
+
+
 func reset_for_new_run() -> void:
 	_owned_weapon_ids.clear()
 	ensure_starting_weapon()

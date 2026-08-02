@@ -7,6 +7,7 @@ extends Node
 signal objective_changed(step: int, title_zh: String, title_en: String)
 signal story_flag_changed(flag_id: StringName, enabled: bool)
 signal transition_target_changed(chapter_id: StringName, spawn_id: StringName)
+signal progress_state_changed
 
 enum ObjectiveStep {
 	LEAVE_CATACOMB,
@@ -96,6 +97,7 @@ func set_story_flag(flag_id: StringName, enabled: bool = true) -> void:
 		return
 	story_flags[flag_id] = enabled
 	story_flag_changed.emit(flag_id, enabled)
+	progress_state_changed.emit()
 
 
 func has_story_flag(flag_id: StringName) -> bool:
@@ -105,6 +107,7 @@ func has_story_flag(flag_id: StringName) -> bool:
 func mark_chapter_completed(chapter_id: StringName) -> void:
 	if not chapter_id.is_empty():
 		completed_chapters[chapter_id] = true
+		progress_state_changed.emit()
 
 
 func is_chapter_completed(chapter_id: StringName) -> bool:
@@ -115,12 +118,89 @@ func set_transition_target(chapter_id: StringName, spawn_id: StringName) -> void
 	current_chapter_id = chapter_id
 	pending_spawn_id = spawn_id
 	transition_target_changed.emit(chapter_id, spawn_id)
+	progress_state_changed.emit()
 
 
 func consume_pending_spawn(default_spawn_id: StringName) -> StringName:
 	var result: StringName = pending_spawn_id if not pending_spawn_id.is_empty() else default_spawn_id
 	pending_spawn_id = &""
 	return result
+
+
+func export_progress_snapshot() -> Dictionary:
+	var completed_ids: Array[StringName] = []
+	for chapter_id: StringName in completed_chapters:
+		if completed_chapters[chapter_id]:
+			completed_ids.append(chapter_id)
+	completed_ids.sort()
+	var enabled_flags: Dictionary[StringName, bool] = {}
+	var serialized_completed_ids: Array[String] = []
+	for chapter_id: StringName in completed_ids:
+		serialized_completed_ids.append(String(chapter_id))
+	for flag_id: StringName in story_flags:
+		enabled_flags[flag_id] = story_flags[flag_id]
+	return {
+		"opening_completed": opening_completed,
+		"revival_completed": revival_completed,
+		"daggers_recovered": daggers_recovered,
+		"catacomb_exited": catacomb_exited,
+		"boss_reward_spawned": boss_reward_spawned,
+		"boss_reward_collected": boss_reward_collected,
+		"current_objective": int(current_objective),
+		"current_chapter_id": String(current_chapter_id),
+		"pending_spawn_id": String(pending_spawn_id),
+		"completed_chapters": serialized_completed_ids,
+		"story_flags": enabled_flags,
+	}
+
+
+func import_progress_snapshot(snapshot: Dictionary) -> bool:
+	if not can_import_progress_snapshot(snapshot):
+		return false
+	var objective_value: int = int(snapshot.get("current_objective", ObjectiveStep.LEAVE_CATACOMB))
+	var completed_value: Variant = snapshot.get("completed_chapters", [])
+	var flags_value: Variant = snapshot.get("story_flags", {})
+	var restored_chapters: Dictionary[StringName, bool] = {}
+	for raw_chapter_id: Variant in completed_value:
+		var chapter_id: StringName = StringName(String(raw_chapter_id))
+		restored_chapters[chapter_id] = true
+	var restored_flags: Dictionary[StringName, bool] = {}
+	for raw_flag_id: Variant in flags_value:
+		var flag_id: StringName = StringName(String(raw_flag_id))
+		restored_flags[flag_id] = bool(flags_value[raw_flag_id])
+	opening_completed = bool(snapshot.get("opening_completed", false))
+	revival_completed = bool(snapshot.get("revival_completed", false))
+	daggers_recovered = bool(snapshot.get("daggers_recovered", false))
+	catacomb_exited = bool(snapshot.get("catacomb_exited", false))
+	boss_reward_spawned = bool(snapshot.get("boss_reward_spawned", false))
+	boss_reward_collected = bool(snapshot.get("boss_reward_collected", false))
+	current_objective = objective_value
+	current_chapter_id = StringName(String(snapshot.get("current_chapter_id", "")))
+	pending_spawn_id = StringName(String(snapshot.get("pending_spawn_id", "")))
+	completed_chapters = restored_chapters
+	story_flags = restored_flags
+	for flag_id: StringName in story_flags:
+		story_flag_changed.emit(flag_id, story_flags[flag_id])
+	transition_target_changed.emit(current_chapter_id, pending_spawn_id)
+	progress_state_changed.emit()
+	return true
+
+
+func can_import_progress_snapshot(snapshot: Dictionary) -> bool:
+	var objective_value: int = int(snapshot.get("current_objective", ObjectiveStep.LEAVE_CATACOMB))
+	if objective_value < ObjectiveStep.LEAVE_CATACOMB or objective_value > ObjectiveStep.ENTER_CASTLE:
+		return false
+	var completed_value: Variant = snapshot.get("completed_chapters", [])
+	var flags_value: Variant = snapshot.get("story_flags", {})
+	if not completed_value is Array or not flags_value is Dictionary:
+		return false
+	for raw_chapter_id: Variant in completed_value:
+		if StringName(String(raw_chapter_id)).is_empty():
+			return false
+	for raw_flag_id: Variant in flags_value:
+		if StringName(String(raw_flag_id)).is_empty():
+			return false
+	return true
 
 
 func reset_revival_state() -> void:

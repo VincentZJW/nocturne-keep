@@ -6860,3 +6860,56 @@ Status: complete — formal pixel assets and complete Player visual only; stoppe
 
 - Review `docs/qa/chapter_03_thirteenfold_absolution/w2/pixel_contact_sheet.png` and the ten Main screenshots for seal grouping, off-hand hook strength, copper balance, left-facing readability and trail restraint.
 - W2 is complete and stops here. `WeaponData`, 14/28 damage registration, Inventory ownership, Equipment acquisition, Save/Load, Boss reward formation, reliquary pickup and Chapter IV unlock remain W3–W5 and were not started.
+
+## 2026-08-02 — Thirteenfold Absolution W3 preflight
+
+Status: in progress — WeaponData, Inventory/Equipment ownership and narrow disk persistence only; stop before W4
+
+### Goals, owned files, tests and scope
+
+- Loaded `AGENTS.md`, README, technical architecture, the Godot Gameplay Scripter skill, W0 audit and accepted W2 runtime-visual contract. W3 keeps the existing Resource-driven combat and typed Autoload boundaries; it does not add Player/Boss gameplay logic.
+- Create the independent `thirteenfold_absolution_blades.tres` authority with weapon ID `thirteenfold_absolution_blades`, tier 3, normal/Dash damage `14/28`, unique/permanent/story-reward flags and visual ID `thirteenfold_absolution`.
+- Register the fourth weapon in `EquipmentManager`, add minimal unique-ledger snapshot import/export to `WeaponInventory`, add necessary ChapterSession progress snapshot/restore, and introduce one narrow `user://` progress service with explicit save/load/clear and debug-session isolation.
+- Preserve formal New Game semantics: starting a new game clears old weapon-progress save data; Debug Chapter Start never reads or writes the formal save. W3 does not add a Continue menu, Boss reward formation, pickup interaction, reliquary logic, Chapter IV scene or unlock flow.
+- Owned runtime paths: the Chapter III WeaponData resource, `scripts/items/equipment_manager.gd`, `scripts/items/weapon_inventory.gd`, `scripts/systems/chapter_session.gd`, `scripts/systems/player_progress_save_service.gd`, the minimal `MainBootstrap`/`project.godot` service registration needed to enforce formal/debug lifetimes, focused W3 tests/docs, README and this log. Existing unrelated Chapter I/shared/resource/QA-image changes and UID sidecars remain excluded.
+- Planned verification: exact Godot 4.7.1 editor import/parse; independent Resource and presentation-path audit; `14/28` combat resolution; duplicate rejection; Inventory/Equipment snapshot restore; Player death/respawn retention; real `user://` JSON write followed by a fresh-process load check; formal New Game cleanup; Debug isolation; existing Crimson Masque, Player respawn, W2 visual and MainBootstrap regressions; configured F5/Main startup; `git diff --check`; one isolated W3 commit.
+
+### Read-only baseline
+
+- Work starts on `master` at `38de23d41edac7d3836c020eecd2cb81acb7039f`; F5 authority remains `res://scenes/bootstrap/main_bootstrap.tscn`.
+- `PlayerWeaponInventory`, `PlayerEquipmentManager` and `ChapterSessionState` are current runtime Autoloads. No `FileAccess`/JSON save service or Continue flow exists; `docs/design/save_and_session_spec.md` explicitly records disk persistence as unimplemented.
+- `EquipmentManager` preloads Veilbound, Ravenfang and Crimson Masque only. `WeaponInventory` rejects duplicate IDs but exposes no snapshot API. `ChapterSession` owns story/completion/transition state but no serializable snapshot API.
+- Formal `MainBootstrap.start_new_game_flow()` calls `begin_formal_new_game()` and resets wallet/equipment/inventory; Debug start applies a disposable profile. W3 will preserve this behavior and use it as the save-lifetime boundary rather than allowing debug runs to overwrite formal progress.
+
+## 2026-08-02 — Thirteenfold Absolution W3 complete
+
+Status: complete — WeaponData, Inventory/Equipment registration and minimum disk persistence passed; stopped before W4
+
+### Delivered
+
+- Added the independent `thirteenfold_absolution_blades.tres` WeaponData with the approved bilingual identity, tier 3, `14/28` damage, W2 visual ID, inventory/HUD icons and unique/permanent/story-reward acquisition flags. It does not share or mutate Crimson Masque data.
+- Registered the fourth formal weapon in `PlayerEquipmentManager`. Existing attack code continues to read normal/Dash damage from the equipped WeaponData and Player presentation continues to swap the complete W2 SpriteFrames through the typed equipment signal.
+- Added sorted snapshot export and validated unique replacement import to `PlayerWeaponInventory`; the starting Veilbound ID is always present and duplicate IDs remain impossible.
+- Added a selected ChapterSession progress snapshot/restore contract for story flags, completed chapters, current recovery target and legacy route booleans. Added one typed progress-change signal for autosave without moving gameplay into an Autoload.
+- Added `PlayerProgressSaveService` as a narrow Autoload. Version-1 JSON under `user://` stores only owned weapon IDs, equipped ID and the ChapterSession recovery ledger. It validates version/registered IDs/equipped ownership before mutation, suppresses autosave during import, and exposes explicit save/load/clear APIs.
+- Formal New Game clears previous weapon progress, resets runtime state and writes a clean baseline. Debug Chapter Start disables persistence before profile application; SHA-256 evidence proved Debug mutations did not alter the formal test save. No Continue menu or implicit route resume was invented.
+- Added a two-process W3 test, W3 specification, QA report, README/save-contract/architecture updates, and advanced the historical W2 visual test from its now-obsolete “W3 absent” boundary to assert the formal registration.
+- Preserved and excluded all pre-existing unrelated Chapter I/shared/resource/QA-image modifications and UID sidecars.
+
+### Exact commands and actual results
+
+1. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS, exact `4.7.1.stable.official.a13da4feb`; new Resource, class and Autoload parsed with no script/resource error.
+2. `W3_PROGRESS_PHASE=write .../Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_thirteenfold_absolution_w3_progress.gd` — PASS: independent data, unique acquisition, equipped `14/28`, versioned JSON and recovery flags written.
+3. `W3_PROGRESS_PHASE=load .../Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_thirteenfold_absolution_w3_progress.gd` — PASS in a fresh process: ownership/equipment/damage/flags/spawn restored; death/respawn retained the weapon; Debug hash unchanged; formal New Game cleaned the file and runtime.
+4. `test_thirteenfold_absolution_w2_visuals.gd` — PASS: 30 animations, 97 frames, eight presentation/effect assets and the visual-only preview remain valid after W3 registration.
+5. `test_crimson_masque_weapon.gd` — PASS: existing Chapter II data, 49-frame visual, `14/28`, dedup and Chapter III profile unchanged.
+6. `test_player_respawn.gd` — PASS: death delay/reset/HUD/input recovery regression unchanged.
+7. `test_chapter_03_r5_full_route.gd` — PASS: 50 transitions, 10 cycles and persistent runtime; reward and Chapter IV remain truthfully partial.
+8. `test_main_bootstrap_flow.gd` — PASS: formal Opening and Debug Chapter II routes; retained pre-existing two-ObjectDB teardown warning, no red gameplay/resource error.
+9. `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --quit-after 240` — PASS: F5 authority printed formal New Game and loaded Opening with no red error.
+
+### Manual acceptance and stop point
+
+- W3 has no legitimate pickup interaction yet. `CH3_REWARD_TEST` remains the W2 non-persistent visual route and must not be interpreted as an acquired reward.
+- W4 may now implement Edran reward formation, the physical reliquary/pickup, one-shot acquisition and the formal reward flag transaction using this data/persistence authority.
+- W3 stops here. No Boss death sequence, reliquary interaction, acquisition UI/sound, Underkeep unlock or Chapter IV scene was added.

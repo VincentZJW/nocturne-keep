@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_data.gd" id="1_weapon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/sprites/inventory_icon.png" id="2_icon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/weapons/thirteenfold_absolution/sprites/hud_icon.png" id="3_hud_icon"]
+
+[resource]
+script = ExtResource("1_weapon")
+weapon_id = &"thirteenfold_absolution_blades"
+display_name_zh = "十三重赦刃"
+display_name_en = "Thirteenfold Absolution"
+description_zh = "由第十三响教宗破碎的权杖、香炉与熄灭封印重铸而成的一对赦罪之刃。赦罪在前，忏悔随行。"
+description_en = "Twin absolution blades reforged from the Thirteenth Pontiff's broken crozier, thurible, and extinguished seals. Absolution leads; Penance follows."
+weapon_type = &"dual_daggers"
+tier = 3
+normal_attack_damage = 14
+dash_attack_damage = 28
+icon = ExtResource("2_icon")
+hud_icon = ExtResource("3_hud_icon")
+player_visual_id = &"thirteenfold_absolution"
+shop_value = 0
+can_sell = false
+is_story_reward = true
+is_unique = true
+is_permanent = true
+auto_equip_on_pickup = true
+allow_duplicates = false

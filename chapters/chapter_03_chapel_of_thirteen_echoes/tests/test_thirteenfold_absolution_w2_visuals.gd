@@ -43,7 +43,7 @@ func _initialize() -> void:
 func _run() -> void:
 	_validate_sprite_frames()
 	_validate_asset_files()
-	_validate_w3_boundary()
+	_validate_w3_registration()
 	await _validate_player_visual_preview()
 	_finish()
 
@@ -98,18 +98,21 @@ func _validate_image(path: String, expected_size: Vector2i) -> void:
 	_expect(image.get_pixel(0, 0).a == 0.0, "Image corner is not transparent: %s" % path)
 
 
-func _validate_w3_boundary() -> void:
+func _validate_w3_registration() -> void:
 	_expect(
-		not FileAccess.file_exists(
+		FileAccess.file_exists(
 			"res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/weapons/"
-			+ "thirteenfold_absolution.tres"
+			+ "thirteenfold_absolution_blades.tres"
 		),
-		"W2 must not create formal WeaponData"
+		"W3 formal WeaponData is missing"
 	)
 	var equipment: PlayerEquipmentManager = root.get_node_or_null("EquipmentManager") as PlayerEquipmentManager
 	_expect(equipment != null, "EquipmentManager autoload is unavailable")
 	if equipment != null:
-		_expect(equipment.get_weapon(&"thirteenfold_absolution") == null, "W2 must not register the weapon")
+		var weapon: WeaponData = equipment.get_weapon(&"thirteenfold_absolution_blades")
+		_expect(weapon != null, "W3 weapon registration is missing")
+		if weapon != null:
+			_expect(weapon.player_visual_id == &"thirteenfold_absolution", "W3 visual ID mismatch")
 
 
 func _validate_player_visual_preview() -> void:

@@ -15,6 +15,10 @@ const RAVENFANG_WEAPON: WeaponData = preload(
 const CRIMSON_MASQUE_WEAPON: WeaponData = preload(
 	"res://chapters/chapter_02_silent_court/resources/weapons/crimson_masque_stilettos.tres"
 )
+const THIRTEENFOLD_ABSOLUTION_WEAPON: WeaponData = preload(
+	"res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/weapons/"
+	+ "thirteenfold_absolution_blades.tres"
+)
 
 var equipped_weapon_id: StringName = &"veilbound_daggers"
 
@@ -71,6 +75,8 @@ func get_weapon(weapon_id: StringName) -> WeaponData:
 			return RAVENFANG_WEAPON
 		&"crimson_masque_stilettos":
 			return CRIMSON_MASQUE_WEAPON
+		&"thirteenfold_absolution_blades":
+			return THIRTEENFOLD_ABSOLUTION_WEAPON
 	return null
 
 
