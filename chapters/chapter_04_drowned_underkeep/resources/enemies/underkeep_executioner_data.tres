@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="Chapter04EnemyConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="1_ps2pj"]
+
+[resource]
+script = ExtResource("1_ps2pj")
+archetype = 7
+chapter_max_health = 244
+max_poise = 126
+stagger_duration = 0.82
+turn_duration = 0.38
+primary_action = &"executioner_cleave"
+secondary_action = &"chain_reaper"
+secondary_damage = 18
+secondary_range = 118.0
+secondary_windup = 0.76
+secondary_active_duration = 0.17
+secondary_recovery = 1.08
+special_action = &"gallows_slam"
+special_damage = 23
+special_range = 70.0
+special_windup = 0.82
+special_active_duration = 0.2
+special_recovery = 1.18
+pull_strength = 76.0
+protected_active_frames = true
+display_name = &"Underkeep Executioner"
+max_health = 100
+attack_damage = 20
+patrol_speed = 18.0
+chase_speed = 34.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 250.0
+lose_target_range = 360.0
+attack_range = 88.0
+attack_windup = 0.68
+attack_active_duration = 0.18
+attack_recovery = 1.0
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26

@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="ChapterStartProfile" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/systems/chapter/chapter_start_profile.gd" id="1_profile"]
+
+[resource]
+script = ExtResource("1_profile")
+profile_id = &"CHAPTER_04_DROWNED_UNDERKEEP_ENTRY"
+chapter_id = &"CHAPTER_04_DROWNED_UNDERKEEP"
+bilingual_name = "第四章 · 沉没下堡 / Chapter IV · The Drowned Underkeep"
+main_scene_path = "res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn"
+default_spawn_id = &"CH4_START"
+default_checkpoint_id = &"CH4_START"
+available_spawn_ids = Array[StringName]([&"CH4_START", &"CH4_HUMANOID_COMBAT", &"CH4_CREATURE_COMBAT", &"CH4_ELITE_TRIAL", &"CH4_BOSS_PHASE_01", &"CH4_BOSS_PHASE_02"])
+previous_chapters_completed = Array[StringName]([&"CHAPTER_PROLOGUE", &"CHAPTER_01_RAVENMOURN_OUTSKIRTS", &"CHAPTER_02_SILENT_COURT", &"CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES"])
+required_weapons = Array[StringName]([&"veilbound_daggers", &"ravenfang_daggers", &"crimson_masque_stilettos", &"thirteenfold_absolution_blades"])
+equipped_weapon = &"thirteenfold_absolution_blades"
+starting_currency = 40
+starting_hp = 100.0
+start_full_health = true
+chapter_boss_defeated = false
+chapter_shortcuts = {}
+chapter_story_flags = {
+&"chapter_03_completed": true,
+&"thirteenth_pontiff_defeated": true,
+&"chapter_04_started": true
+}
+debug_ready = true

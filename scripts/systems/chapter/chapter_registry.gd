@@ -34,6 +34,9 @@ const CHAPTER_03_SCENE_PATH: String = (
 const CHAPTER_04_SCENE_PATH: String = (
 	"res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn"
 )
+const CHAPTER_04_PROFILE_PATH: String = (
+	"res://chapters/chapter_04_drowned_underkeep/resources/chapter/chapter_04_start_profile.tres"
+)
 const CHAPTER_05_SCENE_PATH: String = (
 	"res://chapters/chapter_05_night_repeated/scenes/level/night_repeated.tscn"
 )
@@ -99,18 +102,11 @@ static func _ensure_initialized() -> void:
 	) as ChapterStartProfile
 	assert(chapter_three_profile != null, "Chapter III entry profile failed to load")
 	_register(chapter_three_profile)
-	_register(_make_planned_profile(
-		CHAPTER_04_DROWNED_UNDERKEEP,
-		"第四章 · 沉没下堡 / Chapter IV · The Drowned Underkeep",
-		CHAPTER_04_SCENE_PATH,
-		&"chapter_04_start",
-		[
-			CHAPTER_PROLOGUE,
-			CHAPTER_01_RAVENMOURN_OUTSKIRTS,
-			CHAPTER_02_SILENT_COURT,
-			CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES,
-		]
-	))
+	var chapter_four_profile: ChapterStartProfile = ResourceLoader.load(
+		CHAPTER_04_PROFILE_PATH, "ChapterStartProfile"
+	) as ChapterStartProfile
+	assert(chapter_four_profile != null, "Chapter IV entry profile failed to load")
+	_register(chapter_four_profile)
 	_register(_make_planned_profile(
 		CHAPTER_05_NIGHT_REPEATED,
 		"第五章 · 重演之夜 / Chapter V · Night Repeated",

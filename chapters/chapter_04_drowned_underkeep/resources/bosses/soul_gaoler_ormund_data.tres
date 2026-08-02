@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="SoulGaolerOrmundConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/soul_gaoler_ormund_config.gd" id="1_o6oa3"]
+
+[resource]
+script = ExtResource("1_o6oa3")
+display_name = &"Soul Gaoler Ormund"
+max_health = 560
+patrol_speed = 0.0
+chase_speed = 48.0
+ground_acceleration = 300.0
+ground_deceleration = 560.0
+gravity = 1650.0
+patrol_half_width = 420.0
+platform_height_tolerance = 180.0
+detection_range = 520.0
+lose_target_range = 720.0
+attack_range = 118.0
+hurt_duration = 0.12
+knockback_speed = 55.0
+initial_idle_duration = 0.0

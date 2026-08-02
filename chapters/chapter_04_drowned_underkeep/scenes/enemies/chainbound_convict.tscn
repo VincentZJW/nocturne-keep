@@ -1,0 +1,515 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy.gd" id="1_c1cku"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/projectiles/chapter_04_enemy_projectile.tscn" id="2_xup81"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="3_cp067"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/alert/alert_01.png" id="4_w4613"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/alert/alert_02.png" id="5_kqidm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/alert/alert_03.png" id="6_d1ffn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_active/chain_sweep_active_01.png" id="7_m1jvp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_active/chain_sweep_active_02.png" id="8_6k5c3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_recovery/chain_sweep_recovery_01.png" id="9_68o7t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_recovery/chain_sweep_recovery_02.png" id="10_3xnbr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_recovery/chain_sweep_recovery_03.png" id="11_361pl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_recovery/chain_sweep_recovery_04.png" id="12_cosei"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_recovery/chain_sweep_recovery_05.png" id="13_udx08"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_windup/chain_sweep_windup_01.png" id="14_dyk2x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_windup/chain_sweep_windup_02.png" id="15_b6nhm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_windup/chain_sweep_windup_03.png" id="16_uulcx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_windup/chain_sweep_windup_04.png" id="17_ejy7r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/chain_sweep_windup/chain_sweep_windup_05.png" id="18_ee4kh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/death/death_01.png" id="19_lsq3e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/death/death_02.png" id="20_6yhly"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/death/death_03.png" id="21_7h76n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/death/death_04.png" id="22_kaouq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/death/death_05.png" id="23_kx7rf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/death/death_06.png" id="24_afw8h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_active/drag_active_01.png" id="25_yygtl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_active/drag_active_02.png" id="26_24kmu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_recovery/drag_recovery_01.png" id="27_lm8vh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_recovery/drag_recovery_02.png" id="28_hov50"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_recovery/drag_recovery_03.png" id="29_blrk3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_recovery/drag_recovery_04.png" id="30_ogjy3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_recovery/drag_recovery_05.png" id="31_xvami"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_windup/drag_windup_01.png" id="32_aaayi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_windup/drag_windup_02.png" id="33_xc6my"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_windup/drag_windup_03.png" id="34_5jx65"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_windup/drag_windup_04.png" id="35_lb77s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/drag_windup/drag_windup_05.png" id="36_rik65"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/hurt/hurt_01.png" id="37_arqoa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/hurt/hurt_02.png" id="38_u0y7f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/hurt/hurt_03.png" id="39_unsxm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/idle/idle_01.png" id="40_ej303"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/idle/idle_02.png" id="41_ioqyp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/idle/idle_03.png" id="42_by017"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/idle/idle_04.png" id="43_454pt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/light_hit/light_hit_01.png" id="44_dkokk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/light_hit/light_hit_02.png" id="45_htoia"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_active/shackle_slam_active_01.png" id="46_8wakw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_active/shackle_slam_active_02.png" id="47_wy0fa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_recovery/shackle_slam_recovery_01.png" id="48_ndkg0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_recovery/shackle_slam_recovery_02.png" id="49_rn4fw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_recovery/shackle_slam_recovery_03.png" id="50_ddiln"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_recovery/shackle_slam_recovery_04.png" id="51_b3psr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_recovery/shackle_slam_recovery_05.png" id="52_ggepq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_windup/shackle_slam_windup_01.png" id="53_bbpep"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_windup/shackle_slam_windup_02.png" id="54_81v0f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_windup/shackle_slam_windup_03.png" id="55_0sy5i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_windup/shackle_slam_windup_04.png" id="56_wlb48"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/shackle_slam_windup/shackle_slam_windup_05.png" id="57_1buol"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/stagger/stagger_01.png" id="58_8jmak"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/stagger/stagger_02.png" id="59_myegu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/stagger/stagger_03.png" id="60_4bmry"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/stagger/stagger_04.png" id="61_a7bdg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/turn/turn_01.png" id="62_01bvh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/turn/turn_02.png" id="63_ofb6v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/turn/turn_03.png" id="64_21vvv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/walk/walk_01.png" id="65_sjdl3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/walk/walk_02.png" id="66_kqrxs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/walk/walk_03.png" id="67_6wtfs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/walk/walk_04.png" id="68_rabor"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/walk/walk_05.png" id="69_4gg1m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/chainbound_convict/sprites/walk/walk_06.png" id="70_ytbdd"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="71_w0ke0"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/components/chapter_04_poise_component.gd" id="72_pjk7b"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="73_hsvx0"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="74_vl1q1"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="75_p5vy7"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_profile.gd" id="76_ctsvx"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="77_otn8x"]
+
+[sub_resource type="Resource" id="Resource_cibln"]
+script = ExtResource("3_cp067")
+archetype = 1
+chapter_max_health = 152
+max_poise = 92
+primary_action = &"chain_sweep"
+secondary_action = &"shackle_slam"
+secondary_damage = 19
+secondary_range = 60.0
+secondary_windup = 0.84
+secondary_active_duration = 0.18
+secondary_recovery = 1.1
+special_action = &"drag"
+special_damage = 11
+special_range = 102.0
+special_windup = 0.68
+special_active_duration = 0.14
+special_recovery = 0.94
+pull_strength = 70.0
+protected_active_frames = true
+display_name = &"Chainbound Convict"
+max_health = 100
+attack_damage = 16
+patrol_speed = 20.0
+chase_speed = 36.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 220.0
+lose_target_range = 360.0
+attack_range = 72.0
+attack_windup = 0.66
+attack_active_duration = 0.18
+attack_recovery = 0.9
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_30g5x"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_w4613")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_kqidm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_d1ffn")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_m1jvp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_6k5c3")
+}],
+"loop": 0,
+"name": &"chain_sweep_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_68o7t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_3xnbr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_361pl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_cosei")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_udx08")
+}],
+"loop": 0,
+"name": &"chain_sweep_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_dyk2x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_b6nhm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_uulcx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ejy7r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_ee4kh")
+}],
+"loop": 0,
+"name": &"chain_sweep_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_lsq3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_6yhly")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_7h76n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_kaouq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_kx7rf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_afw8h")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_yygtl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_24kmu")
+}],
+"loop": 0,
+"name": &"drag_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_lm8vh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_hov50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_blrk3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_ogjy3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_xvami")
+}],
+"loop": 0,
+"name": &"drag_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("32_aaayi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_xc6my")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_5jx65")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_lb77s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_rik65")
+}],
+"loop": 0,
+"name": &"drag_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_arqoa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_u0y7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_unsxm")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_ej303")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_ioqyp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_by017")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_454pt")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44_dkokk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_htoia")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("46_8wakw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_wy0fa")
+}],
+"loop": 0,
+"name": &"shackle_slam_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("48_ndkg0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_rn4fw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_ddiln")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_b3psr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_ggepq")
+}],
+"loop": 0,
+"name": &"shackle_slam_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("53_bbpep")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_81v0f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_0sy5i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_wlb48")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_1buol")
+}],
+"loop": 0,
+"name": &"shackle_slam_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_8jmak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_myegu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_4bmry")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_a7bdg")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_01bvh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_ofb6v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_21vvv")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_sjdl3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_kqrxs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_6wtfs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_rabor")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_4gg1m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_ytbdd")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_b6qyb"]
+size = Vector2(50, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5ntoe"]
+size = Vector2(56, 68)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jqtjl"]
+size = Vector2(62, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8wroh"]
+size = Vector2(88, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m0wup"]
+radius = 220.0
+
+[sub_resource type="Resource" id="Resource_r56cs"]
+script = ExtResource("76_ctsvx")
+enemy_type = &"ChainboundConvict"
+coin_min = 3
+coin_max = 6
+
+[node name="ChainboundConvict" type="CharacterBody2D" unique_id=1985351928]
+z_index = 10
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 6.0
+script = ExtResource("1_c1cku")
+projectile_scene = ExtResource("2_xup81")
+config = SubResource("Resource_cibln")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1872069163]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1667819598]
+texture_filter = 1
+position = Vector2(0, -38)
+sprite_frames = SubResource("SpriteFrames_30g5x")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=224435269]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_b6qyb")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=845035443]
+script = ExtResource("71_w0ke0")
+
+[node name="PoiseComponent" type="Node" parent="." unique_id=1185484280]
+script = ExtResource("72_pjk7b")
+max_poise = 92
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1079908837]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("73_hsvx0")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=325442882]
+position = Vector2(0, -32)
+shape = SubResource("RectangleShape2D_5ntoe")
+
+[node name="FacingRoot" type="Node2D" parent="." unique_id=305561982]
+
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1632363038]
+position = Vector2(42, -29)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("74_vl1q1")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=1418155127]
+shape = SubResource("RectangleShape2D_jqtjl")
+disabled = true
+
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1911984128]
+position = Vector2(55, -28)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("74_vl1q1")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=1258352050]
+shape = SubResource("RectangleShape2D_8wroh")
+disabled = true
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1728796989]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1607288717]
+shape = SubResource("CircleShape2D_m0wup")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=154232949]
+position = Vector2(0, -22)
+target_position = Vector2(-28, 0)
+
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=1270832024]
+position = Vector2(-24, -4)
+target_position = Vector2(0, 34)
+
+[node name="LootDropComponent" type="Node" parent="." unique_id=145087299]
+script = ExtResource("75_p5vy7")
+profile = SubResource("Resource_r56cs")
+dynamic_profile = ExtResource("77_otn8x")

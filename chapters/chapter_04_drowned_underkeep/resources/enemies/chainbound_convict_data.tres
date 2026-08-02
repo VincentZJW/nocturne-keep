@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Chapter04EnemyConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="1_xxglf"]
+
+[resource]
+script = ExtResource("1_xxglf")
+archetype = 1
+chapter_max_health = 152
+max_poise = 92
+primary_action = &"chain_sweep"
+secondary_action = &"shackle_slam"
+secondary_damage = 19
+secondary_range = 60.0
+secondary_windup = 0.84
+secondary_active_duration = 0.18
+secondary_recovery = 1.1
+special_action = &"drag"
+special_damage = 11
+special_range = 102.0
+special_windup = 0.68
+special_active_duration = 0.14
+special_recovery = 0.94
+pull_strength = 70.0
+protected_active_frames = true
+display_name = &"Chainbound Convict"
+max_health = 100
+attack_damage = 16
+patrol_speed = 20.0
+chase_speed = 36.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 220.0
+lose_target_range = 360.0
+attack_range = 72.0
+attack_windup = 0.66
+attack_active_duration = 0.18
+attack_recovery = 0.9
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26

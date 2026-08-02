@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="LootDropProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/items/loot_drop_profile.gd" id="1_wf0ja"]
+
+[resource]
+script = ExtResource("1_wf0ja")
+enemy_type = &"BogToad"
+coin_min = 3
+coin_max = 6

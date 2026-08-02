@@ -1,0 +1,31 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/projectiles/chapter_04_enemy_projectile.gd" id="1_34oqt"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="2_oidsq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wjlbw"]
+size = Vector2(19, 7)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ldmia"]
+size = Vector2(19, 7)
+
+[node name="Chapter04EnemyProjectile" type="Area2D" unique_id=386718674]
+z_index = 16
+collision_layer = 0
+script = ExtResource("1_34oqt")
+
+[node name="Visual" type="Polygon2D" parent="." unique_id=566465689]
+color = Color(0.65882355, 0.72156864, 0.72156864, 1)
+polygon = PackedVector2Array(-9, -3, 10, 0, -9, 3)
+
+[node name="WorldCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1216880034]
+shape = SubResource("RectangleShape2D_wjlbw")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=848701259]
+collision_layer = 64
+collision_mask = 8
+script = ExtResource("2_oidsq")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1136014066]
+shape = SubResource("RectangleShape2D_ldmia")

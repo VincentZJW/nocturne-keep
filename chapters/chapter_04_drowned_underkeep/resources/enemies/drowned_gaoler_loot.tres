@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="LootDropProfile" format=3]
+
+[ext_resource type="Script" path="res://scripts/items/loot_drop_profile.gd" id="1_mp775"]
+
+[resource]
+script = ExtResource("1_mp775")
+enemy_type = &"DrownedGaoler"
+coin_min = 3
+coin_max = 6

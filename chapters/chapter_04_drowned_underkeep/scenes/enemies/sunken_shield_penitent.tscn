@@ -1,0 +1,582 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy.gd" id="1_i47ks"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/projectiles/chapter_04_enemy_projectile.tscn" id="2_m70fh"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="3_m24jw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/alert/alert_01.png" id="4_100d3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/alert/alert_02.png" id="5_5ws2a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/alert/alert_03.png" id="6_rt2ol"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/death/death_01.png" id="7_5xdbp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/death/death_02.png" id="8_yvfow"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/death/death_03.png" id="9_53bwx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/death/death_04.png" id="10_udauh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/death/death_05.png" id="11_nfyht"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/death/death_06.png" id="12_xqbuw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/guard_break/guard_break_01.png" id="13_r2m7m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/guard_break/guard_break_02.png" id="14_6k0bh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/guard_break/guard_break_03.png" id="15_dc8xg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/guard_break/guard_break_04.png" id="16_uamvh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/hurt/hurt_01.png" id="17_bxj3e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/hurt/hurt_02.png" id="18_85vcc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/hurt/hurt_03.png" id="19_8k4ug"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/idle/idle_01.png" id="20_22fo2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/idle/idle_02.png" id="21_kg61h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/idle/idle_03.png" id="22_712io"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/idle/idle_04.png" id="23_i4jux"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/light_hit/light_hit_01.png" id="24_an4c5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/light_hit/light_hit_02.png" id="25_27gsh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_active/rusted_thrust_active_01.png" id="26_no8rs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_active/rusted_thrust_active_02.png" id="27_3hbq4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_recovery/rusted_thrust_recovery_01.png" id="28_ndrxx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_recovery/rusted_thrust_recovery_02.png" id="29_yrjh6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_recovery/rusted_thrust_recovery_03.png" id="30_qm6ki"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_recovery/rusted_thrust_recovery_04.png" id="31_88rqe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_recovery/rusted_thrust_recovery_05.png" id="32_4ey6f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_windup/rusted_thrust_windup_01.png" id="33_ayata"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_windup/rusted_thrust_windup_02.png" id="34_fr120"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_windup/rusted_thrust_windup_03.png" id="35_x2wr6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_windup/rusted_thrust_windup_04.png" id="36_eg0ik"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/rusted_thrust_windup/rusted_thrust_windup_05.png" id="37_6w2yo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_active/shield_bash_active_01.png" id="38_lwycr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_active/shield_bash_active_02.png" id="39_18sj0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_recovery/shield_bash_recovery_01.png" id="40_i14cx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_recovery/shield_bash_recovery_02.png" id="41_fjtf3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_recovery/shield_bash_recovery_03.png" id="42_e8pit"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_recovery/shield_bash_recovery_04.png" id="43_ujw7r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_recovery/shield_bash_recovery_05.png" id="44_t1ixi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_windup/shield_bash_windup_01.png" id="45_4wak8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_windup/shield_bash_windup_02.png" id="46_tg8hl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_windup/shield_bash_windup_03.png" id="47_skax3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_windup/shield_bash_windup_04.png" id="48_ocada"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_bash_windup/shield_bash_windup_05.png" id="49_lyrkc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_active/shield_crush_active_01.png" id="50_rv3b6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_active/shield_crush_active_02.png" id="51_6j2en"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_recovery/shield_crush_recovery_01.png" id="52_e82su"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_recovery/shield_crush_recovery_02.png" id="53_ln6ci"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_recovery/shield_crush_recovery_03.png" id="54_1a1lk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_recovery/shield_crush_recovery_04.png" id="55_pynfm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_recovery/shield_crush_recovery_05.png" id="56_koku8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_windup/shield_crush_windup_01.png" id="57_ncsug"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_windup/shield_crush_windup_02.png" id="58_x5nbw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_windup/shield_crush_windup_03.png" id="59_8acpj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_windup/shield_crush_windup_04.png" id="60_amwyr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/shield_crush_windup/shield_crush_windup_05.png" id="61_apa0v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/stagger/stagger_01.png" id="62_m2byj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/stagger/stagger_02.png" id="63_6umml"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/stagger/stagger_03.png" id="64_ukf2p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/stagger/stagger_04.png" id="65_j441w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/turn/turn_01.png" id="66_tguer"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/turn/turn_02.png" id="67_kipke"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/turn/turn_03.png" id="68_alohw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/walk/walk_01.png" id="69_c1kcc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/walk/walk_02.png" id="70_yq0f1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/walk/walk_03.png" id="71_gbvjc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/walk/walk_04.png" id="72_s888a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/walk/walk_05.png" id="73_ls0u8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/sprites/walk/walk_06.png" id="74_g3khi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/shield/cracked.png" id="75_wad3p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/shield/critical.png" id="76_4knj0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/sunken_shield_penitent/shield/intact.png" id="77_dn28h"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="78_jmalw"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/components/chapter_04_poise_component.gd" id="79_vunmb"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="80_u0ixt"]
+[ext_resource type="Script" path="res://scripts/combat/shield_component.gd" id="81_rj7n7"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="82_t1tp6"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="83_e5yjl"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_profile.gd" id="84_d1p2t"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="85_tu6i5"]
+
+[sub_resource type="Resource" id="Resource_1xetw"]
+script = ExtResource("3_m24jw")
+archetype = 3
+chapter_max_health = 132
+max_poise = 70
+primary_action = &"shield_bash"
+secondary_action = &"rusted_thrust"
+secondary_damage = 14
+secondary_range = 72.0
+secondary_windup = 0.58
+secondary_active_duration = 0.13
+secondary_recovery = 0.78
+special_action = &"shield_crush"
+special_damage = 17
+special_range = 54.0
+special_windup = 0.72
+special_active_duration = 0.18
+special_recovery = 0.98
+special_motion_speed = 90.0
+shield_max_health = 72
+guard_break_duration = 0.72
+display_name = &"Sunken Shield Penitent"
+max_health = 100
+attack_damage = 14
+patrol_speed = 22.0
+chase_speed = 35.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 215.0
+lose_target_range = 360.0
+attack_range = 50.0
+attack_windup = 0.48
+attack_active_duration = 0.15
+attack_recovery = 0.7
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_2u6es"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_100d3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5ws2a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_rt2ol")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_5xdbp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_yvfow")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_53bwx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_udauh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_nfyht")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_xqbuw")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_r2m7m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_6k0bh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_dc8xg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_uamvh")
+}],
+"loop": 0,
+"name": &"guard_break",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_bxj3e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_85vcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_8k4ug")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_22fo2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_kg61h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_712io")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_i4jux")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_an4c5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_27gsh")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_no8rs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_3hbq4")
+}],
+"loop": 0,
+"name": &"rusted_thrust_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("28_ndrxx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_yrjh6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_qm6ki")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_88rqe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_4ey6f")
+}],
+"loop": 0,
+"name": &"rusted_thrust_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_ayata")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_fr120")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_x2wr6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_eg0ik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_6w2yo")
+}],
+"loop": 0,
+"name": &"rusted_thrust_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_lwycr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_18sj0")
+}],
+"loop": 0,
+"name": &"shield_bash_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_i14cx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_fjtf3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_e8pit")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_ujw7r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_t1ixi")
+}],
+"loop": 0,
+"name": &"shield_bash_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_4wak8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_tg8hl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_skax3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_ocada")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_lyrkc")
+}],
+"loop": 0,
+"name": &"shield_bash_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("50_rv3b6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_6j2en")
+}],
+"loop": 0,
+"name": &"shield_crush_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_e82su")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_ln6ci")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_1a1lk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_pynfm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_koku8")
+}],
+"loop": 0,
+"name": &"shield_crush_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_ncsug")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_x5nbw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_8acpj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_amwyr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_apa0v")
+}],
+"loop": 0,
+"name": &"shield_crush_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_m2byj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_6umml")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_ukf2p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_j441w")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("66_tguer")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_kipke")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_alohw")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("69_c1kcc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_yq0f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_gbvjc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_s888a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("73_ls0u8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_g3khi")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7ffmt"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("75_wad3p")
+}],
+"loop": 1,
+"name": &"cracked",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("76_4knj0")
+}],
+"loop": 1,
+"name": &"critical",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("77_dn28h")
+}],
+"loop": 1,
+"name": &"intact",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e1t54"]
+size = Vector2(34, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8gs41"]
+size = Vector2(40, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tfe5k"]
+size = Vector2(62, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5fsee"]
+size = Vector2(88, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_sljde"]
+radius = 215.0
+
+[sub_resource type="Resource" id="Resource_6o47w"]
+script = ExtResource("84_d1p2t")
+enemy_type = &"SunkenShieldPenitent"
+coin_min = 3
+coin_max = 6
+
+[node name="SunkenShieldPenitent" type="CharacterBody2D" unique_id=878491504]
+z_index = 10
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 6.0
+script = ExtResource("1_i47ks")
+shield_component_path = NodePath("ShieldComponent")
+shield_visual_path = NodePath("VisualRoot/ShieldVisual")
+projectile_scene = ExtResource("2_m70fh")
+config = SubResource("Resource_1xetw")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=919761170]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=70243286]
+texture_filter = 1
+position = Vector2(0, -38)
+sprite_frames = SubResource("SpriteFrames_2u6es")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="ShieldVisual" type="AnimatedSprite2D" parent="VisualRoot" unique_id=546776504]
+texture_filter = 1
+position = Vector2(-18, -38)
+sprite_frames = SubResource("SpriteFrames_7ffmt")
+animation = &"intact"
+autoplay = "intact"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1264632449]
+position = Vector2(0, -30)
+shape = SubResource("RectangleShape2D_e1t54")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1428504451]
+script = ExtResource("78_jmalw")
+
+[node name="PoiseComponent" type="Node" parent="." unique_id=15827748]
+script = ExtResource("79_vunmb")
+max_poise = 70
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=2019742879]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("80_u0ixt")
+faction = &"enemy"
+hit_policy_path = NodePath("../ShieldComponent")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1535555610]
+position = Vector2(0, -30)
+shape = SubResource("RectangleShape2D_8gs41")
+
+[node name="ShieldComponent" type="Node" parent="." unique_id=430607191]
+script = ExtResource("81_rj7n7")
+shield_max_health = 72
+
+[node name="FacingRoot" type="Node2D" parent="." unique_id=1849038461]
+
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1825219168]
+position = Vector2(42, -29)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("82_t1tp6")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=1631494808]
+shape = SubResource("RectangleShape2D_tfe5k")
+disabled = true
+
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=551011618]
+position = Vector2(55, -28)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("82_t1tp6")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=207441302]
+shape = SubResource("RectangleShape2D_5fsee")
+disabled = true
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=345072604]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1654669710]
+shape = SubResource("CircleShape2D_sljde")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=275853719]
+position = Vector2(0, -22)
+target_position = Vector2(-28, 0)
+
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=865311216]
+position = Vector2(-24, -4)
+target_position = Vector2(0, 34)
+
+[node name="LootDropComponent" type="Node" parent="." unique_id=1698026298]
+script = ExtResource("83_e5yjl")
+profile = SubResource("Resource_6o47w")
+dynamic_profile = ExtResource("85_tu6i5")

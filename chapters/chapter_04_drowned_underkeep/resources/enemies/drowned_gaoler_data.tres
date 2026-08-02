@@ -1,0 +1,40 @@
+[gd_resource type="Resource" script_class="Chapter04EnemyConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="1_thn3j"]
+
+[resource]
+script = ExtResource("1_thn3j")
+chapter_max_health = 104
+max_poise = 44
+primary_action = &"jailer_cleave"
+secondary_action = &"hook_drag"
+secondary_damage = 11
+secondary_range = 78.0
+secondary_windup = 0.48
+secondary_active_duration = 0.12
+secondary_recovery = 0.62
+special_action = &"shoulder_check"
+special_damage = 10
+special_range = 50.0
+special_windup = 0.44
+special_active_duration = 0.16
+special_recovery = 0.66
+special_motion_speed = 115.0
+pull_strength = 62.0
+display_name = &"Drowned Gaoler"
+max_health = 100
+attack_damage = 12
+patrol_speed = 30.0
+chase_speed = 56.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 225.0
+lose_target_range = 360.0
+attack_range = 56.0
+attack_windup = 0.4
+attack_active_duration = 0.14
+attack_recovery = 0.5
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26

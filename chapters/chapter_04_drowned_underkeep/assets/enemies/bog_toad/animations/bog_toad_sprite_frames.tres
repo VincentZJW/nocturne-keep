@@ -1,0 +1,358 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/alert/alert_01.png" id="1_1raxk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/alert/alert_02.png" id="2_1f5bm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/alert/alert_03.png" id="3_j7agi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/death/death_01.png" id="4_62t05"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/death/death_02.png" id="5_ygdgk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/death/death_03.png" id="6_f2yf7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/death/death_04.png" id="7_cx88x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/death/death_05.png" id="8_lhuob"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/death/death_06.png" id="9_la1po"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/hurt/hurt_01.png" id="10_y7adn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/hurt/hurt_02.png" id="11_vwxci"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/hurt/hurt_03.png" id="12_7djpn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/idle/idle_01.png" id="13_ycsv6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/idle/idle_02.png" id="14_diyv0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/idle/idle_03.png" id="15_lpuv0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/idle/idle_04.png" id="16_2d2h8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_active/leap_crush_active_01.png" id="17_rtefa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_active/leap_crush_active_02.png" id="18_6uglk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_recovery/leap_crush_recovery_01.png" id="19_cj0uo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_recovery/leap_crush_recovery_02.png" id="20_fil6w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_recovery/leap_crush_recovery_03.png" id="21_e6slh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_recovery/leap_crush_recovery_04.png" id="22_4b2lv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_recovery/leap_crush_recovery_05.png" id="23_hdorc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_windup/leap_crush_windup_01.png" id="24_i1vgn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_windup/leap_crush_windup_02.png" id="25_o1mck"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_windup/leap_crush_windup_03.png" id="26_nkcf4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_windup/leap_crush_windup_04.png" id="27_lvbn8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/leap_crush_windup/leap_crush_windup_05.png" id="28_7b7nd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/light_hit/light_hit_01.png" id="29_b6j5f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/light_hit/light_hit_02.png" id="30_lwrmb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_active/mud_burst_active_01.png" id="31_cisv8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_active/mud_burst_active_02.png" id="32_doffq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_recovery/mud_burst_recovery_01.png" id="33_jnytt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_recovery/mud_burst_recovery_02.png" id="34_vak5e"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_recovery/mud_burst_recovery_03.png" id="35_18rfl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_recovery/mud_burst_recovery_04.png" id="36_pcn5g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_recovery/mud_burst_recovery_05.png" id="37_vuu17"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_windup/mud_burst_windup_01.png" id="38_oeat3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_windup/mud_burst_windup_02.png" id="39_5c4m2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_windup/mud_burst_windup_03.png" id="40_3ttpw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_windup/mud_burst_windup_04.png" id="41_64gwl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/mud_burst_windup/mud_burst_windup_05.png" id="42_kfyyf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/stagger/stagger_01.png" id="43_o8otf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/stagger/stagger_02.png" id="44_xv5sp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/stagger/stagger_03.png" id="45_y4xmo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/stagger/stagger_04.png" id="46_msxvy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_active/tongue_lash_active_01.png" id="47_y2eft"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_active/tongue_lash_active_02.png" id="48_gifm3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_recovery/tongue_lash_recovery_01.png" id="49_1ig54"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_recovery/tongue_lash_recovery_02.png" id="50_5jskw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_recovery/tongue_lash_recovery_03.png" id="51_a5ayd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_recovery/tongue_lash_recovery_04.png" id="52_sfyp7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_recovery/tongue_lash_recovery_05.png" id="53_okggs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_windup/tongue_lash_windup_01.png" id="54_q1e7y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_windup/tongue_lash_windup_02.png" id="55_1digt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_windup/tongue_lash_windup_03.png" id="56_s1oq1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_windup/tongue_lash_windup_04.png" id="57_pcma2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/tongue_lash_windup/tongue_lash_windup_05.png" id="58_dfg5g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/turn/turn_01.png" id="59_suxh3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/turn/turn_02.png" id="60_mkptb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/turn/turn_03.png" id="61_8ofai"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/walk/walk_01.png" id="62_tne0x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/walk/walk_02.png" id="63_033vv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/walk/walk_03.png" id="64_ywai0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/walk/walk_04.png" id="65_n78nx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/walk/walk_05.png" id="66_1ky6v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/bog_toad/sprites/walk/walk_06.png" id="67_jw6un"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_1raxk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_1f5bm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_j7agi")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_62t05")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_ygdgk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_f2yf7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_cx88x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_lhuob")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_la1po")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_y7adn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_vwxci")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_7djpn")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_ycsv6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_diyv0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_lpuv0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_2d2h8")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_rtefa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_6uglk")
+}],
+"loop": 0,
+"name": &"leap_crush_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_cj0uo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_fil6w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_e6slh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_4b2lv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_hdorc")
+}],
+"loop": 0,
+"name": &"leap_crush_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_i1vgn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_o1mck")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_nkcf4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_lvbn8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_7b7nd")
+}],
+"loop": 0,
+"name": &"leap_crush_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_b6j5f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_lwrmb")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_cisv8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_doffq")
+}],
+"loop": 0,
+"name": &"mud_burst_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_jnytt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_vak5e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_18rfl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_pcn5g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_vuu17")
+}],
+"loop": 0,
+"name": &"mud_burst_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_oeat3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_5c4m2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_3ttpw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_64gwl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_kfyyf")
+}],
+"loop": 0,
+"name": &"mud_burst_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_o8otf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_xv5sp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_y4xmo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_msxvy")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_y2eft")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_gifm3")
+}],
+"loop": 0,
+"name": &"tongue_lash_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_1ig54")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_5jskw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_a5ayd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_sfyp7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_okggs")
+}],
+"loop": 0,
+"name": &"tongue_lash_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("54_q1e7y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_1digt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_s1oq1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_pcma2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_dfg5g")
+}],
+"loop": 0,
+"name": &"tongue_lash_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_suxh3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_mkptb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_8ofai")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_tne0x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_033vv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_ywai0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_n78nx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_1ky6v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_jw6un")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]

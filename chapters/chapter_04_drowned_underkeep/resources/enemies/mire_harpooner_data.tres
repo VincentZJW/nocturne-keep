@@ -1,0 +1,41 @@
+[gd_resource type="Resource" script_class="Chapter04EnemyConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="1_kidh3"]
+
+[resource]
+script = ExtResource("1_kidh3")
+archetype = 2
+chapter_max_health = 96
+max_poise = 38
+primary_action = &"harpoon_shot"
+secondary_action = &"hooked_harpoon"
+secondary_damage = 11
+secondary_range = 245.0
+secondary_windup = 0.72
+secondary_active_duration = 0.1
+secondary_recovery = 0.88
+special_action = &"close_thrust"
+special_damage = 10
+special_range = 48.0
+special_windup = 0.42
+special_active_duration = 0.13
+special_recovery = 0.62
+projectile_speed = 250.0
+projectile_lifetime = 3.0
+pull_strength = 54.0
+display_name = &"Mire Harpooner"
+max_health = 96
+attack_damage = 13
+patrol_speed = 24.0
+chase_speed = 40.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 290.0
+lose_target_range = 360.0
+attack_range = 235.0
+attack_windup = 0.58
+attack_recovery = 0.72
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26

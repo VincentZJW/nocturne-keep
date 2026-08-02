@@ -1,0 +1,123 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/drowned_underkeep.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/threshold/drowned_underkeep_threshold.png" id="3"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/trials/chapter_04_character_trial.tscn" id="4"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/soul_gaoler_ormund_hud.gd" id="5"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(1280, 108)
+
+[node name="DrownedUnderkeep" type="Node2D"]
+script = ExtResource("1")
+
+[node name="Backdrop" type="Sprite2D" parent="."]
+z_index = -100
+position = Vector2(640, 360)
+texture_filter = 1
+texture = ExtResource("3")
+
+[node name="Floor" type="StaticBody2D" parent="."]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+position = Vector2(640, 666)
+shape = SubResource("FloorShape")
+
+[node name="ChapterRuntime" parent="." instance=ExtResource("2")]
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="CH4_START" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(160, 584)
+
+[node name="CH4_HUMANOID_COMBAT" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(1500, 584)
+
+[node name="CH4_CREATURE_COMBAT" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(4300, 584)
+
+[node name="CH4_ELITE_TRIAL" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(6950, 584)
+
+[node name="CH4_BOSS_PHASE_01" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(8320, 584)
+
+[node name="CH4_BOSS_PHASE_02" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(8320, 584)
+
+[node name="CharacterTrial" parent="." instance=ExtResource("4")]
+position = Vector2(1280, 0)
+
+[node name="ThresholdNotice" type="Label" parent="."]
+z_index = 25
+offset_left = 360.0
+offset_top = 155.0
+offset_right = 920.0
+offset_bottom = 220.0
+theme_override_colors/font_color = Color(0.45, 0.68, 0.73, 0.9)
+theme_override_colors/font_outline_color = Color(0.01, 0.03, 0.05, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 15
+text = "CHAPTER IV THRESHOLD · THE DROWNED UNDERKEEP\n第四章入口 · 沉没下堡"
+horizontal_alignment = 1
+
+[node name="BossHUDLayer" type="CanvasLayer" parent="."]
+layer = 20
+
+[node name="SoulGaolerOrmundHUD" type="Control" parent="BossHUDLayer"]
+layout_mode = 3
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 106.0
+grow_horizontal = 2
+mouse_filter = 2
+script = ExtResource("5")
+
+[node name="Panel" type="ColorRect" parent="BossHUDLayer/SoulGaolerOrmundHUD"]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 14.0
+offset_right = 960.0
+offset_bottom = 98.0
+color = Color(0.025, 0.043, 0.059, 0.92)
+
+[node name="Name" type="Label" parent="BossHUDLayer/SoulGaolerOrmundHUD/Panel"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 8.0
+offset_right = 430.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.72, 0.84, 0.83, 1)
+text = "SOUL GAOLER ORMUND / 魂牢长·奥蒙德"
+
+[node name="Phase" type="Label" parent="BossHUDLayer/SoulGaolerOrmundHUD/Panel"]
+layout_mode = 0
+offset_left = 438.0
+offset_top = 8.0
+offset_right = 622.0
+offset_bottom = 30.0
+theme_override_colors/font_color = Color(0.55, 0.72, 0.72, 1)
+text = "PHASE 1"
+horizontal_alignment = 2
+
+[node name="HealthBar" type="ProgressBar" parent="BossHUDLayer/SoulGaolerOrmundHUD/Panel"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 39.0
+offset_right = 622.0
+offset_bottom = 66.0
+max_value = 560.0
+value = 560.0
+show_percentage = false
+
+[node name="HealthValue" type="Label" parent="BossHUDLayer/SoulGaolerOrmundHUD/Panel"]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 42.0
+offset_right = 622.0
+offset_bottom = 64.0
+text = "560 / 560"
+horizontal_alignment = 1

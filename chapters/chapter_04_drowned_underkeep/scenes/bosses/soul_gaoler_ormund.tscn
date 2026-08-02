@@ -1,0 +1,1226 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/soul_gaoler_ormund.gd" id="1_ayq3k"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/soul_gaoler_ormund_config.gd" id="2_hypen"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_active/chain_anchor_slam_active_01.png" id="3_81iw7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_active/chain_anchor_slam_active_02.png" id="4_6b5rw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_active/chain_anchor_slam_active_03.png" id="5_twnkx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_recovery/chain_anchor_slam_recovery_01.png" id="6_4rq7g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_recovery/chain_anchor_slam_recovery_02.png" id="7_4cmws"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_recovery/chain_anchor_slam_recovery_03.png" id="8_2ftl2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_recovery/chain_anchor_slam_recovery_04.png" id="9_gk36u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_recovery/chain_anchor_slam_recovery_05.png" id="10_34cdw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_windup/chain_anchor_slam_windup_01.png" id="11_tuosd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_windup/chain_anchor_slam_windup_02.png" id="12_xyhip"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_windup/chain_anchor_slam_windup_03.png" id="13_1x7s6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_windup/chain_anchor_slam_windup_04.png" id="14_3gm02"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_windup/chain_anchor_slam_windup_05.png" id="15_wsg0o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_active/chainstorm_cleave_active_01.png" id="16_u5j3x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_active/chainstorm_cleave_active_02.png" id="17_ygqbg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_active/chainstorm_cleave_active_03.png" id="18_cpqih"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_recovery/chainstorm_cleave_recovery_01.png" id="19_88vll"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_recovery/chainstorm_cleave_recovery_02.png" id="20_hj75g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_recovery/chainstorm_cleave_recovery_03.png" id="21_2dyly"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_recovery/chainstorm_cleave_recovery_04.png" id="22_yso3m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_recovery/chainstorm_cleave_recovery_05.png" id="23_ngclh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_windup/chainstorm_cleave_windup_01.png" id="24_ljaaw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_windup/chainstorm_cleave_windup_02.png" id="25_yhmcb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_windup/chainstorm_cleave_windup_03.png" id="26_jke5w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_windup/chainstorm_cleave_windup_04.png" id="27_r6oh6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chainstorm_cleave_windup/chainstorm_cleave_windup_05.png" id="28_vpid0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_collapse/death_collapse_01.png" id="29_c0mlj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_collapse/death_collapse_02.png" id="30_byaso"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_collapse/death_collapse_03.png" id="31_5ua7q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_collapse/death_collapse_04.png" id="32_1yhbv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_collapse/death_collapse_05.png" id="33_br8o6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_collapse/death_collapse_06.png" id="34_orjhs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_start/death_start_01.png" id="35_stmd8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_start/death_start_02.png" id="36_vo51w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_start/death_start_03.png" id="37_a6gaj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_start/death_start_04.png" id="38_f5w5w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/death_start/death_start_05.png" id="39_c5r3m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/dormant/dormant_01.png" id="40_vhs5w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/dormant/dormant_02.png" id="41_njn5u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/dormant/dormant_03.png" id="42_sdxry"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/dormant/dormant_04.png" id="43_ykht0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_active/drowned_cell_rupture_active_01.png" id="44_axq5n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_active/drowned_cell_rupture_active_02.png" id="45_486xn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_active/drowned_cell_rupture_active_03.png" id="46_8wqqa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_recovery/drowned_cell_rupture_recovery_01.png" id="47_70mcp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_recovery/drowned_cell_rupture_recovery_02.png" id="48_lbaxw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_recovery/drowned_cell_rupture_recovery_03.png" id="49_7gw4c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_recovery/drowned_cell_rupture_recovery_04.png" id="50_utf4o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_recovery/drowned_cell_rupture_recovery_05.png" id="51_ctiwp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_windup/drowned_cell_rupture_windup_01.png" id="52_a7hcv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_windup/drowned_cell_rupture_windup_02.png" id="53_ursit"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_windup/drowned_cell_rupture_windup_03.png" id="54_m8twa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_windup/drowned_cell_rupture_windup_04.png" id="55_m8jcp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/drowned_cell_rupture_windup/drowned_cell_rupture_windup_05.png" id="56_la6md"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_active/flooded_judgment_active_01.png" id="57_bdex6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_active/flooded_judgment_active_02.png" id="58_efvxl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_active/flooded_judgment_active_03.png" id="59_hnnh0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_recovery/flooded_judgment_recovery_01.png" id="60_7gqx1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_recovery/flooded_judgment_recovery_02.png" id="61_wmgr1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_recovery/flooded_judgment_recovery_03.png" id="62_nen3v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_recovery/flooded_judgment_recovery_04.png" id="63_qtax2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_recovery/flooded_judgment_recovery_05.png" id="64_kq5cu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_windup/flooded_judgment_windup_01.png" id="65_u15tt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_windup/flooded_judgment_windup_02.png" id="66_ujbdp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_windup/flooded_judgment_windup_03.png" id="67_04410"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_windup/flooded_judgment_windup_04.png" id="68_winmy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/flooded_judgment_windup/flooded_judgment_windup_05.png" id="69_1dm55"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_active/floodgate_charge_active_01.png" id="70_itnnn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_active/floodgate_charge_active_02.png" id="71_rdmj8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_active/floodgate_charge_active_03.png" id="72_1ijdg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_recovery/floodgate_charge_recovery_01.png" id="73_ha18s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_recovery/floodgate_charge_recovery_02.png" id="74_7o6ae"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_recovery/floodgate_charge_recovery_03.png" id="75_2gsi0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_recovery/floodgate_charge_recovery_04.png" id="76_7datg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_recovery/floodgate_charge_recovery_05.png" id="77_pfdxs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_windup/floodgate_charge_windup_01.png" id="78_5gwyu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_windup/floodgate_charge_windup_02.png" id="79_h4mse"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_windup/floodgate_charge_windup_03.png" id="80_h5ql3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_windup/floodgate_charge_windup_04.png" id="81_apdei"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/floodgate_charge_windup/floodgate_charge_windup_05.png" id="82_khb7s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_active/halberd_sweep_active_01.png" id="83_bymam"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_active/halberd_sweep_active_02.png" id="84_35ht6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_active/halberd_sweep_active_03.png" id="85_3evlh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_recovery/halberd_sweep_recovery_01.png" id="86_f2jsk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_recovery/halberd_sweep_recovery_02.png" id="87_wst4g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_recovery/halberd_sweep_recovery_03.png" id="88_ouuot"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_recovery/halberd_sweep_recovery_04.png" id="89_gj74g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_recovery/halberd_sweep_recovery_05.png" id="90_ft34t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_windup/halberd_sweep_windup_01.png" id="91_ayyqe"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_windup/halberd_sweep_windup_02.png" id="92_l3ykk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_windup/halberd_sweep_windup_03.png" id="93_1311q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_windup/halberd_sweep_windup_04.png" id="94_tbn02"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/halberd_sweep_windup/halberd_sweep_windup_05.png" id="95_8gq3o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p1/idle_p1_01.png" id="96_1hmac"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p1/idle_p1_02.png" id="97_e1k8b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p1/idle_p1_03.png" id="98_e66fm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p1/idle_p1_04.png" id="99_83vhx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p1/idle_p1_05.png" id="100_mk8rh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p2/idle_p2_01.png" id="101_mgsnl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p2/idle_p2_02.png" id="102_pygeb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p2/idle_p2_03.png" id="103_v8a4x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p2/idle_p2_04.png" id="104_yvsge"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/idle_p2/idle_p2_05.png" id="105_30hf7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/intro/intro_01.png" id="106_2hd8g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/intro/intro_02.png" id="107_yfjnm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/intro/intro_03.png" id="108_groou"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/intro/intro_04.png" id="109_yvqtv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/intro/intro_05.png" id="110_r41gb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/intro/intro_06.png" id="111_x5ihs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/light_hit_p1/light_hit_p1_01.png" id="112_niy30"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/light_hit_p1/light_hit_p1_02.png" id="113_nhbrh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/light_hit_p2/light_hit_p2_01.png" id="114_fvlye"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/light_hit_p2/light_hit_p2_02.png" id="115_0k3rs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/move_p2/move_p2_01.png" id="116_x0u50"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/move_p2/move_p2_02.png" id="117_yhixu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/move_p2/move_p2_03.png" id="118_n3bxh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/move_p2/move_p2_04.png" id="119_5xwvu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/move_p2/move_p2_05.png" id="120_hgq8t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/move_p2/move_p2_06.png" id="121_f2nrf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_01.png" id="122_kreim"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_02.png" id="123_ocv1p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_03.png" id="124_a5jab"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_04.png" id="125_6smqo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_05.png" id="126_pw2jx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_06.png" id="127_8r2ss"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_07.png" id="128_y855n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/phase_transition/phase_transition_08.png" id="129_li6je"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_active/prison_hook_drag_active_01.png" id="130_26f22"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_active/prison_hook_drag_active_02.png" id="131_ur8v6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_active/prison_hook_drag_active_03.png" id="132_7chms"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_recovery/prison_hook_drag_recovery_01.png" id="133_7oktq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_recovery/prison_hook_drag_recovery_02.png" id="134_mvail"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_recovery/prison_hook_drag_recovery_03.png" id="135_qbstp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_recovery/prison_hook_drag_recovery_04.png" id="136_mlnr8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_recovery/prison_hook_drag_recovery_05.png" id="137_pmc15"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_windup/prison_hook_drag_windup_01.png" id="138_quluv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_windup/prison_hook_drag_windup_02.png" id="139_m37wn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_windup/prison_hook_drag_windup_03.png" id="140_jgmgx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_windup/prison_hook_drag_windup_04.png" id="141_5xdd8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/prison_hook_drag_windup/prison_hook_drag_windup_05.png" id="142_yhm62"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_active/soul_cage_pulse_active_01.png" id="143_et3s3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_active/soul_cage_pulse_active_02.png" id="144_kvcgx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_active/soul_cage_pulse_active_03.png" id="145_r3brs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_recovery/soul_cage_pulse_recovery_01.png" id="146_80dcq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_recovery/soul_cage_pulse_recovery_02.png" id="147_n1kbc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_recovery/soul_cage_pulse_recovery_03.png" id="148_a0edy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_recovery/soul_cage_pulse_recovery_04.png" id="149_iiika"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_recovery/soul_cage_pulse_recovery_05.png" id="150_q1fe6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_windup/soul_cage_pulse_windup_01.png" id="151_h4nf5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_windup/soul_cage_pulse_windup_02.png" id="152_08m64"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_windup/soul_cage_pulse_windup_03.png" id="153_dio08"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_windup/soul_cage_pulse_windup_04.png" id="154_yi52d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_cage_pulse_windup/soul_cage_pulse_windup_05.png" id="155_m76yp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_01.png" id="156_qjmyn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_02.png" id="157_jabfi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_03.png" id="158_lkwxl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_04.png" id="159_nfcue"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_05.png" id="160_0i6mq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_06.png" id="161_mfnne"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_07.png" id="162_ndlbr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_release/soul_release_08.png" id="163_rcoge"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_active/soul_shackle_active_01.png" id="164_h4tsp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_active/soul_shackle_active_02.png" id="165_45vl5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_active/soul_shackle_active_03.png" id="166_tedmv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_recovery/soul_shackle_recovery_01.png" id="167_4cdjf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_recovery/soul_shackle_recovery_02.png" id="168_w8uws"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_recovery/soul_shackle_recovery_03.png" id="169_tdpg6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_recovery/soul_shackle_recovery_04.png" id="170_kbqbf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_recovery/soul_shackle_recovery_05.png" id="171_fgw1u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_windup/soul_shackle_windup_01.png" id="172_3ea0o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_windup/soul_shackle_windup_02.png" id="173_2uj6w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_windup/soul_shackle_windup_03.png" id="174_fksvg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_windup/soul_shackle_windup_04.png" id="175_vuiy7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/soul_shackle_windup/soul_shackle_windup_05.png" id="176_bs3dc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p1/stagger_p1_01.png" id="177_rxcjw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p1/stagger_p1_02.png" id="178_ulumu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p1/stagger_p1_03.png" id="179_07m50"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p1/stagger_p1_04.png" id="180_ibgeo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p1/stagger_p1_05.png" id="181_ds5e5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p2/stagger_p2_01.png" id="182_0jdhl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p2/stagger_p2_02.png" id="183_arnbw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p2/stagger_p2_03.png" id="184_lhuhj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p2/stagger_p2_04.png" id="185_fdnij"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/stagger_p2/stagger_p2_05.png" id="186_wmusr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p1/turn_p1_01.png" id="187_bbc6n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p1/turn_p1_02.png" id="188_8x5v8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p1/turn_p1_03.png" id="189_i1c2w"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p1/turn_p1_04.png" id="190_qbe5p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p2/turn_p2_01.png" id="191_vrwxv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p2/turn_p2_02.png" id="192_6dhr7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p2/turn_p2_03.png" id="193_1fg68"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/turn_p2/turn_p2_04.png" id="194_cv0qb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_active/undertow_pull_active_01.png" id="195_fvmks"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_active/undertow_pull_active_02.png" id="196_33urc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_active/undertow_pull_active_03.png" id="197_snyxb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_recovery/undertow_pull_recovery_01.png" id="198_vtaob"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_recovery/undertow_pull_recovery_02.png" id="199_dbi8n"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_recovery/undertow_pull_recovery_03.png" id="200_tx7ln"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_recovery/undertow_pull_recovery_04.png" id="201_21c7y"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_recovery/undertow_pull_recovery_05.png" id="202_5dney"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_windup/undertow_pull_windup_01.png" id="203_boydf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_windup/undertow_pull_windup_02.png" id="204_o8ajm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_windup/undertow_pull_windup_03.png" id="205_cbo33"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_windup/undertow_pull_windup_04.png" id="206_1nw5b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/undertow_pull_windup/undertow_pull_windup_05.png" id="207_gxvjt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/walk_p1/walk_p1_01.png" id="208_nqduc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/walk_p1/walk_p1_02.png" id="209_27lc1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/walk_p1/walk_p1_03.png" id="210_hhbmc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/walk_p1/walk_p1_04.png" id="211_n51t5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/walk_p1/walk_p1_05.png" id="212_wmsu6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/walk_p1/walk_p1_06.png" id="213_oxd0x"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="214_cyuee"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/components/chapter_04_poise_component.gd" id="215_50jrp"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/chapter_04_boss_damage_policy.gd" id="216_d38ga"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="217_sipin"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="218_h4es8"]
+
+[sub_resource type="Resource" id="Resource_04hap"]
+script = ExtResource("2_hypen")
+display_name = &"Soul Gaoler Ormund"
+max_health = 560
+patrol_speed = 0.0
+chase_speed = 48.0
+ground_acceleration = 300.0
+ground_deceleration = 560.0
+gravity = 1650.0
+patrol_half_width = 420.0
+platform_height_tolerance = 180.0
+detection_range = 520.0
+lose_target_range = 720.0
+attack_range = 118.0
+hurt_duration = 0.12
+knockback_speed = 55.0
+initial_idle_duration = 0.0
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_dq1bc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_81iw7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_6b5rw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_twnkx")
+}],
+"loop": 0,
+"name": &"chain_anchor_slam_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_4rq7g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_4cmws")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_2ftl2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_gk36u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_34cdw")
+}],
+"loop": 0,
+"name": &"chain_anchor_slam_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_tuosd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_xyhip")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_1x7s6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_3gm02")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_wsg0o")
+}],
+"loop": 0,
+"name": &"chain_anchor_slam_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_u5j3x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ygqbg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_cpqih")
+}],
+"loop": 0,
+"name": &"chainstorm_cleave_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_88vll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_hj75g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_2dyly")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_yso3m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_ngclh")
+}],
+"loop": 0,
+"name": &"chainstorm_cleave_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_ljaaw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_yhmcb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_jke5w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_r6oh6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_vpid0")
+}],
+"loop": 0,
+"name": &"chainstorm_cleave_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_c0mlj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_byaso")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_5ua7q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_1yhbv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_br8o6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_orjhs")
+}],
+"loop": 0,
+"name": &"death_collapse",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("35_stmd8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_vo51w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_a6gaj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_f5w5w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_c5r3m")
+}],
+"loop": 0,
+"name": &"death_start",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("40_vhs5w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_njn5u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_sdxry")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_ykht0")
+}],
+"loop": 1,
+"name": &"dormant",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44_axq5n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_486xn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_8wqqa")
+}],
+"loop": 0,
+"name": &"drowned_cell_rupture_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_70mcp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_lbaxw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_7gw4c")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_utf4o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_ctiwp")
+}],
+"loop": 0,
+"name": &"drowned_cell_rupture_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_a7hcv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_ursit")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_m8twa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_m8jcp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_la6md")
+}],
+"loop": 0,
+"name": &"drowned_cell_rupture_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("57_bdex6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_efvxl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_hnnh0")
+}],
+"loop": 0,
+"name": &"flooded_judgment_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("60_7gqx1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_wmgr1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_nen3v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_qtax2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_kq5cu")
+}],
+"loop": 0,
+"name": &"flooded_judgment_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_u15tt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_ujbdp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_04410")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_winmy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_1dm55")
+}],
+"loop": 0,
+"name": &"flooded_judgment_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("70_itnnn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("71_rdmj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_1ijdg")
+}],
+"loop": 0,
+"name": &"floodgate_charge_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("73_ha18s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_7o6ae")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_2gsi0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_7datg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("77_pfdxs")
+}],
+"loop": 0,
+"name": &"floodgate_charge_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("78_5gwyu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_h4mse")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_h5ql3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_apdei")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_khb7s")
+}],
+"loop": 0,
+"name": &"floodgate_charge_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("83_bymam")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_35ht6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_3evlh")
+}],
+"loop": 0,
+"name": &"halberd_sweep_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("86_f2jsk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_wst4g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_ouuot")
+}, {
+"duration": 1.0,
+"texture": ExtResource("89_gj74g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_ft34t")
+}],
+"loop": 0,
+"name": &"halberd_sweep_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("91_ayyqe")
+}, {
+"duration": 1.0,
+"texture": ExtResource("92_l3ykk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_1311q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_tbn02")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_8gq3o")
+}],
+"loop": 0,
+"name": &"halberd_sweep_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("96_1hmac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_e1k8b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_e66fm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_83vhx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_mk8rh")
+}],
+"loop": 0,
+"name": &"idle",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("96_1hmac")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_e1k8b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("98_e66fm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("99_83vhx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("100_mk8rh")
+}],
+"loop": 1,
+"name": &"idle_p1",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("101_mgsnl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("102_pygeb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_v8a4x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_yvsge")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_30hf7")
+}],
+"loop": 1,
+"name": &"idle_p2",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("106_2hd8g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_yfjnm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_groou")
+}, {
+"duration": 1.0,
+"texture": ExtResource("109_yvqtv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_r41gb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_x5ihs")
+}],
+"loop": 0,
+"name": &"intro",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("112_niy30")
+}, {
+"duration": 1.0,
+"texture": ExtResource("113_nhbrh")
+}],
+"loop": 0,
+"name": &"light_hit_p1",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("114_fvlye")
+}, {
+"duration": 1.0,
+"texture": ExtResource("115_0k3rs")
+}],
+"loop": 0,
+"name": &"light_hit_p2",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("116_x0u50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("117_yhixu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("118_n3bxh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("119_5xwvu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("120_hgq8t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("121_f2nrf")
+}],
+"loop": 1,
+"name": &"move_p2",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("122_kreim")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_ocv1p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("124_a5jab")
+}, {
+"duration": 1.0,
+"texture": ExtResource("125_6smqo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("126_pw2jx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("127_8r2ss")
+}, {
+"duration": 1.0,
+"texture": ExtResource("128_y855n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("129_li6je")
+}],
+"loop": 0,
+"name": &"phase_transition",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("130_26f22")
+}, {
+"duration": 1.0,
+"texture": ExtResource("131_ur8v6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("132_7chms")
+}],
+"loop": 0,
+"name": &"prison_hook_drag_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("133_7oktq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("134_mvail")
+}, {
+"duration": 1.0,
+"texture": ExtResource("135_qbstp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("136_mlnr8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("137_pmc15")
+}],
+"loop": 0,
+"name": &"prison_hook_drag_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("138_quluv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("139_m37wn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("140_jgmgx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("141_5xdd8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("142_yhm62")
+}],
+"loop": 0,
+"name": &"prison_hook_drag_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("143_et3s3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("144_kvcgx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("145_r3brs")
+}],
+"loop": 0,
+"name": &"soul_cage_pulse_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("146_80dcq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("147_n1kbc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("148_a0edy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("149_iiika")
+}, {
+"duration": 1.0,
+"texture": ExtResource("150_q1fe6")
+}],
+"loop": 0,
+"name": &"soul_cage_pulse_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("151_h4nf5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("152_08m64")
+}, {
+"duration": 1.0,
+"texture": ExtResource("153_dio08")
+}, {
+"duration": 1.0,
+"texture": ExtResource("154_yi52d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("155_m76yp")
+}],
+"loop": 0,
+"name": &"soul_cage_pulse_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("156_qjmyn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("157_jabfi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("158_lkwxl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("159_nfcue")
+}, {
+"duration": 1.0,
+"texture": ExtResource("160_0i6mq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("161_mfnne")
+}, {
+"duration": 1.0,
+"texture": ExtResource("162_ndlbr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("163_rcoge")
+}],
+"loop": 0,
+"name": &"soul_release",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("164_h4tsp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("165_45vl5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("166_tedmv")
+}],
+"loop": 0,
+"name": &"soul_shackle_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("167_4cdjf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("168_w8uws")
+}, {
+"duration": 1.0,
+"texture": ExtResource("169_tdpg6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("170_kbqbf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("171_fgw1u")
+}],
+"loop": 0,
+"name": &"soul_shackle_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("172_3ea0o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("173_2uj6w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("174_fksvg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("175_vuiy7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("176_bs3dc")
+}],
+"loop": 0,
+"name": &"soul_shackle_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("177_rxcjw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("178_ulumu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("179_07m50")
+}, {
+"duration": 1.0,
+"texture": ExtResource("180_ibgeo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("181_ds5e5")
+}],
+"loop": 0,
+"name": &"stagger_p1",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("182_0jdhl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("183_arnbw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("184_lhuhj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("185_fdnij")
+}, {
+"duration": 1.0,
+"texture": ExtResource("186_wmusr")
+}],
+"loop": 0,
+"name": &"stagger_p2",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("187_bbc6n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("188_8x5v8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("189_i1c2w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("190_qbe5p")
+}],
+"loop": 0,
+"name": &"turn_p1",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("191_vrwxv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("192_6dhr7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("193_1fg68")
+}, {
+"duration": 1.0,
+"texture": ExtResource("194_cv0qb")
+}],
+"loop": 0,
+"name": &"turn_p2",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("195_fvmks")
+}, {
+"duration": 1.0,
+"texture": ExtResource("196_33urc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("197_snyxb")
+}],
+"loop": 0,
+"name": &"undertow_pull_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("198_vtaob")
+}, {
+"duration": 1.0,
+"texture": ExtResource("199_dbi8n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("200_tx7ln")
+}, {
+"duration": 1.0,
+"texture": ExtResource("201_21c7y")
+}, {
+"duration": 1.0,
+"texture": ExtResource("202_5dney")
+}],
+"loop": 0,
+"name": &"undertow_pull_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("203_boydf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("204_o8ajm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("205_cbo33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("206_1nw5b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("207_gxvjt")
+}],
+"loop": 0,
+"name": &"undertow_pull_windup",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("208_nqduc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("209_27lc1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("210_hhbmc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("211_n51t5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("212_wmsu6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("213_oxd0x")
+}],
+"loop": 1,
+"name": &"walk_p1",
+"speed": 7.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0d4p4"]
+size = Vector2(66, 142)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_tsccy"]
+size = Vector2(76, 148)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_x1s1j"]
+size = Vector2(148, 72)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xh686"]
+size = Vector2(260, 138)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xhyvd"]
+radius = 520.0
+
+[node name="SoulGaolerOrmund" type="CharacterBody2D" unique_id=9915650]
+z_index = 12
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 8.0
+script = ExtResource("1_ayq3k")
+config = SubResource("Resource_04hap")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1405340266]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1832183511]
+texture_filter = 1
+position = Vector2(0, -92)
+sprite_frames = SubResource("SpriteFrames_dq1bc")
+animation = &"dormant"
+autoplay = "dormant"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1781929217]
+position = Vector2(0, -71)
+shape = SubResource("RectangleShape2D_0d4p4")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=328244455]
+script = ExtResource("214_cyuee")
+max_health = 560
+
+[node name="PoiseComponent" type="Node" parent="." unique_id=1933005580]
+script = ExtResource("215_50jrp")
+max_poise = 150
+
+[node name="DamagePolicy" type="Node" parent="." unique_id=595810739]
+script = ExtResource("216_d38ga")
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=1098020695]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("217_sipin")
+faction = &"enemy"
+hit_policy_path = NodePath("../DamagePolicy")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=493188950]
+position = Vector2(0, -74)
+shape = SubResource("RectangleShape2D_tsccy")
+
+[node name="FacingRoot" type="Node2D" parent="." unique_id=1095881583]
+
+[node name="MeleeHitbox" type="Area2D" parent="FacingRoot" unique_id=1434986966]
+position = Vector2(90, -65)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("218_h4es8")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/MeleeHitbox" unique_id=387426242]
+shape = SubResource("RectangleShape2D_x1s1j")
+disabled = true
+
+[node name="AreaHitbox" type="Area2D" parent="." unique_id=1104022529]
+position = Vector2(0, -68)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("218_h4es8")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaHitbox" unique_id=1222757296]
+shape = SubResource("RectangleShape2D_xh686")
+disabled = true
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=528597056]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=194041786]
+shape = SubResource("CircleShape2D_xhyvd")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=1931181699]
+position = Vector2(0, -35)
+target_position = Vector2(-42, 0)
+
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=380210960]
+position = Vector2(-34, -5)
+target_position = Vector2(0, 48)

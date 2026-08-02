@@ -1,0 +1,515 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy.gd" id="1_a2bfy"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/projectiles/chapter_04_enemy_projectile.tscn" id="2_28jbt"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="3_3f5pp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/alert/alert_01.png" id="4_cpcud"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/alert/alert_02.png" id="5_7du21"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/alert/alert_03.png" id="6_goysp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_active/close_thrust_active_01.png" id="7_iaq0r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_active/close_thrust_active_02.png" id="8_3xojs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_recovery/close_thrust_recovery_01.png" id="9_24cds"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_recovery/close_thrust_recovery_02.png" id="10_fbgf8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_recovery/close_thrust_recovery_03.png" id="11_7xd5s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_recovery/close_thrust_recovery_04.png" id="12_8b01u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_recovery/close_thrust_recovery_05.png" id="13_r3shw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_windup/close_thrust_windup_01.png" id="14_ejtqs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_windup/close_thrust_windup_02.png" id="15_50rr2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_windup/close_thrust_windup_03.png" id="16_shkik"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_windup/close_thrust_windup_04.png" id="17_cwsf3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/close_thrust_windup/close_thrust_windup_05.png" id="18_tje5r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/death/death_01.png" id="19_adj23"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/death/death_02.png" id="20_lqr28"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/death/death_03.png" id="21_shcir"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/death/death_04.png" id="22_xvc7x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/death/death_05.png" id="23_5wg4k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/death/death_06.png" id="24_iv1r7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_active/harpoon_shot_active_01.png" id="25_dc0fp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_active/harpoon_shot_active_02.png" id="26_wp6og"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_recovery/harpoon_shot_recovery_01.png" id="27_poxwb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_recovery/harpoon_shot_recovery_02.png" id="28_xvwya"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_recovery/harpoon_shot_recovery_03.png" id="29_wqoeb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_recovery/harpoon_shot_recovery_04.png" id="30_rvimx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_recovery/harpoon_shot_recovery_05.png" id="31_qt7d4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_windup/harpoon_shot_windup_01.png" id="32_tdl3p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_windup/harpoon_shot_windup_02.png" id="33_6ryy6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_windup/harpoon_shot_windup_03.png" id="34_owml1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_windup/harpoon_shot_windup_04.png" id="35_6r5lx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/harpoon_shot_windup/harpoon_shot_windup_05.png" id="36_pf6kn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_active/hooked_harpoon_active_01.png" id="37_v88wl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_active/hooked_harpoon_active_02.png" id="38_lfl5r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_recovery/hooked_harpoon_recovery_01.png" id="39_u74eg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_recovery/hooked_harpoon_recovery_02.png" id="40_hcal6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_recovery/hooked_harpoon_recovery_03.png" id="41_it6hp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_recovery/hooked_harpoon_recovery_04.png" id="42_0r2m1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_recovery/hooked_harpoon_recovery_05.png" id="43_vhsrb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_windup/hooked_harpoon_windup_01.png" id="44_4y7hx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_windup/hooked_harpoon_windup_02.png" id="45_dw6kk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_windup/hooked_harpoon_windup_03.png" id="46_6knxu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_windup/hooked_harpoon_windup_04.png" id="47_4tr1x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hooked_harpoon_windup/hooked_harpoon_windup_05.png" id="48_m3ifl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hurt/hurt_01.png" id="49_blb7p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hurt/hurt_02.png" id="50_o77yf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/hurt/hurt_03.png" id="51_g2s4p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/idle/idle_01.png" id="52_j7sog"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/idle/idle_02.png" id="53_2wx1r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/idle/idle_03.png" id="54_j178u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/idle/idle_04.png" id="55_p8grx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/light_hit/light_hit_01.png" id="56_kyqj8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/light_hit/light_hit_02.png" id="57_hoax0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/stagger/stagger_01.png" id="58_7vt4q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/stagger/stagger_02.png" id="59_a5u33"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/stagger/stagger_03.png" id="60_sqpsg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/stagger/stagger_04.png" id="61_jk7ai"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/turn/turn_01.png" id="62_kyrbb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/turn/turn_02.png" id="63_51k84"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/turn/turn_03.png" id="64_3dctl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/walk/walk_01.png" id="65_3l51v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/walk/walk_02.png" id="66_ksh3t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/walk/walk_03.png" id="67_c3iie"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/walk/walk_04.png" id="68_knt73"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/walk/walk_05.png" id="69_syk7d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mire_harpooner/sprites/walk/walk_06.png" id="70_qs5ga"]
+[ext_resource type="Script" path="res://scripts/combat/health_component.gd" id="71_rywvd"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/components/chapter_04_poise_component.gd" id="72_8olar"]
+[ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="73_x8onv"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="74_8ltri"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_component.gd" id="75_ekfuo"]
+[ext_resource type="Script" path="res://scripts/items/loot_drop_profile.gd" id="76_wnklt"]
+[ext_resource type="Resource" path="res://resources/items/loot/default_dynamic_loot_profile.tres" id="77_5pxek"]
+
+[sub_resource type="Resource" id="Resource_2vitk"]
+script = ExtResource("3_3f5pp")
+archetype = 2
+chapter_max_health = 96
+max_poise = 38
+primary_action = &"harpoon_shot"
+secondary_action = &"hooked_harpoon"
+secondary_damage = 11
+secondary_range = 245.0
+secondary_windup = 0.72
+secondary_active_duration = 0.1
+secondary_recovery = 0.88
+special_action = &"close_thrust"
+special_damage = 10
+special_range = 48.0
+special_windup = 0.42
+special_active_duration = 0.13
+special_recovery = 0.62
+projectile_speed = 250.0
+projectile_lifetime = 3.0
+pull_strength = 54.0
+display_name = &"Mire Harpooner"
+max_health = 96
+attack_damage = 13
+patrol_speed = 24.0
+chase_speed = 40.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 290.0
+lose_target_range = 360.0
+attack_range = 235.0
+attack_windup = 0.58
+attack_recovery = 0.72
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_as1pk"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_cpcud")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_7du21")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_goysp")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("7_iaq0r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_3xojs")
+}],
+"loop": 0,
+"name": &"close_thrust_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_24cds")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_fbgf8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_7xd5s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_8b01u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_r3shw")
+}],
+"loop": 0,
+"name": &"close_thrust_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("14_ejtqs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_50rr2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_shkik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_cwsf3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_tje5r")
+}],
+"loop": 0,
+"name": &"close_thrust_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_adj23")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_lqr28")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_shcir")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_xvc7x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_5wg4k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_iv1r7")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_dc0fp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_wp6og")
+}],
+"loop": 0,
+"name": &"harpoon_shot_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("27_poxwb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_xvwya")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_wqoeb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_rvimx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_qt7d4")
+}],
+"loop": 0,
+"name": &"harpoon_shot_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("32_tdl3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_6ryy6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_owml1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_6r5lx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_pf6kn")
+}],
+"loop": 0,
+"name": &"harpoon_shot_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_v88wl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_lfl5r")
+}],
+"loop": 0,
+"name": &"hooked_harpoon_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("39_u74eg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_hcal6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_it6hp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_0r2m1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_vhsrb")
+}],
+"loop": 0,
+"name": &"hooked_harpoon_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("44_4y7hx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_dw6kk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_6knxu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_4tr1x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_m3ifl")
+}],
+"loop": 0,
+"name": &"hooked_harpoon_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_blb7p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_o77yf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_g2s4p")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_j7sog")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_2wx1r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_j178u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_p8grx")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_kyqj8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_hoax0")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("58_7vt4q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_a5u33")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_sqpsg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_jk7ai")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_kyrbb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_51k84")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_3dctl")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_3l51v")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_ksh3t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_c3iie")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_knt73")
+}, {
+"duration": 1.0,
+"texture": ExtResource("69_syk7d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_qs5ga")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bdvbf"]
+size = Vector2(34, 60)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dystu"]
+size = Vector2(40, 64)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_c1u4q"]
+size = Vector2(62, 28)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_87lco"]
+size = Vector2(88, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_276sj"]
+radius = 290.0
+
+[sub_resource type="Resource" id="Resource_8vy1j"]
+script = ExtResource("76_wnklt")
+enemy_type = &"MireHarpooner"
+coin_min = 3
+coin_max = 6
+
+[node name="MireHarpooner" type="CharacterBody2D" unique_id=1325156319]
+z_index = 10
+collision_layer = 4
+collision_mask = 3
+floor_snap_length = 6.0
+script = ExtResource("1_a2bfy")
+projectile_scene = ExtResource("2_28jbt")
+config = SubResource("Resource_2vitk")
+
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1690041326]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1623144595]
+texture_filter = 1
+position = Vector2(0, -38)
+sprite_frames = SubResource("SpriteFrames_as1pk")
+animation = &"idle"
+autoplay = "idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=390034192]
+position = Vector2(0, -30)
+shape = SubResource("RectangleShape2D_bdvbf")
+
+[node name="HealthComponent" type="Node" parent="." unique_id=1802611718]
+script = ExtResource("71_rywvd")
+
+[node name="PoiseComponent" type="Node" parent="." unique_id=1597105473]
+script = ExtResource("72_8olar")
+max_poise = 38
+
+[node name="Hurtbox" type="Area2D" parent="." unique_id=515748505]
+collision_layer = 16
+collision_mask = 32
+script = ExtResource("73_x8onv")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=127995915]
+position = Vector2(0, -30)
+shape = SubResource("RectangleShape2D_dystu")
+
+[node name="FacingRoot" type="Node2D" parent="." unique_id=399022000]
+
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1346111879]
+position = Vector2(42, -29)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("74_8ltri")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=603339093]
+shape = SubResource("RectangleShape2D_c1u4q")
+disabled = true
+
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=910704566]
+position = Vector2(55, -28)
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("74_8ltri")
+faction = &"enemy"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=621089668]
+shape = SubResource("RectangleShape2D_87lco")
+disabled = true
+
+[node name="DetectionArea" type="Area2D" parent="." unique_id=172903080]
+collision_layer = 128
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1884221468]
+shape = SubResource("CircleShape2D_276sj")
+
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=1036982916]
+position = Vector2(0, -22)
+target_position = Vector2(-28, 0)
+
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=359486874]
+position = Vector2(-24, -4)
+target_position = Vector2(0, 34)
+
+[node name="LootDropComponent" type="Node" parent="." unique_id=1665312904]
+script = ExtResource("75_ekfuo")
+profile = SubResource("Resource_8vy1j")
+dynamic_profile = ExtResource("77_5pxek")

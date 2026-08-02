@@ -1,0 +1,42 @@
+[gd_resource type="Resource" script_class="Chapter04EnemyConfig" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/enemies/chapter_04_enemy_config.gd" id="1_fbqgw"]
+
+[resource]
+script = ExtResource("1_fbqgw")
+archetype = 3
+chapter_max_health = 132
+max_poise = 70
+primary_action = &"shield_bash"
+secondary_action = &"rusted_thrust"
+secondary_damage = 14
+secondary_range = 72.0
+secondary_windup = 0.58
+secondary_active_duration = 0.13
+secondary_recovery = 0.78
+special_action = &"shield_crush"
+special_damage = 17
+special_range = 54.0
+special_windup = 0.72
+special_active_duration = 0.18
+special_recovery = 0.98
+special_motion_speed = 90.0
+shield_max_health = 72
+guard_break_duration = 0.72
+display_name = &"Sunken Shield Penitent"
+max_health = 100
+attack_damage = 14
+patrol_speed = 22.0
+chase_speed = 35.0
+ground_acceleration = 330.0
+ground_deceleration = 540.0
+patrol_half_width = 138.0
+platform_height_tolerance = 130.0
+detection_range = 215.0
+lose_target_range = 360.0
+attack_range = 50.0
+attack_windup = 0.48
+attack_active_duration = 0.15
+attack_recovery = 0.7
+initial_idle_duration = 0.6
+patrol_turn_pause = 0.26

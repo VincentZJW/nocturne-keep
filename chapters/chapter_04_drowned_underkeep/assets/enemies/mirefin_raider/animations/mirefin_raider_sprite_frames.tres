@@ -1,0 +1,358 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/alert/alert_01.png" id="1_qcsio"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/alert/alert_02.png" id="2_854j8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/alert/alert_03.png" id="3_e0tsg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_active/claw_swipe_active_01.png" id="4_sfh4s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_active/claw_swipe_active_02.png" id="5_tg3jg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_recovery/claw_swipe_recovery_01.png" id="6_bpn7f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_recovery/claw_swipe_recovery_02.png" id="7_5pcc5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_recovery/claw_swipe_recovery_03.png" id="8_722qw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_recovery/claw_swipe_recovery_04.png" id="9_b1qfc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_recovery/claw_swipe_recovery_05.png" id="10_77pek"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_windup/claw_swipe_windup_01.png" id="11_draun"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_windup/claw_swipe_windup_02.png" id="12_qnn1u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_windup/claw_swipe_windup_03.png" id="13_3682d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_windup/claw_swipe_windup_04.png" id="14_ghms1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/claw_swipe_windup/claw_swipe_windup_05.png" id="15_fmr8c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/death/death_01.png" id="16_jxtys"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/death/death_02.png" id="17_hxd24"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/death/death_03.png" id="18_bsfi3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/death/death_04.png" id="19_q3e6p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/death/death_05.png" id="20_2dsc0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/death/death_06.png" id="21_lu05x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_active/fin_bite_active_01.png" id="22_jvjbg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_active/fin_bite_active_02.png" id="23_rytiw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_recovery/fin_bite_recovery_01.png" id="24_lpol1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_recovery/fin_bite_recovery_02.png" id="25_3l6xu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_recovery/fin_bite_recovery_03.png" id="26_dyovy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_recovery/fin_bite_recovery_04.png" id="27_52704"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_recovery/fin_bite_recovery_05.png" id="28_mintx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_windup/fin_bite_windup_01.png" id="29_ii4ho"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_windup/fin_bite_windup_02.png" id="30_f0cmj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_windup/fin_bite_windup_03.png" id="31_j56u3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_windup/fin_bite_windup_04.png" id="32_4565k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/fin_bite_windup/fin_bite_windup_05.png" id="33_uvtcw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/hurt/hurt_01.png" id="34_7g87x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/hurt/hurt_02.png" id="35_qw137"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/hurt/hurt_03.png" id="36_hot7v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/idle/idle_01.png" id="37_02wxi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/idle/idle_02.png" id="38_n2onm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/idle/idle_03.png" id="39_2t64g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/idle/idle_04.png" id="40_na7yc"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/light_hit/light_hit_01.png" id="41_78i8m"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/light_hit/light_hit_02.png" id="42_5aw1u"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_active/mire_lunge_active_01.png" id="43_2ywn5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_active/mire_lunge_active_02.png" id="44_3ylvh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_recovery/mire_lunge_recovery_01.png" id="45_otjxt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_recovery/mire_lunge_recovery_02.png" id="46_bvt6g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_recovery/mire_lunge_recovery_03.png" id="47_j7axo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_recovery/mire_lunge_recovery_04.png" id="48_rqjnm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_recovery/mire_lunge_recovery_05.png" id="49_pfjps"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_windup/mire_lunge_windup_01.png" id="50_s6nj0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_windup/mire_lunge_windup_02.png" id="51_x25tv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_windup/mire_lunge_windup_03.png" id="52_ajj5g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_windup/mire_lunge_windup_04.png" id="53_gneaw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/mire_lunge_windup/mire_lunge_windup_05.png" id="54_16nfx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/stagger/stagger_01.png" id="55_riy2h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/stagger/stagger_02.png" id="56_s42qu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/stagger/stagger_03.png" id="57_1imtn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/stagger/stagger_04.png" id="58_ltkpx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/turn/turn_01.png" id="59_ffqbm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/turn/turn_02.png" id="60_mjvbg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/turn/turn_03.png" id="61_1nugw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/walk/walk_01.png" id="62_455yx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/walk/walk_02.png" id="63_yleu7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/walk/walk_03.png" id="64_uxp1k"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/walk/walk_04.png" id="65_snu31"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/walk/walk_05.png" id="66_1wsyu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/enemies/mirefin_raider/sprites/walk/walk_06.png" id="67_30b6k"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_qcsio")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_854j8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_e0tsg")
+}],
+"loop": 0,
+"name": &"alert",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("4_sfh4s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_tg3jg")
+}],
+"loop": 0,
+"name": &"claw_swipe_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_bpn7f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_5pcc5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_722qw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_b1qfc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_77pek")
+}],
+"loop": 0,
+"name": &"claw_swipe_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("11_draun")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_qnn1u")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_3682d")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ghms1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_fmr8c")
+}],
+"loop": 0,
+"name": &"claw_swipe_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_jxtys")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_hxd24")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_bsfi3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_q3e6p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_2dsc0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_lu05x")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("22_jvjbg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_rytiw")
+}],
+"loop": 0,
+"name": &"fin_bite_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_lpol1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_3l6xu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_dyovy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_52704")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_mintx")
+}],
+"loop": 0,
+"name": &"fin_bite_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_ii4ho")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_f0cmj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_j56u3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_4565k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("33_uvtcw")
+}],
+"loop": 0,
+"name": &"fin_bite_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("34_7g87x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_qw137")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_hot7v")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_02wxi")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_n2onm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_2t64g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_na7yc")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_78i8m")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_5aw1u")
+}],
+"loop": 0,
+"name": &"light_hit",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_2ywn5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_3ylvh")
+}],
+"loop": 0,
+"name": &"mire_lunge_active",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_otjxt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_bvt6g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_j7axo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_rqjnm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_pfjps")
+}],
+"loop": 0,
+"name": &"mire_lunge_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("50_s6nj0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_x25tv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_ajj5g")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_gneaw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_16nfx")
+}],
+"loop": 0,
+"name": &"mire_lunge_windup",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("55_riy2h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_s42qu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_1imtn")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_ltkpx")
+}],
+"loop": 0,
+"name": &"stagger",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_ffqbm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_mjvbg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_1nugw")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("62_455yx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_yleu7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_uxp1k")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_snu31")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_1wsyu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_30b6k")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 8.0
+}]
