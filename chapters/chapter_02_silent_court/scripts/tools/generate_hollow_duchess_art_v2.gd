@@ -1,6 +1,6 @@
 extends SceneTree
 
-## Deterministic 96x96 production-art generator for the Hollow Duchess Stage 2 rework.
+## Deterministic 192x192 production-art generator for the Hollow Duchess Stage 2 rework.
 ## Gameplay timings and attack names remain stable while presentation families expand.
 
 const ROOT: String = "res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess"
@@ -9,7 +9,9 @@ const PHASE_2_ROOT: String = ROOT + "/phase_02_unmasked"
 const TRANSITION_ROOT: String = ROOT + "/phase_transition"
 const EFFECTS_ROOT: String = ROOT + "/effects"
 const ANIMATIONS_ROOT: String = ROOT + "/animations"
-const FRAME_SIZE: int = 96
+const FRAME_SIZE: int = 192
+const LEGACY_SIZE: int = 96
+const ART_OFFSET: Vector2i = Vector2i(48, 48)
 const CLEAR: Color = Color(0.0, 0.0, 0.0, 0.0)
 const OUTLINE: Color = Color("08070d")
 const VOID: Color = Color("0b0710")
@@ -123,7 +125,16 @@ func _write_transition_set() -> int:
 
 
 func _draw_character_frame(animation: StringName, frame: int, count: int, phase_2: bool) -> Image:
+	var legacy: Image = _draw_character_frame_legacy(animation, frame, count, phase_2)
 	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_replication_details(image, animation, frame, phase_2)
+	return image
+
+
+func _draw_character_frame_legacy(animation: StringName, frame: int, count: int, phase_2: bool) -> Image:
+	var image: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(CLEAR)
 	if animation in [&"death", &"death_start", &"death_mask_shatter", &"death_collapse", &"death_dissolve"]:
 		_draw_death(image, animation, frame, count, phase_2)
@@ -134,6 +145,32 @@ func _draw_character_frame(animation: StringName, frame: int, count: int, phase_
 	else:
 		_draw_phase_1(image, pose, animation, frame, count)
 	return image
+
+
+func _draw_replication_details(image: Image, animation: StringName, frame: int, phase_2: bool) -> void:
+	if String(animation).contains("death") and frame >= 4:
+		return
+	var o: Vector2i = ART_OFFSET
+	if not phase_2:
+		# Porcelain court mask, widow crown, necklace and embroidered ballroom bodice.
+		_draw_segment(image, o + Vector2i(39, 20), o + Vector2i(51, 20), 1, PORCELAIN)
+		_draw_segment(image, o + Vector2i(45, 21), o + Vector2i(45, 29), 1, PORCELAIN_SHADE)
+		for crown_point: int in range(5):
+			var crown_x: int = o.x + 35 + crown_point * 5
+			_draw_segment(image, Vector2i(crown_x, o.y + 13), Vector2i(crown_x + 2, o.y + 7 + abs(crown_point - 2) * 2), 2, OLD_GOLD)
+		for jewel: int in range(4):
+			_pixel(image, o.x + 38 + jewel * 5, o.y + 38 + (jewel % 2), GOLD_LIT)
+		_draw_segment(image, o + Vector2i(40, 44), o + Vector2i(45, 69), 2, OXBLOOD_LIT)
+	else:
+		# Broken mask, exposed hollow face, spinal fan and torn ceremonial train.
+		_draw_segment(image, o + Vector2i(37, 20), o + Vector2i(47, 27), 2, PORCELAIN_SHADE)
+		_draw_segment(image, o + Vector2i(48, 18), o + Vector2i(54, 29), 1, DULL_CRIMSON)
+		_pixel(image, o.x + 43, o.y + 23, COLD_LIGHT)
+		_pixel(image, o.x + 49, o.y + 25, COLD_LIGHT)
+		for rib: int in range(5):
+			_draw_segment(image, o + Vector2i(43, 39), o + Vector2i(16 + rib * 14, 20 + (rib % 2) * 6), 2, BONE_SHADE)
+		_draw_segment(image, o + Vector2i(28, 71), o + Vector2i(18, 86), 2, OXBLOOD)
+		_draw_segment(image, o + Vector2i(61, 70), o + Vector2i(75, 86), 2, OXBLOOD)
 
 
 func _pose(animation: StringName, frame: int, count: int, phase_2: bool) -> Dictionary:
@@ -459,7 +496,16 @@ func _draw_phase_fx(image: Image, animation: StringName, frame: int, count: int,
 
 
 func _draw_transition_frame(animation: StringName, frame: int, progress: float) -> Image:
+	var legacy: Image = _draw_transition_frame_legacy(animation, frame, progress)
 	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_replication_details(image, animation, frame, progress >= 0.54)
+	return image
+
+
+func _draw_transition_frame_legacy(animation: StringName, frame: int, progress: float) -> Image:
+	var image: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(CLEAR)
 	if progress < 0.54:
 		var pose: Dictionary = {&"x": 45, &"top": 9, &"lean": roundi(progress * 5.0), &"stride": 0, &"progress": progress}

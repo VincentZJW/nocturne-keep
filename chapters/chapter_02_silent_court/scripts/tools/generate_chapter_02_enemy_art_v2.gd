@@ -2,12 +2,14 @@ extends SceneTree
 
 ## Chapter II Stage 1 formal enemy-art generator.
 ##
-## Every runtime frame is authored on a native 64x64 canvas with role-specific
-## anatomy, costume, weapon and reaction language.  Compatibility animation names
-## remain available for the existing gameplay scripts while the expanded families
-## document the production-ready presentation contract.
+## Every runtime frame is delivered on a native 128x128 production canvas.  The
+## approved 64x64 motion silhouettes remain centered for compatibility, while a
+## role-specific replication pass restores the concept-art identity at runtime.
 
 const ROOT: String = "res://chapters/chapter_02_silent_court/assets/enemies"
+const FRAME_SIZE: int = 128
+const LEGACY_SIZE: int = 64
+const ART_OFFSET: Vector2i = Vector2i(32, 32)
 const CLEAR: Color = Color(0.0, 0.0, 0.0, 0.0)
 const VOID: Color = Color("090b12")
 const OUTLINE: Color = Color("11141d")
@@ -108,17 +110,63 @@ func _initialize() -> void:
 
 
 func _draw_frame(role: String, animation: String, frame: int, count: int) -> Image:
-	var image: Image = Image.create(64, 64, false, Image.FORMAT_RGBA8)
-	image.fill(CLEAR)
+	var legacy: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
+	legacy.fill(CLEAR)
 	var phase: float = float(frame) / float(maxi(1, count - 1))
 	var stage: String = _stage(animation, phase)
 	match role:
-		"hollow_retainer": _draw_retainer(image, animation, stage, frame, phase)
-		"court_halberdier": _draw_halberdier(image, animation, stage, frame, phase)
-		"mourning_armor": _draw_mourning_armor(image, animation, stage, frame, phase)
-		"blood_candle_acolyte": _draw_acolyte(image, animation, stage, frame, phase)
-		"hanging_stalker": _draw_stalker(image, animation, stage, frame, phase)
+		"hollow_retainer": _draw_retainer(legacy, animation, stage, frame, phase)
+		"court_halberdier": _draw_halberdier(legacy, animation, stage, frame, phase)
+		"mourning_armor": _draw_mourning_armor(legacy, animation, stage, frame, phase)
+		"blood_candle_acolyte": _draw_acolyte(legacy, animation, stage, frame, phase)
+		"hanging_stalker": _draw_stalker(legacy, animation, stage, frame, phase)
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_replication_details(image, role, animation, stage, frame)
 	return image
+
+
+func _draw_replication_details(image: Image, role: String, animation: String, stage: String, frame: int) -> void:
+	if stage == "death" and frame >= 4:
+		return
+	var o: Vector2i = ART_OFFSET
+	match role:
+		"hollow_retainer":
+			# Porcelain half-mask seam, chamberlain chain and wine-red service sash.
+			_segment(image, o + Vector2i(24, 15), o + Vector2i(34, 15), 1, IVORY)
+			_segment(image, o + Vector2i(29, 16), o + Vector2i(29, 23), 1, IVORY_SHADOW)
+			for link: int in range(5):
+				_pixel(image, o.x + 23 + link * 3, o.y + 31 + (link % 2), GOLD_LIT)
+			_segment(image, o + Vector2i(21, 34), o + Vector2i(35, 43), 2, WINE_LIT)
+		"court_halberdier":
+			# Tall court crest, layered gorget and oath pennon distinguish the reach unit.
+			_poly(image, _pts([o.x+25,o.y+7, o.x+30,o.y+1, o.x+35,o.y+7, o.x+32,o.y+13, o.x+27,o.y+13]), IRON)
+			_segment(image, o + Vector2i(21, 23), o + Vector2i(39, 23), 2, STEEL)
+			_poly(image, _pts([o.x+47,o.y+12, o.x+59,o.y+17, o.x+49,o.y+24]), WINE)
+			_pixel(image, o.x + 30, o.y + 11, SOUL_LIT)
+		"mourning_armor":
+			# Empty visor glow, funeral ribbons and layered plate rivets.
+			_segment(image, o + Vector2i(23, 18), o + Vector2i(38, 18), 2, OUTLINE)
+			_segment(image, o + Vector2i(26, 18), o + Vector2i(35, 18), 1, SOUL_LIT)
+			for rivet: int in range(4):
+				_pixel(image, o.x + 22 + rivet * 6, o.y + 31, STEEL_LIT)
+			_segment(image, o + Vector2i(19, 35), o + Vector2i(15, 53), 2, WINE)
+			_segment(image, o + Vector2i(41, 35), o + Vector2i(45, 52), 2, WINE)
+		"blood_candle_acolyte":
+			# Wax crown, prayer stole and a readable blood-candle drip pattern.
+			for wick: int in range(3):
+				_rect(image, o.x + 24 + wick * 5, o.y + 5 - (wick % 2) * 2, 2, 7, WAX)
+				_pixel(image, o.x + 25 + wick * 5, o.y + 3 - (wick % 2) * 2, EMBER)
+			_segment(image, o + Vector2i(27, 27), o + Vector2i(24, 48), 2, GOLD)
+			_segment(image, o + Vector2i(33, 27), o + Vector2i(36, 48), 2, GOLD)
+		"hanging_stalker":
+			# Hook silhouette, exposed ribs and curse seam remain legible upside-down.
+			for rib: int in range(4):
+				_segment(image, o + Vector2i(25, 25 + rib * 4), o + Vector2i(37, 25 + rib * 4), 1, IVORY_SHADOW)
+			_segment(image, o + Vector2i(18, 23), o + Vector2i(12, 13), 2, STEEL)
+			_segment(image, o + Vector2i(42, 23), o + Vector2i(49, 13), 2, STEEL)
+			_pixel(image, o.x + 30, o.y + 16, SOUL_LIT)
 
 
 func _stage(animation: String, phase: float) -> String:

@@ -1,0 +1,2 @@
+# Archived pre-replication PNGs are retained for visual comparison only.
+# Godot must not import or expose these files as runtime assets.
