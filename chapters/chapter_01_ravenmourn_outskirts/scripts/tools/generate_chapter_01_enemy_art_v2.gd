@@ -36,6 +36,10 @@ const STONE: Color = Color("465158")
 const STONE_LIT: Color = Color("7b8989")
 const MOSS: Color = Color("536148")
 const SHADOW_ALPHA: Color = Color(0.08, 0.10, 0.14, 0.55)
+const ENEMY_FRAME_SIZE: int = 128
+const ENEMY_LEGACY_SIZE: int = 64
+const BOSS_FRAME_SIZE: int = 192
+const BOSS_LEGACY_SIZE: int = 96
 
 const ROLES: Array[String] = [
 	"castle_guard",
@@ -76,7 +80,8 @@ const ANIMATIONS: Dictionary = {
 func _initialize() -> void:
 	var total: int = 0
 	for role: String in ROLES:
-		var size: int = 96 if role == "fallen_gate_knight" else 64
+		var size: int = BOSS_FRAME_SIZE if role == "fallen_gate_knight" else ENEMY_FRAME_SIZE
+		var legacy_size: int = BOSS_LEGACY_SIZE if role == "fallen_gate_knight" else ENEMY_LEGACY_SIZE
 		var definitions: Dictionary = ANIMATIONS[role] as Dictionary
 		for animation: String in definitions:
 			var count: int = int(definitions[animation])
@@ -86,14 +91,14 @@ func _initialize() -> void:
 				quit(1)
 				return
 			for frame: int in range(count):
-				var image: Image = _draw_frame(role, animation, frame, count, size)
+				var image: Image = _draw_frame(role, animation, frame, count, legacy_size, size)
 				var output: String = "%s/%s_%02d.png" % [directory, animation, frame + 1]
 				if image.save_png(ProjectSettings.globalize_path(output)) != OK:
 					push_error("Cannot save Chapter I formal frame: %s" % output)
 					quit(1)
 					return
 				total += 1
-		_write_role_references(role, size)
+		_write_role_references(role, legacy_size, size)
 	_write_shield_effects()
 	_write_boss_shield_overlays()
 	print("CH1 ENEMY ART V2 | PASS roles=%d frames=%d" % [ROLES.size(), total])
@@ -106,18 +111,79 @@ func _sprite_root(role: String) -> String:
 	return ROOT + "/enemies/" + role + "/sprites"
 
 
-func _draw_frame(role: String, animation: String, frame: int, count: int, size: int) -> Image:
-	var image: Image = Image.create(size, size, false, Image.FORMAT_RGBA8)
-	image.fill(CLEAR)
+func _draw_frame(role: String, animation: String, frame: int, count: int, legacy_size: int, output_size: int) -> Image:
+	var legacy: Image = Image.create(legacy_size, legacy_size, false, Image.FORMAT_RGBA8)
+	legacy.fill(CLEAR)
 	var phase: float = float(frame) / float(maxi(1, count - 1))
 	match role:
-		"castle_guard": _draw_castle_guard(image, animation, frame, phase)
-		"cursed_shield_guard": _draw_shield_guard(image, animation, frame, phase)
-		"decayed_spearman": _draw_spearman(image, animation, frame, phase)
-		"fallen_crossbowman": _draw_crossbowman(image, animation, frame, phase)
-		"gargoyle_sentinel": _draw_gargoyle(image, animation, frame, phase)
-		"fallen_gate_knight": _draw_gate_knight(image, animation, frame, phase)
+		"castle_guard": _draw_castle_guard(legacy, animation, frame, phase)
+		"cursed_shield_guard": _draw_shield_guard(legacy, animation, frame, phase)
+		"decayed_spearman": _draw_spearman(legacy, animation, frame, phase)
+		"fallen_crossbowman": _draw_crossbowman(legacy, animation, frame, phase)
+		"gargoyle_sentinel": _draw_gargoyle(legacy, animation, frame, phase)
+		"fallen_gate_knight": _draw_gate_knight(legacy, animation, frame, phase)
+	var image: Image = Image.create(output_size, output_size, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	var offset: Vector2i = Vector2i((output_size - legacy_size) / 2, (output_size - legacy_size) / 2)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, Vector2i(legacy_size, legacy_size)), offset)
+	_draw_replication_details(image, role, animation, frame, phase, offset)
 	return image
+
+
+func _draw_replication_details(img: Image, role: String, animation: String, frame: int, phase: float, offset: Vector2i) -> void:
+	if animation.contains("death"):
+		return
+	var ox: int = offset.x
+	var oy: int = offset.y
+	match role:
+		"castle_guard":
+			# Raven-visored patrol helm, layered gorget and royal service studs.
+			_poly(img, _pts([ox+25,oy+8,ox+30,oy+1,ox+35,oy+8,ox+33,oy+11,ox+27,oy+11]), OUTLINE)
+			_poly(img, _pts([ox+27,oy+8,ox+30,oy+4,ox+33,oy+8,ox+31,oy+9,ox+28,oy+9]), IRON_LIT)
+			for rivet: int in range(4): _ellipse(img, Vector2i(ox+24+rivet*4,oy+31), 1, 1, GOLD)
+			_draw_segment(img, Vector2i(ox+26,oy+38), Vector2i(ox+34,oy+38), 1, RUST_LIT)
+		"cursed_shield_guard":
+			var unshielded: bool = animation.contains("unshielded") or animation == "guard_break"
+			if not unshielded:
+				# Beaked Ravenmourn ward crest and permanent shield construction marks.
+				_poly(img, _pts([ox+12,oy+26,ox+19,oy+21,ox+25,oy+26,ox+19,oy+31]), RUST_LIT)
+				_draw_segment(img, Vector2i(ox+14,oy+19), Vector2i(ox+24,oy+19), 2, GOLD)
+				for rivet: Vector2i in [Vector2i(13,15),Vector2i(25,15),Vector2i(13,46),Vector2i(25,46)]: _ellipse(img, offset+rivet,1,1,STEEL)
+			else:
+				# Broken harness remains visible so the permanent state change reads at 48px.
+				_draw_segment(img, Vector2i(ox+20,oy+25), Vector2i(ox+34,oy+40), 2, LEATHER_LIT)
+				_draw_segment(img, Vector2i(ox+20,oy+40), Vector2i(ox+34,oy+25), 2, LEATHER)
+		"decayed_spearman":
+			# Nasal helm, mail rows and a hooked oath pennon separate him from the guard.
+			_draw_segment(img, Vector2i(ox+30,oy+8), Vector2i(ox+30,oy+18), 2, STEEL)
+			for row: int in range(4):
+				for link: int in range(3): _pixel(img, ox+25+link*4+(row%2)*2, oy+24+row*4, IRON_LIT)
+			_poly(img, _pts([ox+39,oy+20,ox+46,oy+23,ox+40,oy+27]), WINE)
+		"fallen_crossbowman":
+			# Quarrel fletching, hood seam and belt tools remain readable during aim/reload.
+			_draw_segment(img, Vector2i(ox+26,oy+9), Vector2i(ox+34,oy+14), 1, CLOTH_LIT)
+			for bolt: int in range(3): _draw_segment(img, Vector2i(ox+18+bolt*3,oy+27), Vector2i(ox+16+bolt*3,oy+20), 1, STEEL)
+			_ellipse(img, Vector2i(ox+27,oy+37), 2, 2, GOLD)
+		"gargoyle_sentinel":
+			# Chiselled chapel runes and cold soul seams preserve a carved-stone identity.
+			_draw_segment(img, Vector2i(ox+27,oy+19), Vector2i(ox+31,oy+25), 1, MOON_BLUE)
+			_draw_segment(img, Vector2i(ox+31,oy+25), Vector2i(ox+35,oy+18), 1, MOON_LIT)
+			for chip: Vector2i in [Vector2i(19,31),Vector2i(42,30),Vector2i(25,44),Vector2i(38,46)]: _pixel(img,ox+chip.x,oy+chip.y,STONE_LIT)
+		"fallen_gate_knight":
+			var phase_two: bool = animation.contains("unshielded") or animation in ["phase_transition","charge_thrust","combo_slash_1","combo_slash_2","heavy_overhead","jump_smash","shockwave_strike"]
+			# Crowned gate helm, layered cuirass and oath-chain survive every combat pose.
+			_poly(img,_pts([ox+42,oy+16,ox+48,oy+6,ox+54,oy+16,ox+52,oy+20,ox+44,oy+20]),OUTLINE)
+			_poly(img,_pts([ox+44,oy+16,ox+48,oy+10,ox+52,oy+16,ox+50,oy+18,ox+46,oy+18]),GOLD)
+			_draw_segment(img,Vector2i(ox+39,oy+46),Vector2i(ox+57,oy+46),2,IRON_LIT)
+			for clasp: int in range(5): _ellipse(img,Vector2i(ox+40+clasp*4,oy+52),1,1,GOLD)
+			if phase_two:
+				# Exposed cursed left arm and brighter soul fissure make Phase II structural.
+				_draw_segment(img,Vector2i(ox+37,oy+35),Vector2i(ox+30,oy+56),4,IRON_DARK)
+				_draw_segment(img,Vector2i(ox+36,oy+38),Vector2i(ox+31,oy+54),1,MOON_LIT)
+			else:
+				# Shield face receives the gate sigil rather than a featureless slab.
+				_poly(img,_pts([ox+23,oy+36,ox+31,oy+29,ox+39,oy+36,ox+31,oy+43]),GOLD)
+				_poly(img,_pts([ox+27,oy+36,ox+31,oy+32,ox+35,oy+36,ox+31,oy+39]),WINE)
 
 
 # -- Castle Guard -----------------------------------------------------------
@@ -690,7 +756,7 @@ func _write_boss_shield_overlays() -> void:
 		overlay.save_png(ProjectSettings.globalize_path("%s/shield_%s_overlay.png" % [fx_root,state]))
 
 
-func _write_role_references(role: String, size: int) -> void:
+func _write_role_references(role: String, legacy_size: int, size: int) -> void:
 	var base: String=ROOT+("/boss/" if role=="fallen_gate_knight" else "/enemies/")+role
 	var concept_root: String=base+"/concept_art"
 	var effect_root: String=base+"/effects"
@@ -702,14 +768,14 @@ func _write_role_references(role: String, size: int) -> void:
 	var action_count: int=int((ANIMATIONS[role] as Dictionary)[action_name])
 	var action_frame: int=maxi(0,action_count/2)
 	var action_reference: Image=Image.create(size*3,size,false,Image.FORMAT_RGBA8); action_reference.fill(CLEAR)
-	action_reference.blit_rect(_draw_frame(role,idle_name,0,idle_count,size),Rect2i(0,0,size,size),Vector2i(0,0))
-	action_reference.blit_rect(_draw_frame(role,action_name,action_frame,action_count,size),Rect2i(0,0,size,size),Vector2i(size,0))
+	action_reference.blit_rect(_draw_frame(role,idle_name,0,idle_count,legacy_size,size),Rect2i(0,0,size,size),Vector2i(0,0))
+	action_reference.blit_rect(_draw_frame(role,action_name,action_frame,action_count,legacy_size,size),Rect2i(0,0,size,size),Vector2i(size,0))
 	var hurt_name: String="hurt_shielded" if role=="fallen_gate_knight" else "hurt"
 	var hurt_count: int=int((ANIMATIONS[role] as Dictionary)[hurt_name])
-	action_reference.blit_rect(_draw_frame(role,hurt_name,0,hurt_count,size),Rect2i(0,0,size,size),Vector2i(size*2,0))
+	action_reference.blit_rect(_draw_frame(role,hurt_name,0,hurt_count,legacy_size,size),Rect2i(0,0,size,size),Vector2i(size*2,0))
 	action_reference.save_png(ProjectSettings.globalize_path("%s/%s_action_reference.png" % [concept_root,role]))
 	var silhouette: Image=Image.create(256,256,false,Image.FORMAT_RGBA8); silhouette.fill(CLEAR)
-	var idle: Image=_draw_frame(role,idle_name,0,idle_count,size)
+	var idle: Image=_draw_frame(role,idle_name,0,idle_count,legacy_size,size)
 	var black: Image=idle.duplicate()
 	for py: int in range(size):
 		for px: int in range(size):
@@ -717,7 +783,7 @@ func _write_role_references(role: String, size: int) -> void:
 	black.resize(size*3,size*3,Image.INTERPOLATE_NEAREST)
 	silhouette.blit_rect(black,Rect2i(0,0,black.get_width(),black.get_height()),Vector2i((256-black.get_width())/2,(256-black.get_height())/2))
 	silhouette.save_png(ProjectSettings.globalize_path("%s/%s_silhouette.png" % [concept_root,role]))
-	var effect: Image=Image.create(96 if size==64 else 144,48 if size==64 else 72,false,Image.FORMAT_RGBA8); effect.fill(CLEAR)
+	var effect: Image=Image.create(144 if role!="fallen_gate_knight" else 216,72 if role!="fallen_gate_knight" else 108,false,Image.FORMAT_RGBA8); effect.fill(CLEAR)
 	match role:
 		"castle_guard": _draw_impact(effect,Vector2i(45,28),1)
 		"cursed_shield_guard": _draw_shield_fragments(effect,Vector2i(46,27),3)
