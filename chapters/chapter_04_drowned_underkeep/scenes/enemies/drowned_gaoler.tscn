@@ -425,7 +425,7 @@ enemy_type = &"DrownedGaoler"
 coin_min = 3
 coin_max = 6
 
-[node name="DrownedGaoler" type="CharacterBody2D" unique_id=990906391]
+[node name="DrownedGaoler" type="CharacterBody2D" unique_id=283033657]
 z_index = 10
 collision_layer = 4
 collision_mask = 3
@@ -434,39 +434,39 @@ script = ExtResource("1_hkimd")
 projectile_scene = ExtResource("2_xtcjg")
 config = SubResource("Resource_doqbv")
 
-[node name="VisualRoot" type="Node2D" parent="." unique_id=536073116]
+[node name="VisualRoot" type="Node2D" parent="." unique_id=443300673]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1174732077]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=448620616]
 texture_filter = 1
 position = Vector2(0, -38)
 sprite_frames = SubResource("SpriteFrames_1r4c4")
 animation = &"idle"
 autoplay = "idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1856795293]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=727800128]
 position = Vector2(0, -30)
 shape = SubResource("RectangleShape2D_c2loo")
 
-[node name="HealthComponent" type="Node" parent="." unique_id=972281988]
+[node name="HealthComponent" type="Node" parent="." unique_id=1545141179]
 script = ExtResource("71_lwe4y")
 
-[node name="PoiseComponent" type="Node" parent="." unique_id=992925278]
+[node name="PoiseComponent" type="Node" parent="." unique_id=1380511535]
 script = ExtResource("72_68fhn")
 max_poise = 44
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=1236025878]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=2081274843]
 collision_layer = 16
 collision_mask = 32
 script = ExtResource("73_bvdnh")
 faction = &"enemy"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=291505297]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=2002445078]
 position = Vector2(0, -30)
 shape = SubResource("RectangleShape2D_hu7c6")
 
-[node name="FacingRoot" type="Node2D" parent="." unique_id=1277090770]
+[node name="FacingRoot" type="Node2D" parent="." unique_id=510994181]
 
-[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=208227714]
+[node name="PrimaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1115474116]
 position = Vector2(42, -29)
 collision_layer = 64
 collision_mask = 8
@@ -475,11 +475,11 @@ monitorable = false
 script = ExtResource("74_61b8q")
 faction = &"enemy"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=1167371861]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/PrimaryHitbox" unique_id=636786844]
 shape = SubResource("RectangleShape2D_upwef")
 disabled = true
 
-[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=374832907]
+[node name="SecondaryHitbox" type="Area2D" parent="FacingRoot" unique_id=1789002124]
 position = Vector2(55, -28)
 collision_layer = 64
 collision_mask = 8
@@ -488,27 +488,27 @@ monitorable = false
 script = ExtResource("74_61b8q")
 faction = &"enemy"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=306006330]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/SecondaryHitbox" unique_id=2085113108]
 shape = SubResource("RectangleShape2D_q5b5l")
 disabled = true
 
-[node name="DetectionArea" type="Area2D" parent="." unique_id=1588167723]
+[node name="DetectionArea" type="Area2D" parent="." unique_id=1477870722]
 collision_layer = 128
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1196022080]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1134868106]
 shape = SubResource("CircleShape2D_ij5nk")
 
-[node name="WallCheck" type="RayCast2D" parent="." unique_id=1821638519]
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=17825039]
 position = Vector2(0, -22)
 target_position = Vector2(-28, 0)
 
-[node name="FloorCheck" type="RayCast2D" parent="." unique_id=1760291691]
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=1974607049]
 position = Vector2(-24, -4)
 target_position = Vector2(0, 34)
 
-[node name="LootDropComponent" type="Node" parent="." unique_id=758158132]
+[node name="LootDropComponent" type="Node" parent="." unique_id=934533678]
 script = ExtResource("75_gujah")
 profile = SubResource("Resource_reh03")
 dynamic_profile = ExtResource("77_5f260")

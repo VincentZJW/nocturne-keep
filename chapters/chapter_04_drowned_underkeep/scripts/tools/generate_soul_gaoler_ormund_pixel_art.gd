@@ -143,11 +143,89 @@ func _draw_ormund(img: Image, p2: bool, animation: String, stage: String, frame:
 		_segment(img, Vector2i(x-24,y+51), rear_hand, 17, OUTLINE); _segment(img, Vector2i(x-24,y+51), rear_hand, 9, IRON)
 	_segment(img, Vector2i(x+23,y+52), front_hand, 17, OUTLINE); _segment(img, Vector2i(x+23,y+52), front_hand, 9, IRON_LIT)
 	_draw_key_halberd(img, rear_hand if p2 else front_hand, tip, p2)
+	_draw_ormund_replication_details(img, p2, x, y, stage, t)
 	if stage == "transition":
 		for spark: int in range(9):
 			var a: float = float(spark) * TAU / 9.0
 			var radius: float = 35.0 + 50.0 * t
 			_ellipse(img, Vector2i(x+roundi(cos(a)*radius),y+64+roundi(sin(a)*radius)), 2, 2, SOUL_LIT)
+
+
+func _draw_ormund_replication_details(img: Image, p2: bool, x: int, y: int, stage: String, t: float) -> void:
+	# Both phases retain the concept's layered funeral plate, rivets, chains and keys.
+	for layer: int in range(4):
+		var ly: int = y + 30 + layer * 8
+		_segment(img, Vector2i(x-39-layer*2,ly), Vector2i(x-20,ly+5), 5, OUTLINE)
+		_segment(img, Vector2i(x-37-layer*2,ly), Vector2i(x-21,ly+4), 2, RUST if layer%2 else IRON_LIT)
+		_segment(img, Vector2i(x+19,ly+4), Vector2i(x+40+layer*2,ly-1), 5, OUTLINE)
+		_segment(img, Vector2i(x+21,ly+3), Vector2i(x+38+layer*2,ly), 2, IRON_LIT if layer%2 else RUST)
+	for rivet_x: int in range(-31, 33, 8):
+		_ellipse(img, Vector2i(x+rivet_x,y+42), 2, 2, STEEL)
+	_chain_curve_boss(img, Vector2i(x-34,y+50), Vector2i(x,y+88), Vector2i(x+35,y+48), GOLD)
+	_draw_boss_key_ring(img, Vector2i(x-29,y+115))
+	_draw_boss_key_ring(img, Vector2i(x+24,y+120))
+	if not p2:
+		# Phase I: a large sealed reliquary dominates the torso, with trapped souls behind bars.
+		_poly(img, _pts([x-27,y+43,x-22,y+34,x+24,y+33,x+30,y+43,x+27,y+102,x+19,y+111,x-21,y+110,x-29,y+101]), OUTLINE)
+		_poly(img, _pts([x-22,y+46,x-18,y+39,x+20,y+38,x+25,y+45,x+22,y+98,x+16,y+105,x-17,y+104,x-23,y+97]), ABYSS)
+		for soul_index: int in range(5):
+			var sx: int = x - 13 + (soul_index % 3) * 13
+			var sy: int = y + 57 + (soul_index / 3) * 25
+			_ellipse(img, Vector2i(sx,sy), 5, 7, SOUL)
+			_ellipse(img, Vector2i(sx,sy-2), 2, 2, SOUL_LIT)
+		for bar: int in range(7): _segment(img,Vector2i(x-20+bar*7,y+39),Vector2i(x-20+bar*7,y+104),3,IRON_LIT)
+		for rung: int in range(4): _segment(img,Vector2i(x-22,y+45+rung*18),Vector2i(x+24,y+45+rung*18),3,RUST_LIT)
+		_rect(img,Rect2i(x-7,y+65,16,20),IRON); _ellipse(img,Vector2i(x+1,y+75),3,4,GOLD)
+		# Crown spikes must remain readable at gameplay scale.
+		for crown: int in range(6):
+			var cx: int=x-16+crown*6
+			_poly(img,_pts([cx,y+7,cx+3,y-13-(crown%2)*5,cx+6,y+7]),OUTLINE)
+			_poly(img,_pts([cx+2,y+5,cx+3,y-8-(crown%2)*4,cx+4,y+5]),IRON_LIT)
+	else:
+		# Phase II: the cage has burst into a rib halo; the exposed soul is long and cadaverous.
+		for rib: int in range(8):
+			var side: int = -1 if rib < 4 else 1
+			var local: int = rib if rib < 4 else rib-4
+			var root := Vector2i(x+side*(18+local*4),y+58+local*8)
+			var tip := Vector2i(x+side*(48+local*9),y+16+local*7)
+			_segment(img,root,tip,6,OUTLINE)
+			_segment(img,root,tip,3,IRON_LIT if local%2==0 else RUST_LIT)
+			_poly(img,_pts([tip.x-3,tip.y+3,tip.x,tip.y-9,tip.x+3,tip.y+3]),STEEL)
+		_chain_curve_boss(img,Vector2i(x-51,y+41),Vector2i(x-69,y+89),Vector2i(x-47,y+129),IRON_LIT)
+		_chain_curve_boss(img,Vector2i(x+51,y+39),Vector2i(x+74,y+84),Vector2i(x+52,y+133),IRON_LIT)
+		# Spectral skull and leaking veil replace the closed visor.
+		_poly(img,_pts([x-13,y+3,x-7,y-9,x+7,y-10,x+15,y+3,x+10,y+24,x+5,y+38,x-4,y+40,x-10,y+25]),OUTLINE)
+		_poly(img,_pts([x-9,y+3,x-5,y-5,x+5,y-6,x+10,y+3,x+6,y+21,x+3,y+34,x-2,y+35,x-6,y+21]),SOUL)
+		_ellipse(img,Vector2i(x-4,y+7),3,3,ABYSS); _ellipse(img,Vector2i(x+5,y+7),3,3,ABYSS)
+		_segment(img,Vector2i(x-4,y+18),Vector2i(x+5,y+18),2,SOUL_LIT)
+		for leak: int in range(5): _segment(img,Vector2i(x-8+leak*4,y+28),Vector2i(x-11+leak*5,y+45+(leak%2)*8),2,SOUL)
+		# The off arm is fused into a visible cage-blade rather than merely losing its shield.
+		_poly(img,_pts([x+31,y+66,x+52,y+59,x+67,y+70,x+58,y+91,x+36,y+94]),OUTLINE)
+		_poly(img,_pts([x+36,y+69,x+51,y+64,x+61,y+71,x+54,y+86,x+39,y+88]),IRON)
+		for cage_bar: int in range(4): _segment(img,Vector2i(x+40+cage_bar*5,y+67),Vector2i(x+42+cage_bar*5,y+88),2,SOUL_LIT)
+	if stage == "transition":
+		# Permanent cage fragments sell the actual structural transformation.
+		for shard: int in range(12):
+			var angle: float = TAU * float(shard) / 12.0
+			var distance: float = 28.0 + t * 60.0
+			var sp := Vector2i(x+roundi(cos(angle)*distance),y+66+roundi(sin(angle)*distance))
+			_poly(img,_pts([sp.x-3,sp.y-4,sp.x+4,sp.y-1,sp.x,sp.y+5]),IRON_LIT if shard%3 else SOUL)
+
+
+func _chain_curve_boss(img: Image, start: Vector2i, control: Vector2i, finish: Vector2i, color: Color) -> void:
+	for i: int in range(24):
+		var t: float=float(i)/23.0
+		var inv: float=1.0-t
+		var point:=Vector2i(roundi(inv*inv*start.x+2.0*inv*t*control.x+t*t*finish.x),roundi(inv*inv*start.y+2.0*inv*t*control.y+t*t*finish.y))
+		_ellipse(img,point,2,1,color)
+
+
+func _draw_boss_key_ring(img: Image, center: Vector2i) -> void:
+	_ellipse(img,center,8,8,OUTLINE); _ellipse(img,center,5,5,GOLD); _ellipse(img,center,2,2,CLEAR)
+	for index: int in range(4):
+		var key_x: int=center.x-6+index*4
+		_segment(img,Vector2i(key_x,center.y+7),Vector2i(key_x,center.y+20+index%2*4),3,GOLD)
+		_segment(img,Vector2i(key_x,center.y+18+index%2*4),Vector2i(key_x+5,center.y+18+index%2*4),2,GOLD)
 
 
 func _draw_key_halberd(img: Image, grip: Vector2i, tip: Vector2i, p2: bool) -> void:
@@ -160,6 +238,14 @@ func _draw_key_halberd(img: Image, grip: Vector2i, tip: Vector2i, p2: bool) -> v
 	var b := Vector2i(base - normal * 16.0)
 	_poly(img, PackedVector2Array([Vector2(tip)+direction*7.0, Vector2(a), base-direction*10.0, Vector2(b)]), OUTLINE)
 	_poly(img, PackedVector2Array([Vector2(tip)+direction*3.0, Vector2(base+normal*11.0), base-direction*5.0, Vector2(base-normal*11.0)]), STEEL)
+	# Hooked execution edge, key teeth and corroded inner channel from the equipment sheet.
+	var hook_base: Vector2 = base - direction * 4.0
+	_poly(img,PackedVector2Array([hook_base+normal*8.0,hook_base+normal*25.0-direction*5.0,hook_base+normal*19.0-direction*18.0,hook_base+normal*5.0-direction*10.0]),OUTLINE)
+	_poly(img,PackedVector2Array([hook_base+normal*10.0,hook_base+normal*20.0-direction*6.0,hook_base+normal*16.0-direction*13.0,hook_base+normal*7.0-direction*8.0]),RUST_LIT if p2 else STEEL)
+	for tooth: int in range(3):
+		var tooth_root: Vector2=Vector2(grip)-direction*(12.0+tooth*9.0)
+		_segment(img,Vector2i(tooth_root),Vector2i(tooth_root-normal*(7.0+tooth*2.0)),4,OUTLINE)
+		_segment(img,Vector2i(tooth_root),Vector2i(tooth_root-normal*(5.0+tooth*2.0)),2,GOLD)
 	_ellipse(img, grip, 7, 7, OUTLINE); _ellipse(img, grip, 4, 4, SOUL if p2 else GOLD)
 
 

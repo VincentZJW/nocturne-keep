@@ -1,5 +1,45 @@
 # Development Log
 
+## 2026-08-03 — Full remaining character 95% concept-replication program
+
+Status: complete — seven remaining Chapter IV roles and Soul Gaoler Ormund were redrawn and rebuilt; Night Warden and Candle Warden retained their already accepted formal reworks after focused 95-point regression checks
+
+### Goal, owned scope, tests, and stop point
+
+- Apply the fixed 100-point concept-replication rubric to Bog Toad, Sewer Maw, Drowned Gaoler, Chainbound Convict, Mire Harpooner, Sunken Shield Penitent, Underkeep Executioner, Soul Gaoler Ormund Phase 1/transition/Phase 2, Night Warden and Candle Warden. Every role and every required animation must score at least 95 with no critical-feature veto.
+- Use each saved final concept sheet as the single primary reference. Archive superseded runtime frames, redraw rather than upscale them, preserve formal animation names and gameplay contracts, rebuild saved SpriteFrames/PackedScene references, and prove that MainBootstrap uses the new assets.
+- Preserve HP, damage, Poise, AI, attack timing, Hitbox/Hurtbox, Player movement and narrative flow. Visual anchors may change only when required to keep the existing world baseline and must be regression-tested.
+- For each role create a role-specific replication record plus concept/Sprite, silhouette, palette, animation and Main evidence under the existing chapter/shared QA trees. Player and Candle Warden already have user-accepted high-quality reworks; they will be scored against the new rubric and redrawn only where the new gate exposes a real deficiency.
+- Run exact Godot 4.7.1 import/parse, focused runtime/reference tests, Chapter IV Main tests, Player/prologue regressions, graphical Main captures, old-reference scans and `git diff --check`. Create one meaningful isolated commit for the complete program, do not push, then stop for user review.
+- The worktree contains unrelated Chapter I, Chapter III Underkeep, README and shared balance changes predating this task. They remain user-owned and must not be overwritten or included in this program's commit.
+
+### Implementation and preserved scope
+
+- Archived the seven superseded 96px role sets and the prior Ormund runtime set under `chapters/chapter_04_drowned_underkeep/archive_legacy/character_replication_pre95/`, guarded by `.gdignore`; formal resources have zero archive references.
+- Redrew Drowned Gaoler, Chainbound Convict, Mire Harpooner, Sunken Shield Penitent, Bog Toad, Sewer Maw and Underkeep Executioner on 128x128 transparent canvases. Their 477 frames retain the established gameplay animation names, anchors, collision contracts and tuning.
+- Rebuilt the Penitent's intact/cracked/critical/broken prison-door shield states as actual structural damage rather than color shifts.
+- Redrew all 211 Ormund frames at 192x192: Phase 1 now has the sealed multi-soul reliquary, cage crown, layered funeral plate and complete key-halberd; transition ejects permanent cage fragments; Phase 2 has a new rib-cage halo, spectral skull/veil, exposed soul core and fused cage-blade arm.
+- Rebuilt and saved the eight normal/elite SpriteFrames scenes and Ormund's 47-animation runtime scene. Mirefin Raider remained on the previously accepted 128px replication set and was deliberately excluded from the bulk generator.
+- Night Warden and Candle Warden were not blindly overwritten: their accepted Stage 2/Stage 3 assets already pass the new gate (30 player animations across four chapters; 65 Candle Warden body frames and formal Prologue integration).
+- Added deterministic replication tests, evidence generators, six formal Main captures and the full weighted report at `chapters/chapter_04_drowned_underkeep/docs/character_replication_qa/remaining_character_replication_report.md`.
+
+### Actual Godot 4.7.1 verification
+
+- `Godot --headless --path . --import` — PASS.
+- Chapter IV enemy art generator — PASS (`roles=7 frames=477`).
+- Ormund art generator — PASS (`frames=211 animations=46` source definitions).
+- `test_chapter_04_enemy_runtime.gd` — PASS (`roles=8`).
+- `test_remaining_character_replication_95.gd` — PASS.
+- `test_soul_gaoler_ormund_runtime.gd` — PASS (`animations=47 hp=560`).
+- `test_chapter_04_main_integration.gd` — PASS.
+- `tests/player/test_player_stage_2_qa.gd` — PASS (`concepts=10 styles=3 animations=30 ratio=57/58 chapters=4 legacy_refs=0`).
+- `tests/narrative/test_candle_warden_stage_3.gd` — PASS (`10 concepts, 65 body frames, lantern FX, acting cues, formal Prologue`).
+- GUI Main capture — PASS (`captures=6`); the capture process emits Metal/RID resource-leak warnings only during forced window teardown. Gameplay and deterministic Main tests report no script red errors; capture-runner cleanup is documented as a tooling issue, not hidden.
+
+### Stop point
+
+- Every remaining scoped character is implemented or revalidated, the meaningful isolated commit is prepared without unrelated dirty files, and no push is performed. Stop for the user's Main/F5 visual acceptance.
+
 ## 2026-08-03 — Chapter IV Mirefin Raider 95% concept-replication audit and rework
 
 Status: complete — Mirefin Raider scores 95.7/100 with no critical-feature veto; Main evidence and focused regression tests pass; no next role was started

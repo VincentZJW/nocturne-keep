@@ -21,10 +21,13 @@ const BOG_LIT: Color = Color("84905b")
 const SOUL: Color = Color("73b7ba")
 const SOUL_LIT: Color = Color("c2e4df")
 const GOLD: Color = Color("9a7440")
+const FRAME_SIZE: int = 128
+const LEGACY_SIZE: int = 96
+const ART_OFFSET: Vector2i = Vector2i(16, 16)
 
 const ROLES: Array[String] = [
 	"drowned_gaoler", "chainbound_convict", "mire_harpooner",
-	"sunken_shield_penitent", "mirefin_raider", "bog_toad", "sewer_maw",
+	"sunken_shield_penitent", "bog_toad", "sewer_maw",
 	"underkeep_executioner",
 ]
 
@@ -84,8 +87,8 @@ func _animation_definitions(role: String) -> Dictionary:
 
 
 func _draw_frame(role: String, animation: String, frame: int, count: int) -> Image:
-	var image: Image = Image.create(96, 96, false, Image.FORMAT_RGBA8)
-	image.fill(CLEAR)
+	var legacy: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
+	legacy.fill(CLEAR)
 	var phase: float = float(frame) / float(maxi(1, count - 1))
 	var stage: String = "base"
 	if animation.ends_with("_windup"):
@@ -106,15 +109,133 @@ func _draw_frame(role: String, animation: String, frame: int, count: int) -> Ima
 	elif animation == "walk":
 		bob = [0, -2, -1, 0, -2, -1][frame]
 	match role:
-		"drowned_gaoler": _draw_humanoid(image, role, animation, stage, frame, phase, bob, 1.0)
-		"chainbound_convict": _draw_convict(image, animation, stage, frame, phase, bob)
-		"mire_harpooner": _draw_harpooner(image, animation, stage, frame, phase, bob)
-		"sunken_shield_penitent": _draw_humanoid(image, role, animation, stage, frame, phase, bob, 1.12)
-		"mirefin_raider": _draw_raider(image, animation, stage, frame, phase, bob)
-		"bog_toad": _draw_toad(image, animation, stage, frame, phase, bob)
-		"sewer_maw": _draw_maw(image, animation, stage, frame, phase, bob)
-		"underkeep_executioner": _draw_executioner(image, animation, stage, frame, phase, bob)
+		"drowned_gaoler": _draw_humanoid(legacy, role, animation, stage, frame, phase, bob, 1.0)
+		"chainbound_convict": _draw_convict(legacy, animation, stage, frame, phase, bob)
+		"mire_harpooner": _draw_harpooner(legacy, animation, stage, frame, phase, bob)
+		"sunken_shield_penitent": _draw_humanoid(legacy, role, animation, stage, frame, phase, bob, 1.12)
+		"bog_toad": _draw_toad(legacy, animation, stage, frame, phase, bob)
+		"sewer_maw": _draw_maw(legacy, animation, stage, frame, phase, bob)
+		"underkeep_executioner": _draw_executioner(legacy, animation, stage, frame, phase, bob)
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(0, 0, LEGACY_SIZE, LEGACY_SIZE), ART_OFFSET)
+	_draw_replication_details(image, role, animation, stage, frame, phase, bob)
 	return image
+
+
+func _draw_replication_details(img: Image, role: String, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	if stage == "death":
+		return
+	match role:
+		"drowned_gaoler": _detail_gaoler(img, animation, stage, frame, phase, bob)
+		"chainbound_convict": _detail_convict(img, animation, stage, frame, phase, bob)
+		"mire_harpooner": _detail_harpooner(img, animation, stage, frame, phase, bob)
+		"sunken_shield_penitent": _detail_penitent(img, animation, stage, frame, phase, bob)
+		"bog_toad": _detail_toad(img, animation, stage, frame, phase, bob)
+		"sewer_maw": _detail_maw(img, animation, stage, frame, phase, bob)
+		"underkeep_executioner": _detail_executioner(img, animation, stage, frame, phase, bob)
+
+
+func _detail_gaoler(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	var x: int = 59 + (5 if stage == "active" else -4 if stage in ["windup", "hurt"] else 0)
+	var y: int = 29 + bob
+	# Distinct drowned prison helm, leather gorget and key-studded coat.
+	_poly(img, _pts([x-12,y+1,x-7,y-7,x+3,y-9,x+12,y-2,x+9,y+3,x-9,y+4]), OUTLINE)
+	_poly(img, _pts([x-8,y,x-5,y-4,x+2,y-6,x+8,y-1,x+6,y+1,x-7,y+2]), IRON_LIT)
+	_segment(img, Vector2i(x-8,y+23), Vector2i(x+10,y+21), 3, RUST)
+	for clasp: int in range(4):
+		_ellipse(img, Vector2i(x-7+clasp*5,y+55), 1, 1, GOLD)
+	_chain(img, Vector2i(x-12,y+62), Vector2i(x-24,y+76), STEEL)
+	_draw_key_ring(img, Vector2i(x-25,y+76))
+
+
+func _detail_convict(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	var x: int = 61 + (6 if stage == "active" else -5 if stage in ["windup", "hurt"] else 0)
+	var y: int = 24 + bob
+	# The concept's wooden punishment yoke is the primary silhouette identifier.
+	_rect(img, Rect2i(x-35,y+21,70,9), OUTLINE)
+	_rect(img, Rect2i(x-32,y+23,64,5), RUST)
+	for bolt_x: int in [x-27,x-14,x+14,x+27]: _ellipse(img, Vector2i(bolt_x,y+25), 1, 1, STEEL)
+	_segment(img, Vector2i(x-29,y+29), Vector2i(x-34,y+49), 4, IRON)
+	_segment(img, Vector2i(x+29,y+29), Vector2i(x+35,y+49), 4, IRON)
+	_chain_curve(img, Vector2i(x-30,y+47), Vector2i(x-47,y+63), Vector2i(x-39,y+83), STEEL)
+	_chain_curve(img, Vector2i(x+31,y+47), Vector2i(x+48,y+62), Vector2i(x+43,y+81), STEEL)
+
+
+func _detail_harpooner(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	var x: int = 55 + (5 if stage == "active" else -3 if stage in ["windup", "hurt"] else 0)
+	var y: int = 29 + bob
+	# Fish-bone helm crown and belt winch/rope coil.
+	for spike: int in range(5):
+		_poly(img, _pts([x-10+spike*5,y+3,x-8+spike*5,y-8-(spike%2)*3,x-5+spike*5,y+4]), BONE)
+	_ellipse(img, Vector2i(x-11,y+58), 8, 8, OUTLINE)
+	_ellipse(img, Vector2i(x-11,y+58), 5, 5, GOLD)
+	_ellipse(img, Vector2i(x-11,y+58), 2, 2, DEEP)
+	_chain_curve(img, Vector2i(x-8,y+58), Vector2i(x+16,y+72), Vector2i(x+29,y+54), IRON_LIT)
+	for patch: int in range(3): _segment(img, Vector2i(x-7,y+35+patch*7), Vector2i(x+8,y+33+patch*7), 1, SOUL)
+
+
+func _detail_penitent(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	var x: int = 59 + (5 if stage == "active" else -4 if stage in ["windup", "hurt"] else 0)
+	var y: int = 29 + bob
+	# Penitent scripture tags and asymmetric cage pauldrons remain after the shield breaks.
+	for strip: int in range(3):
+		var sx: int = x-12+strip*9
+		_rect(img, Rect2i(sx,y+46,5,17+strip*2), BONE)
+		_segment(img, Vector2i(sx+1,y+50), Vector2i(sx+3,y+50), 1, PRISON_RED)
+	_poly(img, _pts([x-18,y+19,x-13,y+12,x-6,y+17,x-10,y+29]), IRON_LIT)
+	_poly(img, _pts([x+18,y+19,x+13,y+12,x+7,y+17,x+11,y+29]), RUST_LIT)
+
+
+func _detail_toad(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	var jump: int = -12 if stage == "active" else -roundi(phase*7.0) if stage == "windup" else 0
+	var x: int = 62 + (8 if stage == "active" else 0)
+	var y: int = 57 + bob + jump
+	# Bone growths, layered wet hide, pustules, teeth and a dragging chain.
+	for ridge: int in range(6):
+		var rx: int = x-20+ridge*8
+		_poly(img, _pts([rx,y-15-(ridge%2)*3,rx+3,y-27-(ridge%3)*2,rx+6,y-14]), BONE)
+	for wart: Vector2i in [Vector2i(-20,-6),Vector2i(-11,-14),Vector2i(3,-16),Vector2i(18,-7),Vector2i(12,4),Vector2i(-4,7)]:
+		_ellipse(img, Vector2i(x+wart.x,y+wart.y), 2, 2, BOG_LIT)
+		_pixel(img,x+wart.x,y+wart.y-1,SOUL)
+	_segment(img, Vector2i(x-16,y+8), Vector2i(x+18,y+8), 2, OUTLINE)
+	for tooth: int in range(6): _poly(img,_pts([x-13+tooth*5,y+8,x-11+tooth*5,y+13,x-8+tooth*5,y+8]),BONE)
+	_chain_curve(img, Vector2i(x-24,y+13), Vector2i(x-43,y+25), Vector2i(x-48,y+39), IRON_LIT)
+	for drip: int in range(4): _segment(img,Vector2i(x-12+drip*8,y+22),Vector2i(x-12+drip*8,y+27+(drip%2)*3),1,MIRE_LIT)
+
+
+func _detail_maw(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	if stage == "hidden":
+		return
+	var x: int = 60 + (10 if stage == "active" else 0)
+	var y: int = 65 + bob - (8 if stage == "windup" else 0)
+	# Long plated sewer predator silhouette: ribs, dorsal plates and torn cage debris.
+	_poly(img,_pts([x-42,y+4,x-32,y-13,x-20,y-19,x-9,y-17,x-15,y+15,x-34,y+20]),OUTLINE)
+	_poly(img,_pts([x-38,y+4,x-29,y-10,x-20,y-15,x-13,y-13,x-19,y+11,x-33,y+16]),MIRE)
+	for plate: int in range(7):
+		var px: int=x-34+plate*9
+		_poly(img,_pts([px,y-8-(plate%2)*3,px+4,y-20-(plate%3)*2,px+8,y-7]),IRON_LIT if plate%2==0 else BONE)
+	for rib: int in range(5): _segment(img,Vector2i(x-31+rib*7,y+4),Vector2i(x-27+rib*7,y+17),2,BONE)
+	for claw: int in range(4):
+		var cx: int=x-29+claw*14
+		_segment(img,Vector2i(cx,y+16),Vector2i(cx-5+(claw%2)*10,y+29),4,IRON)
+		_poly(img,_pts([cx-7+(claw%2)*10,y+28,cx-2+(claw%2)*10,y+31,cx-8+(claw%2)*10,y+33]),BONE)
+	_segment(img,Vector2i(x+5,y+3),Vector2i(x+29,y+5),2,PRISON_RED)
+	_rect(img,Rect2i(x-46,y+7,3,22),IRON); _segment(img,Vector2i(x-51,y+8),Vector2i(x-39,y+8),3,RUST)
+
+
+func _detail_executioner(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
+	var x: int = 58 + (5 if stage == "active" else -4 if stage in ["windup", "hurt"] else 0)
+	var y: int = 24 + bob
+	# Layered execution cuirass, hanging keys and the full hooked axe blade.
+	for plate: int in range(4): _segment(img,Vector2i(x-17,y+37+plate*8),Vector2i(x+18,y+35+plate*8),3,IRON_LIT if plate%2==0 else RUST)
+	_chain(img,Vector2i(x-21,y+31),Vector2i(x+22,y+31),GOLD)
+	_draw_key_ring(img,Vector2i(x-23,y+69))
+	var blade_center: Vector2i=Vector2i(x+31,y+56)
+	if stage=="windup": blade_center=Vector2i(x-28-roundi(phase*10.0),y+15-roundi(phase*12.0))
+	elif stage=="active": blade_center=Vector2i(111,y+39+frame*9)
+	_poly(img,_pts([blade_center.x-4,blade_center.y-20,blade_center.x+14,blade_center.y-12,blade_center.x+18,blade_center.y+3,blade_center.x+6,blade_center.y+16,blade_center.x-8,blade_center.y+12,blade_center.x+2,blade_center.y]),OUTLINE)
+	_poly(img,_pts([blade_center.x,blade_center.y-15,blade_center.x+10,blade_center.y-9,blade_center.x+13,blade_center.y+1,blade_center.x+5,blade_center.y+10,blade_center.x-2,blade_center.y+8,blade_center.x+6,blade_center.y]),STEEL)
 
 
 func _draw_humanoid(img: Image, role: String, animation: String, stage: String, frame: int, phase: float, bob: int, scale_factor: float) -> void:
@@ -349,16 +470,21 @@ func _write_shield_states() -> bool:
 	var directory: String="%s/sunken_shield_penitent/shield" % ROOT
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
 	for stage: int in range(4):
-		var image: Image=Image.create(96,96,false,Image.FORMAT_RGBA8); image.fill(CLEAR)
+		var image: Image=Image.create(FRAME_SIZE,FRAME_SIZE,false,Image.FORMAT_RGBA8); image.fill(CLEAR)
 		if stage<3:
-			_poly(image,_pts([18,26,41,17,63,27,60,70,40,84,20,69]),OUTLINE)
-			_poly(image,_pts([22,29,41,22,59,30,56,67,40,78,24,66]),IRON)
-			_segment(image,Vector2i(40,24),Vector2i(40,77),3,GOLD)
-			_segment(image,Vector2i(24,43),Vector2i(57,43),3,GOLD)
-			for crack: int in range(stage*3): _segment(image,Vector2i(33+crack*4,34+crack*5),Vector2i(29+crack*5,47+crack*6),2,RUST_LIT)
+			_poly(image,_pts([27,29,58,17,88,31,84,91,58,108,30,90]),OUTLINE)
+			_poly(image,_pts([32,33,58,23,82,35,79,87,58,101,35,85]),IRON)
+			_rect(image,Rect2i(37,38,42,7),RUST)
+			_rect(image,Rect2i(37,58,42,7),RUST)
+			_rect(image,Rect2i(37,78,42,7),RUST)
+			_segment(image,Vector2i(58,25),Vector2i(58,99),4,GOLD)
+			_segment(image,Vector2i(34,56),Vector2i(81,56),4,GOLD)
+			_rect(image,Rect2i(49,46,18,18),DEEP)
+			for bar: int in range(4): _segment(image,Vector2i(52+bar*4,48),Vector2i(52+bar*4,62),2,STEEL)
+			for crack: int in range(stage*4): _segment(image,Vector2i(48+crack*3,34+crack*6),Vector2i(43+crack*4,48+crack*7),2,RUST_LIT)
 		else:
-			for shard: int in range(9):
-				var p: Vector2i=Vector2i(22+(shard*13)%45,30+(shard*17)%42)
+			for shard: int in range(12):
+				var p: Vector2i=Vector2i(31+(shard*17)%56,32+(shard*19)%60)
 				_poly(image,_pts([p.x,p.y-5,p.x+5,p.y+2,p.x-3,p.y+5]),IRON)
 		var name: String=["intact","cracked","critical","broken"][stage]
 		if image.save_png(ProjectSettings.globalize_path("%s/%s.png" % [directory,name]))!=OK: return false
@@ -368,11 +494,11 @@ func _write_shield_states() -> bool:
 func _write_reference_sheet(role: String) -> void:
 	var directory: String="%s/%s/reference" % [ROOT,role]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
-	var sheet: Image=Image.create(288,96,false,Image.FORMAT_RGBA8); sheet.fill(CLEAR)
+	var sheet: Image=Image.create(FRAME_SIZE*3,FRAME_SIZE,false,Image.FORMAT_RGBA8); sheet.fill(CLEAR)
 	var action: String=(ACTIONS[role] as Array)[0]
-	sheet.blit_rect(_draw_frame(role,"idle",0,4),Rect2i(0,0,96,96),Vector2i.ZERO)
-	sheet.blit_rect(_draw_frame(role,"%s_active" % action,0,2),Rect2i(0,0,96,96),Vector2i(96,0))
-	sheet.blit_rect(_draw_frame(role,"death",3,6),Rect2i(0,0,96,96),Vector2i(192,0))
+	sheet.blit_rect(_draw_frame(role,"idle",0,4),Rect2i(0,0,FRAME_SIZE,FRAME_SIZE),Vector2i.ZERO)
+	sheet.blit_rect(_draw_frame(role,"%s_active" % action,0,2),Rect2i(0,0,FRAME_SIZE,FRAME_SIZE),Vector2i(FRAME_SIZE,0))
+	sheet.blit_rect(_draw_frame(role,"death",3,6),Rect2i(0,0,FRAME_SIZE,FRAME_SIZE),Vector2i(FRAME_SIZE*2,0))
 	sheet.save_png(ProjectSettings.globalize_path("%s/%s_runtime_reference.png" % [directory,role]))
 
 
@@ -380,6 +506,10 @@ func _pts(values: Array[int]) -> PackedVector2Array:
 	var points: PackedVector2Array=PackedVector2Array()
 	for i: int in range(0,values.size(),2): points.append(Vector2(values[i],values[i+1]))
 	return points
+
+
+func _rect(img: Image, rect: Rect2i, color: Color) -> void:
+	img.fill_rect(rect, color)
 
 
 func _poly(img: Image, points: PackedVector2Array, color: Color) -> void:

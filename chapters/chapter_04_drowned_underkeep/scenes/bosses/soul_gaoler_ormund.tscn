@@ -1138,7 +1138,7 @@ size = Vector2(260, 138)
 [sub_resource type="CircleShape2D" id="CircleShape2D_xhyvd"]
 radius = 520.0
 
-[node name="SoulGaolerOrmund" type="CharacterBody2D" unique_id=9915650]
+[node name="SoulGaolerOrmund" type="CharacterBody2D" unique_id=1833579414]
 z_index = 12
 collision_layer = 4
 collision_mask = 3
@@ -1146,44 +1146,44 @@ floor_snap_length = 8.0
 script = ExtResource("1_ayq3k")
 config = SubResource("Resource_04hap")
 
-[node name="VisualRoot" type="Node2D" parent="." unique_id=1405340266]
+[node name="VisualRoot" type="Node2D" parent="." unique_id=1246645441]
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1832183511]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1760419767]
 texture_filter = 1
 position = Vector2(0, -92)
 sprite_frames = SubResource("SpriteFrames_dq1bc")
 animation = &"dormant"
 autoplay = "dormant"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1781929217]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119300541]
 position = Vector2(0, -71)
 shape = SubResource("RectangleShape2D_0d4p4")
 
-[node name="HealthComponent" type="Node" parent="." unique_id=328244455]
+[node name="HealthComponent" type="Node" parent="." unique_id=613258622]
 script = ExtResource("214_cyuee")
 max_health = 560
 
-[node name="PoiseComponent" type="Node" parent="." unique_id=1933005580]
+[node name="PoiseComponent" type="Node" parent="." unique_id=659981857]
 script = ExtResource("215_50jrp")
 max_poise = 150
 
-[node name="DamagePolicy" type="Node" parent="." unique_id=595810739]
+[node name="DamagePolicy" type="Node" parent="." unique_id=576956452]
 script = ExtResource("216_d38ga")
 
-[node name="Hurtbox" type="Area2D" parent="." unique_id=1098020695]
+[node name="Hurtbox" type="Area2D" parent="." unique_id=977519790]
 collision_layer = 16
 collision_mask = 32
 script = ExtResource("217_sipin")
 faction = &"enemy"
 hit_policy_path = NodePath("../DamagePolicy")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=493188950]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=211930603]
 position = Vector2(0, -74)
 shape = SubResource("RectangleShape2D_tsccy")
 
-[node name="FacingRoot" type="Node2D" parent="." unique_id=1095881583]
+[node name="FacingRoot" type="Node2D" parent="." unique_id=579782489]
 
-[node name="MeleeHitbox" type="Area2D" parent="FacingRoot" unique_id=1434986966]
+[node name="MeleeHitbox" type="Area2D" parent="FacingRoot" unique_id=559676111]
 position = Vector2(90, -65)
 collision_layer = 64
 collision_mask = 8
@@ -1192,11 +1192,11 @@ monitorable = false
 script = ExtResource("218_h4es8")
 faction = &"enemy"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/MeleeHitbox" unique_id=387426242]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FacingRoot/MeleeHitbox" unique_id=1875953128]
 shape = SubResource("RectangleShape2D_x1s1j")
 disabled = true
 
-[node name="AreaHitbox" type="Area2D" parent="." unique_id=1104022529]
+[node name="AreaHitbox" type="Area2D" parent="." unique_id=1355441258]
 position = Vector2(0, -68)
 collision_layer = 64
 collision_mask = 8
@@ -1205,22 +1205,22 @@ monitorable = false
 script = ExtResource("218_h4es8")
 faction = &"enemy"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaHitbox" unique_id=1222757296]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AreaHitbox" unique_id=742837238]
 shape = SubResource("RectangleShape2D_xh686")
 disabled = true
 
-[node name="DetectionArea" type="Area2D" parent="." unique_id=528597056]
+[node name="DetectionArea" type="Area2D" parent="." unique_id=2113834514]
 collision_layer = 128
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=194041786]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DetectionArea" unique_id=1690811833]
 shape = SubResource("CircleShape2D_xhyvd")
 
-[node name="WallCheck" type="RayCast2D" parent="." unique_id=1931181699]
+[node name="WallCheck" type="RayCast2D" parent="." unique_id=97045692]
 position = Vector2(0, -35)
 target_position = Vector2(-42, 0)
 
-[node name="FloorCheck" type="RayCast2D" parent="." unique_id=380210960]
+[node name="FloorCheck" type="RayCast2D" parent="." unique_id=906396578]
 position = Vector2(-34, -5)
 target_position = Vector2(0, 48)

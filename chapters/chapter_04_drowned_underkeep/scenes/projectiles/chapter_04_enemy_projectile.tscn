@@ -9,23 +9,23 @@ size = Vector2(19, 7)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ldmia"]
 size = Vector2(19, 7)
 
-[node name="Chapter04EnemyProjectile" type="Area2D" unique_id=386718674]
+[node name="Chapter04EnemyProjectile" type="Area2D" unique_id=224628529]
 z_index = 16
 collision_layer = 0
 script = ExtResource("1_34oqt")
 
-[node name="Visual" type="Polygon2D" parent="." unique_id=566465689]
+[node name="Visual" type="Polygon2D" parent="." unique_id=466619073]
 color = Color(0.65882355, 0.72156864, 0.72156864, 1)
 polygon = PackedVector2Array(-9, -3, 10, 0, -9, 3)
 
-[node name="WorldCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1216880034]
+[node name="WorldCollisionShape2D" type="CollisionShape2D" parent="." unique_id=1321119815]
 shape = SubResource("RectangleShape2D_wjlbw")
 
-[node name="Hitbox" type="Area2D" parent="." unique_id=848701259]
+[node name="Hitbox" type="Area2D" parent="." unique_id=723060107]
 collision_layer = 64
 collision_mask = 8
 script = ExtResource("2_oidsq")
 faction = &"enemy"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=1136014066]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=671911093]
 shape = SubResource("RectangleShape2D_ldmia")
