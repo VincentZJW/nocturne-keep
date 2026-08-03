@@ -45,6 +45,7 @@ const BONE: Color = Color("a89c82")
 const GLASS: Color = Color("24475a")
 const SOUL_BLUE: Color = Color("65b7d2")
 const SOUL_PALE: Color = Color("bcecf5")
+const FORMAL_FRAME_SIZE: Vector2i = Vector2i(128, 128)
 
 
 func _init() -> void:
@@ -109,6 +110,15 @@ func _export_animation_frames() -> int:
 
 
 func _render_frame(animation_name: StringName, frame_index: int) -> Image:
+	var source: Image = _render_legacy_frame(animation_name, frame_index)
+	_enhance_warden_frame(source, animation_name, frame_index)
+	var formal: Image = PixelCanvas.create_transparent(FORMAL_FRAME_SIZE)
+	var offset: Vector2i = (FORMAL_FRAME_SIZE - source.get_size()) / 2
+	formal.blit_rect(source, Rect2i(Vector2i.ZERO, source.get_size()), offset)
+	return formal
+
+
+func _render_legacy_frame(animation_name: StringName, frame_index: int) -> Image:
 	var image: Image = PixelCanvas.create_transparent(Vector2i(80, 80))
 	var bob: int = 0
 	var body_x: int = 40
@@ -173,6 +183,31 @@ func _render_frame(animation_name: StringName, frame_index: int) -> Image:
 	if animation_name == &"return_to_shadow":
 		_fade_image(image, 1.0 - float(frame_index) * 0.13, 1.0 - float(frame_index) * 0.10)
 	return image
+
+
+func _enhance_warden_frame(
+	image: Image, animation_name: StringName, frame_index: int
+	) -> void:
+	var back_view: bool = (
+		(animation_name == &"turn_away" and frame_index >= 2)
+		or (animation_name == &"return_to_shadow" and frame_index >= 1)
+	)
+	if not back_view:
+		# Segmented funerary mask and narrow soul-lit eye slit from the approved
+		# character turnaround. The asymmetry keeps the NPC readable beside the
+		# player's pointed hood.
+		PixelCanvas.draw_line(image, Vector2i(40, 15), Vector2i(41, 25), MASK_DARK, 1)
+		PixelCanvas.fill_rect(image, Rect2i(35, 19, 3, 1), SOUL_PALE)
+		PixelCanvas.fill_rect(image, Rect2i(43, 19, 2, 1), SOUL_BLUE)
+		PixelCanvas.fill_rect(image, Rect2i(38, 27, 5, 2), BONE)
+
+	# Persistent oath-key chain, robe seal and reinforced funerary hem make the
+	# storytelling props survive every dialogue and locomotion pose.
+	PixelCanvas.draw_line(image, Vector2i(49, 45), Vector2i(52, 54), METAL, 1)
+	PixelCanvas.fill_rect(image, Rect2i(51, 53, 4, 2), METAL_LIGHT)
+	PixelCanvas.fill_rect(image, Rect2i(48, 46, 3, 3), WAX)
+	PixelCanvas.draw_line(image, Vector2i(31, 67), Vector2i(49, 67), ROBE_LIGHT, 1)
+	PixelCanvas.fill_rect(image, Rect2i(39, 65, 3, 3), Color("705142"))
 
 
 func _draw_body(

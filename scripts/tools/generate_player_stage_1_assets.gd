@@ -16,6 +16,7 @@ const WEAPON_ROOT: String = "res://shared/assets/player/weapons"
 const REVIVAL_ROOT: String = "res://shared/assets/player/revival"
 const QA_ROOT: String = "res://docs/qa/core_character_art_rework/stage_1"
 const STYLES: Array[StringName] = [&"veilbound", &"ravenfang", &"crimson_masque"]
+const FORMAL_FRAME_SIZE: Vector2i = Vector2i(96, 96)
 
 
 func _init() -> void:
@@ -38,35 +39,83 @@ func _init() -> void:
 func _export_style(style: StringName) -> int:
 	var root: String = ANIMATION_ROOT.path_join(str(style))
 	var failures: int = 0
-	failures += _save_sequences(root, ActionGenerator.generate_all(style))
-	failures += _save_sequences(root, M1Generator.generate_all(style))
-	failures += _save_sequence(root, &"hurt", HurtGenerator.generate_frames(style))
-	failures += _save_sequence(root, &"hurt_light", HurtGenerator.generate_light_frames(style))
-	failures += _save_sequence(root, &"hurt_heavy", HurtGenerator.generate_heavy_frames(style))
-	failures += _save_sequence(root, &"death", DeathGenerator.generate_death_frames(style))
+	failures += _save_sequences(root, ActionGenerator.generate_all(style), style)
+	failures += _save_sequences(root, M1Generator.generate_all(style), style)
+	failures += _save_sequence(root, &"hurt", HurtGenerator.generate_frames(style), style)
+	failures += _save_sequence(root, &"hurt_light", HurtGenerator.generate_light_frames(style), style)
+	failures += _save_sequence(root, &"hurt_heavy", HurtGenerator.generate_heavy_frames(style), style)
+	failures += _save_sequence(root, &"death", DeathGenerator.generate_death_frames(style), style)
 	return failures
 
 
-func _save_sequences(root: String, sequences: Dictionary[String, Array]) -> int:
+func _save_sequences(
+	root: String, sequences: Dictionary[String, Array], style: StringName
+	) -> int:
 	var failures: int = 0
 	for animation_name: String in sequences:
-		failures += _save_sequence(root, StringName(animation_name), sequences[animation_name])
+		failures += _save_sequence(
+			root, StringName(animation_name), sequences[animation_name], style
+		)
 	return failures
 
 
-func _save_sequence(root: String, animation_name: StringName, frames: Array) -> int:
+func _save_sequence(
+	root: String, animation_name: StringName, frames: Array, style: StringName
+	) -> int:
 	var directory: String = root.path_join(str(animation_name))
 	if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
 		return frames.size()
 	var failures: int = 0
 	for frame_index: int in range(frames.size()):
-		var image: Image = frames[frame_index] as Image
+		var source: Image = frames[frame_index] as Image
+		var image: Image = _replicate_player_frame(
+			source, style, animation_name, frame_index
+		)
 		var path: String = directory.path_join(
 			"%s_%02d.png" % [animation_name, frame_index + 1]
 		)
 		if image == null or image.save_png(path) != OK:
 			failures += 1
 	return failures
+
+
+func _replicate_player_frame(
+	source: Image, style: StringName, animation_name: StringName, frame_index: int
+	) -> Image:
+	if source == null or source.is_empty():
+		return Image.new()
+	var formal: Image = PixelCanvas.create_transparent(FORMAL_FRAME_SIZE)
+	var offset: Vector2i = (FORMAL_FRAME_SIZE - source.get_size()) / 2
+	formal.blit_rect(source, Rect2i(Vector2i.ZERO, source.get_size()), offset)
+	if animation_name == &"death" and frame_index >= 3:
+		return formal
+
+	# The approved action drawings remain the source of truth. These stable pixel
+	# accents restore the concept sheet's hood seam, oath clasp and outfit identity
+	# without altering the shared foot anchor or gameplay silhouette.
+	var hood_seam: Color = Color("526f84")
+	var steel: Color = Color("d5dee3")
+	var accent: Color = Color("b98243")
+	match style:
+		&"ravenfang":
+			hood_seam = Color("738b9b")
+			accent = Color("8d3141")
+		&"crimson_masque":
+			hood_seam = Color("694857")
+			accent = Color("b94c5f")
+		_:
+			pass
+
+	var origin: Vector2i = offset
+	PixelCanvas.draw_line(
+		formal, origin + Vector2i(31, 8), origin + Vector2i(33, 11), hood_seam, 1
+	)
+	PixelCanvas.fill_rect(formal, Rect2i(origin + Vector2i(29, 15), Vector2i(2, 1)), steel)
+	PixelCanvas.fill_rect(formal, Rect2i(origin + Vector2i(33, 15), Vector2i(2, 1)), steel)
+	PixelCanvas.fill_rect(formal, Rect2i(origin + Vector2i(31, 26), Vector2i(3, 2)), accent)
+	PixelCanvas.fill_rect(formal, Rect2i(origin + Vector2i(24, 32), Vector2i(2, 1)), hood_seam)
+	PixelCanvas.fill_rect(formal, Rect2i(origin + Vector2i(38, 32), Vector2i(2, 1)), hood_seam)
+	return formal
 
 
 func _export_concept_deliverables() -> int:
