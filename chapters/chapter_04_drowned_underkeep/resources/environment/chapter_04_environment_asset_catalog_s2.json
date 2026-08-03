@@ -1,0 +1,2684 @@
+{
+	"asset_count": 297,
+	"assets": [
+		{
+			"height": 256,
+			"id": "WALL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/wet_prison_brick_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "seamless_wet_prison_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/wet_prison_brick_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "seamless_wet_prison_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/wet_prison_brick_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "seamless_wet_prison_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/eroded_chapel_limestone_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chapel_runoff_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/eroded_chapel_limestone_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chapel_runoff_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/drainage_masonry_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cistern_and_sluice_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/drainage_masonry_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cistern_and_sluice_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/soul_gaol_carved_stone_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_gaol_lock_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/soul_gaol_carved_stone_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_gaol_lock_masonry",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/thick_pointed_prison_arch_128.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "structural_prison_arch",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/thick_pointed_prison_arch_176.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "structural_prison_arch",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/thick_pointed_prison_arch_224.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "structural_prison_arch",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "WALL-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/chapel_prison_transition_arch.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chapter_transition_arch",
+			"width": 320
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/wet_flagstone_strip_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/wet_flagstone_strip_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/wet_flagstone_strip_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/wet_flagstone_strip_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/shallow_water_channel_bed_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_bed_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/shallow_water_channel_bed_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_bed_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/shallow_water_channel_bed_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_bed_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/drain_grate_strip_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_drain_grate",
+			"width": 128
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/drain_grate_strip_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_drain_grate",
+			"width": 128
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/drain_grate_strip_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_drain_grate",
+			"width": 128
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/dry_checkpoint_stone_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "safe_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/dry_checkpoint_stone_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "safe_floor",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/broken_edge_endcap_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "broken_walkable_endcap",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/broken_edge_endcap_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "broken_walkable_endcap",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/broken_edge_endcap_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "broken_walkable_endcap",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/broken_edge_endcap_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "broken_walkable_endcap",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/broken_edge_endcap_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "broken_walkable_endcap",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "FLOOR-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/broken_edge_endcap_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "broken_walkable_endcap",
+			"width": 64
+		},
+		{
+			"height": 160,
+			"id": "CELL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/thick_cell_front_intact.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cell_front_state",
+			"width": 128
+		},
+		{
+			"height": 160,
+			"id": "CELL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/thick_cell_front_open.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cell_front_state",
+			"width": 128
+		},
+		{
+			"height": 160,
+			"id": "CELL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/thick_cell_front_bent.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cell_front_state",
+			"width": 128
+		},
+		{
+			"height": 160,
+			"id": "CELL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/upper_inspection_cell_bay_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "elevated_cell_bay",
+			"width": 192
+		},
+		{
+			"height": 160,
+			"id": "CELL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/upper_inspection_cell_bay_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "elevated_cell_bay",
+			"width": 192
+		},
+		{
+			"height": 32,
+			"id": "CELL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/waterline_wall_trim_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "waterline_trim",
+			"width": 256
+		},
+		{
+			"height": 32,
+			"id": "CELL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/waterline_wall_trim_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "waterline_trim",
+			"width": 256
+		},
+		{
+			"height": 32,
+			"id": "CELL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/waterline_wall_trim_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "waterline_trim",
+			"width": 256
+		},
+		{
+			"height": 32,
+			"id": "CELL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/waterline_wall_trim_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "waterline_trim",
+			"width": 256
+		},
+		{
+			"height": 32,
+			"id": "PLAT-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_096.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_light_platform",
+			"width": 96
+		},
+		{
+			"height": 32,
+			"id": "PLAT-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_128.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_light_platform",
+			"width": 128
+		},
+		{
+			"height": 32,
+			"id": "PLAT-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_160.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_light_platform",
+			"width": 160
+		},
+		{
+			"height": 48,
+			"id": "PLAT-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/wide_prison_dais_160.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_heavy_platform",
+			"width": 160
+		},
+		{
+			"height": 48,
+			"id": "PLAT-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/wide_prison_dais_224.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_heavy_platform",
+			"width": 224
+		},
+		{
+			"height": 64,
+			"id": "PLAT-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/execution_platform_256.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "elite_execution_platform",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "PLAT-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/cistern_stepping_stone_048.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "low_water_stepping_stone",
+			"width": 48
+		},
+		{
+			"height": 24,
+			"id": "PLAT-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/cistern_stepping_stone_064.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "low_water_stepping_stone",
+			"width": 64
+		},
+		{
+			"height": 24,
+			"id": "PLAT-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/cistern_stepping_stone_096.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "low_water_stepping_stone",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "CAT-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/riveted_iron_catwalk_096.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_ranged_catwalk",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "CAT-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/riveted_iron_catwalk_128.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_ranged_catwalk",
+			"width": 128
+		},
+		{
+			"height": 48,
+			"id": "CAT-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/riveted_iron_catwalk_160.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_ranged_catwalk",
+			"width": 160
+		},
+		{
+			"height": 48,
+			"id": "CAT-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/oak_prison_walkway_intact.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_oak_catwalk",
+			"width": 128
+		},
+		{
+			"height": 48,
+			"id": "CAT-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/oak_prison_walkway_cracked.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "walkable_oak_catwalk",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "CAT-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/chain_bridge_intact.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chain_bridge_span",
+			"width": 160
+		},
+		{
+			"height": 96,
+			"id": "CAT-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/chain_bridge_broken_left.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chain_bridge_span",
+			"width": 160
+		},
+		{
+			"height": 96,
+			"id": "CAT-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/chain_bridge_broken_right.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chain_bridge_span",
+			"width": 160
+		},
+		{
+			"height": 96,
+			"id": "CAT-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/maintenance_stairs_right.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "mandatory_access_stairs",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "CAT-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/maintenance_stairs_left.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "mandatory_access_stairs",
+			"width": 128
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_07.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "CAT-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_08.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "platform_support",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "CAT-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/decorative_broken_ledge_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "non_walkable_rear_ledge",
+			"width": 128
+		},
+		{
+			"height": 32,
+			"id": "CAT-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/decorative_broken_ledge_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "non_walkable_rear_ledge",
+			"width": 128
+		},
+		{
+			"height": 32,
+			"id": "CAT-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/decorative_broken_ledge_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "non_walkable_rear_ledge",
+			"width": 128
+		},
+		{
+			"height": 256,
+			"id": "CIS-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/cistern/reservoir_regulator_intact.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cistern_landmark",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "CIS-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/cistern/reservoir_regulator_corrupted.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cistern_landmark",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "CIS-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/cistern/overflow_drain_round.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "overflow_drain",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "CIS-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/cistern/overflow_drain_square.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "overflow_drain",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "CIS-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/cistern/overflow_drain_barred.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "overflow_drain",
+			"width": 96
+		},
+		{
+			"height": 80,
+			"id": "DRAIN-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/ambush_drain_closed.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "ambush_drain_state",
+			"width": 96
+		},
+		{
+			"height": 80,
+			"id": "DRAIN-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/ambush_drain_telegraph.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "ambush_drain_state",
+			"width": 96
+		},
+		{
+			"height": 80,
+			"id": "DRAIN-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/ambush_drain_open.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "ambush_drain_state",
+			"width": 96
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/floor_grate_intact.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floor_drain_prop",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/floor_grate_bent.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floor_drain_prop",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/floor_grate_broken.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floor_drain_prop",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/sediment_cluster_01.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "small_drainage_dress",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/sediment_cluster_02.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "small_drainage_dress",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/sediment_cluster_03.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "small_drainage_dress",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DRAIN-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/drainage/sediment_cluster_04.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "small_drainage_dress",
+			"width": 64
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_07.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_08.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_waterwheel",
+			"width": 256
+		},
+		{
+			"height": 192,
+			"id": "GATE-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_gear_train",
+			"width": 256
+		},
+		{
+			"height": 192,
+			"id": "GATE-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_gear_train",
+			"width": 256
+		},
+		{
+			"height": 192,
+			"id": "GATE-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_gear_train",
+			"width": 256
+		},
+		{
+			"height": 192,
+			"id": "GATE-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "animated_gear_train",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/floodgate_housing_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_architecture",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "GATE-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/floodgate_housing_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_architecture",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "GATE-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/sluice_channel_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_water_channel",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "GATE-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/sluice_channel_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_water_channel",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "GATE-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/sluice_channel_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_water_channel",
+			"width": 256
+		},
+		{
+			"height": 192,
+			"id": "GATE-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/waterwheel_support_pier_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "machinery_support",
+			"width": 128
+		},
+		{
+			"height": 192,
+			"id": "GATE-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/waterwheel_support_pier_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "machinery_support",
+			"width": 128
+		},
+		{
+			"height": 128,
+			"id": "BAR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/prison_bars/prison_bar_module_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "prison_bar_module",
+			"width": 64
+		},
+		{
+			"height": 128,
+			"id": "BAR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/prison_bars/prison_bar_module_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "prison_bar_module",
+			"width": 64
+		},
+		{
+			"height": 128,
+			"id": "BAR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/prison_bars/prison_bar_module_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "prison_bar_module",
+			"width": 64
+		},
+		{
+			"height": 128,
+			"id": "BAR-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/prison_bars/prison_bar_module_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "prison_bar_module",
+			"width": 64
+		},
+		{
+			"height": 128,
+			"id": "BAR-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/prison_bars/prison_bar_module_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "prison_bar_module",
+			"width": 64
+		},
+		{
+			"height": 128,
+			"id": "BAR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/prison_bars/prison_bar_module_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "prison_bar_module",
+			"width": 64
+		},
+		{
+			"height": 160,
+			"id": "CHAIN-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 160,
+			"id": "CHAIN-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 160,
+			"id": "CHAIN-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 160,
+			"id": "CHAIN-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 160,
+			"id": "CHAIN-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 96,
+			"id": "CHAIN-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_06.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 96,
+			"id": "CHAIN-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_07.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 96,
+			"id": "CHAIN-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/chains/chain_module_08.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "restraint_and_hoist_chain",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "KEY-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "key_and_lock_narrative_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "KEY-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "key_and_lock_narrative_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "KEY-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "key_and_lock_narrative_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "KEY-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "key_and_lock_narrative_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "KEY-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_05.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "key_and_lock_narrative_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "KEY-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_06.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "key_and_lock_narrative_prop",
+			"width": 64
+		},
+		{
+			"height": 72,
+			"id": "REC-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_05.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_06.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-07",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_07.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 72,
+			"id": "REC-08",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_08.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "registry_and_safe_room_prop",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "TOOL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/torture_tools/workshop_prop_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "rear_layer_workshop_prop",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "TOOL-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/torture_tools/workshop_prop_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "rear_layer_workshop_prop",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "TOOL-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/torture_tools/workshop_prop_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "rear_layer_workshop_prop",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "TOOL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/torture_tools/workshop_prop_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "rear_layer_workshop_prop",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "TOOL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/torture_tools/workshop_prop_05.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "rear_layer_workshop_prop",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "TOOL-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/torture_tools/workshop_prop_06.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "rear_layer_workshop_prop",
+			"width": 128
+		},
+		{
+			"height": 64,
+			"id": "STORE-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/crates/storage_prop_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "prison_storage_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "STORE-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/crates/storage_prop_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "prison_storage_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "STORE-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/crates/storage_prop_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "prison_storage_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "STORE-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/crates/storage_prop_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "prison_storage_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "STORE-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/crates/storage_prop_05.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "prison_storage_prop",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "STORE-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/crates/storage_prop_06.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "prison_storage_prop",
+			"width": 64
+		},
+		{
+			"height": 48,
+			"id": "REMAIN-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/corpses/remains_prop_01.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "non_gore_environmental_remains",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "REMAIN-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/corpses/remains_prop_02.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "non_gore_environmental_remains",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "REMAIN-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/corpses/remains_prop_03.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "non_gore_environmental_remains",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "REMAIN-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/corpses/remains_prop_04.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "non_gore_environmental_remains",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "REMAIN-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/corpses/remains_prop_05.png",
+			"priority": "P2",
+			"provenance": "original_godot_image_api",
+			"role": "non_gore_environmental_remains",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "SOUL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/numbered_soul_cage_intact.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "standard_soul_cage",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SOUL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/numbered_soul_cage_empty.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "standard_soul_cage",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SOUL-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/numbered_soul_cage_cracked.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "standard_soul_cage",
+			"width": 64
+		},
+		{
+			"height": 128,
+			"id": "SOUL-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/registry_wall_cage_bay_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "registry_cage_bay",
+			"width": 128
+		},
+		{
+			"height": 128,
+			"id": "SOUL-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/registry_wall_cage_bay_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "registry_cage_bay",
+			"width": 128
+		},
+		{
+			"height": 128,
+			"id": "SOUL-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/registry_wall_cage_bay_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "registry_cage_bay",
+			"width": 128
+		},
+		{
+			"height": 96,
+			"id": "SOUL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/broken_cage_state_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_cage_break_state",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "SOUL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/broken_cage_state_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_cage_break_state",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "SOUL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/broken_cage_state_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_cage_break_state",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "SOUL-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/broken_cage_state_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_cage_break_state",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "SOUL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/soul_glass_core_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "contained_soul_motion",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SOUL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/soul_glass_core_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "contained_soul_motion",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SOUL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/soul_glass_core_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "contained_soul_motion",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SOUL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/soul_glass_core_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "contained_soul_motion",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SOUL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/soul_glass_core_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "contained_soul_motion",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SOUL-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/soul_glass_core_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "contained_soul_motion",
+			"width": 48
+		},
+		{
+			"height": 144,
+			"id": "DOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/cell_doors/cell_door_closed.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cell_door_state",
+			"width": 96
+		},
+		{
+			"height": 144,
+			"id": "DOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/cell_doors/cell_door_open.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cell_door_state",
+			"width": 96
+		},
+		{
+			"height": 144,
+			"id": "DOOR-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/cell_doors/cell_door_bent.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "cell_door_state",
+			"width": 96
+		},
+		{
+			"height": 176,
+			"id": "DOOR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/rusted_gates/isolation_gate_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "room_isolation_gate_state",
+			"width": 128
+		},
+		{
+			"height": 176,
+			"id": "DOOR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/rusted_gates/isolation_gate_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "room_isolation_gate_state",
+			"width": 128
+		},
+		{
+			"height": 176,
+			"id": "DOOR-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/rusted_gates/isolation_gate_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "room_isolation_gate_state",
+			"width": 128
+		},
+		{
+			"height": 192,
+			"id": "DOOR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/floodgates/vertical_floodgate_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_state",
+			"width": 160
+		},
+		{
+			"height": 192,
+			"id": "DOOR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/floodgates/vertical_floodgate_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_state",
+			"width": 160
+		},
+		{
+			"height": 192,
+			"id": "DOOR-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/floodgates/vertical_floodgate_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_state",
+			"width": 160
+		},
+		{
+			"height": 256,
+			"id": "DOOR-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_outer_frame.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_rear_frame",
+			"width": 256
+		},
+		{
+			"height": 224,
+			"id": "DOOR-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_panel_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_moving_panel",
+			"width": 192
+		},
+		{
+			"height": 224,
+			"id": "DOOR-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_panel_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_moving_panel",
+			"width": 192
+		},
+		{
+			"height": 224,
+			"id": "DOOR-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_panel_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_moving_panel",
+			"width": 192
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_07.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 96,
+			"id": "DOOR-06",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_seal_08.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_gate_seal_animation",
+			"width": 96
+		},
+		{
+			"height": 320,
+			"id": "BOSSENV-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/boss_area/drowned_gaol_core_backdrop.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_backdrop_module",
+			"width": 512
+		},
+		{
+			"height": 256,
+			"id": "BOSSENV-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/boss_area/chained_prison_crown.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_landmark",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "BOSSENV-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/boss_area/monumental_floodgate_recess.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_rear_floodgate",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "BOSSENV-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/boss_area/boss_shallow_water_bed.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "boss_water_floor",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "MEM-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/broken_soul_reservoir.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_architecture",
+			"width": 512
+		},
+		{
+			"height": 256,
+			"id": "MEM-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/ruined_drowned_corridor_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "ruined_memory_corridor",
+			"width": 256
+		},
+		{
+			"height": 256,
+			"id": "MEM-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/ruined_drowned_corridor_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "ruined_memory_corridor",
+			"width": 256
+		},
+		{
+			"height": 128,
+			"id": "MEM-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/reflected_royal_corridor_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chapter_five_reflection_tease",
+			"width": 256
+		},
+		{
+			"height": 128,
+			"id": "MEM-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/reflected_royal_corridor_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chapter_five_reflection_tease",
+			"width": 256
+		},
+		{
+			"height": 128,
+			"id": "MEM-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/reflected_royal_corridor_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "chapter_five_reflection_tease",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "MEM-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_memory_water",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "MEM-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_memory_water",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "MEM-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_memory_water",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "MEM-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_memory_water",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "MEM-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_memory_water",
+			"width": 256
+		},
+		{
+			"height": 96,
+			"id": "MEM-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "post_boss_memory_water",
+			"width": 256
+		},
+		{
+			"height": 64,
+			"id": "WFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/rear_water_body_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "rear_water_animation",
+			"width": 256
+		},
+		{
+			"height": 16,
+			"id": "WFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/local_highlight_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_highlight_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/flow_strip_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_flow_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/drain_foam_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "drain_foam_animation",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "WFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/rear_water_body_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "rear_water_animation",
+			"width": 256
+		},
+		{
+			"height": 16,
+			"id": "WFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/local_highlight_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_highlight_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/flow_strip_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_flow_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/drain_foam_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "drain_foam_animation",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "WFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/rear_water_body_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "rear_water_animation",
+			"width": 256
+		},
+		{
+			"height": 16,
+			"id": "WFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/local_highlight_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_highlight_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/flow_strip_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_flow_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/drain_foam_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "drain_foam_animation",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "WFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/rear_water_body_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "rear_water_animation",
+			"width": 256
+		},
+		{
+			"height": 16,
+			"id": "WFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/local_highlight_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_highlight_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/flow_strip_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "water_flow_animation",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "WFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/drain_foam_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "drain_foam_animation",
+			"width": 96
+		},
+		{
+			"height": 4,
+			"id": "WFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/front_lip_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "foot_only_foreground_water",
+			"width": 256
+		},
+		{
+			"height": 4,
+			"id": "WFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/front_lip_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "foot_only_foreground_water",
+			"width": 256
+		},
+		{
+			"height": 4,
+			"id": "WFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/front_lip_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "foot_only_foreground_water",
+			"width": 256
+		},
+		{
+			"height": 4,
+			"id": "WFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/front_lip_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "foot_only_foreground_water",
+			"width": 256
+		},
+		{
+			"height": 4,
+			"id": "WFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/front_lip_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "foot_only_foreground_water",
+			"width": 256
+		},
+		{
+			"height": 4,
+			"id": "WFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/water/front_lip_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "foot_only_foreground_water",
+			"width": 256
+		},
+		{
+			"height": 24,
+			"id": "RFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/step_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_step_ripple",
+			"width": 64
+		},
+		{
+			"height": 48,
+			"id": "RFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/landing_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_landing_splash",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "RFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/dash_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_dash_splash",
+			"width": 128
+		},
+		{
+			"height": 24,
+			"id": "RFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/step_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_step_ripple",
+			"width": 64
+		},
+		{
+			"height": 48,
+			"id": "RFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/landing_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_landing_splash",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "RFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/dash_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_dash_splash",
+			"width": 128
+		},
+		{
+			"height": 24,
+			"id": "RFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/step_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_step_ripple",
+			"width": 64
+		},
+		{
+			"height": 48,
+			"id": "RFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/landing_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_landing_splash",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "RFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/dash_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_dash_splash",
+			"width": 128
+		},
+		{
+			"height": 24,
+			"id": "RFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/step_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_step_ripple",
+			"width": 64
+		},
+		{
+			"height": 48,
+			"id": "RFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/landing_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_landing_splash",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "RFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/dash_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_dash_splash",
+			"width": 128
+		},
+		{
+			"height": 24,
+			"id": "RFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/step_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_step_ripple",
+			"width": 64
+		},
+		{
+			"height": 48,
+			"id": "RFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/landing_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_landing_splash",
+			"width": 96
+		},
+		{
+			"height": 48,
+			"id": "RFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/dash_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "player_dash_splash",
+			"width": 128
+		},
+		{
+			"height": 32,
+			"id": "RFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/enemy_wake_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "enemy_water_wake",
+			"width": 96
+		},
+		{
+			"height": 16,
+			"id": "RFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/idle_ripple_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_idle_ripple",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "RFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/enemy_wake_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "enemy_water_wake",
+			"width": 96
+		},
+		{
+			"height": 16,
+			"id": "RFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/idle_ripple_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_idle_ripple",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "RFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/enemy_wake_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "enemy_water_wake",
+			"width": 96
+		},
+		{
+			"height": 16,
+			"id": "RFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/idle_ripple_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_idle_ripple",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "RFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/enemy_wake_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "enemy_water_wake",
+			"width": 96
+		},
+		{
+			"height": 16,
+			"id": "RFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/ripples/idle_ripple_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_idle_ripple",
+			"width": 64
+		},
+		{
+			"height": 32,
+			"id": "DFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "water_droplet_animation",
+			"width": 16
+		},
+		{
+			"height": 32,
+			"id": "DFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "water_droplet_animation",
+			"width": 16
+		},
+		{
+			"height": 32,
+			"id": "DFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "water_droplet_animation",
+			"width": 16
+		},
+		{
+			"height": 32,
+			"id": "DFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "water_droplet_animation",
+			"width": 16
+		},
+		{
+			"height": 160,
+			"id": "CFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_chain_sway",
+			"width": 64
+		},
+		{
+			"height": 160,
+			"id": "CFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_chain_sway",
+			"width": 64
+		},
+		{
+			"height": 160,
+			"id": "CFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_chain_sway",
+			"width": 64
+		},
+		{
+			"height": 160,
+			"id": "CFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "decorative_chain_sway",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "SFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_flame_animation",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_flame_animation",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_flame_animation",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_flame_animation",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_05.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_flame_animation",
+			"width": 48
+		},
+		{
+			"height": 64,
+			"id": "SFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_06.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_flame_animation",
+			"width": 48
+		},
+		{
+			"height": 96,
+			"id": "SCFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_01.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_02.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_03.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 96,
+			"id": "SCFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_04.png",
+			"priority": "P0",
+			"provenance": "original_godot_image_api",
+			"role": "soul_cage_fx_sequence",
+			"width": 64
+		},
+		{
+			"height": 64,
+			"id": "GFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-01",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-02",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-03",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-04",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_01.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_02.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_03.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		},
+		{
+			"height": 64,
+			"id": "GFX-05",
+			"path": "res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_04.png",
+			"priority": "P1",
+			"provenance": "original_godot_image_api",
+			"role": "floodgate_fx_sequence",
+			"width": 96
+		}
+	],
+	"chapter": "chapter_04_drowned_underkeep",
+	"grid_architecture_px": 32,
+	"grid_detail_px": 16,
+	"milestone": "CH4-S2",
+	"mipmaps": false,
+	"runtime_filter": "nearest"
+}

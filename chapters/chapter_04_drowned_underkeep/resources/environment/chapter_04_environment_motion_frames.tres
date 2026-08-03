@@ -1,0 +1,352 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_01.png" id="1_ds26s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_02.png" id="2_g8d3p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_03.png" id="3_hi4ff"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gate_seal_04.png" id="4_gcei6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_01.png" id="5_ar5wb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_02.png" id="6_u1qum"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_03.png" id="7_n6y8r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/contained_drift_04.png" id="8_g4woq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_01.png" id="9_sep7o"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_02.png" id="10_act3l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_03.png" id="11_nf4o3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/crack_leak_04.png" id="12_jf3lh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_01.png" id="13_apcjk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_02.png" id="14_72b2a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_03.png" id="15_voqud"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/post_boss_release_04.png" id="16_qsyww"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_01.png" id="17_r51uk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_02.png" id="18_apcid"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_03.png" id="19_fwduj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_cage/cage_strain_04.png" id="20_tcmob"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_01.png" id="21_w2de3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_02.png" id="22_r0bnu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_03.png" id="23_sfxik"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/drips/droplet_04.png" id="24_1y5p4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_01.png" id="25_yvgpk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_02.png" id="26_jrx4i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_03.png" id="27_c2116"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/chain_strain_04.png" id="28_ddngp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_01.png" id="29_ljwe4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_02.png" id="30_kahlf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_03.png" id="31_xx6g1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/gear_dust_04.png" id="32_wgs74"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_01.png" id="33_e0180"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_02.png" id="34_u00q2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_03.png" id="35_gnwre"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/lock_spark_04.png" id="36_bh1tk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_01.png" id="37_djmt2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_02.png" id="38_eqm72"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_03.png" id="39_f1pli"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/floodgate/water_surge_04.png" id="40_ghqwh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_01.png" id="41_l2qbf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_02.png" id="42_sgcwv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_03.png" id="43_k8jk3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/main_gear_train_04.png" id="44_cb0dx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_01.png" id="45_6nlog"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_02.png" id="46_rpc0t"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_03.png" id="47_kaivs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_04.png" id="48_be3l5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_05.png" id="49_4t762"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/memory_water_06.png" id="50_vy8o5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_01.png" id="51_x2ycq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_02.png" id="52_tdl26"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_03.png" id="53_cdqqp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/chains/rear_chain_sway_04.png" id="54_ivqvv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_01.png" id="55_r3duj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_02.png" id="56_dmn4a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_03.png" id="57_427if"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_04.png" id="58_i0uq3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_05.png" id="59_0j7t2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/fx/soul_fire/idle_soul_flame_06.png" id="60_a653d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_01.png" id="61_fwsic"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_02.png" id="62_o01ld"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_03.png" id="63_vcjna"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_04.png" id="64_o2fxr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_05.png" id="65_fynsh"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_06.png" id="66_7ndtg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_07.png" id="67_elw3i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floodgate/gothic_waterwheel_08.png" id="68_pg0jd"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_ds26s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_g8d3p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_hi4ff")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_gcei6")
+}],
+"loop": 1,
+"name": &"boss_gate_seal",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("5_ar5wb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_u1qum")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_n6y8r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_g4woq")
+}],
+"loop": 1,
+"name": &"cage_contained",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("9_sep7o")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_act3l")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_nf4o3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_jf3lh")
+}],
+"loop": 1,
+"name": &"cage_crack_leak",
+"speed": 7.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_apcjk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_72b2a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_voqud")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_qsyww")
+}],
+"loop": 0,
+"name": &"cage_release",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("17_r51uk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_apcid")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_fwduj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_tcmob")
+}],
+"loop": 1,
+"name": &"cage_strain",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("21_w2de3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_r0bnu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_sfxik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("24_1y5p4")
+}],
+"loop": 1,
+"name": &"drip",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("25_yvgpk")
+}, {
+"duration": 1.0,
+"texture": ExtResource("26_jrx4i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_c2116")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_ddngp")
+}],
+"loop": 1,
+"name": &"floodgate_chain_strain",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("29_ljwe4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_kahlf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("31_xx6g1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_wgs74")
+}],
+"loop": 0,
+"name": &"floodgate_gear_dust",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_e0180")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_u00q2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_gnwre")
+}, {
+"duration": 1.0,
+"texture": ExtResource("36_bh1tk")
+}],
+"loop": 0,
+"name": &"floodgate_lock_spark",
+"speed": 14.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("37_djmt2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("38_eqm72")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_f1pli")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_ghqwh")
+}],
+"loop": 0,
+"name": &"floodgate_water_surge",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("41_l2qbf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_sgcwv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("43_k8jk3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_cb0dx")
+}],
+"loop": 1,
+"name": &"gear_train",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("45_6nlog")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_rpc0t")
+}, {
+"duration": 1.0,
+"texture": ExtResource("47_kaivs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_be3l5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("49_4t762")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_vy8o5")
+}],
+"loop": 1,
+"name": &"memory_water",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("51_x2ycq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("52_tdl26")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_cdqqp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_ivqvv")
+}],
+"loop": 1,
+"name": &"rear_chain_sway",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("55_r3duj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("56_dmn4a")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_427if")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_i0uq3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("59_0j7t2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_a653d")
+}],
+"loop": 1,
+"name": &"soul_flame",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("61_fwsic")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_o01ld")
+}, {
+"duration": 1.0,
+"texture": ExtResource("63_vcjna")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_o2fxr")
+}, {
+"duration": 1.0,
+"texture": ExtResource("65_fynsh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_7ndtg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("67_elw3i")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_pg0jd")
+}],
+"loop": 1,
+"name": &"waterwheel",
+"speed": 8.0
+}]

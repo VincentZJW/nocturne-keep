@@ -2,7 +2,7 @@
 
 - Milestone owner: `CH4-S1` design handoff
 - Consumer: `CH4-S2` formal pixel-asset production
-- Status: **LOCKED FOR PRODUCTION / no runtime asset produced in S1**
+- Status: **S2 PRODUCTION COMPLETE / 297 formal assets and 25 packaged animations verified**
 - Base structural grid: 16 px detail grid, 32 px architecture grid
 - Runtime rules: transparent PNG where modular; nearest filtering; lossless; no mipmaps; integer placement
 
@@ -286,15 +286,17 @@ FX constraints:
 
 ## 13. S2 acceptance checklist
 
-- [ ] Every P0 module exists as an original pixel asset in the declared Chapter IV folder.
-- [ ] Contact sheets show intended scale beside the formal Player and at least one Chapter IV enemy.
-- [ ] Wall/floor/platform modules tile or join without unintended seams.
-- [ ] Walkable and decorative ledges are visually distinct.
-- [ ] All Harpooner platform widths (128–160 px plans) can be assembled from the kit with supported undersides.
-- [ ] Water is split into rear body/highlight/front lip.
-- [ ] Doors are split into frame/panel/trim/core and have state frames.
-- [ ] Soul cages do not require foreground occlusion.
-- [ ] Boss arena art preserves a broad flat centre.
-- [ ] Memory transition does not accidentally become Chapter V production.
-- [ ] Texture imports are lossless, nearest and mipmap-free.
-- [ ] Concept boards remain unreferenced by runtime scenes.
+- [x] Every P0 module exists as an original pixel asset in the declared Chapter IV folder.
+- [x] Contact sheets show intended scale beside the formal Player and at least one Chapter IV enemy.
+- [x] Wall/floor/platform modules tile or join without unintended seams.
+- [x] Walkable and decorative ledges are visually distinct.
+- [x] All Harpooner platform widths (128–160 px plans) can be assembled from the kit with supported undersides.
+- [x] Water is split into rear body/highlight/front lip.
+- [x] Doors are split into frame/panel/trim/core and have state frames.
+- [x] Soul cages do not require foreground occlusion.
+- [x] Boss arena art preserves a broad flat centre.
+- [x] Memory transition does not accidentally become Chapter V production.
+- [x] Texture imports are lossless and mipmap-free; S3 consumers must set `texture_filter = NEAREST` on their presentation roots because Godot 4 filtering is a CanvasItem/project setting, not a PNG import flag.
+- [x] Concept boards remain unreferenced by runtime scenes.
+
+S2 implementation evidence is recorded in `chapter_04_environment_assets_s2.md` and `res://docs/qa/chapter_04_scene_production/s2/chapter_04_s2_qa.md`. This checklist does not authorize S3 route assembly.

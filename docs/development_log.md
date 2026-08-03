@@ -1,5 +1,21 @@
 # Development Log
 
+## 2026-08-03 — Chapter IV scene production S2 formal environment assets
+
+Status: complete — 297 formal Chapter IV environment assets, 25 packaged animations and five QA boards pass exact Godot 4.7.1 validation; CH4-S3 was not started
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture and all four mandatory chapter production documents. The locked S0 route and S1 environment/asset manifests are the design authority.
+- Goal: replace future Chapter IV room dependence on placeholder geometry by producing every S1 P0 environment module plus the essential narrative props and dynamic water, gate, chain, soul-cage and memory sequences required for later S3/S4 scene assembly.
+- Task-owned paths: Chapter IV `assets/environment`, `assets/props`, `assets/doors`, `assets/fx`, new S2-only generation/QA scripts and tests, Chapter IV S2 documentation, `docs/qa/chapter_04_scene_production/s2/`, and this isolated log entry.
+- Asset contract: original deterministic Godot `Image` pixel construction, transparent modular PNGs, 16 px detail/32 px architecture grid, nearest/lossless/no-mipmap import, supported platform undersides, split rear/highlight/front-lip water, separated door frame/panel/core, and no direct concept-art downscaling.
+- Verification plan: exact Godot 4.7.1 generation/import, dimensions/alpha/import audit, P0 inventory and animation-frame validation, tiling/join/readability contact sheets beside the formal Player and Chapter IV enemies, current Chapter IV runtime/Main/Boss regressions, MainBootstrap smoke, runtime concept-reference scan and `git diff --check`.
+- Stop point: do not assemble the 17 formal rooms, modify collision/door/water gameplay, place encounters, change Chapter IV/Main routes or begin CH4-S3. Pre-existing Chapter I/III/README/shared-resource worktree changes remain user-owned and outside the S2 commit.
+- Delivered 297 original project-owned RGBA8 PNG assets (228 P0 / 60 P1 / 9 P2): formal masonry, floors, cells, supported platforms, catwalks, cistern/drainage, floodgate machinery, split doors, narrative props, soul cages, Boss architecture, memory-transition art and dynamic FX. The generator and JSON catalog make the delivery deterministic and auditable.
+- Packaged 10 water/ripple animations and 15 mechanism/soul/memory animations into two saved SpriteFrames resources. Rear water, 16 px local highlight and 4 px front lip remain separate; the scene consumer's nearest-filter/integer-placement contract is recorded for S3.
+- Visual QA: five 1600×900 nearest-neighbour boards cover core architecture, route props, water/mechanism motion, Boss/memory assets and formal Player/Chapter IV enemy readability. Evidence and manual acceptance boundary: `res://docs/qa/chapter_04_scene_production/s2/chapter_04_s2_qa.md`.
+- Exact Godot 4.7.1 results: source generation PASS (`assets=297`); QA-board generation PASS (`boards=5`); import PASS (`compress/mode=0`, `mipmaps/generate=false`); SpriteFrames build PASS (`resources=2`); S2 asset test PASS (`assets=297 animations=25`); Chapter IV enemy runtime PASS; Chapter IV Main integration PASS; Soul Gaoler Ormund PASS; MainBootstrap 180-frame smoke PASS and resolved the formal opening cinematic without red parser/resource errors.
+- Runtime scan found zero `.tscn/.tres/.gd` references to the S1 Chapter IV environment concept-art folder. `git diff --check` passed. Main/Chapter IV scenes and gameplay were deliberately unchanged because room assembly, collision, Encounter placement and formal F5 Chapter IV traversal belong to CH4-S3.
+
 ## 2026-08-03 — Chapter IV scene production S1 environment direction
 
 Status: complete — environment direction, five concept boards, 17-area narrative matrix and the S2 asset-production manifest are delivered; subjective visual acceptance remains with the user
