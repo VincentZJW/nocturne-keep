@@ -1,5 +1,150 @@
 # Development Log
 
+## 2026-08-03 — Chapter IV Mirefin Raider 95% concept-replication audit and rework
+
+Status: complete — Mirefin Raider scores 95.7/100 with no critical-feature veto; Main evidence and focused regression tests pass; no next role was started
+
+### Goal, planned files, tests, and scope check
+
+- Use `mirefin_raider_concept_sheet.png` as the single `primary_concept_reference`; do not iterate from the existing runtime sprite. Audit silhouette, skull, gills, teeth, dorsal fins, scales, long arms, webbed claws, prisoner rags, ankle chain, wet material, every animation, Main references, anchors and combat geometry against the fixed 100-point rubric.
+- Archive the current 67-frame 96×96 runtime set, then redraw all formal frames at 128×128 on transparent pixel canvases. Keep the existing animation names, FPS, AI, HP/damage/Poise, Hitbox/Hurtbox, collision and encounter placement unchanged.
+- Add a role-specific deterministic pixel generator, replication manifest, focused automated QA, concept/Sprite comparison boards and MainBootstrap/F5 captures for idle, movement, attack, hurt, death and Player scale.
+- Run exact Godot 4.7.1 import/parse, focused enemy/Main tests, old-reference search, graphical Main capture and `git diff --check`. If any mandatory feature is missing or the documented score is below 95, this role remains FAIL and no next Chapter IV character may begin.
+
+### Read-only audit result before modification
+
+- Formal Main authority is `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter IV resolves to `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn`, which instances `CharacterTrial/PenitentFloodway/Enemies/MirefinRaider` from the saved `mirefin_raider.tscn` PackedScene.
+- The saved scene and trial both reference the same 67 PNGs under `assets/enemies/mirefin_raider/sprites/`; the sprite anchor is `VisualRoot/AnimatedSprite2D` at `(0, -38)`, body/Hurtbox centers remain `(0, -30)`, and no texture override was found on the Main instance.
+- Current production frames are 96×96. Visual inspection confirms a rounded head, upright torso and line-like claws with no readable long fish-bone jaw, multi-row teeth, gill cage, complete layered dorsal ridge, scale mass, prisoner rags or animated ankle chain. The pre-rework estimate is 35/100 and directly FAILS the mandatory-feature veto.
+- The worktree already contains unrelated user-owned Chapter I, Chapter III Underkeep, README, shared-resource and QA changes. They are preserved and are outside this milestone; only Mirefin-owned implementation/QA plus this isolated log entry may be committed.
+
+### Delivered rework and QA result
+
+- Archived the complete original 67-frame 96×96 set under `assets/enemies/mirefin_raider/archive_legacy/c4_96px_v1/` and added `.gdignore`; runtime references to this archive are zero.
+- Rebuilt all 17 animations / 67 formal frames at 128×128 using the role-specific typed generator. The same formal paths now preserve the concept's fish-bone long skull, upper/lower teeth, red four-slit gill cage, eight-part dorsal ridge, wet scales, hunched proportion, two long webbed four-claw hands, prisoner rags, ankle shackle and animated chain.
+- Preserved the saved scene's `(0, -38)` visual anchor, `(0, -30)` body/Hurtbox centers, combat geometry, AI, HP, damage, Poise, timing, drops and Encounter placement. Neither the formal `mirefin_raider.tscn` nor the CharacterTrial/Main instance needs an Inspector texture override because both resolve the replaced formal PNG paths.
+- Added deterministic old/new, silhouette, palette, detail and 17-animation QA boards plus eight MainBootstrap/F5 captures. The fixed rubric result is **95.7 / 100 PASS**; all mandatory features pass and the lowest individual animation score is 95.0.
+- Formal report: `chapters/chapter_04_drowned_underkeep/docs/character_replication_qa/mirefin_raider_replication_qa.md`. Evidence root: `docs/qa/chapter_04_character_replication/mirefin_raider/`.
+
+### Exact commands and actual results
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --import` — PASS with exact Godot 4.7.1; archive `.gdignore` prevents legacy UID/import conflicts.
+- `.../Godot --headless --path . --script res://chapters/chapter_04_drowned_underkeep/scripts/tools/generate_mirefin_raider_replication.gd` — PASS, `frames=67 size=128x128`.
+- `.../Godot --headless --path . --script res://chapters/chapter_04_drowned_underkeep/scripts/tools/generate_mirefin_raider_replication_qa.gd` — PASS, seven deterministic comparison/evidence boards generated.
+- `.../Godot --headless --path . --script res://chapters/chapter_04_drowned_underkeep/tests/characters/test_mirefin_raider_replication.gd` — PASS: concept, archive, 17 animations, 67 frames, transparent canvas, signature-feature regions, stable anchors and formal references.
+- `.../Godot --headless --path . --script res://chapters/chapter_04_drowned_underkeep/tests/characters/test_chapter_04_enemy_runtime.gd` — PASS with the Mirefin-specific 128px contract; other Chapter IV roles remain unchanged at 96px.
+- `.../Godot --headless --path . --script res://chapters/chapter_04_drowned_underkeep/tests/characters/test_chapter_04_main_integration.gd` — PASS; CharacterTrial/Main still uses the saved Mirefin PackedScene.
+- `.../Godot --headless --path . --script res://chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_runtime.gd` — PASS; unrelated Chapter IV Boss runtime remains intact.
+- Graphical exact-4.7.1 MainBootstrap capture — PASS, eight 1280×720 formal-Main frames created for Idle, Walk, three attacks, Hurt, Death and flip. No gameplay/parser/resource error occurred while the scene ran. On command-line GUI process shutdown, Godot 4.7.1 still prints its pre-existing Chapter-IV bulk texture/RID cleanup diagnostics; this harness-only shutdown issue is disclosed and is not presented as a clean process-exit result.
+- The next ordered role, Bog Toad, was not modified. User visual acceptance of the 95.7 internal rubric result remains the only manual gate.
+
+## 2026-08-02 — Chapter IV characters CH4-C4 through CH4-C7 runtime completion
+
+Status: complete — seven normals, one elite and two-phase Soul Gaoler Ormund are formally implemented, Main-integrated and committed for playtest
+
+- Produced 544 transparent 96×96 normal/elite runtime frames and 211 transparent 192×192 Boss frames, with role-specific animation/action sets, independent scenes, typed data resources and nearest-neighbour imports.
+- Implemented shared Chapter IV enemy control, Poise, shield routing and swept projectiles; created the Underkeep Executioner elite and a dedicated 560 HP Ormund controller with a real 55% phase transition, five P1 actions and five P2 actions.
+- Registered the formal Chapter IV start profile and embedded the complete character trial in `drowned_underkeep.tscn`. F5 spawn IDs cover humanoids, creatures, elite, Boss P1 and Boss P2; the two Boss routes activate the real saved encounter.
+- Exact Godot 4.7.1 import and the enemy, Boss and Main-integration test scripts all passed. A graphical MainBootstrap run produced six 1280×720 QA frames. Forced capture-process teardown still reports renderer texture-cache/RID warnings after the captures; these are documented separately and are not hidden as a clean gameplay result.
+- Formal implementation specification: `chapters/chapter_04_drowned_underkeep/docs/chapter_04_character_runtime_c4_c7.md`. QA report/evidence: `docs/qa/chapter_04_characters/c7/`.
+- Scope remained character-only: Player tuning and Chapters I–III were not modified. The complete Chapter IV environment/encounter route remains a later milestone.
+
+## 2026-08-02 — Chapter IV characters CH4-C1 humanoid concept production
+
+Status: complete — four original humanoid concept packages passed visual/file/import QA; C2 and runtime implementation remain gated
+
+### Goal, planned files, tests, and scope check
+
+- Produce the four C0-locked humanoid normal-enemy concept packages: Drowned Gaoler, Chainbound Convict, Mire Harpooner and Sunken Shield Penitent. Each package must provide a polished original concept board with primary three-quarter design, side/back references, black silhouette, weapon/structure callouts and gameplay pose language.
+- Save project-bound raster outputs under each Chapter IV-owned `assets/enemies/<enemy_id>/concept_art/` directory, add a Chapter IV C1 visual index/QA report, and preserve exact generation prompts and provenance. The built-in image-generation workflow is used for original bitmap concept art; it does not replace later hand-authored pixel sprites.
+- Do not start non-humanoid C2, elite/Boss C3, formal Sprite/animation/AI C4, Encounter placement or Main enemy integration. No Player values, prior-chapter resources, Chapter IV C0 values or existing dirty worktree files may be altered.
+- Verify image integrity/dimensions, visually inspect all boards, run exact Godot 4.7.1 import/parse and formal Bootstrap smoke, record manual acceptance points, create one isolated C1 commit, then stop.
+
+### Delivered concept packages
+
+- Generated and saved four original 1536×1024 production boards under Chapter IV ownership: Drowned Gaoler, Chainbound Convict, Mire Harpooner and Sunken Shield Penitent. No input image, licensed asset or existing commercial character was used.
+- Every board includes one primary three-quarter design, coherent side/back views, a black silhouette, weapon/structure callouts and gameplay action language. The Gaoler locks the cap/key-ring/cleaver/hook identity; the Convict locks the wood pillory/manacle/chain-ball construction; the Harpooner locks the fish-bone breathing mask, complete tethered harpoon and platform stance; the Penitent locks the prison-door shield, hook weapon and four structural damage states.
+- Added `chapter_04_character_c1_humanoid_concepts.md`, a visual difference matrix and C4 pixel-production invariants. The Convict's ball remains attached to the left ankle shackle while the hands grip an intermediate chain segment during attacks; this removes a future animation attachment ambiguity.
+- Added the C1 QA report and exact normalized generation prompt set. Concept images are references only: no SpriteFrames, EnemyData, scene, AI, Hitbox, Encounter or Main character instance was created.
+
+### Exact commands and actual results
+
+- Four built-in image-generation calls — PASS, four distinct original boards copied from Codex-generated storage into the project-owned Chapter IV enemy directories.
+- `file .../concept_art/*.png` — PASS: every output is a non-interlaced 8-bit RGB PNG at 1536×1024. Total individual size is 2.5–3.0 MB; SHA-256 values are recorded in the C1 specification.
+- Visual inspection through the local-image viewer — PASS: four primary designs, coherent side/back views, silhouettes, material structures and action rows are visible; no watermark, commercial logo, geometry placeholder or line weapon was found.
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS using exact Godot 4.7.1; all four PNGs imported, no parser or missing-resource error.
+- Import sidecar audit — PASS: all four use lossless `compress/mode=0`, `mipmaps/generate=false` and alpha-border processing. They remain non-runtime concept references.
+- `.../Godot --headless --path . --script res://tests/systems/test_chapter_start_foundation.gd` — PASS: seven chapter entries and MainBootstrap authority are unchanged.
+- `.../Godot --headless --path . --quit-after 180` — PASS: formal startup logged `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; no red runtime error was emitted.
+
+### Acceptance boundary
+
+- C1 concept quality and provenance are PASS. Pixel readability, animation continuity, combat timing and Main encounter behaviour are intentionally `NOT STARTED`, because those belong to C4 after C2/C3 concept approval.
+- The worktree still contains pre-existing unrelated Chapter I, Chapter III Underkeep and shared-resource edits. Only C1-owned images/import sidecars/spec/QA are eligible for the isolated milestone commit; this interleaved development-log file must not pull unrelated history into that commit.
+
+## 2026-08-02 — Chapter IV characters CH4-C0 audit and design lock
+
+Status: complete — actual Chapter I–III combat baselines audited; Chapter IV roster, values, assets and architecture locked; no EnemyData or runtime characters created
+
+### Goal, planned files, tests, and scope check
+
+- Execute only the attachment's `CH4-C0`: read the mandatory production contracts, audit the formal Main route, the current Chapter IV directory, Player/weapon values, Chapter I–III enemy/Boss resources and shared combat architecture, then lock seven normal enemies, one elite and the two-phase Chapter IV Boss.
+- Add one Chapter IV-owned C0 specification and this log entry. Do not create concept art, SpriteFrames, EnemyData, AI, Encounters or Boss gameplay; do not alter Player, prior-chapter balance or the existing threshold scene.
+- Verify with the exact Godot 4.7.1 executable, focused resource loading/registry checks, formal Bootstrap smoke and `git diff --check`. C0 must stop before `CH4-C1`.
+
+### Audit result and design decision
+
+- `run/main_scene` remains `res://scenes/bootstrap/main_bootstrap.tscn`. The registered Chapter IV authority is `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn`, entered at `CH4_START`; it currently contains only the approved chapter threshold and no enemy/Boss runtime content.
+- Confirmed Player maximum HP 100 and the third-chapter reward weapon at 14 Normal / 28 Dash. Current worktree combat ranges are Chapter I 30–50 Body HP and 5–10 damage, Chapter II 48–96 HP and 4–14 damage, Chapter III 70–126 HP, 8–17 damage and 30–82 Poise. The audit explicitly records that some Chapter I values are pre-existing uncommitted working-tree changes.
+- Confirmed Boss baselines: Fallen Gate Knight 180 Body + 100 Shield; Duchess 220 HP with ×0.85 Phase 2 and 60/80 Poise; Edran 360 HP with ×0.88/×0.80 mitigation and 110/145 Poise.
+- Locked a mixed prison-duty/water-mutation ecology. Final roster: Drowned Gaoler, Chainbound Convict, Mire Harpooner, Sunken Shield Penitent, Mirefin Raider, Bog Toad, Sewer Maw, elite Underkeep Executioner, and two-phase Soul Gaoler Ormund.
+- Locked role-scaled HP/Poise and damage, third-weapon hit counts, shield no-overflow routing, pull/water fairness contracts, per-character concept/Sprite/animation plans, chapter-owned paths and future Main/F5 spawn/test matrix in `chapter_04_character_roster_c0.md`.
+- Architecture decision: reuse `EnemyCombatant`, `GroundEnemyBase`, Health/Hitbox/Hurtbox, EncounterGroup and Loot; create Chapter IV-local config, Poise, swept projectile, shallow-water and collision-safe pull modules. Do not inherit an earlier bespoke Boss controller or invent a duplicate AttackContext.
+
+### Verification and boundary
+
+- `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit` — PASS with the exact Godot 4.7.1 executable; project import, global class registration and saved editor resources completed without parser or missing-resource error.
+- `.../Godot --headless --path . --script res://tests/systems/test_chapter_start_foundation.gd` — PASS: seven chapter entries, Chapters I–III debug-ready contract and Bootstrap authority remain valid; Chapter IV remains intentionally planned/not debug-ready.
+- `.../Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/underkeep/test_underkeep_descent_transition.gd` — PASS: formal Underkeep handoff, nonblocking water and the loadable `CH4_START` threshold remain valid.
+- `.../Godot --headless --path . --quit-after 180` — PASS: formal F5 authority logged `MAIN BOOTSTRAP | FORMAL NEW GAME | res://scenes/cinematics/opening_cinematic.tscn`; no red runtime error was emitted.
+- `git diff --check` — PASS. Runtime enemy testing is intentionally `NOT STARTED`: no fourth-chapter EnemyData or scene instance exists yet.
+- C0 is a meaningful design lock but shares a dirty worktree with prior user-owned implementation. Only the standalone Chapter IV specification is eligible for an isolated commit; the pre-existing implementation and interleaved development-log state must not be staged. Next gate is `CH4-C1`; it requires explicit approval under the milestone contract.
+
+## 2026-08-02 — `ch3_underkeep_descent` UD0–UD5 formal rework
+
+Status: implementation and automated Main QA complete; direct desktop/editor input matrix remains manual acceptance; intentionally uncommitted per user request
+
+### Audit and scope
+
+- Read the mandatory chapter scene, character and QA workflows, then traced the saved `MainBootstrap -> Chapter03Route -> CH3_POST_BOSS -> CH3_UNDERKEEP_DESCENT` path. The supplied screenshot's chart-like structure was the runtime `UnderkeepDescent/OssuaryStairs` `Sprite2D`, backed by `r3_grid_aligned/ossuary_stairs_496x200.png`; it had no collision. Water was two static body sprites plus two four-pixel foreground strips, with no animation, interaction Area, ripple or splash system.
+- Preserved the formal 2304x108 floor collision (top y=612), 2304x720 room/camera bounds, Player movement/attack tuning, Boss/reward route and empty narrative-buffer encounter policy. No swimming state, water slowdown, enemy, balance change or global rendering change was introduced.
+
+### Delivered implementation
+
+- Deleted the `OssuaryStairs` node, both obsolete PNGs/import metadata and both generator references. Rebuilt the visible route as chapel drainage, drowned ossuary and prison threshold using original drain grates, a collapsed oak beam, drowned reliquary, Bell Saint statue, rusted bars/chains and a formed Chapter IV gate.
+- Generated 54 original nearest-ready PNGs with `generate_underkeep_transition_assets.gd`: a 2304x720 backdrop, water bed, four body frames, six rear/front surface frames, four highlights, four drain-foam frames, five ripple/step/dash/landing sequences, eight props, a water drop and a Chapter IV threshold backdrop. Imported textures are lossless, mipmaps disabled; every runtime Sprite uses nearest filtering.
+- Added layered low-resolution water animation. `WaterBody`, rear surface, highlights and local drain foam render below Player z12; only the four-pixel front edge renders at z13. `WaterInteractionArea` has layer 0/mask 2 and is detection-only. The continuous floor remains the sole traversal collision.
+- Added bounded presentation-only reactions: step cadence, jump/double-jump event hooks, landing ripple, Ground/Air Dash and Dash Attack splashes, plus three independently randomized 1.8–4.5 second drip points with falling droplets, impact ripples and quiet positional audio. Transient Player reactions cap at ten and queue-free after five frames; no movement velocity is changed by the water controller.
+- Added a typed Underkeep room handoff to `SceneTransitionManager` and a formal `CH4_START` threshold scene at `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn`. E at the right gate now performs a 0.45-second Fade Out/load/Fade In while preserving the formal Player/HUD runtime. This is a chapter-entry threshold only, not an invented Chapter IV level.
+
+### Exact commands and actual results
+
+- Exact Godot 4.7.1 asset generator — `UNDERKEEP_ASSET_GENERATION PASS assets=54 original=true nearest_ready=true`.
+- Exact 4.7.1 headless editor import/class scan — PASS; all new typed scripts/resources imported, no parser or missing-resource error.
+- `test_underkeep_descent_transition.gd` — PASS: placeholder absent, animated water, nonblocking interaction, continuous floor, formal Chapter IV PackedScene/spawn.
+- `test_underkeep_player_actions.gd` — PASS through MainBootstrap: run, jump, double jump, Ground Dash, Normal Attack and Dash Attack remain available in shallow water; reactions remain capped.
+- `test_underkeep_transition_stability.gd` — PASS: 10 post-Boss/Underkeep room round trips, 10 Chapter IV entries and 10 direct Underkeep reloads in 10,146 ms; Player, HUD and water layers stayed singular.
+- Existing `test_chapter_03_boss_environment.gd` — PASS with `chapter4=threshold`; exact editor import and existing route data remain valid.
+- Existing R4/R5 route regressions — PASS after replacing their obsolete “Chapter IV must not exist” assertion with the new formal-threshold contract: R4 covers checkpoint/gate/room/Boss/reward/Underkeep; R5 covers 50 transitions and 10 persistent-runtime cycles.
+- Existing render-layer L1 regression — PASS after updating its old water-node paths to the new three-tile `WaterLayers/BodyXX` and four-pixel `SurfaceFrontXX` contract; bodies remain below Player z12 and only the front edge remains within limited foreground.
+- Existing Edran B4–B7 full-Boss regression — PASS: protected transition, six Phase 2 attacks, death, reward interface and the registered Chapter IV threshold remain valid.
+- Graphical OpenGL/Metal MainBootstrap capture runner — PASS, 18 current 1280x720 images covering the recomposed location, two water animation frames, Idle/Run, landing, Ground Dash, jump, Normal Attack, Dash Attack, falling/impact drip, submerged props, collision hint, Chapter IV prompt, Fade Out/Fade In and threshold. Three independent process launches also passed (`captures=18 main_bootstrap=true water_fx=true chapter4=true`).
+
+### Honest QA boundary
+
+- This Codex environment can launch the real Godot 4.7.1 renderer and drive saved Main state through scripts, but exposes no desktop mouse/keyboard or editor Remote Scene Tree control. Therefore direct human input traversal, Remote tree inspection and the editor Debugger panel screenshot remain `PARTIAL / manual acceptance`, not falsely marked complete. Automated renderer output contains no red error and all inspected captures preserve Player readability.
+- QA report and manual matrix: `res://docs/qa/chapter_03_underkeep_descent/report.md`. Suggested future commit: `feat: rebuild Chapter III underkeep transition`; no staging, commit or push was performed.
+
 ## 2026-07-31 — Boss music MU4 (preflight)
 
 Status: complete — dialogue Duck, death/retry, Reward/exit cleanup and formal Main QA passed

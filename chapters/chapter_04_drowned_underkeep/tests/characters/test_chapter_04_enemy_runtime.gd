@@ -40,7 +40,8 @@ func _run() -> void:
 				_expect(enemy.animated_sprite.sprite_frames.has_animation(animation), "%s owns %s" % [role, animation])
 		var idle_texture: Texture2D = enemy.animated_sprite.sprite_frames.get_frame_texture(&"idle", 0)
 		var idle_image: Image = idle_texture.get_image()
-		_expect(idle_image.get_size() == Vector2i(96, 96), "%s runtime frame is 96x96" % role)
+		var expected_frame_size: Vector2i = Vector2i(128, 128) if role == "mirefin_raider" else Vector2i(96, 96)
+		_expect(idle_image.get_size() == expected_frame_size, "%s runtime frame is %dx%d" % [role, expected_frame_size.x, expected_frame_size.y])
 		_expect(is_zero_approx(idle_image.get_pixel(0, 0).a), "%s frame keeps transparent background" % role)
 		enemy.queue_free()
 		await process_frame
