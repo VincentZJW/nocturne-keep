@@ -1,5 +1,28 @@
 # Development Log
 
+## 2026-08-03 — Chapter IV scene production S1 environment direction
+
+Status: complete — environment direction, five concept boards, 17-area narrative matrix and the S2 asset-production manifest are delivered; subjective visual acceptance remains with the user
+
+- Goal: turn the locked CH4-S0 route into a production-ready visual brief for all 17 areas, covering past use, catastrophe, current ecology, gameplay purpose, focal composition, palette/material progression, Boss foreshadowing and the Chapter V memory handoff.
+- Task-owned files: Chapter IV `assets/concept_art/environment/`, `docs/chapter_04_scene_environment_s1.md`, the existing S0 audit and this log entry. No formal environment Sprite, room scene, collision, door/water runtime, Encounter manifest, enemy/Boss data or Main route will be changed in S1.
+- Visual production: create original project-bound environment concept boards with the built-in image-generation workflow. These are art-direction references only and must not be downscaled or used as runtime scenery in place of S2 pixel assets.
+- Delivered five original 1536×1024 concept boards covering the chapter-wide identity, early route, middle route, late route, Boss approach and memory-water exit. Their exact prompts, SHA-256 values, provenance and runtime-exclusion contract are recorded in `res://chapters/chapter_04_drowned_underkeep/docs/chapter_04_environment_concept_manifest_s1.md`.
+- Locked the four-zone environmental progression, palette/material/shape language, focal composition and narrative purpose of all 17 areas in `chapter_04_scene_environment_s1.md`; produced the reuse/adapt/new inventory and S2 batch order in `chapter_04_environment_asset_manifest_s1.md`.
+- Exact Godot 4.7.1 verification: `--headless --path . --import` PASS; Chapter IV enemy runtime PASS; Chapter IV Main integration PASS; Soul Gaoler Ormund runtime PASS; MainBootstrap 180-frame smoke PASS and resolved the formal opening cinematic without parser/resource errors. Runtime search found zero `.tscn/.tres/.gd` references to the concept-art directory.
+- QA evidence and complete commands are recorded in `res://docs/qa/chapter_04_scene_production/s1/chapter_04_s1_qa.md`. S1 intentionally changes no gameplay scene, collision, door/water runtime, encounter, tuning or Main route. Stop before CH4-S2.
+- Worktree risk: unrelated Chapter I balance, Chapter III Underkeep, README, shared resources and QA files are already modified/untracked. They remain user-owned and will not be reverted or included in the S1 commit.
+
+## 2026-08-03 — Chapter IV scene and Encounter production S0 audit
+
+Status: audit/design lock complete; formal environment assets, 17-room route and persisted encounters are not yet implemented
+
+- Read the project scene/character production contracts and audited the real Bootstrap route, Chapter III handoff, Chapter IV threshold, CharacterTrial, eight enemy/elite scenes, Ormund Boss, EncounterGroup behavior, current environment assets and Player traversal tuning. The formal authority remains `res://scenes/bootstrap/main_bootstrap.tscn`; Chapter IV resolves to `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` at `CH4_START`.
+- Confirmed that the current Chapter IV level is a threshold plus long character-test gallery, not a production chapter. It has only two Chapter IV environment PNGs and six sample EncounterGroups; no saved room/SpawnPoint/Encounter manifests, fixed-seed generator, room isolation controller or formal 17-area route exists.
+- Locked the future 17-area route, 10 combat-room functions, 20 sequential EncounterGroups, exact 46-enemy matrix, all seven reachable Harpooner platforms, 13 elevated starts, six non-combat support spaces plus one Boss-only arena, seed `40446`, original environment/prop/door/FX asset inventory and Main/F5 QA route. Full audit: `res://chapters/chapter_04_drowned_underkeep/docs/chapter_04_scene_encounter_s0_audit.md`.
+- Exact Godot 4.7.1 checks passed: Chapter IV enemy runtime, current Main integration, Ormund runtime, measured Player reach and headless editor import/parse. The forced one-frame editor scan reports only `Scan thread aborted` on shutdown; no script/resource red error was emitted.
+- Scope stop: documentation only. No scene, asset, script, Resource, tuning, encounter or Main route was changed. This audit-only milestone is intentionally not committed; pre-existing dirty worktree changes remain untouched.
+
 ## 2026-08-03 — Chapters I–III and core character replication rework
 
 Status: implementation, import, formal-scene validation and MainBootstrap smoke complete; unified manual F5 visual acceptance remains with the user
