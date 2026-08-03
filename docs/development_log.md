@@ -1,5 +1,23 @@
 # Development Log
 
+## 2026-08-03 — Chapter IV scene production S3 formal route assembly
+
+Status: complete — 17 saved formal rooms, route transitions, collision/camera/checkpoint contracts and Main/F5 integration pass exact Godot 4.7.1 validation; Encounter population and formal Boss activation remain out of scope
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture, all mandatory chapter production standards, render-layer contract, and the approved CH4-S0/S1/S2 route and asset specifications.
+- Goal: replace the current Chapter IV threshold-plus-CharacterTrial Main route with 17 independently saved formal room scenes, deterministic room transitions, collision-safe traversal, two checkpoints, semantic future-Encounter markers, Boss staging/arena geometry, post-Boss memory spaces and MainBootstrap/F5 debug starts.
+- Task-owned paths: Chapter IV formal room/level scenes, S3 route/room scripts and generated room manifest, Chapter IV start profile, S3-only tooling/tests/documentation, `docs/qa/chapter_04_scene_production/s3/`, and this isolated log entry.
+- Assembly contract: use accepted Chapter IV PNG assets with nearest filtering and integer placement; rear architecture/water remain below actors, walkable geometry stays at gameplay z=0, the Player stays at global z=12, front water lips overlap feet only, and fixed architecture never hides the actor body.
+- Verification plan: exact Godot 4.7.1 room generation/import, 17-room structural and asset-reference audit, collision/platform reach checks, transition/checkpoint/spawn tests, Main registry/profile integration, MainBootstrap traversal smoke, graphical room QA captures, current Chapter IV enemy/Boss regressions and `git diff --check`.
+- Scope stop: do not populate ordinary encounters, change enemy/Boss AI or balance, add Boss mechanics, implement Chapter V, or begin CH4-S4. The existing CharacterTrial remains available as a regression tool but is removed from the formal Chapter IV route. Pre-existing Chapter I/III/README/shared-resource worktree changes remain user-owned and outside the S3 commit.
+- Delivered 17 independently saved `Chapter04Room` scenes and a deterministic manifest. The route now loads one room at a time while Player/HUD/respawn services remain persistent; every room has ordered west/east exits, three spawn markers, room-aware camera bounds and an exact floor top at y=620.
+- Assembled 664 nearest-filter formal Sprite instances from the accepted S2 kit. Four macro-zones now progress from eroded chapel runoff through cells/cistern ecology and machinery bureaucracy to monumental soul locks, the flat Boss core and silver memory water; the old threshold-plus-CharacterTrial strip is no longer the formal Main route.
+- Implemented the render-layer contract in runtime structure: background -100, architecture -70, rear props -40, rear water -20, gameplay 0, Player 12 and four-pixel front water lip 13. Fixed architecture, doors, cages and rear water cannot cover the Player body.
+- Added traversal-safe supported platforms within the locked 124px staged-route envelope, two formal checkpoints (`DRY_GAOLER_CELL`, `LAST_GAOL`), semantic future-Encounter markers, a 1400px clear Boss centre and a sealed Area 16 Chapter V placeholder. No ordinary enemies or runtime RNG were introduced in S3.
+- Main/F5 verification: `run/main_scene` remains `res://scenes/bootstrap/main_bootstrap.tscn`; the registry resolves the new formal route; all 17 rooms were loaded through Main, Player spawn and camera limits were checked in every room, and 17 graphical Main evidence frames were saved under `docs/qa/chapter_04_scene_production/s3/main/`.
+- Exact Godot 4.7.1 results: room builder PASS (`rooms=17`); import/parse PASS; formal route test PASS (`rooms=17 assets=664 checkpoints=2`); Main route PASS (`rooms=17 final=CH4_AREA_16`); Chapter IV enemy runtime PASS; Soul Gaoler Ormund runtime PASS; updated Chapter IV Main integration PASS; graphical Main capture PASS (`captures=17`). Focused runs emitted no red parser/resource/gameplay error.
+- Full specification: `res://chapters/chapter_04_drowned_underkeep/docs/chapter_04_scene_assembly_s3.md`. QA and manual acceptance boundary: `res://docs/qa/chapter_04_scene_production/s3/chapter_04_s3_qa.md`.
+
 ## 2026-08-03 — Chapter IV scene production S2 formal environment assets
 
 Status: complete — 297 formal Chapter IV environment assets, 25 packaged animations and five QA boards pass exact Godot 4.7.1 validation; CH4-S3 was not started

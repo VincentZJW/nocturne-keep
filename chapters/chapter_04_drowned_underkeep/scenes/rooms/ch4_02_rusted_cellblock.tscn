@@ -1,0 +1,510 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room.gd" id="1_4wjjg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/wet_prison_brick_02.png" id="2_4qsfs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/thick_cell_front_intact.png" id="3_0m2ks"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/thick_cell_front_bent.png" id="4_4qlvo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/flooded_cells/thick_cell_front_open.png" id="5_nrbkq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/doors/cell_doors/cell_door_closed.png" id="6_u3e5v"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/catwalks/support_bracket_01.png" id="7_un17k"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_04_drowned_underkeep/resources/environment/chapter_04_water_fx_frames.tres" id="8_4b441"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/wet_flagstone_strip_02.png" id="9_w0k6h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_160.png" id="10_t7hxv"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="11_qieq8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6dpc4"]
+size = Vector2(2048, 104)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_grghi"]
+size = Vector2(160, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_olqqp"]
+size = Vector2(72, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_f086e"]
+size = Vector2(72, 160)
+
+[node name="Ch4RustedCellblock" type="Node2D" unique_id=1583122634]
+script = ExtResource("1_4wjjg")
+room_id = &"CH4_AREA_02"
+room_index = 2
+bilingual_name = "CHAPTER IV · RUSTED CELLBLOCK / 锈锁牢区"
+room_size = Vector2i(2048, 720)
+metadata/formal_chapter_room = true
+metadata/environment_asset_milestone = "CH4-S2"
+
+[node name="Background" type="Node2D" parent="." unique_id=1683061554]
+z_index = -100
+
+[node name="Wall_00_00" type="Sprite2D" parent="Background" unique_id=1062188416]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(128, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_01" type="Sprite2D" parent="Background" unique_id=2004422625]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(384, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_02" type="Sprite2D" parent="Background" unique_id=100863038]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(640, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_03" type="Sprite2D" parent="Background" unique_id=695984912]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(896, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_04" type="Sprite2D" parent="Background" unique_id=521373374]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1152, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_05" type="Sprite2D" parent="Background" unique_id=720072863]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1408, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_06" type="Sprite2D" parent="Background" unique_id=923334668]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1664, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_00_07" type="Sprite2D" parent="Background" unique_id=432243324]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1920, 128)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_00" type="Sprite2D" parent="Background" unique_id=767192915]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(128, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_01" type="Sprite2D" parent="Background" unique_id=1640451165]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(384, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_02" type="Sprite2D" parent="Background" unique_id=583718083]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(640, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_03" type="Sprite2D" parent="Background" unique_id=760003090]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(896, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_04" type="Sprite2D" parent="Background" unique_id=51535793]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1152, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_05" type="Sprite2D" parent="Background" unique_id=148038021]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1408, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_06" type="Sprite2D" parent="Background" unique_id=478322133]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1664, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_01_07" type="Sprite2D" parent="Background" unique_id=298831741]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1920, 352)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_00" type="Sprite2D" parent="Background" unique_id=986497055]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(128, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_01" type="Sprite2D" parent="Background" unique_id=1277826105]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(384, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_02" type="Sprite2D" parent="Background" unique_id=150797807]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(640, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_03" type="Sprite2D" parent="Background" unique_id=1767847041]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(896, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_04" type="Sprite2D" parent="Background" unique_id=1066899936]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1152, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_05" type="Sprite2D" parent="Background" unique_id=516602543]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1408, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_06" type="Sprite2D" parent="Background" unique_id=375468202]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1664, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Wall_02_07" type="Sprite2D" parent="Background" unique_id=481880400]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1920, 576)
+texture = ExtResource("2_4qsfs")
+
+[node name="Architecture" type="Node2D" parent="." unique_id=179794723]
+z_index = -70
+
+[node name="FocalAsset_00" type="Sprite2D" parent="Architecture" unique_id=568250395]
+texture_filter = 1
+position = Vector2(400, 492)
+texture = ExtResource("3_0m2ks")
+
+[node name="FocalAsset_01" type="Sprite2D" parent="Architecture" unique_id=357958582]
+texture_filter = 1
+position = Vector2(640, 492)
+texture = ExtResource("4_4qlvo")
+
+[node name="FocalAsset_02" type="Sprite2D" parent="Architecture" unique_id=1948084675]
+texture_filter = 1
+position = Vector2(880, 492)
+texture = ExtResource("5_nrbkq")
+
+[node name="FocalAsset_03" type="Sprite2D" parent="Architecture" unique_id=92679132]
+texture_filter = 1
+position = Vector2(1640, 500)
+texture = ExtResource("6_u3e5v")
+
+[node name="PlatformSupport_00" type="Sprite2D" parent="Architecture" unique_id=597563074]
+texture_filter = 1
+position = Vector2(1248, 590)
+texture = ExtResource("7_un17k")
+
+[node name="RearProps" type="Node2D" parent="." unique_id=243498900]
+z_index = -40
+
+[node name="RearWater" type="Node2D" parent="." unique_id=638440697]
+z_index = -20
+
+[node name="RearWater_00" type="AnimatedSprite2D" parent="RearWater" unique_id=823161388]
+texture_filter = 1
+position = Vector2(128, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_00" type="AnimatedSprite2D" parent="RearWater" unique_id=93861902]
+texture_filter = 1
+position = Vector2(128, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_01" type="AnimatedSprite2D" parent="RearWater" unique_id=543350502]
+texture_filter = 1
+position = Vector2(384, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_01" type="AnimatedSprite2D" parent="RearWater" unique_id=777121104]
+texture_filter = 1
+position = Vector2(384, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_02" type="AnimatedSprite2D" parent="RearWater" unique_id=306474152]
+texture_filter = 1
+position = Vector2(640, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_02" type="AnimatedSprite2D" parent="RearWater" unique_id=1670949843]
+texture_filter = 1
+position = Vector2(640, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_03" type="AnimatedSprite2D" parent="RearWater" unique_id=1296062055]
+texture_filter = 1
+position = Vector2(896, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_03" type="AnimatedSprite2D" parent="RearWater" unique_id=1061538915]
+texture_filter = 1
+position = Vector2(896, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_04" type="AnimatedSprite2D" parent="RearWater" unique_id=561859522]
+texture_filter = 1
+position = Vector2(1152, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_04" type="AnimatedSprite2D" parent="RearWater" unique_id=1914617722]
+texture_filter = 1
+position = Vector2(1152, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_05" type="AnimatedSprite2D" parent="RearWater" unique_id=1117150184]
+texture_filter = 1
+position = Vector2(1408, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_05" type="AnimatedSprite2D" parent="RearWater" unique_id=840244032]
+texture_filter = 1
+position = Vector2(1408, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_06" type="AnimatedSprite2D" parent="RearWater" unique_id=1554589955]
+texture_filter = 1
+position = Vector2(1664, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_06" type="AnimatedSprite2D" parent="RearWater" unique_id=1830554704]
+texture_filter = 1
+position = Vector2(1664, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="RearWater_07" type="AnimatedSprite2D" parent="RearWater" unique_id=80474171]
+texture_filter = 1
+position = Vector2(1920, 588)
+sprite_frames = ExtResource("8_4b441")
+animation = &"rear_water"
+autoplay = "rear_water"
+
+[node name="WaterHighlight_07" type="AnimatedSprite2D" parent="RearWater" unique_id=1026119604]
+texture_filter = 1
+position = Vector2(1920, 612)
+sprite_frames = ExtResource("8_4b441")
+animation = &"local_highlight"
+autoplay = "local_highlight"
+
+[node name="Gameplay" type="Node2D" parent="." unique_id=114616796]
+
+[node name="FloorTile_00" type="Sprite2D" parent="Gameplay" unique_id=501351778]
+texture_filter = 1
+position = Vector2(128, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_01" type="Sprite2D" parent="Gameplay" unique_id=402330984]
+texture_filter = 1
+position = Vector2(384, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_02" type="Sprite2D" parent="Gameplay" unique_id=1030096258]
+texture_filter = 1
+position = Vector2(640, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_03" type="Sprite2D" parent="Gameplay" unique_id=883352055]
+texture_filter = 1
+position = Vector2(896, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_04" type="Sprite2D" parent="Gameplay" unique_id=1571989046]
+texture_filter = 1
+position = Vector2(1152, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_05" type="Sprite2D" parent="Gameplay" unique_id=129535333]
+texture_filter = 1
+position = Vector2(1408, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_06" type="Sprite2D" parent="Gameplay" unique_id=1193188670]
+texture_filter = 1
+position = Vector2(1664, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorTile_07" type="Sprite2D" parent="Gameplay" unique_id=1630563426]
+texture_filter = 1
+position = Vector2(1920, 652)
+texture = ExtResource("9_w0k6h")
+
+[node name="FloorCollision" type="StaticBody2D" parent="Gameplay" unique_id=140140465]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/FloorCollision" unique_id=585046287]
+position = Vector2(1024, 672)
+shape = SubResource("RectangleShape2D_6dpc4")
+
+[node name="PlatformVisual_00" type="Sprite2D" parent="Gameplay" unique_id=2747049]
+texture_filter = 1
+position = Vector2(1248, 564)
+texture = ExtResource("10_t7hxv")
+
+[node name="PlatformCollision_00" type="StaticBody2D" parent="Gameplay" unique_id=1363209460]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_00" unique_id=1716193635]
+position = Vector2(1248, 554)
+shape = SubResource("RectangleShape2D_grghi")
+
+[node name="FrontWaterLip" type="Node2D" parent="." unique_id=1244973866]
+z_index = 13
+
+[node name="FrontLip_00" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=135663862]
+texture_filter = 1
+position = Vector2(128, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_01" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=462968362]
+texture_filter = 1
+position = Vector2(384, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_02" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=897350293]
+texture_filter = 1
+position = Vector2(640, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_03" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=165780926]
+texture_filter = 1
+position = Vector2(896, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_04" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=1004824972]
+texture_filter = 1
+position = Vector2(1152, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_05" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=855022839]
+texture_filter = 1
+position = Vector2(1408, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_06" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=1881433279]
+texture_filter = 1
+position = Vector2(1664, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FrontLip_07" type="AnimatedSprite2D" parent="FrontWaterLip" unique_id=152232964]
+texture_filter = 1
+position = Vector2(1920, 618)
+sprite_frames = ExtResource("8_4b441")
+animation = &"front_lip"
+autoplay = "front_lip"
+
+[node name="FutureEncounterSpawns" type="Node2D" parent="." unique_id=1483900760]
+
+[node name="GroundSlot01" type="Marker2D" parent="FutureEncounterSpawns" unique_id=504935064]
+position = Vector2(360, 620)
+metadata/semantic_tag = "ground"
+
+[node name="GroundSlot02" type="Marker2D" parent="FutureEncounterSpawns" unique_id=1430075915]
+position = Vector2(692, 620)
+metadata/semantic_tag = "ground"
+
+[node name="GroundSlot03" type="Marker2D" parent="FutureEncounterSpawns" unique_id=2130489814]
+position = Vector2(1024, 620)
+metadata/semantic_tag = "ground"
+
+[node name="GroundSlot04" type="Marker2D" parent="FutureEncounterSpawns" unique_id=1652195947]
+position = Vector2(1356, 620)
+metadata/semantic_tag = "ground"
+
+[node name="GroundSlot05" type="Marker2D" parent="FutureEncounterSpawns" unique_id=1908462094]
+position = Vector2(1688, 620)
+metadata/semantic_tag = "ground"
+
+[node name="PlatformSlot01" type="Marker2D" parent="FutureEncounterSpawns" unique_id=1856534962]
+position = Vector2(1248, 548)
+metadata/semantic_tag = "platform_ranged"
+metadata/platform_width = 160
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=1831323729]
+
+[node name="EntryWest" type="Marker2D" parent="SpawnPoints" unique_id=1426164644]
+position = Vector2(120, 592)
+
+[node name="EntryEast" type="Marker2D" parent="SpawnPoints" unique_id=1085287735]
+position = Vector2(1928, 592)
+
+[node name="Inspection" type="Marker2D" parent="SpawnPoints" unique_id=1790333075]
+position = Vector2(1024, 592)
+
+[node name="Transitions" type="Node2D" parent="." unique_id=603563855]
+
+[node name="ExitWest" type="Area2D" parent="Transitions" unique_id=1612335130]
+position = Vector2(24, 550)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_qieq8")
+destination_room_id = &"CH4_AREA_01"
+destination_spawn_id = &"EntryEast"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitWest" unique_id=1408710645]
+shape = SubResource("RectangleShape2D_olqqp")
+
+[node name="ExitEast" type="Area2D" parent="Transitions" unique_id=1742202251]
+position = Vector2(2024, 550)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("11_qieq8")
+destination_room_id = &"CH4_AREA_03"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=2058093420]
+shape = SubResource("RectangleShape2D_f086e")

@@ -1,0 +1,261 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room.gd" id="1_kp8p4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/soul_gaol_carved_stone_01.png" id="2_qul18"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/doors/boss_gate/soul_lock_outer_frame.png" id="3_2tx1j"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/props/keys/key_prop_03.png" id="4_dig8a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/props/records/record_prop_08.png" id="5_0dchm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/dry_checkpoint_stone_02.png" id="6_grgji"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_checkpoint.gd" id="7_1igp1"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="8_2x1w5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mllvo"]
+size = Vector2(1536, 104)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jgwjf"]
+size = Vector2(160, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_otiwy"]
+size = Vector2(72, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_3fa0p"]
+size = Vector2(72, 160)
+
+[node name="Ch4LastGaolCheckpoint" type="Node2D" unique_id=521334094]
+script = ExtResource("1_kp8p4")
+room_id = &"CH4_AREA_12"
+room_index = 12
+bilingual_name = "CHAPTER IV · LAST GAOL CHECKPOINT / 末狱检查点"
+room_size = Vector2i(1536, 720)
+room_function = &"safe_checkpoint"
+metadata/formal_chapter_room = true
+metadata/environment_asset_milestone = "CH4-S2"
+
+[node name="Background" type="Node2D" parent="." unique_id=672201997]
+z_index = -100
+
+[node name="Wall_00_00" type="Sprite2D" parent="Background" unique_id=225627125]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(128, 128)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_00_01" type="Sprite2D" parent="Background" unique_id=1224225989]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(384, 128)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_00_02" type="Sprite2D" parent="Background" unique_id=1261398005]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(640, 128)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_00_03" type="Sprite2D" parent="Background" unique_id=977624765]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(896, 128)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_00_04" type="Sprite2D" parent="Background" unique_id=712176524]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1152, 128)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_00_05" type="Sprite2D" parent="Background" unique_id=1716039764]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1408, 128)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_01_00" type="Sprite2D" parent="Background" unique_id=1332374736]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(128, 352)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_01_01" type="Sprite2D" parent="Background" unique_id=459035217]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(384, 352)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_01_02" type="Sprite2D" parent="Background" unique_id=1837989731]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(640, 352)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_01_03" type="Sprite2D" parent="Background" unique_id=185733070]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(896, 352)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_01_04" type="Sprite2D" parent="Background" unique_id=1245684872]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1152, 352)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_01_05" type="Sprite2D" parent="Background" unique_id=380426974]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1408, 352)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_02_00" type="Sprite2D" parent="Background" unique_id=985827068]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(128, 576)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_02_01" type="Sprite2D" parent="Background" unique_id=857884899]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(384, 576)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_02_02" type="Sprite2D" parent="Background" unique_id=1852743528]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(640, 576)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_02_03" type="Sprite2D" parent="Background" unique_id=1538899711]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(896, 576)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_02_04" type="Sprite2D" parent="Background" unique_id=1233726518]
+modulate = Color(0.92, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1152, 576)
+texture = ExtResource("2_qul18")
+
+[node name="Wall_02_05" type="Sprite2D" parent="Background" unique_id=590049714]
+modulate = Color(0.94, 0.94, 1, 1)
+texture_filter = 1
+position = Vector2(1408, 576)
+texture = ExtResource("2_qul18")
+
+[node name="Architecture" type="Node2D" parent="." unique_id=746563498]
+z_index = -70
+
+[node name="FocalAsset_02" type="Sprite2D" parent="Architecture" unique_id=1877848097]
+texture_filter = 1
+position = Vector2(1280, 398)
+texture = ExtResource("3_2tx1j")
+
+[node name="RearProps" type="Node2D" parent="." unique_id=1480888414]
+z_index = -40
+
+[node name="FocalAsset_00" type="Sprite2D" parent="RearProps" unique_id=989579676]
+texture_filter = 1
+position = Vector2(620, 540)
+texture = ExtResource("4_dig8a")
+
+[node name="FocalAsset_01" type="Sprite2D" parent="RearProps" unique_id=46552137]
+texture_filter = 1
+position = Vector2(820, 548)
+texture = ExtResource("5_0dchm")
+
+[node name="RearWater" type="Node2D" parent="." unique_id=1216172960]
+z_index = -20
+
+[node name="Gameplay" type="Node2D" parent="." unique_id=748403357]
+
+[node name="FloorTile_00" type="Sprite2D" parent="Gameplay" unique_id=1810831128]
+texture_filter = 1
+position = Vector2(128, 652)
+texture = ExtResource("6_grgji")
+
+[node name="FloorTile_01" type="Sprite2D" parent="Gameplay" unique_id=1821203377]
+texture_filter = 1
+position = Vector2(384, 652)
+texture = ExtResource("6_grgji")
+
+[node name="FloorTile_02" type="Sprite2D" parent="Gameplay" unique_id=1664877494]
+texture_filter = 1
+position = Vector2(640, 652)
+texture = ExtResource("6_grgji")
+
+[node name="FloorTile_03" type="Sprite2D" parent="Gameplay" unique_id=544171878]
+texture_filter = 1
+position = Vector2(896, 652)
+texture = ExtResource("6_grgji")
+
+[node name="FloorTile_04" type="Sprite2D" parent="Gameplay" unique_id=2026951248]
+texture_filter = 1
+position = Vector2(1152, 652)
+texture = ExtResource("6_grgji")
+
+[node name="FloorTile_05" type="Sprite2D" parent="Gameplay" unique_id=2085732206]
+texture_filter = 1
+position = Vector2(1408, 652)
+texture = ExtResource("6_grgji")
+
+[node name="FloorCollision" type="StaticBody2D" parent="Gameplay" unique_id=1349085920]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/FloorCollision" unique_id=1561717721]
+position = Vector2(768, 672)
+shape = SubResource("RectangleShape2D_mllvo")
+
+[node name="Checkpoint" type="Area2D" parent="Gameplay" unique_id=1568011354]
+position = Vector2(768, 550)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("7_1igp1")
+checkpoint_id = &"LAST_GAOL"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Checkpoint" unique_id=984167231]
+shape = SubResource("RectangleShape2D_jgwjf")
+
+[node name="SpawnMarker" type="Marker2D" parent="Gameplay/Checkpoint" unique_id=796823671]
+position = Vector2(0, 42)
+
+[node name="FrontWaterLip" type="Node2D" parent="." unique_id=832032889]
+z_index = 13
+
+[node name="FutureEncounterSpawns" type="Node2D" parent="." unique_id=1689246302]
+
+[node name="SpawnPoints" type="Node2D" parent="." unique_id=1473862057]
+
+[node name="EntryWest" type="Marker2D" parent="SpawnPoints" unique_id=1605334160]
+position = Vector2(120, 592)
+
+[node name="EntryEast" type="Marker2D" parent="SpawnPoints" unique_id=905351644]
+position = Vector2(1416, 592)
+
+[node name="Inspection" type="Marker2D" parent="SpawnPoints" unique_id=1259734261]
+position = Vector2(768, 592)
+
+[node name="Transitions" type="Node2D" parent="." unique_id=2024383931]
+
+[node name="ExitWest" type="Area2D" parent="Transitions" unique_id=1078618800]
+position = Vector2(24, 550)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("8_2x1w5")
+destination_room_id = &"CH4_AREA_11"
+destination_spawn_id = &"EntryEast"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitWest" unique_id=786695100]
+shape = SubResource("RectangleShape2D_otiwy")
+
+[node name="ExitEast" type="Area2D" parent="Transitions" unique_id=1818470685]
+position = Vector2(1512, 550)
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+script = ExtResource("8_2x1w5")
+destination_room_id = &"CH4_AREA_13"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=752651046]
+shape = SubResource("RectangleShape2D_3fa0p")
