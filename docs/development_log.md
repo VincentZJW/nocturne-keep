@@ -1,5 +1,18 @@
 # Development Log
 
+## 2026-08-03 — Chapters I–III and core character replication rework
+
+Status: implementation, import, formal-scene validation and MainBootstrap smoke complete; unified manual F5 visual acceptance remains with the user
+
+- Scope completed: rebuilt the formal runtime pixel art for every Chapter I–III enemy and Boss, then regenerated the shared Night Warden player and Candle Warden NPC presentation. Gameplay AI, combat values, collision shapes, chapter layouts, encounter logic and narrative sequencing were not changed.
+- Authoritative references: the existing approved concept-art sheets under each chapter's `assets/**/concept_art/` folders. Runtime frames preserve concept silhouettes, signature equipment, layered materials, side-facing readability and existing animation names.
+- Runtime targets delivered: 128x128 canvases for normal enemies and summons, 192x192 for Bosses, 96x96 centered player canvases and 128x128 centered Candle Warden canvases. All outputs use transparent PNGs, nearest-neighbor import, stable centered anchors and formal non-archive paths.
+- Legacy handling: superseded frames are retained beneath `.gdignore` archive roots for visual provenance. Runtime scene scans report zero `archive_legacy` references.
+- QA evidence: `docs/qa/chapter_01_character_replication/chapter_01_replication_roster.png`, `docs/qa/chapter_02_character_replication/chapter_02_replication_roster.png`, `docs/qa/chapter_03_character_replication/chapter_03_replication_roster.png`, and `docs/qa/core_character_replication/core_character_replication_roster.png`.
+- Exact Godot 4.7.1 generation and import — PASS. Chapter I, Chapter II, Chapter III and core-character 95 gates — PASS. MainBootstrap smoke — PASS, logging the formal opening cinematic route with no parser/resource red error.
+- Commits: `ee6e3531` Chapter I, `91643f19` Chapter II, `ed9b66ea` Chapter III, `b242adc6` shared Player/Candle Warden. Commits are local only; no push was requested.
+- Dirty-worktree isolation: pre-existing Chapter I balance/scene edits and Chapter III Underkeep environment edits remain preserved outside these commits.
+
 ## 2026-08-03 — Full remaining character 95% concept-replication program
 
 Status: complete — seven remaining Chapter IV roles and Soul Gaoler Ormund were redrawn and rebuilt; Night Warden and Candle Warden retained their already accepted formal reworks after focused 95-point regression checks
