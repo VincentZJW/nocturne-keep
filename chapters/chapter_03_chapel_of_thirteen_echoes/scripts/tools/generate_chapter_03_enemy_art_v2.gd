@@ -8,6 +8,9 @@ extends SceneTree
 ## runtime frame so no legacy attack/reaction frame remains in the formal SpriteFrames.
 
 const ROOT: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/enemies"
+const FRAME_SIZE: int = 128
+const LEGACY_SIZE: int = 64
+const ART_OFFSET: Vector2i = Vector2i(32, 32)
 const CLEAR: Color = Color(0.0, 0.0, 0.0, 0.0)
 const VOID: Color = Color("080a10")
 const OUTLINE: Color = Color("11141c")
@@ -112,8 +115,8 @@ func _initialize() -> void:
 
 
 func _draw_frame(role: String, animation: String, frame: int, count: int) -> Image:
-	var image: Image = Image.create(64, 64, false, Image.FORMAT_RGBA8)
-	image.fill(CLEAR)
+	var legacy: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
+	legacy.fill(CLEAR)
 	var phase: float = float(frame) / float(maxi(1, count - 1))
 	var stage: String = "base"
 	if animation.ends_with("_windup"):
@@ -135,18 +138,68 @@ func _draw_frame(role: String, animation: String, frame: int, count: int) -> Ima
 		bob = [0, -1, 0, 0, -1, 0][frame]
 	match role:
 		"bellchain_penitent":
-			_draw_penitent(image, animation, stage, frame, phase, bob)
+			_draw_penitent(legacy, animation, stage, frame, phase, bob)
 		"censer_executioner":
-			_draw_executioner(image, animation, stage, frame, phase, bob)
+			_draw_executioner(legacy, animation, stage, frame, phase, bob)
 		"silent_chorister":
-			_draw_chorister(image, animation, stage, frame, phase, bob)
+			_draw_chorister(legacy, animation, stage, frame, phase, bob)
 		"stained_glass_seraph":
-			_draw_seraph(image, animation, stage, frame, phase, bob)
+			_draw_seraph(legacy, animation, stage, frame, phase, bob)
 		"confessional_wraith":
-			_draw_wraith(image, animation, stage, frame, phase, bob)
+			_draw_wraith(legacy, animation, stage, frame, phase, bob)
 		"thirteenth_scribe":
-			_draw_scribe(image, animation, stage, frame, phase, bob)
+			_draw_scribe(legacy, animation, stage, frame, phase, bob)
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_replication_details(image, role, stage, frame)
 	return image
+
+
+func _draw_replication_details(image: Image, role: String, stage: String, frame: int) -> void:
+	if stage == "death" and frame >= 4:
+		return
+	var o: Vector2i = ART_OFFSET
+	match role:
+		"bellchain_penitent":
+			# Thirteen-link penitential collar and split bell face.
+			for link: int in range(7):
+				_pixel(image, o.x + 18 + link * 4, o.y + 28 + link % 2, COPPER_LIT)
+			_draw_segment(image, o + Vector2i(26, 13), o + Vector2i(34, 21), 2, BONE)
+			_draw_segment(image, o + Vector2i(34, 13), o + Vector2i(26, 21), 2, BONE_SHADOW)
+		"censer_executioner":
+			# Execution hood seam, iron gorget and smoke-scarred censer vents.
+			_draw_segment(image, o + Vector2i(23, 15), o + Vector2i(38, 15), 2, IRON)
+			_draw_segment(image, o + Vector2i(30, 7), o + Vector2i(30, 22), 1, STEEL)
+			for vent: int in range(4):
+				_pixel(image, o.x + 48 + (vent % 2) * 3, o.y + 37 + (vent / 2) * 3, COPPER_LIT)
+		"silent_chorister":
+			# Sewn mouth veil and a thirteen-note stole identify the silence caster.
+			_draw_segment(image, o + Vector2i(23, 18), o + Vector2i(36, 18), 2, BONE_SHADOW)
+			for stitch: int in range(5):
+				_pixel(image, o.x + 24 + stitch * 3, o.y + 18 + stitch % 2, OUTLINE)
+			for note: int in range(5):
+				_pixel(image, o.x + 27 + note % 2 * 6, o.y + 30 + note * 4, PALE)
+		"stained_glass_seraph":
+			# Lead came seams and tri-colour window shards keep the wing read unique.
+			for ray: int in range(4):
+				_draw_segment(image, o + Vector2i(30, 25), o + Vector2i(9 + ray * 14, 9 + (ray % 2) * 12), 1, OUTLINE)
+			_pixel(image, o.x + 15, o.y + 14, GLASS_RED)
+			_pixel(image, o.x + 43, o.y + 14, GLASS_GOLD)
+			_pixel(image, o.x + 30, o.y + 10, GLASS_CYAN)
+		"confessional_wraith":
+			# Lattice confession mask, absolution key and spectral chest seam.
+			for bar: int in range(4):
+				_draw_segment(image, o + Vector2i(23 + bar * 4, 12), o + Vector2i(23 + bar * 4, 23), 1, BONE_SHADOW)
+			_draw_segment(image, o + Vector2i(27, 31), o + Vector2i(34, 47), 1, PALE)
+			_draw_segment(image, o + Vector2i(42, 34), o + Vector2i(51, 29), 2, COPPER)
+		"thirteenth_scribe":
+			# Split quill crown, ink scripture bands and the thirteenth seal.
+			for quill: int in range(3):
+				_draw_segment(image, o + Vector2i(27 + quill * 4, 13), o + Vector2i(24 + quill * 7, 4 + quill % 2 * 3), 2, BONE)
+			for line_index: int in range(4):
+				_draw_segment(image, o + Vector2i(23, 31 + line_index * 4), o + Vector2i(37, 31 + line_index * 4), 1, INK)
+			_pixel(image, o.x + 30, o.y + 49, PALE_LIT)
 
 
 func _draw_penitent(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
@@ -679,16 +732,16 @@ func _write_role_references(role: String) -> void:
 	var effect_dir: String = "%s/%s/effects" % [ROOT,role]
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(reference_dir))
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(effect_dir))
-	var action_reference: Image = Image.create(192,64,false,Image.FORMAT_RGBA8)
+	var action_reference: Image = Image.create(384,128,false,Image.FORMAT_RGBA8)
 	action_reference.fill(CLEAR)
 	var idle: Image = _draw_frame(role,"idle",0,4)
 	var action_name: String = _representative_action(role)
 	var active_count: int = int((ANIMATIONS[role] as Dictionary)[action_name])
 	var active: Image = _draw_frame(role,action_name,0,active_count)
 	var hurt: Image = _draw_frame(role,"hurt",0,3)
-	action_reference.blit_rect(idle,Rect2i(0,0,64,64),Vector2i(0,0))
-	action_reference.blit_rect(active,Rect2i(0,0,64,64),Vector2i(64,0))
-	action_reference.blit_rect(hurt,Rect2i(0,0,64,64),Vector2i(128,0))
+	action_reference.blit_rect(idle,Rect2i(0,0,128,128),Vector2i(0,0))
+	action_reference.blit_rect(active,Rect2i(0,0,128,128),Vector2i(128,0))
+	action_reference.blit_rect(hurt,Rect2i(0,0,128,128),Vector2i(256,0))
 	action_reference.save_png(ProjectSettings.globalize_path("%s/%s_action_reference.png" % [reference_dir,role]))
 	var effect: Image = Image.create(96,48,false,Image.FORMAT_RGBA8)
 	effect.fill(CLEAR)

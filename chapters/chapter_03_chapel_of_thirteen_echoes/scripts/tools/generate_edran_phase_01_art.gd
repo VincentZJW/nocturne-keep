@@ -1,12 +1,14 @@
 extends SceneTree
 
-## Deterministic 96x96 formal pixel-art generator for Edran Phase 1.
+## Deterministic 192x192 formal pixel-art generator for Edran Phase 1.
 ## Concept boards remain production references; runtime art is authored directly at target resolution.
 
 const ROOT: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran"
 const SPRITES_ROOT: String = ROOT + "/phase_01"
 const PREVIEW_ROOT: String = ROOT + "/previews"
-const FRAME_SIZE: int = 96
+const FRAME_SIZE: int = 192
+const LEGACY_SIZE: int = 96
+const ART_OFFSET: Vector2i = Vector2i(48, 48)
 const CLEAR: Color = Color(0.0, 0.0, 0.0, 0.0)
 const OUTLINE: Color = Color("070810")
 const VOID: Color = Color("0b0c14")
@@ -93,21 +95,49 @@ func _write_master_previews() -> void:
 			if silhouette.get_pixel(x, y).a > 0.0:
 				silhouette.set_pixel(x, y, Color.BLACK)
 	silhouette.save_png(ProjectSettings.globalize_path(PREVIEW_ROOT + "/edran_phase_01_sprite_silhouette.png"))
-	var scale_board: Image = Image.create(320, 128, false, Image.FORMAT_RGBA8)
+	var scale_board: Image = Image.create(640, 256, false, Image.FORMAT_RGBA8)
 	scale_board.fill(Color("11131c"))
-	_blit_scaled_nearest(scale_board, idle, Vector2i(18, 16), 1)
-	_blit_scaled_nearest(scale_board, idle, Vector2i(124, 0), 2)
-	_draw_segment(scale_board, Vector2i(8, 112), Vector2i(306, 112), 2, STEEL)
+	_blit_scaled_nearest(scale_board, idle, Vector2i(18, 32), 1)
+	_blit_scaled_nearest(scale_board, idle, Vector2i(280, 0), 1)
+	_draw_segment(scale_board, Vector2i(8, 224), Vector2i(620, 224), 2, STEEL)
 	scale_board.save_png(ProjectSettings.globalize_path(PREVIEW_ROOT + "/edran_phase_01_scale_preview.png"))
 
 
 func _draw_frame(animation: StringName, frame: int, count: int) -> Image:
+	var legacy: Image = _draw_frame_legacy(animation, frame, count)
 	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_replication_details(image, animation, frame)
+	return image
+
+
+func _draw_frame_legacy(animation: StringName, frame: int, count: int) -> Image:
+	var image: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(CLEAR)
 	var progress: float = float(frame) / float(maxi(1, count - 1))
 	var pose: Dictionary = _pose(animation, frame, progress)
 	_draw_edran(image, animation, frame, progress, pose)
 	return image
+
+
+func _draw_replication_details(image: Image, animation: StringName, frame: int) -> void:
+	var o: Vector2i = ART_OFFSET
+	# Thirteen-point reliquary crown, sealed pontifical mask, scripture stole,
+	# black-bell breast reliquary and chained censer identify Edran in every pose.
+	for point: int in range(7):
+		var crown_x: int = o.x + 31 + point * 5
+		_draw_segment(image, Vector2i(crown_x, o.y + 13), Vector2i(crown_x + 2, o.y + 4 + abs(point - 3)), 2, OLD_GOLD)
+	_draw_segment(image, o + Vector2i(39, 20), o + Vector2i(57, 20), 2, BONE)
+	for seal: int in range(5):
+		_pixel(image, o.x + 38 + seal * 4, o.y + 34 + (seal % 2), GOLD_LIGHT)
+	_draw_segment(image, o + Vector2i(45, 39), o + Vector2i(45, 72), 3, OXBLOOD_LIGHT)
+	for script_line: int in range(5):
+		_draw_segment(image, o + Vector2i(39, 48 + script_line * 5), o + Vector2i(51, 48 + script_line * 5), 1, BONE_SHADE)
+	_draw_segment(image, o + Vector2i(63, 39), o + Vector2i(74, 58), 2, COPPER_LIGHT)
+	if animation in [&"summon_loop", &"thirteenfold_sentence"]:
+		for mote: int in range(4):
+			_pixel(image, o.x + 27 + mote * 13, o.y + 17 + (frame + mote) % 4, SOUL_LIGHT)
 
 
 func _pose(animation: StringName, frame: int, progress: float) -> Dictionary:

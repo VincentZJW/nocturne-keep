@@ -2,6 +2,8 @@ extends SceneTree
 
 const ROOT: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/boss_summons"
 const SIZE: int = 64
+const FRAME_SIZE: int = 128
+const ART_OFFSET: Vector2i = Vector2i(32, 32)
 const OUTLINE: Color = Color("0c0d12")
 const VOID: Color = Color("05060a")
 const BONE: Color = Color("c8c0aa")
@@ -44,11 +46,20 @@ func _initialize() -> void:
 					return
 				_saved += 1
 	_write_previews()
-	print("EDRAN_SUMMON_ART | PASS actors=2 frames=%d canvas=64" % _saved)
+	print("EDRAN_SUMMON_ART | PASS actors=2 frames=%d canvas=128" % _saved)
 	quit(0)
 
 
 func _draw_penitent(animation: StringName, frame: int, count: int) -> Image:
+	var legacy: Image = _draw_penitent_legacy(animation, frame, count)
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_penitent_replication_details(image, frame)
+	return image
+
+
+func _draw_penitent_legacy(animation: StringName, frame: int, count: int) -> Image:
 	var image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(Color.TRANSPARENT)
 	if animation == &"summon_telegraph":
@@ -141,6 +152,15 @@ func _draw_penitent(animation: StringName, frame: int, count: int) -> Image:
 
 
 func _draw_husk(animation: StringName, frame: int, count: int) -> Image:
+	var legacy: Image = _draw_husk_legacy(animation, frame, count)
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(Color.TRANSPARENT)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_husk_replication_details(image, frame)
+	return image
+
+
+func _draw_husk_legacy(animation: StringName, frame: int, count: int) -> Image:
 	var image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(Color.TRANSPARENT)
 	if animation == &"summon_telegraph":
@@ -226,6 +246,39 @@ func _draw_husk(animation: StringName, frame: int, count: int) -> Image:
 	return image
 
 
+func _draw_penitent_replication_details(image: Image, frame: int) -> void:
+	var o: Vector2i = ART_OFFSET
+	# Ossuary burden slab, seal nails and asymmetric grave claws.
+	for nail: int in range(5):
+		_pixel_on_canvas(image, o.x + 23 + nail * 4, o.y + 25 + nail % 2, BRASS)
+	_draw_canvas_segment(image, o + Vector2i(22, 31), o + Vector2i(40, 31), 2, BONE)
+	_draw_canvas_segment(image, o + Vector2i(15, 42), o + Vector2i(8, 50 + frame % 2), 2, BONE_DARK)
+	_draw_canvas_segment(image, o + Vector2i(45, 41), o + Vector2i(55, 51 - frame % 2), 2, BONE)
+
+
+func _draw_husk_replication_details(image: Image, frame: int) -> void:
+	var o: Vector2i = ART_OFFSET
+	# Choir cage mask, thirteen seal nodes and exposed funeral ribs.
+	for bar: int in range(5):
+		_draw_canvas_segment(image, o + Vector2i(22 + bar * 4, 10), o + Vector2i(22 + bar * 4, 23), 1, BONE_DARK)
+	for seal: int in range(7):
+		_pixel_on_canvas(image, o.x + 20 + seal * 4, o.y + 34 + (seal + frame) % 2, SOUL_LIGHT)
+	for rib: int in range(4):
+		_draw_canvas_segment(image, o + Vector2i(23, 27 + rib * 4), o + Vector2i(38, 27 + rib * 4), 1, BONE)
+
+
+func _draw_canvas_segment(image: Image, start: Vector2i, finish: Vector2i, width: int, color: Color) -> void:
+	var steps: int = maxi(absi(finish.x - start.x), absi(finish.y - start.y))
+	for index: int in range(steps + 1):
+		var point: Vector2i = (Vector2(start).lerp(Vector2(finish), float(index) / float(maxi(1, steps)))).round()
+		image.fill_rect(Rect2i(point - Vector2i(width / 2, width / 2), Vector2i(width, width)), color)
+
+
+func _pixel_on_canvas(image: Image, x: int, y: int, color: Color) -> void:
+	if x >= 0 and y >= 0 and x < image.get_width() and y < image.get_height():
+		image.set_pixel(x, y, color)
+
+
 func _draw_penitent_skull(image: Image, center: Vector2i) -> void:
 	_poly(image,PackedVector2Array([center+Vector2i(-6,-6),center+Vector2i(4,-7),center+Vector2i(7,-3),center+Vector2i(5,6),center+Vector2i(1,9),center+Vector2i(-5,6),center+Vector2i(-7,-1)]),OUTLINE)
 	_poly(image,PackedVector2Array([center+Vector2i(-4,-5),center+Vector2i(3,-5),center+Vector2i(5,-2),center+Vector2i(3,5),center+Vector2i(0,7),center+Vector2i(-4,4),center+Vector2i(-5,-1)]),BONE)
@@ -301,7 +354,7 @@ func _write_previews() -> void:
 		var source: Image = _draw_penitent(&"idle", 0, 4) if actor == &"ossuary_penitent" else _draw_husk(&"idle", 0, 4)
 		var preview: Image = Image.create(256, 256, false, Image.FORMAT_RGBA8)
 		preview.fill(Color("10131b"))
-		_blit_nearest(preview, source, Vector2i.ZERO, 4)
+		_blit_nearest(preview, source, Vector2i.ZERO, 2)
 		var directory: String = "%s/%s/previews" % [ROOT, actor]
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
 		preview.save_png(ProjectSettings.globalize_path("%s/%s_master_preview.png" % [directory, actor]))

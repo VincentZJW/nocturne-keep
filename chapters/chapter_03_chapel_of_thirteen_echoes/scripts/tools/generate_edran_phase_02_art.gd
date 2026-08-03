@@ -1,7 +1,7 @@
 extends SceneTree
 
 ## Deterministic production-pixel authoring for Edran's structural transformation and Phase 2.
-## Every frame is drawn directly at 96x96; no concept image is downscaled into runtime art.
+## Every frame is delivered on a 192x192 Boss canvas; no concept image is downscaled into runtime art.
 
 const ROOT: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran"
 const TRANSITION_ROOT: String = ROOT + "/phase_transition"
@@ -9,6 +9,8 @@ const PHASE_02_ROOT: String = ROOT + "/phase_02"
 const CONCEPT_ROOT: String = ROOT + "/concept_art"
 const PREVIEW_ROOT: String = ROOT + "/previews"
 const SIZE: int = 96
+const FRAME_SIZE: int = 192
+const ART_OFFSET: Vector2i = Vector2i(48, 48)
 const CLEAR: Color = Color(0, 0, 0, 0)
 const OUTLINE: Color = Color("070810")
 const VOID: Color = Color("0b0c14")
@@ -85,6 +87,15 @@ func _initialize() -> void:
 
 
 func _draw_frame(animation: StringName, frame: int, count: int, transition: bool) -> Image:
+	var legacy: Image = _draw_frame_legacy(animation, frame, count, transition)
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	image.blit_rect(legacy, Rect2i(Vector2i.ZERO, legacy.get_size()), ART_OFFSET)
+	_draw_replication_details(image, animation, frame, transition)
+	return image
+
+
+func _draw_frame_legacy(animation: StringName, frame: int, count: int, transition: bool) -> Image:
 	var image: Image = Image.create(SIZE, SIZE, false, Image.FORMAT_RGBA8)
 	image.fill(CLEAR)
 	var progress: float = float(frame) / float(maxi(1, count - 1))
@@ -105,6 +116,26 @@ func _draw_frame(animation: StringName, frame: int, count: int, transition: bool
 		lean = -roundi(progress * 10.0)
 	_draw_phase_02(image, animation, frame, progress, x, y, lean, stride, transition)
 	return image
+
+
+func _draw_replication_details(image: Image, animation: StringName, frame: int, transition: bool) -> void:
+	var o: Vector2i = ART_OFFSET
+	# The broken crown, void mask, external ribs and black-bell reliquary are
+	# permanent Phase II anatomy, not a colour modulation of Phase I.
+	for point: int in range(7):
+		var crown_x: int = o.x + 31 + point * 5
+		_line(image, Vector2i(crown_x, o.y + 14), Vector2i(crown_x + (1 if point % 2 else -1), o.y + 4 + abs(point - 3)), 2, GOLD)
+	_line(image, o + Vector2i(38, 20), o + Vector2i(55, 20), 2, VOID)
+	_pixel(image, o.x + 42, o.y + 21, SOUL_LIT)
+	_pixel(image, o.x + 51, o.y + 21, SOUL_LIT)
+	for rib: int in range(5):
+		_line(image, o + Vector2i(46, 37 + rib * 3), o + Vector2i(25 - rib * 2, 31 + rib * 2), 2, BONE)
+		_line(image, o + Vector2i(49, 37 + rib * 3), o + Vector2i(69 + rib * 2, 31 + rib * 2), 2, BONE_DARK)
+	_circle_outline(image, o + Vector2i(48, 48), 7, IRON)
+	_fill(image, Rect2i(o.x + 44, o.y + 44, 8, 9), VOID)
+	if transition:
+		for shard: int in range(3 + frame):
+			_pixel(image, o.x + 25 + (shard * 11) % 48, o.y + 12 + (shard * 7) % 35, BONE)
 
 
 func _draw_phase_02(image: Image, animation: StringName, frame: int, progress: float, x: int, y: int, lean: int, stride: int, transition: bool) -> void:
@@ -200,23 +231,23 @@ func _write_previews_and_concepts() -> void:
 	var idle: Image = _draw_frame(&"phase_02_idle",0,4,false)
 	idle.save_png(ProjectSettings.globalize_path(PREVIEW_ROOT+"/edran_phase_02_sprite_master.png"))
 	var silhouette: Image = idle.duplicate()
-	for y: int in range(SIZE):
-		for x: int in range(SIZE):
+	for y: int in range(silhouette.get_height()):
+		for x: int in range(silhouette.get_width()):
 			if silhouette.get_pixel(x,y).a > 0.0:
 				silhouette.set_pixel(x,y,Color.BLACK)
 	silhouette.save_png(ProjectSettings.globalize_path(PREVIEW_ROOT+"/edran_phase_02_sprite_silhouette.png"))
 	var board: Image = Image.create(1280,800,false,Image.FORMAT_RGBA8)
 	board.fill(Color("11131d"))
-	_blit_nearest(board,_draw_frame(&"phase_02_rise",4,5,true),Vector2i(80,100),5)
-	_blit_nearest(board,idle,Vector2i(650,100),5)
+	_blit_nearest(board,_draw_frame(&"phase_02_rise",4,5,true),Vector2i(20,100),3)
+	_blit_nearest(board,idle,Vector2i(650,100),3)
 	_draw_label_blocks(board,Vector2i(70,42),520,GOLD_LIT)
 	_draw_label_blocks(board,Vector2i(640,42),530,SOUL_LIT)
 	board.save_png(ProjectSettings.globalize_path(CONCEPT_ROOT+"/edran_phase_transition_and_phase_02_board.png"))
 	var anatomy: Image = Image.create(1280,640,false,Image.FORMAT_RGBA8)
 	anatomy.fill(Color("10121b"))
-	_blit_nearest(anatomy,_draw_frame(&"crown_crack",3,4,true),Vector2i(40,75),4)
-	_blit_nearest(anatomy,_draw_frame(&"chest_open",3,4,true),Vector2i(430,75),4)
-	_blit_nearest(anatomy,_draw_frame(&"crozier_fuse",3,4,true),Vector2i(820,75),4)
+	_blit_nearest(anatomy,_draw_frame(&"crown_crack",3,4,true),Vector2i(0,40),3)
+	_blit_nearest(anatomy,_draw_frame(&"chest_open",3,4,true),Vector2i(410,40),3)
+	_blit_nearest(anatomy,_draw_frame(&"crozier_fuse",3,4,true),Vector2i(820,40),3)
 	anatomy.save_png(ProjectSettings.globalize_path(CONCEPT_ROOT+"/edran_phase_02_anatomy_and_weapon_board.png"))
 
 
