@@ -20,7 +20,10 @@ func _initialize() -> void:
 func _run() -> void:
 	var manifest: Dictionary = _load_json(MANIFEST_PATH)
 	_check(int(manifest.get("room_count", 0)) == 17, "manifest room_count must be 17")
-	_check(not bool(manifest.get("formal_encounters_populated", true)), "S3 must not populate ordinary encounters")
+	_check(bool(manifest.get("formal_encounters_populated", false)), "S4 must persist formal ordinary encounters")
+	_check(int(manifest.get("formal_enemy_count", 0)) == 46, "S4 formal enemy count must be 46")
+	_check(int(manifest.get("formal_encounter_group_count", 0)) == 20, "S4 EncounterGroup count must be 20")
+	_check(int(manifest.get("encounter_authored_seed", 0)) == 40446, "S4 authored seed must be 40446")
 	var rooms: Array = manifest.get("rooms", []) as Array
 	_check(rooms.size() == 17, "manifest must contain 17 room records")
 	var asset_references: int = 0
@@ -71,7 +74,11 @@ func _run() -> void:
 			_check(620.0 - (platform_shape.position.y - 6.0) <= 124.0, "room %02d mandatory platform exceeds locked vertical envelope" % index)
 		if room.has_node("Gameplay/Checkpoint"):
 			checkpoint_ids.append(String((room.get_node("Gameplay/Checkpoint") as Area2D).get("checkpoint_id")))
-		_check(room.find_children("*", "EnemyCombatant", true, false).is_empty(), "room %02d must not populate enemies in S3" % index)
+		var encounter_spawner: Chapter04EncounterSpawner = room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
+		if EXPECTED_SLOTS[index] > 0:
+			_check(encounter_spawner != null, "combat room %02d must persist its S4 EncounterSpawner" % index)
+		else:
+			_check(encounter_spawner == null, "support room %02d must remain enemy-free" % index)
 		room.free()
 	_check(asset_references >= 500, "17-room route should reference at least 500 formal Sprite nodes")
 	_check(checkpoint_ids == ["DRY_GAOLER_CELL", "LAST_GAOL"], "formal checkpoint ids mismatch")
@@ -85,7 +92,7 @@ func _run() -> void:
 		_check(not level_root.has_node("CharacterTrial"), "CharacterTrial must remain separate from the formal route")
 		level_root.free()
 	if _failures.is_empty():
-		print("CH4 S3 FORMAL ROUTE | PASS rooms=17 assets=%d checkpoints=2" % asset_references)
+		print("CH4 S3/S4 FORMAL ROUTE | PASS rooms=17 assets=%d checkpoints=2 encounters=20 enemies=46" % asset_references)
 		quit(0)
 		return
 	for failure: String in _failures:

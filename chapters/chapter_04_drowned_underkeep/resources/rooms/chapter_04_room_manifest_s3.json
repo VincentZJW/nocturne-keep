@@ -1,8 +1,11 @@
 {
 	"chapter": "CHAPTER_04_DROWNED_UNDERKEEP",
 	"chapter_v_destination_status": "sealed_placeholder",
-	"formal_encounters_populated": false,
-	"milestone": "CH4-S3",
+	"encounter_authored_seed": 40446,
+	"formal_encounter_group_count": 20,
+	"formal_enemy_count": 46,
+	"formal_encounters_populated": true,
+	"milestone": "CH4-S4",
 	"room_count": 17,
 	"rooms": [
 		{

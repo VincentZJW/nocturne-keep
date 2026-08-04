@@ -1,0 +1,134 @@
+[gd_resource type="Resource" script_class="Chapter04EncounterManifest" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_data.gd" id="1_im88s"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_enemy_spawn_data.gd" id="2_yjmub"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/drowned_gaoler.tscn" id="3_11qqq"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/mire_harpooner.tscn" id="4_6ydly"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/mirefin_raider.tscn" id="5_ho8fs"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/bog_toad.tscn" id="6_5ilxp"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_manifest.gd" id="7_xis26"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_spawn_point_data.gd" id="8_eo10m"]
+
+[sub_resource type="Resource" id="Resource_0f7qs"]
+script = ExtResource("2_yjmub")
+spawn_record_id = &"CH4_AREA_03_DROWNED_GAOLER_01"
+enemy_type = &"drowned_gaoler"
+spawn_point_id = &"GroundSlot01"
+enemy_scene = ExtResource("3_11qqq")
+local_position = Vector2(360, 620)
+movement_bounds = Vector2(230, 490)
+facing_direction = 1.0
+access_route = "west chainway floor"
+
+[sub_resource type="Resource" id="Resource_qq8nh"]
+script = ExtResource("2_yjmub")
+spawn_record_id = &"CH4_AREA_03_MIRE_HARPOONER_01"
+enemy_type = &"mire_harpooner"
+spawn_point_id = &"PlatformSlot02"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("4_6ydly")
+local_position = Vector2(800, 528)
+movement_bounds = Vector2(760, 840)
+facing_direction = 1.0
+access_route = "H02: west floor -> first broken-chain ledge"
+
+[sub_resource type="Resource" id="Resource_somi4"]
+script = ExtResource("1_im88s")
+encounter_id = &"CH4_AREA_03_ENCOUNTER_01"
+room_id = &"CH4_AREA_03"
+region_name = &"CH4_AREA_03_REGION_01"
+activation_rect = Rect2(96, 0, 896, 720)
+spawns = Array[ExtResource("2_yjmub")]([SubResource("Resource_0f7qs"), SubResource("Resource_qq8nh")])
+
+[sub_resource type="Resource" id="Resource_shg2y"]
+script = ExtResource("2_yjmub")
+spawn_record_id = &"CH4_AREA_03_MIREFIN_RAIDER_01"
+enemy_type = &"mirefin_raider"
+spawn_point_id = &"GroundSlot03"
+spawn_role = &"shallow_water"
+enemy_scene = ExtResource("5_ho8fs")
+local_position = Vector2(1245.3334, 620)
+movement_bounds = Vector2(1115.3334, 1375.3334)
+access_route = "east chainway channel"
+
+[sub_resource type="Resource" id="Resource_hsc8s"]
+script = ExtResource("2_yjmub")
+spawn_record_id = &"CH4_AREA_03_BOG_TOAD_01"
+enemy_type = &"bog_toad"
+spawn_point_id = &"GroundSlot04"
+spawn_role = &"shallow_water"
+enemy_scene = ExtResource("6_5ilxp")
+local_position = Vector2(1688, 620)
+movement_bounds = Vector2(1558, 1818)
+access_route = "east chainway channel"
+
+[sub_resource type="Resource" id="Resource_sk838"]
+script = ExtResource("1_im88s")
+encounter_id = &"CH4_AREA_03_ENCOUNTER_02"
+room_id = &"CH4_AREA_03"
+region_name = &"CH4_AREA_03_REGION_02"
+sequence_index = 1
+activation_rect = Rect2(1056, 0, 896, 720)
+spawns = Array[ExtResource("2_yjmub")]([SubResource("Resource_shg2y"), SubResource("Resource_hsc8s")])
+
+[sub_resource type="Resource" id="Resource_dgc1o"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"GroundSlot01"
+room_id = &"CH4_AREA_03"
+local_position = Vector2(360, 620)
+movement_bounds = Vector2(230, 490)
+
+[sub_resource type="Resource" id="Resource_iqjtc"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"GroundSlot02"
+room_id = &"CH4_AREA_03"
+local_position = Vector2(802.6667, 620)
+movement_bounds = Vector2(672.6667, 932.6667)
+
+[sub_resource type="Resource" id="Resource_fu2m5"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"GroundSlot03"
+room_id = &"CH4_AREA_03"
+local_position = Vector2(1245.3334, 620)
+movement_bounds = Vector2(1115.3334, 1375.3334)
+
+[sub_resource type="Resource" id="Resource_byw7d"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"GroundSlot04"
+room_id = &"CH4_AREA_03"
+local_position = Vector2(1688, 620)
+movement_bounds = Vector2(1558, 1818)
+
+[sub_resource type="Resource" id="Resource_8j7d8"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"PlatformSlot02"
+room_id = &"CH4_AREA_03"
+semantic_tag = &"platform_ranged"
+local_position = Vector2(800, 528)
+movement_bounds = Vector2(760, 840)
+platform_width = 128.0
+
+[sub_resource type="Resource" id="Resource_480bn"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"PlatformSlot03"
+room_id = &"CH4_AREA_03"
+semantic_tag = &"platform_ranged"
+local_position = Vector2(1000, 496)
+movement_bounds = Vector2(944, 1056)
+platform_width = 160.0
+
+[sub_resource type="Resource" id="Resource_g1esk"]
+script = ExtResource("8_eo10m")
+spawn_point_id = &"PlatformSlot04"
+room_id = &"CH4_AREA_03"
+semantic_tag = &"platform_ranged"
+local_position = Vector2(1200, 528)
+movement_bounds = Vector2(1160, 1240)
+platform_width = 128.0
+
+[resource]
+script = ExtResource("7_xis26")
+room_id = &"CH4_AREA_03"
+room_width = 2048
+spawn_points = Array[ExtResource("8_eo10m")]([SubResource("Resource_dgc1o"), SubResource("Resource_iqjtc"), SubResource("Resource_fu2m5"), SubResource("Resource_byw7d"), SubResource("Resource_8j7d8"), SubResource("Resource_480bn"), SubResource("Resource_g1esk")])
+encounters = Array[ExtResource("1_im88s")]([SubResource("Resource_somi4"), SubResource("Resource_sk838")])

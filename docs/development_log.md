@@ -1,5 +1,21 @@
 # Development Log
 
+## 2026-08-04 — Chapter IV scene production S4 formal Encounter population
+
+Status: complete — fixed-seed population, saved room manifests, serialized group activation, Main integration and exact Godot 4.7.1 QA pass
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture, all four mandatory production standards, the Level Designer workflow, and the approved CH4-S0 through S3 specifications.
+- Goal: populate the ten formal Chapter IV combat rooms from the locked fixed-seed `40446` plan using saved typed manifests: exactly 46 ordinary/elite enemies, 20 spatially sequential EncounterGroups, seven reachable Harpooner platforms, 13 elevated starts, bounded patrol lanes, room-scoped activation and deterministic reloads.
+- Task-owned paths: Chapter IV Encounter data/runtime/tooling/resources, the ten S3 combat-room scenes and S3 manifest metadata needed to bind those manifests, S4-only tests/docs/QA evidence, and this isolated log entry.
+- Encounter contract: two groups per combat room; four-enemy rooms use 2+2 and five-enemy rooms use 2+3. Runtime never calls RNG. Dormant groups keep AI/process disabled, room unloading removes all active targets, support rooms remain enemy-free, and Ormund is not counted or formally activated in S4.
+- Spatial contract: all seven Harpooners use the approved reachable platforms; the remaining six elevated starts are two Gaolers, two Penitents, one Executioner and one Convict. Door buffers, body separation, platform width, floor baseline, camera and S3 collision/layer contracts remain unchanged.
+- Verification plan: exact Godot 4.7.1 manifest generation/import; fixed seed/count/role/group/elevation audits; formal room reference scan; dormant activation and group isolation; room unload/reload determinism; current Chapter IV enemy and Ormund regressions; MainBootstrap traversal/capture; Output/Debugger and `git diff --check`.
+- Implementation: added typed persisted spawn/encounter/manifest resources and a room-owned `Chapter04EncounterSpawner`; authored seed `40446` into ten saved combat rooms as 20 EncounterGroups and 46 existing enemy instances. Groups are split `2 + 2` or `2 + 3`, only one spatial group is armed during an active encounter, and clearing it rearms the remaining group. Thirteen reviewed elevated starts include all seven Harpooners and persist their access-route notes and platform patrol bounds. Areas 00, 06, 12, 13, 14, 15 and 16 remain free of ordinary encounters.
+- Main result: `res://scenes/bootstrap/main_bootstrap.tscn` resolves the formal `drowned_underkeep.tscn` route; a Main-path test loaded all 17 rooms and confirmed exactly 10 populated combat rooms, 20 groups and 46 enemies. Ten graphical Main captures were saved under `docs/qa/chapter_04_scene_production/s4/main/`.
+- Validation: exact 4.7.1 editor import PASS; manifest QA PASS (`rooms=10 groups=20 enemies=46 elevated=13 harpooners=7 seed=40446`); runtime serialization/rearm/reload QA PASS; Main encounter integration PASS; S3 structural regression PASS (`rooms=17 assets=664 checkpoints=2`); Main full-route regression PASS; graphical capture PASS (`captures=10`). Detailed commands and outputs are preserved in `docs/qa/chapter_04_scene_production/s4/chapter_04_s4_qa.md`.
+- Known limit: `simultaneous_attack_limit = 2` is persisted for future scheduling, but the shared EncounterGroup still has no attack-token scheduler. S4 therefore guarantees group size and serialized group activation, not a hard two-attacker cap. Encounter fairness remains a manual playtest decision.
+- Scope stop: no enemy/Boss tuning, no new character art, no Player changes, no formal Ormund activation/HUD/reward and no Chapter V transition. The user separately approved CH4-S5 after S4; S5 starts only after this milestone is committed. Pre-existing Chapter I/III/README/shared-resource worktree changes remain user-owned and outside the S4 commit.
+
 ## 2026-08-03 — Chapter IV scene production S3 formal route assembly
 
 Status: complete — 17 saved formal rooms, route transitions, collision/camera/checkpoint contracts and Main/F5 integration pass exact Godot 4.7.1 validation; Encounter population and formal Boss activation remain out of scope

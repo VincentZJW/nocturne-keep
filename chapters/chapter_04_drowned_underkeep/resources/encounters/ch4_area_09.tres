@@ -1,0 +1,124 @@
+[gd_resource type="Resource" script_class="Chapter04EncounterManifest" format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_data.gd" id="1_s71nj"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_enemy_spawn_data.gd" id="2_elmkp"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/chainbound_convict.tscn" id="3_0q5rj"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/drowned_gaoler.tscn" id="4_8wtb3"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/sunken_shield_penitent.tscn" id="5_8xr10"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/enemies/mire_harpooner.tscn" id="6_uagmx"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_manifest.gd" id="7_20obk"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_spawn_point_data.gd" id="8_7fvbr"]
+
+[sub_resource type="Resource" id="Resource_6m623"]
+script = ExtResource("2_elmkp")
+spawn_record_id = &"CH4_AREA_09_CHAINBOUND_CONVICT_01"
+enemy_type = &"chainbound_convict"
+spawn_point_id = &"GroundSlot01"
+enemy_scene = ExtResource("3_0q5rj")
+local_position = Vector2(360, 620)
+movement_bounds = Vector2(230, 490)
+facing_direction = 1.0
+access_route = "west registry floor"
+
+[sub_resource type="Resource" id="Resource_mwcsw"]
+script = ExtResource("2_elmkp")
+spawn_record_id = &"CH4_AREA_09_DROWNED_GAOLER_01"
+enemy_type = &"drowned_gaoler"
+spawn_point_id = &"PlatformSlot01"
+spawn_role = &"platform_heavy"
+enemy_scene = ExtResource("4_8wtb3")
+local_position = Vector2(680, 548)
+movement_bounds = Vector2(632, 728)
+facing_direction = 1.0
+access_route = "west archive step -> cage ledge"
+
+[sub_resource type="Resource" id="Resource_xqryi"]
+script = ExtResource("1_s71nj")
+encounter_id = &"CH4_AREA_09_ENCOUNTER_01"
+room_id = &"CH4_AREA_09"
+region_name = &"CH4_AREA_09_REGION_01"
+activation_rect = Rect2(96, 0, 960, 720)
+spawns = Array[ExtResource("2_elmkp")]([SubResource("Resource_6m623"), SubResource("Resource_mwcsw")])
+
+[sub_resource type="Resource" id="Resource_mufni"]
+script = ExtResource("2_elmkp")
+spawn_record_id = &"CH4_AREA_09_SUNKEN_SHIELD_PENITENT_01"
+enemy_type = &"sunken_shield_penitent"
+spawn_point_id = &"GroundSlot03"
+enemy_scene = ExtResource("5_8xr10")
+local_position = Vector2(1330.6666, 620)
+movement_bounds = Vector2(1200.6666, 1460.6666)
+access_route = "east registry floor"
+
+[sub_resource type="Resource" id="Resource_snbbv"]
+script = ExtResource("2_elmkp")
+spawn_record_id = &"CH4_AREA_09_MIRE_HARPOONER_01"
+enemy_type = &"mire_harpooner"
+spawn_point_id = &"PlatformSlot02"
+spawn_role = &"platform_ranged"
+enemy_scene = ExtResource("6_uagmx")
+local_position = Vector2(1450, 548)
+movement_bounds = Vector2(1402, 1498)
+access_route = "H06: east archive step -> cage ledge"
+
+[sub_resource type="Resource" id="Resource_u2yek"]
+script = ExtResource("1_s71nj")
+encounter_id = &"CH4_AREA_09_ENCOUNTER_02"
+room_id = &"CH4_AREA_09"
+region_name = &"CH4_AREA_09_REGION_02"
+sequence_index = 1
+activation_rect = Rect2(1120, 0, 960, 720)
+spawns = Array[ExtResource("2_elmkp")]([SubResource("Resource_mufni"), SubResource("Resource_snbbv")])
+
+[sub_resource type="Resource" id="Resource_c3nek"]
+script = ExtResource("8_7fvbr")
+spawn_point_id = &"GroundSlot01"
+room_id = &"CH4_AREA_09"
+local_position = Vector2(360, 620)
+movement_bounds = Vector2(230, 490)
+
+[sub_resource type="Resource" id="Resource_jqgti"]
+script = ExtResource("8_7fvbr")
+spawn_point_id = &"GroundSlot02"
+room_id = &"CH4_AREA_09"
+local_position = Vector2(845.3333, 620)
+movement_bounds = Vector2(715.3333, 975.3333)
+
+[sub_resource type="Resource" id="Resource_x28k2"]
+script = ExtResource("8_7fvbr")
+spawn_point_id = &"GroundSlot03"
+room_id = &"CH4_AREA_09"
+local_position = Vector2(1330.6666, 620)
+movement_bounds = Vector2(1200.6666, 1460.6666)
+
+[sub_resource type="Resource" id="Resource_80qnx"]
+script = ExtResource("8_7fvbr")
+spawn_point_id = &"GroundSlot04"
+room_id = &"CH4_AREA_09"
+local_position = Vector2(1816, 620)
+movement_bounds = Vector2(1686, 1946)
+
+[sub_resource type="Resource" id="Resource_kcjed"]
+script = ExtResource("8_7fvbr")
+spawn_point_id = &"PlatformSlot01"
+room_id = &"CH4_AREA_09"
+semantic_tag = &"platform_ranged"
+local_position = Vector2(680, 548)
+movement_bounds = Vector2(632, 728)
+platform_width = 144.0
+
+[sub_resource type="Resource" id="Resource_2n3uk"]
+script = ExtResource("8_7fvbr")
+spawn_point_id = &"PlatformSlot02"
+room_id = &"CH4_AREA_09"
+semantic_tag = &"platform_ranged"
+local_position = Vector2(1450, 548)
+movement_bounds = Vector2(1402, 1498)
+platform_width = 144.0
+
+[resource]
+script = ExtResource("7_20obk")
+room_id = &"CH4_AREA_09"
+room_width = 2176
+spawn_points = Array[ExtResource("8_7fvbr")]([SubResource("Resource_c3nek"), SubResource("Resource_jqgti"), SubResource("Resource_x28k2"), SubResource("Resource_80qnx"), SubResource("Resource_kcjed"), SubResource("Resource_2n3uk")])
+encounters = Array[ExtResource("1_s71nj")]([SubResource("Resource_xqryi"), SubResource("Resource_u2yek")])

@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/shallow_water_channel_bed_01.png" id="7_f2fcy"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_128.png" id="8_0i4pt"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="9_3eohl"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_spawner.gd" id="10_1xcn3"]
+[ext_resource type="Resource" path="res://chapters/chapter_04_drowned_underkeep/resources/encounters/ch4_area_01.tres" id="11_hgaqp"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ewmjy"]
 size = Vector2(1920, 104)
@@ -29,6 +31,8 @@ room_index = 1
 bilingual_name = "CHAPTER IV · FLOODED INTAKE / 淹水引渠"
 metadata/formal_chapter_room = true
 metadata/environment_asset_milestone = "CH4-S2"
+metadata/formal_encounters_populated = true
+metadata/encounter_authored_seed = 40446
 
 [node name="Background" type="Node2D" parent="." unique_id=173716068]
 z_index = -100
@@ -491,3 +495,7 @@ destination_room_id = &"CH4_AREA_02"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1838501780]
 shape = SubResource("RectangleShape2D_ouvho")
+
+[node name="EncounterSpawner" type="Node2D" parent="." unique_id=426644966]
+script = ExtResource("10_1xcn3")
+manifest = ExtResource("11_hgaqp")

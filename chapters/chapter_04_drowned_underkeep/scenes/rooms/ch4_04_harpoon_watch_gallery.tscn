@@ -15,6 +15,8 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_096.png" id="13_4lxf6"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/platforms/maintenance_stone_ledge_160.png" id="14_wsvjr"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="15_v81wx"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_spawner.gd" id="16_avjcr"]
+[ext_resource type="Resource" path="res://chapters/chapter_04_drowned_underkeep/resources/encounters/ch4_area_04.tres" id="17_f8251"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1vg5k"]
 size = Vector2(2176, 104)
@@ -46,6 +48,8 @@ room_size = Vector2i(2176, 720)
 room_function = &"vertical_combat"
 metadata/formal_chapter_room = true
 metadata/environment_asset_milestone = "CH4-S2"
+metadata/formal_encounters_populated = true
+metadata/encounter_authored_seed = 40446
 
 [node name="Background" type="Node2D" parent="." unique_id=466259093]
 z_index = -100
@@ -622,3 +626,7 @@ destination_room_id = &"CH4_AREA_05"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=820793461]
 shape = SubResource("RectangleShape2D_iomye")
+
+[node name="EncounterSpawner" type="Node2D" parent="." unique_id=1976119857]
+script = ExtResource("16_avjcr")
+manifest = ExtResource("17_f8251")
