@@ -611,6 +611,6 @@ destination_room_id = &"CH4_AREA_06"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1447635831]
 shape = SubResource("RectangleShape2D_h7k4u")
 
-[node name="EncounterSpawner" type="Node2D" parent="." unique_id=1609195242]
+[node name="EncounterSpawner" type="Node2D" parent="." unique_id=1657552555]
 script = ExtResource("15_1doqb")
 manifest = ExtResource("16_nhgbp")

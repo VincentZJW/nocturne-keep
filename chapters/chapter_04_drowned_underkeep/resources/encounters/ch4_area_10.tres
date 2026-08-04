@@ -9,7 +9,7 @@
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_manifest.gd" id="7_pgh1m"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_spawn_point_data.gd" id="8_g415r"]
 
-[sub_resource type="Resource" id="Resource_rs88t"]
+[sub_resource type="Resource" id="Resource_5ek3p"]
 script = ExtResource("2_ms5rr")
 spawn_record_id = &"CH4_AREA_10_SUNKEN_SHIELD_PENITENT_01"
 enemy_type = &"sunken_shield_penitent"
@@ -20,7 +20,7 @@ movement_bounds = Vector2(230, 490)
 facing_direction = 1.0
 access_route = "west engine floor"
 
-[sub_resource type="Resource" id="Resource_wmbyc"]
+[sub_resource type="Resource" id="Resource_ms5rr"]
 script = ExtResource("2_ms5rr")
 spawn_record_id = &"CH4_AREA_10_MIREFIN_RAIDER_01"
 enemy_type = &"mirefin_raider"
@@ -32,15 +32,15 @@ movement_bounds = Vector2(626, 886)
 facing_direction = 1.0
 access_route = "west engine channel"
 
-[sub_resource type="Resource" id="Resource_2u3wp"]
+[sub_resource type="Resource" id="Resource_3ta0w"]
 script = ExtResource("1_5ek3p")
 encounter_id = &"CH4_AREA_10_ENCOUNTER_01"
 room_id = &"CH4_AREA_10"
 region_name = &"CH4_AREA_10_REGION_01"
-activation_rect = Rect2(96, 0, 1024, 720)
-spawns = Array[ExtResource("2_ms5rr")]([SubResource("Resource_rs88t"), SubResource("Resource_wmbyc")])
+activation_rect = Rect2(320, 0, 800, 720)
+spawns = Array[ExtResource("2_ms5rr")]([SubResource("Resource_5ek3p"), SubResource("Resource_ms5rr")])
 
-[sub_resource type="Resource" id="Resource_terj2"]
+[sub_resource type="Resource" id="Resource_ih7b4"]
 script = ExtResource("2_ms5rr")
 spawn_record_id = &"CH4_AREA_10_CHAINBOUND_CONVICT_01"
 enemy_type = &"chainbound_convict"
@@ -51,7 +51,7 @@ local_position = Vector2(1320, 540)
 movement_bounds = Vector2(1232, 1408)
 access_route = "central machinery stair -> heavy gantry"
 
-[sub_resource type="Resource" id="Resource_p85go"]
+[sub_resource type="Resource" id="Resource_03jqm"]
 script = ExtResource("2_ms5rr")
 spawn_record_id = &"CH4_AREA_10_BOG_TOAD_01"
 enemy_type = &"bog_toad"
@@ -62,7 +62,7 @@ local_position = Vector2(1548, 620)
 movement_bounds = Vector2(1418, 1678)
 access_route = "east engine channel"
 
-[sub_resource type="Resource" id="Resource_lnkj2"]
+[sub_resource type="Resource" id="Resource_irdc1"]
 script = ExtResource("2_ms5rr")
 spawn_record_id = &"CH4_AREA_10_BOG_TOAD_02"
 enemy_type = &"bog_toad"
@@ -73,51 +73,51 @@ local_position = Vector2(1944, 620)
 movement_bounds = Vector2(1814, 2074)
 access_route = "east engine channel"
 
-[sub_resource type="Resource" id="Resource_nwfsd"]
+[sub_resource type="Resource" id="Resource_pgh1m"]
 script = ExtResource("1_5ek3p")
 encounter_id = &"CH4_AREA_10_ENCOUNTER_02"
 room_id = &"CH4_AREA_10"
 region_name = &"CH4_AREA_10_REGION_02"
 sequence_index = 1
-activation_rect = Rect2(1184, 0, 1024, 720)
-spawns = Array[ExtResource("2_ms5rr")]([SubResource("Resource_terj2"), SubResource("Resource_p85go"), SubResource("Resource_lnkj2")])
+activation_rect = Rect2(1184, 0, 800, 720)
+spawns = Array[ExtResource("2_ms5rr")]([SubResource("Resource_ih7b4"), SubResource("Resource_03jqm"), SubResource("Resource_irdc1")])
 
-[sub_resource type="Resource" id="Resource_tteb7"]
+[sub_resource type="Resource" id="Resource_g415r"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"GroundSlot01"
 room_id = &"CH4_AREA_10"
 local_position = Vector2(360, 620)
 movement_bounds = Vector2(230, 490)
 
-[sub_resource type="Resource" id="Resource_cbadj"]
+[sub_resource type="Resource" id="Resource_rs88t"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"GroundSlot02"
 room_id = &"CH4_AREA_10"
 local_position = Vector2(756, 620)
 movement_bounds = Vector2(626, 886)
 
-[sub_resource type="Resource" id="Resource_lyqlm"]
+[sub_resource type="Resource" id="Resource_wmbyc"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"GroundSlot03"
 room_id = &"CH4_AREA_10"
 local_position = Vector2(1152, 620)
 movement_bounds = Vector2(1022, 1282)
 
-[sub_resource type="Resource" id="Resource_g6sfh"]
+[sub_resource type="Resource" id="Resource_2u3wp"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"GroundSlot04"
 room_id = &"CH4_AREA_10"
 local_position = Vector2(1548, 620)
 movement_bounds = Vector2(1418, 1678)
 
-[sub_resource type="Resource" id="Resource_3aifs"]
+[sub_resource type="Resource" id="Resource_terj2"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"GroundSlot05"
 room_id = &"CH4_AREA_10"
 local_position = Vector2(1944, 620)
 movement_bounds = Vector2(1814, 2074)
 
-[sub_resource type="Resource" id="Resource_e12cw"]
+[sub_resource type="Resource" id="Resource_p85go"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"PlatformSlot01"
 room_id = &"CH4_AREA_10"
@@ -126,7 +126,7 @@ local_position = Vector2(760, 552)
 movement_bounds = Vector2(704, 816)
 platform_width = 160.0
 
-[sub_resource type="Resource" id="Resource_lwvj0"]
+[sub_resource type="Resource" id="Resource_lnkj2"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"PlatformSlot02"
 room_id = &"CH4_AREA_10"
@@ -135,7 +135,7 @@ local_position = Vector2(1320, 540)
 movement_bounds = Vector2(1232, 1408)
 platform_width = 224.0
 
-[sub_resource type="Resource" id="Resource_47mi7"]
+[sub_resource type="Resource" id="Resource_nwfsd"]
 script = ExtResource("8_g415r")
 spawn_point_id = &"PlatformSlot03"
 room_id = &"CH4_AREA_10"
@@ -148,5 +148,5 @@ platform_width = 160.0
 script = ExtResource("7_pgh1m")
 room_id = &"CH4_AREA_10"
 room_width = 2304
-spawn_points = Array[ExtResource("8_g415r")]([SubResource("Resource_tteb7"), SubResource("Resource_cbadj"), SubResource("Resource_lyqlm"), SubResource("Resource_g6sfh"), SubResource("Resource_3aifs"), SubResource("Resource_e12cw"), SubResource("Resource_lwvj0"), SubResource("Resource_47mi7")])
-encounters = Array[ExtResource("1_5ek3p")]([SubResource("Resource_2u3wp"), SubResource("Resource_nwfsd")])
+spawn_points = Array[ExtResource("8_g415r")]([SubResource("Resource_g415r"), SubResource("Resource_rs88t"), SubResource("Resource_wmbyc"), SubResource("Resource_2u3wp"), SubResource("Resource_terj2"), SubResource("Resource_p85go"), SubResource("Resource_lnkj2"), SubResource("Resource_nwfsd")])
+encounters = Array[ExtResource("1_5ek3p")]([SubResource("Resource_3ta0w"), SubResource("Resource_pgh1m")])

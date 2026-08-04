@@ -315,5 +315,5 @@ func _movement_bounds(room_width: int, marker: Marker2D, offset: Vector2) -> Vec
 func _activation_rect(room_width: int, group_index: int) -> Rect2:
 	var half_width: float = float(room_width) * 0.5
 	if group_index == 0:
-		return Rect2(96.0, 0.0, half_width - 128.0, 720.0)
-	return Rect2(half_width + 32.0, 0.0, half_width - 128.0, 720.0)
+		return Rect2(320.0, 0.0, half_width - 352.0, 720.0)
+	return Rect2(half_width + 32.0, 0.0, half_width - 352.0, 720.0)

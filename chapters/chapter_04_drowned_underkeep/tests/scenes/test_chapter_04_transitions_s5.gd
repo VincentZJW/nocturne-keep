@@ -1,0 +1,131 @@
+extends SceneTree
+
+const BOOTSTRAP: String = "res://scenes/bootstrap/main_bootstrap.tscn"
+const LEVEL: String = "res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn"
+const MAX_TRANSITION_USEC: int = 1_000_000
+const MAX_POST_FADE_RESOURCE_WAIT_USEC: int = 400_000
+
+var _failures: PackedStringArray = []
+var _transition_count: int = 0
+var _peak_transition_usec: int = 0
+var _peak_wait_usec: int = 0
+var _peak_instantiation_usec: int = 0
+
+
+func _initialize() -> void:
+	call_deferred("_run")
+
+
+func _run() -> void:
+	var debug: DebugRunConfigState = root.get_node_or_null("DebugRunConfig") as DebugRunConfigState
+	if debug == null:
+		_failures.append("DebugRunConfig missing")
+		await _finish()
+		return
+	debug.debug_chapter_start_enabled = true
+	debug.debug_start_chapter_id = ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP
+	debug.debug_start_spawn_id = &"CH4_START"
+	debug.debug_skip_chapter_intro = true
+	if change_scene_to_file(BOOTSTRAP) != OK:
+		_failures.append("MainBootstrap launch failed")
+		await _finish()
+		return
+	var level: Node = await _wait_for_level()
+	if level == null:
+		_failures.append("formal Chapter IV level did not load")
+		await _finish()
+		return
+	var controller: Chapter04RoomTransitionController = level.get_node_or_null("RoomTransitionController") as Chapter04RoomTransitionController
+	var player: Player = level.get_node_or_null("ChapterRuntime/Player") as Player
+	var hud: CanvasLayer = level.get_node_or_null("ChapterRuntime/HUD") as CanvasLayer
+	var room_host: Node2D = level.get_node_or_null("RoomHost") as Node2D
+	if controller == null or player == null or hud == null or room_host == null:
+		_failures.append("persistent Main runtime contract is incomplete")
+		await _finish()
+		return
+	var player_id: int = player.get_instance_id()
+	var hud_id: int = hud.get_instance_id()
+	for room_index: int in range(1, 17):
+		await _transition_and_check(controller, player, hud, room_host, player_id, hud_id, room_index, &"EntryWest")
+	for room_index: int in range(15, -1, -1):
+		await _transition_and_check(controller, player, hud, room_host, player_id, hud_id, room_index, &"EntryEast")
+	_check(_transition_count == 32, "expected 32 forward/backward transitions")
+	debug.reset_to_defaults()
+	await _finish(level)
+
+
+func _transition_and_check(
+		controller: Chapter04RoomTransitionController,
+		player: Player,
+		hud: CanvasLayer,
+		room_host: Node2D,
+		player_id: int,
+		hud_id: int,
+		room_index: int,
+		spawn_id: StringName
+) -> void:
+	var destination: StringName = StringName("CH4_AREA_%02d" % room_index)
+	var outgoing: WeakRef = weakref(controller.active_room)
+	_check(controller.request_room_change(destination, spawn_id), "request rejected for %s" % destination)
+	for _frame: int in 180:
+		await process_frame
+		if not controller.is_transitioning() and controller.active_room_id == destination:
+			break
+	_check(not controller.is_transitioning(), "%s transition exceeded frame timeout" % destination)
+	await process_frame
+	await process_frame
+	var metrics: Dictionary = controller.get_transition_metrics()
+	var transition_usec: int = int(metrics.get("transition_usec", 0))
+	var wait_usec: int = int(metrics.get("resource_wait_usec", 0))
+	var instantiate_usec: int = int(metrics.get("instantiation_usec", 0))
+	_peak_transition_usec = maxi(_peak_transition_usec, transition_usec)
+	_peak_wait_usec = maxi(_peak_wait_usec, wait_usec)
+	_peak_instantiation_usec = maxi(_peak_instantiation_usec, instantiate_usec)
+	_check(transition_usec > 0 and transition_usec < MAX_TRANSITION_USEC, "%s transition duration out of contract: %dus" % [destination, transition_usec])
+	_check(wait_usec < MAX_POST_FADE_RESOURCE_WAIT_USEC, "%s resource wait exceeded budget: %dus" % [destination, wait_usec])
+	_check(room_host.get_child_count() == 1, "%s left more than one room instance" % destination)
+	_check(outgoing.get_ref() == null, "%s outgoing room was not released" % destination)
+	_check(player.get_instance_id() == player_id, "%s replaced persistent Player" % destination)
+	_check(hud.get_instance_id() == hud_id, "%s replaced persistent HUD" % destination)
+	_check(player.player_camera.limit_right == controller.active_room.get("room_size").x, "%s Camera bounds mismatch" % destination)
+	var expected_spawn: Marker2D = controller.active_room.call("get_spawn", spawn_id) as Marker2D
+	_check(expected_spawn != null and player.global_position == expected_spawn.global_position, "%s Player spawn mismatch" % destination)
+	var spawner: Chapter04EncounterSpawner = controller.active_room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
+	if spawner != null:
+		for group: EncounterGroup in spawner.get_encounter_groups():
+			_check(not group.is_activated, "%s %s encounter activated beneath transition fade" % [destination, group.encounter_name])
+	_transition_count += 1
+
+
+func _wait_for_level() -> Node:
+	for _frame: int in 480:
+		await process_frame
+		if current_scene != null and current_scene.scene_file_path == LEVEL:
+			return current_scene
+	return null
+
+
+func _check(condition: bool, message: String) -> void:
+	if not condition:
+		_failures.append(message)
+
+
+func _finish(level: Node = null) -> void:
+	if _failures.is_empty():
+		print("CH4 S5 TRANSITIONS | PASS transitions=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
+			_transition_count, _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
+		])
+	else:
+		for failure: String in _failures:
+			push_error("CH4 S5 TRANSITIONS: %s" % failure)
+	if level != null:
+		unload_current_scene()
+		for _frame: int in 12:
+			await process_frame
+		for _frame: int in 4:
+			await physics_frame
+		# Give Godot's threaded ResourceLoader one real-time cleanup window before
+		# ending this short-lived headless process. The running game naturally has
+		# this lifetime; the test otherwise exits in only a few milliseconds.
+		await create_timer(0.5, true, false, true).timeout
+	quit(0 if _failures.is_empty() else 1)

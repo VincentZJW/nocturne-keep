@@ -2,6 +2,7 @@ class_name Chapter04RoomTransitionController
 extends Node
 
 signal room_changed(room_id: StringName, room: Node2D)
+signal room_transition_profiled(room_id: StringName, metrics: Dictionary)
 
 const ROOM_SCRIPT: Script = preload("res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room.gd")
 const LAYER_CONTRACT: Script = preload("res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_layer_contract.gd")
@@ -43,11 +44,25 @@ const ROOM_SCENES: Dictionary[StringName, String] = {
 var active_room: Node2D
 var active_room_id: StringName = &""
 var _transitioning: bool = false
+var _prepared_rooms: Dictionary[StringName, PackedScene] = {}
+var _loader_thread: Thread = Thread.new()
+var _loading_room_id: StringName = &""
+var _transition_started_usec: int = 0
+var last_resource_wait_usec: int = 0
+var last_instantiation_usec: int = 0
+var last_transition_usec: int = 0
+var peak_resource_wait_usec: int = 0
+var peak_instantiation_usec: int = 0
 
 
 func _ready() -> void:
 	player.z_index = LAYER_CONTRACT.PLAYER
 	player.z_as_relative = true
+
+
+func _exit_tree() -> void:
+	_collect_loader_thread()
+	_prepared_rooms.clear()
 
 
 func initialize(room_id: StringName, spawn_id: StringName) -> bool:
@@ -60,6 +75,8 @@ func request_room_change(room_id: StringName, spawn_id: StringName) -> bool:
 	if _transitioning or room_id == active_room_id or not ROOM_SCENES.has(room_id):
 		return false
 	_transitioning = true
+	_transition_started_usec = Time.get_ticks_usec()
+	_request_room_prepare(room_id)
 	_run_transition(room_id, spawn_id)
 	return true
 
@@ -76,7 +93,8 @@ func _run_transition(room_id: StringName, spawn_id: StringName) -> void:
 	var fade_out: Tween = create_tween()
 	fade_out.tween_property(fade_rect, "modulate:a", 1.0, 0.18)
 	await fade_out.finished
-	var did_swap: bool = _swap_room(room_id, spawn_id)
+	var packed: PackedScene = await _await_prepared_room(room_id)
+	var did_swap: bool = _swap_room_from_packed(room_id, spawn_id, packed)
 	await get_tree().physics_frame
 	var fade_in: Tween = create_tween()
 	fade_in.tween_property(fade_rect, "modulate:a", 0.0, 0.18)
@@ -85,33 +103,64 @@ func _run_transition(room_id: StringName, spawn_id: StringName) -> void:
 	if player.hurtbox != null and not was_invulnerable:
 		player.hurtbox.set_invulnerable(false)
 	player.set_input_profile(Player.InputProfile.FULL if did_swap else previous_profile)
+	if did_swap:
+		_resume_active_room_encounters()
 	_transitioning = false
+	last_transition_usec = Time.get_ticks_usec() - _transition_started_usec
+	if did_swap:
+		_prune_prepared_rooms(room_id)
+	room_transition_profiled.emit(room_id, get_transition_metrics())
 
 
 func _swap_room(room_id: StringName, spawn_id: StringName) -> bool:
+	var wait_started_usec: int = Time.get_ticks_usec()
+	var packed: PackedScene = _get_prepared_room_blocking(room_id)
+	last_resource_wait_usec = Time.get_ticks_usec() - wait_started_usec
+	peak_resource_wait_usec = maxi(peak_resource_wait_usec, last_resource_wait_usec)
+	var did_swap: bool = _swap_room_from_packed(room_id, spawn_id, packed)
+	if did_swap:
+		_resume_active_room_encounters()
+	return did_swap
+
+
+func _swap_room_from_packed(room_id: StringName, spawn_id: StringName, packed: PackedScene) -> bool:
 	var path: String = ROOM_SCENES.get(room_id, "")
-	var packed: PackedScene = ResourceLoader.load(path, "PackedScene") as PackedScene
 	if packed == null:
 		push_error("Unable to load Chapter IV room: %s" % path)
 		return false
+	var instantiate_started_usec: int = Time.get_ticks_usec()
 	var new_room: Node2D = packed.instantiate() as Node2D
-	if new_room == null or new_room.get_script() != ROOM_SCRIPT:
+	last_instantiation_usec = Time.get_ticks_usec() - instantiate_started_usec
+	peak_instantiation_usec = maxi(peak_instantiation_usec, last_instantiation_usec)
+	if new_room == null:
+		push_error("Unable to instantiate Chapter IV room: %s" % path)
+		return false
+	if new_room.get_script() != ROOM_SCRIPT:
 		push_error("Chapter IV room root must be Chapter04Room: %s" % path)
+		new_room.free()
+		return false
+	new_room.process_mode = Node.PROCESS_MODE_DISABLED
+	room_host.add_child(new_room)
+	var encounter_spawner: Chapter04EncounterSpawner = new_room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
+	if encounter_spawner != null:
+		encounter_spawner.set_activation_suspended(true)
+	var spawn: Marker2D = new_room.call("get_spawn", spawn_id) as Marker2D
+	if spawn == null:
+		push_error("Chapter IV room has no valid spawn: %s / %s" % [room_id, spawn_id])
+		room_host.remove_child(new_room)
+		new_room.free()
 		return false
 	if active_room != null:
+		active_room.process_mode = Node.PROCESS_MODE_DISABLED
 		room_host.remove_child(active_room)
 		active_room.queue_free()
 	if player.status_effect_controller != null:
 		player.status_effect_controller.clear_all()
 	active_room = new_room
 	active_room_id = room_id
-	room_host.add_child(active_room)
+	active_room.process_mode = Node.PROCESS_MODE_INHERIT
 	active_room.connect("transition_requested", request_room_change)
 	active_room.connect("checkpoint_requested", _on_checkpoint_requested)
-	var spawn: Marker2D = active_room.call("get_spawn", spawn_id) as Marker2D
-	if spawn == null:
-		push_error("Chapter IV room has no valid spawn: %s / %s" % [room_id, spawn_id])
-		return false
 	player.global_position = spawn.global_position
 	player.velocity = Vector2.ZERO
 	_set_respawn(spawn.global_position)
@@ -124,6 +173,102 @@ func _swap_room(room_id: StringName, spawn_id: StringName) -> bool:
 	room_name_label.text = str(active_room.get("bilingual_name"))
 	room_changed.emit(room_id, active_room)
 	return true
+
+
+func _resume_active_room_encounters() -> void:
+	if active_room == null:
+		return
+	var encounter_spawner: Chapter04EncounterSpawner = active_room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
+	if encounter_spawner != null:
+		encounter_spawner.set_activation_suspended(false)
+
+
+func get_transition_metrics() -> Dictionary:
+	return {
+		"room_id": active_room_id,
+		"resource_wait_usec": last_resource_wait_usec,
+		"instantiation_usec": last_instantiation_usec,
+		"transition_usec": last_transition_usec,
+		"peak_resource_wait_usec": peak_resource_wait_usec,
+		"peak_instantiation_usec": peak_instantiation_usec,
+		"prepared_room_count": _prepared_rooms.size(),
+		"thread_request_count": 1 if _loader_thread.is_started() else 0,
+	}
+
+
+func is_transitioning() -> bool:
+	return _transitioning
+
+
+func is_room_prepared(room_id: StringName) -> bool:
+	return _prepared_rooms.has(room_id)
+
+
+func _request_room_prepare(room_id: StringName) -> void:
+	if _prepared_rooms.has(room_id) or room_id == _loading_room_id or not ROOM_SCENES.has(room_id):
+		return
+	_collect_loader_thread()
+	var path: String = ROOM_SCENES[room_id]
+	_loading_room_id = room_id
+	var error: Error = _loader_thread.start(_load_packed_scene_on_worker.bind(path))
+	if error == OK:
+		return
+	else:
+		_loading_room_id = &""
+		push_warning("Unable to prepare Chapter IV room on loader thread: %s (%s)" % [path, error_string(error)])
+
+
+func _await_prepared_room(room_id: StringName) -> PackedScene:
+	var wait_started_usec: int = Time.get_ticks_usec()
+	_request_room_prepare(room_id)
+	while room_id == _loading_room_id and _loader_thread.is_alive():
+		await get_tree().process_frame
+	if room_id == _loading_room_id:
+		_collect_loader_thread()
+	last_resource_wait_usec = Time.get_ticks_usec() - wait_started_usec
+	peak_resource_wait_usec = maxi(peak_resource_wait_usec, last_resource_wait_usec)
+	if _prepared_rooms.has(room_id):
+		return _prepared_rooms[room_id]
+	return _load_room_sync(room_id)
+
+
+func _get_prepared_room_blocking(room_id: StringName) -> PackedScene:
+	if _prepared_rooms.has(room_id):
+		return _prepared_rooms[room_id]
+	if room_id == _loading_room_id:
+		_collect_loader_thread()
+		if _prepared_rooms.has(room_id):
+			return _prepared_rooms[room_id]
+	return _load_room_sync(room_id)
+
+
+func _collect_loader_thread() -> void:
+	if not _loader_thread.is_started():
+		return
+	var completed_room_id: StringName = _loading_room_id
+	var packed: PackedScene = _loader_thread.wait_to_finish() as PackedScene
+	_loading_room_id = &""
+	if packed != null and not completed_room_id.is_empty():
+		_prepared_rooms[completed_room_id] = packed
+
+
+static func _load_packed_scene_on_worker(path: String) -> PackedScene:
+	return ResourceLoader.load(path, "PackedScene", ResourceLoader.CACHE_MODE_IGNORE) as PackedScene
+
+
+func _load_room_sync(room_id: StringName) -> PackedScene:
+	if not ROOM_SCENES.has(room_id):
+		return null
+	var packed: PackedScene = ResourceLoader.load(ROOM_SCENES[room_id], "PackedScene") as PackedScene
+	if packed != null:
+		_prepared_rooms[room_id] = packed
+	return packed
+
+
+func _prune_prepared_rooms(room_id: StringName) -> void:
+	for prepared_id: StringName in _prepared_rooms.keys():
+		if prepared_id != room_id:
+			_prepared_rooms.erase(prepared_id)
 
 
 func _set_respawn(position: Vector2) -> void:

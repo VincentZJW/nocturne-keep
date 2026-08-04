@@ -13,6 +13,7 @@ const LAYER_CONTRACT: Script = preload(
 
 var _groups: Array[EncounterGroup] = []
 var _active_group: EncounterGroup
+var _activation_suspended: bool = false
 
 
 func _ready() -> void:
@@ -34,6 +35,14 @@ func get_total_enemy_count() -> int:
 
 func get_active_encounter_id() -> StringName:
 	return _active_group.encounter_name if is_instance_valid(_active_group) else &""
+
+
+func set_activation_suspended(suspended: bool) -> void:
+	_activation_suspended = suspended
+	for group: EncounterGroup in _groups:
+		if group.activation_area == null or group.is_activated:
+			continue
+		group.activation_area.set_deferred("monitoring", not suspended)
 
 
 func _build_encounter(data: Chapter04EncounterData) -> void:
@@ -96,6 +105,8 @@ func _instantiate_enemy(spawn: Chapter04EnemySpawnData) -> EnemyCombatant:
 
 
 func _arm_all_dormant_groups() -> void:
+	if _activation_suspended:
+		return
 	for group: EncounterGroup in _groups:
 		if group.activation_area != null and not group.is_activated:
 			group.activation_area.set_deferred("monitoring", true)
@@ -119,8 +130,9 @@ func _on_group_cleared(_encounter_id: StringName, group: EncounterGroup) -> void
 	for candidate: EncounterGroup in _groups:
 		if candidate.is_activated or candidate.activation_area == null:
 			continue
-		candidate.activation_area.set_deferred("monitoring", true)
-		call_deferred("_activate_if_player_overlaps", candidate)
+		candidate.activation_area.set_deferred("monitoring", not _activation_suspended)
+		if not _activation_suspended:
+			call_deferred("_activate_if_player_overlaps", candidate)
 
 
 func _activate_if_player_overlaps(group: EncounterGroup) -> void:

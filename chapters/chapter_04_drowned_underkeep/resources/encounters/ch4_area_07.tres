@@ -8,7 +8,7 @@
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_manifest.gd" id="6_3v2gn"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_spawn_point_data.gd" id="7_54ttx"]
 
-[sub_resource type="Resource" id="Resource_b5s6d"]
+[sub_resource type="Resource" id="Resource_vktmp"]
 script = ExtResource("2_1blrh")
 spawn_record_id = &"CH4_AREA_07_DROWNED_GAOLER_01"
 enemy_type = &"drowned_gaoler"
@@ -19,7 +19,7 @@ movement_bounds = Vector2(230, 490)
 facing_direction = 1.0
 access_route = "west sluice floor"
 
-[sub_resource type="Resource" id="Resource_nky1i"]
+[sub_resource type="Resource" id="Resource_1blrh"]
 script = ExtResource("2_1blrh")
 spawn_record_id = &"CH4_AREA_07_SEWER_MAW_01"
 enemy_type = &"sewer_maw"
@@ -31,15 +31,15 @@ movement_bounds = Vector2(630, 890)
 facing_direction = 1.0
 access_route = "west sluice drain"
 
-[sub_resource type="Resource" id="Resource_kj2mo"]
+[sub_resource type="Resource" id="Resource_8legi"]
 script = ExtResource("1_vktmp")
 encounter_id = &"CH4_AREA_07_ENCOUNTER_01"
 room_id = &"CH4_AREA_07"
 region_name = &"CH4_AREA_07_REGION_01"
-activation_rect = Rect2(96, 0, 832, 720)
-spawns = Array[ExtResource("2_1blrh")]([SubResource("Resource_b5s6d"), SubResource("Resource_nky1i")])
+activation_rect = Rect2(320, 0, 608, 720)
+spawns = Array[ExtResource("2_1blrh")]([SubResource("Resource_vktmp"), SubResource("Resource_1blrh")])
 
-[sub_resource type="Resource" id="Resource_lcy8l"]
+[sub_resource type="Resource" id="Resource_ryfbq"]
 script = ExtResource("2_1blrh")
 spawn_record_id = &"CH4_AREA_07_SEWER_MAW_02"
 enemy_type = &"sewer_maw"
@@ -50,7 +50,7 @@ local_position = Vector2(1160, 620)
 movement_bounds = Vector2(1030, 1290)
 access_route = "east sluice drain"
 
-[sub_resource type="Resource" id="Resource_mkii1"]
+[sub_resource type="Resource" id="Resource_tr53f"]
 script = ExtResource("2_1blrh")
 spawn_record_id = &"CH4_AREA_07_MIREFIN_RAIDER_01"
 enemy_type = &"mirefin_raider"
@@ -61,37 +61,37 @@ local_position = Vector2(1560, 620)
 movement_bounds = Vector2(1430, 1690)
 access_route = "east sluice channel"
 
-[sub_resource type="Resource" id="Resource_7g7sp"]
+[sub_resource type="Resource" id="Resource_3v2gn"]
 script = ExtResource("1_vktmp")
 encounter_id = &"CH4_AREA_07_ENCOUNTER_02"
 room_id = &"CH4_AREA_07"
 region_name = &"CH4_AREA_07_REGION_02"
 sequence_index = 1
-activation_rect = Rect2(992, 0, 832, 720)
-spawns = Array[ExtResource("2_1blrh")]([SubResource("Resource_lcy8l"), SubResource("Resource_mkii1")])
+activation_rect = Rect2(992, 0, 608, 720)
+spawns = Array[ExtResource("2_1blrh")]([SubResource("Resource_ryfbq"), SubResource("Resource_tr53f")])
 
-[sub_resource type="Resource" id="Resource_1lo5d"]
+[sub_resource type="Resource" id="Resource_54ttx"]
 script = ExtResource("7_54ttx")
 spawn_point_id = &"GroundSlot01"
 room_id = &"CH4_AREA_07"
 local_position = Vector2(360, 620)
 movement_bounds = Vector2(230, 490)
 
-[sub_resource type="Resource" id="Resource_fj3qo"]
+[sub_resource type="Resource" id="Resource_b5s6d"]
 script = ExtResource("7_54ttx")
 spawn_point_id = &"GroundSlot02"
 room_id = &"CH4_AREA_07"
 local_position = Vector2(760, 620)
 movement_bounds = Vector2(630, 890)
 
-[sub_resource type="Resource" id="Resource_ld764"]
+[sub_resource type="Resource" id="Resource_nky1i"]
 script = ExtResource("7_54ttx")
 spawn_point_id = &"GroundSlot03"
 room_id = &"CH4_AREA_07"
 local_position = Vector2(1160, 620)
 movement_bounds = Vector2(1030, 1290)
 
-[sub_resource type="Resource" id="Resource_e74yt"]
+[sub_resource type="Resource" id="Resource_kj2mo"]
 script = ExtResource("7_54ttx")
 spawn_point_id = &"GroundSlot04"
 room_id = &"CH4_AREA_07"
@@ -101,5 +101,5 @@ movement_bounds = Vector2(1430, 1690)
 [resource]
 script = ExtResource("6_3v2gn")
 room_id = &"CH4_AREA_07"
-spawn_points = Array[ExtResource("7_54ttx")]([SubResource("Resource_1lo5d"), SubResource("Resource_fj3qo"), SubResource("Resource_ld764"), SubResource("Resource_e74yt")])
-encounters = Array[ExtResource("1_vktmp")]([SubResource("Resource_kj2mo"), SubResource("Resource_7g7sp")])
+spawn_points = Array[ExtResource("7_54ttx")]([SubResource("Resource_54ttx"), SubResource("Resource_b5s6d"), SubResource("Resource_nky1i"), SubResource("Resource_kj2mo")])
+encounters = Array[ExtResource("1_vktmp")]([SubResource("Resource_8legi"), SubResource("Resource_3v2gn")])

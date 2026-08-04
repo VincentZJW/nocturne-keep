@@ -1,5 +1,20 @@
 # Development Log
 
+## 2026-08-04 — Chapter IV scene production S5 transitions and performance
+
+Status: complete — threaded preparation, atomic one-room replacement, persistent runtime preservation and exact Godot 4.7.1 performance/regression QA pass
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture and the mandatory Chapter Scene Workflow S5 contract. S4 commit `b147e213` is the baseline.
+- Goal: profile and harden all 17 formal room transitions through MainBootstrap: request the destination PackedScene before the existing fade begins, overlap threaded loading with that fixed fade, keep exactly one active room instance, disable the outgoing room before release, preserve Player/HUD/Camera/respawn state, and expose reproducible timing counters for QA.
+- Task-owned paths: Chapter IV room transition controller, transition-safe Encounter activation boundaries, S5-only profiling/tests/docs/QA evidence and this isolated log entry. Existing room art, encounter composition/balance, enemy/Boss logic, Player tuning, shared runtime and unrelated dirty worktree content remain unchanged.
+- Implementation: destination loading now starts on one owned worker `Thread` before the unchanged 0.18 s fade-out. The worker only loads a `PackedScene`; the main thread validates and instantiates it disabled, suspends Encounter activation, then disables/releases the outgoing room, teleports the persistent Player, updates respawn/Camera/HUD and resumes encounters only after the unchanged 0.18 s fade-in. Exactly one current room remains and the loader thread is explicitly joined.
+- Transition safety: the S4 activation regions now preserve a 320 px door-safe buffer and the room spawner exposes a transition-only activation suspension. This prevents the destination group from seeing the Player's old-room coordinate while the screen is opaque; no encounter AI or balance values changed.
+- Performance result: fresh-process cold synchronous baseline over 17 unique rooms measured `load_total=530167us`, `load_peak=101886us`; 32 real MainBootstrap forward/backward transitions measured `peak_total=380968us`, `peak_post_fade_wait=13021us`, `peak_instantiate=944us`, with one active room instance. The comparison is a baseline-versus-residual-wait measurement, not a synthetic percentage speedup.
+- Validation: exact 4.7.1 import PASS; S5 transition lifecycle/performance PASS; S4 manifests/runtime/Main regressions PASS; S3 structure/Main full-route regressions PASS; Chapter IV enemy runtime/Main integration PASS; graphical Main capture PASS (`captures=3`). Focused Output emitted no red parser/resource/gameplay errors and the final worker-thread path exits without ObjectDB leak warnings.
+- Evidence: `res://chapters/chapter_04_drowned_underkeep/docs/chapter_04_transitions_performance_s5.md` and `res://docs/qa/chapter_04_scene_production/s5/chapter_04_s5_qa.md`; Main frames are under `res://docs/qa/chapter_04_scene_production/s5/main/`.
+- Manual acceptance: traverse doors in both directions, judge the retained 0.36 s fade pacing, confirm no stale Camera frame, and verify encounters begin only after fade-in. Automated checks cover lifecycle and timing, not subjective transition feel.
+- Scope stop: no transition lengthening to hide stalls, no new loading screen, no enemy/Boss balance, no formal Ormund activation/reward, no Chapter V handoff and no changes outside Chapter IV S5-owned paths.
+
 ## 2026-08-04 — Chapter IV scene production S4 formal Encounter population
 
 Status: complete — fixed-seed population, saved room manifests, serialized group activation, Main integration and exact Godot 4.7.1 QA pass
