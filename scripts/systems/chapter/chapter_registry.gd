@@ -107,18 +107,25 @@ static func _ensure_initialized() -> void:
 	) as ChapterStartProfile
 	assert(chapter_four_profile != null, "Chapter IV entry profile failed to load")
 	_register(chapter_four_profile)
-	_register(_make_planned_profile(
+	_register(_make_profile(
 		CHAPTER_05_NIGHT_REPEATED,
 		"第五章 · 重演之夜 / Chapter V · Night Repeated",
 		CHAPTER_05_SCENE_PATH,
-		&"chapter_05_start",
+		&"CH5_START",
+		&"CH5_START",
+		[&"CH5_START"],
 		[
 			CHAPTER_PROLOGUE,
 			CHAPTER_01_RAVENMOURN_OUTSKIRTS,
 			CHAPTER_02_SILENT_COURT,
 			CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES,
 			CHAPTER_04_DROWNED_UNDERKEEP,
-		]
+		],
+		[],
+		&"",
+		0,
+		100.0,
+		true
 	))
 	_register(_make_planned_profile(
 		CHAPTER_06_HOLLOW_BELL_ABYSS,

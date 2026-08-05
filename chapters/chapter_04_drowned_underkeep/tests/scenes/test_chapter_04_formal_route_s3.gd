@@ -50,9 +50,11 @@ func _run() -> void:
 			_check(is_equal_approx(floor_shape.position.y - rectangle.size.y * 0.5, 620.0), "room %02d floor top is not 620" % index)
 		var spawns: Node2D = room.get_node_or_null("SpawnPoints") as Node2D
 		_check(spawns != null and spawns.has_node("EntryWest") and spawns.has_node("EntryEast") and spawns.has_node("Inspection"), "room %02d spawn contract incomplete" % index)
-		var exit_count: int = room.get_node("Transitions").get_child_count()
+		var exit_count: int = room.get_node("Transitions").find_children("*", "Chapter04RoomExit", false, false).size()
 		var expected_exits: int = 1 if index in [0, 16] else 2
 		_check(exit_count == expected_exits, "room %02d exit count mismatch" % index)
+		if index == 16:
+			_check(room.has_node("Transitions/MemoryExit"), "room 16 must expose the formal Chapter V memory exit")
 		var slot_root: Node = room.get_node("FutureEncounterSpawns")
 		var ground_slots: int = 0
 		for marker: Node in slot_root.get_children():
@@ -81,7 +83,7 @@ func _run() -> void:
 			_check(encounter_spawner == null, "support room %02d must remain enemy-free" % index)
 		room.free()
 	_check(asset_references >= 500, "17-room route should reference at least 500 formal Sprite nodes")
-	_check(checkpoint_ids == ["DRY_GAOLER_CELL", "LAST_GAOL"], "formal checkpoint ids mismatch")
+	_check(checkpoint_ids == ["DRY_GAOLER_CELL", "CP_CH4_BOSS"], "formal checkpoint ids mismatch")
 	var level: PackedScene = load(LEVEL_PATH) as PackedScene
 	_check(level != null, "formal Chapter IV level failed to load")
 	if level != null:

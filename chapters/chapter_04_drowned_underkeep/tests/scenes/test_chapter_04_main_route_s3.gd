@@ -52,8 +52,11 @@ func _run() -> void:
 	debug.reset_to_defaults()
 	print("CH4 S3 MAIN ROUTE | PASS bootstrap=%s rooms=17 final=%s" % [ProjectSettings.get_setting("application/run/main_scene"), controller.get("active_room_id")])
 	unload_current_scene()
-	for _frame: int in 4:
+	for _frame: int in 12:
 		await process_frame
+	for _frame: int in 4:
+		await physics_frame
+	await create_timer(0.5, true, false, true).timeout
 	quit(0)
 
 

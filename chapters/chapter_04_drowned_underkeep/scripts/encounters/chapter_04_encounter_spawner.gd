@@ -17,6 +17,7 @@ var _activation_suspended: bool = false
 
 
 func _ready() -> void:
+	_activation_suspended = bool(get_parent().get_meta(&"chapter_04_activation_suspended", false))
 	if manifest == null:
 		push_error("Chapter04EncounterSpawner requires a manifest")
 		return
@@ -39,6 +40,7 @@ func get_active_encounter_id() -> StringName:
 
 func set_activation_suspended(suspended: bool) -> void:
 	_activation_suspended = suspended
+	get_parent().set_meta(&"chapter_04_activation_suspended", suspended)
 	for group: EncounterGroup in _groups:
 		if group.activation_area == null or group.is_activated:
 			continue

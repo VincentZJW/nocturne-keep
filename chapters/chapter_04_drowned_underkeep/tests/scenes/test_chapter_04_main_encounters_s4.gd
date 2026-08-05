@@ -58,8 +58,11 @@ func _run() -> void:
 	debug.reset_to_defaults()
 	print("CH4 S4 MAIN ENCOUNTERS | PASS bootstrap=%s rooms=10 groups=20 enemies=46" % ProjectSettings.get_setting("application/run/main_scene"))
 	unload_current_scene()
-	for _frame: int in 4:
+	for _frame: int in 12:
 		await process_frame
+	for _frame: int in 4:
+		await physics_frame
+	await create_timer(0.5, true, false, true).timeout
 	quit(0)
 
 

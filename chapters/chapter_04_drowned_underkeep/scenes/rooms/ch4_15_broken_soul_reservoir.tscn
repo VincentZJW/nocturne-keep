@@ -8,6 +8,7 @@
 [ext_resource type="SpriteFrames" path="res://chapters/chapter_04_drowned_underkeep/resources/environment/chapter_04_environment_motion_frames.tres" id="6_5m56t"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/wet_flagstone_strip_03.png" id="7_ib50n"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="8_dvjuh"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/rewards/chapter_04_reward_controller.gd" id="9_reward_controller"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qmtr8"]
 size = Vector2(1920, 104)
@@ -17,6 +18,9 @@ size = Vector2(72, 160)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sf788"]
 size = Vector2(72, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_reward"]
+size = Vector2(120, 126)
 
 [node name="Ch4BrokenSoulReservoir" type="Node2D" unique_id=224224750]
 script = ExtResource("1_qheat")
@@ -308,6 +312,31 @@ z_index = 13
 
 [node name="FutureEncounterSpawns" type="Node2D" parent="." unique_id=2125981268]
 
+[node name="RewardController" type="Node2D" parent="."]
+position = Vector2(960, 534)
+script = ExtResource("9_reward_controller")
+
+[node name="RewardVisual" type="Sprite2D" parent="RewardController"]
+texture_filter = 1
+position = Vector2(0, 4)
+scale = Vector2(0.42, 0.42)
+texture = ExtResource("3_5sj86")
+
+[node name="InteractionArea" type="Area2D" parent="RewardController"]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RewardController/InteractionArea"]
+shape = SubResource("RectangleShape2D_reward")
+
+[node name="Prompt" type="Label" parent="RewardController/InteractionArea"]
+visible = false
+position = Vector2(-220, -132)
+size = Vector2(440, 72)
+text = "E  CLAIM THE UNNAMED CHAIN RELIC / 领取未命名断链遗物\nREWARD CONTENT AWAITS FINAL DESIGN / 奖励内容待设计"
+horizontal_alignment = 1
+
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=221730748]
 
 [node name="EntryWest" type="Marker2D" parent="SpawnPoints" unique_id=1171191478]
@@ -340,6 +369,17 @@ collision_mask = 2
 monitorable = false
 script = ExtResource("8_dvjuh")
 destination_room_id = &"CH4_AREA_16"
+requires_interaction = true
+prompt_path = NodePath("Prompt")
+locked = true
+locked_prompt_text = "SEALED · CLAIM THE RELIC / 封印中 · 领取遗物"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1045707758]
 shape = SubResource("RectangleShape2D_sf788")
+
+[node name="Prompt" type="Label" parent="Transitions/ExitEast"]
+visible = false
+position = Vector2(-190, -116)
+size = Vector2(380, 46)
+text = "E  ENTER THE HALL OF DROWNED MEMORIES / 进入溺忆回廊"
+horizontal_alignment = 1

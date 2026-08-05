@@ -4,6 +4,10 @@ extends GroundEnemyBase
 signal phase_changed(phase: int)
 signal boss_action_started(action: StringName, phase: int)
 signal boss_action_active(action: StringName, active: bool)
+signal intro_started
+signal combat_started
+signal death_sequence_started
+signal defeated
 
 const INTRO: StringName = &"Intro"
 const COMBAT: StringName = &"Combat"
@@ -15,6 +19,7 @@ const STAGGER: StringName = &"Stagger"
 @export_node_path("HitboxComponent") var area_hitbox_path: NodePath = NodePath("AreaHitbox")
 @export_node_path("Chapter04PoiseComponent") var poise_component_path: NodePath = NodePath("PoiseComponent")
 @export_node_path("Chapter04BossDamagePolicy") var damage_policy_path: NodePath = NodePath("DamagePolicy")
+@export var external_intro_control: bool = false
 
 @onready var melee_hitbox: HitboxComponent = get_node_or_null(melee_hitbox_path) as HitboxComponent
 @onready var area_hitbox: HitboxComponent = get_node_or_null(area_hitbox_path) as HitboxComponent
@@ -33,6 +38,8 @@ var _next_attack_id: int = 1
 var _judgment_cooldown: float = 0.0
 var _stagger_protection: float = 0.0
 var _transition_started: bool = false
+var _combat_enabled: bool = true
+var _defeat_emitted: bool = false
 
 
 func complete_debug_phase_transition() -> void:
@@ -53,11 +60,19 @@ func _on_common_ready() -> void:
 	health_component.health_changed.connect(_on_health_changed)
 	_end_hitboxes()
 	transition_state(INTRO)
-	state_timer = 1.05
-	play_animation(&"intro", true)
+	_combat_enabled = not external_intro_control
+	state_timer = 1.05 if _combat_enabled else 0.0
+	play_animation(&"dormant" if external_intro_control else &"intro", true)
+	if external_intro_control:
+		set_physics_process(false)
+		hurtbox.set_enabled(false)
+		detection_area.set_deferred("monitoring", false)
 
 
 func _process_enemy_state(delta: float) -> void:
+	if not _combat_enabled:
+		velocity = Vector2.ZERO
+		return
 	_judgment_cooldown = maxf(0.0, _judgment_cooldown - delta)
 	_stagger_protection = maxf(0.0, _stagger_protection - delta)
 	poise_component.advance(delta, current_state in [STAGGER, PHASE_TRANSITION])
@@ -292,7 +307,7 @@ func _is_death_animation(animation_name: StringName) -> bool:
 func enter_death() -> void:
 	if not transition_state(DEATH): return
 	velocity=Vector2.ZERO; _on_attack_cancelled(); hurtbox.set_enabled(false); detection_area.set_deferred("monitoring",false); collision_layer=0; collision_mask=1
-	play_animation(&"death_start",true); enemy_died.emit(); call_deferred("_play_death_sequence")
+	play_animation(&"death_start",true); enemy_died.emit(); death_sequence_started.emit(); call_deferred("_play_death_sequence")
 
 
 func _play_death_sequence() -> void:
@@ -302,6 +317,43 @@ func _play_death_sequence() -> void:
 	await get_tree().create_timer(0.65).timeout
 	if not is_inside_tree(): return
 	play_animation(&"soul_release",true)
+	# The common enemy presenter frees the node when soul_release finishes, so
+	# publish the formal defeat once the final presentation has begun.  This is
+	# after collapse and before the animation-owned cleanup, exactly once.
+	if not _defeat_emitted:
+		_defeat_emitted = true
+		defeated.emit()
+
+
+func begin_external_intro() -> void:
+	if is_dead():
+		return
+	_combat_enabled = false
+	set_physics_process(false)
+	velocity = Vector2.ZERO
+	_end_hitboxes()
+	hurtbox.set_enabled(false)
+	detection_area.set_deferred("monitoring", false)
+	transition_state(INTRO)
+	play_animation(&"intro", true)
+	intro_started.emit()
+
+
+func begin_combat(player_target: Player) -> void:
+	if is_dead():
+		return
+	target = player_target
+	_combat_enabled = true
+	set_physics_process(true)
+	hurtbox.set_enabled(true)
+	detection_area.set_deferred("monitoring", true)
+	transition_state(COMBAT)
+	play_animation(_idle_animation(), true)
+	combat_started.emit()
+
+
+func is_combat_enabled() -> bool:
+	return _combat_enabled
 
 
 func get_attack_phase_name() -> StringName: return attack_phase

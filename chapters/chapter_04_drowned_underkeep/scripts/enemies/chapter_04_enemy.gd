@@ -70,6 +70,14 @@ func _on_common_ready() -> void:
 
 
 func _process_enemy_state(delta: float) -> void:
+	# Encounter dormancy resets the shared base state to Idle.  Ambush enemies
+	# must re-enter their authored hidden state before any target-driven action,
+	# otherwise the disabled Hurtbox can survive while combat proceeds.
+	if _hidden and current_state != HIDDEN:
+		transition_state(HIDDEN)
+		state_timer = _chapter_config().hidden_duration
+		velocity = Vector2.ZERO
+		play_animation(&"hidden", true)
 	_secondary_cooldown = maxf(0.0, _secondary_cooldown - delta)
 	_special_cooldown = maxf(0.0, _special_cooldown - delta)
 	poise_component.advance(delta, current_state == STAGGER or current_state == GUARD_BREAK)

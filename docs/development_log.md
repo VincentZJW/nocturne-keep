@@ -1,5 +1,35 @@
 # Development Log
 
+## 2026-08-05 — Chapter IV Q2–Q4 and BOSS4 complete
+
+Status: implementation, MainBootstrap runtime QA, repeated Boss-flow stress and rendered evidence complete; final Chapter IV reward identity remains intentionally undecided
+
+- Fixed the shared Chapter IV Encounter activation lifecycle instead of patching individual instances: dormant enemies are hidden and non-processing, destination rooms cannot activate against the persistent Player's previous position under the fade, reaction states always exit, and Sewer Maw restores its Hurtbox after emergence.
+- Converted the Cistern east boundary into a visible, encounter-locked E exit with an authored gate/blocker. A real `interact` InputEventAction now loads Area 06 at `EntryWest`; no direct position mutation or out-of-camera disappearance remains.
+- Completed the formal late-chapter route: `CP_CH4_BOSS`, interactive Soul Lock gate, Ormund intro/dialogue/HUD, original two-phase music, death/soul-release result, one-shot reward slot, reward-gated Hall of Drowned Memories and registered `CH5_START` placeholder.
+- Added the Hall's one-shot bilingual memory-fragment presentation and verified the real E/SceneTransitionManager handoff into the registered Chapter V scene at `CH5_START`.
+- Made the memory presentation transition-safe with a room-owned Timer sequence, so rapid unloads leave no suspended coroutine and natural room fades cannot restore the transient `LOCKED` input profile. Boss-room teardown now also stops Ormund-only music and clears its phase guard.
+- Boss retry now rebuilds full HP/Phase 1 and uses a short presentation after the first long dialogue. Defeated Boss state persists when backtracking and cannot spawn a duplicate.
+- Preserved the product boundary: `CH4_UNNAMED_CHAIN_RELIC_PLACEHOLDER` is a flow-only slot with no invented final WeaponData or permanent balance values.
+- Exact Godot 4.7.1 results: formal route `17/670/2/20/46`; transitions `32`; encounter manifests `20/46`; runtime and Main encounter tests PASS; combat stress `8 roles/160 kills/360 attacks/5 reloads`; Ormund runtime PASS; Main Q4/Boss route PASS including natural Cistern E transition.
+- Repeated Boss route test PASS: checkpoint `10`, gate `20`, complete intro `10`, retry `10`, death `10`, unclaimed reload `5`, reward collect `10`, repeated input `100`, memory/CH5 `10`.
+- GUI MainBootstrap capture PASS on OpenGL Compatibility / Apple M4: 13 distinct 1280×720 frames under `docs/qa/chapter_04_q4_boss_flow/`. Editor parse and every final suite completed without red script/resource/runtime errors; `git diff --check` PASS.
+- Full implementation and QA matrices: `res://chapters/chapter_04_drowned_underkeep/docs/chapter_04_q4_boss4_completion_report.md`.
+
+## 2026-08-05 — Chapter IV Q1-A combat/transition runtime audit and BOSS4-0 flow audit
+
+Status: audit complete — no gameplay, scene, AI, collision, transition, Boss, reward, balance, or project-setting changes were made
+
+- Approved scope: enumerate all 17 formal Chapter IV rooms, saved Encounter manifests and runtime-spawned enemies; trace Encounter activation through AI/Detection/attack and Player-hit contracts; locate the Cistern east exit and continuous room route; and audit the existing pre-Boss, Boss, reward and Chapter V handoff implementation.
+- Formal inventory result: 17 rooms, 20 saved EncounterGroups and 46 runtime-spawned ordinary/elite enemies. All eight formal enemy types use the common `chapter_04_enemy.gd`; their embedded scene configs, not the similarly named standalone data resources, are the current runtime tuning authority.
+- Root causes proven: later EncounterGroups remain visibly rendered while `PROCESS_MODE_DISABLED`; destination rooms can activate the wrong group during the add-before-suspend/teleport transition window; the common `LightHitReaction` state never exits; and Sewer Maw can bypass its Hidden-state Hurtbox re-enable branch while already entering shared Alert/Approach combat.
+- Exact isolated evidence: Drowned Gaoler and Bog Toad both accepted a real hit (`104→103`, `142→141`) yet remained `LightHitReaction` after two seconds. Runtime MainBootstrap probes also observed all eight types detecting/attacking; all non-Maw Hurtboxes accepted the Player attack contract, while Sewer Maw attacked with its Hurtbox still disabled.
+- Cistern result: the real `Ch4CisternOfTheChanged/Transitions/ExitEast` targets Area 06 `EntryWest` `(120,592)` and works when entered. The apparent disappearance comes from an automatic, unprompted trigger at `x=2152` combined with actor bounds extending past the authored `2176`-pixel room/camera, not from an invalid destination, hidden Player or missing spawn.
+- Boss result: Areas 11–16 and Ormund's two-phase combat shell exist, but no interactive Soul-Lock Gate, formal intro/dialogue/HUD/music controller, arena lifecycle, Chapter IV reward spawner, specific route flags or Chapter V scene/`CH5_START` handoff exists. Reward content and values remain deliberately undecided.
+- Exact Godot 4.7.1 suites passed: formal route (`17/20/46`), S4 manifests (`10/20/46`, seed `40446`), Main route (`17`, final Area 16) and S5 direct transitions (`32`). Existing green tests do not cover natural door-to-Encounter activation or hit-recovery-to-second-attack cycles, which explains the regression gap.
+- Full Q1-A findings, all formal instance records, BOSS4-0 route/dialogue design, affected systems, estimated file sets and formal F5 acceptance plans: `res://chapters/chapter_04_drowned_underkeep/docs/chapter_04_q1_a_boss4_0_audit.md`.
+- Scope stop: do not implement Q2 enemy fixes, Q3 transition fixes, Boss door/intro/reward content or final reward values without the next approved implementation stage. This audit-only milestone intentionally creates no commit.
+
 ## 2026-08-05 — GI0–GI5 Gargoyle ceiling recovery and Hollow Duchess music rebuild
 
 Status: implementation, deterministic/MainBootstrap QA and two independent 15-minute real-time loop endurance runs complete; subjective musical acceptance remains a user playtest boundary

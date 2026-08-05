@@ -16,6 +16,9 @@
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="14_aktw7"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_spawner.gd" id="15_1doqb"]
 [ext_resource type="Resource" path="res://chapters/chapter_04_drowned_underkeep/resources/encounters/ch4_area_05.tres" id="16_nhgbp"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_encounter_gate.gd" id="17_gate"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/doors/floodgates/vertical_floodgate_01.png" id="18_gate_closed"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/doors/floodgates/vertical_floodgate_03.png" id="19_gate_open"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lmeea"]
 size = Vector2(2176, 104)
@@ -581,7 +584,7 @@ metadata/semantic_tag = "ground"
 position = Vector2(120, 592)
 
 [node name="EntryEast" type="Marker2D" parent="SpawnPoints" unique_id=447800239]
-position = Vector2(2056, 592)
+position = Vector2(1936, 592)
 
 [node name="Inspection" type="Marker2D" parent="SpawnPoints" unique_id=652348853]
 position = Vector2(1088, 592)
@@ -601,14 +604,60 @@ destination_spawn_id = &"EntryEast"
 shape = SubResource("RectangleShape2D_fyh6g")
 
 [node name="ExitEast" type="Area2D" parent="Transitions" unique_id=276242650]
-position = Vector2(2152, 550)
+position = Vector2(2050, 550)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("14_aktw7")
 destination_room_id = &"CH4_AREA_06"
+requires_interaction = true
+prompt_path = NodePath("Prompt")
+locked = true
+
+[node name="Prompt" type="Label" parent="Transitions/ExitEast"]
+visible = false
+z_index = 30
+offset_left = -320.0
+offset_top = -128.0
+offset_right = 48.0
+offset_bottom = -96.0
+theme_override_colors/font_color = Color(0.78, 0.92, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.01, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 13
+text = "E · ENTER THE DRY GAOLER'S CELL / 进入干牢吏室"
+horizontal_alignment = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1447635831]
+shape = SubResource("RectangleShape2D_h7k4u")
+
+[node name="CisternExitGate" type="Node2D" parent="Transitions"]
+script = ExtResource("17_gate")
+encounter_spawner_path = NodePath("../../EncounterSpawner")
+exit_path = NodePath("../ExitEast")
+blocker_shape_path = NodePath("Blocker/CollisionShape2D")
+closed_visual_path = NodePath("Closed")
+open_visual_path = NodePath("Open")
+
+[node name="Closed" type="Sprite2D" parent="Transitions/CisternExitGate"]
+z_index = 4
+texture_filter = 1
+position = Vector2(2092, 544)
+texture = ExtResource("18_gate_closed")
+
+[node name="Open" type="Sprite2D" parent="Transitions/CisternExitGate"]
+visible = false
+z_index = 2
+texture_filter = 1
+position = Vector2(2092, 544)
+texture = ExtResource("19_gate_open")
+
+[node name="Blocker" type="StaticBody2D" parent="Transitions/CisternExitGate"]
+collision_layer = 1
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/CisternExitGate/Blocker"]
+position = Vector2(2092, 556)
 shape = SubResource("RectangleShape2D_h7k4u")
 
 [node name="EncounterSpawner" type="Node2D" parent="." unique_id=1657552555]

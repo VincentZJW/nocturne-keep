@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/boss_area/boss_shallow_water_bed.png" id="7_l4xuk"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="8_l2qxs"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/bosses/soul_gaoler_ormund.tscn" id="9_ormund"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/chapter_04_boss_room_controller.gd" id="10_boss_flow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d43d5"]
 size = Vector2(2304, 104)
@@ -29,6 +30,7 @@ room_function = &"boss_arena"
 metadata/formal_chapter_room = true
 metadata/environment_asset_milestone = "CH4-S2"
 metadata/boss_arena_clear_width = 1400
+metadata/boss_intro_controls_player = true
 
 [node name="Background" type="Node2D" parent="." unique_id=852377525]
 z_index = -100
@@ -479,7 +481,11 @@ position = Vector2(1566.72, 619)
 
 [node name="SoulGaolerOrmund" parent="Enemies" instance=ExtResource("9_ormund")]
 position = Vector2(1567, 619)
+external_intro_control = true
 metadata/formal_boss_instance = true
+
+[node name="BossRoomController" type="Node" parent="."]
+script = ExtResource("10_boss_flow")
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=55040474]
 
@@ -513,6 +519,17 @@ collision_mask = 2
 monitorable = false
 script = ExtResource("8_l2qxs")
 destination_room_id = &"CH4_AREA_15"
+requires_interaction = true
+prompt_path = NodePath("Prompt")
+locked = true
+locked_prompt_text = "SEALED · DEFEAT ORMUND / 封印中 · 击败奥蒙德"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1362942914]
 shape = SubResource("RectangleShape2D_hppmc")
+
+[node name="Prompt" type="Label" parent="Transitions/ExitEast"]
+visible = false
+position = Vector2(-190, -116)
+size = Vector2(380, 46)
+text = "E  ENTER THE BROKEN RESERVOIR / 进入破魂蓄池"
+horizontal_alignment = 1

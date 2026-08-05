@@ -1,0 +1,57 @@
+[gd_scene load_steps=6 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_05_night_repeated/scripts/level/night_repeated_placeholder.gd" id="1_controller"]
+[ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/memory_transition/ruined_drowned_corridor_01.png" id="3_memory_wall"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/dry_checkpoint_stone_02.png" id="4_floor"]
+
+[sub_resource type="RectangleShape2D" id="FloorShape"]
+size = Vector2(1280, 96)
+
+[node name="NightRepeatedPlaceholder" type="Node2D"]
+script = ExtResource("1_controller")
+
+[node name="Background" type="Node2D" parent="."]
+z_index = -100
+
+[node name="Wall0" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(256, 320)
+texture = ExtResource("3_memory_wall")
+
+[node name="Wall1" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(768, 320)
+texture = ExtResource("3_memory_wall")
+
+[node name="Wall2" type="Sprite2D" parent="Background"]
+texture_filter = 1
+position = Vector2(1280, 320)
+texture = ExtResource("3_memory_wall")
+
+[node name="FloorVisual" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(640, 652)
+scale = Vector2(5, 1)
+texture = ExtResource("4_floor")
+
+[node name="FloorCollision" type="StaticBody2D" parent="."]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="FloorCollision"]
+position = Vector2(640, 672)
+shape = SubResource("FloorShape")
+
+[node name="ChapterRuntime" parent="." instance=ExtResource("2_runtime")]
+
+[node name="SpawnPoints" type="Node2D" parent="."]
+
+[node name="CH5_START" type="Marker2D" parent="SpawnPoints"]
+position = Vector2(160, 592)
+
+[node name="ChapterTitle" type="Label" parent="."]
+z_index = 20
+position = Vector2(384, 106)
+size = Vector2(512, 72)
+text = "CHAPTER V · NIGHT REPEATED\n第五章 · 重演之夜\nFORMAL ENTRY PLACEHOLDER / 正式入口占位"
+horizontal_alignment = 1

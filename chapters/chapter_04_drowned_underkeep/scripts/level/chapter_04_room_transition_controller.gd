@@ -81,6 +81,16 @@ func request_room_change(room_id: StringName, spawn_id: StringName) -> bool:
 	return true
 
 
+func request_room_restart(spawn_id: StringName) -> bool:
+	if _transitioning or active_room_id.is_empty() or not ROOM_SCENES.has(active_room_id):
+		return false
+	_transitioning = true
+	_transition_started_usec = Time.get_ticks_usec()
+	_request_room_prepare(active_room_id)
+	_run_transition(active_room_id, spawn_id)
+	return true
+
+
 func _run_transition(room_id: StringName, spawn_id: StringName) -> void:
 	var previous_profile: Player.InputProfile = player.get_input_profile()
 	var was_invulnerable: bool = player.hurtbox != null and player.hurtbox.is_invulnerable
@@ -100,9 +110,15 @@ func _run_transition(room_id: StringName, spawn_id: StringName) -> void:
 	fade_in.tween_property(fade_rect, "modulate:a", 0.0, 0.18)
 	await fade_in.finished
 	fade_rect.visible = false
-	if player.hurtbox != null and not was_invulnerable:
-		player.hurtbox.set_invulnerable(false)
-	player.set_input_profile(Player.InputProfile.FULL if did_swap else previous_profile)
+	var room_owns_player_lock: bool = (
+		did_swap
+		and active_room != null
+		and bool(active_room.get_meta(&"boss_intro_controls_player", false))
+	)
+	if not room_owns_player_lock:
+		if player.hurtbox != null and not was_invulnerable:
+			player.hurtbox.set_invulnerable(false)
+		player.set_input_profile(Player.InputProfile.FULL if did_swap else previous_profile)
 	if did_swap:
 		_resume_active_room_encounters()
 	_transitioning = false
@@ -139,6 +155,11 @@ func _swap_room_from_packed(room_id: StringName, spawn_id: StringName, packed: P
 		push_error("Chapter IV room root must be Chapter04Room: %s" % path)
 		new_room.free()
 		return false
+	# Child _ready callbacks run while the room enters the tree, before this
+	# controller can resolve the destination spawn.  Mark the room first so its
+	# encounter spawner cannot activate against the persistent Player's old
+	# world-space position during that window.
+	new_room.set_meta(&"chapter_04_activation_suspended", true)
 	new_room.process_mode = Node.PROCESS_MODE_DISABLED
 	room_host.add_child(new_room)
 	var encounter_spawner: Chapter04EncounterSpawner = new_room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
@@ -181,6 +202,7 @@ func _resume_active_room_encounters() -> void:
 	var encounter_spawner: Chapter04EncounterSpawner = active_room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
 	if encounter_spawner != null:
 		encounter_spawner.set_activation_suspended(false)
+	active_room.set_meta(&"chapter_04_activation_suspended", false)
 
 
 func get_transition_metrics() -> Dictionary:

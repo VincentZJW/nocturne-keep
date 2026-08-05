@@ -211,7 +211,7 @@ collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("7_1igp1")
-checkpoint_id = &"LAST_GAOL"
+checkpoint_id = &"CP_CH4_BOSS"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/Checkpoint" unique_id=984167231]
 shape = SubResource("RectangleShape2D_jgwjf")

@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/props/soul_cages/numbered_soul_cage_empty.png" id="5_06emr"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/floors/dry_checkpoint_stone_01.png" id="6_opbxo"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="7_2nkym"]
+[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_boss_gate_controller.gd" id="8_gate_controller"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4upt"]
 size = Vector2(1792, 104)
@@ -16,6 +17,9 @@ size = Vector2(72, 160)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ieqh5"]
 size = Vector2(72, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate_blocker"]
+size = Vector2(76, 176)
 
 [node name="Ch4SoulLockAntechamber" type="Node2D" unique_id=711934853]
 script = ExtResource("1_q6nwt")
@@ -240,7 +244,7 @@ z_index = 13
 position = Vector2(120, 592)
 
 [node name="EntryEast" type="Marker2D" parent="SpawnPoints" unique_id=269873229]
-position = Vector2(1672, 592)
+position = Vector2(1576, 592)
 
 [node name="Inspection" type="Marker2D" parent="SpawnPoints" unique_id=1051566384]
 position = Vector2(896, 592)
@@ -260,12 +264,44 @@ destination_spawn_id = &"EntryEast"
 shape = SubResource("RectangleShape2D_xfunh")
 
 [node name="ExitEast" type="Area2D" parent="Transitions" unique_id=1591499752]
-position = Vector2(1768, 550)
+position = Vector2(1696, 550)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 script = ExtResource("7_2nkym")
 destination_room_id = &"CH4_AREA_14"
+requires_interaction = true
+prompt_path = NodePath("Prompt")
+transition_delay = 0.62
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1871549724]
 shape = SubResource("RectangleShape2D_ieqh5")
+
+[node name="Prompt" type="Label" parent="Transitions/ExitEast"]
+visible = false
+position = Vector2(-178, -116)
+size = Vector2(356, 46)
+text = "E  OPEN THE FINAL SOUL LOCK / 开启最终魂锁"
+horizontal_alignment = 1
+
+[node name="BossGatePresentation" type="Node2D" parent="."]
+position = Vector2(1696, 548)
+script = ExtResource("8_gate_controller")
+
+[node name="LeftPanel" type="Sprite2D" parent="BossGatePresentation"]
+texture_filter = 1
+position = Vector2(-34, -32)
+texture = ExtResource("4_tr8vk")
+
+[node name="RightPanel" type="Sprite2D" parent="BossGatePresentation"]
+texture_filter = 1
+position = Vector2(34, -32)
+scale = Vector2(-1, 1)
+texture = ExtResource("4_tr8vk")
+
+[node name="GateBlocker" type="StaticBody2D" parent="BossGatePresentation"]
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BossGatePresentation/GateBlocker"]
+position = Vector2(0, 2)
+shape = SubResource("RectangleShape2D_gate_blocker")
