@@ -42,6 +42,7 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/boss/duchess_encounter_presentation.tscn" id="40_boss_presentation"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_02_silent_court/scenes/transitions/duchess_reliquary.tscn" id="41_reliquary"]
 [ext_resource type="Script" path="res://chapters/chapter_02_silent_court/scripts/boss/duchess_boss_threshold_transition.gd" id="42_boss_threshold"]
+[ext_resource type="PackedScene" path="res://shared/scenes/world/world_bounds_2d.tscn" id="43_world_bounds"]
 
 [sub_resource type="RectangleShape2D" id="Rectangle_left_wall"]
 size = Vector2(64, 2520)
@@ -771,6 +772,10 @@ destination_spawn_id = &"CH2_FLOOR_3_START"
 shape = SubResource("Rectangle_floor_transition")
 
 [node name="WorldBounds" type="Node2D" parent="."]
+
+[node name="WorldBounds2D" parent="WorldBounds" instance=ExtResource("43_world_bounds")]
+actor_bounds = Rect2(0, -1900, 7200, 2620)
+flight_margin = 56.0
 
 [node name="LeftWall" type="StaticBody2D" parent="WorldBounds"]
 collision_layer = 1

@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="17_tp8bc"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/encounters/chapter_04_encounter_spawner.gd" id="18_hi6yl"]
 [ext_resource type="Resource" path="res://chapters/chapter_04_drowned_underkeep/resources/encounters/ch4_area_03.tres" id="19_uiebp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/walls/thick_pointed_prison_arch_128.png" id="20_exit_arch"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hyfgm"]
 size = Vector2(2048, 104)
@@ -602,6 +603,29 @@ collision_mask = 2
 monitorable = false
 script = ExtResource("17_tp8bc")
 destination_room_id = &"CH4_AREA_04"
+requires_interaction = true
+prompt_path = NodePath("Prompt")
+
+[node name="ExitArch" type="Sprite2D" parent="Transitions/ExitEast"]
+z_index = 2
+texture_filter = 1
+position = Vector2(-34, -34)
+texture = ExtResource("20_exit_arch")
+
+[node name="Prompt" type="Label" parent="Transitions/ExitEast"]
+visible = false
+z_index = 20
+offset_left = -256.0
+offset_top = -128.0
+offset_right = -40.0
+offset_bottom = -100.0
+theme_override_colors/font_color = Color(0.84, 0.76, 0.56, 1)
+theme_override_colors/font_shadow_color = Color(0.02, 0.03, 0.05, 1)
+theme_override_constants/shadow_offset_x = 1
+theme_override_constants/shadow_offset_y = 1
+theme_override_font_sizes/font_size = 13
+text = "E · DESCEND / 进入下层溺狱"
+horizontal_alignment = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1465514338]
 shape = SubResource("RectangleShape2D_ju245")

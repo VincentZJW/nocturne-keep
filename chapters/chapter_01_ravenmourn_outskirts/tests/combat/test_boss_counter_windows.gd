@@ -40,7 +40,7 @@ func _run_tests() -> void:
 	var player_times: Dictionary[StringName, float] = _measure_player_timings(player)
 	_test_per_skill_gaps(player, boss, player_times)
 	_test_turn_is_not_reset_by_hits(player, boss)
-	var fight_durations: Array[float] = _simulate_three_complete_fights(player, boss)
+	var fight_durations: Array[float] = _simulate_complete_fights(player, boss, 20)
 	_print_metrics(player_times, fight_durations)
 	main.queue_free()
 	await process_frame
@@ -116,7 +116,9 @@ func _test_per_skill_gaps(
 			FallenGateKnight.HEAVY_OVERHEAD,
 		] else 2
 		var expected_gap: float = boss._get_attack_gap_for_state(attack_state)
-		_test_natural_active_close(boss, attack_state, phase, expected_gap)
+		var active_window_repetitions: int = 15 if phase == 2 else 1
+		for _repetition: int in range(active_window_repetitions):
+			_test_natural_active_close(boss, attack_state, phase, expected_gap)
 		var measured_gap: float = _measure_runtime_gap(player, boss, attack_state, phase)
 		_measured_gaps[attack_state] = measured_gap
 		_expect(
@@ -276,9 +278,10 @@ func _test_turn_is_not_reset_by_hits(player: Player, boss: FallenGateKnight) -> 
 	_expect(boss.facing_direction > 0.0, "Boss did not commit facing after hit-resilient Turn")
 
 
-func _simulate_three_complete_fights(
+func _simulate_complete_fights(
 	_player: Player,
-	boss: FallenGateKnight
+	boss: FallenGateKnight,
+	fight_count: int
 ) -> Array[float]:
 	var results: Array[float] = []
 	var counter_patterns: Array[Array] = [
@@ -286,7 +289,7 @@ func _simulate_three_complete_fights(
 		[12, 24, 24],
 		[12, 12, 24],
 	]
-	for fight_index: int in range(3):
+	for fight_index: int in range(fight_count):
 		var shield_health: int = boss.config.boss_shield_max_health
 		var body_health: int = boss.config.max_health
 		var elapsed: float = 0.0
@@ -295,7 +298,8 @@ func _simulate_three_complete_fights(
 			var attack_state: StringName = ATTACK_ORDER[cycle % 3]
 			elapsed += _attack_active_end_time(boss, attack_state)
 			elapsed += boss._get_attack_gap_for_state(attack_state)
-			var shield_damage: int = counter_patterns[fight_index][cycle % counter_patterns[fight_index].size()]
+			var pattern: Array = counter_patterns[fight_index % counter_patterns.size()]
+			var shield_damage: int = pattern[cycle % pattern.size()]
 			shield_health = maxi(0, shield_health - shield_damage)
 			cycle += 1
 		elapsed += boss.config.shield_break_stun + boss.config.phase_transition_duration
@@ -304,7 +308,8 @@ func _simulate_three_complete_fights(
 			var attack_state: StringName = ATTACK_ORDER[3 + cycle % 4]
 			elapsed += _attack_active_end_time(boss, attack_state)
 			elapsed += boss._get_attack_gap_for_state(attack_state)
-			var body_damage: int = counter_patterns[fight_index][cycle % counter_patterns[fight_index].size()]
+			var pattern: Array = counter_patterns[fight_index % counter_patterns.size()]
+			var body_damage: int = pattern[cycle % pattern.size()]
 			body_health = maxi(0, body_health - body_damage)
 			cycle += 1
 		results.append(elapsed)
@@ -384,12 +389,16 @@ func _print_metrics(
 			]
 		)
 	var average: float = 0.0
+	var minimum: float = INF
+	var maximum: float = 0.0
 	for duration: float in fight_durations:
 		average += duration
+		minimum = minf(minimum, duration)
+		maximum = maxf(maximum, duration)
 	average /= float(fight_durations.size())
 	print(
-		"CONTROLLED_BOSS_FIGHTS durations=%.2f,%.2f,%.2f average=%.2f"
-		% [fight_durations[0], fight_durations[1], fight_durations[2], average]
+		"CONTROLLED_BOSS_FIGHTS count=%d shield_breaks=%d phase2_each=15 min=%.2f max=%.2f average=%.2f"
+		% [fight_durations.size(), fight_durations.size(), minimum, maximum, average]
 	)
 
 

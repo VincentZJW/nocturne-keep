@@ -23,6 +23,7 @@ func _run() -> void:
 	await _test_retainer_attack_cadence()
 	await _test_acolyte_projectile_and_buff()
 	await _test_stalker_direction_lock()
+	await _test_stalker_reengage_cycle()
 	await _finish()
 
 
@@ -44,7 +45,7 @@ func _test_saved_contracts() -> void:
 		var idle_animation: String = "hang" if slug == "hanging_stalker" else "idle"
 		var png_path: String = "%s/assets/enemies/%s/sprites/%s/%s_01.png" % [ENEMY_ROOT, slug, idle_animation, idle_animation]
 		var texture: Texture2D = ResourceLoader.load(png_path, "Texture2D") as Texture2D
-		_expect(texture != null and texture.get_width() == 64 and texture.get_height() == 64, "%s source frame is not 64x64" % slug)
+		_expect(texture != null and texture.get_width() == 128 and texture.get_height() == 128, "%s formal source frame is not 128x128" % slug)
 		var image: Image = texture.get_image() if texture != null else Image.new()
 		_expect(not image.is_empty() and image.detect_alpha() != Image.ALPHA_NONE, "%s source frame lacks transparency" % slug)
 		image = null
@@ -162,6 +163,39 @@ func _test_stalker_direction_lock() -> void:
 	_expect(stalker.get_state_name() == HangingStalker.DROP, "Stalker did not enter its drop")
 	_expect(signf(stalker.velocity.x) == signf(locked_velocity_x), "Stalker changed its locked drop direction")
 	_expect(is_equal_approx(stalker.config.telegraph_duration, 0.55), "Stalker telegraph duration mismatch")
+	await _dispose_fixture(fixture)
+
+
+func _test_stalker_reengage_cycle() -> void:
+	var fixture: Node2D = _make_fixture()
+	root.add_child(fixture)
+	var player_scene: PackedScene = load("res://scenes/player/player.tscn") as PackedScene
+	var player: Player = player_scene.instantiate() as Player if player_scene != null else null
+	var stalker: HangingStalker = _instantiate_enemy("hanging_stalker") as HangingStalker
+	_expect(player != null and stalker != null, "Stalker re-engage fixture did not instantiate")
+	if player == null or stalker == null:
+		await _dispose_fixture(fixture)
+		return
+	fixture.add_child(player)
+	fixture.add_child(stalker)
+	player.global_position = Vector2(560.0, 584.0)
+	stalker.global_position = Vector2(500.0, 170.0)
+	await process_frame
+	player.set_physics_process(false)
+	stalker.set_physics_process(false)
+	# Stress the real retained-target return path 20 times: set_target is not
+	# called again between cycles, matching a Player who stays in the room.
+	stalker.target = player
+	var completed_cycles: int = 0
+	for _cycle: int in range(20):
+		stalker._transition(HangingStalker.RETURN_TO_ANCHOR)
+		stalker._transition(HangingStalker.HANG)
+		stalker.state_timer = 0.0
+		stalker._process_hang(0.01)
+		if stalker.get_state_name() == HangingStalker.ALERT_TELEGRAPH:
+			completed_cycles += 1
+		_expect(stalker.state_timer > 0.0, "Stalker repeat telegraph has no readable delay")
+	_expect(completed_cycles == 20, "Stalker retained-target loop did not re-arm 20/20 times")
 	await _dispose_fixture(fixture)
 
 

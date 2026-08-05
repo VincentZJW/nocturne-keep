@@ -45,6 +45,7 @@ var locked_drop_x: float = 0.0
 var _direction_locked: bool = false
 var _used_ground_claw: bool = false
 var _next_attack_id: int = 1
+var world_bounds: WorldBounds2D
 
 
 func _ready() -> void:
@@ -52,6 +53,10 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 	ceiling_anchor = global_position
+	world_bounds = _find_world_bounds()
+	if world_bounds != null:
+		ceiling_anchor = world_bounds.clamp_flight_anchor(ceiling_anchor)
+		global_position = ceiling_anchor
 	health_component.max_health = config.max_health
 	health_component.reset_to_full()
 	drop_hitbox.end_attack()
@@ -75,7 +80,7 @@ func _physics_process(delta: float) -> void:
 		return
 	match current_state:
 		HANG:
-			velocity = Vector2.ZERO
+			_process_hang(delta)
 		ALERT_TELEGRAPH:
 			_process_telegraph(delta)
 		DROP:
@@ -93,6 +98,7 @@ func _physics_process(delta: float) -> void:
 		HURT:
 			_process_hurt(delta)
 	move_and_slide()
+	_enforce_flight_bounds()
 	if current_state == DROP and is_on_floor():
 		_end_drop()
 
@@ -178,6 +184,13 @@ func _enter_telegraph() -> void:
 	_play(&"telegraph", true)
 
 
+func _process_hang(delta: float) -> void:
+	velocity = Vector2.ZERO
+	state_timer = maxf(0.0, state_timer - delta)
+	if state_timer <= 0.0 and _has_target() and ai_active:
+		_enter_telegraph()
+
+
 func _process_telegraph(delta: float) -> void:
 	velocity = Vector2.ZERO
 	state_timer = maxf(0.0, state_timer - delta)
@@ -261,6 +274,7 @@ func _process_return() -> void:
 		global_position = ceiling_anchor
 		velocity = Vector2.ZERO
 		_transition(HANG)
+		state_timer = config.reengage_delay
 		_play(&"hang")
 
 
@@ -361,6 +375,27 @@ func _validate_dependencies() -> bool:
 		push_error("HangingStalker scene composition is incomplete")
 		return false
 	return true
+
+
+func _find_world_bounds() -> WorldBounds2D:
+	for node: Node in get_tree().get_nodes_in_group(&"world_bounds"):
+		if node is WorldBounds2D:
+			return node as WorldBounds2D
+	return null
+
+
+func _enforce_flight_bounds() -> void:
+	if world_bounds == null or current_state == DEATH:
+		return
+	var safe_top_y: float = world_bounds.get_safe_flight_top_y()
+	if global_position.y < safe_top_y:
+		global_position.y = safe_top_y
+		velocity.y = maxf(0.0, velocity.y)
+		ceiling_anchor = world_bounds.clamp_flight_anchor(ceiling_anchor)
+		if current_state not in [HANG, RETURN_TO_ANCHOR]:
+			_end_attacks()
+			_transition(RETURN_TO_ANCHOR)
+			_play(&"return_to_anchor", true)
 
 
 func get_debug_summary() -> String:

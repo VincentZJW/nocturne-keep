@@ -1,13 +1,18 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/drowned_underkeep.gd" id="1_route"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="2_runtime"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_transition_controller.gd" id="3_transition"]
+[ext_resource type="PackedScene" path="res://shared/scenes/world/world_bounds_2d.tscn" id="4_world_bounds"]
 
 [node name="DrownedUnderkeep" type="Node2D"]
 script = ExtResource("1_route")
 
 [node name="RoomHost" type="Node2D" parent="."]
+
+[node name="WorldBounds2D" parent="." instance=ExtResource("4_world_bounds")]
+actor_bounds = Rect2(0, 0, 4096, 720)
+flight_margin = 52.0
 
 [node name="ChapterRuntime" parent="." instance=ExtResource("2_runtime")]
 

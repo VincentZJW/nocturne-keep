@@ -4964,7 +4964,8 @@ autoplay = "idle"
 
 [node name="ShieldVisual" type="AnimatedSprite2D" parent="PenitentFloodway/Enemies/SunkenShieldPenitent/VisualRoot" unique_id=546776504]
 texture_filter = 1
-position = Vector2(-18, -38)
+position = Vector2(-15, -37)
+scale = Vector2(0.78, 0.78)
 sprite_frames = SubResource("SpriteFrames_7ffmt")
 animation = &"intact"
 autoplay = "intact"

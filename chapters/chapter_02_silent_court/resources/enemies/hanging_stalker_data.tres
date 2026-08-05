@@ -18,5 +18,6 @@ claw_windup = 0.25
 claw_active_duration = 0.1
 retreat_duration = 0.32
 return_speed = 210.0
+reengage_delay = 0.65
 hurt_duration = 0.18
 knockback_speed = 100.0

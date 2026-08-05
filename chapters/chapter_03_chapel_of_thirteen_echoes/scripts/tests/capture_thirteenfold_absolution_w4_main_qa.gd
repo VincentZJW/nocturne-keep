@@ -65,10 +65,13 @@ func _run() -> void:
 	await create_timer(0.90).timeout
 	await _save("02_thirteen_seals_extinguish_main.png")
 	await create_timer(0.95).timeout
-	await _save("03_blades_reforged_main.png")
+	if room.reward_sequence.weapon.visible:
+		_fail("Boss room exposed a duplicate reward weapon")
+		return
+	await _save("03_reliquary_unsealed_boss_room_no_weapon_main.png")
 	while not room.reward_sequence.is_complete():
 		await process_frame
-	await _save("04_formation_complete_main.png")
+	await _save("04_boss_room_sequence_complete_no_weapon_main.png")
 	if not room.post_boss_exit.monitoring:
 		_fail("post-Boss exit did not wait for and open after formation")
 		return
@@ -110,7 +113,7 @@ func _run() -> void:
 		return
 	_config.reset_to_defaults()
 	print(
-		"THIRTEENFOLD_W4_MAIN_QA: PASS captures=%d formation=4.20s pickup=unique equipment=14/28 gate=open"
+		"THIRTEENFOLD_W4_MAIN_QA: PASS captures=%d boss_weapon=0 reliquary_weapon=1 equipment=14/28 gate=open"
 		% _capture_count
 	)
 	quit(0)

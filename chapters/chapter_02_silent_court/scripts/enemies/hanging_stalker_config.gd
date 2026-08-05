@@ -15,5 +15,6 @@ extends Resource
 @export var claw_active_duration: float = 0.10
 @export var retreat_duration: float = 0.32
 @export var return_speed: float = 210.0
+@export_range(0.20, 1.50, 0.05) var reengage_delay: float = 0.65
 @export var hurt_duration: float = 0.18
 @export var knockback_speed: float = 100.0

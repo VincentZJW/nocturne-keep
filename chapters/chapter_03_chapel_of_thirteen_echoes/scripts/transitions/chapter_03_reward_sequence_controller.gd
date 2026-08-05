@@ -98,18 +98,15 @@ func _run_sequence(player: Player) -> void:
 	resonance_tween.tween_property(resonance, "modulate:a", 0.10, seal_duration * 0.75)
 	await get_tree().create_timer(seal_duration).timeout
 
-	formation_stage_changed.emit(&"blades_reforged")
-	weapon.visible = true
-	weapon.modulate.a = 0.0
-	weapon.position = Vector2(0.0, 12.0)
-	var forge_tween: Tween = create_tween().set_parallel(true)
-	forge_tween.tween_property(weapon, "modulate:a", 1.0, forge_duration * 0.35)
-	forge_tween.tween_property(weapon, "position:y", -10.0, forge_duration).set_trans(
-		Tween.TRANS_SINE
-	).set_ease(Tween.EASE_OUT)
+	# The Boss arena owns only the reforging resonance. The sole collectible and
+	# authoritative weapon presentation lives in the post-Boss reliquary.
+	formation_stage_changed.emit(&"reliquary_unsealed")
+	weapon.visible = false
+	var forge_tween: Tween = create_tween()
 	forge_tween.tween_property(resonance, "modulate:a", 0.52, forge_duration * 0.30)
+	forge_tween.tween_property(resonance, "modulate:a", 0.0, forge_duration * 0.70)
 	await forge_tween.finished
-	formation_stage_changed.emit(&"weapon_ready")
+	formation_stage_changed.emit(&"reliquary_ready")
 	await get_tree().create_timer(hold_duration).timeout
 
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
@@ -118,6 +115,8 @@ func _run_sequence(player: Player) -> void:
 		session.set_story_flag(FLAG_REWARD_SPAWNED)
 	_completed = true
 	_running = false
+	visible = false
+	weapon.visible = false
 	if is_instance_valid(player) and not player.is_dead():
 		if player.hurtbox != null and not was_invulnerable:
 			player.hurtbox.set_invulnerable(false)

@@ -139,7 +139,7 @@ func _validate_frames(path: String,animations: Array[StringName],label: String) 
 			_check(frames.get_frame_count(animation) >= 2,"%s/%s has production frames" % [label,animation])
 			for index: int in range(frames.get_frame_count(animation)):
 				var texture: Texture2D = frames.get_frame_texture(animation,index)
-				_check(texture != null and texture.get_size() == Vector2(96,96),"%s/%s frame is 96x96" % [label,animation])
+				_check(texture != null and texture.get_size() == Vector2(192,192),"%s/%s frame is 192x192" % [label,animation])
 
 
 func _on_phase_changed(_phase: int) -> void:

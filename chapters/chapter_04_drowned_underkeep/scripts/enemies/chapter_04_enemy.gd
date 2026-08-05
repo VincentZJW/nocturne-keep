@@ -40,6 +40,7 @@ var _poise_broken_this_hit: bool = false
 var _hidden: bool = false
 var _hover_origin_y: float = 0.0
 var _hover_time: float = 0.0
+var world_bounds: WorldBounds2D
 
 
 func _on_common_ready() -> void:
@@ -53,6 +54,11 @@ func _on_common_ready() -> void:
 	hurtbox.hit_resolving.connect(_on_hit_resolving)
 	_end_hitboxes()
 	_hover_origin_y = global_position.y
+	world_bounds = _find_world_bounds()
+	if world_bounds != null and _chapter_config().airborne:
+		var safe_anchor: Vector2 = world_bounds.clamp_flight_anchor(global_position)
+		global_position = safe_anchor
+		_hover_origin_y = safe_anchor.y
 	if shield_component != null:
 		shield_component.shield_max_health = _chapter_config().shield_max_health
 		shield_component.shield_health_changed.connect(_on_shield_health_changed)
@@ -91,6 +97,7 @@ func _process_enemy_state(delta: float) -> void:
 func _update_airborne_motion(delta: float) -> void:
 	if not _chapter_config().airborne:
 		return
+	_enforce_flight_bounds()
 	_hover_time += delta
 	var desired_y: float = _hover_origin_y + sin(_hover_time * 2.0) * _chapter_config().hover_amplitude
 	velocity.y = clampf((desired_y - global_position.y) * 5.0, -48.0, 48.0)
@@ -183,7 +190,7 @@ func _process_reaction(delta: float) -> void:
 	velocity.x = move_toward(velocity.x, 0.0, config.ground_deceleration * delta)
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer <= 0.0:
-		if current_state == STAGGER:
+		if current_state in [STAGGER, GUARD_BREAK]:
 			poise_component.reset_to_full()
 		transition_state(APPROACH if has_valid_target() else PATROL)
 		play_animation(&"walk")
@@ -339,6 +346,23 @@ func _enter_hidden() -> void:
 	velocity = Vector2.ZERO
 	hurtbox.set_enabled(false)
 	play_animation(&"hidden", true)
+
+
+func _find_world_bounds() -> WorldBounds2D:
+	for node: Node in get_tree().get_nodes_in_group(&"world_bounds"):
+		if node is WorldBounds2D:
+			return node as WorldBounds2D
+	return null
+
+
+func _enforce_flight_bounds() -> void:
+	if world_bounds == null or not _chapter_config().airborne or is_dead():
+		return
+	var safe_top_y: float = world_bounds.get_safe_flight_top_y()
+	if global_position.y < safe_top_y:
+		global_position.y = safe_top_y
+		velocity.y = maxf(0.0, velocity.y)
+		_hover_origin_y = maxf(_hover_origin_y, safe_top_y + _chapter_config().hover_amplitude)
 
 
 func _validate_target() -> bool:

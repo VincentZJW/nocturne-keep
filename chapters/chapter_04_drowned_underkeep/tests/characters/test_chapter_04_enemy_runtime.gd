@@ -43,6 +43,14 @@ func _run() -> void:
 		var expected_frame_size: Vector2i = Vector2i(128, 128)
 		_expect(idle_image.get_size() == expected_frame_size, "%s runtime frame is %dx%d" % [role, expected_frame_size.x, expected_frame_size.y])
 		_expect(is_zero_approx(idle_image.get_pixel(0, 0).a), "%s frame keeps transparent background" % role)
+		enemy.transition_state(Chapter04Enemy.LIGHT_HIT)
+		enemy.state_timer = 0.01
+		enemy._process_reaction(0.02)
+		_expect(enemy.current_state != Chapter04Enemy.LIGHT_HIT, "%s exits LightHitReaction" % role)
+		enemy.transition_state(Chapter04Enemy.GUARD_BREAK)
+		enemy.state_timer = 0.01
+		enemy._process_reaction(0.02)
+		_expect(enemy.current_state != Chapter04Enemy.GUARD_BREAK, "%s exits GuardBreak" % role)
 		enemy.queue_free()
 		await process_frame
 	print("CH4 ENEMY RUNTIME TEST | %s" % ("PASS" if _failures == 0 else "FAIL %d" % _failures))

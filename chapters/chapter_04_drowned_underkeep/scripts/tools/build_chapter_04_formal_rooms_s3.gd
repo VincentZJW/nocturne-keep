@@ -7,6 +7,7 @@ const EXIT_SCRIPT: String = "res://chapters/chapter_04_drowned_underkeep/scripts
 const CHECKPOINT_SCRIPT: String = "res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_checkpoint.gd"
 const WATER_FRAMES: String = "res://chapters/chapter_04_drowned_underkeep/resources/environment/chapter_04_water_fx_frames.tres"
 const MOTION_FRAMES: String = "res://chapters/chapter_04_drowned_underkeep/resources/environment/chapter_04_environment_motion_frames.tres"
+const ORMUND_SCENE: String = "res://chapters/chapter_04_drowned_underkeep/scenes/bosses/soul_gaoler_ormund.tscn"
 const ROOT: String = "res://chapters/chapter_04_drowned_underkeep/assets/"
 const FLOOR_Y: float = 620.0
 
@@ -99,6 +100,8 @@ func _build_room(index: int, data: Dictionary) -> bool:
 		_build_water(rear_water, front_lip, int(data["width"]), bool(data.get("memory", false)))
 	_build_spawns(spawn_points, int(data["width"]), root)
 	_build_transitions(transitions, index, int(data["width"]), root)
+	if index == 3:
+		_configure_broken_chainway_exit(transitions, root)
 	_build_future_slots(markers, int(data["slots"]), int(data["width"]), data["platforms"] as Array, root)
 	if data.has("checkpoint"):
 		_build_checkpoint(gameplay, data["checkpoint"] as StringName, int(data["width"]) / 2, root)
@@ -107,6 +110,17 @@ func _build_room(index: int, data: Dictionary) -> bool:
 		boss_slot.name = "BossSlot"
 		boss_slot.position = Vector2(int(data["width"]) * 0.68, FLOOR_Y - 1.0)
 		_owned(markers, boss_slot, root)
+		var boss_scene: PackedScene = load(ORMUND_SCENE) as PackedScene
+		if boss_scene == null:
+			_fail("formal Ormund scene did not load")
+			root.free()
+			return false
+		var enemies: Node2D = _node2d(root, "Enemies", root)
+		var boss: Node2D = boss_scene.instantiate() as Node2D
+		boss.name = "SoulGaolerOrmund"
+		boss.position = boss_slot.position
+		boss.set_meta("formal_boss_instance", true)
+		_owned(enemies, boss, root)
 		root.set_meta("boss_arena_clear_width", 1400)
 
 	var packed: PackedScene = PackedScene.new()
@@ -295,6 +309,35 @@ func _add_exit(parent: Node2D, name_value: String, position: Vector2, destinatio
 	shape.size = Vector2(72, 160)
 	shape_node.shape = shape
 	_owned(area, shape_node, root)
+
+
+func _configure_broken_chainway_exit(transitions: Node2D, root: Node2D) -> void:
+	var exit_east: Area2D = transitions.get_node_or_null("ExitEast") as Area2D
+	if exit_east == null:
+		return
+	exit_east.set("requires_interaction", true)
+	exit_east.set("prompt_path", NodePath("Prompt"))
+	var arch: Sprite2D = Sprite2D.new()
+	arch.name = "ExitArch"
+	arch.z_index = 2
+	arch.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	arch.position = Vector2(-34.0, -34.0)
+	arch.texture = _texture("environment/walls/thick_pointed_prison_arch_128.png")
+	_owned(exit_east, arch, root)
+	var prompt: Label = Label.new()
+	prompt.name = "Prompt"
+	prompt.visible = false
+	prompt.z_index = 20
+	prompt.position = Vector2(-256.0, -128.0)
+	prompt.size = Vector2(216.0, 28.0)
+	prompt.text = "E · DESCEND / 进入下层溺狱"
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	prompt.add_theme_font_size_override("font_size", 13)
+	prompt.add_theme_color_override("font_color", Color(0.84, 0.76, 0.56))
+	prompt.add_theme_color_override("font_shadow_color", Color(0.02, 0.03, 0.05))
+	prompt.add_theme_constant_override("shadow_offset_x", 1)
+	prompt.add_theme_constant_override("shadow_offset_y", 1)
+	_owned(exit_east, prompt, root)
 
 
 func _build_future_slots(parent: Node2D, count: int, width: int, platforms: Array, root: Node2D) -> void:

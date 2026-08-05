@@ -8,6 +8,7 @@
 [ext_resource type="SpriteFrames" path="res://chapters/chapter_04_drowned_underkeep/resources/environment/chapter_04_water_fx_frames.tres" id="6_0ortv"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/environment/boss_area/boss_shallow_water_bed.png" id="7_l4xuk"]
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/level/chapter_04_room_exit.gd" id="8_l2qxs"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_04_drowned_underkeep/scenes/bosses/soul_gaoler_ormund.tscn" id="9_ormund"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d43d5"]
 size = Vector2(2304, 104)
@@ -473,6 +474,12 @@ autoplay = "front_lip"
 
 [node name="BossSlot" type="Marker2D" parent="FutureEncounterSpawns" unique_id=1950709652]
 position = Vector2(1566.72, 619)
+
+[node name="Enemies" type="Node2D" parent="."]
+
+[node name="SoulGaolerOrmund" parent="Enemies" instance=ExtResource("9_ormund")]
+position = Vector2(1567, 619)
+metadata/formal_boss_instance = true
 
 [node name="SpawnPoints" type="Node2D" parent="." unique_id=55040474]
 

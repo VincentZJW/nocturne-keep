@@ -39,6 +39,7 @@ var _poise_broken_this_hit: bool = false
 var _hidden: bool = false
 var _shared_volley_ledger: Dictionary[int, bool] = {}
 var _spawned_fields: Array[Chapter03TimedField] = []
+var world_bounds: WorldBounds2D
 
 
 func _on_common_ready() -> void:
@@ -52,6 +53,11 @@ func _on_common_ready() -> void:
 	hurtbox.hit_resolving.connect(_on_hit_resolving)
 	_end_hitboxes()
 	_hover_origin_y = global_position.y
+	world_bounds = _find_world_bounds()
+	if world_bounds != null and _specialist_config().airborne:
+		var safe_anchor: Vector2 = world_bounds.clamp_flight_anchor(global_position)
+		_hover_origin_y = safe_anchor.y
+		global_position = safe_anchor
 	if ward_policy != null:
 		ward_policy.cooldown = _specialist_config().ward_cooldown
 	if _specialist_config().starts_hidden:
@@ -65,6 +71,7 @@ func _process_enemy_state(delta: float) -> void:
 	if ward_policy != null:
 		ward_policy.advance(delta)
 	_update_airborne_motion(delta)
+	_enforce_flight_bounds()
 	if attack_phase != &"None":
 		_process_action(delta)
 		return
@@ -100,6 +107,7 @@ func _process_hidden(delta: float) -> void:
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer <= 0.0 and has_valid_target():
 		_hidden = false
+		animated_sprite.visible = true
 		hurtbox.set_enabled(true)
 		_enter_alert()
 
@@ -368,7 +376,33 @@ func _enter_hidden() -> void:
 	state_timer = _specialist_config().hidden_duration
 	velocity = Vector2.ZERO
 	hurtbox.set_enabled(false)
+	animated_sprite.visible = false
 	play_animation(&"hidden", true)
+
+
+func _on_ai_active_changed(active: bool) -> void:
+	# EncounterGroup disables enemies after their scene-ready initialization.
+	# Re-enter the authored hidden state on activation; otherwise the base class
+	# leaves a Wraith logically Idle while its sprite and Hurtbox stay disabled.
+	if active and _specialist_config().starts_hidden and _hidden:
+		_enter_hidden()
+
+
+func _find_world_bounds() -> WorldBounds2D:
+	for node: Node in get_tree().get_nodes_in_group(&"world_bounds"):
+		if node is WorldBounds2D:
+			return node as WorldBounds2D
+	return null
+
+
+func _enforce_flight_bounds() -> void:
+	if world_bounds == null or not _specialist_config().airborne or is_dead():
+		return
+	var safe_top_y: float = world_bounds.get_safe_flight_top_y()
+	if global_position.y < safe_top_y:
+		global_position.y = safe_top_y
+		velocity.y = maxf(0.0, velocity.y)
+		_hover_origin_y = maxf(_hover_origin_y, safe_top_y + _specialist_config().hover_amplitude)
 
 
 func _validate_target() -> bool:

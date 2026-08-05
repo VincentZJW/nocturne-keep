@@ -26,6 +26,9 @@ const EXTINGUISHED_SEAL: String = (
 var _failures: Array[String] = []
 var _formation_finish_count: int = 0
 var _stages: Array[StringName] = []
+var _full_flow_count: int = 0
+var _uncollected_reload_count: int = 0
+var _collected_reload_count: int = 0
 
 
 func _initialize() -> void:
@@ -34,10 +37,13 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_test_w4_assets()
-	_reset_runtime()
-	await _test_formation_sequence()
-	_reset_runtime()
-	await _test_pickup_and_gate_transaction()
+	for flow_index: int in range(10):
+		_reset_runtime()
+		await _test_formation_sequence()
+		if flow_index == 0:
+			await _test_uncollected_reloads(5)
+		await _test_pickup_and_gate_transaction(1)
+		_full_flow_count += 1
 	_reset_runtime()
 	_finish()
 
@@ -49,6 +55,8 @@ func _test_w4_assets() -> void:
 
 
 func _test_formation_sequence() -> void:
+	_formation_finish_count = 0
+	_stages.clear()
 	var player: Player = PLAYER_SCENE.instantiate() as Player
 	var sequence: Chapter03RewardSequenceController = (
 		SEQUENCE_SCENE.instantiate() as Chapter03RewardSequenceController
@@ -66,25 +74,42 @@ func _test_formation_sequence() -> void:
 	_expect(sequence.play_sequence(player), "Formation did not start")
 	_expect(not sequence.play_sequence(player), "Formation started a duplicate sequence")
 	await process_frame
+	_expect(not sequence.weapon.visible, "Boss-room sequence exposed a duplicate weapon visual")
 	_expect(player.get_input_profile() == Player.InputProfile.LOCKED, "Formation did not lock Player input")
 	_expect(player.hurtbox.is_invulnerable, "Formation did not protect Player")
 	await sequence.formation_finished
 	_expect(_formation_finish_count == 1, "Formation completion did not emit exactly once")
 	_expect(_stages == [
-		&"fragments_converge", &"thirteen_seals_extinguish", &"blades_reforged", &"weapon_ready",
+		&"fragments_converge", &"thirteen_seals_extinguish", &"reliquary_unsealed", &"reliquary_ready",
 	], "Formation stages are missing or out of order")
 	_expect(sequence.is_complete() and not sequence.is_running(), "Formation terminal state is incorrect")
+	_expect(not sequence.visible and not sequence.weapon.visible, "Boss-room duplicate visual survived formation")
 	_expect(player.get_input_profile() == profile_before, "Formation did not restore Player input")
 	_expect(not player.hurtbox.is_invulnerable, "Formation did not restore Player vulnerability")
 	var session: ChapterSessionState = _session()
 	_expect(session.boss_reward_spawned, "Formation did not set runtime spawned state")
 	_expect(session.has_story_flag(Chapter03RewardSequenceController.FLAG_REWARD_SPAWNED), "Formation spawned flag missing")
-	player.queue_free()
-	sequence.queue_free()
+	# The signal resumes this coroutine while the emitter is still locked. Wait until
+	# the next idle/physics boundary before deterministic teardown.
 	await process_frame
+	await physics_frame
+	await _dispose_node(sequence)
+	await _dispose_node(player)
 
 
-func _test_pickup_and_gate_transaction() -> void:
+func _test_uncollected_reloads(reload_count: int) -> void:
+	for reload_index: int in range(reload_count):
+		var room: Chapter03PostBossRoom = POST_BOSS_ROOM.instantiate() as Chapter03PostBossRoom
+		root.add_child(room)
+		await process_frame
+		await physics_frame
+		_expect(room.reliquary.is_reward_available(), "Uncollected reload %d lost the reward" % (reload_index + 1))
+		_expect(not room.underkeep_exit.monitoring, "Uncollected reload %d opened the gate" % (reload_index + 1))
+		await _dispose_node(room)
+		_uncollected_reload_count += 1
+
+
+func _test_pickup_and_gate_transaction(collected_reload_count: int) -> void:
 	var room: Chapter03PostBossRoom = POST_BOSS_ROOM.instantiate() as Chapter03PostBossRoom
 	root.add_child(room)
 	await process_frame
@@ -113,18 +138,28 @@ func _test_pickup_and_gate_transaction() -> void:
 	_expect(session.has_story_flag(Chapter03PostBossReliquary.FLAG_REWARD_COLLECTED), "Collected flag missing")
 	_expect(session.has_story_flag(Chapter03PostBossReliquary.FLAG_UNDERKEEP_UNLOCKED), "Underkeep flag missing")
 	_expect(session.is_chapter_completed(ChapterRegistry.CHAPTER_03_CHAPEL_OF_THIRTEEN_ECHOES), "Chapter completion missing")
-	room.queue_free()
-	await process_frame
+	await _dispose_node(room)
 
-	var restored_room: Chapter03PostBossRoom = POST_BOSS_ROOM.instantiate() as Chapter03PostBossRoom
-	root.add_child(restored_room)
+	for reload_index: int in range(collected_reload_count):
+		var restored_room: Chapter03PostBossRoom = POST_BOSS_ROOM.instantiate() as Chapter03PostBossRoom
+		root.add_child(restored_room)
+		await process_frame
+		await physics_frame
+		_expect(restored_room.reliquary.is_reward_collected(), "Collected reload %d did not stay empty" % (reload_index + 1))
+		_expect(not restored_room.reliquary.is_reward_available(), "Collected reload %d duplicated the weapon" % (reload_index + 1))
+		_expect(restored_room.underkeep_exit.monitoring, "Collected reload %d did not keep the gate open" % (reload_index + 1))
+		await _dispose_node(restored_room)
+		_collected_reload_count += 1
+
+
+func _dispose_node(node: Node) -> void:
+	if node == null:
+		return
+	if node.get_parent() != null:
+		node.get_parent().remove_child(node)
+	node.free()
 	await process_frame
 	await physics_frame
-	_expect(restored_room.reliquary.is_reward_collected(), "Reloaded reliquary did not stay empty")
-	_expect(not restored_room.reliquary.is_reward_available(), "Reloaded reliquary duplicated the weapon")
-	_expect(restored_room.underkeep_exit.monitoring, "Reloaded underkeep gate did not stay open")
-	restored_room.queue_free()
-	await process_frame
 
 
 func _on_formation_stage_changed(stage_name: StringName) -> void:
@@ -174,7 +209,10 @@ func _expect_image(path: String, expected_size: Vector2i) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("THIRTEENFOLD_W4_REWARD | PASS stages=4 unique=1 damage=14/28 gate=locked/open reload=empty")
+		print(
+			"THIRTEENFOLD_W4_REWARD | PASS full_flows=%d uncollected_reloads=%d collected_reloads=%d unique=1 damage=14/28"
+			% [_full_flow_count, _uncollected_reload_count, _collected_reload_count]
+		)
 		quit(0)
 		return
 	for failure: String in _failures:

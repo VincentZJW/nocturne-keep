@@ -61,6 +61,8 @@ res://scenes/bootstrap/main_bootstrap.tscn
 
 `MainBootstrap`是唯一启动场景和路由执行者。默认`DebugRunConfig.debug_chapter_start_enabled = false`，所以F5自动选择`res://scenes/cinematics/opening_cinematic.tscn`，Opening自然结束或合法长按跳过后进入`res://scenes/levels/veilbound_catacomb.tscn`，墓窟流程完成后才进入第一章。`ChapterStartRouter`只解析经过校验的Debug目标，不再通过Autoload `_ready()`替换刚加载的Opening。Release构建始终忽略Debug章节启动；不要手工改写`run/main_scene`。
 
+跨章节严重问题回归入口：第一章使用`CH1_BOSS`，第二章从`CH2_START`前往E08倒悬猎兽，第三章使用`CH3_CONFESSIONALS`/`CH3_BOSS`/`CH3_REWARD_TEST`，第四章使用`CH4_AREA_03`/`CH4_AREA_02`/`CH4_AREA_14`。四章正式Level均挂载共享`WorldBounds2D`；断链水廊右侧靠近门拱后按E进入下一房间。完整自动次数、Main证据和人工验收边界见[跨章节严重问题最终QA](docs/qa/cross_chapter_critical_bugfix/final_report.md)。
+
 第一章正式根目录是`res://chapters/chapter_01_ravenmourn_outskirts/`，主场景是`res://chapters/chapter_01_ravenmourn_outskirts/scenes/level/ravenmourn_outskirts.tscn`。若要直接验证第一章，将`scripts/systems/debug_run_config.gd`中的`debug_chapter_start_enabled`临时设为`true`、章节设为`CHAPTER_01_RAVENMOURN_OUTSKIRTS`；Boss前流程再将`debug_start_spawn_id`设为`&"boss_checkpoint"`。完整章节直达测试使用`&"dark_forest_tutorial_spawn"`。完成后应把Debug开关恢复为`false`。
 
 第二章主场景为`res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn`。它保留九房间灰盒和正式章节边界，并在`Phase2EnemyPrototypeShowcase`下放置五个独立验收实例；这些不是正式EncounterGroup，不代表最终数量或布阵。

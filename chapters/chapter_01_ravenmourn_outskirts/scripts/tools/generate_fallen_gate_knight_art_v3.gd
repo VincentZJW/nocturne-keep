@@ -362,11 +362,11 @@ func _draw_exposed_curse_arm(image: Image, shoulder: Vector2i, hand: Vector2i) -
 func _get_sword_pose(
 	animation: StringName, frame: int, x: int, y: int, phase_one: bool
 ) -> Dictionary:
-	# Gatewarden Greatsword: the default oath-rest pose presents an 82–88 px
-	# pommel-to-tip silhouette, roughly 84–88% of the authored knight height.
+	# Gatewarden Greatsword: the default oath-rest pose presents an 88–93 px
+	# pommel-to-tip silhouette, roughly 90–95% of the authored knight height.
 	var grip: Vector2i = Vector2i(x + 10, y + 32) if phase_one else Vector2i(x + 5, y + 33)
 	var second_grip: Vector2i = grip - Vector2i(7, 3)
-	var tip: Vector2i = Vector2i(x + 46, y + 87) if phase_one else Vector2i(x + 48, y + 87)
+	var tip: Vector2i = Vector2i(x + 50, y + 88) if phase_one else Vector2i(x + 52, y + 88)
 	if phase_one:
 		second_grip = grip
 	match animation:

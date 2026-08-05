@@ -196,7 +196,7 @@ func _build_enemy_scene(role: String, config: Chapter04EnemyConfig, frames: Spri
 	var shield: ShieldComponent
 	if role=="sunken_shield_penitent":
 		shield=ShieldComponent.new(); shield.name="ShieldComponent"; shield.shield_max_health=config.shield_max_health; root.add_child(shield); hurtbox.hit_policy_path=NodePath("../ShieldComponent"); root.shield_component_path=NodePath("ShieldComponent")
-		var shield_sprite: AnimatedSprite2D=AnimatedSprite2D.new(); shield_sprite.name="ShieldVisual"; shield_sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST; shield_sprite.position=Vector2(-18,-38); shield_sprite.sprite_frames=_build_shield_frames(); shield_sprite.animation=&"intact"; shield_sprite.autoplay="intact"; visual.add_child(shield_sprite); root.shield_visual_path=NodePath("VisualRoot/ShieldVisual")
+		var shield_sprite: AnimatedSprite2D=AnimatedSprite2D.new(); shield_sprite.name="ShieldVisual"; shield_sprite.texture_filter=CanvasItem.TEXTURE_FILTER_NEAREST; shield_sprite.position=Vector2(-15,-37); shield_sprite.scale=Vector2(0.78,0.78); shield_sprite.sprite_frames=_build_shield_frames(); shield_sprite.animation=&"intact"; shield_sprite.autoplay="intact"; visual.add_child(shield_sprite); root.shield_visual_path=NodePath("VisualRoot/ShieldVisual")
 	var facing: Node2D=Node2D.new(); facing.name="FacingRoot"; root.add_child(facing)
 	var primary: HitboxComponent=_hitbox("PrimaryHitbox",Vector2(62,28),Vector2(42,-29)); facing.add_child(primary)
 	var secondary: HitboxComponent=_hitbox("SecondaryHitbox",Vector2(88,32),Vector2(55,-28)); facing.add_child(secondary)

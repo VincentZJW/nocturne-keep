@@ -152,14 +152,38 @@ func _detail_gaoler(img: Image, animation: String, stage: String, frame: int, ph
 func _detail_convict(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
 	var x: int = 61 + (6 if stage == "active" else -5 if stage in ["windup", "hurt"] else 0)
 	var y: int = 24 + bob
-	# The concept's wooden punishment yoke is the primary silhouette identifier.
+	# The concept's timber punishment yoke, chained wrists and ruined human body
+	# must remain readable at gameplay scale. Build the yoke from layered timber
+	# and iron rather than a single horizontal bar.
 	_rect(img, Rect2i(x-35,y+21,70,9), OUTLINE)
-	_rect(img, Rect2i(x-32,y+23,64,5), RUST)
+	_rect(img, Rect2i(x-32,y+23,64,5), Color("49352c"))
+	_segment(img, Vector2i(x-31,y+24), Vector2i(x+31,y+24), 1, RUST_LIT)
+	_rect(img, Rect2i(x-8,y+17,7,15), OUTLINE)
+	_rect(img, Rect2i(x-6,y+18,3,13), IRON)
+	_rect(img, Rect2i(x+3,y+17,7,15), OUTLINE)
+	_rect(img, Rect2i(x+5,y+18,3,13), IRON_LIT)
 	for bolt_x: int in [x-27,x-14,x+14,x+27]: _ellipse(img, Vector2i(bolt_x,y+25), 1, 1, STEEL)
+	# Cage mask highlights and the restrained cyan eye survive the dark scene.
+	for mask_bar: int in range(4):
+		_segment(img, Vector2i(x-6+mask_bar*4,y+5), Vector2i(x-7+mask_bar*4,y+19), 1, IRON_LIT)
+	_pixel(img, x+5, y+11, SOUL_LIT)
+	# Scarred torso planes, crossing chain and torn prison cloth match the concept.
+	_segment(img, Vector2i(x-12,y+37), Vector2i(x+11,y+55), 2, DEEP)
+	_segment(img, Vector2i(x+10,y+37), Vector2i(x-9,y+56), 2, IRON_LIT)
+	for scar: int in range(3):
+		_segment(img, Vector2i(x-10+scar*7,y+43), Vector2i(x-5+scar*7,y+41), 1, RUST_LIT)
+	_poly(img, _pts([x-15,y+63,x-6,y+68,x-2,y+64,x+4,y+70,x+14,y+63,x+11,y+78,x+4,y+75,x-1,y+82,x-7,y+75,x-14,y+79]), DEEP)
 	_segment(img, Vector2i(x-29,y+29), Vector2i(x-34,y+49), 4, IRON)
 	_segment(img, Vector2i(x+29,y+29), Vector2i(x+35,y+49), 4, IRON)
+	_draw_shackle(img, Vector2i(x-34,y+49))
+	_draw_shackle(img, Vector2i(x+35,y+49))
 	_chain_curve(img, Vector2i(x-30,y+47), Vector2i(x-47,y+63), Vector2i(x-39,y+83), STEEL)
 	_chain_curve(img, Vector2i(x+31,y+47), Vector2i(x+48,y+62), Vector2i(x+43,y+81), STEEL)
+	# Bare feet and ankle irons prevent the lower half reading as two rounded blocks.
+	_rect(img, Rect2i(x-17,y+79,12,4), OUTLINE)
+	_rect(img, Rect2i(x+6,y+79,12,4), OUTLINE)
+	_segment(img, Vector2i(x-14,y+78), Vector2i(x-5,y+78), 2, IRON_LIT)
+	_segment(img, Vector2i(x+7,y+78), Vector2i(x+16,y+78), 2, IRON_LIT)
 
 
 func _detail_harpooner(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:

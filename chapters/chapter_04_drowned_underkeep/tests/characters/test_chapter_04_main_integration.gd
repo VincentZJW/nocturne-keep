@@ -22,6 +22,11 @@ func _run() -> void:
 	_check(level_script_source.contains("CH4_BOSS_PHASE_01"),"Boss arena F5 spawn exists")
 	_check(level_script_source.contains("CH4_BOSS_PHASE_02"),"Boss Phase II compatibility spawn exists")
 	_check(level_script_source.contains("CH4_AREA_16"),"formal route resolves its final room")
+	var boss_room_source: String = FileAccess.get_file_as_string(
+		"res://chapters/chapter_04_drowned_underkeep/scenes/rooms/ch4_14_core_of_drowned_gaol.tscn"
+	)
+	_check(boss_room_source.contains("soul_gaoler_ormund.tscn"), "formal Boss room references Ormund")
+	_check(boss_room_source.contains("formal_boss_instance"), "formal Boss room owns the runtime Boss instance")
 	_check(trial_source.contains("soul_gaoler_ormund.tscn"),"separate regression trial owns latest Soul Gaoler scene")
 	for role:String in ["drowned_gaoler","chainbound_convict","mire_harpooner","sunken_shield_penitent","mirefin_raider","bog_toad","sewer_maw","underkeep_executioner"]:
 		_check(trial_source.contains("%s.tscn" % role),"Main trial references %s" % role)

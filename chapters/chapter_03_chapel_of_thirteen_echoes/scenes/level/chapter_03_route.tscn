@@ -1,11 +1,15 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_route.gd" id="1_route"]
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/level/chapter_03_room_transition_controller.gd" id="2_transition"]
 [ext_resource type="PackedScene" path="res://scenes/runtime/chapter_gameplay_runtime.tscn" id="3_runtime"]
+[ext_resource type="PackedScene" path="res://shared/scenes/world/world_bounds_2d.tscn" id="4_world_bounds"]
 
 [node name="Chapter03Route" type="Node2D"]
 script = ExtResource("1_route")
+[node name="WorldBounds2D" parent="." instance=ExtResource("4_world_bounds")]
+actor_bounds = Rect2(0, 0, 4096, 720)
+flight_margin = 52.0
 [node name="RoomHost" type="Node2D" parent="."]
 [node name="PersistentRuntime" type="Node2D" parent="."]
 [node name="ChapterRuntime" parent="PersistentRuntime" instance=ExtResource("3_runtime")]

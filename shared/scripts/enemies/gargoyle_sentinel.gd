@@ -43,6 +43,7 @@ var dive_direction: Vector2 = Vector2.DOWN
 var current_attack_id: int = 0
 var _next_attack_id: int = 1
 var _death_shatter_started: bool = false
+var world_bounds: WorldBounds2D
 
 
 func _ready() -> void:
@@ -50,6 +51,10 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 	home_position = global_position
+	world_bounds = _find_world_bounds()
+	if world_bounds != null:
+		home_position = world_bounds.clamp_flight_anchor(home_position)
+		global_position = home_position
 	health_component.max_health = config.max_health
 	health_component.reset_to_full()
 	dive_hitbox.damage = config.dive_damage
@@ -87,6 +92,7 @@ func _physics_process(delta: float) -> void:
 		HURT:
 			_process_hurt(delta)
 	move_and_slide()
+	_enforce_flight_bounds()
 	if current_state == DIVE:
 		for index: int in range(get_slide_collision_count()):
 			var collision: KinematicCollision2D = get_slide_collision(index)
@@ -367,3 +373,24 @@ func _validate_dependencies() -> bool:
 		push_error("GargoyleSentinel scene composition is incomplete")
 		return false
 	return true
+
+
+func _find_world_bounds() -> WorldBounds2D:
+	var bounds_nodes: Array[Node] = get_tree().get_nodes_in_group(&"world_bounds")
+	for node: Node in bounds_nodes:
+		if node is WorldBounds2D:
+			return node as WorldBounds2D
+	return null
+
+
+func _enforce_flight_bounds() -> void:
+	if world_bounds == null or current_state == DEATH:
+		return
+	var safe_top_y: float = world_bounds.get_safe_flight_top_y()
+	if global_position.y < safe_top_y:
+		global_position.y = safe_top_y
+		velocity.y = maxf(0.0, velocity.y)
+		home_position = world_bounds.clamp_flight_anchor(home_position)
+		if current_state in [HOVER, TRACK, RETURN_TO_AIR]:
+			transition_state(RETURN_TO_AIR)
+			play_animation(&"return_to_air")

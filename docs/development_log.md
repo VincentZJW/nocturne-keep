@@ -1,5 +1,27 @@
 # Development Log
 
+## 2026-08-05 — Cross-chapter critical bugfix QA1–QA7
+
+Status: implementation and deterministic/MainBootstrap QA complete; manual player-feel and visual acceptance remain
+
+- Completed the approved QA1–QA7 sequence without pausing between phases: Fallen Gate Knight greatsword/Phase 2 presentation, Hanging Stalker repeat acquisition, Confessional Wraith visibility/Hurtbox contract, Chapter III reward uniqueness, all Chapter IV combat reactions, shield presentation, Chainbound Convict runtime art, formal Ormund room, Broken Chainway interaction and shared Chapter I–IV actor ceilings.
+- Added shared `WorldBounds2D` with physical top/bottom/side walls and queryable flight safety margins to all four formal chapter levels. Gargoyle Sentinel, Hanging Stalker and Chapter III/IV airborne controllers now use the same contract.
+- Exact Godot 4.7.1 stress results: Chapter I 20 controlled fights/20 shield breaks/Phase 2 attacks 15 each; Hanging Stalker 20 retained-target cycles plus Main fifth-cycle evidence; Wraith 20 normal kills + 5 Dash kills + 135 damage events; reward 10 full flows + 15 reloads; Chapter IV 160 kills + 360 attacks + 5 encounter reloads; Broken Chainway 10 transitions + 5 checkpoint reloads; airborne 80 clamps + 20 Player ceiling attempts + 20 reloads. All deterministic tests passed.
+- Import/parse and default MainBootstrap 600-frame smoke passed with no parser/resource red error and preserved the formal Opening Cinematic route. GUI Main evidence passed for Chapters II–IV; the Chapter II screenshot harness alone reports Metal/GLES3 teardown resource warnings after its functional PASS, recorded as a tooling limitation rather than hidden.
+- Full results, exact routes, issue mapping, evidence paths and manual acceptance boundary: `docs/qa/cross_chapter_critical_bugfix/final_report.md`.
+- Scope preserved: no Player/Boss balance changes, no run/main_scene replacement, no new chapter content, no push. This is a meaningful cross-chapter runtime fix and receives one isolated commit.
+
+## 2026-08-05 — Cross-chapter critical bugfix QA0 audit
+
+Status: complete audit / implementation blocked pending QA1 approval — no gameplay, scene, art, collision, AI, balance, or project-setting change
+
+- Read the mandatory project, chapter scene, character/encounter, render-layer, QA, architecture and workflow contracts; audited the formal MainBootstrap route rather than treating standalone test scenes as acceptance evidence.
+- Mapped the user's eleven screenshots to the actual Chapter 01-04 scenes, nodes, scripts, data resources and encounter records. Two tightly cropped enemy images resolve to an exact packed-scene identity but not one unique formal instance, so all possible formal instances are documented without guessing.
+- Confirmed high-impact root causes: the Chapter 02 Hanging Stalker retains its target after returning to Hang and cannot re-arm; the Chapter 03 Confessional Wraith can stay visibly rendered while its Hurtbox is disabled; the Chapter 03 reward sequence leaves a presentation weapon visible beside the later real pickup; Chapter 04 shared `LIGHT_HIT`/`GUARD_BREAK` reactions never exit; and Ormund is absent from the formal Chapter 04 route despite existing in CharacterTrial.
+- Confirmed additional failures: Chapter 01's baked diagonal sword has an acceptable nominal authored length but reads materially shorter when visible; Shield Penitent and Chainbound Convict runtime art fail their concept contracts; Broken Chainway has a structurally valid but invisible east-edge transition; Chapters 01-04 have camera/local geometry limits but no shared actor top bound.
+- Exact Godot 4.7.1 import/parser and MainBootstrap opening smoke checks passed. Existing Chapter 03/04 tests also passed, but the audit found coverage gaps: they do not exercise combat recovery cycles, formal Ormund presence, reward presentation uniqueness, or exit readability.
+- Evidence and staged F5 plan: `res://docs/qa/cross_chapter_critical_bugfix_qa0.md`. QA0 intentionally made no substantive project change and created no commit; stop here until QA1 is explicitly approved.
+
 ## 2026-08-04 — Chapter IV scene production S5 transitions and performance
 
 Status: complete — threaded preparation, atomic one-room replacement, persistent runtime preservation and exact Godot 4.7.1 performance/regression QA pass

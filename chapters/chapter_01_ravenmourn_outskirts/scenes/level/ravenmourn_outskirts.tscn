@@ -1,40 +1,41 @@
-[gd_scene load_steps=68 format=3]
+[gd_scene format=3 uid="uid://clg83t85np14u"]
 
-[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="1_player"]
-[ext_resource type="Script" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
-[ext_resource type="Script" path="res://scripts/ui/player_stamina_hud.gd" id="3_stamina_hud"]
-[ext_resource type="Script" path="res://scripts/ui/player_health_hud.gd" id="4_health_hud"]
-[ext_resource type="Script" path="res://scripts/ui/player_death_hud.gd" id="5_death_hud"]
-[ext_resource type="Script" path="res://scripts/tools/player_death_test_button.gd" id="6_death_test"]
-[ext_resource type="Script" path="res://scripts/systems/player_respawn_controller.gd" id="7_respawn"]
-[ext_resource type="Script" path="res://scripts/tools/main_enemy_debug_overlay.gd" id="9_enemy_debug"]
-[ext_resource type="Script" path="res://scripts/tools/main_debug_hud_controller.gd" id="14_debug_hud"]
+[ext_resource type="PackedScene" uid="uid://ilk7wlpsv544" path="res://scenes/player/player.tscn" id="1_player"]
+[ext_resource type="Script" uid="uid://c8got4tuho4jg" path="res://scripts/tools/player_action_debug_overlay.gd" id="2_debug"]
+[ext_resource type="Script" uid="uid://bhmdlfc3ob70j" path="res://scripts/ui/player_stamina_hud.gd" id="3_stamina_hud"]
+[ext_resource type="Script" uid="uid://g6jo4gawflr7" path="res://scripts/ui/player_health_hud.gd" id="4_health_hud"]
+[ext_resource type="Script" uid="uid://bn6euo1mqrp0d" path="res://scripts/ui/player_death_hud.gd" id="5_death_hud"]
+[ext_resource type="Script" uid="uid://bi1wa8rajr0hd" path="res://scripts/tools/player_death_test_button.gd" id="6_death_test"]
+[ext_resource type="Script" uid="uid://b22g4ponerwyp" path="res://scripts/systems/player_respawn_controller.gd" id="7_respawn"]
+[ext_resource type="Script" uid="uid://bgl7dkawmncgd" path="res://scripts/tools/main_enemy_debug_overlay.gd" id="9_enemy_debug"]
+[ext_resource type="Script" uid="uid://bm4hxesnfwiay" path="res://scripts/tools/main_debug_hud_controller.gd" id="14_debug_hud"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_01_ravenmourn_outskirts/scenes/boss/fallen_gate_knight.tscn" id="16_boss"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/boss_room_controller.gd" id="17_boss_room"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/boss_health_hud.gd" id="18_boss_hud"]
-[ext_resource type="Script" path="res://scripts/tools/level_traversal_debug_overlay.gd" id="19_traversal_debug"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/castle_gate_controller.gd" id="20_castle_gate"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/moat_hazard.gd" id="21_moat_hazard"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_approach_art.gd" id="22_approach_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_surface_details.gd" id="23_surface_details"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_castle_backdrop.gd" id="24_castle_backdrop"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_archway_art.gd" id="25_archway_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_bridge_art.gd" id="26_bridge_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_moat_art.gd" id="27_moat_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_gate_art.gd" id="28_gate_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/transitions/castle_entrance_transition.gd" id="29_entrance_transition"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/dark_forest_outskirts_art.gd" id="30_forest_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/castle_frontier_transition_art.gd" id="31_transition_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/outskirts_surface_details.gd" id="32_outskirts_details"]
+[ext_resource type="Script" uid="uid://degbtiqrptx2t" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/boss_room_controller.gd" id="17_boss_room"]
+[ext_resource type="Script" uid="uid://bvfjjx3o3chw0" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/boss_health_hud.gd" id="18_boss_hud"]
+[ext_resource type="Script" uid="uid://bde6wuowi64xq" path="res://scripts/tools/level_traversal_debug_overlay.gd" id="19_traversal_debug"]
+[ext_resource type="Script" uid="uid://dfvo1jkcslm51" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/castle_gate_controller.gd" id="20_castle_gate"]
+[ext_resource type="Script" uid="uid://dtapglnakl3b8" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/moat_hazard.gd" id="21_moat_hazard"]
+[ext_resource type="Script" uid="uid://cglksfjqerca1" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_approach_art.gd" id="22_approach_art"]
+[ext_resource type="Script" uid="uid://prbuti4jah7y" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_surface_details.gd" id="23_surface_details"]
+[ext_resource type="Script" uid="uid://bhsiedfhs873l" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_castle_backdrop.gd" id="24_castle_backdrop"]
+[ext_resource type="Script" uid="uid://ciklycrkm4wjq" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_archway_art.gd" id="25_archway_art"]
+[ext_resource type="Script" uid="uid://d3e340bnyqkys" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_bridge_art.gd" id="26_bridge_art"]
+[ext_resource type="Script" uid="uid://c3gjynb17dxch" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_moat_art.gd" id="27_moat_art"]
+[ext_resource type="Script" uid="uid://biufkpyl08m80" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_gate_art.gd" id="28_gate_art"]
+[ext_resource type="Script" uid="uid://b3d1eols2yh4c" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/transitions/castle_entrance_transition.gd" id="29_entrance_transition"]
+[ext_resource type="Script" uid="uid://dcnwsaxm1mt7h" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/dark_forest_outskirts_art.gd" id="30_forest_art"]
+[ext_resource type="Script" uid="uid://ccbe22da1a76c" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/castle_frontier_transition_art.gd" id="31_transition_art"]
+[ext_resource type="Script" uid="uid://cuswn6awftexf" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/outskirts_surface_details.gd" id="32_outskirts_details"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_01_ravenmourn_outskirts/scenes/encounters/first_level_encounters.tscn" id="33_encounters"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tutorial_prompt_ui.tscn" id="34_tutorial_ui"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/tutorial_controller.gd" id="35_tutorial"]
-[ext_resource type="Script" path="res://scripts/systems/checkpoint_trigger.gd" id="36_checkpoint"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/chapter_one_storytelling_art.gd" id="37_story_art"]
-[ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/boss_last_words_presenter.gd" id="38_boss_words"]
+[ext_resource type="Script" uid="uid://bs5hffdqmphey" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/tutorial_controller.gd" id="35_tutorial"]
+[ext_resource type="Script" uid="uid://dmn6o5fswgfio" path="res://scripts/systems/checkpoint_trigger.gd" id="36_checkpoint"]
+[ext_resource type="Script" uid="uid://bv5viatb1bita" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/chapter_one_storytelling_art.gd" id="37_story_art"]
+[ext_resource type="Script" uid="uid://cuobwnbg0vdr6" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/boss/boss_last_words_presenter.gd" id="38_boss_words"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_01_ravenmourn_outskirts/scenes/boss/fallen_gate_knight_reward.tscn" id="39_boss_reward"]
-[ext_resource type="Script" path="res://scripts/ui/run_inventory_hud.gd" id="40_inventory_hud"]
+[ext_resource type="Script" uid="uid://bqosv47d5ly5d" path="res://scripts/ui/run_inventory_hud.gd" id="40_inventory_hud"]
 [ext_resource type="Script" path="res://chapters/chapter_01_ravenmourn_outskirts/scripts/level/ravenmourn_outskirts.gd" id="41_level"]
+[ext_resource type="PackedScene" path="res://shared/scenes/world/world_bounds_2d.tscn" id="42_world_bounds"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_floor"]
 size = Vector2(5620, 96)
@@ -54,44 +55,44 @@ size = Vector2(220, 24)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_platform_e"]
 size = Vector2(240, 24)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
-size = Vector2(48, 900)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_boss_trigger"]
-size = Vector2(120, 420)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
-size = Vector2(48, 260)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_floor"]
-size = Vector2(264, 96)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_bridge"]
-size = Vector2(800, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_moat_hazard"]
-size = Vector2(840, 104)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint_trigger"]
-size = Vector2(120, 160)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tutorial_log"]
 size = Vector2(52, 44)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tutorial_platform"]
 size = Vector2(176, 20)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wall"]
+size = Vector2(48, 900)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_checkpoint_trigger"]
+size = Vector2(120, 160)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_moat_hazard"]
+size = Vector2(840, 104)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bridge"]
+size = Vector2(800, 20)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_boss_trigger"]
+size = Vector2(120, 420)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rear_barrier"]
 size = Vector2(28, 260)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_entrance"]
-size = Vector2(40, 260)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_floor"]
+size = Vector2(264, 96)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_upper"]
 size = Vector2(264, 210)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_tower"]
 size = Vector2(184, 260)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gate"]
+size = Vector2(48, 260)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_castle_entrance"]
+size = Vector2(40, 260)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_background"]
 bg_color = Color(0.025, 0.035, 0.055, 1)
@@ -101,11 +102,11 @@ border_width_right = 2
 border_width_bottom = 2
 border_color = Color(0.376, 0.478, 0.565, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_fill"]
-bg_color = Color(0.725, 0.51, 0.263, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_health_fill"]
 bg_color = Color(0.66, 0.27, 0.34, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_stamina_fill"]
+bg_color = Color(0.725, 0.51, 0.263, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_body_fill"]
 bg_color = Color(0.55, 0.16, 0.22, 1)
@@ -113,36 +114,40 @@ bg_color = Color(0.55, 0.16, 0.22, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_boss_shield_fill"]
 bg_color = Color(0.34, 0.48, 0.62, 1)
 
-[node name="Main" type="Node2D"]
+[node name="Main" type="Node2D" unique_id=979708462]
 script = ExtResource("41_level")
 
-[node name="Backdrop" type="ColorRect" parent="."]
-offset_left = -500.0
-offset_top = -200.0
-offset_right = 7100.0
-offset_bottom = 1000.0
+[node name="WorldBounds2D" parent="." instance=ExtResource("42_world_bounds")]
+actor_bounds = Rect2(0, 0, 6800, 720)
+flight_margin = 56.0
+
+[node name="Backdrop" type="ColorRect" parent="." unique_id=319809763]
+offset_left = -338.0
+offset_top = -189.0
+offset_right = 7262.0
+offset_bottom = 1011.0
 mouse_filter = 2
 color = Color(0.018, 0.015, 0.031, 1)
 
-[node name="World" type="Node2D" parent="."]
+[node name="World" type="Node2D" parent="." unique_id=426924591]
 
-[node name="DarkForestOutskirtsArt" type="Node2D" parent="World"]
+[node name="DarkForestOutskirtsArt" type="Node2D" parent="World" unique_id=1214883571]
 script = ExtResource("30_forest_art")
 
-[node name="CastleFrontierTransitionArt" type="Node2D" parent="World"]
+[node name="CastleFrontierTransitionArt" type="Node2D" parent="World" unique_id=434360543]
 script = ExtResource("31_transition_art")
 
-[node name="LateLevelApproachArt" type="Node2D" parent="World"]
+[node name="LateLevelApproachArt" type="Node2D" parent="World" unique_id=1701066046]
 script = ExtResource("22_approach_art")
 
-[node name="BossCastleBackdrop" type="Node2D" parent="World"]
+[node name="BossCastleBackdrop" type="Node2D" parent="World" unique_id=372071882]
 script = ExtResource("24_castle_backdrop")
 
-[node name="RavenmournArchway" type="Node2D" parent="World"]
+[node name="RavenmournArchway" type="Node2D" parent="World" unique_id=736171755]
 position = Vector2(5420, 640)
 script = ExtResource("25_archway_art")
 
-[node name="CastleName" type="Label" parent="World/RavenmournArchway"]
+[node name="CastleName" type="Label" parent="World/RavenmournArchway" unique_id=1881578828]
 offset_left = -108.0
 offset_top = -239.0
 offset_right = 108.0
@@ -155,160 +160,132 @@ text = "RAVENMOURN CASTLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Floor" type="StaticBody2D" parent="World"]
-collision_layer = 1
-collision_mask = 1
+[node name="Floor" type="StaticBody2D" parent="World" unique_id=359828196]
 
-[node name="Visual" type="Polygon2D" parent="World/Floor"]
-polygon = PackedVector2Array(-100, 640, 5520, 640, 5520, 736, -100, 736)
+[node name="Visual" type="Polygon2D" parent="World/Floor" unique_id=96311660]
 color = Color(0.105, 0.105, 0.145, 1)
+polygon = PackedVector2Array(-100, 640, 5520, 640, 5520, 736, -100, 736)
 
-[node name="TopLine" type="Polygon2D" parent="World/Floor"]
-polygon = PackedVector2Array(-100, 640, 5520, 640, 5520, 646, -100, 646)
+[node name="TopLine" type="Polygon2D" parent="World/Floor" unique_id=186916484]
 color = Color(0.376, 0.478, 0.565, 1)
+polygon = PackedVector2Array(-100, 640, 5520, 640, 5520, 646, -100, 646)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Floor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Floor" unique_id=1042943768]
 position = Vector2(2710, 688)
 shape = SubResource("RectangleShape2D_floor")
 
-[node name="PlatformA" type="StaticBody2D" parent="World"]
+[node name="PlatformA" type="StaticBody2D" parent="World" unique_id=710359807]
 position = Vector2(870, 520)
-collision_layer = 1
-collision_mask = 1
 
-[node name="Visual" type="Polygon2D" parent="World/PlatformA"]
-polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, -110, 12)
+[node name="Visual" type="Polygon2D" parent="World/PlatformA" unique_id=798810904]
 color = Color(0.19, 0.18, 0.25, 1)
+polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, -110, 12)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformA"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformA" unique_id=475388635]
 shape = SubResource("RectangleShape2D_platform_a")
 
-[node name="PlatformB" type="StaticBody2D" parent="World"]
+[node name="PlatformB" type="StaticBody2D" parent="World" unique_id=1956548203]
 position = Vector2(2780, 512)
-collision_layer = 1
-collision_mask = 1
 
-[node name="Visual" type="Polygon2D" parent="World/PlatformB"]
-polygon = PackedVector2Array(-95, -12, 95, -12, 95, 11, 72, 11, 64, 15, 20, 12, 8, 16, -28, 12, -40, 15, -78, 11, -95, 12)
+[node name="Visual" type="Polygon2D" parent="World/PlatformB" unique_id=1064469302]
 color = Color(0.19, 0.18, 0.25, 1)
+polygon = PackedVector2Array(-95, -12, 95, -12, 95, 11, 72, 11, 64, 15, 20, 12, 8, 16, -28, 12, -40, 15, -78, 11, -95, 12)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformB"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformB" unique_id=67772047]
 shape = SubResource("RectangleShape2D_platform_b")
 
-[node name="PlatformC" type="StaticBody2D" parent="World"]
+[node name="PlatformC" type="StaticBody2D" parent="World" unique_id=1389547942]
 position = Vector2(4420, 516)
-collision_layer = 1
-collision_mask = 1
 
-[node name="Visual" type="Polygon2D" parent="World/PlatformC"]
-polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, 84, 12, 74, 16, 30, 12, 14, 15, -24, 12, -42, 16, -92, 12, -110, 12)
+[node name="Visual" type="Polygon2D" parent="World/PlatformC" unique_id=1898571043]
 color = Color(0.19, 0.18, 0.25, 1)
+polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, 84, 12, 74, 16, 30, 12, 14, 15, -24, 12, -42, 16, -92, 12, -110, 12)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformC"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformC" unique_id=678604125]
 shape = SubResource("RectangleShape2D_platform_c")
 
-[node name="PlatformD" type="StaticBody2D" parent="World"]
+[node name="PlatformD" type="StaticBody2D" parent="World" unique_id=103651569]
 position = Vector2(5160, 520)
-collision_layer = 1
-collision_mask = 1
 
-[node name="Visual" type="Polygon2D" parent="World/PlatformD"]
-polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, 92, 12, 78, 15, 36, 12, 22, 16, -18, 12, -38, 15, -86, 12, -110, 12)
+[node name="Visual" type="Polygon2D" parent="World/PlatformD" unique_id=15610513]
 color = Color(0.19, 0.18, 0.25, 1)
+polygon = PackedVector2Array(-110, -12, 110, -12, 110, 12, 92, 12, 78, 15, 36, 12, 22, 16, -18, 12, -38, 15, -86, 12, -110, 12)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformD"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/PlatformD" unique_id=967574351]
 shape = SubResource("RectangleShape2D_platform_d")
 
-[node name="GargoylePerch" type="StaticBody2D" parent="World"]
+[node name="GargoylePerch" type="StaticBody2D" parent="World" unique_id=1954996949]
 position = Vector2(3560, 504)
-collision_layer = 1
-collision_mask = 1
 
-[node name="Visual" type="Polygon2D" parent="World/GargoylePerch"]
-polygon = PackedVector2Array(-120, -12, 120, -12, 120, 12, 94, 12, 82, 17, 38, 12, 18, 16, -20, 12, -34, 17, -96, 12, -120, 12)
+[node name="Visual" type="Polygon2D" parent="World/GargoylePerch" unique_id=1159659286]
 color = Color(0.16, 0.15, 0.22, 1)
+polygon = PackedVector2Array(-120, -12, 120, -12, 120, 12, 94, 12, 82, 17, 38, 12, 18, 16, -20, 12, -34, 17, -96, 12, -120, 12)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/GargoylePerch"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/GargoylePerch" unique_id=1595744162]
 shape = SubResource("RectangleShape2D_platform_e")
 
-[node name="LateLevelSurfaceDetails" type="Node2D" parent="World"]
+[node name="LateLevelSurfaceDetails" type="Node2D" parent="World" unique_id=2085619198]
 script = ExtResource("23_surface_details")
 
-[node name="OutskirtsSurfaceDetails" type="Node2D" parent="World"]
+[node name="OutskirtsSurfaceDetails" type="Node2D" parent="World" unique_id=673756963]
 script = ExtResource("32_outskirts_details")
 
-[node name="ChapterOneStorytellingArt" type="Node2D" parent="World"]
+[node name="ChapterOneStorytellingArt" type="Node2D" parent="World" unique_id=1235219865]
 script = ExtResource("37_story_art")
 
-[node name="TutorialFallenLog" type="StaticBody2D" parent="World"]
+[node name="TutorialFallenLog" type="StaticBody2D" parent="World" unique_id=1607705618]
 position = Vector2(620, 618)
-collision_layer = 1
-collision_mask = 1
 
-[node name="LogVisual" type="Polygon2D" parent="World/TutorialFallenLog"]
-polygon = PackedVector2Array(-30, -22, 25, -22, 31, 20, -31, 20)
+[node name="LogVisual" type="Polygon2D" parent="World/TutorialFallenLog" unique_id=138178110]
 color = Color(0.18, 0.12, 0.1, 1)
+polygon = PackedVector2Array(-30, -22, 25, -22, 31, 20, -31, 20)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialFallenLog"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialFallenLog" unique_id=286002025]
 shape = SubResource("RectangleShape2D_tutorial_log")
 
-[node name="TutorialLaunchPlatform" type="StaticBody2D" parent="World"]
+[node name="TutorialLaunchPlatform" type="StaticBody2D" parent="World" unique_id=1806200605]
 position = Vector2(2170, 522)
-collision_layer = 1
-collision_mask = 1
 
-[node name="Visual" type="Polygon2D" parent="World/TutorialLaunchPlatform"]
-polygon = PackedVector2Array(-88, -10, 88, -10, 88, 10, -88, 10)
+[node name="Visual" type="Polygon2D" parent="World/TutorialLaunchPlatform" unique_id=1529996111]
 color = Color(0.18, 0.18, 0.24, 1)
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialLaunchPlatform"]
-shape = SubResource("RectangleShape2D_tutorial_platform")
-
-[node name="TutorialAirDashPlatform" type="StaticBody2D" parent="World"]
-position = Vector2(2460, 452)
-collision_layer = 1
-collision_mask = 1
-
-[node name="Visual" type="Polygon2D" parent="World/TutorialAirDashPlatform"]
 polygon = PackedVector2Array(-88, -10, 88, -10, 88, 10, -88, 10)
-color = Color(0.21, 0.21, 0.28, 1)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialAirDashPlatform"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialLaunchPlatform" unique_id=1959810244]
 shape = SubResource("RectangleShape2D_tutorial_platform")
 
-[node name="LeftWall" type="StaticBody2D" parent="World"]
+[node name="TutorialAirDashPlatform" type="StaticBody2D" parent="World" unique_id=1270513382]
+position = Vector2(2460, 452)
+
+[node name="Visual" type="Polygon2D" parent="World/TutorialAirDashPlatform" unique_id=1148023258]
+color = Color(0.21, 0.21, 0.28, 1)
+polygon = PackedVector2Array(-88, -10, 88, -10, 88, 10, -88, 10)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/TutorialAirDashPlatform" unique_id=1006361805]
+shape = SubResource("RectangleShape2D_tutorial_platform")
+
+[node name="LeftWall" type="StaticBody2D" parent="World" unique_id=630531180]
 position = Vector2(-124, 360)
-collision_layer = 1
-collision_mask = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/LeftWall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/LeftWall" unique_id=690566983]
 shape = SubResource("RectangleShape2D_wall")
 
-[node name="RightWall" type="StaticBody2D" parent="World"]
+[node name="RightWall" type="StaticBody2D" parent="World" unique_id=975080338]
 position = Vector2(6624, 360)
-collision_layer = 1
-collision_mask = 1
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/RightWall"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/RightWall" unique_id=399243810]
 shape = SubResource("RectangleShape2D_wall")
 
-[node name="DarkForestTutorialSpawn" type="Marker2D" parent="World"]
+[node name="DarkForestTutorialSpawn" type="Marker2D" parent="World" unique_id=984314900]
 position = Vector2(320, 612)
 
-[node name="Player" parent="World" instance=ExtResource("1_player")]
+[node name="Player" parent="World" unique_id=1537946158 instance=ExtResource("1_player")]
 position = Vector2(320, 612)
 
-[node name="Camera2D" parent="World/Player"]
-limit_left = 0
-limit_top = 0
-limit_right = 6600
-limit_bottom = 720
+[node name="Encounters" parent="World" unique_id=1519202417 instance=ExtResource("33_encounters")]
 
-[node name="Encounters" parent="World" instance=ExtResource("33_encounters")]
+[node name="Checkpoints" type="Node2D" parent="World" unique_id=317313916]
 
-[node name="Checkpoints" type="Node2D" parent="World"]
-
-[node name="AfterTutorial" type="Area2D" parent="World/Checkpoints"]
+[node name="AfterTutorial" type="Area2D" parent="World/Checkpoints" unique_id=1284185987]
 position = Vector2(2580, 550)
 collision_layer = 0
 collision_mask = 2
@@ -317,13 +294,13 @@ script = ExtResource("36_checkpoint")
 checkpoint_id = &"after_tutorial"
 respawn_controller_path = NodePath("../../../PlayerRespawnController")
 
-[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterTutorial"]
+[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterTutorial" unique_id=2107208175]
 position = Vector2(0, 62)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterTutorial"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterTutorial" unique_id=982478162]
 shape = SubResource("RectangleShape2D_checkpoint_trigger")
 
-[node name="AfterForest" type="Area2D" parent="World/Checkpoints"]
+[node name="AfterForest" type="Area2D" parent="World/Checkpoints" unique_id=1202101545]
 position = Vector2(3780, 550)
 collision_layer = 0
 collision_mask = 2
@@ -332,13 +309,13 @@ script = ExtResource("36_checkpoint")
 checkpoint_id = &"after_forest"
 respawn_controller_path = NodePath("../../../PlayerRespawnController")
 
-[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterForest"]
+[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterForest" unique_id=1026316827]
 position = Vector2(0, 62)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterForest"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterForest" unique_id=1653150086]
 shape = SubResource("RectangleShape2D_checkpoint_trigger")
 
-[node name="AfterOutskirts" type="Area2D" parent="World/Checkpoints"]
+[node name="AfterOutskirts" type="Area2D" parent="World/Checkpoints" unique_id=238014849]
 position = Vector2(4780, 550)
 collision_layer = 0
 collision_mask = 2
@@ -347,232 +324,223 @@ script = ExtResource("36_checkpoint")
 checkpoint_id = &"after_outskirts"
 respawn_controller_path = NodePath("../../../PlayerRespawnController")
 
-[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterOutskirts"]
+[node name="SpawnMarker" type="Marker2D" parent="World/Checkpoints/AfterOutskirts" unique_id=926612621]
 position = Vector2(0, 62)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterOutskirts"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Checkpoints/AfterOutskirts" unique_id=743170871]
 shape = SubResource("RectangleShape2D_checkpoint_trigger")
-[node name="CastleEntranceArea" type="Node2D" parent="World"]
 
-[node name="NearBank" type="Polygon2D" parent="World/CastleEntranceArea"]
-polygon = PackedVector2Array(5440, 620, 5520, 620, 5520, 640, 5440, 640)
+[node name="CastleEntranceArea" type="Node2D" parent="World" unique_id=469621536]
+
+[node name="NearBank" type="Polygon2D" parent="World/CastleEntranceArea" unique_id=2095414894]
 color = Color(0.22, 0.21, 0.28, 1)
+polygon = PackedVector2Array(5440, 620, 5520, 620, 5520, 640, 5440, 640)
 
-[node name="Moat" type="Node2D" parent="World/CastleEntranceArea"]
+[node name="Moat" type="Node2D" parent="World/CastleEntranceArea" unique_id=1886576216]
 
-[node name="WaterVisual" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 736, 5520, 736)
+[node name="WaterVisual" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=1410414638]
 color = Color(0.025, 0.145, 0.235, 1)
-z_index = 0
+polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 736, 5520, 736)
 
-[node name="WaterDepth" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5520, 694, 6360, 694, 6360, 736, 5520, 736)
+[node name="WaterDepth" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=1907648882]
+z_index = 1
 color = Color(0.018, 0.075, 0.135, 1)
-z_index = 1
+polygon = PackedVector2Array(5520, 694, 6360, 694, 6360, 736, 5520, 736)
 
-[node name="WaterSurfaceBand" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 684, 5520, 684)
+[node name="WaterSurfaceBand" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=389710645]
+z_index = 2
 color = Color(0.075, 0.29, 0.4, 1)
-z_index = 2
+polygon = PackedVector2Array(5520, 676, 6360, 676, 6360, 684, 5520, 684)
 
-[node name="WaterReflection" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5550, 679, 5712, 679, 5712, 681, 5550, 681, 5550, 679, 5780, 679, 5780, 681, 5654, 681, 5654, 683, 5550, 683)
+[node name="WaterReflection" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=261048038]
+z_index = 2
 color = Color(0.38, 0.68, 0.76, 0.72)
-z_index = 2
+polygon = PackedVector2Array(5550, 679, 5712, 679, 5712, 681, 5550, 681, 5550, 679, 5780, 679, 5780, 681, 5654, 681, 5654, 683, 5550, 683)
 
-[node name="WaterRippleMid" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5810, 687, 5968, 687, 5968, 689, 5810, 689, 5810, 687, 6028, 687, 6028, 689, 5914, 689, 5914, 691, 5810, 691)
+[node name="WaterRippleMid" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=1506796217]
+z_index = 2
 color = Color(0.19, 0.47, 0.58, 0.7)
-z_index = 2
+polygon = PackedVector2Array(5810, 687, 5968, 687, 5968, 689, 5810, 689, 5810, 687, 6028, 687, 6028, 689, 5914, 689, 5914, 691, 5810, 691)
 
-[node name="WaterRippleFar" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(6110, 698, 6248, 698, 6248, 700, 6110, 700, 6110, 698, 6318, 698, 6318, 700, 6192, 700, 6192, 702, 6110, 702)
+[node name="WaterRippleFar" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=1386018814]
+z_index = 2
 color = Color(0.12, 0.36, 0.49, 0.64)
-z_index = 2
+polygon = PackedVector2Array(6110, 698, 6248, 698, 6248, 700, 6110, 700, 6110, 698, 6318, 698, 6318, 700, 6192, 700, 6192, 702, 6110, 702)
 
-[node name="BridgeShadow" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
-polygon = PackedVector2Array(5560, 660, 6360, 660, 6360, 676, 5560, 676)
-color = Color(0.008, 0.018, 0.032, 0.78)
+[node name="BridgeShadow" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=1011952290]
 z_index = 1
+color = Color(0.008, 0.018, 0.032, 0.78)
+polygon = PackedVector2Array(5560, 660, 6360, 660, 6360, 676, 5560, 676)
 
-[node name="NearStoneBank" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+[node name="NearStoneBank" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=312375913]
+z_index = 2
+color = Color(0.24, 0.29, 0.32, 1)
 polygon = PackedVector2Array(5508, 664, 5520, 664, 5520, 724, 5508, 724)
-color = Color(0.24, 0.29, 0.32, 1)
-z_index = 2
 
-[node name="FarStoneBank" type="Polygon2D" parent="World/CastleEntranceArea/Moat"]
+[node name="FarStoneBank" type="Polygon2D" parent="World/CastleEntranceArea/Moat" unique_id=1186337731]
+z_index = 2
+color = Color(0.24, 0.29, 0.32, 1)
 polygon = PackedVector2Array(6360, 664, 6372, 664, 6372, 724, 6360, 724)
-color = Color(0.24, 0.29, 0.32, 1)
-z_index = 2
 
-[node name="MoatAtmosphere" type="Node2D" parent="World/CastleEntranceArea/Moat"]
+[node name="MoatAtmosphere" type="Node2D" parent="World/CastleEntranceArea/Moat" unique_id=983182061]
 z_index = 2
 script = ExtResource("27_moat_art")
 
-[node name="MoatHazard" type="Area2D" parent="World/CastleEntranceArea/Moat"]
+[node name="MoatHazard" type="Area2D" parent="World/CastleEntranceArea/Moat" unique_id=819661860]
 position = Vector2(5940, 708)
 collision_layer = 0
 collision_mask = 6
 monitorable = false
 script = ExtResource("21_moat_hazard")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/Moat/MoatHazard"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/Moat/MoatHazard" unique_id=450118868]
 shape = SubResource("RectangleShape2D_moat_hazard")
 
-[node name="WoodenBridge" type="StaticBody2D" parent="World/CastleEntranceArea"]
+[node name="WoodenBridge" type="StaticBody2D" parent="World/CastleEntranceArea" unique_id=281269374]
 position = Vector2(5960, 650)
-collision_layer = 1
-collision_mask = 1
 
-[node name="BridgeVisual" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge"]
-polygon = PackedVector2Array(-400, -10, 400, -10, 400, 10, -400, 10)
+[node name="BridgeVisual" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge" unique_id=726354752]
 color = Color(0.24, 0.15, 0.105, 1)
+polygon = PackedVector2Array(-400, -10, 400, -10, 400, 10, -400, 10)
 
-[node name="TopEdge" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge"]
-polygon = PackedVector2Array(-400, -10, 400, -10, 400, -6, -400, -6)
+[node name="TopEdge" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge" unique_id=1947290322]
 color = Color(0.55, 0.38, 0.23, 1)
+polygon = PackedVector2Array(-400, -10, 400, -10, 400, -6, -400, -6)
 
-[node name="DetailedBridgeArt" type="Node2D" parent="World/CastleEntranceArea/WoodenBridge"]
+[node name="DetailedBridgeArt" type="Node2D" parent="World/CastleEntranceArea/WoodenBridge" unique_id=1073076416]
 script = ExtResource("26_bridge_art")
 
-[node name="BridgeCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/WoodenBridge"]
+[node name="BridgeCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/WoodenBridge" unique_id=1648921135]
 shape = SubResource("RectangleShape2D_bridge")
 
-[node name="BridgeDecorations" type="Node2D" parent="World/CastleEntranceArea/WoodenBridge"]
+[node name="BridgeDecorations" type="Node2D" parent="World/CastleEntranceArea/WoodenBridge" unique_id=983266052]
 
-[node name="LeftChainPost" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge/BridgeDecorations"]
+[node name="LeftChainPost" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge/BridgeDecorations" unique_id=569982289]
+color = Color(0.18, 0.18, 0.21, 1)
 polygon = PackedVector2Array(-388, -10, -376, -10, -376, -76, -388, -76)
-color = Color(0.18, 0.18, 0.21, 1)
 
-[node name="RightChainPost" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge/BridgeDecorations"]
+[node name="RightChainPost" type="Polygon2D" parent="World/CastleEntranceArea/WoodenBridge/BridgeDecorations" unique_id=426218674]
+color = Color(0.18, 0.18, 0.21, 1)
 polygon = PackedVector2Array(376, -10, 388, -10, 388, -76, 376, -76)
-color = Color(0.18, 0.18, 0.21, 1)
 
-[node name="BossCheckpoint" type="Marker2D" parent="World/CastleEntranceArea"]
+[node name="BossCheckpoint" type="Marker2D" parent="World/CastleEntranceArea" unique_id=714911757]
 position = Vector2(5480, 612)
 
-[node name="BossCheckpointTrigger" type="Area2D" parent="World/CastleEntranceArea"]
+[node name="BossCheckpointTrigger" type="Area2D" parent="World/CastleEntranceArea" unique_id=1524647145]
 position = Vector2(5480, 560)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/BossCheckpointTrigger"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/BossCheckpointTrigger" unique_id=981648798]
 shape = SubResource("RectangleShape2D_checkpoint_trigger")
 
-[node name="BossEntryTrigger" type="Area2D" parent="World/CastleEntranceArea"]
+[node name="BossEntryTrigger" type="Area2D" parent="World/CastleEntranceArea" unique_id=2012805621]
 position = Vector2(5780, 430)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/BossEntryTrigger"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/BossEntryTrigger" unique_id=2051920631]
 shape = SubResource("RectangleShape2D_boss_trigger")
 
-[node name="RearBattleBarrier" type="StaticBody2D" parent="World/CastleEntranceArea"]
+[node name="RearBattleBarrier" type="StaticBody2D" parent="World/CastleEntranceArea" unique_id=1748672158]
 position = Vector2(5420, 510)
 collision_layer = 0
-collision_mask = 1
 
-[node name="BarrierVisual" type="Polygon2D" parent="World/CastleEntranceArea/RearBattleBarrier"]
-polygon = PackedVector2Array(-4, -130, 4, -130, 4, 130, -4, 130)
+[node name="BarrierVisual" type="Polygon2D" parent="World/CastleEntranceArea/RearBattleBarrier" unique_id=593695093]
 color = Color(0.45, 0.29, 0.55, 0.68)
+polygon = PackedVector2Array(-4, -130, 4, -130, 4, 130, -4, 130)
 
-[node name="ChainCross" type="Polygon2D" parent="World/CastleEntranceArea/RearBattleBarrier"]
-polygon = PackedVector2Array(-14, -100, 14, -84, 14, -66, -14, -82, -14, 66, 14, 82, 14, 100, -14, 84)
+[node name="ChainCross" type="Polygon2D" parent="World/CastleEntranceArea/RearBattleBarrier" unique_id=762633296]
 color = Color(0.58, 0.46, 0.64, 0.9)
+polygon = PackedVector2Array(-14, -100, 14, -84, 14, -66, -14, -82, -14, 66, 14, 82, 14, 100, -14, 84)
 
-[node name="BarrierCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/RearBattleBarrier"]
-disabled = true
+[node name="BarrierCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/RearBattleBarrier" unique_id=1487738015]
 shape = SubResource("RectangleShape2D_rear_barrier")
+disabled = true
 
-[node name="BossSpawnPoint" type="Marker2D" parent="World/CastleEntranceArea"]
+[node name="BossSpawnPoint" type="Marker2D" parent="World/CastleEntranceArea" unique_id=487433927]
 position = Vector2(6120, 596)
 
-[node name="ArenaBackdrop" type="Polygon2D" parent="World/CastleEntranceArea"]
-polygon = PackedVector2Array(5520, 190, 6400, 190, 6400, 676, 5520, 676)
-color = Color(0.065, 0.052, 0.09, 0.5)
+[node name="ArenaBackdrop" type="Polygon2D" parent="World/CastleEntranceArea" unique_id=1464925969]
 z_index = -2
+color = Color(0.065, 0.052, 0.09, 0.5)
+polygon = PackedVector2Array(5520, 190, 6400, 190, 6400, 676, 5520, 676)
 
-[node name="FallenGateKnight" parent="World/CastleEntranceArea" instance=ExtResource("16_boss")]
+[node name="FallenGateKnight" parent="World/CastleEntranceArea" unique_id=1997382328 instance=ExtResource("16_boss")]
 position = Vector2(6120, 596)
 bridge_bounds_enabled = true
 bridge_min_x = 5650.0
 bridge_max_x = 6320.0
 
-[node name="BossReward" parent="World/CastleEntranceArea" instance=ExtResource("39_boss_reward")]
+[node name="BossReward" parent="World/CastleEntranceArea" unique_id=49016945 instance=ExtResource("39_boss_reward")]
 position = Vector2(6210, 592)
 
-[node name="CastleFloor" type="StaticBody2D" parent="World/CastleEntranceArea"]
-collision_layer = 1
-collision_mask = 1
+[node name="CastleFloor" type="StaticBody2D" parent="World/CastleEntranceArea" unique_id=846279063]
 
-[node name="Visual" type="Polygon2D" parent="World/CastleEntranceArea/CastleFloor"]
-polygon = PackedVector2Array(6360, 640, 6624, 640, 6624, 736, 6360, 736)
+[node name="Visual" type="Polygon2D" parent="World/CastleEntranceArea/CastleFloor" unique_id=1085787095]
 color = Color(0.105, 0.105, 0.145, 1)
+polygon = PackedVector2Array(6360, 640, 6624, 640, 6624, 736, 6360, 736)
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFloor"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFloor" unique_id=1741865095]
 position = Vector2(6492, 688)
 shape = SubResource("RectangleShape2D_castle_floor")
 
-[node name="CastleFacade" type="StaticBody2D" parent="World/CastleEntranceArea"]
-collision_layer = 1
-collision_mask = 1
+[node name="CastleFacade" type="StaticBody2D" parent="World/CastleEntranceArea" unique_id=1388993186]
 
-[node name="Tower" type="Polygon2D" parent="World/CastleEntranceArea/CastleFacade"]
-polygon = PackedVector2Array(6360, 170, 6624, 170, 6624, 640, 6440, 640, 6440, 380, 6360, 380)
+[node name="Tower" type="Polygon2D" parent="World/CastleEntranceArea/CastleFacade" unique_id=1709933813]
+z_index = -1
 color = Color(0.095, 0.085, 0.125, 1)
-z_index = -1
+polygon = PackedVector2Array(6360, 170, 6624, 170, 6624, 640, 6440, 640, 6440, 380, 6360, 380)
 
-[node name="Arch" type="Polygon2D" parent="World/CastleEntranceArea/CastleFacade"]
-polygon = PackedVector2Array(6360, 350, 6440, 350, 6440, 380, 6360, 380)
+[node name="Arch" type="Polygon2D" parent="World/CastleEntranceArea/CastleFacade" unique_id=1240207812]
+z_index = -1
 color = Color(0.19, 0.18, 0.24, 1)
-z_index = -1
+polygon = PackedVector2Array(6360, 350, 6440, 350, 6440, 380, 6360, 380)
 
-[node name="UpperCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFacade"]
+[node name="UpperCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFacade" unique_id=260708507]
 position = Vector2(6492, 275)
 shape = SubResource("RectangleShape2D_castle_upper")
 
-[node name="TowerCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFacade"]
+[node name="TowerCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleFacade" unique_id=949791438]
 position = Vector2(6532, 510)
 shape = SubResource("RectangleShape2D_castle_tower")
 
-[node name="CastleGate" type="StaticBody2D" parent="World/CastleEntranceArea"]
+[node name="CastleGate" type="StaticBody2D" parent="World/CastleEntranceArea" unique_id=655685565]
 position = Vector2(6400, 510)
-collision_layer = 1
-collision_mask = 1
 
-[node name="GateVisual" type="Node2D" parent="World/CastleEntranceArea/CastleGate"]
+[node name="GateVisual" type="Node2D" parent="World/CastleEntranceArea/CastleGate" unique_id=1160427472]
 
-[node name="DetailedGateArt" type="Node2D" parent="World/CastleEntranceArea/CastleGate/GateVisual"]
+[node name="DetailedGateArt" type="Node2D" parent="World/CastleEntranceArea/CastleGate/GateVisual" unique_id=1923348676]
 script = ExtResource("28_gate_art")
 
-[node name="GateCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleGate"]
+[node name="GateCollision" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleGate" unique_id=2039754175]
 shape = SubResource("RectangleShape2D_gate")
 
-[node name="GateAudio" type="AudioStreamPlayer2D" parent="World/CastleEntranceArea/CastleGate"]
+[node name="GateAudio" type="AudioStreamPlayer2D" parent="World/CastleEntranceArea/CastleGate" unique_id=1831810156]
 volume_db = -18.0
 
-[node name="GateAnimationPlayer" type="AnimationPlayer" parent="World/CastleEntranceArea/CastleGate"]
+[node name="GateAnimationPlayer" type="AnimationPlayer" parent="World/CastleEntranceArea/CastleGate" unique_id=1853846982]
 script = ExtResource("20_castle_gate")
 
-[node name="CastleEntranceTrigger" type="Area2D" parent="World/CastleEntranceArea"]
+[node name="CastleEntranceTrigger" type="Area2D" parent="World/CastleEntranceArea" unique_id=841763401]
 position = Vector2(6428, 510)
 collision_layer = 0
 collision_mask = 2
 monitorable = false
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleEntranceTrigger"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/CastleEntranceArea/CastleEntranceTrigger" unique_id=1785318365]
 shape = SubResource("RectangleShape2D_castle_entrance")
 
-[node name="PlayerRespawnController" type="Node" parent="."]
+[node name="PlayerRespawnController" type="Node" parent="." unique_id=1161324157]
 script = ExtResource("7_respawn")
 spawn_point_path = NodePath("../World/DarkForestTutorialSpawn")
 
-[node name="Interface" type="CanvasLayer" parent="."]
+[node name="Interface" type="CanvasLayer" parent="." unique_id=1344055516]
 script = ExtResource("14_debug_hud")
 
-[node name="DebugHudRoot" type="Control" parent="Interface"]
+[node name="DebugHudRoot" type="Control" parent="Interface" unique_id=1854982468]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -581,7 +549,7 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="Panel" type="ColorRect" parent="Interface/DebugHudRoot"]
+[node name="Panel" type="ColorRect" parent="Interface/DebugHudRoot" unique_id=569339256]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 12.0
@@ -590,7 +558,7 @@ offset_bottom = 76.0
 mouse_filter = 1
 color = Color(0.025, 0.035, 0.055, 0.66)
 
-[node name="Content" type="MarginContainer" parent="Interface/DebugHudRoot/Panel"]
+[node name="Content" type="MarginContainer" parent="Interface/DebugHudRoot/Panel" unique_id=2144417707]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -602,19 +570,20 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 26
 theme_override_constants/margin_bottom = 6
 
-[node name="ActionScroll" type="ScrollContainer" parent="Interface/DebugHudRoot/Panel/Content"]
+[node name="ActionScroll" type="ScrollContainer" parent="Interface/DebugHudRoot/Panel/Content" unique_id=856258023]
 layout_mode = 2
 vertical_scroll_mode = 0
 
-[node name="ActionDebug" type="Label" parent="Interface/DebugHudRoot/Panel/Content/ActionScroll"]
+[node name="ActionDebug" type="Label" parent="Interface/DebugHudRoot/Panel/Content/ActionScroll" unique_id=2117377897]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
 theme_override_font_sizes/font_size = 11
-text = "PLAYER  STATE idle | HP 100/100 | STA 100/100\nVX 0  VY 0 | DASH 0 | HURT 0.00 | INV 0.00"
+text = "PLAYER  STATE idle | HP 100/100 | STA 100/100
+VX 0  VY 0 | DASH 0 | HURT 0.00 | INV 0.00"
 script = ExtResource("2_debug")
 player_path = NodePath("../../../../../../World/Player")
 
-[node name="DebugToggle" type="Button" parent="Interface/DebugHudRoot/Panel"]
+[node name="DebugToggle" type="Button" parent="Interface/DebugHudRoot/Panel" unique_id=387726373]
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
@@ -626,7 +595,7 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 10
 text = "+"
 
-[node name="DamageTestButton" type="Button" parent="Interface/DebugHudRoot"]
+[node name="DamageTestButton" type="Button" parent="Interface/DebugHudRoot" unique_id=2129013414]
 layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -641,7 +610,7 @@ text = "TAKE 25 DMG"
 script = ExtResource("6_death_test")
 health_component_path = NodePath("../../../World/Player/HealthComponent")
 
-[node name="EnemyDebugPanel" type="ColorRect" parent="Interface/DebugHudRoot"]
+[node name="EnemyDebugPanel" type="ColorRect" parent="Interface/DebugHudRoot" unique_id=541834233]
 layout_mode = 0
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -653,7 +622,7 @@ grow_vertical = 0
 mouse_filter = 1
 color = Color(0.025, 0.035, 0.055, 0.66)
 
-[node name="Content" type="MarginContainer" parent="Interface/DebugHudRoot/EnemyDebugPanel"]
+[node name="Content" type="MarginContainer" parent="Interface/DebugHudRoot/EnemyDebugPanel" unique_id=447630175]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -665,20 +634,21 @@ theme_override_constants/margin_top = 6
 theme_override_constants/margin_right = 26
 theme_override_constants/margin_bottom = 6
 
-[node name="EnemyScroll" type="ScrollContainer" parent="Interface/DebugHudRoot/EnemyDebugPanel/Content"]
+[node name="EnemyScroll" type="ScrollContainer" parent="Interface/DebugHudRoot/EnemyDebugPanel/Content" unique_id=1586646262]
 layout_mode = 2
 horizontal_scroll_mode = 0
 
-[node name="EnemyDebug" type="Label" parent="Interface/DebugHudRoot/EnemyDebugPanel/Content/EnemyScroll"]
+[node name="EnemyDebug" type="Label" parent="Interface/DebugHudRoot/EnemyDebugPanel/Content/EnemyScroll" unique_id=1541784095]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.835, 0.871, 0.89, 1)
 theme_override_font_sizes/font_size = 11
-text = "ENC 01 | ALIVE 2 | ENGAGED 0 | ATK 0/2\nGuard ×1 | Shield Guard ×1"
+text = "ENC 01 | ALIVE 2 | ENGAGED 0 | ATK 0/2
+Guard ×1 | Shield Guard ×1"
 script = ExtResource("9_enemy_debug")
 encounters_root_path = NodePath("../../../../../../World/Encounters")
 boss_path = NodePath("../../../../../../World/CastleEntranceArea/FallenGateKnight")
 
-[node name="EnemyDebugToggle" type="Button" parent="Interface/DebugHudRoot/EnemyDebugPanel"]
+[node name="EnemyDebugToggle" type="Button" parent="Interface/DebugHudRoot/EnemyDebugPanel" unique_id=1451860125]
 layout_mode = 0
 anchor_left = 1.0
 anchor_right = 1.0
@@ -690,14 +660,13 @@ grow_horizontal = 0
 theme_override_font_sizes/font_size = 10
 text = "+"
 
-[node name="LevelTraversalDebug" type="Label" parent="Interface/DebugHudRoot"]
+[node name="LevelTraversalDebug" type="Label" parent="Interface/DebugHudRoot" unique_id=1111526359]
 visible = false
 layout_mode = 0
 offset_left = 420.0
 offset_top = 12.0
 offset_right = 880.0
 offset_bottom = 62.0
-mouse_filter = 2
 theme_override_colors/font_color = Color(0.72, 0.84, 0.76, 1)
 theme_override_colors/font_shadow_color = Color(0.02, 0.03, 0.04, 0.9)
 theme_override_constants/shadow_offset_x = 1
@@ -706,14 +675,15 @@ theme_override_font_sizes/font_size = 11
 text = "TRAVERSAL [F4]"
 script = ExtResource("19_traversal_debug")
 
-[node name="HUD" type="CanvasLayer" parent="."]
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1382234999]
 layer = 2
 script = ExtResource("3_stamina_hud")
 
-[node name="TutorialPrompt" parent="HUD" instance=ExtResource("34_tutorial_ui")]
+[node name="TutorialPrompt" parent="HUD" unique_id=1398331557 instance=ExtResource("34_tutorial_ui")]
 
-[node name="HealthContainer" type="ColorRect" parent="HUD"]
+[node name="HealthContainer" type="ColorRect" parent="HUD" unique_id=1359801651]
 unique_name_in_owner = true
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -208.0
@@ -725,7 +695,8 @@ mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.82)
 script = ExtResource("4_health_hud")
 
-[node name="Title" type="Label" parent="HUD/HealthContainer"]
+[node name="Title" type="Label" parent="HUD/HealthContainer" unique_id=1866511677]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 4.0
 offset_right = 90.0
@@ -734,8 +705,9 @@ theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
 theme_override_font_sizes/font_size = 11
 text = "HP"
 
-[node name="HealthValue" type="Label" parent="HUD/HealthContainer"]
+[node name="HealthValue" type="Label" parent="HUD/HealthContainer" unique_id=1815242193]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 92.0
 offset_top = 4.0
 offset_right = 186.0
@@ -745,8 +717,9 @@ theme_override_font_sizes/font_size = 11
 text = "100 / 100"
 horizontal_alignment = 2
 
-[node name="HealthBar" type="ProgressBar" parent="HUD/HealthContainer"]
+[node name="HealthBar" type="ProgressBar" parent="HUD/HealthContainer" unique_id=1220998943]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 10.0
 offset_top = 28.0
 offset_right = 186.0
@@ -757,8 +730,9 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_health_fill")
 value = 100.0
 show_percentage = false
 
-[node name="StaminaContainer" type="ColorRect" parent="HUD"]
+[node name="StaminaContainer" type="ColorRect" parent="HUD" unique_id=1570137855]
 unique_name_in_owner = true
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -208.0
@@ -769,7 +743,8 @@ grow_horizontal = 0
 mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.82)
 
-[node name="Title" type="Label" parent="HUD/StaminaContainer"]
+[node name="Title" type="Label" parent="HUD/StaminaContainer" unique_id=721862583]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 4.0
 offset_right = 90.0
@@ -778,8 +753,9 @@ theme_override_colors/font_color = Color(0.607, 0.68, 0.73, 1)
 theme_override_font_sizes/font_size = 11
 text = "STA"
 
-[node name="StaminaValue" type="Label" parent="HUD/StaminaContainer"]
+[node name="StaminaValue" type="Label" parent="HUD/StaminaContainer" unique_id=1149263544]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 92.0
 offset_top = 4.0
 offset_right = 186.0
@@ -789,8 +765,9 @@ theme_override_font_sizes/font_size = 11
 text = "100 / 100"
 horizontal_alignment = 2
 
-[node name="StaminaBar" type="ProgressBar" parent="HUD/StaminaContainer"]
+[node name="StaminaBar" type="ProgressBar" parent="HUD/StaminaContainer" unique_id=983332562]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 10.0
 offset_top = 28.0
 offset_right = 186.0
@@ -801,7 +778,8 @@ theme_override_styles/fill = SubResource("StyleBoxFlat_stamina_fill")
 value = 100.0
 show_percentage = false
 
-[node name="RunInventory" type="ColorRect" parent="HUD"]
+[node name="RunInventory" type="ColorRect" parent="HUD" unique_id=482054399]
+anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
 offset_left = -208.0
@@ -813,7 +791,8 @@ mouse_filter = 2
 color = Color(0.025, 0.035, 0.055, 0.82)
 script = ExtResource("40_inventory_hud")
 
-[node name="CoinLabel" type="Label" parent="HUD/RunInventory"]
+[node name="CoinLabel" type="Label" parent="HUD/RunInventory" unique_id=2142479141]
+layout_mode = 0
 offset_left = 10.0
 offset_top = 6.0
 offset_right = 72.0
@@ -822,7 +801,8 @@ theme_override_colors/font_color = Color(0.91, 0.75, 0.4, 1)
 theme_override_font_sizes/font_size = 11
 text = "◉ 0"
 
-[node name="WeaponLabel" type="Label" parent="HUD/RunInventory"]
+[node name="WeaponLabel" type="Label" parent="HUD/RunInventory" unique_id=7550908]
+layout_mode = 0
 offset_left = 72.0
 offset_top = 6.0
 offset_right = 186.0
@@ -832,8 +812,9 @@ theme_override_font_sizes/font_size = 11
 text = "WPN T1  10 / 20"
 horizontal_alignment = 2
 
-[node name="DeathOverlay" type="ColorRect" parent="HUD"]
+[node name="DeathOverlay" type="ColorRect" parent="HUD" unique_id=524905248]
 visible = false
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -848,7 +829,8 @@ mouse_filter = 2
 color = Color(0.025, 0.02, 0.035, 0.94)
 script = ExtResource("5_death_hud")
 
-[node name="Title" type="Label" parent="HUD/DeathOverlay"]
+[node name="Title" type="Label" parent="HUD/DeathOverlay" unique_id=1078953801]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 16.0
 offset_right = 400.0
@@ -858,7 +840,8 @@ theme_override_font_sizes/font_size = 30
 text = "YOU DIED"
 horizontal_alignment = 1
 
-[node name="Subtitle" type="Label" parent="HUD/DeathOverlay"]
+[node name="Subtitle" type="Label" parent="HUD/DeathOverlay" unique_id=1073746630]
+layout_mode = 0
 offset_left = 20.0
 offset_top = 66.0
 offset_right = 400.0
@@ -868,8 +851,9 @@ theme_override_font_sizes/font_size = 18
 text = "已阵亡"
 horizontal_alignment = 1
 
-[node name="BossHealthHud" type="ColorRect" parent="HUD"]
+[node name="BossHealthHud" type="ColorRect" parent="HUD" unique_id=739410386]
 unique_name_in_owner = true
+anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -280.0
@@ -881,8 +865,9 @@ mouse_filter = 2
 color = Color(0.025, 0.02, 0.04, 0.88)
 script = ExtResource("18_boss_hud")
 
-[node name="BossName" type="Label" parent="HUD/BossHealthHud"]
+[node name="BossName" type="Label" parent="HUD/BossHealthHud" unique_id=2081495194]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 12.0
 offset_top = 6.0
 offset_right = 548.0
@@ -892,20 +877,22 @@ theme_override_font_sizes/font_size = 14
 text = "FALLEN GATE KNIGHT / 堕落门卫骑士"
 horizontal_alignment = 1
 
-[node name="BossBodyBar" type="ProgressBar" parent="HUD/BossHealthHud"]
+[node name="BossBodyBar" type="ProgressBar" parent="HUD/BossHealthHud" unique_id=352879040]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 12.0
 offset_top = 32.0
 offset_right = 466.0
 offset_bottom = 54.0
 theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background")
 theme_override_styles/fill = SubResource("StyleBoxFlat_boss_body_fill")
-value = 18.0
 max_value = 18.0
+value = 18.0
 show_percentage = false
 
-[node name="BossBodyValue" type="Label" parent="HUD/BossHealthHud"]
+[node name="BossBodyValue" type="Label" parent="HUD/BossHealthHud" unique_id=291467650]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 472.0
 offset_top = 32.0
 offset_right = 548.0
@@ -913,27 +900,28 @@ offset_bottom = 54.0
 text = "18 / 18"
 horizontal_alignment = 2
 
-[node name="BossShieldRow" type="Control" parent="HUD/BossHealthHud"]
+[node name="BossShieldRow" type="Control" parent="HUD/BossHealthHud" unique_id=111222425]
 unique_name_in_owner = true
-offset_left = 0.0
-offset_top = 0.0
+anchors_preset = 0
 offset_right = 560.0
 offset_bottom = 96.0
 
-[node name="BossShieldBar" type="ProgressBar" parent="HUD/BossHealthHud/BossShieldRow"]
+[node name="BossShieldBar" type="ProgressBar" parent="HUD/BossHealthHud/BossShieldRow" unique_id=707559920]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 12.0
 offset_top = 64.0
 offset_right = 466.0
 offset_bottom = 84.0
 theme_override_styles/background = SubResource("StyleBoxFlat_stamina_background")
 theme_override_styles/fill = SubResource("StyleBoxFlat_boss_shield_fill")
-value = 10.0
 max_value = 10.0
+value = 10.0
 show_percentage = false
 
-[node name="BossShieldValue" type="Label" parent="HUD/BossHealthHud/BossShieldRow"]
+[node name="BossShieldValue" type="Label" parent="HUD/BossHealthHud/BossShieldRow" unique_id=1383777173]
 unique_name_in_owner = true
+layout_mode = 0
 offset_left = 472.0
 offset_top = 63.0
 offset_right = 548.0
@@ -941,7 +929,7 @@ offset_bottom = 85.0
 text = "10 / 10"
 horizontal_alignment = 2
 
-[node name="BossLastWords" type="Label" parent="HUD"]
+[node name="BossLastWords" type="Label" parent="HUD" unique_id=1927992160]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -957,18 +945,19 @@ theme_override_colors/font_color = Color(0.82, 0.86, 0.9, 1)
 theme_override_colors/font_outline_color = Color(0.02, 0.025, 0.04, 1)
 theme_override_constants/outline_size = 3
 theme_override_font_sizes/font_size = 16
-text = "钟……认得你。\nThe bell… remembers you."
+text = "钟……认得你。
+The bell… remembers you."
 horizontal_alignment = 1
 vertical_alignment = 1
 script = ExtResource("38_boss_words")
 boss_path = NodePath("../../World/CastleEntranceArea/FallenGateKnight")
 room_controller_path = NodePath("../../BossRoomController")
 
-[node name="CastleEntranceTransition" type="CanvasLayer" parent="."]
+[node name="CastleEntranceTransition" type="CanvasLayer" parent="." unique_id=1906904026]
 layer = 50
 script = ExtResource("29_entrance_transition")
 
-[node name="FadeRect" type="ColorRect" parent="CastleEntranceTransition"]
+[node name="FadeRect" type="ColorRect" parent="CastleEntranceTransition" unique_id=343234539]
 visible = false
 anchors_preset = 15
 anchor_right = 1.0
@@ -978,8 +967,8 @@ grow_vertical = 2
 mouse_filter = 2
 color = Color(0.008, 0.01, 0.018, 1)
 
-[node name="BossRoomController" type="Node" parent="."]
+[node name="BossRoomController" type="Node" parent="." unique_id=1576960073]
 script = ExtResource("17_boss_room")
 
-[node name="TutorialController" type="Node" parent="."]
+[node name="TutorialController" type="Node" parent="." unique_id=1728405285]
 script = ExtResource("35_tutorial")
