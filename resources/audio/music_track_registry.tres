@@ -1,12 +1,13 @@
-[gd_resource type="Resource" script_class="MusicTrackRegistry" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="MusicTrackRegistry" load_steps=8 format=3]
 
 [ext_resource type="Script" path="res://scripts/audio/music_track_registry.gd" id="1_registry"]
 [ext_resource type="Script" path="res://scripts/audio/music_track_definition.gd" id="2_definition"]
 [ext_resource type="Resource" path="res://resources/audio/music_tracks/ch2_hollow_duchess_phase_01.tres" id="2_phase1"]
 [ext_resource type="Resource" path="res://resources/audio/music_tracks/ch2_hollow_duchess_phase_02.tres" id="3_phase2"]
+[ext_resource type="Resource" path="res://resources/audio/music_tracks/ch2_hollow_duchess_transition_stinger.tres" id="3_transition"]
 [ext_resource type="Resource" path="res://resources/audio/music_tracks/ch3_thirteenth_pontiff_phase_01.tres" id="4_ch3_phase1"]
 [ext_resource type="Resource" path="res://resources/audio/music_tracks/ch3_thirteenth_pontiff_phase_02.tres" id="5_ch3_phase2"]
 
 [resource]
 script = ExtResource("1_registry")
-tracks = Array[ExtResource("2_definition")]([ExtResource("2_phase1"), ExtResource("3_phase2"), ExtResource("4_ch3_phase1"), ExtResource("5_ch3_phase2")])
+tracks = Array[ExtResource("2_definition")]([ExtResource("2_phase1"), ExtResource("3_phase2"), ExtResource("3_transition"), ExtResource("4_ch3_phase1"), ExtResource("5_ch3_phase2")])

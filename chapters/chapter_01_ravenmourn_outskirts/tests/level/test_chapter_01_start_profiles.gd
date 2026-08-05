@@ -9,6 +9,7 @@ const EXPECTED_SPAWNS: Dictionary[StringName, NodePath] = {
 	&"after_forest": NodePath("World/Checkpoints/AfterForest/SpawnMarker"),
 	&"after_outskirts": NodePath("World/Checkpoints/AfterOutskirts/SpawnMarker"),
 	&"boss_checkpoint": NodePath("World/CastleEntranceArea/BossCheckpoint"),
+	&"CH1_GARGOYLE_HEIGHT_TEST": NodePath("World/GargoyleHeightTestSpawn"),
 }
 
 var _failures: Array[String] = []
@@ -36,7 +37,12 @@ func _run() -> void:
 		var marker: Marker2D = level.get_node(EXPECTED_SPAWNS[spawn_id]) as Marker2D
 		var player: Player = level.get_node("World/Player") as Player
 		var respawn: PlayerRespawnController = level.get_node("PlayerRespawnController") as PlayerRespawnController
-		_expect(player.global_position.distance_to(marker.global_position) < 1.0, "Spawn failed: %s" % spawn_id)
+		_expect(
+			player.global_position.distance_to(marker.global_position) < 1.0,
+			"Spawn failed: %s player=%s marker=%s" % [
+				spawn_id, player.global_position, marker.global_position,
+			]
+		)
 		_expect(respawn.spawn_point == marker, "Respawn marker failed: %s" % spawn_id)
 		level.queue_free()
 		await process_frame
@@ -60,7 +66,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("CHAPTER_01_START_PROFILE_TEST: PASS (5 spawns, Chapter II transition)")
+		print("CHAPTER_01_START_PROFILE_TEST: PASS (6 spawns, Chapter II transition)")
 		quit(0)
 		return
 	for failure: String in _failures:

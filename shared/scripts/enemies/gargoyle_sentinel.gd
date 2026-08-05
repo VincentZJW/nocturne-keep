@@ -4,6 +4,8 @@ extends EnemyCombatant
 ## Airborne ambusher with a readable dive, ground punish window, and return loop.
 
 signal state_changed(previous_state: StringName, current_state: StringName)
+signal flight_top_reached(previous_state: StringName, safe_target: Vector2)
+signal return_completed(safe_target: Vector2, attack_cycle_count: int)
 
 const DORMANT: StringName = &"Dormant"
 const HOVER: StringName = &"Hover"
@@ -12,6 +14,8 @@ const DIVE_WINDUP: StringName = &"DiveWindup"
 const DIVE: StringName = &"Dive"
 const GROUND_STUN: StringName = &"GroundStun"
 const RETURN_TO_AIR: StringName = &"ReturnToAir"
+const RETURN_TO_PLAYABLE_ALTITUDE: StringName = &"ReturnToPlayableAltitude"
+const HOVER_RECOVER: StringName = &"HoverRecover"
 const HURT: StringName = &"Hurt"
 const DEATH: StringName = &"Death"
 
@@ -41,8 +45,13 @@ var ai_active: bool = true
 var home_position: Vector2 = Vector2.ZERO
 var dive_direction: Vector2 = Vector2.DOWN
 var current_attack_id: int = 0
+var attack_cycle_count: int = 0
+var ceiling_recovery_count: int = 0
+var return_target: Vector2 = Vector2.ZERO
+var last_ceiling_state: StringName = &""
 var _next_attack_id: int = 1
 var _death_shatter_started: bool = false
+var _ceiling_recovery_latched: bool = false
 var world_bounds: WorldBounds2D
 
 
@@ -55,6 +64,7 @@ func _ready() -> void:
 	if world_bounds != null:
 		home_position = world_bounds.clamp_flight_anchor(home_position)
 		global_position = home_position
+	return_target = _get_safe_flight_target(home_position)
 	health_component.max_health = config.max_health
 	health_component.reset_to_full()
 	dive_hitbox.damage = config.dive_damage
@@ -87,8 +97,10 @@ func _physics_process(delta: float) -> void:
 			_process_dive()
 		GROUND_STUN:
 			_process_ground_stun(delta)
-		RETURN_TO_AIR:
+		RETURN_TO_AIR, RETURN_TO_PLAYABLE_ALTITUDE:
 			_process_return(delta)
+		HOVER_RECOVER:
+			_process_hover_recover(delta)
 		HURT:
 			_process_hurt(delta)
 	move_and_slide()
@@ -115,14 +127,24 @@ func set_ai_active(active: bool) -> void:
 		return
 	ai_active = active
 	if not active:
+		if dive_hitbox.is_active:
+			dive_hitbox.end_attack()
+			attack_window_changed.emit(false)
 		target = null
 		velocity = Vector2.ZERO
+		state_timer = 0.0
+		cooldown_timer = 0.0
+		current_attack_id = 0
+		_ceiling_recovery_latched = false
+		return_target = _get_safe_flight_target(home_position)
 		transition_state(DORMANT)
 		play_animation(&"dormant")
 		detection_area.set_deferred("monitoring", false)
 		set_physics_process(false)
 		return
 	detection_area.set_deferred("monitoring", true)
+	_ceiling_recovery_latched = false
+	return_target = _get_safe_flight_target(home_position)
 	set_physics_process(true)
 
 
@@ -165,6 +187,10 @@ func get_attack_phase_name() -> StringName:
 		return &"DiveActive"
 	if current_state == GROUND_STUN:
 		return StringName("Stun %.2f" % state_timer)
+	if current_state == RETURN_TO_PLAYABLE_ALTITUDE:
+		return &"CeilingRecovery"
+	if current_state == HOVER_RECOVER:
+		return StringName("HoverRecover %.2f" % state_timer)
 	return &"None"
 
 
@@ -173,13 +199,24 @@ func is_attack_window_active() -> bool:
 
 
 func get_debug_summary() -> String:
-	return "%s  %s  HP %d/%d  ANIM %s  DIVE_LOCK %.2f  STUN %.2f  TARGET %s  H %.0f" % [
+	return "%s %s HP %d/%d ANIM %s TARGET %s TOP %.0f RETURN(%.0f,%.0f) CYCLE %d CEIL %d" % [
 		get_enemy_type_name(), current_state, health_component.current_health,
-		health_component.max_health, animated_sprite.animation,
-		state_timer if current_state == DIVE_WINDUP else 0.0,
-		state_timer if current_state == GROUND_STUN else 0.0,
-		"yes" if _has_target() else "no", home_position.y - global_position.y,
+		health_component.max_health, animated_sprite.animation, "yes" if _has_target() else "no",
+		get_flight_top_limit_y(), return_target.x, return_target.y,
+		attack_cycle_count, ceiling_recovery_count,
 	]
+
+
+func get_flight_top_limit_y() -> float:
+	return world_bounds.get_safe_flight_top_y() if world_bounds != null else -INF
+
+
+func get_return_target() -> Vector2:
+	return return_target
+
+
+func get_attack_cycle_count() -> int:
+	return attack_cycle_count
 
 
 func transition_state(next_state: StringName) -> bool:
@@ -238,6 +275,7 @@ func _process_windup(delta: float) -> void:
 		dive_direction = dive_direction.normalized()
 		transition_state(DIVE)
 		velocity = dive_direction * config.dive_speed
+		attack_cycle_count += 1
 		current_attack_id = _next_attack_id
 		_next_attack_id += 1
 		dive_hitbox.begin_attack(current_attack_id, config.dive_damage, facing_direction, self)
@@ -253,27 +291,37 @@ func _process_ground_stun(delta: float) -> void:
 	velocity = Vector2.ZERO
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer <= 0.0:
-		transition_state(RETURN_TO_AIR)
-		play_animation(&"return_to_air", true)
+		_begin_return_to_air(false)
 
 
 func _process_return(_delta: float) -> void:
-	var return_target: Vector2 = Vector2(global_position.x, home_position.y)
 	velocity = global_position.direction_to(return_target) * config.return_speed
-	if global_position.distance_to(return_target) <= 4.0:
+	if global_position.distance_to(return_target) <= config.return_arrival_threshold:
 		global_position = return_target
 		velocity = Vector2.ZERO
-		transition_state(TRACK)
-		cooldown_timer = config.attack_cooldown
+		transition_state(HOVER_RECOVER)
+		state_timer = config.ceiling_recovery_wait
+		return_completed.emit(return_target, attack_cycle_count)
 		play_animation(&"hover")
+
+
+func _process_hover_recover(delta: float) -> void:
+	velocity = Vector2.ZERO
+	state_timer = maxf(0.0, state_timer - delta)
+	if state_timer > 0.0:
+		return
+	_ceiling_recovery_latched = false
+	_reacquire_player_from_detection()
+	transition_state(TRACK if _has_target() else HOVER)
+	cooldown_timer = config.attack_cooldown
+	play_animation(&"hover")
 
 
 func _process_hurt(delta: float) -> void:
 	state_timer = maxf(0.0, state_timer - delta)
 	velocity = velocity.move_toward(Vector2.ZERO, config.knockback_speed * delta * 5.0)
 	if state_timer <= 0.0:
-		transition_state(TRACK)
-		play_animation(&"hover")
+		_begin_return_to_air(false)
 
 
 func _enter_dive_windup() -> void:
@@ -293,6 +341,29 @@ func _enter_ground_stun() -> void:
 	velocity = Vector2.ZERO
 	state_timer = config.ground_stun_duration
 	play_animation(&"ground_stun", true)
+
+
+func _begin_return_to_air(from_ceiling: bool) -> void:
+	return_target = _get_safe_flight_target(home_position)
+	var next_state: StringName = RETURN_TO_PLAYABLE_ALTITUDE if from_ceiling else RETURN_TO_AIR
+	transition_state(next_state)
+	velocity = Vector2.ZERO
+	play_animation(&"return_to_air", true)
+
+
+func _enter_ceiling_recovery(previous_state: StringName) -> void:
+	if _ceiling_recovery_latched or current_state in [DEATH, DORMANT, GROUND_STUN, HOVER_RECOVER]:
+		return
+	_ceiling_recovery_latched = true
+	last_ceiling_state = previous_state
+	ceiling_recovery_count += 1
+	if dive_hitbox.is_active:
+		dive_hitbox.end_attack()
+		attack_window_changed.emit(false)
+	current_attack_id = 0
+	dive_direction = Vector2.ZERO
+	_begin_return_to_air(true)
+	flight_top_reached.emit(previous_state, return_target)
 
 
 func _enter_hurt(source_position: Vector2) -> void:
@@ -358,6 +429,34 @@ func _has_target() -> bool:
 	return target != null and is_instance_valid(target) and not target.is_dead()
 
 
+func _reacquire_player_from_detection() -> void:
+	if _has_target() or detection_area == null or not detection_area.monitoring:
+		return
+	for body: Node2D in detection_area.get_overlapping_bodies():
+		var player: Player = body as Player
+		if player != null and not player.is_dead():
+			set_target(player)
+			return
+
+
+func _get_safe_flight_target(preferred_target: Vector2) -> Vector2:
+	if world_bounds == null:
+		return preferred_target
+	var safe_top_y: float = world_bounds.get_safe_flight_top_y()
+	var safe_bottom_y: float = maxf(
+		safe_top_y,
+		world_bounds.get_bottom_limit_y() - config.minimum_hover_height
+	)
+	return Vector2(
+		clampf(
+			preferred_target.x,
+			world_bounds.get_left_limit_x() + world_bounds.flight_margin,
+			world_bounds.get_right_limit_x() - world_bounds.flight_margin
+		),
+		clampf(preferred_target.y, safe_top_y, safe_bottom_y)
+	)
+
+
 func _configure_detection_radius() -> void:
 	var shape_node: CollisionShape2D = detection_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
 	var circle: CircleShape2D = shape_node.shape as CircleShape2D if shape_node != null else null
@@ -387,10 +486,10 @@ func _enforce_flight_bounds() -> void:
 	if world_bounds == null or current_state == DEATH:
 		return
 	var safe_top_y: float = world_bounds.get_safe_flight_top_y()
-	if global_position.y < safe_top_y:
+	var moving_upward: bool = velocity.y < 0.0
+	if global_position.y < safe_top_y or (is_equal_approx(global_position.y, safe_top_y) and moving_upward):
+		var previous_state: StringName = current_state
 		global_position.y = safe_top_y
 		velocity.y = maxf(0.0, velocity.y)
-		home_position = world_bounds.clamp_flight_anchor(home_position)
-		if current_state in [HOVER, TRACK, RETURN_TO_AIR]:
-			transition_state(RETURN_TO_AIR)
-			play_animation(&"return_to_air")
+		home_position = _get_safe_flight_target(home_position)
+		_enter_ceiling_recovery(previous_state)

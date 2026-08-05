@@ -106,3 +106,28 @@ The first encounter then uses the complete 6.4-second five-line presentation and
 ## Verification boundary
 
 Automated evidence proves configuration, 70 attack cycles, phase/Poise/reset, five complete 222–226-second live-component simulations and Main composition. Graphical evidence was captured from the legal Bootstrap/CH2_BOSS path, not an isolated preview. Manual acceptance must still judge tell readability, punish-window feel, camera framing at arena extremes and whether phase-two lanes remain readable during real evasive play.
+
+## Two-phase battle-music contract (2026-08-05)
+
+The formal room now uses the original, sample-free two-phase score documented at
+`assets/audio/music/boss/hollow_duchess/hollow_duchess_music_spec.md`.
+
+- Phase 1: `CH2_BOSS_MUSIC_PHASE_01`, 150.000 seconds, 96 BPM, 3/4, full dark
+  court-waltz form `Intro / A / B / C / A' / Loop Return`.
+- Transition: `CH2_BOSS_MUSIC_TRANSITION_STINGER`, 4.500 seconds, non-looping,
+  fired once when the mask-break transition begins.
+- Phase 2: `CH2_BOSS_MUSIC_PHASE_02`, 132.000 seconds, 120 BPM, 3/4, related
+  high-pressure form `A2 / B2 / Phantom Dance / Broken Waltz / Final Reprise`.
+
+Intro starts Phase 1 at -18 dB, combat restores its -12 dB authored level,
+dialogue applies a 6 dB Music-bus duck, transition lowers Phase 1 to -20 dB over
+0.90 seconds, and the one-shot Stinger bridges the 1.00-second Phase-2
+crossfade. Boss death fades the active music over 1.50 seconds. Respawn stops
+both persistent music decks and the persistent Stinger player, clears the
+one-shot phase guard, and restarts Phase 1 from time zero. The reward area does
+not retain battle music.
+
+Runtime masters, score JSON, MIDI, stems and deterministic generator are stored
+under `assets/audio/music/boss/hollow_duchess/`. The former 6.6-second Phase-1
+motif and former Phase-2 master remain only as unreferenced historical source;
+neither TrackDefinition nor the formal Main scene references them.

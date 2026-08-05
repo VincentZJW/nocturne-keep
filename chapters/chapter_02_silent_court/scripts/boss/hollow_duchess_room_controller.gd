@@ -9,9 +9,12 @@ signal room_cleared
 
 const PHASE_01_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
 const PHASE_02_TRACK_ID: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
+const TRANSITION_STINGER_ID: StringName = &"CH2_BOSS_MUSIC_TRANSITION_STINGER"
 const PHASE_SWITCH_GUARD: StringName = &"CH2_DUCHESS_PHASE_02_ONCE"
 const DIALOGUE_DUCK_DB: float = 6.0
 const TRANSITION_MUSIC_DB: float = -20.0
+const INTRO_MUSIC_DB: float = -18.0
+const PHASE_01_COMBAT_DB: float = -12.0
 
 @export_node_path("Player") var player_path: NodePath
 @export_node_path("HollowDuchess") var boss_path: NodePath
@@ -106,6 +109,7 @@ func _begin_encounter() -> void:
 	if music_manager != null:
 		music_manager.clear_phase_switch_guard(PHASE_SWITCH_GUARD)
 		music_manager.play_music(PHASE_01_TRACK_ID, 0.35)
+		music_manager.set_music_volume(INTRO_MUSIC_DB, 0.0)
 	respawn_controller.set_spawn_point(checkpoint)
 	_set_door_closed(rear_door, true)
 	_set_door_closed(exit_door, true)
@@ -124,6 +128,8 @@ func _on_boss_combat_started() -> void:
 	var camera_tween: Tween = create_tween()
 	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom, 0.24)
 	player.set_input_profile(Player.InputProfile.FULL)
+	if music_manager != null:
+		music_manager.set_music_volume(PHASE_01_COMBAT_DB, 0.55)
 
 
 func _on_intro_line_requested(text: String) -> void:
@@ -170,13 +176,14 @@ func _on_phase_transition_started() -> void:
 	presentation.play_phase_transition()
 	if music_manager != null:
 		music_manager.set_music_volume(TRANSITION_MUSIC_DB, 0.90)
+		music_manager.play_transition_stinger(TRANSITION_STINGER_ID, true)
 
 
 func _on_phase_02_revealed() -> void:
 	if music_manager == null or room_is_cleared:
 		return
 	music_manager.restore_after_dialogue(0.0)
-	music_manager.phase_switch_once(PHASE_SWITCH_GUARD, PHASE_02_TRACK_ID, 1.10)
+	music_manager.phase_switch_once(PHASE_SWITCH_GUARD, PHASE_02_TRACK_ID, 1.00)
 
 
 func _on_phase_transition_completed() -> void:

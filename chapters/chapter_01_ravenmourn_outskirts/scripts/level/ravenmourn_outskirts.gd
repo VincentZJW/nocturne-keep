@@ -12,6 +12,7 @@ const SPAWN_PATHS: Dictionary[StringName, NodePath] = {
 	&"after_forest": NodePath("World/Checkpoints/AfterForest/SpawnMarker"),
 	&"after_outskirts": NodePath("World/Checkpoints/AfterOutskirts/SpawnMarker"),
 	&"boss_checkpoint": NodePath("World/CastleEntranceArea/BossCheckpoint"),
+	&"CH1_GARGOYLE_HEIGHT_TEST": NodePath("World/GargoyleHeightTestSpawn"),
 }
 
 @onready var player: Player = $World/Player as Player

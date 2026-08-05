@@ -8,6 +8,8 @@ signal track_started(track_id: StringName)
 signal track_stopped(track_id: StringName)
 signal crossfade_started(from_track_id: StringName, to_track_id: StringName, duration: float)
 signal crossfade_completed(track_id: StringName)
+signal transition_stinger_started(track_id: StringName)
+signal transition_stinger_finished(track_id: StringName)
 
 const REGISTRY: MusicTrackRegistry = preload("res://resources/audio/music_track_registry.tres")
 const SILENCE_DB: float = -80.0
@@ -17,9 +19,11 @@ var _deck_a: AudioStreamPlayer
 var _deck_b: AudioStreamPlayer
 var _active_deck: AudioStreamPlayer
 var _standby_deck: AudioStreamPlayer
+var _transition_stinger: AudioStreamPlayer
 var _fade_tween: Tween
 var _duck_tween: Tween
 var _current_track_id: StringName = &""
+var _current_stinger_id: StringName = &""
 var _current_target_db: float = -10.0
 var _duck_amount_db: float = 0.0
 var _music_bus_index: int = -1
@@ -35,6 +39,8 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_deck_a = _create_deck("MusicDeckA")
 	_deck_b = _create_deck("MusicDeckB")
+	_transition_stinger = _create_deck("MusicTransitionStinger")
+	_transition_stinger.finished.connect(_on_transition_stinger_finished)
 	_active_deck = _deck_a
 	_standby_deck = _deck_b
 	_create_debug_overlay()
@@ -126,14 +132,35 @@ func clear_all_phase_switch_guards() -> void:
 	_phase_switch_guards.clear()
 
 
+func play_transition_stinger(track_id: StringName, restart: bool = false) -> bool:
+	var definition: MusicTrackDefinition = REGISTRY.find_track(track_id)
+	if definition == null:
+		push_error("Unknown transition stinger id: %s" % track_id)
+		return false
+	if definition.loops:
+		push_error("Transition stinger must be authored as a non-looping track: %s" % track_id)
+		return false
+	if _transition_stinger.playing and _current_stinger_id == track_id and not restart:
+		return false
+	_transition_stinger.stop()
+	_transition_stinger.stream = definition.stream
+	_transition_stinger.bus = &"Music"
+	_transition_stinger.volume_db = definition.default_volume_db
+	_current_stinger_id = track_id
+	_transition_stinger.play()
+	transition_stinger_started.emit(track_id)
+	return true
+
+
 func fade_out(duration: float = 1.0) -> void:
-	if _current_track_id.is_empty():
+	if _current_track_id.is_empty() and not _transition_stinger.playing:
 		return
 	_cancel_fade()
 	var stopped_id: StringName = _current_track_id
 	_current_track_id = &""
 	if duration <= 0.0:
 		_stop_decks()
+		_stop_transition_stinger()
 		_reset_dialogue_duck()
 		track_stopped.emit(stopped_id)
 		return
@@ -141,8 +168,10 @@ func fade_out(duration: float = 1.0) -> void:
 	_fade_tween.set_parallel(true)
 	_fade_tween.tween_property(_deck_a, "volume_db", SILENCE_DB, duration)
 	_fade_tween.tween_property(_deck_b, "volume_db", SILENCE_DB, duration)
+	_fade_tween.tween_property(_transition_stinger, "volume_db", SILENCE_DB, duration)
 	_fade_tween.finished.connect(func() -> void:
 		_stop_decks()
+		_stop_transition_stinger()
 		_reset_dialogue_duck()
 		track_stopped.emit(stopped_id)
 	, CONNECT_ONE_SHOT)
@@ -153,6 +182,7 @@ func stop_music() -> void:
 	var stopped_id: StringName = _current_track_id
 	_current_track_id = &""
 	_stop_decks()
+	_stop_transition_stinger()
 	_reset_dialogue_duck()
 	if not stopped_id.is_empty():
 		track_stopped.emit(stopped_id)
@@ -161,11 +191,13 @@ func stop_music() -> void:
 func pause_music() -> void:
 	_deck_a.stream_paused = true
 	_deck_b.stream_paused = true
+	_transition_stinger.stream_paused = true
 
 
 func resume_music() -> void:
 	_deck_a.stream_paused = false
 	_deck_b.stream_paused = false
+	_transition_stinger.stream_paused = false
 
 
 func set_music_volume(volume_db: float, fade_seconds: float = 0.0) -> void:
@@ -199,12 +231,25 @@ func get_current_track_id() -> StringName:
 	return _current_track_id
 
 
+func get_current_stinger_id() -> StringName:
+	return _current_stinger_id
+
+
+func get_current_bpm() -> float:
+	var definition: MusicTrackDefinition = REGISTRY.find_track(_current_track_id)
+	return definition.bpm if definition != null else 0.0
+
+
 func get_playback_position() -> float:
 	return _active_deck.get_playback_position() if _active_deck != null and _active_deck.playing else 0.0
 
 
 func get_active_player_count() -> int:
 	return int(_deck_a.playing) + int(_deck_b.playing)
+
+
+func get_total_audio_player_count() -> int:
+	return get_active_player_count() + int(_transition_stinger.playing)
 
 
 func get_current_volume_db() -> float:
@@ -323,6 +368,21 @@ func _stop_decks() -> void:
 		deck.stream_paused = false
 
 
+func _stop_transition_stinger() -> void:
+	_transition_stinger.stop()
+	_transition_stinger.volume_db = SILENCE_DB
+	_transition_stinger.stream_paused = false
+	_current_stinger_id = &""
+
+
+func _on_transition_stinger_finished() -> void:
+	var finished_id: StringName = _current_stinger_id
+	_current_stinger_id = &""
+	_transition_stinger.volume_db = SILENCE_DB
+	if not finished_id.is_empty():
+		transition_stinger_finished.emit(finished_id)
+
+
 func _exit_tree() -> void:
 	_reset_dialogue_duck()
 
@@ -348,7 +408,7 @@ func _update_debug_overlay() -> void:
 		return
 	var bus_index: int = AudioServer.get_bus_index(&"Music")
 	var bus_db: float = AudioServer.get_bus_volume_db(bus_index) if bus_index >= 0 else -80.0
-	_debug_label.text = "MUSIC %s | POS %.2fs | BUS %.1fdB | DUCK %.1fdB | PLAYERS %d | SWITCH %d" % [
-		_current_track_id, get_playback_position(), bus_db, _duck_amount_db,
-		get_active_player_count(), _switch_count,
+	_debug_label.text = "MUSIC %s | POS %.2fs | BPM %.1f | BUS %.1fdB | DUCK %.1fdB | STINGER %s | PLAYERS %d | SWITCH %d" % [
+		_current_track_id, get_playback_position(), get_current_bpm(), bus_db, _duck_amount_db,
+		_current_stinger_id, get_total_audio_player_count(), _switch_count,
 	]

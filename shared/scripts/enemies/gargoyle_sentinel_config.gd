@@ -15,6 +15,9 @@ extends Resource
 @export var ground_stun_duration: float = 0.65
 @export var return_height: float = 70.0
 @export var return_speed: float = 125.0
+@export_range(32.0, 240.0, 1.0) var minimum_hover_height: float = 96.0
+@export_range(0.55, 0.85, 0.01) var ceiling_recovery_wait: float = 0.70
+@export_range(1.0, 16.0, 0.5) var return_arrival_threshold: float = 4.0
 @export var attack_cooldown: float = 1.10
 @export var hurt_duration: float = 0.18
 @export var knockback_speed: float = 95.0

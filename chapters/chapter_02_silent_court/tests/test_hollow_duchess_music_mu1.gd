@@ -4,10 +4,12 @@ const BOOTSTRAP: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const LEVEL_PATH: String = "res://chapters/chapter_02_silent_court/scenes/level/silent_court.tscn"
 const PHASE_01: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
 const PHASE_02: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
+const TRANSITION_STINGER: StringName = &"CH2_BOSS_MUSIC_TRANSITION_STINGER"
 
 var _failures: Array[String] = []
 var _phase_01_started: int = 0
 var _phase_02_started: int = 0
+var _stinger_started: int = 0
 
 
 func _initialize() -> void:
@@ -23,6 +25,7 @@ func _run() -> void:
 		_finish()
 		return
 	manager.track_started.connect(_on_track_started)
+	manager.transition_stinger_started.connect(_on_stinger_started)
 	config.debug_chapter_start_enabled = true
 	config.debug_start_chapter_id = ChapterRegistry.CHAPTER_02_SILENT_COURT
 	config.debug_start_spawn_id = &"CH2_BOSS_MUSIC_PHASE_02"
@@ -55,6 +58,7 @@ func _run() -> void:
 	_expect(manager.get_active_player_count() <= 2, "Crossfade created extra players")
 	_expect(_phase_01_started == 1, "Phase 1 started %d times" % _phase_01_started)
 	_expect(_phase_02_started == 1, "Phase 2 started %d times" % _phase_02_started)
+	_expect(_stinger_started == 1, "Transition Stinger started %d times" % _stinger_started)
 	if controller != null:
 		controller._on_player_respawned(Vector2.ZERO)
 		await process_frame
@@ -66,17 +70,19 @@ func _run() -> void:
 	config.reset_to_defaults()
 	if manager.track_started.is_connected(_on_track_started):
 		manager.track_started.disconnect(_on_track_started)
+	if manager.transition_stinger_started.is_connected(_on_stinger_started):
+		manager.transition_stinger_started.disconnect(_on_stinger_started)
 	manager.set_debug_overlay_enabled(false)
 	manager.stop_music()
 	Engine.time_scale = 1.0
 	if current_scene != null:
-		current_scene.free()
+		current_scene.queue_free()
 		current_scene = null
 	boss = null
 	presentation = null
 	controller = null
 	level = null
-	for _frame: int in range(10):
+	for _frame: int in range(30):
 		await process_frame
 	_finish()
 
@@ -102,6 +108,11 @@ func _on_track_started(track_id: StringName) -> void:
 		_phase_01_started += 1
 	elif track_id == PHASE_02:
 		_phase_02_started += 1
+
+
+func _on_stinger_started(track_id: StringName) -> void:
+	if track_id == TRANSITION_STINGER:
+		_stinger_started += 1
 
 
 func _expect(condition: bool, message: String) -> void:

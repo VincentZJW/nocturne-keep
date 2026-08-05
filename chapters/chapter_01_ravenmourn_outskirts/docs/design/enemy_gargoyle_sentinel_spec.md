@@ -1,7 +1,7 @@
 # Gargoyle Sentinel Specification
 
-Version: 1.1
-Last updated: 2026-07-24
+Version: 1.2
+Last updated: 2026-08-05
 
 ## Role and presentation
 
@@ -32,6 +32,39 @@ Dormant → wake → Hover/Track → DiveWindup → Dive
                               GroundStun → ReturnToAir → Track
 Any living state → Hurt; Health 0 → DeathFall → DeathShatter → cleanup
 ```
+
+### Top-limit recovery contract
+
+Chapter I retains its formal `WorldBounds2D` (`Rect2(0, 0, 6800, 720)`) and
+56-pixel flight margin, so the playable flight top is world Y 56. Reaching that
+top while moving upward is an explicit event rather than a velocity-only clamp:
+
+```text
+upward state + flight_top_reached
+→ close DiveHitbox and clear the invalid attack
+→ ReturnToPlayableAltitude (fixed, legal return_target)
+→ original Hover Anchor
+→ HoverRecover (0.70 s)
+→ reacquire overlapping Player
+→ Track/Hover + existing 1.10 s attack cooldown
+```
+
+`return_target` is captured when return begins and is never recomputed from the
+Player during the return. Its Y is clamped between the safe flight top and the
+room bottom minus the 96-pixel minimum hover height. If the authored home anchor
+is already legal, that exact anchor wins. `flight_top_reached` is latched once
+per recovery, closes the active attack window, and cannot repeatedly transition
+at the ceiling. AI disable/re-enable (checkpoint reset or room re-entry) clears
+the latch, attack id, transient timers and velocity while preserving the legal
+home anchor.
+
+The formal Main debug route `CH1_GARGOYLE_HEIGHT_TEST` spawns the Player at
+`World/GargoyleHeightTestSpawn` and exercises the saved
+`World/Encounters/ForestEncounter03/Enemies/ForestGargoyle01`. Debug output
+exposes state, top Y, fixed return target, attack-cycle count and ceiling count.
+The deterministic regression performs ten consecutive ceiling recoveries,
+Player leave/re-enter reacquisition, Hurt recovery and AI reset/re-entry without
+removing the world ceiling or teleporting over normal return movement.
 
 The Dive Hitbox opens once per attack id and deals at most one hit to a target. World collision closes it immediately and creates the 0.65-second grounded counter-window. Return movement goes to the authored hover Y rather than granting a second Dive while grounded.
 

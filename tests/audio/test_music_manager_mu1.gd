@@ -2,6 +2,7 @@ extends SceneTree
 
 const PHASE_01: StringName = &"CH2_BOSS_MUSIC_PHASE_01"
 const PHASE_02: StringName = &"CH2_BOSS_MUSIC_PHASE_02"
+const TRANSITION_STINGER: StringName = &"CH2_BOSS_MUSIC_TRANSITION_STINGER"
 const CH3_PHASE_01: StringName = &"CH3_BOSS_MUSIC_PHASE_01"
 const GUARD: StringName = &"MU1_TEST_PHASE_SWITCH"
 
@@ -25,15 +26,21 @@ func _run() -> void:
 	_expect(AudioServer.get_bus_index(&"UI") >= 0, "UI bus is missing")
 	_expect(manager.preload_track(PHASE_01), "Phase 1 definition is missing")
 	_expect(manager.preload_track(PHASE_02), "Phase 2 definition is missing")
+	_expect(manager.preload_track(TRANSITION_STINGER), "Transition Stinger definition is missing")
 	_expect(manager.preload_track(CH3_PHASE_01), "Chapter III Phase 1 definition is missing")
 	var deck_count: int = manager.find_children("MusicDeck*", "AudioStreamPlayer", false, false).size()
 	_expect(deck_count == 2, "MusicManager must own exactly two reusable decks")
+	var stinger_count: int = manager.find_children("MusicTransitionStinger", "AudioStreamPlayer", false, false).size()
+	_expect(stinger_count == 1, "MusicManager must own one reusable transition stinger player")
 
 	manager.stop_music()
 	_expect(manager.play_music(PHASE_01, 0.0), "Phase 1 did not start")
 	_expect(not manager.play_music(PHASE_01, 0.0), "Repeated Phase 1 request restarted playback")
 	_expect(manager.get_current_track_id() == PHASE_01, "Phase 1 id mismatch")
 	_expect(manager.get_active_player_count() == 1, "Phase 1 must use one active player")
+	_expect(manager.play_transition_stinger(TRANSITION_STINGER), "Transition Stinger did not start")
+	_expect(not manager.play_transition_stinger(TRANSITION_STINGER), "Transition Stinger restarted without permission")
+	_expect(manager.get_current_stinger_id() == TRANSITION_STINGER, "Transition Stinger id mismatch")
 	manager.duck_for_dialogue(10.0, 0.0)
 	manager.restore_after_dialogue(0.0)
 

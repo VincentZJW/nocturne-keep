@@ -1,5 +1,19 @@
 # Development Log
 
+## 2026-08-05 — GI0–GI5 Gargoyle ceiling recovery and Hollow Duchess music rebuild
+
+Status: implementation, deterministic/MainBootstrap QA and two independent 15-minute real-time loop endurance runs complete; subjective musical acceptance remains a user playtest boundary
+
+- Audited the formal `run/main_scene` (`res://scenes/bootstrap/main_bootstrap.tscn`), Chapter I `WorldBounds2D`, Gargoyle state machine, Chapter II Ballroom Boss lifecycle, Audio buses/MusicManager, both legacy cues and the Chapter III procedural score pipeline before implementation.
+- Root cause: the Gargoyle ceiling clamp only corrected position/velocity in selected states; it did not end an invalid active attack or enter a recoverable state. Its return target was also recomputed from the current X position, so the authored Hover Anchor was not a stable target. Added a one-shot top event, fixed legal target, `ReturnToPlayableAltitude`, 0.70-second `HoverRecover`, Player reacquisition, counters/signals/debug data and reset/re-entry cleanup without weakening the shared ceiling.
+- Added formal Main spawn `CH1_GARGOYLE_HEIGHT_TEST`, a ten-cycle deterministic regression and seven MainBootstrap evidence frames. Ten attacks, ten ceiling events, legal `(3500,400)` formal return target, second/fifth/tenth attack readiness, Player leave/re-enter, Hurt recovery and AI reset/re-entry all pass.
+- Replaced the old 6.6-second Phase-1 motif and former Phase-2 runtime master with an original sample-free score generated from repository code: Phase 1 150 s/96 BPM/3-4, Phase 2 132 s/120 BPM/3-4 and a 4.5 s non-looping transformation Stinger. Retained deterministic source JSON, standard MIDI, three stems per phase, masters, analyses and an authored structure/provenance specification.
+- Extended the persistent MusicManager with one reusable Stinger player and lifecycle/debug APIs. Formal Ballroom logic now performs low-volume intro, 6 dB dialogue duck, guarded Stinger/phase crossfade, 1.50-second death fade and clean Phase-1 retry reset; no attack/Boss/Player balance changed.
+- Exact Godot 4.7.1 import, Gargoyle unit/regression, shared airborne bounds, music assets/structure, MusicManager transitions and formal MainBootstrap Gargoyle/Ballroom captures pass without red parser/resource/gameplay errors. The graphical Ballroom harness exits with two ObjectDB teardown warnings after PASS; no runtime red error is present.
+- Independent real-time endurance runs passed for 900 seconds per cue: Phase 1 wrapped 5 times and Phase 2 wrapped 6 times, each held one active player, and monitored static memory changed from 34,856,663 to 34,853,775 bytes (`-2,888`) with a 34,858,495-byte peak.
+- Evidence and full 25-row QA table: `docs/qa/gargoyle_duchess_gi/final_report.md`. Subjective listening (fatigue, waltz feel and SFX mix) remains explicitly assigned to manual F5 acceptance rather than falsely claimed by automation.
+- Scope preserved: no removal of map ceilings, no Boss/Player tuning change, no third-party audio, no `run/main_scene` replacement, no unrelated dirty-worktree staging and no push. This is a meaningful runtime/audio production change and receives one isolated commit.
+
 ## 2026-08-05 — Cross-chapter critical bugfix QA1–QA7
 
 Status: implementation and deterministic/MainBootstrap QA complete; manual player-feel and visual acceptance remain
