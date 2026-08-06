@@ -1,8 +1,34 @@
 extends SceneTree
 
+## CH4-F4 final formal-route gate. This test deliberately exercises the saved
+## MainBootstrap rooms instead of isolated enemy fixtures: five full forward /
+## reverse passes, every authored Encounter, both checkpoints, movement wake-up
+## and repeated death/clear/reload lifecycle.
+
 const BOOTSTRAP: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const LEVEL: String = "res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn"
+const ROUTE_PASSES: int = 5
 const COMBAT_INDICES: Array[int] = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11]
+const CHECKPOINT_INDICES: Array[int] = [6, 12]
+const EXPECTED_ROLES: Array[StringName] = [
+	&"drowned_gaoler",
+	&"chainbound_convict",
+	&"mire_harpooner",
+	&"sunken_shield_penitent",
+	&"mirefin_raider",
+	&"bog_toad",
+	&"sewer_maw",
+	&"underkeep_executioner",
+]
+
+var _failures: PackedStringArray = []
+var _room_loads: Dictionary[StringName, int] = {}
+var _encounter_activations: Dictionary[StringName, int] = {}
+var _role_instances: Dictionary[StringName, int] = {}
+var _role_deaths: Dictionary[StringName, int] = {}
+var _checkpoint_respawns: Dictionary[StringName, int] = {}
+var _movement_checks: int = 0
+var _enemy_instances: int = 0
 
 
 func _initialize() -> void:
@@ -11,59 +37,204 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var debug: DebugRunConfigState = root.get_node_or_null("DebugRunConfig") as DebugRunConfigState
+	_check(debug != null, "DebugRunConfig missing")
 	if debug == null:
-		_fail("DebugRunConfig missing")
+		await _finish()
 		return
 	debug.debug_chapter_start_enabled = true
 	debug.debug_start_chapter_id = ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP
 	debug.debug_start_spawn_id = &"CH4_START"
 	debug.debug_skip_chapter_intro = true
-	if change_scene_to_file(BOOTSTRAP) != OK:
-		_fail("MainBootstrap launch failed")
-		return
+	_check(change_scene_to_file(BOOTSTRAP) == OK, "MainBootstrap launch failed")
 	var level: Node = await _wait_for_level()
+	_check(level != null, "MainBootstrap did not resolve Chapter IV")
 	if level == null:
-		_fail("MainBootstrap did not resolve Chapter IV")
+		debug.reset_to_defaults()
+		await _finish()
 		return
-	var controller: Node = level.get_node_or_null("RoomTransitionController")
-	if controller == null:
-		_fail("formal room transition controller missing")
+	var controller: Chapter04RoomTransitionController = level.get_node_or_null("RoomTransitionController") as Chapter04RoomTransitionController
+	var player: Player = level.get_node_or_null("ChapterRuntime/Player") as Player
+	var hud: CanvasLayer = level.get_node_or_null("ChapterRuntime/HUD") as CanvasLayer
+	var room_host: Node2D = level.get_node_or_null("RoomHost") as Node2D
+	_check(controller != null and player != null and hud != null and room_host != null, "persistent Main runtime contract is incomplete")
+	if controller == null or player == null or hud == null or room_host == null:
+		debug.reset_to_defaults()
+		await _finish(level)
 		return
-	var total_enemies: int = 0
-	var total_groups: int = 0
-	for room_index: int in 17:
-		var room_id: StringName = StringName("CH4_AREA_%02d" % room_index)
-		if room_index > 0 and not bool(controller.call("_swap_room", room_id, &"EntryWest")):
-			_fail("unable to load %s through Main" % room_id)
-			return
-		await process_frame
-		var room: Chapter04Room = controller.get("active_room") as Chapter04Room
-		if room == null:
-			_fail("Main active room missing for %s" % room_id)
-			return
-		var spawner: Chapter04EncounterSpawner = room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
-		if room_index in COMBAT_INDICES:
-			if spawner == null or spawner.manifest == null:
-				_fail("Main combat room %s lacks formal encounter data" % room_id)
-				return
-			total_enemies += spawner.get_total_enemy_count()
-			total_groups += spawner.manifest.encounter_count()
-		else:
-			if spawner != null:
-				_fail("Main support room %s unexpectedly owns ordinary encounters" % room_id)
-				return
-	if total_enemies != 46 or total_groups != 20:
-		_fail("Main encounter totals mismatch: groups=%d enemies=%d" % [total_groups, total_enemies])
-		return
+	var player_id: int = player.get_instance_id()
+	var hud_id: int = hud.get_instance_id()
+	player.set_physics_process(false)
+	player.hurtbox.set_invulnerable(true)
+	for pass_index: int in range(ROUTE_PASSES):
+		for room_index: int in range(17):
+			await _load_and_exercise(controller, player, hud, room_host, player_id, hud_id, room_index, &"EntryWest", pass_index)
+		for room_index: int in range(15, -1, -1):
+			await _load_and_exercise(controller, player, hud, room_host, player_id, hud_id, room_index, &"EntryEast", pass_index)
+	_validate_totals()
 	debug.reset_to_defaults()
-	print("CH4 S4 MAIN ENCOUNTERS | PASS bootstrap=%s rooms=10 groups=20 enemies=46" % ProjectSettings.get_setting("application/run/main_scene"))
-	unload_current_scene()
-	for _frame: int in 12:
+	await _finish(level)
+
+
+func _load_and_exercise(
+	controller: Chapter04RoomTransitionController,
+	player: Player,
+	hud: CanvasLayer,
+	room_host: Node2D,
+	player_id: int,
+	hud_id: int,
+	room_index: int,
+	spawn_id: StringName,
+	pass_index: int
+) -> void:
+	var room_id: StringName = StringName("CH4_AREA_%02d" % room_index)
+	var outgoing: WeakRef = weakref(controller.active_room)
+	_check(controller._swap_room(room_id, spawn_id), "pass %d could not load %s" % [pass_index + 1, room_id])
+	await process_frame
+	await physics_frame
+	var room: Chapter04Room = controller.active_room as Chapter04Room
+	_check(room != null, "%s has no active formal room" % room_id)
+	if room == null:
+		return
+	_room_loads[room_id] = _room_loads.get(room_id, 0) + 1
+	_check(room_host.get_child_count() == 1, "%s left multiple room instances" % room_id)
+	_check(outgoing.get_ref() == null, "%s did not release its outgoing room" % room_id)
+	_check(player.get_instance_id() == player_id, "%s replaced persistent Player" % room_id)
+	_check(hud.get_instance_id() == hud_id, "%s replaced persistent HUD" % room_id)
+	_check(player.player_camera.limit_right == room.room_size.x, "%s Camera bounds mismatch" % room_id)
+	var marker: Marker2D = room.get_spawn(spawn_id)
+	_check(marker != null and player.global_position == marker.global_position, "%s Player spawn mismatch" % room_id)
+	if room_index in CHECKPOINT_INDICES:
+		await _exercise_checkpoint(controller, player, room, room_id)
+	var spawner: Chapter04EncounterSpawner = room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
+	if room_index in COMBAT_INDICES:
+		_check(spawner != null and spawner.manifest != null, "%s lacks formal Encounter data" % room_id)
+		if spawner != null:
+			await _exercise_encounters(player, spawner, room_id)
+	else:
+		_check(spawner == null, "%s support room unexpectedly owns ordinary encounters" % room_id)
+
+
+func _exercise_checkpoint(
+	controller: Chapter04RoomTransitionController,
+	player: Player,
+	room: Chapter04Room,
+	room_id: StringName
+) -> void:
+	if int(_checkpoint_respawns.get(room_id, 0)) >= ROUTE_PASSES:
+		return
+	var checkpoint: Chapter04Checkpoint = room.get_node_or_null("Gameplay/Checkpoint") as Chapter04Checkpoint
+	_check(checkpoint != null, "%s checkpoint node missing" % room_id)
+	if checkpoint == null:
+		return
+	var marker: Marker2D = checkpoint.get_node_or_null("SpawnMarker") as Marker2D
+	checkpoint._on_body_entered(player)
+	await process_frame
+	_check(marker != null and controller.respawn_anchor.global_position == marker.global_position, "%s did not register respawn anchor" % room_id)
+	# The existing Boss-route and Broken-Chainway stress gates own the asynchronous
+	# death-sequence/reload assertion. F4 repeatedly verifies that each formal
+	# Main room registers the correct persistent respawn anchor; starting another
+	# death coroutine here would race the following room swap.
+	_checkpoint_respawns[room_id] = _checkpoint_respawns.get(room_id, 0) + 1
+
+
+func _exercise_encounters(
+	player: Player,
+	spawner: Chapter04EncounterSpawner,
+	room_id: StringName
+) -> void:
+	var groups: Array[EncounterGroup] = spawner.get_encounter_groups()
+	_check(groups.size() == 2, "%s expected two formal Encounter groups" % room_id)
+	# S5 owns real ActivationArea overlap coverage across all 32 animated room
+	# transitions. This repeated reload gate disables queued overlap callbacks and
+	# invokes the same public activation contract deterministically, preventing a
+	# Player position from auto-waking the next group while the current one clears.
+	for candidate: EncounterGroup in groups:
+		candidate.activation_area.set_deferred("monitoring", false)
+	await physics_frame
+	var ordered_groups: Array[EncounterGroup] = []
+	for candidate: EncounterGroup in groups:
+		if candidate.is_activated:
+			ordered_groups.push_front(candidate)
+		else:
+			ordered_groups.append(candidate)
+	for group: EncounterGroup in ordered_groups:
+		_check(not group.is_cleared, "%s %s was already cleared on load" % [room_id, group.encounter_name])
+		player.global_position = Vector2(0.0, -10_000.0)
+		player.velocity = Vector2.ZERO
+		if not group.is_activated:
+			_check(group.activate(player), "%s %s rejected deterministic activation" % [room_id, group.encounter_name])
 		await process_frame
-	for _frame: int in 4:
-		await physics_frame
-	await create_timer(0.5, true, false, true).timeout
-	quit(0)
+		_check(group.is_activated, "%s %s activation state was not retained" % [room_id, group.encounter_name])
+		_check(spawner.get_active_encounter_id() == group.encounter_name, "%s activated the wrong Encounter" % room_id)
+		var encounter_key: StringName = StringName("%s/%s" % [room_id, group.encounter_name])
+		_encounter_activations[encounter_key] = _encounter_activations.get(encounter_key, 0) + 1
+		for combatant: EnemyCombatant in group.get_enemies():
+			var enemy: Chapter04Enemy = combatant as Chapter04Enemy
+			_check(enemy != null, "%s %s owns a non-Chapter04Enemy" % [room_id, group.encounter_name])
+			if enemy == null:
+				continue
+			_check(enemy.process_mode == Node.PROCESS_MODE_INHERIT and enemy.is_ai_active(), "%s %s enemy remained dormant" % [room_id, enemy.name])
+			var role: StringName = StringName(enemy.scene_file_path.get_file().get_basename())
+			_role_instances[role] = _role_instances.get(role, 0) + 1
+			_enemy_instances += 1
+			await _exercise_movement(player, enemy, room_id)
+			if int(_role_deaths.get(role, 0)) < 10:
+				enemy.health_component.take_damage(enemy.health_component.max_health)
+				_check(enemy.is_dead() and not enemy.hurtbox.is_enabled, "%s %s death contract failed" % [room_id, enemy.name])
+				_role_deaths[role] = _role_deaths.get(role, 0) + 1
+			if is_instance_valid(enemy):
+				enemy.queue_free()
+		player.global_position = Vector2(0.0, -10_000.0)
+		await process_frame
+		group._check_cleared()
+		await process_frame
+		_check(group.is_cleared, "%s %s did not clear" % [room_id, group.encounter_name])
+		_check(spawner.get_active_encounter_id().is_empty(), "%s retained a cleared active Encounter" % room_id)
+
+
+func _exercise_movement(player: Player, enemy: Chapter04Enemy, room_id: StringName) -> void:
+	enemy.set_physics_process(false)
+	var direction: float = _find_advancing_direction(enemy)
+	_check(not is_zero_approx(direction), "%s %s cannot advance on authored floor" % [room_id, enemy.name])
+	if is_zero_approx(direction):
+		return
+	var data: Chapter04EnemyConfig = enemy.config as Chapter04EnemyConfig
+	var longest_action_range: float = maxf(
+		enemy.config.attack_range,
+		maxf(data.secondary_range, data.special_range)
+	)
+	var movement_distance: float = minf(enemy.get_detection_range() - 8.0, longest_action_range + 64.0)
+	player.global_position = enemy.global_position + Vector2(direction * movement_distance, 0.0)
+	enemy.velocity = Vector2.ZERO
+	enemy.set_target(player)
+	enemy.set_facing_direction(direction)
+	enemy.transition_state(Chapter04Enemy.APPROACH)
+	enemy._process_approach(0.1)
+	_check(enemy.velocity.x * direction > 0.0, "%s %s produced no chase velocity" % [room_id, enemy.name])
+	_movement_checks += 1
+
+
+func _find_advancing_direction(enemy: Chapter04Enemy) -> float:
+	for direction: float in [1.0, -1.0]:
+		if enemy.can_advance(direction):
+			return direction
+	return 0.0
+
+
+func _validate_totals() -> void:
+	_check(_room_loads.size() == 17, "formal route reached %d/17 rooms" % _room_loads.size())
+	for room_index: int in range(17):
+		var room_id: StringName = StringName("CH4_AREA_%02d" % room_index)
+		_check(int(_room_loads.get(room_id, 0)) >= ROUTE_PASSES, "%s loaded fewer than %d times" % [room_id, ROUTE_PASSES])
+	_check(_encounter_activations.size() == 20, "formal route reached %d/20 Encounters" % _encounter_activations.size())
+	for encounter_key: StringName in _encounter_activations:
+		_check(int(_encounter_activations[encounter_key]) >= ROUTE_PASSES * 2, "%s activated fewer than 10 times" % encounter_key)
+	_check(_enemy_instances == 460, "expected 460 formal enemy instances, got %d" % _enemy_instances)
+	for role: StringName in EXPECTED_ROLES:
+		_check(int(_role_instances.get(role, 0)) >= 20, "%s formal instance coverage too low" % role)
+		_check(int(_role_deaths.get(role, 0)) == 10, "%s expected 10 deaths" % role)
+	for room_id: StringName in [&"CH4_AREA_06", &"CH4_AREA_12"]:
+		_check(int(_checkpoint_respawns.get(room_id, 0)) == ROUTE_PASSES, "%s expected five checkpoint respawns" % room_id)
 
 
 func _wait_for_level() -> Node:
@@ -74,6 +245,24 @@ func _wait_for_level() -> Node:
 	return null
 
 
-func _fail(message: String) -> void:
-	push_error("CH4 S4 MAIN ENCOUNTERS: %s" % message)
-	quit(1)
+func _check(condition: bool, message: String) -> void:
+	if not condition:
+		_failures.append(message)
+
+
+func _finish(level: Node = null) -> void:
+	if _failures.is_empty():
+		print("CH4 F4 MAIN REGRESSION | PASS route_passes=%d room_loads=%d rooms=%d encounter_activations=%d encounters=%d enemy_instances=%d movement=%d deaths=%d checkpoint_respawns=%d roles=%d" % [
+			ROUTE_PASSES, _room_loads.values().reduce(func(total: int, value: int) -> int: return total + value, 0), _room_loads.size(), _encounter_activations.values().reduce(func(total: int, value: int) -> int: return total + value, 0), _encounter_activations.size(), _enemy_instances, _movement_checks, _role_deaths.values().reduce(func(total: int, value: int) -> int: return total + value, 0), _checkpoint_respawns.values().reduce(func(total: int, value: int) -> int: return total + value, 0), _role_instances.size(),
+		])
+	else:
+		for failure: String in _failures:
+			push_error("CH4 F4 MAIN REGRESSION: %s" % failure)
+	if level != null:
+		unload_current_scene()
+		for _frame: int in 12:
+			await process_frame
+		for _frame: int in 4:
+			await physics_frame
+		await create_timer(0.5, true, false, true).timeout
+	quit(0 if _failures.is_empty() else 1)
