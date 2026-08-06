@@ -40,6 +40,11 @@ var _poise_broken_this_hit: bool = false
 var _hidden: bool = false
 var _hover_origin_y: float = 0.0
 var _hover_time: float = 0.0
+var _primary_hitbox_default_position: Vector2 = Vector2.ZERO
+var _primary_hitbox_default_size: Vector2 = Vector2.ZERO
+var _secondary_hitbox_default_position: Vector2 = Vector2.ZERO
+var _secondary_hitbox_default_size: Vector2 = Vector2.ZERO
+var _hitbox_geometry_ready: bool = false
 var world_bounds: WorldBounds2D
 
 
@@ -52,6 +57,7 @@ func _on_common_ready() -> void:
 	health_component.reset_to_full()
 	poise_component.configure(_chapter_config().max_poise, _chapter_config().poise_recovery_delay)
 	hurtbox.hit_resolving.connect(_on_hit_resolving)
+	_capture_runtime_hitbox_geometry()
 	_end_hitboxes()
 	_hover_origin_y = global_position.y
 	world_bounds = _find_world_bounds()
@@ -251,6 +257,7 @@ func _begin_active_window() -> void:
 		_spawn_projectile()
 	else:
 		var selected: HitboxComponent = secondary_hitbox if active_action != _chapter_config().primary_action else primary_hitbox
+		_configure_active_hitbox_geometry(selected)
 		selected.attack_kind = StringName("enemy_%s" % active_action)
 		selected.begin_attack(current_attack_id, action_damage, facing_direction, self)
 		attack_window_changed.emit(true)
@@ -287,6 +294,85 @@ func _active_motion_speed() -> float:
 	if active_action == _chapter_config().secondary_action:
 		return _chapter_config().secondary_motion_speed
 	return _chapter_config().special_motion_speed
+
+
+func _active_action_range() -> float:
+	if active_action == _chapter_config().primary_action:
+		return config.attack_range
+	if active_action == _chapter_config().secondary_action:
+		return _chapter_config().secondary_range
+	return _chapter_config().special_range
+
+
+func _capture_runtime_hitbox_geometry() -> void:
+	var primary_shape: CollisionShape2D = _get_hitbox_collision_shape(primary_hitbox)
+	var secondary_shape: CollisionShape2D = _get_hitbox_collision_shape(secondary_hitbox)
+	if primary_shape == null or secondary_shape == null:
+		push_error("%s requires CollisionShape2D children on both attack Hitboxes" % get_enemy_type_name())
+		return
+	var primary_rectangle: RectangleShape2D = primary_shape.shape as RectangleShape2D
+	var secondary_rectangle: RectangleShape2D = secondary_shape.shape as RectangleShape2D
+	if primary_rectangle == null or secondary_rectangle == null:
+		push_error("%s requires rectangular attack Hitboxes" % get_enemy_type_name())
+		return
+	# Scene subresources are shared between instances. Each combatant owns a
+	# runtime copy so one long-range action cannot resize another actor's shape.
+	primary_rectangle = primary_rectangle.duplicate(true) as RectangleShape2D
+	secondary_rectangle = secondary_rectangle.duplicate(true) as RectangleShape2D
+	primary_shape.shape = primary_rectangle
+	secondary_shape.shape = secondary_rectangle
+	_primary_hitbox_default_position = primary_hitbox.position
+	_primary_hitbox_default_size = primary_rectangle.size
+	_secondary_hitbox_default_position = secondary_hitbox.position
+	_secondary_hitbox_default_size = secondary_rectangle.size
+	_hitbox_geometry_ready = true
+
+
+func _configure_active_hitbox_geometry(hitbox: HitboxComponent) -> void:
+	_restore_default_hitbox_geometry(hitbox)
+	if not _hitbox_geometry_ready or not is_zero_approx(_active_motion_speed()):
+		return
+	var collision_shape: CollisionShape2D = _get_hitbox_collision_shape(hitbox)
+	var rectangle: RectangleShape2D = collision_shape.shape as RectangleShape2D if collision_shape != null else null
+	if rectangle == null:
+		return
+	var default_position: Vector2 = (
+		_primary_hitbox_default_position
+		if hitbox == primary_hitbox
+		else _secondary_hitbox_default_position
+	)
+	var default_size: Vector2 = (
+		_primary_hitbox_default_size
+		if hitbox == primary_hitbox
+		else _secondary_hitbox_default_size
+	)
+	var near_edge: float = default_position.x - default_size.x * 0.5
+	var default_far_edge: float = default_position.x + default_size.x * 0.5
+	var required_far_edge: float = maxf(default_far_edge, _active_action_range())
+	if is_equal_approx(required_far_edge, default_far_edge):
+		return
+	var resized_width: float = required_far_edge - near_edge
+	hitbox.position.x = (near_edge + required_far_edge) * 0.5
+	rectangle.size.x = resized_width
+
+
+func _restore_default_hitbox_geometry(hitbox: HitboxComponent) -> void:
+	if not _hitbox_geometry_ready or hitbox == null:
+		return
+	var collision_shape: CollisionShape2D = _get_hitbox_collision_shape(hitbox)
+	var rectangle: RectangleShape2D = collision_shape.shape as RectangleShape2D if collision_shape != null else null
+	if rectangle == null:
+		return
+	if hitbox == primary_hitbox:
+		hitbox.position = _primary_hitbox_default_position
+		rectangle.size = _primary_hitbox_default_size
+		return
+	hitbox.position = _secondary_hitbox_default_position
+	rectangle.size = _secondary_hitbox_default_size
+
+
+func _get_hitbox_collision_shape(hitbox: HitboxComponent) -> CollisionShape2D:
+	return hitbox.get_node_or_null("CollisionShape2D") as CollisionShape2D if hitbox != null else null
 
 
 func _on_hit_resolving(hitbox: HitboxComponent) -> void:
@@ -395,8 +481,10 @@ func _validate_target() -> bool:
 func _end_hitboxes() -> void:
 	if primary_hitbox != null:
 		primary_hitbox.end_attack()
+		_restore_default_hitbox_geometry(primary_hitbox)
 	if secondary_hitbox != null:
 		secondary_hitbox.end_attack()
+		_restore_default_hitbox_geometry(secondary_hitbox)
 	attack_window_changed.emit(false)
 
 

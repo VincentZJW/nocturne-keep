@@ -14,7 +14,10 @@ var _encounter_activation_checks: int = 0
 var _movement_state_checks: int = 0
 var _action_state_checks: int = 0
 var _shallow_water_checks: int = 0
+var _enemy_damage_checks: int = 0
+var _player_damage_checks: int = 0
 var _checked_enemy_types: Dictionary = {}
+var _next_combat_attack_id: int = 90_000
 
 
 func _initialize() -> void:
@@ -50,6 +53,7 @@ func _run() -> void:
 		return
 	var player_id: int = player.get_instance_id()
 	var hud_id: int = hud.get_instance_id()
+	player.set_physics_process(false)
 	if player.hurtbox != null:
 		player.hurtbox.set_invulnerable(true)
 	for room_index: int in range(1, 17):
@@ -152,6 +156,9 @@ func _exercise_enemy_motion_and_state(player: Player, enemy: Chapter04Enemy, des
 	_check(data != null, "%s enemy lacks Chapter04EnemyConfig" % destination)
 	if data == null:
 		return
+	# The assertions below advance the state machine deterministically. Disable
+	# the actor's own tick so long projectile waits cannot race the manual phase.
+	enemy.set_physics_process(false)
 	_checked_enemy_types[String(enemy.get_enemy_type_name())] = true
 	if StringName(enemy.get_meta(&"spawn_role", &"")) == &"shallow_water":
 		_shallow_water_checks += 1
@@ -169,19 +176,44 @@ func _exercise_enemy_motion_and_state(player: Player, enemy: Chapter04Enemy, des
 	_check(not is_zero_approx(direction), "%s %s cannot advance on its formal floor" % [destination, enemy.name])
 	if is_zero_approx(direction):
 		return
-	var movement_distance: float = minf(enemy.get_detection_range() - 8.0, enemy.config.attack_range + 64.0)
+	var longest_action_range: float = maxf(
+		enemy.config.attack_range,
+		maxf(data.secondary_range, data.special_range)
+	)
+	var movement_distance: float = minf(enemy.get_detection_range() - 8.0, longest_action_range + 64.0)
 	player.global_position = enemy.global_position + Vector2(direction * movement_distance, 0.0)
 	player.velocity = Vector2.ZERO
+	enemy.velocity = Vector2.ZERO
 	enemy.set_target(player)
 	enemy.set_facing_direction(direction)
 	enemy.transition_state(Chapter04Enemy.APPROACH)
 	enemy._process_approach(0.1)
-	_check(enemy.velocity.x * direction > 0.0, "%s %s did not produce chase velocity" % [destination, enemy.name])
+	_check(
+		enemy.velocity.x * direction > 0.0,
+		"%s %s did not produce chase velocity (state=%s phase=%s facing=%.0f dir=%.0f distance=%.1f velocity=%.1f)"
+		% [
+			destination,
+			enemy.name,
+			enemy.current_state,
+			enemy.attack_phase,
+			enemy.facing_direction,
+			direction,
+			absf(player.global_position.x - enemy.global_position.x),
+			enemy.velocity.x,
+		]
+	)
 	_check(enemy.current_state == Chapter04Enemy.APPROACH, "%s %s left Approach before moving" % [destination, enemy.name])
 	_movement_state_checks += 1
 
-	player.global_position = enemy.global_position + Vector2(direction * maxf(8.0, enemy.config.attack_range * 0.5), 0.0)
+	player.global_position = enemy.global_position + Vector2(
+		direction * maxf(8.0, enemy.config.attack_range * 0.5),
+		-28.0
+	)
 	player.velocity = Vector2.ZERO
+	player.health_component.reset_to_full()
+	player.hurt_controller.reset_after_respawn()
+	player._on_hurt_finished()
+	player.hurtbox.set_invulnerable(false)
 	enemy.velocity = Vector2.ZERO
 	enemy.set_target(player)
 	enemy.set_facing_direction(direction)
@@ -192,14 +224,91 @@ func _exercise_enemy_motion_and_state(player: Player, enemy: Chapter04Enemy, des
 		return
 	enemy._process_action(enemy.action_timer + 0.01)
 	_check(enemy.attack_phase == &"Active", "%s %s did not enter attack Active" % [destination, enemy.name])
+	var player_health_before: int = player.health_component.current_health
+	for contact_frame: int in range(90 if enemy._is_projectile_action(enemy.active_action) else 5):
+		await physics_frame
+		if player.health_component.current_health < player_health_before:
+			break
+	_check(
+		player.health_component.current_health == player_health_before - enemy.action_damage,
+		"%s %s Active did not damage formal Main Player exactly once (before=%d after=%d expected=%d)"
+		% [
+			destination,
+			enemy.name,
+			player_health_before,
+			player.health_component.current_health,
+			enemy.action_damage,
+		]
+	)
+	_enemy_damage_checks += 1
+	player.hurt_controller.reset_after_respawn()
+	player._on_hurt_finished()
+	player.health_component.reset_to_full()
+	player.hurtbox.set_invulnerable(true)
 	enemy._process_action(enemy.action_timer + 0.01)
 	_check(enemy.attack_phase == &"Recovery", "%s %s did not enter attack Recovery" % [destination, enemy.name])
 	enemy._process_action(enemy.action_timer + 0.01)
 	_check(enemy.attack_phase == &"None", "%s %s did not exit attack state" % [destination, enemy.name])
 	_check(enemy.current_state == Chapter04Enemy.APPROACH, "%s %s did not recover to Approach" % [destination, enemy.name])
+	await _exercise_player_damage_contract(player, enemy, direction, destination)
 	_action_state_checks += 1
 	for projectile: Node in get_nodes_in_group(&"chapter_04_enemy_projectile"):
 		projectile.queue_free()
+
+
+func _exercise_player_damage_contract(
+	player: Player,
+	enemy: Chapter04Enemy,
+	direction: float,
+	destination: StringName
+) -> void:
+	enemy.set_facing_direction(direction)
+	enemy.hurtbox.set_enabled(true)
+	player.global_position = enemy.global_position + Vector2(-direction * 44.0, -28.0)
+	player.velocity = Vector2.ZERO
+	player.animation_controller.reset_to_idle()
+	player.animation_controller.set_facing_left(direction < 0.0)
+	await physics_frame
+	var contacts: Array[Dictionary] = [
+		{
+			"name": &"normal_attack",
+			"hitbox": player.action_controller.attack_hitbox,
+			"damage": 1,
+		},
+		{
+			"name": &"dash_attack",
+			"hitbox": player.action_controller.dash_attack_hitbox,
+			"damage": 2,
+		},
+	]
+	for contact: Dictionary in contacts:
+		enemy.health_component.reset_to_full()
+		var health_before: int = enemy.health_component.current_health
+		var hitbox: HitboxComponent = contact["hitbox"] as HitboxComponent
+		hitbox.attack_kind = contact["name"] as StringName
+		var attack_id: int = _next_combat_attack_id
+		_next_combat_attack_id += 1
+		hitbox.begin_attack(attack_id, contact["damage"] as int, direction, player)
+		for contact_frame: int in range(5):
+			await physics_frame
+			if enemy.health_component.current_health < health_before:
+				break
+		_check(
+			enemy.health_component.current_health == health_before - (contact["damage"] as int),
+			"%s Player %s did not damage formal %s from facing %.0f"
+			% [destination, contact["name"], enemy.name, direction]
+		)
+		var health_after_contact: int = enemy.health_component.current_health
+		for duplicate_frame: int in range(2):
+			await physics_frame
+		_check(
+			enemy.health_component.current_health == health_after_contact,
+			"%s Player %s damaged %s more than once for attack_id=%d"
+			% [destination, contact["name"], enemy.name, attack_id]
+		)
+		hitbox.end_attack()
+		_player_damage_checks += 1
+		await physics_frame
 
 
 func _find_advancing_direction(enemy: Chapter04Enemy) -> float:
@@ -225,8 +334,8 @@ func _check(condition: bool, message: String) -> void:
 func _finish(level: Node = null) -> void:
 	_check(_checked_enemy_types.size() == 8, "formal Main state coverage reached %d/8 enemy types" % _checked_enemy_types.size())
 	if _failures.is_empty():
-		print("CH4 S5 TRANSITIONS | PASS transitions=%d encounter_activations=%d movement_states=%d action_states=%d shallow_water=%d roles=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
-			_transition_count, _encounter_activation_checks, _movement_state_checks, _action_state_checks, _shallow_water_checks, _checked_enemy_types.size(), _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
+		print("CH4 S5 TRANSITIONS | PASS transitions=%d encounter_activations=%d movement_states=%d action_states=%d enemy_damage=%d player_damage=%d shallow_water=%d roles=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
+			_transition_count, _encounter_activation_checks, _movement_state_checks, _action_state_checks, _enemy_damage_checks, _player_damage_checks, _shallow_water_checks, _checked_enemy_types.size(), _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
 		])
 	else:
 		for failure: String in _failures:
