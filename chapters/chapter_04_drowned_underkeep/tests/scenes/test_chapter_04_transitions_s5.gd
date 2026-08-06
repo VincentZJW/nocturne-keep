@@ -11,6 +11,10 @@ var _peak_transition_usec: int = 0
 var _peak_wait_usec: int = 0
 var _peak_instantiation_usec: int = 0
 var _encounter_activation_checks: int = 0
+var _movement_state_checks: int = 0
+var _action_state_checks: int = 0
+var _shallow_water_checks: int = 0
+var _checked_enemy_types: Dictionary = {}
 
 
 func _initialize() -> void:
@@ -99,36 +103,110 @@ func _transition_and_check(
 		for group: EncounterGroup in groups:
 			_check(not group.is_activated, "%s %s encounter activated beneath transition fade" % [destination, group.encounter_name])
 		if not groups.is_empty():
-			await _enter_first_encounter(player, spawner, groups, destination)
+			await _exercise_formal_encounters(player, spawner, groups, destination)
 	_transition_count += 1
 
 
-func _enter_first_encounter(
+func _exercise_formal_encounters(
 	player: Player,
 	spawner: Chapter04EncounterSpawner,
 	groups: Array[EncounterGroup],
 	destination: StringName
 ) -> void:
-	var expected: EncounterGroup = groups[0]
-	var activation_shape: CollisionShape2D = expected.activation_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
-	_check(activation_shape != null, "%s first encounter lacks activation shape" % destination)
-	if activation_shape == null:
+	for expected: EncounterGroup in groups:
+		var activation_shape: CollisionShape2D = expected.activation_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		_check(activation_shape != null, "%s %s lacks activation shape" % [destination, expected.encounter_name])
+		if activation_shape == null:
+			continue
+		player.global_position = activation_shape.global_position
+		player.velocity = Vector2.ZERO
+		for _frame: int in 3:
+			await physics_frame
+		_check(expected.is_activated, "%s %s did not activate from real Player overlap" % [destination, expected.encounter_name])
+		_check(spawner.get_active_encounter_id() == expected.encounter_name, "%s registered an incorrect active encounter" % destination)
+		var active_count: int = 0
+		for group: EncounterGroup in groups:
+			if group.is_activated and not group.is_cleared:
+				active_count += 1
+		_check(active_count == 1, "%s activated %d uncleared encounter groups" % [destination, active_count])
+		for combatant: EnemyCombatant in expected.get_enemies():
+			_check(combatant.process_mode == Node.PROCESS_MODE_INHERIT, "%s active enemy process remained suspended" % destination)
+			_check(combatant.is_ai_active(), "%s active enemy AI remained dormant" % destination)
+			var enemy: Chapter04Enemy = combatant as Chapter04Enemy
+			_check(enemy != null, "%s formal encounter owns a non-Chapter04Enemy" % destination)
+			if enemy != null:
+				await _exercise_enemy_motion_and_state(player, enemy, destination)
+		_encounter_activation_checks += 1
+		for enemy: EnemyCombatant in expected.get_enemies():
+			enemy.queue_free()
+		await process_frame
+		expected.call("_check_cleared")
+		await process_frame
+		for _frame: int in 2:
+			await physics_frame
+		_check(expected.is_cleared, "%s %s did not clear after its enemies were removed" % [destination, expected.encounter_name])
+
+
+func _exercise_enemy_motion_and_state(player: Player, enemy: Chapter04Enemy, destination: StringName) -> void:
+	var data: Chapter04EnemyConfig = enemy.config as Chapter04EnemyConfig
+	_check(data != null, "%s enemy lacks Chapter04EnemyConfig" % destination)
+	if data == null:
 		return
-	player.global_position = activation_shape.global_position
+	_checked_enemy_types[String(enemy.get_enemy_type_name())] = true
+	if StringName(enemy.get_meta(&"spawn_role", &"")) == &"shallow_water":
+		_shallow_water_checks += 1
+	if data.starts_hidden:
+		enemy.set_target(player)
+		if enemy.current_state != Chapter04Enemy.HIDDEN:
+			enemy._process_enemy_state(0.0)
+		enemy._process_hidden(data.hidden_duration + 0.01)
+		_check(
+			enemy.current_state == Chapter04Enemy.ALERT,
+			"%s hidden enemy did not emerge into Alert (state=%s target=%s timer=%.3f)"
+			% [destination, enemy.current_state, enemy.has_valid_target(), enemy.state_timer]
+		)
+	var direction: float = _find_advancing_direction(enemy)
+	_check(not is_zero_approx(direction), "%s %s cannot advance on its formal floor" % [destination, enemy.name])
+	if is_zero_approx(direction):
+		return
+	var movement_distance: float = minf(enemy.get_detection_range() - 8.0, enemy.config.attack_range + 64.0)
+	player.global_position = enemy.global_position + Vector2(direction * movement_distance, 0.0)
 	player.velocity = Vector2.ZERO
-	for _frame: int in 3:
-		await physics_frame
-	_check(expected.is_activated, "%s first encounter did not activate from real Player overlap" % destination)
-	_check(spawner.get_active_encounter_id() == expected.encounter_name, "%s registered an incorrect active encounter" % destination)
-	var active_count: int = 0
-	for group: EncounterGroup in groups:
-		if group.is_activated:
-			active_count += 1
-	_check(active_count == 1, "%s activated %d encounter groups from one Player overlap" % [destination, active_count])
-	for enemy: EnemyCombatant in expected.get_enemies():
-		_check(enemy.process_mode == Node.PROCESS_MODE_INHERIT, "%s active enemy process remained suspended" % destination)
-		_check(enemy.is_ai_active(), "%s active enemy AI remained dormant" % destination)
-	_encounter_activation_checks += 1
+	enemy.set_target(player)
+	enemy.set_facing_direction(direction)
+	enemy.transition_state(Chapter04Enemy.APPROACH)
+	enemy._process_approach(0.1)
+	_check(enemy.velocity.x * direction > 0.0, "%s %s did not produce chase velocity" % [destination, enemy.name])
+	_check(enemy.current_state == Chapter04Enemy.APPROACH, "%s %s left Approach before moving" % [destination, enemy.name])
+	_movement_state_checks += 1
+
+	player.global_position = enemy.global_position + Vector2(direction * maxf(8.0, enemy.config.attack_range * 0.5), 0.0)
+	player.velocity = Vector2.ZERO
+	enemy.velocity = Vector2.ZERO
+	enemy.set_target(player)
+	enemy.set_facing_direction(direction)
+	enemy.transition_state(Chapter04Enemy.APPROACH)
+	enemy._process_approach(0.016)
+	_check(enemy.attack_phase == &"Windup", "%s %s did not enter attack Windup" % [destination, enemy.name])
+	if enemy.attack_phase != &"Windup":
+		return
+	enemy._process_action(enemy.action_timer + 0.01)
+	_check(enemy.attack_phase == &"Active", "%s %s did not enter attack Active" % [destination, enemy.name])
+	enemy._process_action(enemy.action_timer + 0.01)
+	_check(enemy.attack_phase == &"Recovery", "%s %s did not enter attack Recovery" % [destination, enemy.name])
+	enemy._process_action(enemy.action_timer + 0.01)
+	_check(enemy.attack_phase == &"None", "%s %s did not exit attack state" % [destination, enemy.name])
+	_check(enemy.current_state == Chapter04Enemy.APPROACH, "%s %s did not recover to Approach" % [destination, enemy.name])
+	_action_state_checks += 1
+	for projectile: Node in get_nodes_in_group(&"chapter_04_enemy_projectile"):
+		projectile.queue_free()
+
+
+func _find_advancing_direction(enemy: Chapter04Enemy) -> float:
+	for direction: float in [1.0, -1.0]:
+		if enemy.can_advance(direction):
+			return direction
+	return 0.0
 
 
 func _wait_for_level() -> Node:
@@ -145,9 +223,10 @@ func _check(condition: bool, message: String) -> void:
 
 
 func _finish(level: Node = null) -> void:
+	_check(_checked_enemy_types.size() == 8, "formal Main state coverage reached %d/8 enemy types" % _checked_enemy_types.size())
 	if _failures.is_empty():
-		print("CH4 S5 TRANSITIONS | PASS transitions=%d encounter_activations=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
-			_transition_count, _encounter_activation_checks, _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
+		print("CH4 S5 TRANSITIONS | PASS transitions=%d encounter_activations=%d movement_states=%d action_states=%d shallow_water=%d roles=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
+			_transition_count, _encounter_activation_checks, _movement_state_checks, _action_state_checks, _shallow_water_checks, _checked_enemy_types.size(), _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
 		])
 	else:
 		for failure: String in _failures:

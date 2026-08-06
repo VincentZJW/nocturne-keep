@@ -1,5 +1,19 @@
 # Development Log
 
+## 2026-08-06 — CH4-F2 movement and state-machine repair
+
+Status: implementation and exact Godot 4.7.1 MainBootstrap regression complete; stop point is CH4-F2 only
+
+- Workflow loaded: root `AGENTS.md`, README, technical architecture, Chapter Scene Workflow, Chapter Character Workflow, production checklist, Chapter QA Standard and render-layer contract.
+- Approved scope: audit and repair only Chapter IV ordinary/elite enemy locomotion, shallow-water traversal, stuck combat/reaction states and animation-completion recovery. CH4-F3 Hitbox/Hurtbox work, Chapter IV Boss, Player, Chapters I–III, art, balance and encounter composition remain out of scope.
+- Reproduced root cause 1: when Player and Enemy shared the same world X on vertically separated authored platforms, `signf(0.0)` became an invalid facing value and all eight roles could loop `Approach -> Turn -> Approach`. The shared Chapter IV controller now retains the current facing for a zero horizontal offset, allowing the bounded action selector to proceed.
+- Reproduced root cause 2: Encounter rollback or room suspension could disable an enemy during Windup/Active/Recovery. The shared base reset its state, but Chapter IV-local `attack_phase`, `active_action` and action timers survived. Deactivation now cancels the complete action, closes both hitboxes and resets temporary poise-break state before later reactivation.
+- Shallow-water audit: formal shallow water is presentation plus ordinary world-floor collision; no WaterArea callback changes enemy process, mask, velocity or state. No fabricated water-only state or movement tuning was added. All eight formal SpriteFrames retain looping idle/walk and non-looping transient/action animations, so no animation asset was changed.
+- Regression coverage added to the existing tests: all eight roles now verify loop flags, same-column targeting, bounded Windup/Active/Recovery exit and suspend/reactivate cleanup. The saved MainBootstrap route test now exercises both Encounter groups in all ten combat rooms, 92 movement cycles, 92 action cycles, 22 shallow-water placements and all eight formal roles.
+- Exact engine: `/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot` reported `4.7.1.stable.official.a13da4feb`. Import/parse exited 0. `test_chapter_04_enemy_runtime.gd`, `test_chapter_04_encounter_runtime_s4.gd`, `test_chapter_04_encounter_manifests_s4.gd`, `test_chapter_04_formal_route_s3.gd`, `test_chapter_04_main_encounters_s4.gd`, `test_chapter_04_transitions_s5.gd`, `test_chapter_04_combat_stress.gd`, `test_chapter_04_main_integration.gd` and `test_chapter_04_q4_boss_flow.gd` all printed PASS and exited 0. Combat stress covered 8 roles, 160 kills, 360 attacks and 5 Encounter reloads.
+- Default `MainBootstrap` headless smoke (`--quit-after 180`) exited 0 and entered the formal opening cinematic with no `SCRIPT ERROR` or `ERROR`. `run/main_scene` remains `res://scenes/bootstrap/main_bootstrap.tscn`.
+- Scope check: no balance, Player, Boss, art, collision/Hitbox/Hurtbox gameplay, Chapter I–III or encounter-composition change belongs to CH4-F2. Existing unrelated dirty work remains preserved and excluded from this milestone commit. Manual F5 acceptance should focus on same-X upper/lower-platform targeting, shallow-water chase, reaction recovery and room re-entry; CH4-F3 remains explicitly deferred.
+
 ## 2026-08-06 — CH4-F1 formal encounter activation-chain repair
 
 Status: implementation and exact Godot 4.7.1 MainBootstrap regression complete; stop point is CH4-F1 only

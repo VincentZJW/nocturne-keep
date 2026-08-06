@@ -157,7 +157,7 @@ func _process_approach(delta: float) -> void:
 	if not _validate_target():
 		return
 	var offset: Vector2 = target.global_position - global_position
-	var direction: float = signf(offset.x)
+	var direction: float = _horizontal_target_direction()
 	var distance_x: float = absf(offset.x)
 	if direction != facing_direction:
 		transition_state(TURN)
@@ -189,7 +189,7 @@ func _process_turn(delta: float) -> void:
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer <= 0.0:
 		if has_valid_target():
-			set_facing_direction(signf(target.global_position.x - global_position.x))
+			set_facing_direction(_horizontal_target_direction())
 		transition_state(APPROACH if has_valid_target() else PATROL)
 		play_animation(&"walk")
 
@@ -356,6 +356,16 @@ func _enter_hidden() -> void:
 	play_animation(&"hidden", true)
 
 
+func _horizontal_target_direction() -> float:
+	if not has_valid_target():
+		return facing_direction
+	var horizontal_offset: float = target.global_position.x - global_position.x
+	# Player and Enemy can share an X coordinate while separated vertically on
+	# authored platforms. A zero sign must retain the current facing; treating it
+	# as a new direction creates an endless Approach -> Turn cycle.
+	return facing_direction if is_zero_approx(horizontal_offset) else signf(horizontal_offset)
+
+
 func _find_world_bounds() -> WorldBounds2D:
 	for node: Node in get_tree().get_nodes_in_group(&"world_bounds"):
 		if node is WorldBounds2D:
@@ -394,7 +404,23 @@ func _on_attack_cancelled() -> void:
 	_end_hitboxes()
 	attack_phase = &"None"
 	active_action = &""
+	action_timer = 0.0
+	action_damage = 0
+	action_active_duration = 0.0
+	action_recovery = 0.0
 	super._on_attack_cancelled()
+
+
+func _on_ai_active_changed(active: bool) -> void:
+	if active:
+		return
+	# Encounter rollback and room suspension are allowed during any combat
+	# phase. Clear Chapter IV's action state before the shared base enters Idle,
+	# otherwise reactivation can resume a stale Windup/Active/Recovery phase.
+	_on_attack_cancelled()
+	_poise_broken_this_hit = false
+	if poise_component != null:
+		poise_component.reset_to_full()
 
 
 func is_attack_window_active() -> bool:
