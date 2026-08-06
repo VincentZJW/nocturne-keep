@@ -58,6 +58,10 @@ func _build_encounter(data: Chapter04EncounterData) -> void:
 	activation_area.name = "ActivationArea"
 	activation_area.collision_layer = 0
 	activation_area.collision_mask = 2
+	# A freshly inserted room initially shares world space with the persistent
+	# Player's previous room position. Keep monitoring off before this Area2D
+	# enters the tree so no stale overlap can queue the wrong encounter.
+	activation_area.monitoring = false
 	activation_area.monitorable = false
 	var activation_shape: CollisionShape2D = CollisionShape2D.new()
 	activation_shape.name = "CollisionShape2D"
@@ -115,7 +119,13 @@ func _arm_all_dormant_groups() -> void:
 
 
 func _on_group_activated(_encounter_id: StringName, group: EncounterGroup) -> void:
+	if _activation_suspended:
+		_restore_group_to_dormant(group)
+		return
 	if is_instance_valid(_active_group) and _active_group != group and not _active_group.is_cleared:
+		# EncounterGroup has already woken its actors before emitting this signal.
+		# A competing queued overlap must be rolled back, not merely ignored.
+		_restore_group_to_dormant(group)
 		return
 	_active_group = group
 	for candidate: EncounterGroup in _groups:
@@ -123,6 +133,20 @@ func _on_group_activated(_encounter_id: StringName, group: EncounterGroup) -> vo
 			continue
 		candidate.activation_area.set_deferred("monitoring", false)
 	active_encounter_changed.emit(group.encounter_name)
+
+
+func _restore_group_to_dormant(group: EncounterGroup) -> void:
+	if group == null or group.is_cleared:
+		return
+	group.is_activated = false
+	if group.activation_area != null:
+		group.activation_area.set_deferred("monitoring", false)
+	for enemy: EnemyCombatant in group.get_enemies():
+		if not is_instance_valid(enemy) or enemy.is_dead():
+			continue
+		enemy.set_meta(&"encounter_active", false)
+		enemy.set_ai_active(false)
+		enemy.process_mode = Node.PROCESS_MODE_DISABLED
 
 
 func _on_group_cleared(_encounter_id: StringName, group: EncounterGroup) -> void:

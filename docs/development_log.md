@@ -1,5 +1,19 @@
 # Development Log
 
+## 2026-08-06 — CH4-F1 formal encounter activation-chain repair
+
+Status: implementation and exact Godot 4.7.1 MainBootstrap regression complete; stop point is CH4-F1 only
+
+- Approved scope: repair Chapter IV formal enemy registration, suspended-room activation, `Dormant → Alert` wake-up, process/Detection resumption and one-active-Encounter serialization. Do not enter CH4-F2–F4.
+- Root cause: each generated `ActivationArea` entered the scene tree with default monitoring enabled before the room-transition controller finished placing the persistent Player. A queued overlap could activate the wrong group under the fade. If a second group raced the accepted group, the spawner rejected its signal without returning its already-awake enemies to Dormant.
+- Task-owned files: `chapter_04_encounter_spawner.gd`, existing Chapter IV encounter runtime/transition tests, this isolated log entry and no other chapter/gameplay assets.
+- Implementation: dynamically composed Chapter IV `ActivationArea` nodes now enter the tree with monitoring disabled. Only the post-teleport resume step arms dormant groups. If a suspended or competing group receives a queued activation, the Chapter IV spawner returns its `is_activated`, `encounter_active`, AI, Detection, target, velocity and process state to Dormant instead of leaving a rejected group awake.
+- Test coverage now uses the formal Player and saved Area 01 room to reproduce the persistent-Player stale-position window, verify competing-group rollback, clear/rearm the second group and repeat after reload. The formal MainBootstrap transition test now walks all 32 forward/reverse room changes and enters the first real ActivationArea in every combat-room visit; it observed exactly 20 correct encounter activations and never activated more than one group.
+- Exact results: Godot 4.7.1 editor import PASS; S4 runtime PASS (`suspended_safe`, serialization, rollback, rearm, deterministic reload); S5 MainBootstrap transitions PASS (`32`, encounter activations `20`, one room instance); manifests PASS (`10/20/46`); formal route PASS (`17/672/2/20/46`); Main encounters PASS (`10/20/46`); enemy runtime and Main integration PASS; combat stress PASS (`8 roles/160 kills/360 attacks/5 reloads`); Q4/Boss flow PASS; default MainBootstrap 180-frame smoke PASS and selected the formal opening cinematic.
+- Output/Debugger: no red parser, resource, node or gameplay error in the final commands. The editor import emitted only Godot's normal early-quit `Scan thread aborted` warning.
+- Manual F5 acceptance: use the existing Chapter IV Debug Start at `CH4_START`, enter each combat region and confirm enemies remain visible but idle before the boundary, then acquire/track/move/attack immediately after crossing it. Room changes must never wake the group matching the previous room coordinate. Subjective enemy reaction/feel remains a user playtest item.
+- Existing unrelated dirty Chapter I/III/shared-resource/QA changes are preserved and excluded from the CH4-F1 commit.
+
 ## 2026-08-05 — Chapter IV Q2–Q4 and BOSS4 complete
 
 Status: implementation, MainBootstrap runtime QA, repeated Boss-flow stress and rendered evidence complete; final Chapter IV reward identity remains intentionally undecided

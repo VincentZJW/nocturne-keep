@@ -10,6 +10,7 @@ var _transition_count: int = 0
 var _peak_transition_usec: int = 0
 var _peak_wait_usec: int = 0
 var _peak_instantiation_usec: int = 0
+var _encounter_activation_checks: int = 0
 
 
 func _initialize() -> void:
@@ -45,6 +46,8 @@ func _run() -> void:
 		return
 	var player_id: int = player.get_instance_id()
 	var hud_id: int = hud.get_instance_id()
+	if player.hurtbox != null:
+		player.hurtbox.set_invulnerable(true)
 	for room_index: int in range(1, 17):
 		await _transition_and_check(controller, player, hud, room_host, player_id, hud_id, room_index, &"EntryWest")
 	for room_index: int in range(15, -1, -1):
@@ -92,9 +95,40 @@ func _transition_and_check(
 	_check(expected_spawn != null and player.global_position == expected_spawn.global_position, "%s Player spawn mismatch" % destination)
 	var spawner: Chapter04EncounterSpawner = controller.active_room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner
 	if spawner != null:
-		for group: EncounterGroup in spawner.get_encounter_groups():
+		var groups: Array[EncounterGroup] = spawner.get_encounter_groups()
+		for group: EncounterGroup in groups:
 			_check(not group.is_activated, "%s %s encounter activated beneath transition fade" % [destination, group.encounter_name])
+		if not groups.is_empty():
+			await _enter_first_encounter(player, spawner, groups, destination)
 	_transition_count += 1
+
+
+func _enter_first_encounter(
+	player: Player,
+	spawner: Chapter04EncounterSpawner,
+	groups: Array[EncounterGroup],
+	destination: StringName
+) -> void:
+	var expected: EncounterGroup = groups[0]
+	var activation_shape: CollisionShape2D = expected.activation_area.get_node_or_null("CollisionShape2D") as CollisionShape2D
+	_check(activation_shape != null, "%s first encounter lacks activation shape" % destination)
+	if activation_shape == null:
+		return
+	player.global_position = activation_shape.global_position
+	player.velocity = Vector2.ZERO
+	for _frame: int in 3:
+		await physics_frame
+	_check(expected.is_activated, "%s first encounter did not activate from real Player overlap" % destination)
+	_check(spawner.get_active_encounter_id() == expected.encounter_name, "%s registered an incorrect active encounter" % destination)
+	var active_count: int = 0
+	for group: EncounterGroup in groups:
+		if group.is_activated:
+			active_count += 1
+	_check(active_count == 1, "%s activated %d encounter groups from one Player overlap" % [destination, active_count])
+	for enemy: EnemyCombatant in expected.get_enemies():
+		_check(enemy.process_mode == Node.PROCESS_MODE_INHERIT, "%s active enemy process remained suspended" % destination)
+		_check(enemy.is_ai_active(), "%s active enemy AI remained dormant" % destination)
+	_encounter_activation_checks += 1
 
 
 func _wait_for_level() -> Node:
@@ -112,8 +146,8 @@ func _check(condition: bool, message: String) -> void:
 
 func _finish(level: Node = null) -> void:
 	if _failures.is_empty():
-		print("CH4 S5 TRANSITIONS | PASS transitions=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
-			_transition_count, _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
+		print("CH4 S5 TRANSITIONS | PASS transitions=%d encounter_activations=%d peak_total_us=%d peak_wait_us=%d peak_instantiate_us=%d room_instances=1" % [
+			_transition_count, _encounter_activation_checks, _peak_transition_usec, _peak_wait_usec, _peak_instantiation_usec,
 		])
 	else:
 		for failure: String in _failures:
