@@ -7385,3 +7385,95 @@ Status: complete — W1–W5 final reward boundary, process-restart recovery, tr
 - Final report, manifests and ten Main frames: `docs/qa/chapter_03_thirteenfold_absolution/w5/`.
 - Manual route: enable Debug Chapter Start for Chapter III. `CH3_BOSS` proves the full fight-to-pickup flow; `CH3_REWARD_TEST` is the fast real pickup/action check; `CH3_UNDERKEEP_DESCENT` proves already-owned death/respawn. Confirm tier 3 and 14/28, gate locked before pickup/open after, empty return and honest planned Chapter IV prompt.
 - No Player timing/Hitbox/movement/stamina, Boss balance/AI, enemies, Chapter IV content, title/Continue UI or unrelated dirty worktree changes were modified. W5 is complete and stops here for user acceptance.
+## 2026-08-06 — R0 enemy presence, Chapter IV route and creature-art audit
+
+Status: audit complete; no gameplay, scene, resource or art file changed
+
+### Scope and findings
+
+- F5 authority remains `res://scenes/bootstrap/main_bootstrap.tscn`.
+- Chapter I owns 18 serialized encounter groups and 34 serialized ordinary-enemy instances. They are not instantiated on player entry, but shared `scripts/encounters/encounter_group.gd` hides every enemy in `_ready()` and reveals it in `activate()`, which is the direct visible-pop cause.
+- Chapter III constructs 20 groups / 72 ordinary enemies from manifests in `chapter_03_encounter_spawner.gd::_ready()`; Chapter IV constructs 20 groups / 46 ordinary or elite enemies in `chapter_04_encounter_spawner.gd::_ready()`. Both then inherit the same hide/reveal defect. Confessional Wraith has a distinct 0.8-second hidden state, but the current implementation only hides its sprite/Hurtbox and does not yet provide the required booth movement, mist or soul-light telegraph.
+- The complete Chapter IV route already exists as Area 09 Registry → Area 10 Engine Hall → Area 11 Final Lock → Area 12 checkpoint → Area 13 antechamber → Area 14 Boss. The broken player-facing link is Area 09 `Transitions/ExitEast`: it is an invisible automatic Area2D at x=2152 with no interaction requirement, prompt or door presentation.
+- Soul Gaoler Ormund is serialized at `ch4_14_core_of_drowned_gaol.tscn/Enemies/SoulGaolerOrmund`. Area 12 owns `CP_CH4_BOSS`; Area 13 owns the interactive final soul-lock gate.
+- User reference identities were confirmed from actual formal resources: Bog Toad and Sewer Maw. Bog Toad, Sewer Maw and Mirefin Raider each have a 1536×1024 concept sheet, 128×128 per-frame PNGs and an embedded SpriteFrames subresource in the formal enemy scene. Their standalone `*_sprite_frames.tres` and `*_data.tres` files are not referenced by the formal scenes.
+- Current runtime silhouettes materially omit the concept structure: Bog Toad is a compact green mouth/oval instead of a massive chained low toad; Sewer Maw is a short mouth-ball instead of a long armored sewer reptile; Mirefin Raider reads as a crouched amphibian instead of the tall bone-headed, finned, chained raider.
+- Existing unreferenced legacy art was found: 68 Bog Toad PNGs and 72 Sewer Maw PNGs under the chapter-level pre-95 archive, plus 68 Mirefin PNGs under its local c4_96px archive. Formal `.tscn`/`.tres` runtime references to archive paths are zero; only historical QA generators/tests refer to them.
+- No missing required formal file forces creation of a new file. R1–R4 can be performed by overwriting existing scenes/scripts/resources/PNGs and deleting already-existing unreferenced duplicates, subject to approval of the next stage.
+
+### Exact verification
+
+1. Godot 4.7.1 headless editor import (`--editor --quit-after 8`) — exit 0; no script/resource error; normal early-quit scan warning only.
+2. `test_main_enemy_integration.gd` — PASS: 18 groups, 34 mixed enemies.
+3. `test_chapter_03_enemy_distribution_b0_b5.gd` — PASS: 9 rooms, 20 encounters, 72 enemies, including 10 Wraiths.
+4. `test_chapter_04_encounter_manifests_s4.gd` — PASS: 10 combat rooms, 20 groups, 46 enemies.
+5. `test_chapter_04_formal_route_s3.gd` — PASS: 17 rooms, 670 assets, 2 checkpoints, 20 encounters, 46 enemies.
+6. `test_confessional_wraith_combat_fix.gd` — PASS for targetability/damage; presentation warning remains an R1 visual-contract gap.
+7. `test_chapter_04_q4_boss_flow.gd` — PASS: Main, Boss P1/P2/death and reward flow.
+8. `test_chapter_04_encounter_runtime_s4.gd` — PASS: current groups serialize/rearm deterministically; the test validates current runtime construction, not the requested preplaced-enemy rule.
+9. MainBootstrap headless smoke ran for 8 seconds, selected the formal opening cinematic and emitted no red error; the process was then manually interrupted. Full repeated F5 acceptance is deliberately deferred to R1–R4 after implementation.
+10. `test_chapter_04_boss_route_stress.gd` did not terminate inside the 30-second audit window and was interrupted; no PASS is claimed for that command in R0.
+
+No R0 commit is created because this phase is a read-only product/code audit apart from this required development-log entry.
+
+## 2026-08-06 — R1–R4 approved implementation start
+
+Status: in progress — the user explicitly approved continuous execution of R1 through R4 without an approval pause between stages.
+
+Scope and constraints:
+
+- R1: make Chapter I, III and IV ordinary enemies visible from room load while keeping inactive encounters dormant; remove player-proximity pop-in and preserve the Confessional Wraith as the only telegraphed ordinary-enemy emergence exception.
+- R2: repair the existing Chapter IV route from Soul-Cage Registry through the saved checkpoint, antechamber and Core/Boss room, including the existing exit prompt, target spawn, fade and camera handoff.
+- R3: overwrite the existing Bog Toad, Sewer Maw and Mirefin Raider formal sprite frames/scene animation resources in place; no parallel PNG, TRES, TSCN, GD or folder may be created.
+- R4: remove unreferenced parallel legacy creature assets, verify runtime old references are zero, run formal MainBootstrap regression and publish the final QA result.
+- Preserve all pre-existing dirty worktree changes outside these task-owned files. Do not alter Player balance, enemy combat tuning, Boss AI, the project main scene or unrelated chapter content.
+- Any temporary comparison output must live outside `res://` and must not remain in the repository.
+
+Planned verification:
+
+- Godot 4.7.1 editor import/parse and exact existing chapter/encounter/route/Boss tests.
+- Saved-scene and resource-reference audits for ordinary-enemy visibility, no activation-time enemy creation, Chapter IV exit targets and creature runtime paths.
+- MainBootstrap runs through the existing legal Chapter I, III and IV debug starts, with Output/Debugger checked for red errors.
+- `git diff --check`, task-scope diff audit, and one clear implementation commit after R1–R4 complete.
+
+## 2026-08-06 — R1–R4 enemy presence, Chapter IV route and creature-art completion
+
+Status: implementation complete; automated regression passed; manual visual acceptance remains for the user
+
+### Implemented scope
+
+- Ordinary encounter actors now remain visible from the first rendered room frame while dormant. Entering an `ActivationArea` only enables processing, detection and AI; it no longer performs the shared hide/reveal transition that caused visible pop-in in Chapters I, III and IV.
+- Confessional Wraith remains the sole ordinary-enemy emergence exception. Its existing actor is present before activation, shows a cold translucent oscillating silhouette for the authored telegraph, keeps its Hurtbox disabled, then becomes targetable when the reveal completes.
+- Repaired the existing `ch4_09_soul_cage_registry.tscn` east exit by reusing the existing encounter gate script and closed/open door textures. The gate is locked until its encounter clears, exposes the existing bilingual Engine Hall prompt, and targets the existing `CH4_AREA_10 / EntryWest` route. The blocker was moved clear of `EntryEast`, preserving westbound return spawning.
+- Overwrote the existing 128×128 formal Bog Toad and Sewer Maw frame PNGs and runtime reference sheets in place. Bog Toad now has the broad chained low body, articulated jaws/teeth/tongue, heavy limbs, warts/osteoderms and wet highlights; Sewer Maw now has the long crocodilian body, articulated long skull, irregular teeth/tongue, dorsal prison structure, chain/ID details, limbs and a preloaded submerged telegraph silhouette.
+- Re-ran the existing Mirefin Raider formal generator against the existing frame paths and retained its bone fish head, gills, dorsal fins, long arms, webbed claws, prisoner rags and chain silhouette. All overwrite generators now refuse to create a missing replacement frame, reference sheet or directory.
+- Removed 209 unreferenced legacy comparison files from the existing Bog Toad, Sewer Maw and Mirefin Raider archive locations by moving the exact directories to system Trash. The operation is recoverable; runtime resource references to those archives are zero. Existing QA helpers now fall back to the authoritative current sheet when a historical comparison sheet has been intentionally removed.
+- No new project file or folder was created for R1–R4. Existing formal scene paths, embedded SpriteFrames references, UIDs, player balance, enemy tuning, Boss AI and `run/main_scene` were preserved.
+
+### Exact verification and actual results
+
+1. Godot 4.7.1 editor import (`--headless --path . --editor --quit-after 8`) — PASS; no script/resource error, only the normal early-quit scan-aborted warning.
+2. `test_main_enemy_integration.gd` — PASS: Chapter I 18 encounter groups / 34 mixed enemies / Boss room / HUD / respawn.
+3. `test_chapter_03_enemy_distribution_b0_b5.gd` — PASS: 9 rooms / 20 encounters / 72 enemies, including 10 Confessional Wraiths.
+4. `test_confessional_wraith_combat_fix.gd` — PASS: telegraph silhouette/Hurtbox gate plus `normal_kills=20 dash_kills=5 damage_events=135`.
+5. `test_chapter_04_enemy_runtime.gd` — PASS.
+6. `test_chapter_04_main_integration.gd` — PASS.
+7. `test_chapter_04_formal_route_s3.gd` — PASS: 17 rooms / 672 assets / 2 checkpoints / 20 encounters / 46 enemies.
+8. `test_chapter_04_q4_boss_flow.gd` — PASS: Main bootstrap, Ormund P1/P2/death, reward and Chapter V memory.
+9. `test_chapter_04_transitions_s5.gd` — PASS after moving the Area 09 blocker clear of the return spawn: 32 transitions and exactly one active room instance. The repaired transition test was also executed sequentially ten times during R2 without failure.
+10. `test_chapter_04_combat_stress.gd` — PASS: 8 roles / 160 kills / 360 attacks / 5 encounter reloads.
+11. `test_chapter_04_boss_route_stress.gd` — PASS: checkpoint 10 / gate 20 / intro 10 / retry 10 / death 10 / unclaimed reload 5 / reward collect 10 / repeated E 100 / memory 10 / Chapter V 10.
+12. `test_mirefin_raider_replication.gd` — PASS after removal of the obsolete local archive requirement.
+13. `test_remaining_character_replication_95.gd` — PASS after formal frame overwrite and archive removal.
+14. MainBootstrap (`--headless --path . --quit-after 180`) — PASS and selected formal New Game → `res://scenes/cinematics/opening_cinematic.tscn`; repeated three times during R2 without red errors.
+15. An initial combined regression command used six obsolete test paths and correctly produced `File not found`; those invocations did not execute tests. Every affected test was immediately rerun using the real `tests/characters/` or `tests/scenes/` path and produced the PASS results above.
+16. Runtime-reference audit — PASS: no Chapter I–IV formal TSCN/TRES/GD resource points to the removed target archives. The only remaining text match is a test assertion that verifies the trial does not contain a legacy Mirefin path.
+17. Target-file audit — PASS: 140 formal Bog/Sewer PNGs modified, 209 legacy files deleted, zero target untracked files and no replacement-suffix file created.
+18. `git diff --check` on task-owned scripts/scenes/tests/log — PASS.
+
+### Manual acceptance and known limits
+
+- Existing Debug Start IDs provide the acceptance route: `CH4_AREA_09` validates Registry → Engine Hall; `CH4_AREA_12` validates checkpoint → antechamber → Core; `CH4_CREATURE_COMBAT` exposes Bog Toad, Sewer Maw and Mirefin Raider; `CH4_AREA_14` enters the formal Ormund room.
+- Exact concept-overlay thresholds (3% body/head ratio and 5% limb ratio), the requested long-duration animation repetition counts and subjective 1:1 visual acceptance are not claimed by deterministic tests. The formal frames were inspected at source resolution and their required structures are present, but these remain explicit user playtest/visual-acceptance items.
+- The Wraith telegraph is a cold silhouette shake/reveal implemented on the existing actor. A dedicated confessional-booth door animation was not added because this task prohibited creation of missing assets/files.
+- The worktree still contains substantial pre-existing unrelated Chapter I/III/environment/QA changes. They were preserved and excluded from this task's commit.

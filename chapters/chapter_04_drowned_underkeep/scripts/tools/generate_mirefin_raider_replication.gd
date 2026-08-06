@@ -39,13 +39,17 @@ func _initialize() -> void:
 		var count: int = int(definitions[animation])
 		var directory: String = "%s/sprites/%s" % [ROOT, animation]
 		var absolute_directory: String = ProjectSettings.globalize_path(directory)
-		if DirAccess.make_dir_recursive_absolute(absolute_directory) != OK:
-			push_error("MIRE FIN REPLICATION: cannot create %s" % directory)
+		if not DirAccess.dir_exists_absolute(absolute_directory):
+			push_error("MIRE FIN REPLICATION: formal directory does not exist: %s" % directory)
 			quit(1)
 			return
 		for frame: int in range(count):
 			var image: Image = _draw_frame(animation, frame, count)
 			var path: String = "%s/%s_%02d.png" % [directory, animation, frame + 1]
+			if not FileAccess.file_exists(path):
+				push_error("MIRE FIN REPLICATION: refusing to create replacement frame: %s" % path)
+				quit(1)
+				return
 			if image.save_png(ProjectSettings.globalize_path(path)) != OK:
 				push_error("MIRE FIN REPLICATION: cannot save %s" % path)
 				quit(1)
@@ -509,13 +513,16 @@ func _draw_webbed_claw_alpha(image: Image, palm: Vector2i, direction: int, alpha
 
 func _write_reference_sheet() -> void:
 	var directory: String = "%s/reference" % ROOT
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
+	var output: String = "%s/mirefin_raider_runtime_reference.png" % directory
+	if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(directory)) or not FileAccess.file_exists(output):
+		push_error("MIRE FIN REPLICATION: refusing to create replacement reference sheet: %s" % output)
+		return
 	var sheet: Image = Image.create(FRAME_SIZE.x * 3, FRAME_SIZE.y, false, Image.FORMAT_RGBA8)
 	sheet.fill(CLEAR)
 	sheet.blit_rect(_draw_frame("idle", 0, 4), Rect2i(Vector2i.ZERO, FRAME_SIZE), Vector2i.ZERO)
 	sheet.blit_rect(_draw_frame("claw_swipe_active", 0, 2), Rect2i(Vector2i.ZERO, FRAME_SIZE), Vector2i(FRAME_SIZE.x, 0))
 	sheet.blit_rect(_draw_frame("death", 3, 6), Rect2i(Vector2i.ZERO, FRAME_SIZE), Vector2i(FRAME_SIZE.x * 2, 0))
-	sheet.save_png(ProjectSettings.globalize_path("%s/mirefin_raider_runtime_reference.png" % directory))
+	sheet.save_png(ProjectSettings.globalize_path(output))
 
 
 func _pts(values: Array[int]) -> PackedVector2Array:

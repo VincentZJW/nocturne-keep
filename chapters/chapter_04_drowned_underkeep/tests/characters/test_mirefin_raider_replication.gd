@@ -4,7 +4,6 @@ const ROOT: String = "res://chapters/chapter_04_drowned_underkeep"
 const SCENE_PATH: String = ROOT + "/scenes/enemies/mirefin_raider.tscn"
 const CONCEPT_PATH: String = ROOT + "/assets/enemies/mirefin_raider/concept_art/mirefin_raider_concept_sheet.png"
 const FRAME_ROOT: String = ROOT + "/assets/enemies/mirefin_raider/sprites"
-const ARCHIVE_ROOT: String = ROOT + "/assets/enemies/mirefin_raider/archive_legacy/c4_96px_v1"
 const EXPECTED_SIZE: Vector2i = Vector2i(128, 128)
 const EXPECTED_ANIMATIONS: Dictionary = {
 	"idle": 4,
@@ -35,7 +34,6 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_expect(FileAccess.file_exists(CONCEPT_PATH), "primary concept exists")
-	_expect(DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(ARCHIVE_ROOT)), "legacy 96px archive exists")
 	var packed: PackedScene = load(SCENE_PATH) as PackedScene
 	_expect(packed != null, "formal Mirefin scene loads")
 	if packed == null:

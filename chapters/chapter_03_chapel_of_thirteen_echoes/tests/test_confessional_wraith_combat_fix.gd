@@ -27,7 +27,9 @@ func _run() -> void:
 		_finish()
 		return
 	_check(revealed.current_state == Chapter03SpecialistEnemy.HIDDEN, "Wraith does not start hidden")
-	_check(not revealed.animated_sprite.visible, "Hidden Wraith remains visibly targetable")
+	_check(revealed.animated_sprite.visible, "Wraith telegraph silhouette is not visible")
+	_check(revealed.animated_sprite.modulate.a <= 0.45, "Wraith hidden telegraph is too opaque")
+	_check(not revealed.hurtbox.is_enabled, "Wraith telegraph enabled its Hurtbox too early")
 	revealed.target = player
 	revealed.state_timer = 0.0
 	revealed._process_hidden(0.01)

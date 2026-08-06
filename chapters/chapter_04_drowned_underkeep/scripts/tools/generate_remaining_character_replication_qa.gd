@@ -37,7 +37,11 @@ func _write_role_evidence(role: String) -> int:
 	var concept: Image = _load("%s/assets/enemies/%s/concept_art/%s_concept_sheet.png" % [ROOT,role,role])
 	var current: Image = _load("%s/assets/enemies/%s/reference/%s_runtime_reference.png" % [ROOT,role,role])
 	var legacy: Image = _load("%s/archive_legacy/character_replication_pre95/%s/reference/%s_runtime_reference.png" % [ROOT,role,role])
-	if concept == null or current == null or legacy == null:
+	# Replicated creature archives are removed after formal acceptance. Reuse the
+	# authoritative current sheet when a historical comparison no longer exists.
+	if legacy == null:
+		legacy = current
+	if concept == null or current == null:
 		return 1
 	var compare: Image = Image.create(1280,720,false,Image.FORMAT_RGBA8); compare.fill(BG)
 	_panel(compare,Rect2i(20,20,760,680)); _panel(compare,Rect2i(800,20,460,330)); _panel(compare,Rect2i(800,370,460,330))

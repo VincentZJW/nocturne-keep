@@ -27,7 +27,10 @@ func _ready() -> void:
 		return
 	activation_area.body_entered.connect(_on_activation_body_entered)
 	for enemy: EnemyCombatant in get_enemies():
-		enemy.visible = false
+		# Ordinary encounter actors are part of the authored room composition and
+		# remain visible from the first rendered frame. Activation only wakes AI;
+		# it must never look like a runtime spawn.
+		enemy.visible = true
 		enemy.set_meta(&"encounter_active", false)
 		enemy.set_ai_active(false)
 		enemy.process_mode = Node.PROCESS_MODE_DISABLED
@@ -44,7 +47,6 @@ func activate(player: Player = null) -> bool:
 	activation_area.set_deferred("monitoring", false)
 	for enemy: EnemyCombatant in get_enemies():
 		enemy.process_mode = Node.PROCESS_MODE_INHERIT
-		enemy.visible = true
 		enemy.set_meta(&"encounter_active", true)
 		enemy.set_ai_active(true)
 		if (

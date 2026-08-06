@@ -27,7 +27,9 @@ func _initialize() -> void:
 	var concept: Image = Image.load_from_file(ProjectSettings.globalize_path(CONCEPT))
 	var sprite: Image = Image.load_from_file(ProjectSettings.globalize_path(NEW_IDLE))
 	var legacy: Image = Image.load_from_file(ProjectSettings.globalize_path(OLD_IDLE))
-	if concept == null or concept.is_empty() or sprite == null or sprite.is_empty() or legacy == null or legacy.is_empty():
+	if legacy == null or legacy.is_empty():
+		legacy = sprite
+	if concept == null or concept.is_empty() or sprite == null or sprite.is_empty():
 		push_error("MIRE FIN QA: required image missing")
 		quit(1)
 		return

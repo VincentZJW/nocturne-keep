@@ -18,6 +18,7 @@ const HIDDEN: StringName = &"Hidden"
 @onready var primary_hitbox: HitboxComponent = get_node_or_null(primary_hitbox_path) as HitboxComponent
 @onready var secondary_hitbox: HitboxComponent = get_node_or_null(secondary_hitbox_path) as HitboxComponent
 @onready var poise_component: Chapter03PoiseComponent = get_node_or_null(poise_component_path) as Chapter03PoiseComponent
+@onready var visual_root_node: Node2D = get_node_or_null(NodePath("VisualRoot")) as Node2D
 @onready var ward_policy: Chapter03ScribeWardPolicy = (
 	get_node_or_null(ward_policy_path) as Chapter03ScribeWardPolicy
 	if not ward_policy_path.is_empty() else null
@@ -37,6 +38,7 @@ var _hover_origin_y: float = 0.0
 var _hover_time: float = 0.0
 var _poise_broken_this_hit: bool = false
 var _hidden: bool = false
+var _hidden_telegraph_time: float = 0.0
 var _shared_volley_ledger: Dictionary[int, bool] = {}
 var _spawned_fields: Array[Chapter03TimedField] = []
 var world_bounds: WorldBounds2D
@@ -104,10 +106,26 @@ func _update_airborne_motion(delta: float) -> void:
 
 func _process_hidden(delta: float) -> void:
 	velocity = Vector2.ZERO
+	_hidden_telegraph_time += delta
+	var reveal_progress: float = 1.0 - clampf(
+		state_timer / maxf(_specialist_config().hidden_duration, 0.001), 0.0, 1.0
+	)
+	var pulse: float = (sin(_hidden_telegraph_time * 18.0) + 1.0) * 0.5
+	animated_sprite.modulate = Color(
+		0.55 + reveal_progress * 0.35,
+		0.76 + reveal_progress * 0.18,
+		1.0,
+		0.18 + reveal_progress * 0.62 + pulse * 0.08
+	)
+	if visual_root_node != null:
+		visual_root_node.position.x = roundf(sin(_hidden_telegraph_time * 34.0) * (1.0 + reveal_progress * 2.0))
 	state_timer = maxf(0.0, state_timer - delta)
 	if state_timer <= 0.0 and has_valid_target():
 		_hidden = false
 		animated_sprite.visible = true
+		animated_sprite.modulate = Color.WHITE
+		if visual_root_node != null:
+			visual_root_node.position = Vector2.ZERO
 		hurtbox.set_enabled(true)
 		_enter_alert()
 
@@ -372,11 +390,18 @@ func _enter_alert() -> void:
 
 func _enter_hidden() -> void:
 	_hidden = true
+	_hidden_telegraph_time = 0.0
 	transition_state(HIDDEN)
 	state_timer = _specialist_config().hidden_duration
 	velocity = Vector2.ZERO
 	hurtbox.set_enabled(false)
-	animated_sprite.visible = false
+	# The Wraith is the sole authored emergence exception. Its complete actor is
+	# already present, but a cold translucent silhouette shakes for the full
+	# telegraph before the Hurtbox and attacks become available.
+	animated_sprite.visible = true
+	animated_sprite.modulate = Color(0.55, 0.76, 1.0, 0.18)
+	if visual_root_node != null:
+		visual_root_node.position = Vector2.ZERO
 	play_animation(&"hidden", true)
 
 

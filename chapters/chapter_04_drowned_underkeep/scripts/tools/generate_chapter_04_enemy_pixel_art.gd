@@ -25,11 +25,7 @@ const FRAME_SIZE: int = 128
 const LEGACY_SIZE: int = 96
 const ART_OFFSET: Vector2i = Vector2i(16, 16)
 
-const ROLES: Array[String] = [
-	"drowned_gaoler", "chainbound_convict", "mire_harpooner",
-	"sunken_shield_penitent", "bog_toad", "sewer_maw",
-	"underkeep_executioner",
-]
+const ROLES: Array[String] = ["bog_toad", "sewer_maw"]
 
 const ACTIONS: Dictionary = {
 	"drowned_gaoler": ["jailer_cleave", "hook_drag", "shoulder_check"],
@@ -50,22 +46,23 @@ func _initialize() -> void:
 		for animation: String in definitions:
 			var count: int = int(definitions[animation])
 			var directory: String = "%s/%s/sprites/%s" % [ROOT, role, animation]
-			if DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory)) != OK:
-				push_error("Cannot create %s" % directory)
+			if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(directory)):
+				push_error("Formal sprite directory does not exist: %s" % directory)
 				quit(1)
 				return
 			for frame: int in range(count):
 				var image: Image = _draw_frame(role, animation, frame, count)
 				var path: String = "%s/%s_%02d.png" % [directory, animation, frame + 1]
+				if not FileAccess.file_exists(path):
+					push_error("Refusing to create a replacement frame: %s" % path)
+					quit(1)
+					return
 				if image.save_png(ProjectSettings.globalize_path(path)) != OK:
 					push_error("Cannot save %s" % path)
 					quit(1)
 					return
 				total += 1
 		_write_reference_sheet(role)
-	if not _write_shield_states():
-		quit(1)
-		return
 	print("CH4 FORMAL ENEMY ART | PASS roles=%d frames=%d" % [ROLES.size(), total])
 	quit(0)
 
@@ -87,6 +84,37 @@ func _animation_definitions(role: String) -> Dictionary:
 
 
 func _draw_frame(role: String, animation: String, frame: int, count: int) -> Image:
+	var image: Image = Image.create(FRAME_SIZE, FRAME_SIZE, false, Image.FORMAT_RGBA8)
+	image.fill(CLEAR)
+	var phase: float = float(frame) / float(maxi(1, count - 1))
+	var stage: String = "base"
+	if animation.ends_with("_windup"):
+		stage = "windup"
+	elif animation.ends_with("_active"):
+		stage = "active"
+	elif animation.ends_with("_recovery"):
+		stage = "recovery"
+	elif animation in ["light_hit", "hurt", "stagger", "guard_break"]:
+		stage = "hurt"
+	elif animation == "death":
+		stage = "death"
+	elif animation == "hidden":
+		stage = "hidden"
+	var bob: int = 0
+	if animation == "idle":
+		bob = [0, -1, -2, -1][frame]
+	elif animation == "walk":
+		bob = [0, -2, -1, 0, -2, -1][frame]
+	if role == "bog_toad":
+		_draw_toad(image, animation, stage, frame, phase, bob)
+		_detail_toad(image, animation, stage, frame, phase, bob)
+	else:
+		_draw_maw(image, animation, stage, frame, phase, bob)
+		_detail_maw(image, animation, stage, frame, phase, bob)
+	return image
+
+
+func _draw_legacy_frame(role: String, animation: String, frame: int, count: int) -> Image:
 	var legacy: Image = Image.create(LEGACY_SIZE, LEGACY_SIZE, false, Image.FORMAT_RGBA8)
 	legacy.fill(CLEAR)
 	var phase: float = float(frame) / float(maxi(1, count - 1))
@@ -212,40 +240,76 @@ func _detail_penitent(img: Image, animation: String, stage: String, frame: int, 
 
 
 func _detail_toad(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
-	var jump: int = -12 if stage == "active" else -roundi(phase*7.0) if stage == "windup" else 0
-	var x: int = 62 + (8 if stage == "active" else 0)
-	var y: int = 57 + bob + jump
-	# Bone growths, layered wet hide, pustules, teeth and a dragging chain.
-	for ridge: int in range(6):
-		var rx: int = x-20+ridge*8
-		_poly(img, _pts([rx,y-15-(ridge%2)*3,rx+3,y-27-(ridge%3)*2,rx+6,y-14]), BONE)
-	for wart: Vector2i in [Vector2i(-20,-6),Vector2i(-11,-14),Vector2i(3,-16),Vector2i(18,-7),Vector2i(12,4),Vector2i(-4,7)]:
-		_ellipse(img, Vector2i(x+wart.x,y+wart.y), 2, 2, BOG_LIT)
-		_pixel(img,x+wart.x,y+wart.y-1,SOUL)
-	_segment(img, Vector2i(x-16,y+8), Vector2i(x+18,y+8), 2, OUTLINE)
-	for tooth: int in range(6): _poly(img,_pts([x-13+tooth*5,y+8,x-11+tooth*5,y+13,x-8+tooth*5,y+8]),BONE)
-	_chain_curve(img, Vector2i(x-24,y+13), Vector2i(x-43,y+25), Vector2i(x-48,y+39), IRON_LIT)
-	for drip: int in range(4): _segment(img,Vector2i(x-12+drip*8,y+22),Vector2i(x-12+drip*8,y+27+(drip%2)*3),1,MIRE_LIT)
+	if stage == "death":
+		return
+	var leap: int = -16 if stage == "active" and animation.begins_with("leap_crush") else 0
+	var shift: int = 9 if stage == "active" else -roundi(phase * 5.0) if stage == "windup" else 0
+	var x: int = 62 + shift
+	var y: int = 69 + bob + leap
+	# Uneven osteoderms and warts keep the concept's heavy, diseased back readable.
+	for ridge: int in range(9):
+		var rx: int = x - 38 + ridge * 8
+		var height: int = 8 + (ridge * 5) % 9
+		_poly(img, _pts([rx-4,y-22,rx,y-22-height,rx+5,y-20]), OUTLINE)
+		_poly(img, _pts([rx-2,y-23,rx,y-20-height,rx+3,y-21]), BONE if ridge % 3 == 0 else BOG_LIT)
+	for wart: Vector2i in [Vector2i(-33,-13),Vector2i(-24,-27),Vector2i(-12,-33),Vector2i(1,-31),Vector2i(15,-27),Vector2i(29,-16),Vector2i(-9,-13),Vector2i(10,-10)]:
+		_ellipse(img, Vector2i(x+wart.x,y+wart.y), 3, 2, OUTLINE)
+		_ellipse(img, Vector2i(x+wart.x,y+wart.y-1), 2, 1, BOG_LIT)
+		_pixel(img, x+wart.x-1, y+wart.y-2, STEEL)
+	# Heavy neck shackle and dragging chain are permanent identifiers.
+	_ellipse(img, Vector2i(x+21,y-9), 8, 11, OUTLINE)
+	_segment(img, Vector2i(x+17,y-18), Vector2i(x+26,y+2), 3, RUST_LIT)
+	_chain_curve(img, Vector2i(x+18,y+1), Vector2i(x-4,y+24), Vector2i(x-42,y+30), IRON_LIT)
+	# Wet highlights, skin folds, moss and hanging slime.
+	for fold: int in range(5):
+		_segment(img, Vector2i(x-24+fold*11,y-3+(fold%2)*3), Vector2i(x-17+fold*11,y+6+(fold%2)*2), 2, BOG_LIT)
+	for drip: int in range(6):
+		_segment(img, Vector2i(x-24+drip*10,y+16), Vector2i(x-24+drip*10,y+20+(drip%3)*2), 1, MIRE_LIT)
+	# Tongue remains broad and fleshy rather than a single red line.
+	if stage == "active" and animation.begins_with("tongue_lash"):
+		_poly(img, _pts([x+31,y-5,124,y-7,126,y-3,124,y+1,x+31,y+1]), OUTLINE)
+		_poly(img, _pts([x+32,y-4,123,y-5,124,y-2,123,y-1,x+32,y]), Color("8f5660"))
 
 
 func _detail_maw(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
 	if stage == "hidden":
 		return
-	var x: int = 60 + (10 if stage == "active" else 0)
-	var y: int = 65 + bob - (8 if stage == "windup" else 0)
-	# Long plated sewer predator silhouette: ribs, dorsal plates and torn cage debris.
-	_poly(img,_pts([x-42,y+4,x-32,y-13,x-20,y-19,x-9,y-17,x-15,y+15,x-34,y+20]),OUTLINE)
-	_poly(img,_pts([x-38,y+4,x-29,y-10,x-20,y-15,x-13,y-13,x-19,y+11,x-33,y+16]),MIRE)
-	for plate: int in range(7):
-		var px: int=x-34+plate*9
-		_poly(img,_pts([px,y-8-(plate%2)*3,px+4,y-20-(plate%3)*2,px+8,y-7]),IRON_LIT if plate%2==0 else BONE)
-	for rib: int in range(5): _segment(img,Vector2i(x-31+rib*7,y+4),Vector2i(x-27+rib*7,y+17),2,BONE)
-	for claw: int in range(4):
-		var cx: int=x-29+claw*14
-		_segment(img,Vector2i(cx,y+16),Vector2i(cx-5+(claw%2)*10,y+29),4,IRON)
-		_poly(img,_pts([cx-7+(claw%2)*10,y+28,cx-2+(claw%2)*10,y+31,cx-8+(claw%2)*10,y+33]),BONE)
-	_segment(img,Vector2i(x+5,y+3),Vector2i(x+29,y+5),2,PRISON_RED)
-	_rect(img,Rect2i(x-46,y+7,3,22),IRON); _segment(img,Vector2i(x-51,y+8),Vector2i(x-39,y+8),3,RUST)
+	if stage == "death":
+		return
+	var shift: int = 12 if stage == "active" else -roundi(phase * 5.0) if stage == "windup" else 0
+	var x: int = 60 + shift
+	var y: int = 73 + bob - (6 if stage == "windup" else 0)
+	# Dorsal bone plates, prison grate remains, number tag and body chains.
+	for plate: int in range(11):
+		var px: int = x - 46 + plate * 8
+		var peak: int = 13 + (plate * 7) % 8
+		_poly(img, _pts([px-4,y-19,px,y-19-peak,px+5,y-18]), OUTLINE)
+		_poly(img, _pts([px-2,y-20,px,y-17-peak,px+3,y-19]), BONE if plate % 2 == 0 else IRON_LIT)
+	for armor: int in range(7):
+		_ellipse(img, Vector2i(x-37+armor*9,y-14+(armor%2)*2), 5, 4, OUTLINE)
+		_ellipse(img, Vector2i(x-37+armor*9,y-15+(armor%2)*2), 3, 2, IRON)
+	_rect(img, Rect2i(x-42,y-25,27,5), OUTLINE)
+	_rect(img, Rect2i(x-40,y-24,23,3), RUST)
+	for grate: int in range(5):
+		_segment(img, Vector2i(x-39+grate*5,y-31), Vector2i(x-37+grate*5,y-18), 2, IRON_LIT)
+	_ellipse(img, Vector2i(x-10,y-8), 6, 6, OUTLINE)
+	_ellipse(img, Vector2i(x-10,y-8), 4, 4, RUST)
+	_segment(img, Vector2i(x-12,y-11), Vector2i(x-8,y-5), 1, BONE)
+	_chain_curve(img, Vector2i(x-28,y-5), Vector2i(x-5,y+18), Vector2i(x+25,y+15), IRON_LIT)
+	# Articulated short legs and distinct hooked claws.
+	for limb: int in range(4):
+		var root_x: int = x - 34 + limb * 22
+		var side: int = -1 if limb < 2 else 1
+		var foot_x: int = root_x + side * (8 + (limb%2)*4)
+		_segment(img, Vector2i(root_x,y+7), Vector2i(foot_x,y+25), 8, OUTLINE)
+		_segment(img, Vector2i(root_x,y+7), Vector2i(foot_x,y+24), 4, MIRE_LIT)
+		for claw: int in range(3):
+			_segment(img, Vector2i(foot_x,y+24), Vector2i(foot_x+side*(7+claw*2),y+26-claw*2), 2, BONE)
+	# Wet speculars and saliva retain the sewer-predator material.
+	for glint: Vector2i in [Vector2i(-34,-10),Vector2i(-17,-16),Vector2i(4,-15),Vector2i(22,-9),Vector2i(37,-4)]:
+		_pixel(img, x+glint.x, y+glint.y, STEEL)
+	for drip: int in range(4):
+		_segment(img, Vector2i(x+29+drip*5,y+1), Vector2i(x+29+drip*5,y+5+(drip%2)*3), 1, SOUL)
 
 
 func _detail_executioner(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
@@ -391,42 +455,92 @@ func _draw_raider(img: Image, animation: String, stage: String, frame: int, phas
 
 
 func _draw_toad(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
-	if stage=="death": _draw_creature_death(img,frame,BOG); return
-	var jump: int = -12 if stage=="active" else -roundi(phase*7.0) if stage=="windup" else 0
-	var x: int=46+(8 if stage=="active" else 0); var y: int=41+bob+jump
-	var stride: int=[-5,-2,2,5,2,-2][frame] if animation=="walk" else 0
-	# Broad readable toad mass with bell sac and webbed feet.
-	_poly(img,_pts([x-30,y+3,x-21,y-15,x-7,y-23,x+15,y-21,x+29,y-8,x+31,y+11,x+18,y+25,x-20,y+25,x-32,y+14]),OUTLINE)
-	_poly(img,_pts([x-26,y+3,x-18,y-12,x-6,y-19,x+13,y-18,x+25,y-6,x+27,y+9,x+16,y+21,x-17,y+21,x-28,y+12]),BOG)
-	_ellipse(img,Vector2i(x-13,y-18),6,5,BOG_LIT); _ellipse(img,Vector2i(x+13,y-17),6,5,BOG_LIT)
-	_pixel(img,x-12,y-20,SOUL_LIT); _pixel(img,x+14,y-19,SOUL_LIT)
-	_ellipse(img,Vector2i(x,y+4),11,9,RUST); _segment(img,Vector2i(x-9,y+3),Vector2i(x+9,y+3),2,GOLD)
-	_segment(img,Vector2i(x-20,y+15),Vector2i(x-31-stride,y+28),10,OUTLINE); _segment(img,Vector2i(x+19,y+15),Vector2i(x+31+stride,y+28),10,OUTLINE)
-	_draw_webbed_foot(img,Vector2i(x-33-stride,y+29),-1); _draw_webbed_foot(img,Vector2i(x+33+stride,y+29),1)
-	if stage=="active" and animation.begins_with("mud_burst"):
-		for i: int in range(7): _ellipse(img,Vector2i(62+i*5,70-(i%3)*7),2,2,BOG_LIT)
-	if stage=="active" and animation.begins_with("tongue_lash"):
-		_segment(img,Vector2i(x+22,y+2),Vector2i(95,y-1+frame*2),3,PRISON_RED)
+	if stage == "death":
+		_draw_toad_death(img, frame)
+		return
+	var leap: int = -16 if stage == "active" and animation.begins_with("leap_crush") else 0
+	var shift: int = 9 if stage == "active" else -roundi(phase * 5.0) if stage == "windup" else 0
+	var x: int = 62 + shift
+	var y: int = 69 + bob + leap
+	var stride: int = [-7,-3,2,7,3,-2][frame] if animation == "walk" else 0
+	var crouch: int = roundi(phase * 7.0) if stage == "windup" else 0
+	y += crouch
+	# Three-quarter side silhouette: huge rear mass, wide head, low belly and separate limbs.
+	_poly(img, _pts([x-50,y-2,x-45,y-25,x-28,y-43,x-4,y-49,x+20,y-42,x+39,y-27,x+47,y-4,x+42,y+16,x+25,y+27,x-24,y+27,x-46,y+17]), OUTLINE)
+	_poly(img, _pts([x-45,y-3,x-40,y-22,x-25,y-38,x-4,y-44,x+17,y-38,x+34,y-24,x+41,y-5,x+36,y+12,x+22,y+22,x-22,y+22,x-40,y+14]), BOG)
+	_poly(img, _pts([x-39,y-15,x-28,y-32,x-7,y-39,x+12,y-35,x+27,y-24,x+33,y-11,x+18,y-17,x-4,y-20,x-25,y-13]), Color("667044"))
+	# Side head, heavy eyelid, nostril and multi-layer jaw.
+	_poly(img, _pts([x+10,y-31,x+29,y-32,x+46,y-22,x+50,y-8,x+44,y+5,x+17,y+7,x+5,y-6]), OUTLINE)
+	_poly(img, _pts([x+13,y-28,x+28,y-29,x+42,y-20,x+46,y-9,x+40,y+1,x+19,y+3,x+9,y-6]), BOG_LIT)
+	_ellipse(img, Vector2i(x+25,y-27), 8, 7, OUTLINE)
+	_ellipse(img, Vector2i(x+26,y-27), 5, 5, Color("8c8b70"))
+	_ellipse(img, Vector2i(x+27,y-27), 2, 4, OUTLINE)
+	_pixel(img, x+26, y-29, SOUL_LIT)
+	_ellipse(img, Vector2i(x+42,y-15), 2, 2, OUTLINE)
+	_poly(img, _pts([x+12,y-5,x+45,y-6,x+48,y+2,x+40,y+12,x+15,y+12,x+7,y+3]), OUTLINE)
+	_poly(img, _pts([x+15,y-3,x+43,y-4,x+44,y+1,x+37,y+8,x+17,y+8,x+11,y+3]), Color("4c3030"))
+	for tooth: int in range(7):
+		var tx: int = x + 15 + tooth * 4
+		_poly(img, _pts([tx,y-3,tx+2,y+2,tx+4,y-3]), BONE)
+	# Thick rear leg, front arm, webbing and individually readable claws.
+	var rear_foot: Vector2i = Vector2i(x-45-stride,y+28)
+	_segment(img, Vector2i(x-27,y+4), Vector2i(x-36-stride/2,y+18), 19, OUTLINE)
+	_segment(img, Vector2i(x-27,y+4), Vector2i(x-36-stride/2,y+18), 13, BOG_LIT)
+	_draw_large_toad_foot(img, rear_foot, -1)
+	var front_foot: Vector2i = Vector2i(x+42+stride,y+27)
+	_segment(img, Vector2i(x+20,y+1), Vector2i(x+31+stride/2,y+18), 13, OUTLINE)
+	_segment(img, Vector2i(x+20,y+1), Vector2i(x+31+stride/2,y+18), 8, BOG_LIT)
+	_draw_large_toad_foot(img, front_foot, 1)
+	# Inflated throat and belly folds.
+	_ellipse(img, Vector2i(x+10,y+10), 18, 15, OUTLINE)
+	_ellipse(img, Vector2i(x+10,y+9), 14, 12, Color("6c6145"))
+	for fold: int in range(4):
+		_segment(img, Vector2i(x-1,y+4+fold*4), Vector2i(x+21,y+5+fold*3), 1, GOLD)
+	if stage == "active" and animation.begins_with("mud_burst"):
+		for i: int in range(9):
+			_ellipse(img, Vector2i(x+45+i*7,y-5-(i%3)*8), 3, 2, BOG_LIT)
 
 
 func _draw_maw(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
 	if stage=="hidden":
-		for grate: int in range(5): _segment(img,Vector2i(25+grate*10,75),Vector2i(25+grate*10,86),3,IRON)
+		for ripple: int in range(4):
+			_segment(img, Vector2i(18+ripple*18,96-(ripple%2)*3), Vector2i(40+ripple*18,96-(ripple%2)*3), 2, SOUL)
+		for plate: int in range(7):
+			var px: int = 36 + plate * 10
+			_poly(img, _pts([px-5,96,px,80-(plate%3)*3,px+6,96]), OUTLINE)
+			_poly(img, _pts([px-2,94,px,84-(plate%3)*3,px+3,94]), IRON_LIT)
+		_chain_curve(img, Vector2i(31,97), Vector2i(59,106), Vector2i(92,99), RUST_LIT)
 		return
-	if stage=="death": _draw_creature_death(img,frame,DEEP); return
-	var x: int=44+(10 if stage=="active" else 0); var y: int=49+bob-(8 if stage=="windup" else 0)
-	_poly(img,_pts([x-29,y+2,x-20,y-14,x-5,y-21,x+14,y-18,x+29,y-5,x+25,y+18,x+8,y+27,x-15,y+25,x-30,y+14]),OUTLINE)
-	_poly(img,_pts([x-25,y+3,x-17,y-11,x-4,y-17,x+12,y-15,x+25,y-3,x+21,y+14,x+7,y+23,x-13,y+21,x-26,y+12]),DEEP)
-	# Huge sewer bite is distinct from the compact body.
-	_poly(img,_pts([x-16,y-5,x+21,y-6,x+26,y+7,x+17,y+17,x-13,y+16,x-21,y+7]),RUST)
-	for tooth: int in range(7):
-		_poly(img,_pts([x-13+tooth*5,y-5,x-11+tooth*5,y+2,x-8+tooth*5,y-5]),BONE)
-		_poly(img,_pts([x-13+tooth*5,y+16,x-11+tooth*5,y+9,x-8+tooth*5,y+16]),BONE)
-	_pixel(img,x-17,y-9,SOUL); _pixel(img,x+17,y-10,SOUL)
-	for leg: int in range(3):
-		var side: int=-1 if leg<2 else 1
-		var root: Vector2i=Vector2i(x+side*(10+leg*3),y+18)
-		_segment(img,root,Vector2i(root.x+side*13,y+31+leg*2),6,OUTLINE)
+	if stage == "death":
+		_draw_maw_death(img, frame)
+		return
+	var shift: int = 12 if stage == "active" else -roundi(phase * 5.0) if stage == "windup" else 0
+	var x: int = 60 + shift
+	var y: int = 73 + bob - (6 if stage == "windup" else 0)
+	var stride: int = [-5,-2,2,5,2,-2][frame] if animation == "walk" else 0
+	# Full crocodilian body and tapering rear replace the old compact mouth-ball.
+	_poly(img, _pts([x-51,y-6,x-42,y-25,x-22,y-34,x+4,y-34,x+28,y-28,x+48,y-16,x+54,y+2,x+45,y+18,x+18,y+25,x-18,y+24,x-45,y+15,x-55,y+4]), OUTLINE)
+	_poly(img, _pts([x-47,y-6,x-38,y-21,x-20,y-29,x+3,y-29,x+25,y-24,x+43,y-14,x+49,y+1,x+40,y+13,x+16,y+20,x-17,y+19,x-41,y+12,x-50,y+3]), DEEP)
+	_poly(img, _pts([x-42,y-12,x-24,y-25,x+1,y-26,x+22,y-21,x+34,y-14,x+9,y-13,x-17,y-9]), MIRE)
+	# Elongated skull and two independently articulated jaws.
+	var jaw_open: int = 10 if stage == "active" else 4 + roundi(phase*5.0) if stage == "windup" else 5
+	_poly(img, _pts([x+8,y-25,x+29,y-28,x+53,y-20,x+62,y-12,x+56,y-4,x+24,y-5,x+5,y-11]), OUTLINE)
+	_poly(img, _pts([x+12,y-22,x+29,y-24,x+50,y-17,x+57,y-12,x+53,y-8,x+25,y-9,x+9,y-12]), IRON)
+	_poly(img, _pts([x+10,y-6,x+59,y-8,x+64,y+2+jaw_open,x+53,y+9+jaw_open,x+20,y+8+jaw_open,x+4,y+2]), OUTLINE)
+	_poly(img, _pts([x+14,y-4,x+56,y-6,x+59,y+1+jaw_open,x+50,y+5+jaw_open,x+21,y+4+jaw_open,x+9,y+1]), Color("3f242a"))
+	# Irregular multi-row teeth and deep tongue.
+	for tooth: int in range(12):
+		var tx: int = x + 12 + tooth * 4
+		var th: int = 5 + (tooth*3)%5
+		_poly(img, _pts([tx,y-7,tx+2,y-7+th,tx+4,y-7]), BONE)
+		_poly(img, _pts([tx,y+4+jaw_open,tx+2,y+4+jaw_open-th,tx+4,y+4+jaw_open]), BONE)
+	_poly(img, _pts([x+24,y+1+jaw_open,x+56,y-1+jaw_open,x+50,y+4+jaw_open,x+27,y+6+jaw_open]), PRISON_RED)
+	_ellipse(img, Vector2i(x+25,y-20), 5, 5, OUTLINE)
+	_ellipse(img, Vector2i(x+26,y-20), 2, 2, SOUL_LIT)
+	# Tail taper and waterline shadow ground the unusually long silhouette.
+	_poly(img, _pts([x-45,y-4,x-62,y+3,x-55,y+12,x-37,y+11]), OUTLINE)
+	_poly(img, _pts([x-44,y,x-58,y+4,x-53,y+8,x-38,y+8]), MIRE)
+	_segment(img, Vector2i(x-52-stride,y+22), Vector2i(x+48+stride,y+23), 3, Color("1a353b"))
 
 
 func _draw_executioner(img: Image, animation: String, stage: String, frame: int, phase: float, bob: int) -> void:
@@ -477,6 +591,50 @@ func _draw_webbed_foot(img: Image, center: Vector2i, direction: int) -> void:
 	for i: int in range(3): _segment(img,center,center+Vector2i(direction*(7+i*3),i*2-2),4,BOG_LIT)
 
 
+func _draw_large_toad_foot(img: Image, center: Vector2i, direction: int) -> void:
+	_ellipse(img, center, 7, 5, OUTLINE)
+	_ellipse(img, center, 5, 3, BOG_LIT)
+	for toe: int in range(4):
+		var finish: Vector2i = center + Vector2i(direction * (9 + toe * 3), -4 + toe * 3)
+		_segment(img, center, finish, 4, OUTLINE)
+		_segment(img, center + Vector2i(direction, 0), finish - Vector2i(direction * 2, 0), 2, BOG_LIT)
+		_segment(img, finish, finish + Vector2i(direction * 3, 0), 2, BONE)
+
+
+func _draw_toad_death(img: Image, frame: int) -> void:
+	var alpha: float = 1.0 if frame < 4 else 0.65 if frame == 4 else 0.3
+	var fall: int = mini(frame, 3) * 4
+	var y: int = 83 + fall
+	_poly(img, _pts([12,y-11,25,y-26,57,y-31,90,y-21,111,y-5,105,y+13,73,y+18,27,y+15,10,y+4]), Color(OUTLINE.r,OUTLINE.g,OUTLINE.b,alpha))
+	_poly(img, _pts([17,y-10,29,y-22,57,y-26,86,y-17,105,y-4,99,y+8,70,y+13,29,y+11,15,y+3]), Color(BOG.r,BOG.g,BOG.b,alpha))
+	_ellipse(img, Vector2i(89,y-14), 7, 6, Color(BOG_LIT.r,BOG_LIT.g,BOG_LIT.b,alpha))
+	_poly(img, _pts([79,y-5,107,y-6,103,y+5,82,y+6]), Color(PRISON_RED.r,PRISON_RED.g,PRISON_RED.b,alpha))
+	for ridge: int in range(8):
+		var rx: int = 27 + ridge * 9
+		_poly(img, _pts([rx-4,y-20,rx,y-31-(ridge%3)*3,rx+5,y-19]), Color(BONE.r,BONE.g,BONE.b,alpha))
+	_chain_curve(img, Vector2i(78,y+2), Vector2i(54,y+21), Vector2i(17,y+17), Color(IRON_LIT.r,IRON_LIT.g,IRON_LIT.b,alpha))
+	for mote: int in range(maxi(0, frame - 2) * 10):
+		_ellipse(img, Vector2i(15+(mote*17)%100,45+(mote*13)%65), 1+mote%2, 1, Color(SOUL.r,SOUL.g,SOUL.b,alpha))
+
+
+func _draw_maw_death(img: Image, frame: int) -> void:
+	var alpha: float = 1.0 if frame < 4 else 0.65 if frame == 4 else 0.3
+	var fall: int = mini(frame, 3) * 3
+	var y: int = 81 + fall
+	_poly(img, _pts([5,y-4,18,y-18,54,y-25,90,y-22,121,y-9,124,y+8,98,y+17,48,y+16,14,y+11]), Color(OUTLINE.r,OUTLINE.g,OUTLINE.b,alpha))
+	_poly(img, _pts([10,y-4,22,y-14,55,y-20,88,y-17,116,y-7,118,y+4,95,y+12,49,y+11,18,y+7]), Color(DEEP.r,DEEP.g,DEEP.b,alpha))
+	_poly(img, _pts([67,y-14,117,y-10,121,y+5,108,y+12,73,y+9]), Color(PRISON_RED.r,PRISON_RED.g,PRISON_RED.b,alpha))
+	for tooth: int in range(11):
+		var tx: int = 70 + tooth * 4
+		_poly(img, _pts([tx,y-10,tx+2,y-4,tx+4,y-10]), Color(BONE.r,BONE.g,BONE.b,alpha))
+	for plate: int in range(10):
+		var px: int = 20 + plate * 8
+		_poly(img, _pts([px-4,y-15,px,y-29-(plate%3)*3,px+5,y-14]), Color(IRON_LIT.r,IRON_LIT.g,IRON_LIT.b,alpha))
+	_chain_curve(img, Vector2i(27,y), Vector2i(55,y+20), Vector2i(91,y+15), Color(RUST_LIT.r,RUST_LIT.g,RUST_LIT.b,alpha))
+	for mote: int in range(maxi(0, frame - 2) * 10):
+		_ellipse(img, Vector2i(8+(mote*19)%112,45+(mote*11)%66), 1+mote%2, 1, Color(SOUL.r,SOUL.g,SOUL.b,alpha))
+
+
 func _draw_fallen_body(img: Image, frame: int, armored: bool) -> void:
 	var y: int=67+mini(frame,3)*5
 	_poly(img,_pts([10,y,65,y-8,86,y+2,78,y+15,19,y+15]),OUTLINE)
@@ -517,13 +675,16 @@ func _write_shield_states() -> bool:
 
 func _write_reference_sheet(role: String) -> void:
 	var directory: String="%s/%s/reference" % [ROOT,role]
-	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(directory))
+	var output: String = "%s/%s_runtime_reference.png" % [directory,role]
+	if not DirAccess.dir_exists_absolute(ProjectSettings.globalize_path(directory)) or not FileAccess.file_exists(output):
+		push_error("Refusing to create a replacement reference sheet: %s" % output)
+		return
 	var sheet: Image=Image.create(FRAME_SIZE*3,FRAME_SIZE,false,Image.FORMAT_RGBA8); sheet.fill(CLEAR)
 	var action: String=(ACTIONS[role] as Array)[0]
 	sheet.blit_rect(_draw_frame(role,"idle",0,4),Rect2i(0,0,FRAME_SIZE,FRAME_SIZE),Vector2i.ZERO)
 	sheet.blit_rect(_draw_frame(role,"%s_active" % action,0,2),Rect2i(0,0,FRAME_SIZE,FRAME_SIZE),Vector2i(FRAME_SIZE,0))
 	sheet.blit_rect(_draw_frame(role,"death",3,6),Rect2i(0,0,FRAME_SIZE,FRAME_SIZE),Vector2i(FRAME_SIZE*2,0))
-	sheet.save_png(ProjectSettings.globalize_path("%s/%s_runtime_reference.png" % [directory,role]))
+	sheet.save_png(ProjectSettings.globalize_path(output))
 
 
 func _pts(values: Array[int]) -> PackedVector2Array:
