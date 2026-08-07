@@ -1,5 +1,18 @@
 # Development Log
 
+## 2026-08-07 — Chapter IV Final Lock Approach exit interaction repair
+
+Status: complete — explicit Final Lock interaction, reachable Soul Lock interaction and full Main Boss route verified
+
+- Workflow loaded: root `AGENTS.md`, README, technical architecture, Chapter Scene Workflow, Chapter Character Workflow, production checklist, Chapter QA Standard, render-layer contract and Godot Gameplay Scripter skill.
+- Approved scope: repair only the saved `CH4_AREA_11 / Final Lock Approach` east exit so the Player receives a visible `E` interaction and can continue through the existing `CH4_AREA_12 → CH4_AREA_13 → CH4_AREA_14` Boss route. Do not alter enemy behavior, balance, Player abilities, Boss behavior, room art outside the exit presentation or other chapters.
+- Formal authority: `run/main_scene` remains `res://scenes/bootstrap/main_bootstrap.tscn`; `CH4_AREA_11` is `res://chapters/chapter_04_drowned_underkeep/scenes/rooms/ch4_11_final_lock_approach.tscn`; its saved `Transitions/ExitEast` targets `CH4_AREA_12/EntryWest`; Area 12 then targets Area 13, whose explicit soul-lock interaction targets the formal Ormund room in Area 14.
+- Root cause audit: `CH4_AREA_11/Transitions/ExitEast` is the only Boss-approach handoff still authored as a silent edge-overlap exit. It has no `requires_interaction`, no `prompt_path`, no saved `Prompt` child and no interaction delay, so the visible soul-lock arch gives no actionable feedback and the formal route is opaque at the exact point reported by the user. The first real-input full-route regression also exposed a second saved-scene defect in Area 13: its otherwise valid E interaction Area was centred on the closed `BossGatePresentation/GateBlocker`, so the physical door stopped a naturally walking Player before the prompt range.
+- Implemented: `CH4_AREA_11/Transitions/ExitEast` now requires the Input Map `interact` action, owns a saved bilingual `Prompt` label and targets the existing `CH4_AREA_12/EntryWest` route after a short presentation delay. `CH4_AREA_13/Transitions/ExitEast` was moved 88 px in front of its closed physical Boss gate so a naturally controlled Player can reach its existing prompt before collision. The formal-room builder records both contracts to prevent regeneration from restoring the defects.
+- Main/F5 evidence: exact Godot 4.7.1 launched the real `MainBootstrap` route at `CH4_AREA_11`; the saved prompt was visible with Player in range and pressing E emitted `room_changed=CH4_AREA_12`. Screenshot: `docs/qa/chapter_04_q4_boss_flow/00_main_final_lock_exit_prompt.png` (640×392).
+- Automated verification: editor import/parse PASS; `test_chapter_04_q4_boss_flow.gd` PASS through real Input Map events across `CH4_AREA_11 → 12 → 13 → 14`, Ormund lifecycle, reward and Chapter V boundary; `test_chapter_04_transitions_s5.gd` PASS (`32` transitions); `test_chapter_04_boss_route_stress.gd` PASS (`gate=20`, `repeated_E=100`); `test_chapter_04_main_integration.gd` PASS; `test_chapter_04_main_encounters_s4.gd` PASS (`route_passes=5`, `room_loads=165`, `enemy_instances=460`). Output contained no red script/resource/runtime error.
+- Scope check: no enemies, balance, Player abilities, Boss behavior, HUD, other chapters or unrelated dirty worktree content changed. This meaningful saved-route fix is committed independently and stops for user acceptance.
+
 ## 2026-08-07 — Chapter IV natural-input traversal and encounter reachability repair
 
 Status: complete — natural Input Map traversal, combat clear, formal exit handoff and full regression passed

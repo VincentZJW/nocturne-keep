@@ -14,7 +14,7 @@ func _run() -> void:
 	var debug: DebugRunConfigState = root.get_node_or_null("DebugRunConfig") as DebugRunConfigState
 	debug.debug_chapter_start_enabled = true
 	debug.debug_start_chapter_id = ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP
-	debug.debug_start_spawn_id = &"CH4_AREA_14"
+	debug.debug_start_spawn_id = &"CH4_AREA_11"
 	debug.debug_skip_chapter_intro = true
 	_check(ProjectSettings.get_setting("application/run/main_scene") == BOOTSTRAP, "F5 main scene must remain MainBootstrap")
 	_check(change_scene_to_file(BOOTSTRAP) == OK, "MainBootstrap must launch")
@@ -26,6 +26,40 @@ func _run() -> void:
 	var player: Player = level.get_node("ChapterRuntime/Player") as Player
 	await process_frame
 	await process_frame
+	_check(controller.active_room_id == &"CH4_AREA_11", "Main must begin this regression in Final Lock Approach")
+	var final_lock_exit: Chapter04RoomExit = controller.active_room.get_node_or_null("Transitions/ExitEast") as Chapter04RoomExit
+	_check(final_lock_exit != null, "Final Lock Approach east exit must exist")
+	if final_lock_exit != null:
+		_check(final_lock_exit.requires_interaction, "Final Lock Approach east exit must require interact")
+		_check(final_lock_exit.destination_room_id == &"CH4_AREA_12", "Final Lock Approach must target Last Gaol Checkpoint")
+		_check(final_lock_exit.destination_spawn_id == &"EntryWest", "Final Lock Approach must target Area 12 EntryWest")
+		await _enter_exit_range(player, final_lock_exit)
+		_check(final_lock_exit.is_player_in_range(), "Final Lock Approach exit must detect Player before input")
+		_check(final_lock_exit.is_prompt_visible(), "Final Lock Approach must show its E interaction prompt")
+		await _press_action_once(&"interact")
+		_check(await _wait_for_room(controller, &"CH4_AREA_12"), "Final Lock interaction must enter Last Gaol Checkpoint")
+		var area_twelve_spawn: Marker2D = controller.active_room.call("get_spawn", &"EntryWest") as Marker2D
+		_check(area_twelve_spawn != null and player.global_position == area_twelve_spawn.global_position, "Area 12 must use its saved EntryWest spawn")
+
+	var checkpoint_exit: Chapter04RoomExit = controller.active_room.get_node_or_null("Transitions/ExitEast") as Chapter04RoomExit
+	_check(checkpoint_exit != null and not checkpoint_exit.requires_interaction, "Last Gaol Checkpoint must retain its automatic handoff")
+	if checkpoint_exit != null:
+		await _enter_exit_range(player, checkpoint_exit)
+		_check(await _wait_for_room(controller, &"CH4_AREA_13"), "Last Gaol Checkpoint must continue to Soul Lock Antechamber")
+
+	var soul_lock_exit: Chapter04RoomExit = controller.active_room.get_node_or_null("Transitions/ExitEast") as Chapter04RoomExit
+	_check(soul_lock_exit != null and soul_lock_exit.requires_interaction, "Soul Lock Antechamber must retain its explicit Boss-gate interaction")
+	if soul_lock_exit != null:
+		var boss_gate_blocker: StaticBody2D = controller.active_room.get_node_or_null("BossGatePresentation/GateBlocker") as StaticBody2D
+		_check(
+			boss_gate_blocker != null and soul_lock_exit.global_position.x < boss_gate_blocker.global_position.x - 40.0,
+			"Soul Lock interaction Area must remain reachable in front of the closed physical gate"
+		)
+		await _enter_exit_range(player, soul_lock_exit)
+		_check(soul_lock_exit.is_prompt_visible(), "Soul Lock Antechamber must show its Boss-gate prompt")
+		await _press_action_once(&"interact")
+		_check(await _wait_for_room(controller, &"CH4_AREA_14"), "Soul Lock interaction must enter formal Ormund arena")
+
 	var boss_room: Node = controller.active_room
 	var boss: SoulGaolerOrmund = boss_room.get_node_or_null("Enemies/SoulGaolerOrmund") as SoulGaolerOrmund
 	var flow: Chapter04BossRoomController = boss_room.get_node_or_null("BossRoomController") as Chapter04BossRoomController
@@ -159,6 +193,38 @@ func _wait_for_level() -> Node:
 		if current_scene != null and current_scene.scene_file_path == LEVEL:
 			return current_scene
 	return null
+
+
+func _enter_exit_range(player: Player, room_exit: Chapter04RoomExit) -> void:
+	player.global_position = room_exit.global_position + Vector2(-140.0, 42.0)
+	player.velocity = Vector2.ZERO
+	await physics_frame
+	player.global_position = room_exit.global_position + Vector2(0.0, 42.0)
+	player.velocity = Vector2.ZERO
+	await physics_frame
+	await physics_frame
+
+
+func _press_action_once(action: StringName) -> void:
+	var press: InputEventAction = InputEventAction.new()
+	press.action = action
+	press.pressed = true
+	press.strength = 1.0
+	Input.parse_input_event(press)
+	await process_frame
+	var release: InputEventAction = InputEventAction.new()
+	release.action = action
+	release.pressed = false
+	Input.parse_input_event(release)
+	await process_frame
+
+
+func _wait_for_room(controller: Chapter04RoomTransitionController, room_id: StringName) -> bool:
+	for _frame: int in 300:
+		await process_frame
+		if controller.active_room_id == room_id and not controller.is_transitioning():
+			return true
+	return false
 
 
 func _check(condition: bool, message: String) -> void:

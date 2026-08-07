@@ -102,6 +102,10 @@ func _build_room(index: int, data: Dictionary) -> bool:
 	_build_transitions(transitions, index, int(data["width"]), root)
 	if index == 3:
 		_configure_broken_chainway_exit(transitions, root)
+	if index == 11:
+		_configure_final_lock_exit(transitions, root)
+	if index == 13:
+		_configure_soul_lock_exit(transitions, int(data["width"]), root)
 	_build_future_slots(markers, int(data["slots"]), int(data["width"]), data["platforms"] as Array, root)
 	if data.has("checkpoint"):
 		_build_checkpoint(gameplay, data["checkpoint"] as StringName, int(data["width"]) / 2, root)
@@ -338,6 +342,53 @@ func _configure_broken_chainway_exit(transitions: Node2D, root: Node2D) -> void:
 	prompt.add_theme_color_override("font_shadow_color", Color(0.02, 0.03, 0.05))
 	prompt.add_theme_constant_override("shadow_offset_x", 1)
 	prompt.add_theme_constant_override("shadow_offset_y", 1)
+	_owned(exit_east, prompt, root)
+
+
+func _configure_final_lock_exit(transitions: Node2D, root: Node2D) -> void:
+	var exit_east: Area2D = transitions.get_node_or_null("ExitEast") as Area2D
+	if exit_east == null:
+		return
+	exit_east.set("requires_interaction", true)
+	exit_east.set("prompt_path", NodePath("Prompt"))
+	exit_east.set("transition_delay", 0.18)
+	var prompt: Label = Label.new()
+	prompt.name = "Prompt"
+	prompt.visible = false
+	prompt.z_index = 30
+	prompt.position = Vector2(-408.0, -128.0)
+	prompt.size = Vector2(432.0, 34.0)
+	prompt.text = "E · ENTER THE LAST GAOL CHECKPOINT / 进入末狱检查点"
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	prompt.add_theme_font_size_override("font_size", 13)
+	prompt.add_theme_color_override("font_color", Color(0.78, 0.92, 0.9))
+	prompt.add_theme_color_override("font_outline_color", Color(0.01, 0.025, 0.03))
+	prompt.add_theme_constant_override("outline_size", 4)
+	_owned(exit_east, prompt, root)
+
+
+func _configure_soul_lock_exit(transitions: Node2D, room_width: int, root: Node2D) -> void:
+	var exit_east: Area2D = transitions.get_node_or_null("ExitEast") as Area2D
+	if exit_east == null:
+		return
+	# Keep the interaction volume on the Player side of the closed gate. The
+	# saved Boss-gate presentation blocks the doorway itself until interaction.
+	exit_east.position = Vector2(float(room_width - 184), FLOOR_Y - 70.0)
+	exit_east.set("requires_interaction", true)
+	exit_east.set("prompt_path", NodePath("Prompt"))
+	exit_east.set("transition_delay", 0.62)
+	var prompt: Label = Label.new()
+	prompt.name = "Prompt"
+	prompt.visible = false
+	prompt.z_index = 30
+	prompt.position = Vector2(-310.0, -126.0)
+	prompt.size = Vector2(620.0, 36.0)
+	prompt.text = "E  OPEN THE FINAL SOUL LOCK / 开启最终魂锁"
+	prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	prompt.add_theme_font_size_override("font_size", 15)
+	prompt.add_theme_color_override("font_color", Color(0.82, 0.9, 0.88))
+	prompt.add_theme_color_override("font_outline_color", Color(0.01, 0.02, 0.03))
+	prompt.add_theme_constant_override("outline_size", 4)
 	_owned(exit_east, prompt, root)
 
 

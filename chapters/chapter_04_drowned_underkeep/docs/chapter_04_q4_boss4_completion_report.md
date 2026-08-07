@@ -6,6 +6,17 @@ Formal chapter scene: `res://chapters/chapter_04_drowned_underkeep/scenes/level/
 
 The read-only inventory and root-cause evidence for all 17 rooms, 20 EncounterGroups, 46 ordinary/elite instances and nine combatant types is retained in `chapter_04_q1_a_boss4_0_audit.md`. This report records the implemented Q2, Q3, Q4 and BOSS4 results.
 
+## 2026-08-07 Final Lock interaction regression repair
+
+Result: **PASS**.
+
+- Root cause: `CH4_AREA_11/Transitions/ExitEast` was still a silent overlap transition even though its art reads as a deliberate gate. It had neither `requires_interaction` nor a saved prompt, so the Player received no `E` affordance at the exact location reported in Main.
+- Saved fix: the east exit now uses the existing Input Map `interact` action, displays `E · ENTER THE LAST GAOL CHECKPOINT / 进入末狱检查点`, and continues to the existing `CH4_AREA_12/EntryWest` destination. No duplicate room, Player, HUD or Boss asset was introduced.
+- Route correction found by real-input testing: `CH4_AREA_13/Transitions/ExitEast` was centred behind its closed `BossGatePresentation/GateBlocker`. The trigger now sits at x=`1608`, on the Player side of the blocker at x=`1696`, so its existing final soul-lock prompt is reachable before collision.
+- Generator parity: `build_chapter_04_formal_rooms_s3.gd` now preserves both the Area 11 interaction contract and the reachable Area 13 Boss-gate trigger if formal rooms are rebuilt.
+- Main evidence: `docs/qa/chapter_04_q4_boss_flow/00_main_final_lock_exit_prompt.png`; visible exact-Godot Main run confirmed prompt in range and `room_changed=CH4_AREA_12` after pressing E.
+- Regression evidence: `test_chapter_04_q4_boss_flow.gd` now drives real `InputEventAction("interact")` through `CH4_AREA_11 → CH4_AREA_12 → CH4_AREA_13 → CH4_AREA_14` before exercising the existing Ormund/reward/Chapter V flow. Q4 flow, 32-transition regression, Boss-route stress, Main integration and five-pass Main encounter route all pass without red errors.
+
 ## 第四章战斗与转场QA总结果
 
 | 验收项 | 状态 | 证据 |

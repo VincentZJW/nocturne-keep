@@ -264,7 +264,7 @@ destination_spawn_id = &"EntryEast"
 shape = SubResource("RectangleShape2D_xfunh")
 
 [node name="ExitEast" type="Area2D" parent="Transitions" unique_id=1591499752]
-position = Vector2(1696, 550)
+position = Vector2(1608, 550)
 collision_layer = 0
 collision_mask = 2
 monitorable = false

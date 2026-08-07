@@ -365,9 +365,26 @@ collision_mask = 2
 monitorable = false
 script = ExtResource("10_cw6ef")
 destination_room_id = &"CH4_AREA_12"
+requires_interaction = true
+prompt_path = NodePath("Prompt")
+transition_delay = 0.18
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Transitions/ExitEast" unique_id=1278700443]
 shape = SubResource("RectangleShape2D_jpqs6")
+
+[node name="Prompt" type="Label" parent="Transitions/ExitEast"]
+visible = false
+z_index = 30
+offset_left = -408.0
+offset_top = -128.0
+offset_right = 24.0
+offset_bottom = -94.0
+theme_override_colors/font_color = Color(0.78, 0.92, 0.9, 1)
+theme_override_colors/font_outline_color = Color(0.01, 0.025, 0.03, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 13
+text = "E · ENTER THE LAST GAOL CHECKPOINT / 进入末狱检查点"
+horizontal_alignment = 2
 
 [node name="EncounterSpawner" type="Node2D" parent="." unique_id=495681107]
 script = ExtResource("11_dbh8h")
