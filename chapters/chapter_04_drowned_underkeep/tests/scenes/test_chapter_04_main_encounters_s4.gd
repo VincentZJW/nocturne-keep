@@ -29,6 +29,8 @@ var _role_deaths: Dictionary[StringName, int] = {}
 var _checkpoint_respawns: Dictionary[StringName, int] = {}
 var _movement_checks: int = 0
 var _enemy_instances: int = 0
+var _cistern_mirefin_crossings: int = 0
+var _cistern_mirefin_attacks: int = 0
 
 
 func _initialize() -> void:
@@ -177,6 +179,12 @@ func _exercise_encounters(
 			var role: StringName = StringName(enemy.scene_file_path.get_file().get_basename())
 			_role_instances[role] = _role_instances.get(role, 0) + 1
 			_enemy_instances += 1
+			if (
+				room_id == &"CH4_AREA_05"
+				and enemy.name == &"CH4_AREA_05_MIREFIN_RAIDER_01"
+				and _cistern_mirefin_crossings < ROUTE_PASSES
+			):
+				await _exercise_cistern_mirefin_crossing(player, enemy, room_id)
 			await _exercise_movement(player, enemy, room_id)
 			if int(_role_deaths.get(role, 0)) < 10:
 				enemy.health_component.take_damage(enemy.health_component.max_health)
@@ -214,6 +222,34 @@ func _exercise_movement(player: Player, enemy: Chapter04Enemy, room_id: StringNa
 	_movement_checks += 1
 
 
+func _exercise_cistern_mirefin_crossing(
+	player: Player,
+	enemy: Chapter04Enemy,
+	room_id: StringName
+) -> void:
+	var attacks_before: int = _cistern_mirefin_attacks
+	var callback: Callable = func(active: bool) -> void:
+		if active:
+			_cistern_mirefin_attacks += 1
+	enemy.attack_window_changed.connect(callback)
+	player.global_position = Vector2(604.0, 592.0)
+	player.velocity = Vector2.ZERO
+	enemy.velocity = Vector2.ZERO
+	enemy.set_target(player)
+	enemy.set_facing_direction(-1.0)
+	enemy.transition_state(Chapter04Enemy.APPROACH)
+	enemy.set_physics_process(true)
+	for frame_index: int in range(360):
+		await physics_frame
+		if enemy.global_position.x < 688.0 and _cistern_mirefin_attacks > attacks_before:
+			break
+	_check(enemy.global_position.x < 688.0, "%s Mirefin remained blocked by PlatformCollision_00 at x=%.2f" % [room_id, enemy.global_position.x])
+	_check(_cistern_mirefin_attacks > attacks_before, "%s Mirefin crossed the step but never opened an attack window" % room_id)
+	if enemy.attack_window_changed.is_connected(callback):
+		enemy.attack_window_changed.disconnect(callback)
+	_cistern_mirefin_crossings += 1
+
+
 func _find_advancing_direction(enemy: Chapter04Enemy) -> float:
 	for direction: float in [1.0, -1.0]:
 		if enemy.can_advance(direction):
@@ -235,6 +271,8 @@ func _validate_totals() -> void:
 		_check(int(_role_deaths.get(role, 0)) == 10, "%s expected 10 deaths" % role)
 	for room_id: StringName in [&"CH4_AREA_06", &"CH4_AREA_12"]:
 		_check(int(_checkpoint_respawns.get(room_id, 0)) == ROUTE_PASSES, "%s expected five checkpoint respawns" % room_id)
+	_check(_cistern_mirefin_crossings == ROUTE_PASSES, "Cistern Mirefin crossing ran %d/5 times" % _cistern_mirefin_crossings)
+	_check(_cistern_mirefin_attacks >= ROUTE_PASSES, "Cistern Mirefin opened only %d/5 attack windows" % _cistern_mirefin_attacks)
 
 
 func _wait_for_level() -> Node:

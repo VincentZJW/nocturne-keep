@@ -7537,3 +7537,27 @@ Status: implementation complete; automated regression passed; manual visual acce
 - Exact concept-overlay thresholds (3% body/head ratio and 5% limb ratio), the requested long-duration animation repetition counts and subjective 1:1 visual acceptance are not claimed by deterministic tests. The formal frames were inspected at source resolution and their required structures are present, but these remain explicit user playtest/visual-acceptance items.
 - The Wraith telegraph is a cold silhouette shake/reveal implemented on the existing actor. A dedicated confessional-booth door animation was not added because this task prohibited creation of missing assets/files.
 - The worktree still contains substantial pre-existing unrelated Chapter I/III/environment/QA changes. They were preserved and excluded from this task's commit.
+
+## 2026-08-07 — Chapter IV enemy runtime root-cause isolation and Cistern fix
+
+Status: targeted implementation complete; automated Main/room/combat regression passed; desktop-controlled visual QA is pending because this session has no GUI input-control capability.
+
+### Root cause and minimal fix
+
+- Isolated the first failing formal actor to `CH4_AREA_05_MIREFIN_RAIDER_01` in `ch4_05_cistern_of_the_changed.tscn`.
+- AI activation, target acquisition, attack timing, enemy-to-Player damage, Player normal/dash damage, Hurtbox and death all worked. The actor remained in `APPROACH` because `Gameplay/PlatformCollision_00` presented a solid vertical side at x=688 while its low `WallCheck` ray passed two pixels below that shelf; `move_and_slide()` therefore cancelled horizontal velocity indefinitely before attack range.
+- Marked only that shelf collision as one-way. This preserves its top surface for Player/platform use while removing the unintended underside/side wall for the low creature. No shared AI, Player, Boss, tuning, art or Chapter I–III file was changed.
+- Added a saved-Main regression to the existing Chapter IV five-pass route gate. It now runs the real physics loop for this exact enemy on every pass and requires both crossing the x=688 obstruction and opening an attack window.
+
+### Exact verification
+
+1. Targeted formal MainBootstrap probe — PASS across 5 reload/return cycles: 5 crossings, 10 attack windows, 5 Player-damage events, 5 deaths, 20 normal-hit damage and 10 dash-hit damage. A 1,800-physics-frame (30 simulated seconds) pass travelled 2,003.79 pixels and opened 59 attack windows.
+2. `test_chapter_04_main_encounters_s4.gd` — PASS: 5 route passes, 165 room loads, 20 encounter definitions / 200 activations, 460 enemy instances, all 8 roles, 80 deaths and 10 checkpoint registrations; targeted Cistern crossing/attack assertion passed 5/5.
+3. `test_chapter_04_combat_stress.gd` — PASS: 8 roles, 160 kills, 360 authored attacks, 48 enemy contacts, 32 Player contacts, 42 facing checks and 5 encounter reloads.
+4. `test_chapter_04_enemy_runtime.gd`, `test_chapter_04_main_integration.gd`, `test_chapter_04_encounter_manifests_s4.gd`, `test_chapter_04_encounter_runtime_s4.gd`, `test_chapter_04_formal_route_s3.gd`, `test_chapter_04_main_route_s3.gd` and `test_chapter_04_transitions_s5.gd` — PASS.
+5. The same physical obstruction was not reproduced for the other seven roles or other formal room placements, so no speculative batch scene edits were made.
+
+### Manual acceptance
+
+- Use the existing Chapter IV debug start and `CH4_AREA_05`, then F5 through MainBootstrap. Activate the Cistern encounter from the enemy's left side and confirm the Mirefin passes beneath the shelf, pursues, attacks, receives Normal/Dash attacks and dies. Repeat after room return/reload.
+- Also spot-check each of the eight Chapter IV roles in the formal route. Automated evidence is complete, but a visual/UI/Debugger claim is deliberately withheld until a desktop-controlled Godot run is performed.
