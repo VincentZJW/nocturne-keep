@@ -4,6 +4,52 @@ Date: 2026-08-06
 Engine: Godot 4.7.1 (`a13da4feb`)
 Main authority: `res://scenes/bootstrap/main_bootstrap.tscn`
 
+## 2026-08-07 natural-traversal addendum
+
+The earlier deterministic F4 matrix proved the runtime contracts after loading,
+activating and positioning actors, but it did not walk the Player through each
+piece of saved room collision. A user playtest exposed that gap: in the Cistern,
+Encounter 01 worked, then the Player stopped at `x≈856`, before Encounter 02's
+ActivationArea at `x=1120`. The later actors therefore correctly remained
+dormant and appeared inert/unhittable, which prevented the room-clear gate from
+opening.
+
+The obstruction was the left edge of `PlatformCollision_01` (`x=868–932`).
+Chapter IV's 12px-thick elevated platforms were authored as two-way rectangles,
+so they acted as side walls at Player/enemy body height. A previous narrow fix
+changed only Cistern `PlatformCollision_00`; the same defect remained on the
+next platform and in other formal rooms.
+
+The repaired contract is now explicit:
+
+- all 23 `PlatformCollision_*` shapes in the nine affected saved Chapter IV
+  rooms are one-way platforms;
+- the formal-room builder writes `one_way_collision = true`, preventing a
+  regeneration regression;
+- floors, room/gate blockers and actor collision remain two-way;
+- the Main encounter test asserts this contract on all 165 room loads;
+- before the deterministic matrix, the test now performs a natural Cistern
+  pass with real `move`, `jump`, `attack` and parsed `interact` Input Map
+  events—no direct Encounter activation, target assignment, health mutation or
+  room handoff.
+
+Observed result: both Cistern groups cleared through real Player attacks, the
+second group produced 26 health-change events, the encounter gate unlocked and
+the saved `ExitEast` interaction entered `CH4_AREA_06`. The visible Godot run
+also showed Encounter 02 active beyond the former blocker; Sewer Maw, Mirefin
+Raider and Bog Toad moved/attacked and their health decreased in sequence.
+
+| Natural-flow gate | Status | Evidence |
+|---|---|---|
+| Cross former `x≈856` blocker | PASS | Player reached Encounter 02 at `x>1120` |
+| Encounter 02 activation | PASS | AI/Hurtbox/target restored on formal actors |
+| Real Player hits | PASS | 26 `health_changed` emissions in Encounter 02 |
+| Both groups clear | PASS | no direct damage/activation calls in natural pass |
+| Cistern gate unlock | PASS | gate and `ExitEast` reported unlocked |
+| Formal interaction | PASS | `CH4_AREA_05 → CH4_AREA_06` via `interact` event |
+| Full Chapter IV regressions | PASS | F4, S5, combat, Main integration and Q4/Boss flow |
+| Output/Debugger | PASS | no red script/resource/runtime error |
+
 ## Result
 
 CH4-F4 passes. No new production-code, tuning, Player, Boss, Chapter I–III,

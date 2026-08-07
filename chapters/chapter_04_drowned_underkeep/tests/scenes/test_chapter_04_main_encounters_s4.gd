@@ -31,6 +31,7 @@ var _movement_checks: int = 0
 var _enemy_instances: int = 0
 var _cistern_mirefin_crossings: int = 0
 var _cistern_mirefin_attacks: int = 0
+var _natural_cistern_second_group_hits: int = 0
 
 
 func _initialize() -> void:
@@ -65,6 +66,7 @@ func _run() -> void:
 		return
 	var player_id: int = player.get_instance_id()
 	var hud_id: int = hud.get_instance_id()
+	await _exercise_natural_cistern_route(controller, player)
 	player.set_physics_process(false)
 	player.hurtbox.set_invulnerable(true)
 	for pass_index: int in range(ROUTE_PASSES):
@@ -75,6 +77,133 @@ func _run() -> void:
 	_validate_totals()
 	debug.reset_to_defaults()
 	await _finish(level)
+
+
+func _exercise_natural_cistern_route(
+	controller: Chapter04RoomTransitionController,
+	player: Player
+) -> void:
+	_check(controller._swap_room(&"CH4_AREA_05", &"EntryWest"), "natural Cistern route could not load")
+	await process_frame
+	await physics_frame
+	var room: Chapter04Room = controller.active_room as Chapter04Room
+	var spawner: Chapter04EncounterSpawner = room.get_node_or_null("EncounterSpawner") as Chapter04EncounterSpawner if room != null else null
+	_check(room != null and spawner != null, "natural Cistern route lacks formal room/EncounterSpawner")
+	if room == null or spawner == null:
+		return
+	var groups: Array[EncounterGroup] = spawner.get_encounter_groups()
+	_check(groups.size() == 2, "natural Cistern route expected two Encounter groups")
+	if groups.size() != 2:
+		return
+	player.set_physics_process(true)
+	player.hurtbox.set_invulnerable(true)
+	var crossed_original_blocker: bool = false
+	var reached_second_activation: bool = false
+	for combatant: EnemyCombatant in groups[1].get_enemies():
+		var enemy: Chapter04Enemy = combatant as Chapter04Enemy
+		if enemy != null:
+			enemy.health_component.health_changed.connect(
+				func(_current: int, _maximum: int) -> void:
+					_natural_cistern_second_group_hits += 1
+			)
+	for frame_index: int in range(2400):
+		var target: Chapter04Enemy = _nearest_awake_enemy(groups, player)
+		var direction: float = 1.0
+		var distance: float = INF
+		if target != null:
+			distance = absf(target.global_position.x - player.global_position.x)
+			direction = signf(target.global_position.x - player.global_position.x)
+			if is_zero_approx(direction):
+				direction = 1.0
+		# Keep pressing toward a target even when body collision has closed the
+		# remaining gap. Besides proving collision-safe approach, this updates the
+		# Player's facing before the real attack input is consumed.
+		_set_player_move(direction if target == null or distance > 28.0 else 0.0)
+		if target != null and distance <= 68.0 and frame_index % 14 == 0:
+			Input.action_press(&"attack")
+		if target != null and absf(target.global_position.y - player.global_position.y) > 35.0 and frame_index % 55 == 0:
+			Input.action_press(&"player_jump")
+		await physics_frame
+		Input.action_release(&"attack")
+		Input.action_release(&"player_jump")
+		crossed_original_blocker = crossed_original_blocker or player.global_position.x > 950.0
+		reached_second_activation = reached_second_activation or groups[1].is_activated
+		if groups[0].is_cleared and groups[1].is_cleared:
+			break
+	_release_player_input()
+	print("CH4 NATURAL CISTERN COMBAT | x=%.1f first_clear=%s second_active=%s second_clear=%s second_hits=%d" % [
+		player.global_position.x,
+		groups[0].is_cleared,
+		groups[1].is_activated,
+		groups[1].is_cleared,
+		_natural_cistern_second_group_hits,
+	])
+	_check(groups[0].is_cleared, "natural Input actions did not clear Cistern Encounter 01")
+	_check(crossed_original_blocker, "Player remained blocked before the Cistern second ActivationArea")
+	_check(reached_second_activation, "natural traversal never activated Cistern Encounter 02")
+	_check(_natural_cistern_second_group_hits > 0, "real Player attack never damaged a Cistern Encounter 02 enemy")
+	_check(groups[1].is_cleared, "natural Input actions did not clear Cistern Encounter 02")
+	var gate: Chapter04EncounterGate = room.get_node_or_null("Transitions/CisternExitGate") as Chapter04EncounterGate
+	var exit: Chapter04RoomExit = room.get_node_or_null("Transitions/ExitEast") as Chapter04RoomExit
+	await process_frame
+	await physics_frame
+	_check(gate != null and not gate.is_locked(), "Cistern exit gate remained locked after natural clear")
+	_check(exit != null and not exit.is_locked(), "Cistern ExitEast remained locked after natural clear")
+	if exit != null:
+		for _frame_index: int in range(300):
+			if exit.is_player_in_range():
+				break
+			_set_player_move(1.0)
+			await physics_frame
+		_release_player_input()
+		_check(exit.is_player_in_range(), "Player could not naturally reach Cistern ExitEast")
+		var interact_press: InputEventAction = InputEventAction.new()
+		interact_press.action = &"interact"
+		interact_press.pressed = true
+		Input.parse_input_event(interact_press)
+		await process_frame
+		var interact_release: InputEventAction = InputEventAction.new()
+		interact_release.action = &"interact"
+		interact_release.pressed = false
+		Input.parse_input_event(interact_release)
+		for _frame_index: int in range(360):
+			if controller.active_room_id == &"CH4_AREA_06":
+				break
+			await process_frame
+		_check(controller.active_room_id == &"CH4_AREA_06", "natural Cistern interaction did not enter CH4_AREA_06")
+		if controller.active_room_id == &"CH4_AREA_06":
+			print("CH4 NATURAL CISTERN EXIT | PASS CH4_AREA_05 -> CH4_AREA_06 via interact")
+
+
+func _nearest_awake_enemy(groups: Array[EncounterGroup], player: Player) -> Chapter04Enemy:
+	var nearest: Chapter04Enemy = null
+	var nearest_distance: float = INF
+	for group: EncounterGroup in groups:
+		if not group.is_activated:
+			continue
+		for combatant: EnemyCombatant in group.get_enemies():
+			var enemy: Chapter04Enemy = combatant as Chapter04Enemy
+			if enemy == null or enemy.is_dead():
+				continue
+			var distance: float = player.global_position.distance_to(enemy.global_position)
+			if distance < nearest_distance:
+				nearest = enemy
+				nearest_distance = distance
+	return nearest
+
+
+func _set_player_move(direction: float) -> void:
+	Input.action_release(&"player_move_left")
+	Input.action_release(&"player_move_right")
+	if direction < 0.0:
+		Input.action_press(&"player_move_left")
+	elif direction > 0.0:
+		Input.action_press(&"player_move_right")
+
+
+func _release_player_input() -> void:
+	for action: StringName in [&"player_move_left", &"player_move_right", &"player_jump", &"attack"]:
+		Input.action_release(action)
 
 
 func _load_and_exercise(
@@ -103,6 +232,7 @@ func _load_and_exercise(
 	_check(player.get_instance_id() == player_id, "%s replaced persistent Player" % room_id)
 	_check(hud.get_instance_id() == hud_id, "%s replaced persistent HUD" % room_id)
 	_check(player.player_camera.limit_right == room.room_size.x, "%s Camera bounds mismatch" % room_id)
+	_validate_platform_collision_contract(room, room_id)
 	var marker: Marker2D = room.get_spawn(spawn_id)
 	_check(marker != null and player.global_position == marker.global_position, "%s Player spawn mismatch" % room_id)
 	if room_index in CHECKPOINT_INDICES:
@@ -114,6 +244,18 @@ func _load_and_exercise(
 			await _exercise_encounters(player, spawner, room_id)
 	else:
 		_check(spawner == null, "%s support room unexpectedly owns ordinary encounters" % room_id)
+
+
+func _validate_platform_collision_contract(room: Chapter04Room, room_id: StringName) -> void:
+	for platform: Node in room.find_children("PlatformCollision_*", "StaticBody2D", true, false):
+		var shape_node: CollisionShape2D = platform.get_node_or_null("CollisionShape2D") as CollisionShape2D
+		_check(shape_node != null, "%s %s lacks CollisionShape2D" % [room_id, platform.name])
+		if shape_node == null:
+			continue
+		_check(
+			shape_node.one_way_collision,
+			"%s %s is a two-way side wall that blocks natural Encounter traversal" % [room_id, platform.name]
+		)
 
 
 func _exercise_checkpoint(

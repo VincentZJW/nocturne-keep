@@ -430,6 +430,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_00" unique_id=1856810628]
 position = Vector2(640, 574)
 shape = SubResource("RectangleShape2D_dppsh")
+one_way_collision = true
 
 [node name="PlatformVisual_01" type="Sprite2D" parent="Gameplay" unique_id=627484057]
 texture_filter = 1
@@ -442,6 +443,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_01" unique_id=2028307598]
 position = Vector2(800, 534)
 shape = SubResource("RectangleShape2D_aqb1j")
+one_way_collision = true
 
 [node name="PlatformVisual_02" type="Sprite2D" parent="Gameplay" unique_id=1662193957]
 texture_filter = 1
@@ -454,6 +456,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_02" unique_id=1084434814]
 position = Vector2(1000, 502)
 shape = SubResource("RectangleShape2D_kssbh")
+one_way_collision = true
 
 [node name="PlatformVisual_03" type="Sprite2D" parent="Gameplay" unique_id=55420675]
 texture_filter = 1
@@ -466,6 +469,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_03" unique_id=1190277136]
 position = Vector2(1200, 534)
 shape = SubResource("RectangleShape2D_6uqut")
+one_way_collision = true
 
 [node name="PlatformVisual_04" type="Sprite2D" parent="Gameplay" unique_id=264737143]
 texture_filter = 1
@@ -478,6 +482,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_04" unique_id=999377553]
 position = Vector2(1360, 574)
 shape = SubResource("RectangleShape2D_wojk0")
+one_way_collision = true
 
 [node name="FrontWaterLip" type="Node2D" parent="." unique_id=1121240216]
 z_index = 13

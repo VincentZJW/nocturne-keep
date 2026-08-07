@@ -390,6 +390,7 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Gameplay/PlatformCollision_00" unique_id=1716193635]
 position = Vector2(1248, 554)
 shape = SubResource("RectangleShape2D_grghi")
+one_way_collision = true
 
 [node name="FrontWaterLip" type="Node2D" parent="." unique_id=1244973866]
 z_index = 13

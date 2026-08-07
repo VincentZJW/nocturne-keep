@@ -243,6 +243,7 @@ func _build_platforms(parent: Node2D, architecture: Node2D, definitions: Array, 
 		var shape: RectangleShape2D = RectangleShape2D.new()
 		shape.size = Vector2(width, 12)
 		shape_node.shape = shape
+		shape_node.one_way_collision = true
 		_owned(body, shape_node, root)
 
 
