@@ -17,7 +17,7 @@ func _run() -> void:
 	var second_positions: Array[Vector2] = await _exercise_room_once()
 	_check(first_positions == second_positions, "saved spawn positions changed after room reload")
 	if _failures.is_empty():
-		print("CH4 S4 RUNTIME | PASS groups=2 suspended_safe=true serialized=true rollback=true rearms=true reload_deterministic=true")
+		print("CH4 S4 RUNTIME | PASS groups=2 suspended_safe=true independent_overlap=true concurrent_awake=true reload_deterministic=true")
 		quit(0)
 		return
 	for failure: String in _failures:
@@ -77,16 +77,18 @@ func _exercise_room_once() -> Array[Vector2]:
 		_check(groups[0].is_activated, "first group activation state missing")
 		_check(spawner.get_active_encounter_id() == groups[0].encounter_name, "spawner registered the wrong active group")
 		_check(not groups[0].activate(), "active group must reject restart")
-		_check(not groups[1].activation_area.monitoring, "second group must stay disarmed while first group is active")
+		_check(groups[1].activation_area.monitoring, "second group must remain armed while first group is active")
 		_check_group_awake(groups[0], "first group")
 
-		# Reproduce a queued overlap that reaches EncounterGroup after another group
-		# already owns the room. The rejected group must return to full dormancy.
-		groups[1].activate(player)
-		await process_frame
-		_check(not groups[1].is_activated, "competing group remained activated after rejection")
-		_check(spawner.get_active_encounter_id() == groups[0].encounter_name, "competing group replaced the active encounter")
-		_check_group_dormant(groups[1], "competing group")
+		# A later authored region has no internal collision gate. Entering it before
+		# the first group clears must wake its pre-placed actors instead of exposing
+		# visible but invulnerable dormant enemies.
+		player.global_position = SECOND_ENCOUNTER_POSITION
+		player.velocity = Vector2.ZERO
+		await _wait_physics_frames(3)
+		_check(groups[1].is_activated, "second overlapping group did not remain activated")
+		_check(spawner.get_active_encounter_id() == groups[1].encounter_name, "latest overlapping group was not reported active")
+		_check_group_awake(groups[1], "overlapping second group")
 
 		for enemy: EnemyCombatant in groups[0].get_enemies():
 			enemy.queue_free()
@@ -95,13 +97,8 @@ func _exercise_room_once() -> Array[Vector2]:
 		await process_frame
 		await _wait_physics_frames(2)
 		_check(groups[0].is_cleared, "cleared group state missing")
-		_check(groups[1].activation_area.monitoring, "remaining group must rearm after clear")
-
-		player.global_position = SECOND_ENCOUNTER_POSITION
-		player.velocity = Vector2.ZERO
-		await _wait_physics_frames(3)
-		_check(groups[1].is_activated, "second group did not activate after rearm")
-		_check(spawner.get_active_encounter_id() == groups[1].encounter_name, "second group was not registered after rearm")
+		_check(groups[1].is_activated, "second group lost activation when first group cleared")
+		_check(spawner.get_active_encounter_id() == groups[1].encounter_name, "active second group was not retained after first clear")
 		_check_group_awake(groups[1], "second group")
 	room.queue_free()
 	player.queue_free()

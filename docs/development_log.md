@@ -7561,3 +7561,31 @@ Status: targeted implementation complete; automated Main/room/combat regression 
 
 - Use the existing Chapter IV debug start and `CH4_AREA_05`, then F5 through MainBootstrap. Activate the Cistern encounter from the enemy's left side and confirm the Mirefin passes beneath the shelf, pursues, attacks, receives Normal/Dash attacks and dies. Repeat after room return/reload.
 - Also spot-check each of the eight Chapter IV roles in the formal route. Automated evidence is complete, but a visual/UI/Debugger claim is deliberately withheld until a desktop-controlled Godot run is performed.
+
+## 2026-08-07 — Chapter IV overlapping-encounter progression deadlock fix
+
+Status: root cause fixed; exact Godot 4.7.1 Main and route regressions pass; user visual acceptance remains
+
+### Root cause and scope
+
+- Reproduced the reported failure through `MainBootstrap` at the saved `CH4_AREA_05` route without calling `EncounterGroup.activate()`: the Player could leave the first encounter region while its enemies remained alive and enter the second authored region because the room has no internal collision gate.
+- The room spawner nevertheless enforced a single uncleared group. It disabled every later `ActivationArea` and rolled back any competing overlap to `PROCESS_MODE_DISABLED`, AI off and Hurtbox off. The later enemies remained visibly pre-placed but could not move, attack or receive Player attacks; in the failing probe the Sewer Maw stayed at `82/82 HP` after a real J attack. Since the room gate requires every group to clear, this also blocked the normal route toward Ormund.
+- Removed only that incompatible per-room serialization from `chapter_04_encounter_spawner.gd`. Every authored ActivationArea now remains armed and independently wakes its own pre-placed actors when the Player reaches it. Transition-time suspension, one-shot activation, dormant off-screen processing, shared enemy AI, combat values and the all-groups-cleared exit contract remain unchanged.
+- Updated the existing S4 runtime regression to require the second real ActivationArea overlap to wake while the first group is still alive. No Chapter I–III, Player, Boss, art, audio or tuning file was changed.
+
+### Exact verification
+
+1. `test_chapter_04_encounter_runtime_s4.gd` — PASS twice: suspended insertion remains safe, the second real overlap activates independently, both groups remain awake and room reload spawn positions stay deterministic.
+2. Formal MainBootstrap competing-group probe — PASS: Player reached x=1230 while group 1 remained uncleared; `CH4_AREA_05_ENCOUNTER_02` activated through its real Area2D. Sewer Maw, Mirefin Raider 02 and Bog Toad all reported inherited processing, physics enabled, AI enabled and Hurtbox enabled. A real J input reduced Sewer Maw from 82 to 68 HP.
+3. `test_chapter_04_encounter_manifests_s4.gd` — PASS: 10 combat rooms, 20 groups, 46 enemies and 8 roles.
+4. `test_chapter_04_main_encounters_s4.gd` — PASS: 5 forward/reverse route passes, 165 room loads, 200 activations, 460 enemy instances, 460 movement checks, 80 deaths and 10 checkpoint registrations.
+5. `test_chapter_04_transitions_s5.gd` — PASS: 32 Main transitions, 40 real-overlap activations, 92 movement/action/enemy-damage checks, 184 Player-damage checks and all 8 roles.
+6. `test_chapter_04_enemy_runtime.gd` — PASS.
+7. `test_chapter_04_q4_boss_flow.gd` — PASS: Cistern all-group clear unlocks Area 06; Main route continues through Ormund P1/P2/death, reward and Chapter V memory exit.
+8. `test_chapter_04_boss_route_stress.gd` — PASS: checkpoint 10, gate 20, intro/retry/death/reward/memory/Chapter V each 10, repeated interaction 100.
+9. Desktop Godot 4.7.1 Main launch at the existing `CH4_AREA_05` Debug Start — PASS for saved room presentation and pre-placed enemy visibility. Direct keyboard-hold playthrough could not be completed through the desktop automation API because it emits key-down/up inside one render frame; movement/combat evidence therefore comes from the exact MainBootstrap Input-action probe above, not from a falsely claimed manual playthrough.
+
+### Manual acceptance
+
+- F5 with the existing Chapter IV `CH4_AREA_05` debug spawn. Leave at least one enemy from encounter 01 alive, move right into encounter 02, and verify Sewer Maw/Mirefin/Bog Toad wake, pursue, attack and receive J/Dash Attack damage instead of remaining inert.
+- Clear both groups and confirm the Cistern east gate opens; continue through Areas 06–13 to the existing Ormund Boss room. Output should contain no project script/resource red error. The macOS system CA-certificate diagnostic printed only by headless test processes is engine/platform noise and not a gameplay error.

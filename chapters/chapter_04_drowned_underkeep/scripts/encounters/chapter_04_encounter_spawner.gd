@@ -1,7 +1,8 @@
 class_name Chapter04EncounterSpawner
 extends Node2D
 
-## Builds only the loaded room's saved groups and serializes activation to one group at a time.
+## Builds only the loaded room's saved groups. Each authored activation area can
+## wake its own pre-placed actors, even while an earlier encounter is unresolved.
 
 signal active_encounter_changed(encounter_id: StringName)
 
@@ -122,16 +123,13 @@ func _on_group_activated(_encounter_id: StringName, group: EncounterGroup) -> vo
 	if _activation_suspended:
 		_restore_group_to_dormant(group)
 		return
-	if is_instance_valid(_active_group) and _active_group != group and not _active_group.is_cleared:
-		# EncounterGroup has already woken its actors before emitting this signal.
-		# A competing queued overlap must be rolled back, not merely ignored.
-		_restore_group_to_dormant(group)
-		return
+	# Rooms do not place an internal collision gate between authored encounter
+	# regions. A mobile Player can legitimately reach a later region before an
+	# earlier one clears. Rejecting that overlap left visible actors with disabled
+	# processing and collision, making them neither hostile nor damageable and
+	# permanently blocking the room-clear gate. Keep every untriggered area armed
+	# and let proximity wake its own group.
 	_active_group = group
-	for candidate: EncounterGroup in _groups:
-		if candidate == group or candidate.is_activated or candidate.activation_area == null:
-			continue
-		candidate.activation_area.set_deferred("monitoring", false)
 	active_encounter_changed.emit(group.encounter_name)
 
 
@@ -151,14 +149,21 @@ func _restore_group_to_dormant(group: EncounterGroup) -> void:
 
 func _on_group_cleared(_encounter_id: StringName, group: EncounterGroup) -> void:
 	if _active_group == group:
-		_active_group = null
-	active_encounter_changed.emit(&"")
+		_active_group = _find_active_uncleared_group()
+	active_encounter_changed.emit(get_active_encounter_id())
 	for candidate: EncounterGroup in _groups:
 		if candidate.is_activated or candidate.activation_area == null:
 			continue
 		candidate.activation_area.set_deferred("monitoring", not _activation_suspended)
 		if not _activation_suspended:
 			call_deferred("_activate_if_player_overlaps", candidate)
+
+
+func _find_active_uncleared_group() -> EncounterGroup:
+	for candidate: EncounterGroup in _groups:
+		if candidate.is_activated and not candidate.is_cleared:
+			return candidate
+	return null
 
 
 func _activate_if_player_overlaps(group: EncounterGroup) -> void:
