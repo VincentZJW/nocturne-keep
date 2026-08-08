@@ -1,0 +1,119 @@
+{
+  "title": "The Soul Cage Gives Way / 魂笼崩裂",
+  "seed": 4041915,
+  "bpm": 104.0,
+  "time_signature": "4/4",
+  "bars": 4,
+  "duration_seconds": 9.230770833333333,
+  "loop_begin_seconds": 0.0,
+  "loop_end_seconds": 0.0,
+  "loops": false,
+  "sections": {
+    "Chain_Breaks": [
+      1,
+      1
+    ],
+    "Soul_Cage_Rupture": [
+      2,
+      2
+    ],
+    "Flood_Surge": [
+      3,
+      3
+    ],
+    "Final_Impact": [
+      4,
+      4
+    ]
+  },
+  "gaoler_motif": [
+    50,
+    48,
+    46,
+    45,
+    39
+  ],
+  "soul_response": [
+    41,
+    44,
+    43,
+    47,
+    46,
+    40
+  ],
+  "sample_provenance": "fully synthesized locally; no samples or external services",
+  "events": [
+    {
+      "track": "soul",
+      "start_beat": 0.0,
+      "duration_beats": 15.2,
+      "midi_note": 26,
+      "velocity": 62,
+      "pan": 0.0
+    },
+    {
+      "track": "water",
+      "start_beat": 0.0,
+      "duration_beats": 15.3,
+      "midi_note": 31,
+      "velocity": 43,
+      "pan": -0.35
+    },
+    {
+      "track": "brass",
+      "start_beat": 0.0,
+      "duration_beats": 3.6,
+      "midi_note": 38,
+      "velocity": 48,
+      "pan": 0.0
+    },
+    {
+      "track": "chain",
+      "start_beat": 2.0,
+      "duration_beats": 0.62,
+      "midi_note": 69,
+      "velocity": 86,
+      "pan": -0.65
+    },
+    {
+      "track": "chain",
+      "start_beat": 4.0,
+      "duration_beats": 0.72,
+      "midi_note": 74,
+      "velocity": 94,
+      "pan": 0.65
+    },
+    {
+      "track": "gate",
+      "start_beat": 8.0,
+      "duration_beats": 1.85,
+      "midi_note": 35,
+      "velocity": 96,
+      "pan": 0.0
+    },
+    {
+      "track": "water",
+      "start_beat": 12.0,
+      "duration_beats": 3.4,
+      "midi_note": 26,
+      "velocity": 84,
+      "pan": 0.0
+    },
+    {
+      "track": "gate",
+      "start_beat": 15.0,
+      "duration_beats": 0.72,
+      "midi_note": 31,
+      "velocity": 112,
+      "pan": 0.0
+    },
+    {
+      "track": "timpani",
+      "start_beat": 15.0,
+      "duration_beats": 0.7,
+      "midi_note": 31,
+      "velocity": 110,
+      "pan": 0.0
+    }
+  ]
+}

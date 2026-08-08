@@ -6,6 +6,7 @@ signal boss_flow_completed
 
 const PHASE_ONE_TRACK: StringName = &"CH4_BOSS_SOUL_GAOLER_PHASE_01"
 const PHASE_TWO_TRACK: StringName = &"CH4_BOSS_SOUL_GAOLER_PHASE_02"
+const PHASE_TRANSITION_TRACK: StringName = &"CH4_BOSS_SOUL_GAOLER_TRANSITION"
 const FLAG_BOSS_DEFEATED: StringName = &"ch4_boss_defeated"
 const FLAG_BOSS_INTRO_SEEN: StringName = &"ch4_boss_intro_seen"
 
@@ -19,6 +20,7 @@ var reward_exit: Chapter04RoomExit
 var _intro_running: bool = false
 var _boss_defeated: bool = false
 var _combat_started: bool = false
+var _intro_sequence_token: int = 0
 var _ui_layer: CanvasLayer
 var _dialogue_panel: PanelContainer
 var _dialogue_label: Label
@@ -26,6 +28,8 @@ var _boss_panel: PanelContainer
 var _boss_name: Label
 var _boss_phase: Label
 var _boss_health: ProgressBar
+var _last_music_sync_cue: StringName = &""
+var _last_music_sync_seconds: float = 0.0
 
 
 func _ready() -> void:
@@ -38,8 +42,9 @@ func _exit_tree() -> void:
 	if music == null:
 		return
 	var active_track: StringName = music.get_current_track_id()
-	if active_track == PHASE_ONE_TRACK or active_track == PHASE_TWO_TRACK:
+	if active_track in [PHASE_ONE_TRACK, PHASE_TWO_TRACK, PHASE_TRANSITION_TRACK]:
 		music.stop_music()
+	music.restore_after_dialogue(0.0)
 	music.clear_phase_switch_guard(&"ch4_ormund_phase_two")
 
 
@@ -65,10 +70,14 @@ func _bind_runtime() -> void:
 	boss.begin_external_intro()
 	boss.health_component.health_changed.connect(_on_boss_health_changed)
 	boss.phase_changed.connect(_on_phase_changed)
+	boss.phase_transition_started.connect(_on_phase_transition_started)
+	boss.phase_transition_cue.connect(_on_phase_transition_cue)
 	boss.death_sequence_started.connect(_on_death_started)
 	boss.defeated.connect(_on_boss_defeated)
 	player.respawned.connect(_on_player_respawned)
-	if session != null and session.has_story_flag(FLAG_BOSS_INTRO_SEEN):
+	if _is_direct_phase_two_debug_start():
+		_start_direct_phase_two_debug()
+	elif session != null and session.has_story_flag(FLAG_BOSS_INTRO_SEEN):
 		_resume_battle_after_retry()
 	else:
 		_run_intro()
@@ -118,11 +127,13 @@ func _run_intro() -> void:
 	if _intro_running or _boss_defeated:
 		return
 	_intro_running = true
+	_intro_sequence_token += 1
+	var sequence_token: int = _intro_sequence_token
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
 	if session != null:
 		session.set_story_flag(FLAG_BOSS_INTRO_SEEN)
 	_lock_player(true)
-	_play_phase_one_music()
+	_play_phase_one_music(true)
 	var lines: PackedStringArray = [
 		"奥蒙德：礼拜堂终于把你吐了下来。\nORMUND: The chapel has finally spat you out.",
 		"夜巡守卫：埃德兰说，未被赦免的人都在这里。\nNIGHT WARDEN: Edran said the unforgiven were kept here.",
@@ -136,13 +147,16 @@ func _run_intro() -> void:
 	for line: String in lines:
 		_dialogue_label.text = line
 		await get_tree().create_timer(intro_line_duration).timeout
-		if not is_inside_tree():
+		if not is_inside_tree() or sequence_token != _intro_sequence_token:
 			return
 	_dialogue_panel.visible = false
+	var music: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
+	if music != null:
+		music.restore_after_dialogue(0.30)
 	_boss_panel.visible = true
 	_on_boss_health_changed(boss.health_component.current_health, boss.health_component.max_health)
 	await get_tree().create_timer(0.55).timeout
-	if not is_inside_tree():
+	if not is_inside_tree() or sequence_token != _intro_sequence_token:
 		return
 	_lock_player(false)
 	boss.begin_combat(player)
@@ -153,12 +167,14 @@ func _run_intro() -> void:
 
 func _resume_battle_after_retry() -> void:
 	_intro_running = true
+	_intro_sequence_token += 1
+	var sequence_token: int = _intro_sequence_token
 	_lock_player(true)
-	_play_phase_one_music()
+	_play_phase_one_music(false)
 	_boss_panel.visible = true
 	_on_boss_health_changed(boss.health_component.current_health, boss.health_component.max_health)
 	await get_tree().create_timer(0.45).timeout
-	if not is_inside_tree() or _boss_defeated:
+	if not is_inside_tree() or _boss_defeated or sequence_token != _intro_sequence_token:
 		return
 	_lock_player(false)
 	boss.begin_combat(player)
@@ -170,6 +186,8 @@ func _resume_battle_after_retry() -> void:
 func skip_intro_for_qa() -> void:
 	if boss == null or player == null or _boss_defeated:
 		return
+	_play_phase_one_music(false)
+	_intro_sequence_token += 1
 	_intro_running = false
 	if _dialogue_panel != null:
 		_dialogue_panel.visible = false
@@ -195,7 +213,22 @@ func _on_phase_changed(new_phase: int) -> void:
 	if new_phase == 2:
 		var music: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
 		if music != null:
-			music.phase_switch_once(&"ch4_ormund_phase_two", PHASE_TWO_TRACK, 0.85)
+			music.phase_switch_once(&"ch4_ormund_phase_two", PHASE_TWO_TRACK, 0.18)
+
+
+func _on_phase_transition_started(_duration: float) -> void:
+	var music: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
+	if music == null:
+		return
+	music.set_music_volume(-24.0, 0.65)
+	music.play_transition_stinger(PHASE_TRANSITION_TRACK, true)
+
+
+func _on_phase_transition_cue(cue_name: StringName, elapsed_seconds: float) -> void:
+	_last_music_sync_cue = cue_name
+	_last_music_sync_seconds = elapsed_seconds
+	get_parent().set_meta(&"ormund_music_sync_cue", cue_name)
+	get_parent().set_meta(&"ormund_music_sync_seconds", elapsed_seconds)
 
 
 func _on_death_started() -> void:
@@ -205,7 +238,7 @@ func _on_death_started() -> void:
 		_boss_panel.visible = false
 	var music: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
 	if music != null:
-		music.fade_out(1.0)
+		music.fade_out(2.0)
 
 
 func _on_boss_defeated() -> void:
@@ -254,7 +287,38 @@ func _lock_player(value: bool) -> void:
 		player.hurtbox.set_invulnerable(value)
 
 
-func _play_phase_one_music() -> void:
+func _play_phase_one_music(dialogue_duck: bool) -> void:
 	var music: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
 	if music != null:
 		music.play_music(PHASE_ONE_TRACK, 0.8, true)
+		if dialogue_duck:
+			music.duck_for_dialogue(6.0, 0.20)
+		else:
+			music.restore_after_dialogue(0.0)
+
+
+func _is_direct_phase_two_debug_start() -> bool:
+	var debug: DebugRunConfigState = get_node_or_null("/root/DebugRunConfig") as DebugRunConfigState
+	return debug != null and debug.is_chapter_start_allowed() and debug.debug_start_spawn_id == &"CH4_BOSS_PHASE_02"
+
+
+func _start_direct_phase_two_debug() -> void:
+	_intro_running = false
+	_boss_panel.visible = true
+	_lock_player(false)
+	var music: MusicManagerService = get_node_or_null("/root/MusicManager") as MusicManagerService
+	if music != null:
+		music.clear_phase_switch_guard(&"ch4_ormund_phase_two")
+		music.play_music(PHASE_TWO_TRACK, 0.45, true)
+	boss.begin_debug_phase_two(player)
+	_on_boss_health_changed(boss.health_component.current_health, boss.health_component.max_health)
+	_combat_started = true
+	intro_completed.emit()
+
+
+func get_last_music_sync_cue() -> StringName:
+	return _last_music_sync_cue
+
+
+func get_last_music_sync_seconds() -> float:
+	return _last_music_sync_seconds

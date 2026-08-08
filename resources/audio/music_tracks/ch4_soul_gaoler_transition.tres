@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="MusicTrackDefinition" load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/audio/music_track_definition.gd" id="1_definition"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/soul_gaoler_phase_transition_soul_cage_break.ogg" id="2_stream"]
+
+[resource]
+script = ExtResource("1_definition")
+track_id = &"CH4_BOSS_SOUL_GAOLER_TRANSITION"
+display_name = "The Soul Cage Gives Way / 魂笼崩裂"
+stream = ExtResource("2_stream")
+bpm = 104.0
+beats_per_bar = 4
+beat_unit = 4
+default_volume_db = -8.5
+loops = false
+loop_start_seconds = 0.0
+loop_end_seconds = 0.0

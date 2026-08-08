@@ -232,6 +232,77 @@ def synth_chain(frequency: float, duration: float, seed: int) -> np.ndarray:
     return result * 0.26
 
 
+def synth_bass_brass(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Dark bass-brass pressure without recorded orchestral samples."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    swell = np.minimum(1.0, time / max(0.025, min(0.18, duration * 0.22)))
+    phase = time * math.tau * frequency
+    result = (
+        np.sin(phase) * 0.62
+        + np.sin(phase * 2.0 + 0.13) * 0.27
+        + np.sin(phase * 3.0 + 0.37) * 0.15
+        + np.sin(phase * 4.0 + 0.51) * 0.07
+    ).astype(np.float32)
+    breath = signal.sosfilt(
+        signal.butter(2, 720.0, btype="lowpass", fs=SAMPLE_RATE, output="sos"),
+        rng.standard_normal(length).astype(np.float32),
+    ).astype(np.float32)
+    result = result * swell.astype(np.float32) + breath * 0.012
+    result *= _envelope(length, 0.025, min(0.24, duration * 0.28))
+    return result * 0.34
+
+
+def synth_water_pressure(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Submerged, slowly modulated water-pressure texture."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    noise = rng.standard_normal(length).astype(np.float32)
+    low = signal.sosfilt(
+        signal.butter(3, 310.0, btype="lowpass", fs=SAMPLE_RATE, output="sos"), noise
+    ).astype(np.float32)
+    pulse = (0.68 + np.sin(time * math.tau * 0.19 + rng.uniform(-math.pi, math.pi)) * 0.24).astype(np.float32)
+    tone = np.sin(time * math.tau * max(24.0, frequency * 0.5)).astype(np.float32) * 0.18
+    result = low * pulse * 0.22 + tone
+    result *= _envelope(length, min(0.55, duration * 0.24), min(0.70, duration * 0.30))
+    return result * 0.20
+
+
+def synth_soul_drone(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Wordless trapped-soul drone, kept below the attack-telegraph band."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    wobble = np.sin(time * math.tau * rng.uniform(0.13, 0.22)) * 0.008
+    phase = np.cumsum(frequency * (1.0 + wobble), dtype=np.float64) * (math.tau / SAMPLE_RATE)
+    result = (
+        np.sin(phase) * 0.54
+        + np.sin(phase * 1.5 + 0.4) * 0.20
+        + np.sin(phase * 2.01 + 0.7) * 0.12
+    ).astype(np.float32)
+    result *= _envelope(length, min(0.48, duration * 0.28), min(0.62, duration * 0.32))
+    return result * 0.23
+
+
+def synth_gate_impact(frequency: float, duration: float, seed: int) -> np.ndarray:
+    """Short, broad iron-gate impact for score punctuation and transitions."""
+    length = max(2, int(round(duration * SAMPLE_RATE)))
+    time = np.arange(length, dtype=np.float32) / float(SAMPLE_RATE)
+    rng = np.random.default_rng(seed)
+    noise = rng.standard_normal(length).astype(np.float32)
+    noise = signal.sosfilt(
+        signal.butter(2, [95.0, 2400.0], btype="bandpass", fs=SAMPLE_RATE, output="sos"), noise
+    ).astype(np.float32)
+    metal = np.zeros(length, dtype=np.float32)
+    for ratio, gain in ((1.0, 0.58), (2.37, 0.31), (4.73, 0.16), (7.11, 0.08)):
+        metal += np.sin(time * math.tau * frequency * ratio + rng.uniform(-math.pi, math.pi)) * gain
+    result = metal * np.exp(-time * 3.1).astype(np.float32) + noise * np.exp(-time * 7.5).astype(np.float32) * 0.22
+    result *= _envelope(length, 0.001, min(0.16, duration * 0.18))
+    return result * 0.36
+
+
 SYNTHS: dict[str, Callable[[float, float, int], np.ndarray]] = {
     "harpsichord": synth_harpsichord,
     "strings": synth_bowed_string,
@@ -243,6 +314,10 @@ SYNTHS: dict[str, Callable[[float, float, int], np.ndarray]] = {
     "bell": synth_bronze_bell,
     "pad": synth_cold_pad,
     "chain": synth_chain,
+    "brass": synth_bass_brass,
+    "water": synth_water_pressure,
+    "soul": synth_soul_drone,
+    "gate": synth_gate_impact,
 }
 
 
@@ -257,6 +332,10 @@ TRACK_GAIN: dict[str, float] = {
     "bell": 0.56,
     "pad": 0.48,
     "chain": 0.44,
+    "brass": 0.68,
+    "water": 0.42,
+    "soul": 0.46,
+    "gate": 0.62,
 }
 
 
@@ -417,10 +496,12 @@ def write_standard_midi(
     channel_map = {
         "harpsichord": 0, "strings": 1, "bass": 2, "glass": 3, "timpani": 9,
         "organ": 4, "choir": 5, "bell": 6, "pad": 7, "chain": 8,
+        "brass": 10, "water": 11, "soul": 12, "gate": 13,
     }
     program_map = {
         "harpsichord": 6, "strings": 48, "bass": 43, "glass": 14, "timpani": 47,
         "organ": 19, "choir": 52, "bell": 14, "pad": 89, "chain": 115,
+        "brass": 58, "water": 97, "soul": 91, "gate": 116,
     }
     grouped: dict[str, list[ScoreEvent]] = {name: [] for name in channel_map}
     for event in score_events:

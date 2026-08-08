@@ -2,6 +2,8 @@ class_name SoulGaolerOrmund
 extends GroundEnemyBase
 
 signal phase_changed(phase: int)
+signal phase_transition_started(duration: float)
+signal phase_transition_cue(cue_name: StringName, elapsed_seconds: float)
 signal boss_action_started(action: StringName, phase: int)
 signal boss_action_active(action: StringName, active: bool)
 signal intro_started
@@ -14,6 +16,14 @@ const COMBAT: StringName = &"Combat"
 const TURN: StringName = &"Turn"
 const PHASE_TRANSITION: StringName = &"PhaseTransition"
 const STAGGER: StringName = &"Stagger"
+const PHASE_TRANSITION_CUE_TIMES: PackedFloat32Array = [1.153846, 2.307692, 4.615385, 6.923077, 8.653846]
+const PHASE_TRANSITION_CUES: Array[StringName] = [
+	&"first_chain_break",
+	&"second_chain_break",
+	&"soul_cage_collapse",
+	&"flood_surge",
+	&"final_iron_impact",
+]
 
 @export_node_path("HitboxComponent") var melee_hitbox_path: NodePath = NodePath("FacingRoot/MeleeHitbox")
 @export_node_path("HitboxComponent") var area_hitbox_path: NodePath = NodePath("AreaHitbox")
@@ -38,6 +48,8 @@ var _next_attack_id: int = 1
 var _judgment_cooldown: float = 0.0
 var _stagger_protection: float = 0.0
 var _transition_started: bool = false
+var _transition_elapsed: float = 0.0
+var _transition_cue_index: int = 0
 var _combat_enabled: bool = true
 var _defeat_emitted: bool = false
 
@@ -84,6 +96,8 @@ func _process_enemy_state(delta: float) -> void:
 		return
 	if current_state == PHASE_TRANSITION:
 		state_timer = maxf(0.0, state_timer - delta)
+		_transition_elapsed = _boss_config().phase_transition_duration - state_timer
+		_emit_due_transition_cues()
 		velocity = Vector2.ZERO
 		if state_timer <= 0.0:
 			_finish_phase_transition()
@@ -217,8 +231,20 @@ func _on_health_changed(current: int, _maximum: int) -> void:
 		_on_attack_cancelled()
 		transition_state(PHASE_TRANSITION)
 		state_timer = _boss_config().phase_transition_duration
+		_transition_elapsed = 0.0
+		_transition_cue_index = 0
 		velocity = Vector2.ZERO
 		play_animation(&"phase_transition", true)
+		phase_transition_started.emit(state_timer)
+
+
+func _emit_due_transition_cues() -> void:
+	while _transition_cue_index < PHASE_TRANSITION_CUE_TIMES.size():
+		var cue_time: float = PHASE_TRANSITION_CUE_TIMES[_transition_cue_index]
+		if _transition_elapsed + 0.0001 < cue_time:
+			return
+		phase_transition_cue.emit(PHASE_TRANSITION_CUES[_transition_cue_index], cue_time)
+		_transition_cue_index += 1
 
 
 func _finish_phase_transition() -> void:
@@ -350,6 +376,18 @@ func begin_combat(player_target: Player) -> void:
 	transition_state(COMBAT)
 	play_animation(_idle_animation(), true)
 	combat_started.emit()
+
+
+func begin_debug_phase_two(player_target: Player) -> void:
+	if is_dead():
+		return
+	_transition_started = true
+	phase = 2
+	damage_policy.damage_multiplier = _boss_config().phase_two_damage_multiplier
+	poise_component.configure(_boss_config().phase_two_poise, 1.45)
+	begin_combat(player_target)
+	play_animation(&"idle_p2", true)
+	phase_changed.emit(phase)
 
 
 func is_combat_enabled() -> bool:

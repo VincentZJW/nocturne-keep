@@ -4,7 +4,7 @@ extends EnemyGroundConfig
 @export_category("Shared encounter")
 @export_range(1, 1000, 1) var total_health: int = 560
 @export_range(0.1, 0.9, 0.01) var phase_two_threshold_ratio: float = 0.55
-@export var phase_transition_duration: float = 1.25
+@export var phase_transition_duration: float = 9.230769
 
 @export_category("Phase I")
 @export_range(0.1, 1.0, 0.01) var phase_one_damage_multiplier: float = 0.82
