@@ -4,8 +4,8 @@
   "sample_count": 7975385,
   "duration_seconds": 166.15385416666666,
   "peak_dbfs": -3.0980393476346837,
-  "rms_dbfs": -17.273015228098462,
+  "rms_dbfs": -19.280369293451404,
   "boundary_delta": 0.0,
-  "boundary_rms_20ms": 0.07856601916376751,
-  "sha256": "37e7c494928c3b3b5902a69cc4ab1432569262fbe4e400d9b0c0da9cfd9b1375"
+  "boundary_rms_20ms": 0.07486811023236431,
+  "sha256": "05458edd6c17c7db5cdfd4f4106f2be701db004c5795410fccd25f3d96c638dd"
 }

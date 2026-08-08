@@ -6,11 +6,17 @@ const BOSS_SCENE: PackedScene = preload("res://chapters/chapter_04_drowned_under
 const PHASE_01: StringName = &"CH4_BOSS_SOUL_GAOLER_PHASE_01"
 const PHASE_02: StringName = &"CH4_BOSS_SOUL_GAOLER_PHASE_02"
 const TRANSITION: StringName = &"CH4_BOSS_SOUL_GAOLER_TRANSITION"
+const PHASE_01_SCORE: String = "res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/source/soul_gaoler_phase_01_submerged_chains_score.json"
+const PHASE_02_SCORE: String = "res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/source/soul_gaoler_phase_02_broken_cage_score.json"
+const GAOLER_THEME: Array[int] = [50, 48, 46, 45, 39]
+const SOUL_THEME: Array[int] = [65, 68, 67, 65, 64, 63, 62]
+const UNDERTOW_THEME: Array[int] = [57, 55, 51, 50]
 
 var _failures: Array[String] = []
 var _transition_cues: Array[StringName] = []
 var _stinger_starts: int = 0
 var _phase_two_crossfades: int = 0
+var _formal_dwell_seconds: float = 0.0
 
 
 func _initialize() -> void:
@@ -18,6 +24,9 @@ func _initialize() -> void:
 
 
 func _run() -> void:
+	var dwell_override: String = OS.get_environment("CH4_MELODY_MAIN_DWELL_SECONDS")
+	if dwell_override.is_valid_float():
+		_formal_dwell_seconds = maxf(0.0, dwell_override.to_float())
 	var manager: MusicManagerService = root.get_node_or_null("MusicManager") as MusicManagerService
 	var debug: DebugRunConfigState = root.get_node_or_null("DebugRunConfig") as DebugRunConfigState
 	_expect(manager != null and debug != null, "Required audio/debug Autoload is missing")
@@ -25,6 +34,7 @@ func _run() -> void:
 		_finish()
 		return
 	_validate_definitions()
+	_validate_melody_contracts()
 	manager.transition_stinger_started.connect(_on_stinger_started)
 	manager.crossfade_started.connect(_on_crossfade_started)
 
@@ -56,6 +66,10 @@ func _run() -> void:
 	await process_frame
 	_expect(manager.get_current_track_id() == PHASE_01, "Phase 1 formal Main cue did not start")
 	_expect(manager.get_dialogue_duck_db() == 0.0, "QA combat start retained dialogue Duck")
+	if _formal_dwell_seconds > 0.0:
+		boss.set_physics_process(false)
+		await _dwell_formal_track(manager, PHASE_01, _formal_dwell_seconds, "Phase 1")
+		boss.set_physics_process(true)
 
 	# One real-time transition validates the authored 9.23-second bridge against
 	# the five named Boss-animation sync points.
@@ -118,6 +132,10 @@ func _run() -> void:
 		boss = room.get_node_or_null("Enemies/SoulGaolerOrmund") as SoulGaolerOrmund if room != null else null
 		_expect(boss != null and boss.phase == 2, "CH4_BOSS_PHASE_02 did not create a true Phase 2 Boss")
 		_expect(manager.get_current_track_id() == PHASE_02, "Direct Phase 2 start did not select Phase 2 music")
+		if boss != null and _formal_dwell_seconds > 0.0:
+			boss.set_physics_process(false)
+			await _dwell_formal_track(manager, PHASE_02, _formal_dwell_seconds, "Phase 2")
+			boss.set_physics_process(true)
 	await _cleanup(manager, debug)
 
 
@@ -135,6 +153,44 @@ func _validate_definitions() -> void:
 	if bridge != null:
 		_expect(not bridge.loops and is_equal_approx(bridge.bpm, 104.0), "Transition loop/BPM contract drifted")
 		_expect(bridge.stream != null and absf(bridge.stream.get_length() - 9.230771) < 0.03, "Transition duration drifted")
+
+
+func _validate_melody_contracts() -> void:
+	var phase_one: Dictionary = _load_score(PHASE_01_SCORE)
+	var phase_two: Dictionary = _load_score(PHASE_02_SCORE)
+	_expect(not phase_one.is_empty() and not phase_two.is_empty(), "Formal Chapter IV score JSON is missing")
+	if phase_one.is_empty() or phase_two.is_empty():
+		return
+	for score: Dictionary in [phase_one, phase_two]:
+		_expect(_numeric_array_matches(score.get("gaoler_motif", []) as Array, GAOLER_THEME), "Gaoler theme identity drifted")
+		_expect(_numeric_array_matches(score.get("soul_prison_theme", []) as Array, SOUL_THEME), "Soul Prison theme identity drifted")
+		_expect(_numeric_array_matches(score.get("undertow_motif", []) as Array, UNDERTOW_THEME), "Undertow motif identity drifted")
+		var variations: Array = score.get("gaoler_theme_variations", []) as Array
+		_expect(variations.size() >= 6, "Gaoler theme has fewer than six authored variations")
+	var p1_sections: Dictionary = phase_one.get("sections", {}) as Dictionary
+	var p2_sections: Dictionary = phase_two.get("sections", {}) as Dictionary
+	_expect(p1_sections.size() == 8 and p1_sections.has("E_The_Empty_Cell"), "Phase 1 rich-form section contract drifted")
+	_expect(p2_sections.size() == 7 and p2_sections.has("E2_Chains_Against_Souls"), "Phase 2 rich-form section contract drifted")
+	_expect(p1_sections.has("B_The_Prisoners") and p1_sections.has("C_The_Flood"), "Phase 1 theme-absence regions are missing")
+	_expect(p2_sections.has("C2_Undertow_Hunt") and p2_sections.has("Final_Lock"), "Phase 2 Undertow/Final Lock regions are missing")
+
+
+func _load_score(path: String) -> Dictionary:
+	if not FileAccess.file_exists(path):
+		return {}
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if parsed is Dictionary:
+		return parsed as Dictionary
+	return {}
+
+
+func _numeric_array_matches(actual: Array, expected: Array[int]) -> bool:
+	if actual.size() != expected.size():
+		return false
+	for index: int in range(expected.size()):
+		if int(actual[index]) != expected[index]:
+			return false
+	return true
 
 
 func _wait_for_level(maximum_frames: int) -> DrownedUnderkeepRoute:
@@ -168,6 +224,25 @@ func _wait_for_phase_two(boss: SoulGaolerOrmund, manager: MusicManagerService, m
 			manager.get_current_track_id(),
 		]
 	)
+
+
+func _dwell_formal_track(manager: MusicManagerService, expected_track: StringName, duration_seconds: float, label: String) -> void:
+	var started_ms: int = Time.get_ticks_msec()
+	var deadline_ms: int = Time.get_ticks_msec() + roundi(duration_seconds * 1000.0)
+	while Time.get_ticks_msec() < deadline_ms:
+		await create_timer(0.25, true, false, true).timeout
+		if manager.get_current_track_id() != expected_track:
+			_failures.append("%s changed track during %.1f-second formal-room dwell" % [label, duration_seconds])
+			return
+		var player_count: int = manager.get_active_player_count()
+		if player_count < 1 or player_count > 2:
+			_failures.append("%s formal-room dwell changed active deck count to %d" % [label, player_count])
+			return
+		# Main can enter the dwell while its authored intro-to-combat fade still
+		# overlaps two decks.  It must settle to one deck after that grace period.
+		if Time.get_ticks_msec() - started_ms > 3000 and player_count != 1:
+			_failures.append("%s formal-room dwell did not settle to one active deck" % label)
+			return
 
 
 func _on_transition_cue(cue_name: StringName, _elapsed_seconds: float) -> void:

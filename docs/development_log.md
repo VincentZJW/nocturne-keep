@@ -1,5 +1,28 @@
 # Development Log
 
+## 2026-08-08 — CH4-MELODY-1–4 Soul Gaoler Ormund thematic enrichment
+
+Status: formal score/render/Main/runtime work complete; deterministic QA PASS; subjective listening acceptance remains a manual user gate
+
+- Preserved the approved 78 BPM/60-bar Phase 1, 104 BPM/72-bar Phase 2, D–C–B-flat–A–E-flat Gaoler identity, low-brass/low-string weight, chains, timpani, deep-water pressure, formal file paths and guarded MusicManager transition. No Boss timing, damage, AI, Player system or route was changed.
+- Added genuine melodic material rather than layer-only density: a seven-note F–A-flat–G–F–E–E-flat–D Soul Prison theme, a four-note A–G–E-flat–D Undertow motif and six Gaoler treatments (low brass, cello, higher string/soul mirror, antiphonal fragments, fractured phrase and chromatic/local inversion). P1 now has eight named regions, including Gaoler-free `The Flood`/`The Empty Cell`; P2 has seven, including Gaoler-free `Undertow Hunt` and a `Final Lock` climax where Gaoler, Soul and Undertow materials coexist in separate voices.
+- Reauthored harmony, bass and percussion motion without extending the approved durations. Four rotating low-foundation patterns hold identical bass rhythm to a maximum of two bars; sectional harmonic environments include pedal bass, minor/suspended colour, chromatic descent and diminished/tritone tension. The rendered scores contain 604 P1 events and 970 P2 events.
+- Directly regenerated the formal MIDI, OGG, score JSON and analysis JSON. P1 remains 184.615375 s, peak -3.10 dBFS/RMS -17.83 dBFS/boundary delta 0; P2 remains 166.153854 s, peak -3.10 dBFS/RMS -19.28 dBFS/boundary delta 0. The existing transition was deterministically refreshed but its 9.230771-second event/sync contract and logic were not recomposed.
+- Objective SFX-space analysis found only 0.02%/0.03% of P1/P2 spectral energy in 800–3000 Hz, while 94.25%/93.14% remains below 250 Hz. Ten-second RMS ranges are 4.54 dB and 2.00 dB. This supports telegraph headroom but does not replace human combat listening.
+- Exact Godot 4.7.1 import and the formal Main music test passed. The test used MainBootstrap, the saved Boss room, the real bridge, five sync cues, ten Boss lifecycles, twenty guarded phase switches, Boss death fade and direct `CH4_BOSS_PHASE_02`. An optional formal-room dwell ran P1 and P2 for 120 seconds each and remained on the correct track/deck contract.
+- Both cues completed parallel 900-second endurance runs: P1 wrapped four times and P2 five times, each retained one active player and ended with static-memory growth of -2,888 bytes. Existing Ormund runtime, Q4/Boss flow and Chapter IV Main-integration suites also passed with no red parser/resource/runtime error.
+- Full evidence and the score-vs-listening acceptance boundary are recorded in `docs/qa/chapter_04_boss_music/ch4_m5_report.md`. Automation validates authorship, structure, continuity, headroom and runtime stability; only the user's ears can accept musical fatigue, emotional clarity and live combat-SFX balance.
+
+## 2026-08-08 — CH4-MELODY-0 Soul Gaoler Ormund melody-density audit
+
+Status: audit complete — no score, MIDI, OGG, runtime Resource or Main integration changed; recomposition awaits approval
+
+- Loaded the repository chapter-production policies and audited the authoritative fixed-seed score generator, both formal score JSON files, MIDI/OGG analysis metadata, track Resources and the existing CH4-M5 Main/long-play evidence.
+- Preserved the approved musical identity: D–C–B-flat–A–E-flat Gaoler motif, low brass/low strings, timpani, chains, deep-water pressure, soul-cage atmosphere, 78 BPM Phase 1, 104 BPM Phase 2 and the existing guarded Main transition contract.
+- Root finding: the current cues already have seven/six named regions, but most contrast comes from instrumentation, density and rhythmic-bed changes. Phase 1 has no sustained independent mid/high melodic layer; its six-note soul response is sparse. Phase 2 reduces that response mostly to isolated choir tones while repeating the D–C–B-flat fragment every four bars. The C2 “undertow” is a local bass crawl, not yet a reusable melodic motif, and Final Lock does not yet present two complete themes in counterpoint.
+- Locked the next-stage plan without rendering: retain the existing 60-bar/184.615375-second and 72-bar/166.153854-second forms, redistribute them into stronger 18–33 second regions, develop at least four Gaoler-theme variants, promote a seven-note Soul Prison theme derived from the current response, add a four-note Undertow motif, create melody-free contrast, and make Phase 2 Final Lock combine the Gaoler and Soul themes simultaneously.
+- This is a read-only musical audit apart from this log entry. No commit is created for CH4-MELODY-0, matching the project rule that audit-only work is not a standalone code/content commit.
+
 ## 2026-08-08 — CH4-M1–M5 Soul Gaoler Ormund full Boss-score production and Main integration
 
 Status: implementation and deterministic/Main QA complete; subjective mix/audition acceptance remains explicitly assigned to the user

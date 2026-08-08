@@ -41,6 +41,29 @@
     46,
     40
   ],
+  "soul_prison_theme": [
+    65,
+    68,
+    67,
+    65,
+    64,
+    63,
+    62
+  ],
+  "undertow_motif": [
+    57,
+    55,
+    51,
+    50
+  ],
+  "gaoler_theme_variations": [
+    "A_LOW_BRASS",
+    "B_CELLO",
+    "C_SOUL_MIRROR",
+    "D_ANTIPHONAL_FRAGMENTS",
+    "E_FRACTURED",
+    "F_CHROMATIC_INVERSION"
+  ],
   "sample_provenance": "fully synthesized locally; no samples or external services",
   "events": [
     {
