@@ -179,6 +179,9 @@ static func _draw_dagger(
 	if weapon_style == &"thirteenfold_absolution":
 		Renderer.draw_thirteenfold_absolution_blade(image, handle, tip, is_main)
 		return
+	if weapon_style == &"soul_lock_twin_keys":
+		Renderer.draw_soul_lock_twin_key(image, handle, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - handle).normalized()
 	var blade_start: Vector2i = handle + Vector2i(
 		roundi(direction.x * 3.0), roundi(direction.y * 3.0)

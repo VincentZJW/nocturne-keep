@@ -19,6 +19,10 @@ const THIRTEENFOLD_ABSOLUTION_WEAPON: WeaponData = preload(
 	"res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/weapons/"
 	+ "thirteenfold_absolution_blades.tres"
 )
+const SOUL_LOCK_TWIN_KEYS_WEAPON: WeaponData = preload(
+	"res://chapters/chapter_04_drowned_underkeep/resources/weapons/"
+	+ "soul_lock_twin_keys.tres"
+)
 
 var equipped_weapon_id: StringName = &"veilbound_daggers"
 
@@ -77,6 +81,8 @@ func get_weapon(weapon_id: StringName) -> WeaponData:
 			return CRIMSON_MASQUE_WEAPON
 		&"thirteenfold_absolution_blades":
 			return THIRTEENFOLD_ABSOLUTION_WEAPON
+		&"soul_lock_twin_keys":
+			return SOUL_LOCK_TWIN_KEYS_WEAPON
 	return null
 
 

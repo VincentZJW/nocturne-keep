@@ -1,0 +1,543 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_end/air_dash_end_01.png" id="1_elyco"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_end/air_dash_end_02.png" id="2_151vw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_loop/air_dash_loop_01.png" id="3_1s8qw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_loop/air_dash_loop_02.png" id="4_mnfsg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_loop/air_dash_loop_03.png" id="5_5h0ap"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_start/air_dash_start_01.png" id="6_01fjg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/air_dash_start/air_dash_start_02.png" id="7_ebuqw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack/attack_01.png" id="8_c7wfl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack/attack_02.png" id="9_4akpo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack/attack_03.png" id="10_shsjl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack/attack_04.png" id="11_4jg26"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_1/attack_1_01.png" id="12_mck60"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_1/attack_1_02.png" id="13_h3wie"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_1/attack_1_03.png" id="14_elxlf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_1/attack_1_04.png" id="15_piip0"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_2/attack_2_01.png" id="16_3477q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_2/attack_2_02.png" id="17_ohrqs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_2/attack_2_03.png" id="18_idqwq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_2/attack_2_04.png" id="19_q0gfo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_3/attack_3_01.png" id="20_7epwd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_3/attack_3_02.png" id="21_mr0pg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_3/attack_3_03.png" id="22_86qut"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/attack_3/attack_3_04.png" id="23_00pu1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/combo_transition/combo_transition_01.png" id="24_3dtre"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/combo_transition/combo_transition_02.png" id="25_aptkm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_attack/dash_attack_01.png" id="26_bilsa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_attack/dash_attack_02.png" id="27_6hs8q"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_attack/dash_attack_03.png" id="28_xut8r"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_attack/dash_attack_04.png" id="29_xs2go"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_attack/dash_attack_05.png" id="30_xm2tl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_end/dash_end_01.png" id="31_xsnps"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_end/dash_end_02.png" id="32_68win"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_loop/dash_loop_01.png" id="33_diec8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_loop/dash_loop_02.png" id="34_hkh17"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_loop/dash_loop_03.png" id="35_iebya"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_start/dash_start_01.png" id="36_l11ak"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/dash_start/dash_start_02.png" id="37_6eoml"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/death/death_01.png" id="38_1h005"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/death/death_02.png" id="39_37dev"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/death/death_03.png" id="40_7b0ub"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/death/death_04.png" id="41_sw868"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/death/death_05.png" id="42_3uig8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/double_jump/double_jump_01.png" id="43_q3isw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/double_jump/double_jump_02.png" id="44_vqxkv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/double_jump/double_jump_03.png" id="45_klig2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/double_jump/double_jump_04.png" id="46_pbf5a"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/fall/fall_01.png" id="47_o07v7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/fall/fall_02.png" id="48_8banf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt/hurt_01.png" id="49_iuy8b"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt/hurt_02.png" id="50_bus5p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt/hurt_03.png" id="51_rjoyb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_heavy/hurt_heavy_01.png" id="52_tsvui"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_heavy/hurt_heavy_02.png" id="53_pqtvg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_heavy/hurt_heavy_03.png" id="54_qgeyj"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_heavy/hurt_heavy_04.png" id="55_rjefg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_light/hurt_light_01.png" id="56_b4ilp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_light/hurt_light_02.png" id="57_680hw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/hurt_light/hurt_light_03.png" id="58_7u5ub"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/idle/idle_01.png" id="59_ncj0p"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/idle/idle_02.png" id="60_oxjrv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/idle/idle_03.png" id="61_qqgcx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/idle/idle_04.png" id="62_6teff"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_apex/jump_apex_01.png" id="63_l4wyl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_apex/jump_apex_02.png" id="64_gbw3h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_loop/jump_loop_01.png" id="65_xqhgs"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_loop/jump_loop_02.png" id="66_b1bcg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_rise/jump_rise_01.png" id="67_6whqf"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_rise/jump_rise_02.png" id="68_4y7wi"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_start/jump_start_01.png" id="69_r1ww3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/jump_start/jump_start_02.png" id="70_vgl17"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/land/land_01.png" id="71_i5h6h"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/land/land_02.png" id="72_bpx6l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/ready_idle/ready_idle_01.png" id="73_2ktv4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/ready_idle/ready_idle_02.png" id="74_pfhjw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/ready_idle/ready_idle_03.png" id="75_njy55"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/ready_idle/ready_idle_04.png" id="76_uh5x2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/run/run_01.png" id="77_i11du"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/run/run_02.png" id="78_asjk3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/run/run_03.png" id="79_hbmd6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/run/run_04.png" id="80_njcmu"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/run/run_05.png" id="81_lxxyp"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/run/run_06.png" id="82_rwbmy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/start_move/start_move_01.png" id="83_k8lsl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/start_move/start_move_02.png" id="84_lu7o2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/start_move/start_move_03.png" id="85_wa7pn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/stop_move/stop_move_01.png" id="86_8byp7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/stop_move/stop_move_02.png" id="87_rl8ik"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/stop_move/stop_move_03.png" id="88_7fg4s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/turn/turn_01.png" id="89_1lix6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/turn/turn_02.png" id="90_byd1f"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/turn/turn_03.png" id="91_kcphx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/walk/walk_01.png" id="92_u5rxv"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/walk/walk_02.png" id="93_laa6s"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/walk/walk_03.png" id="94_bhdds"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/walk/walk_04.png" id="95_s44xl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/walk/walk_05.png" id="96_jctev"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/animations/player/walk/walk_06.png" id="97_fqbf8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_elyco")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_151vw")
+}],
+"loop": 0,
+"name": &"air_dash_end",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("3_1s8qw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_mnfsg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_5h0ap")
+}],
+"loop": 1,
+"name": &"air_dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_01fjg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ebuqw")
+}],
+"loop": 0,
+"name": &"air_dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("8_c7wfl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_4akpo")
+}, {
+"duration": 1.0,
+"texture": ExtResource("10_shsjl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_4jg26")
+}],
+"loop": 0,
+"name": &"attack",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("12_mck60")
+}, {
+"duration": 1.0,
+"texture": ExtResource("13_h3wie")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_elxlf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_piip0")
+}],
+"loop": 0,
+"name": &"attack_1",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("16_3477q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_ohrqs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_idqwq")
+}, {
+"duration": 1.0,
+"texture": ExtResource("19_q0gfo")
+}],
+"loop": 0,
+"name": &"attack_2",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("20_7epwd")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_mr0pg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("22_86qut")
+}, {
+"duration": 1.0,
+"texture": ExtResource("23_00pu1")
+}],
+"loop": 0,
+"name": &"attack_3",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("24_3dtre")
+}, {
+"duration": 1.0,
+"texture": ExtResource("25_aptkm")
+}],
+"loop": 0,
+"name": &"combo_transition",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("26_bilsa")
+}, {
+"duration": 1.0,
+"texture": ExtResource("27_6hs8q")
+}, {
+"duration": 1.0,
+"texture": ExtResource("28_xut8r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("29_xs2go")
+}, {
+"duration": 1.0,
+"texture": ExtResource("30_xm2tl")
+}],
+"loop": 0,
+"name": &"dash_attack",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("31_xsnps")
+}, {
+"duration": 1.0,
+"texture": ExtResource("32_68win")
+}],
+"loop": 0,
+"name": &"dash_end",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("33_diec8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("34_hkh17")
+}, {
+"duration": 1.0,
+"texture": ExtResource("35_iebya")
+}],
+"loop": 1,
+"name": &"dash_loop",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("36_l11ak")
+}, {
+"duration": 1.0,
+"texture": ExtResource("37_6eoml")
+}],
+"loop": 0,
+"name": &"dash_start",
+"speed": 20.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("38_1h005")
+}, {
+"duration": 1.0,
+"texture": ExtResource("39_37dev")
+}, {
+"duration": 1.0,
+"texture": ExtResource("40_7b0ub")
+}, {
+"duration": 1.0,
+"texture": ExtResource("41_sw868")
+}, {
+"duration": 1.0,
+"texture": ExtResource("42_3uig8")
+}],
+"loop": 0,
+"name": &"death",
+"speed": 11.111111
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("43_q3isw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("44_vqxkv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("45_klig2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("46_pbf5a")
+}],
+"loop": 0,
+"name": &"double_jump",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("47_o07v7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("48_8banf")
+}],
+"loop": 1,
+"name": &"fall",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("49_iuy8b")
+}, {
+"duration": 1.0,
+"texture": ExtResource("50_bus5p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("51_rjoyb")
+}],
+"loop": 0,
+"name": &"hurt",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("52_tsvui")
+}, {
+"duration": 1.0,
+"texture": ExtResource("53_pqtvg")
+}, {
+"duration": 1.0,
+"texture": ExtResource("54_qgeyj")
+}, {
+"duration": 1.0,
+"texture": ExtResource("55_rjefg")
+}],
+"loop": 0,
+"name": &"hurt_heavy",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("56_b4ilp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("57_680hw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("58_7u5ub")
+}],
+"loop": 0,
+"name": &"hurt_light",
+"speed": 16.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("59_ncj0p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("60_oxjrv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("61_qqgcx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("62_6teff")
+}],
+"loop": 1,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("63_l4wyl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("64_gbw3h")
+}],
+"loop": 1,
+"name": &"jump_apex",
+"speed": 6.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("65_xqhgs")
+}, {
+"duration": 1.0,
+"texture": ExtResource("66_b1bcg")
+}],
+"loop": 1,
+"name": &"jump_loop",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("67_6whqf")
+}, {
+"duration": 1.0,
+"texture": ExtResource("68_4y7wi")
+}],
+"loop": 1,
+"name": &"jump_rise",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("69_r1ww3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("70_vgl17")
+}],
+"loop": 0,
+"name": &"jump_start",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("71_i5h6h")
+}, {
+"duration": 1.0,
+"texture": ExtResource("72_bpx6l")
+}],
+"loop": 0,
+"name": &"land",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("73_2ktv4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("74_pfhjw")
+}, {
+"duration": 1.0,
+"texture": ExtResource("75_njy55")
+}, {
+"duration": 1.0,
+"texture": ExtResource("76_uh5x2")
+}],
+"loop": 1,
+"name": &"ready_idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("77_i11du")
+}, {
+"duration": 1.0,
+"texture": ExtResource("78_asjk3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("79_hbmd6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("80_njcmu")
+}, {
+"duration": 1.0,
+"texture": ExtResource("81_lxxyp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("82_rwbmy")
+}],
+"loop": 1,
+"name": &"run",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("83_k8lsl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("84_lu7o2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("85_wa7pn")
+}],
+"loop": 0,
+"name": &"start_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("86_8byp7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("87_rl8ik")
+}, {
+"duration": 1.0,
+"texture": ExtResource("88_7fg4s")
+}],
+"loop": 0,
+"name": &"stop_move",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("89_1lix6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("90_byd1f")
+}, {
+"duration": 1.0,
+"texture": ExtResource("91_kcphx")
+}],
+"loop": 0,
+"name": &"turn",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("92_u5rxv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("93_laa6s")
+}, {
+"duration": 1.0,
+"texture": ExtResource("94_bhdds")
+}, {
+"duration": 1.0,
+"texture": ExtResource("95_s44xl")
+}, {
+"duration": 1.0,
+"texture": ExtResource("96_jctev")
+}, {
+"duration": 1.0,
+"texture": ExtResource("97_fqbf8")
+}],
+"loop": 1,
+"name": &"walk",
+"speed": 7.0
+}]

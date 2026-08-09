@@ -12,6 +12,10 @@ const THIRTEENFOLD_ABSOLUTION_FRAMES_PATH: String = (
 	"res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/weapons/"
 	+ "thirteenfold_absolution_player_sprite_frames.tres"
 )
+const SOUL_LOCK_TWIN_KEYS_FRAMES_PATH: String = (
+	"res://chapters/chapter_04_drowned_underkeep/resources/weapons/"
+	+ "soul_lock_twin_keys_player_sprite_frames.tres"
+)
 
 @export_node_path("AnimatedSprite2D") var animated_sprite_path: NodePath = NodePath("../AnimatedSprite2D")
 @export_node_path("PlayerAnimationController") var animation_controller_path: NodePath = NodePath(
@@ -30,6 +34,7 @@ var _veilbound_frames: SpriteFrames
 var _ravenfang_frames: SpriteFrames
 var _crimson_masque_frames: SpriteFrames
 var _thirteenfold_absolution_frames: SpriteFrames
+var _soul_lock_twin_keys_frames: SpriteFrames
 
 
 func _ready() -> void:
@@ -40,6 +45,7 @@ func _ready() -> void:
 	_ravenfang_frames = load(RAVENFANG_FRAMES_PATH) as SpriteFrames
 	_crimson_masque_frames = load(CRIMSON_MASQUE_FRAMES_PATH) as SpriteFrames
 	_thirteenfold_absolution_frames = load(THIRTEENFOLD_ABSOLUTION_FRAMES_PATH) as SpriteFrames
+	_soul_lock_twin_keys_frames = load(SOUL_LOCK_TWIN_KEYS_FRAMES_PATH) as SpriteFrames
 	if _ravenfang_frames == null:
 		push_error("PlayerWeaponVisual missing Ravenfang SpriteFrames: %s" % RAVENFANG_FRAMES_PATH)
 	if _crimson_masque_frames == null:
@@ -51,6 +57,11 @@ func _ready() -> void:
 		push_error(
 			"PlayerWeaponVisual missing Thirteenfold Absolution SpriteFrames: %s"
 			% THIRTEENFOLD_ABSOLUTION_FRAMES_PATH
+		)
+	if _soul_lock_twin_keys_frames == null:
+		push_error(
+			"PlayerWeaponVisual missing Soul-Lock Twin Keys SpriteFrames: %s"
+			% SOUL_LOCK_TWIN_KEYS_FRAMES_PATH
 		)
 	var equipment: PlayerEquipmentManager = _equipment()
 	if equipment != null:
@@ -104,6 +115,8 @@ func get_active_sprite_frames_path() -> String:
 			return CRIMSON_MASQUE_FRAMES_PATH
 		&"thirteenfold_absolution":
 			return THIRTEENFOLD_ABSOLUTION_FRAMES_PATH
+		&"soul_lock_twin_keys":
+			return SOUL_LOCK_TWIN_KEYS_FRAMES_PATH
 	return PlayerSpriteFramesBuilder.RESOURCE_PATH
 
 
@@ -127,6 +140,8 @@ func _frames_for_visual(visual_id: StringName) -> SpriteFrames:
 			return _crimson_masque_frames
 		&"thirteenfold_absolution":
 			return _thirteenfold_absolution_frames
+		&"soul_lock_twin_keys":
+			return _soul_lock_twin_keys_frames
 	return _veilbound_frames
 
 

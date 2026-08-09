@@ -159,6 +159,9 @@ static func _draw_dagger(
 	if weapon_style == &"thirteenfold_absolution":
 		draw_thirteenfold_absolution_blade(image, hand, tip, is_main)
 		return
+	if weapon_style == &"soul_lock_twin_keys":
+		draw_soul_lock_twin_key(image, hand, tip, is_main)
+		return
 	var direction: Vector2 = Vector2(tip - hand).normalized()
 	var normal: Vector2 = Vector2(-direction.y, direction.x)
 	var blade_start: Vector2i = hand + Vector2i(roundi(direction.x * 4.0), roundi(direction.y * 4.0))
@@ -363,6 +366,112 @@ static func draw_thirteenfold_absolution_blade(
 	else:
 		# Fixed chain ring: it never swings as a physics weapon.
 		_draw_ring_pixels(image, pommel_i, old_copper, grip_black)
+
+
+static func draw_soul_lock_twin_key(
+		image: Image, hand: Vector2i, tip: Vector2i, is_main: bool
+	) -> void:
+	var delta: Vector2 = Vector2(tip - hand)
+	var length: float = maxf(1.0, delta.length())
+	var direction: Vector2 = delta / length
+	var normal: Vector2 = Vector2(-direction.y, direction.x)
+	var authored_tip: Vector2 = Vector2(tip) if is_main else Vector2(hand) + delta * 0.84
+	var blade_start: Vector2 = Vector2(hand) + direction * (5.0 if is_main else 4.0)
+	var start_i: Vector2i = Vector2i(roundi(blade_start.x), roundi(blade_start.y))
+	var tip_i: Vector2i = Vector2i(roundi(authored_tip.x), roundi(authored_tip.y))
+	var lock_black: Color = Color("10171d")
+	var corroded_steel: Color = Color("6f7d80")
+	var pale_edge: Color = Color("c7d4d3")
+	var rust: Color = Color("8b5133")
+	var soul_cyan: Color = Color("6ca7ac")
+	var grip: Color = Color("171313")
+	if is_main:
+		# Lockbreaker / 断狱: broad asymmetric key-tooth blade and broken shackle guard.
+		PixelCanvas.draw_line(image, start_i, tip_i, lock_black, 6)
+		PixelCanvas.draw_line(image, start_i, tip_i, corroded_steel, 4)
+		PixelCanvas.draw_line(image, start_i, tip_i, pale_edge, 1)
+		for fraction: float in [0.42, 0.61, 0.78]:
+			var tooth_root: Vector2 = blade_start + (authored_tip - blade_start) * fraction
+			var tooth_length: float = 3.0 if fraction < 0.7 else 2.0
+			var tooth_end: Vector2 = tooth_root - normal * tooth_length
+			PixelCanvas.draw_line(
+				image,
+				Vector2i(roundi(tooth_root.x), roundi(tooth_root.y)),
+				Vector2i(roundi(tooth_end.x), roundi(tooth_end.y)),
+				lock_black,
+				3
+			)
+			PixelCanvas.draw_line(
+				image,
+				Vector2i(roundi(tooth_root.x), roundi(tooth_root.y)),
+				Vector2i(roundi(tooth_end.x), roundi(tooth_end.y)),
+				pale_edge,
+				1
+			)
+	else:
+		# Soulseal / 魂契: narrower intact key with a cyan soul channel and sealed teeth.
+		PixelCanvas.draw_line(image, start_i, tip_i, lock_black, 5)
+		PixelCanvas.draw_line(image, start_i, tip_i, corroded_steel, 3)
+		var channel_start: Vector2 = blade_start + direction * 2.0
+		var channel_end: Vector2 = authored_tip - direction * 3.0
+		PixelCanvas.draw_line(
+			image,
+			Vector2i(roundi(channel_start.x), roundi(channel_start.y)),
+			Vector2i(roundi(channel_end.x), roundi(channel_end.y)),
+			soul_cyan,
+			1
+		)
+		for fraction: float in [0.58, 0.76]:
+			var tooth_root: Vector2 = blade_start + (authored_tip - blade_start) * fraction
+			var tooth_end: Vector2 = tooth_root + normal * 2.0
+			PixelCanvas.draw_line(
+				image,
+				Vector2i(roundi(tooth_root.x), roundi(tooth_root.y)),
+				Vector2i(roundi(tooth_end.x), roundi(tooth_end.y)),
+				pale_edge,
+				1
+			)
+	# The opposed guards make the pair read as broken lock and intact seal.
+	var guard_center: Vector2i = Vector2i(
+		roundi(float(hand.x) + direction.x), roundi(float(hand.y) + direction.y)
+	)
+	if is_main:
+		var guard_a: Vector2i = Vector2i(
+			roundi(float(guard_center.x) + normal.x * 4.0),
+			roundi(float(guard_center.y) + normal.y * 4.0)
+		)
+		var guard_b: Vector2i = Vector2i(
+			roundi(float(guard_center.x) - normal.x * 2.0),
+			roundi(float(guard_center.y) - normal.y * 2.0)
+		)
+		PixelCanvas.draw_line(image, guard_a, guard_center, rust, 2)
+		PixelCanvas.draw_line(image, guard_center, guard_b, corroded_steel, 2)
+		_set_safe_pixel(image, guard_a + Vector2i(roundi(direction.x), roundi(direction.y)), soul_cyan)
+	else:
+		_draw_ring_pixels(image, guard_center, corroded_steel, lock_black)
+		_set_safe_pixel(image, guard_center, soul_cyan)
+	var grip_end: Vector2 = Vector2(hand) - direction * (5.0 if is_main else 4.0)
+	var grip_end_i: Vector2i = Vector2i(roundi(grip_end.x), roundi(grip_end.y))
+	PixelCanvas.draw_line(image, hand, grip_end_i, grip, 3)
+	_set_safe_pixel(
+		image,
+		Vector2i(roundi(float(hand.x) - direction.x * 2.0), roundi(float(hand.y) - direction.y * 2.0)),
+		rust
+	)
+	var pommel: Vector2i = Vector2i(
+		roundi(grip_end.x - direction.x * 2.0), roundi(grip_end.y - direction.y * 2.0)
+	)
+	if is_main:
+		# Two compact links imply the broken gaol-chain without changing attack reach.
+		_draw_ring_pixels(image, pommel, rust, lock_black)
+		_set_safe_pixel(
+			image,
+			pommel - Vector2i(roundi(direction.x * 3.0), roundi(direction.y * 3.0)),
+			corroded_steel
+		)
+	else:
+		PixelCanvas.fill_rect(image, Rect2i(pommel.x - 1, pommel.y - 1, 3, 3), lock_black)
+		_set_safe_pixel(image, pommel, soul_cyan)
 
 
 static func _draw_hollow_guard(

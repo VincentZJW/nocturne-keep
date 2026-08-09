@@ -1,0 +1,46 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://scripts/items/weapon_pickup.gd" id="1_pickup"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/sprites/world_pickup.png" id="2_weapon"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/weapons/soul_lock_twin_keys/effects/pickup_glow.png" id="3_glow"]
+
+[sub_resource type="RectangleShape2D" id="PickupShape"]
+size = Vector2(140, 118)
+
+[node name="SoulLockTwinKeysPickup" type="Area2D"]
+z_index = 16
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("1_pickup")
+weapon_id = &"soul_lock_twin_keys"
+auto_equip = true
+player_interaction_enabled = false
+
+[node name="GlowSprite" type="Sprite2D" parent="."]
+z_index = -1
+texture_filter = 1
+texture = ExtResource("3_glow")
+scale = Vector2(1.45, 1.45)
+modulate = Color(0.72, 0.92, 0.94, 0.70)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+texture = ExtResource("2_weapon")
+scale = Vector2(2, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 14)
+shape = SubResource("PickupShape")
+
+[node name="Prompt" type="Label" parent="."]
+z_index = 2
+offset_left = -280.0
+offset_top = -108.0
+offset_right = 280.0
+offset_bottom = -56.0
+theme_override_colors/font_color = Color(0.75, 0.89, 0.90, 1)
+theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.05, 1)
+theme_override_constants/outline_size = 5
+theme_override_font_sizes/font_size = 14
+text = "E · CLAIM SOUL-LOCK TWIN KEYS / 取得魂锁双钥"
+horizontal_alignment = 1

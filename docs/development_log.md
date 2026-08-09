@@ -7666,3 +7666,31 @@ Status: root cause fixed; exact Godot 4.7.1 Main and route regressions pass; use
 
 - F5 with the existing Chapter IV `CH4_AREA_05` debug spawn. Leave at least one enemy from encounter 01 alive, move right into encounter 02, and verify Sewer Maw/Mirefin/Bog Toad wake, pursue, attack and receive J/Dash Attack damage instead of remaining inert.
 - Clear both groups and confirm the Cistern east gate opens; continue through Areas 06–13 to the existing Ormund Boss room. Output should contain no project script/resource red error. The macOS system CA-certificate diagnostic printed only by headless test processes is engine/platform noise and not a gameplay error.
+## 2026-08-09 — CH4-W1–W5 Soul-Lock Twin Keys permanent Boss reward
+
+Status: complete — formal reward, persistence, Main integration and forced QA passed
+
+### Implemented scope
+
+- Added the original Tier 4 `Soul-Lock Twin Keys / 魂锁双钥` weapon data with permanent unique ownership, no sale, automatic equip and the locked 16 Normal / 32 Dash values. No passive, reach, speed, stamina or combo behavior was added.
+- Produced a concept board with the built-in image-generation workflow, then independently rendered 112 formal runtime PNGs through the Godot low-resolution pixel pipeline: 97 player frames across all 30 shared animations, six inventory/HUD/world/reliquary views, eight reward effects and the concept board.
+- Added formal Lockbreaker/Soulseal rendering to the shared player and death-frame renderers, registered the new data and SpriteFrames in EquipmentManager/PlayerWeaponVisual, and preserved every existing anchor, FPS, hit window and collision contract.
+- Replaced the Area 15 placeholder reward interaction with the existing typed WeaponPickup plus a seven-stage Last Soul Lock presentation. Boss death unlocks the reward room only; actual pickup grants/equips the weapon and alone unlocks the Hall of Drowned Memories/Chapter V route.
+- Reused existing Inventory, Equipment, ChapterSession and PlayerProgressSaveService systems. Revisit, duplicate pickup, death/respawn and fresh-process save/load all retain one authoritative weapon and the emptied reliquary.
+
+### Exact verification
+
+1. Exact Godot 4.7.1 editor import/parse — PASS, no project script/resource errors.
+2. Soul-Lock asset generator — PASS; formal resources written under the Chapter IV-owned weapon tree.
+3. SpriteFrames builder — PASS: 30 animations / 97 frames.
+4. `test_soul_lock_twin_keys_reward_sequence.gd` — PASS: all seven stages observed, unique collect, real normal Hitbox removed 16 HP and real Dash Hitbox removed 32 HP.
+5. `SOUL_LOCK_W4_PHASE=write test_soul_lock_twin_keys_progress.gd` — PASS: unique/equip=16/32, death retained, formal save written.
+6. Fresh process `SOUL_LOCK_W4_PHASE=load` — PASS: ownership, equipment, story flags, recovery room and empty reliquary retained; duplicate collection rejected.
+7. `test_chapter_04_q4_boss_flow.gd` — PASS through MainBootstrap: Ormund P1/P2/death, no pre-pickup grant, reward collection, 16/32 equipment, memory unlock and CH5_START.
+8. Rendered MainBootstrap capture — PASS: nine Area 15 sequence/equipment frames saved to `docs/qa/chapter_04_soul_lock_twin_keys/` and visually inspected at 1280×720.
+9. `git diff --check` and task-scope staged-file audit are required immediately before the milestone commit.
+
+### Manual acceptance
+
+- F5 through MainBootstrap using `CHAPTER_04_DROWNED_UNDERKEEP / CH4_AREA_14`, defeat Ormund and enter Area 15. Confirm the staged reliquary sequence, E pickup, `WPN T4 16 / 32`, equipped visuals, death/respawn retention, empty-reliquary revisit and the existing Area 16 → Chapter V handoff.
+- Complete evidence and honest scope boundaries are recorded in `docs/qa/chapter_04_soul_lock_twin_keys/report.md`.

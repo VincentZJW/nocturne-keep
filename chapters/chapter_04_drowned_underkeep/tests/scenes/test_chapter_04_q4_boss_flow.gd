@@ -105,12 +105,21 @@ func _run() -> void:
 	var reward: Chapter04RewardController = controller.active_room.get_node_or_null("RewardController") as Chapter04RewardController
 	var memory_exit: Chapter04RoomExit = controller.active_room.get_node_or_null("Transitions/ExitEast") as Chapter04RoomExit
 	_check(reward != null and memory_exit != null and memory_exit.is_locked(), "Unclaimed reward must lock the memory passage")
+	var inventory: PlayerWeaponInventory = root.get_node("WeaponInventory") as PlayerWeaponInventory
+	var equipment: PlayerEquipmentManager = root.get_node("EquipmentManager") as PlayerEquipmentManager
+	_check(not inventory.owns_weapon(&"soul_lock_twin_keys"), "Boss defeat alone must not grant the reward")
+	_check(not session.has_story_flag(&"ch4_memory_passage_unlocked"), "Boss defeat alone must not unlock Chapter V route")
 	if reward != null:
-		reward.collect_for_qa()
+		_check(reward.collect_for_qa(), "Soul-Lock Twin Keys must collect once")
 	await process_frame
 	_check(session.has_story_flag(&"ch4_reward_collected"), "Reward collection flag must persist")
 	_check(session.has_story_flag(&"ch4_memory_passage_unlocked"), "Memory passage flag must persist")
 	_check(not memory_exit.is_locked(), "Claiming the reward must unlock Area 16")
+	_check(inventory.owns_weapon(&"soul_lock_twin_keys"), "Soul-Lock Twin Keys ownership must persist")
+	_check(equipment.equipped_weapon_id == &"soul_lock_twin_keys", "Soul-Lock Twin Keys must auto-equip")
+	_check(equipment.get_normal_attack_damage() == 16, "Soul-Lock normal damage must be 16")
+	_check(equipment.get_dash_attack_damage() == 32, "Soul-Lock Dash damage must be 32")
+	_check(reward != null and not reward.collect_for_qa(), "Soul-Lock duplicate pickup must be rejected")
 
 	_check(controller._swap_room(&"CH4_AREA_16", &"EntryWest"), "Main must load Hall of Drowned Memories")
 	await process_frame
