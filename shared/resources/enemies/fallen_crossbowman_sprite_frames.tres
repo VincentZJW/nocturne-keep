@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://betuj2a400o8w"]
 
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/fallen_crossbowman/sprites/aim/aim_01.png" id="1_6xsf0"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/fallen_crossbowman/sprites/aim/aim_02.png" id="2_jxhyr"]

@@ -1,21 +1,6 @@
-[gd_resource type="Resource" script_class="PlayerActionPrototypeConfig" load_steps=2 format=3]
+[gd_resource type="Resource" script_class="PlayerActionPrototypeConfig" format=3 uid="uid://c4l0irbaijxmg"]
 
-[ext_resource type="Script" path="res://scripts/player/player_action_prototype_config.gd" id="1_config"]
+[ext_resource type="Script" uid="uid://d1eul0fo86vaf" path="res://scripts/player/player_action_prototype_config.gd" id="1_config"]
 
 [resource]
 script = ExtResource("1_config")
-dash_speed = 480.0
-dash_duration = 0.18
-dash_input_buffer_time = 0.1
-dash_min_interval = 0.03
-dash_attack_input_window = 0.18
-maximum_normal_combo = 3
-attack_buffer_time = 0.08
-attack_chain_window_start = 0.1
-attack_chain_window_end = 0.2
-minimum_attack_interval = 0.32
-attack_chain_recovery_duration = 0.12
-combo_end_recovery = 0.34
-dash_attack_speed = 320.0
-dash_attack_move_duration = 0.15
-dash_attack_recovery_duration = 0.1

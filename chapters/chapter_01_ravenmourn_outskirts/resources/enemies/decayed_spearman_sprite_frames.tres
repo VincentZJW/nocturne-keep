@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://diodph0nc1fl2"]
 
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/decayed_spearman/sprites/attack_thrust/attack_thrust_01.png" id="1_a4pi3"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/decayed_spearman/sprites/attack_thrust/attack_thrust_02.png" id="2_2yhjq"]

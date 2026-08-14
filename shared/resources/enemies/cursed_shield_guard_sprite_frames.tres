@@ -1,4 +1,4 @@
-[gd_resource type="SpriteFrames" format=3]
+[gd_resource type="SpriteFrames" format=3 uid="uid://x1x3dtorflkx"]
 
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/sprites/attack/attack_01.png" id="1_d65hk"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/cursed_shield_guard/sprites/attack/attack_02.png" id="2_icwup"]

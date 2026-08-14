@@ -1,7 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3 uid="uid://640b41f0fu8w"]
 
-[ext_resource type="Script" path="res://scripts/core/main_bootstrap.gd" id="1_bootstrap"]
+[ext_resource type="Script" uid="uid://qxcnwqvbq5pe" path="res://scripts/core/main_bootstrap.gd" id="1_bootstrap"]
 
-[node name="MainBootstrap" type="Node"]
+[node name="MainBootstrap" type="Node" unique_id=504339566]
 script = ExtResource("1_bootstrap")
-opening_scene_path = "res://scenes/cinematics/opening_cinematic.tscn"

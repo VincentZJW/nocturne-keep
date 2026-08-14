@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="MusicTrackDefinition" load_steps=3 format=3]
+[gd_resource type="Resource" script_class="MusicTrackDefinition" format=3 uid="uid://bdbxisvc78kxk"]
 
-[ext_resource type="Script" path="res://scripts/audio/music_track_definition.gd" id="1_definition"]
-[ext_resource type="AudioStream" path="res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/soul_gaoler_phase_01_submerged_chains.ogg" id="2_stream"]
+[ext_resource type="Script" uid="uid://mqaijfh2nlsk" path="res://scripts/audio/music_track_definition.gd" id="1_definition"]
+[ext_resource type="AudioStream" uid="uid://byu250utmkv3" path="res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/soul_gaoler_phase_01_submerged_chains.ogg" id="2_stream"]
 
 [resource]
 script = ExtResource("1_definition")
@@ -9,9 +9,5 @@ track_id = &"CH4_BOSS_SOUL_GAOLER_PHASE_01"
 display_name = "The Weight of the Last Key / 末钥之重"
 stream = ExtResource("2_stream")
 bpm = 78.0
-beats_per_bar = 4
-beat_unit = 4
 default_volume_db = -11.5
-loops = true
-loop_start_seconds = 0.0
 loop_end_seconds = 184.615375

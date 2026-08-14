@@ -1,47 +1,47 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_01.png" id="1_7xwdy"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_02.png" id="2_bsy0i"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_03.png" id="3_iha7y"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_04.png" id="4_um6pc"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_05.png" id="5_7pj2b"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_01.png" id="6_qgnsl"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_02.png" id="7_ssf8t"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_03.png" id="8_seluj"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_04.png" id="9_ynxp5"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_05.png" id="10_isgfu"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_06.png" id="11_3y4fj"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/hurt/hurt_01.png" id="12_3ygha"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/hurt/hurt_02.png" id="13_rm0va"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/hurt/hurt_03.png" id="14_yc2nh"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_01.png" id="15_xqdxj"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_02.png" id="16_yu50c"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_03.png" id="17_2h1bq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_04.png" id="18_qu48m"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_01.png" id="19_thl2v"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_02.png" id="20_krnsk"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_03.png" id="21_cmfs6"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_04.png" id="22_jmc4s"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_05.png" id="23_yipaq"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_06.png" id="24_l036g"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_01.png" id="1_363xx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_02.png" id="2_f6tch"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_03.png" id="3_jgkxt"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_04.png" id="4_t7lir"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/attack/attack_05.png" id="5_vv5wl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_01.png" id="6_6wnim"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_02.png" id="7_faa15"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_03.png" id="8_nauvr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_04.png" id="9_5c7pg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_05.png" id="10_64t2d"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/death/death_06.png" id="11_w1s6i"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/hurt/hurt_01.png" id="12_117y1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/hurt/hurt_02.png" id="13_cfjyq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/hurt/hurt_03.png" id="14_7l0jw"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_01.png" id="15_xjndb"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_02.png" id="16_0se33"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_03.png" id="17_3k4pd"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/idle/idle_04.png" id="18_ay15l"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_01.png" id="19_w7ydq"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_02.png" id="20_yr0lo"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_03.png" id="21_s58n1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_04.png" id="22_w0ssm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_05.png" id="23_aiqqk"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/enemies/castle_guard/sprites/walk/walk_06.png" id="24_4adwu"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.75,
-"texture": ExtResource("1_7xwdy")
+"texture": ExtResource("1_363xx")
 }, {
 "duration": 1.75,
-"texture": ExtResource("2_bsy0i")
+"texture": ExtResource("2_f6tch")
 }, {
 "duration": 0.5,
-"texture": ExtResource("3_iha7y")
+"texture": ExtResource("3_jgkxt")
 }, {
 "duration": 0.5,
-"texture": ExtResource("4_um6pc")
+"texture": ExtResource("4_t7lir")
 }, {
 "duration": 4.5,
-"texture": ExtResource("5_7pj2b")
+"texture": ExtResource("5_vv5wl")
 }],
 "loop": 0,
 "name": &"attack",
@@ -49,22 +49,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("6_qgnsl")
+"texture": ExtResource("6_6wnim")
 }, {
 "duration": 1.0,
-"texture": ExtResource("7_ssf8t")
+"texture": ExtResource("7_faa15")
 }, {
 "duration": 1.0,
-"texture": ExtResource("8_seluj")
+"texture": ExtResource("8_nauvr")
 }, {
 "duration": 1.0,
-"texture": ExtResource("9_ynxp5")
+"texture": ExtResource("9_5c7pg")
 }, {
 "duration": 1.0,
-"texture": ExtResource("10_isgfu")
+"texture": ExtResource("10_64t2d")
 }, {
 "duration": 1.0,
-"texture": ExtResource("11_3y4fj")
+"texture": ExtResource("11_w1s6i")
 }],
 "loop": 0,
 "name": &"death",
@@ -72,13 +72,13 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("12_3ygha")
+"texture": ExtResource("12_117y1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("13_rm0va")
+"texture": ExtResource("13_cfjyq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("14_yc2nh")
+"texture": ExtResource("14_7l0jw")
 }],
 "loop": 0,
 "name": &"hurt",
@@ -86,16 +86,16 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("15_xqdxj")
+"texture": ExtResource("15_xjndb")
 }, {
 "duration": 1.0,
-"texture": ExtResource("16_yu50c")
+"texture": ExtResource("16_0se33")
 }, {
 "duration": 1.0,
-"texture": ExtResource("17_2h1bq")
+"texture": ExtResource("17_3k4pd")
 }, {
 "duration": 1.0,
-"texture": ExtResource("18_qu48m")
+"texture": ExtResource("18_ay15l")
 }],
 "loop": 1,
 "name": &"idle",
@@ -103,22 +103,22 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("19_thl2v")
+"texture": ExtResource("19_w7ydq")
 }, {
 "duration": 1.0,
-"texture": ExtResource("20_krnsk")
+"texture": ExtResource("20_yr0lo")
 }, {
 "duration": 1.0,
-"texture": ExtResource("21_cmfs6")
+"texture": ExtResource("21_s58n1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("22_jmc4s")
+"texture": ExtResource("22_w0ssm")
 }, {
 "duration": 1.0,
-"texture": ExtResource("23_yipaq")
+"texture": ExtResource("23_aiqqk")
 }, {
 "duration": 1.0,
-"texture": ExtResource("24_l036g")
+"texture": ExtResource("24_4adwu")
 }],
 "loop": 1,
 "name": &"walk",

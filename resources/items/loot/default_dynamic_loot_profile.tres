@@ -1,21 +1,19 @@
-[gd_resource type="Resource" script_class="DynamicLootProfile" load_steps=7 format=3]
+[gd_resource type="Resource" script_class="DynamicLootProfile" format=3 uid="uid://wsh3q7twfhum"]
 
-[ext_resource type="Script" path="res://scripts/items/dynamic_loot_profile.gd" id="1_profile"]
-[ext_resource type="Script" path="res://scripts/items/loot_probability_weights.gd" id="2_weights"]
+[ext_resource type="Script" uid="uid://6652lg54eb7s" path="res://scripts/items/dynamic_loot_profile.gd" id="1_profile"]
+[ext_resource type="Script" uid="uid://dqgp4wbkdoivg" path="res://scripts/items/loot_probability_weights.gd" id="2_weights"]
+
+[sub_resource type="Resource" id="LootWeights_critical"]
+script = ExtResource("2_weights")
+coin_weight = 20
+small_health_weight = 25
+large_health_weight = 40
+none_weight = 15
 
 [sub_resource type="Resource" id="LootWeights_full"]
 script = ExtResource("2_weights")
 coin_weight = 72
-small_health_weight = 0
-large_health_weight = 0
 none_weight = 28
-
-[sub_resource type="Resource" id="LootWeights_light"]
-script = ExtResource("2_weights")
-coin_weight = 50
-small_health_weight = 28
-large_health_weight = 7
-none_weight = 15
 
 [sub_resource type="Resource" id="LootWeights_heavy"]
 script = ExtResource("2_weights")
@@ -24,11 +22,11 @@ small_health_weight = 35
 large_health_weight = 15
 none_weight = 15
 
-[sub_resource type="Resource" id="LootWeights_critical"]
+[sub_resource type="Resource" id="LootWeights_light"]
 script = ExtResource("2_weights")
-coin_weight = 20
-small_health_weight = 25
-large_health_weight = 40
+coin_weight = 50
+small_health_weight = 28
+large_health_weight = 7
 none_weight = 15
 
 [resource]
