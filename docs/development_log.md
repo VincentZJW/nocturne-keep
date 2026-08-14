@@ -1,5 +1,19 @@
 # Development Log
 
+## 2026-08-14 — CH4-BOSS-BALANCE-0–5 Soul Gaoler Ormund combat rebalance
+
+Status: implementation, focused runtime QA, Main integration and production-component full-fight replays complete; final human-feel acceptance remains the user's manual gate
+
+- Loaded the repository workflow and Godot gameplay guidance, audited the saved Boss room/scene/config/data/damage policy, every attack timeline, hitbox, collider, SpriteFrames presentation, target tracking and MainBootstrap route before changing values. Scope stayed entirely inside Ormund and focused Boss tests/evidence; Player, weapons, other enemies, rewards and Chapters I–III were not changed.
+- Replaced continuous reselection with a real Boss Turn → Player Turn contract: Phase I allows two attacks then guarantees 1.05 seconds; Phase II normally allows two, rarely three every fourth sequence, then guarantees 0.82 seconds. Added repeat/high-pressure spacing, 10-second Judgment, 7.5-second Soul Cage Pulse and 5-second Cell Rupture cooldowns, and wall-pressure suppression for Charge/Hook.
+- Added committed attack direction and delayed 180-degree turns (0.50 seconds Phase I, 0.40 Phase II). Reduced the frontal melee volume to 100×48 and reserved the reduced 180×96 area volume for the three authored 360-degree skills. The room controller now supplies the saved 180–2124 combat bounds.
+- Reduced the oversized source presentation to nearest-neighbour scale 0.6, yielding measured 1.81×/1.79× Boss-to-Player alpha height ratios. Body collision is 44×92, Hurtbox 50×98; they cover the torso rather than the Soul Cage/weapon and permit reliable crossing behind without making the Boss a normal elite.
+- Selected Balance B: 460 HP, 55% Phase II threshold, 0.90/0.84 damage taken, 130/158 Poise, 0.82/0.65-second Stagger and 3.4/3.8-second protection. All ten attack damage values, Boss movement speeds, skills, Phase II systems, music and reward flow remain unchanged.
+- Per-attack Recovery is now authored by risk: Sweep 0.90, Slam 1.48, Hook 1.12, Charge 1.08, Pulse 1.18, Chainstorm 1.15, Undertow 0.74, Rupture 1.32, Shackle 0.76 and Judgment 1.62 seconds. The mean individual Recovery is 1.14 seconds and the average best punish window per replayed Boss cycle is 1.35 seconds; longest windup+active interval without an output opportunity is 1.26 seconds. A focused 30/30 committed-direction crossing check confirmed that the reduced frontal hitbox remains in front while the Player occupies the back side.
+- Exact Godot 4.7.1 tests passed: editor/import, focused runtime, balance contract, four full-fight production-component replays, formal Main capture, Q4 Boss flow and Chapter IV Main integration. Balance A standard was 249.7 s; selected B standard 237.8 s; conservative 330.5 s; aggressive 154.8 s, all with the pre-Boss Thirteenfold Absolution 14/28 and zero deaths. The selected standard run was 20 Normal + 9 Dash, two Staggers and 38 Normal Equivalent inputs.
+- Desktop Control opened the real Main debug build at `CH4_BOSS_PHASE_01` and confirmed the formal room, presentation and 14/28 HUD. The available driver cannot maintain held movement keys, so complete-fight telemetry is explicitly identified as deterministic production-component replay rather than falsely claimed manual play. Final subjective feel remains assigned to the user's F5 acceptance.
+- Main evidence and full before/after tables are in `docs/qa/chapter_04_soul_gaoler_balance/qa_results.md` with eight screenshots. The pre-existing `test_chapter_04_boss_route_stress.gd` still fails unrelated reward-persistence assertions; the formal Q4 flow passes and no out-of-scope reward code was modified.
+
 ## 2026-08-09 — CH4-W0 Soul-Lock Twin Keys reward audit
 
 Status: audit complete — no weapon, reward, Boss, Player, scene, inventory, equipment or persistence implementation changed; stop point is CH4-W0
@@ -7746,3 +7760,12 @@ Status: complete — formal reward, persistence, Main integration and forced QA 
 
 - F5 through MainBootstrap using `CHAPTER_04_DROWNED_UNDERKEEP / CH4_AREA_14`, defeat Ormund and enter Area 15. Confirm the staged reliquary sequence, E pickup, `WPN T4 16 / 32`, equipped visuals, death/respawn retention, empty-reliquary revisit and the existing Area 16 → Chapter V handoff.
 - Complete evidence and honest scope boundaries are recorded in `docs/qa/chapter_04_soul_lock_twin_keys/report.md`.
+## 2026-08-14 — CH4-BOSS-BALANCE-0 Soul Gaoler Ormund combat-rhythm audit
+
+Status: implementation in progress — audit and baseline PASS; approved stop point is CH4-BOSS-BALANCE-5 final Main/F5 QA
+
+- Loaded the repository guide, README, technical architecture, all four permanent chapter-production policies and the Godot Gameplay Scripter skill. Scope is restricted to Soul Gaoler Ormund, his saved Boss scene/config/runtime, Boss-room parameters that are directly required, focused tests and QA documentation. Player data, weapons, Chapters I–III, Chapter IV ordinary enemies and the Boss reward remain out of scope.
+- Formal authority is `res://scenes/bootstrap/main_bootstrap.tscn`; the saved Boss room is `res://chapters/chapter_04_drowned_underkeep/scenes/rooms/ch4_14_core_of_drowned_gaol.tscn`, with Boss instance `Enemies/SoulGaolerOrmund`. Existing fast Main entry is `CH4_AREA_14`/`CH4_BOSS_PHASE_01` (saved spawn `EntryWest`); Phase II has the separate existing `CH4_BOSS_PHASE_02` entry.
+- Actual baseline is 560 HP, 55% Phase II threshold, P1/P2 damage-taken multipliers 0.82/0.72, Poise 150/190, Stagger 0.48/0.38 s and protection 3.4/4.0 s. Body/Hurtbox are 66×142 and 76×148; shared frontal melee range is 148×72 at +90 px, while three explicit area attacks use 260×138 around the Boss.
+- Runtime has ten formal actions and keeps their configured damage unchanged. It currently has no Combo Budget, forced Player Turn, recent-attack history or high-pressure spacing; Recovery can flow directly into another attack selection. Turn animations wait 0.22/0.16 s but facing flips at turn start, so successful cross-throughs do not earn the intended heavy 180-degree turn delay.
+- Exact Godot 4.7.1 baseline `test_soul_gaoler_ormund_runtime.gd` passed. Implementation will use Thirteenfold Absolution / Crimson Masque Stilettos 14/28 as the balance authority, add deterministic timing/turn/sequence tests, and keep subjective combat feel explicitly separated from automated evidence.

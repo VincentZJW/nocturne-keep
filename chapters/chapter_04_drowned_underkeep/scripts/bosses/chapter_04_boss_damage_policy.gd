@@ -1,7 +1,7 @@
 class_name Chapter04BossDamagePolicy
 extends EnemyHitPolicyComponent
 
-var damage_multiplier: float = 0.82
+var damage_multiplier: float = 0.90
 
 
 func resolve_damage(hitbox: HitboxComponent) -> int:

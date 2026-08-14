@@ -1,7 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/soul_gaoler_ormund.gd" id="1_ayq3k"]
-[ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/soul_gaoler_ormund_config.gd" id="2_hypen"]
+[ext_resource type="Resource" path="res://chapters/chapter_04_drowned_underkeep/resources/bosses/soul_gaoler_ormund_data.tres" id="2_hypen"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_active/chain_anchor_slam_active_01.png" id="3_81iw7"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_active/chain_anchor_slam_active_02.png" id="4_6b5rw"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_04_drowned_underkeep/assets/bosses/soul_gaoler_ormund/sprites/chain_anchor_slam_active/chain_anchor_slam_active_03.png" id="5_twnkx"]
@@ -218,24 +218,6 @@
 [ext_resource type="Script" path="res://chapters/chapter_04_drowned_underkeep/scripts/bosses/chapter_04_boss_damage_policy.gd" id="216_d38ga"]
 [ext_resource type="Script" path="res://scripts/combat/hurtbox_component.gd" id="217_sipin"]
 [ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="218_h4es8"]
-
-[sub_resource type="Resource" id="Resource_04hap"]
-script = ExtResource("2_hypen")
-display_name = &"Soul Gaoler Ormund"
-max_health = 560
-patrol_speed = 0.0
-chase_speed = 48.0
-ground_acceleration = 300.0
-ground_deceleration = 560.0
-gravity = 1650.0
-patrol_half_width = 420.0
-platform_height_tolerance = 180.0
-detection_range = 520.0
-lose_target_range = 720.0
-attack_range = 118.0
-hurt_duration = 0.12
-knockback_speed = 55.0
-initial_idle_duration = 0.0
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_dq1bc"]
 animations = [{
@@ -1124,16 +1106,16 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0d4p4"]
-size = Vector2(66, 142)
+size = Vector2(44, 92)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tsccy"]
-size = Vector2(76, 148)
+size = Vector2(50, 98)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x1s1j"]
-size = Vector2(148, 72)
+size = Vector2(100, 48)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_xh686"]
-size = Vector2(260, 138)
+size = Vector2(180, 96)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_xhyvd"]
 radius = 520.0
@@ -1144,9 +1126,10 @@ collision_layer = 4
 collision_mask = 3
 floor_snap_length = 8.0
 script = ExtResource("1_ayq3k")
-config = SubResource("Resource_04hap")
+config = ExtResource("2_hypen")
 
 [node name="VisualRoot" type="Node2D" parent="." unique_id=1246645441]
+scale = Vector2(0.6, 0.6)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1760419767]
 texture_filter = 1
@@ -1156,12 +1139,12 @@ animation = &"dormant"
 autoplay = "dormant"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119300541]
-position = Vector2(0, -71)
+position = Vector2(0, -46)
 shape = SubResource("RectangleShape2D_0d4p4")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=613258622]
 script = ExtResource("214_cyuee")
-max_health = 560
+max_health = 460
 
 [node name="PoiseComponent" type="Node" parent="." unique_id=659981857]
 script = ExtResource("215_50jrp")
@@ -1178,13 +1161,13 @@ faction = &"enemy"
 hit_policy_path = NodePath("../DamagePolicy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=211930603]
-position = Vector2(0, -74)
+position = Vector2(0, -49)
 shape = SubResource("RectangleShape2D_tsccy")
 
 [node name="FacingRoot" type="Node2D" parent="." unique_id=579782489]
 
 [node name="MeleeHitbox" type="Area2D" parent="FacingRoot" unique_id=559676111]
-position = Vector2(90, -65)
+position = Vector2(62, -44)
 collision_layer = 64
 collision_mask = 8
 monitoring = false
@@ -1197,7 +1180,7 @@ shape = SubResource("RectangleShape2D_x1s1j")
 disabled = true
 
 [node name="AreaHitbox" type="Area2D" parent="." unique_id=1355441258]
-position = Vector2(0, -68)
+position = Vector2(0, -46)
 collision_layer = 64
 collision_mask = 8
 monitoring = false
@@ -1218,9 +1201,9 @@ monitorable = false
 shape = SubResource("CircleShape2D_xhyvd")
 
 [node name="WallCheck" type="RayCast2D" parent="." unique_id=97045692]
-position = Vector2(0, -35)
-target_position = Vector2(-42, 0)
+position = Vector2(0, -23)
+target_position = Vector2(-30, 0)
 
 [node name="FloorCheck" type="RayCast2D" parent="." unique_id=906396578]
-position = Vector2(-34, -5)
+position = Vector2(-24, -5)
 target_position = Vector2(0, 48)

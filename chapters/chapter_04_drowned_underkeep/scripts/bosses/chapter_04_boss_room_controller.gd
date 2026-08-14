@@ -13,6 +13,8 @@ const FLAG_BOSS_INTRO_SEEN: StringName = &"ch4_boss_intro_seen"
 @export_node_path("SoulGaolerOrmund") var boss_path: NodePath = NodePath("../Enemies/SoulGaolerOrmund")
 @export_node_path("Chapter04RoomExit") var reward_exit_path: NodePath = NodePath("../Transitions/ExitEast")
 @export var intro_line_duration: float = 0.72
+@export var boss_movement_left_bound: float = 180.0
+@export var boss_movement_right_bound: float = 2124.0
 
 var boss: SoulGaolerOrmund
 var player: Player
@@ -55,6 +57,7 @@ func _bind_runtime() -> void:
 	if boss == null or player == null or reward_exit == null:
 		push_error("Chapter04BossRoomController cannot resolve boss, player, or reward exit")
 		return
+	boss.configure_movement_bounds(boss_movement_left_bound, boss_movement_right_bound)
 	reward_exit.requires_interaction = true
 	var session: ChapterSessionState = get_node_or_null("/root/ChapterSession") as ChapterSessionState
 	if session != null and session.has_story_flag(FLAG_BOSS_DEFEATED):
