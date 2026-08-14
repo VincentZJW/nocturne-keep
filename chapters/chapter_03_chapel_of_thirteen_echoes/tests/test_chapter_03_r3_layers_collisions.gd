@@ -4,7 +4,6 @@ const ROOT := "res://chapters/chapter_03_chapel_of_thirteen_echoes"
 const GRID_ASSET_PATHS: Array[String] = [
 	ROOT + "/assets/environment/r3_grid_aligned/boss_choir_stalls_304x112.png",
 	ROOT + "/assets/environment/r3_grid_aligned/boss_pipe_organ_472x344.png",
-	ROOT + "/assets/environment/r3_grid_aligned/ossuary_stairs_496x200.png",
 	ROOT + "/assets/environment/r3_grid_aligned/rusted_gate_232x264.png",
 	ROOT + "/assets/environment/r3_grid_aligned/rusted_gate_264x296.png",
 	ROOT + "/assets/environment/r3_grid_aligned/wet_arch_232x304.png",

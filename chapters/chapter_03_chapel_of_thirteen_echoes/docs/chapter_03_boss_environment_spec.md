@@ -14,7 +14,7 @@ The route is paced as:
 2. `Gate of the Thirteenth Echo / 第十三回响之门` — thirteen bells and seals, cracked blood wax, controlled fade and collision-safe crossing.
 3. `Sanctum of the Thirteenth Echo / 第十三回响圣所` — a flat combat floor beneath the Thirteenfold Absolution, altar, empty choir stalls and thirteen ritual stations.
 4. `Reliquary of the Last Confession / 末次忏悔遗物室` — quiet post-Boss reward hand-off.
-5. `Descent of the Drowned Saints / 溺圣下行道` — damp ossuary masonry, descending steps, shallow water and the blocked Chapter IV boundary.
+5. `Descent of the Drowned Saints / 溺圣下行道` — drowned chapel drainage, shallow animated water, half-submerged ossuary evidence and a live Chapter IV threshold.
 
 The thirteenth position is emphasized through unstable light and the erased/empty next position. It suggests the Player's relationship to a fourteenth toll without presenting the conclusion as explicit text.
 
@@ -26,7 +26,7 @@ The thirteenth position is emphasized through unstable light and the erased/empt
 | `scenes/areas/ch3_boss_gate_transition.tscn` | Gate collision, thirteen-step visual/audio sequence, input lock, fade and typed crossing request |
 | `scenes/areas/ch3_boss_sanctum.tscn` | Arena composition, intro camera/environment sequence, typed Boss anchor and death-response environment |
 | `scenes/areas/ch3_post_boss_reliquary.tscn` | Reward presentation and authoritative reward-system hand-off |
-| `scenes/areas/ch3_underkeep_descent.tscn` | Water-transition presentation and guarded Chapter IV scene request |
+| `scenes/areas/ch3_underkeep_descent.tscn` | Layered drainage/ossuary composition, shallow-water reactions and guarded Chapter IV scene request |
 
 The level script owns cross-area routing and respawn binding. It does not synthesize an Edran instance or inventory reward.
 
@@ -61,7 +61,7 @@ After the formal room Fade completes, `Chapter03BossSanctum` locks the Player, l
 
 ### Reward and Chapter IV boundary
 
-The reliquary emits `reward_collection_requested(player)`. Only an authoritative reward system may grant the future Boss item and call `notify_reward_collected()`. The Underkeep terminal emits a transition only when the registered Chapter IV PackedScene exists; otherwise it displays a clear planned-content message.
+The reliquary emits `reward_collection_requested(player)`. The authoritative reward system grants Thirteenfold Absolution and calls `notify_reward_collected()`. The rebuilt Underkeep descent keeps the existing chapter-completion gate, then emits a typed room request to the registered Chapter IV threshold. The destination is a formal playable landing scene; it is not the complete Chapter IV map.
 
 ## Main debug starts
 
@@ -72,8 +72,9 @@ The reliquary emits `reward_collection_requested(player)`. Only an authoritative
 | `CH3_POST_BOSS` | Post-death environment and reward hand-off |
 | `CH3_UNDERKEEP_DESCENT` | Open descent, shallow water and Chapter IV boundary |
 
-## Known integration boundaries
+## Current integration boundaries
 
-- `Bell Confessor Edran` has no authoritative scene/data/controller in the repository: Boss dialogue, Boss title, combat and actual death signal remain `PARTIAL`.
-- No Chapter III Boss reward Resource exists: inventory grant remains `PARTIAL`; the environment hook is implemented and tested.
-- `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` does not exist: the downward route is complete to its terminal, while actual Chapter IV loading remains `PARTIAL`.
+- Edran and the Thirteenfold Absolution reward now have independent authoritative gameplay specifications; this environment document continues to own only their scene hooks.
+- `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` exists and accepts `CH4_START`, so the Chapter III-to-IV fade and landing are live.
+- The destination is intentionally limited to a formal threshold/landing. Chapter IV's complete route, encounters and final environment remain outside this specification and are not claimed complete.
+- The detailed Underkeep layer, collision and water contract is maintained in `chapter_03_underkeep_descent_spec.md`.

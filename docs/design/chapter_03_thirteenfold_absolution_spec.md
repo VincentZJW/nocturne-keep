@@ -1,6 +1,6 @@
 # Chapter III fixed reward — Thirteenfold Absolution / 十三重赦刃
 
-Status: W1–W5 complete on 2026-08-02. Chapter IV scene entry remains explicitly partial.
+Status: W1–W5 complete on 2026-08-02. The later Underkeep UD0–UD5 pass adds a formal Chapter IV threshold without changing this weapon contract.
 
 ## Identity and narrative role
 
@@ -75,9 +75,9 @@ All four states route through `res://scenes/bootstrap/main_bootstrap.tscn`. They
 
 Historical W2 documents describe the visual-only state that was correct during W2. W5 intentionally supersedes the runtime meaning of `CH3_REWARD_TEST`; it now uses the real uncollected pickup and Equipment transaction.
 
-## Explicit boundary
+## Current boundary update
 
-`res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` does not exist. The Underkeep terminal correctly reports Chapter IV as planned and refuses a false transition. W5 proves the saved recovery contract up to that boundary; it does not create Chapter IV, a Continue menu, new combat behavior or balance changes.
+W5 originally stopped honestly at a missing Chapter IV scene. The later Underkeep UD0–UD5 environment pass created `res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn` as a formal `CH4_START` threshold and connected the existing reward-gated descent to it. This does not change weapon ownership, damage, persistence or reward timing, and it does not claim that the complete Chapter IV map exists.
 
 ## Verification and evidence
 
@@ -86,4 +86,4 @@ Historical W2 documents describe the visual-only state that was correct during W
 - QA report: `res://docs/qa/chapter_03_thirteenfold_absolution/w5/report.md`.
 - Screenshot/path hashes: `res://docs/qa/chapter_03_thirteenfold_absolution/w5/sha256_manifest.txt`.
 
-Manual F5 acceptance: select Chapter III and use `CH3_BOSS` for the complete encounter, `CH3_REWARD_TEST` for a short pickup/action check, or `CH3_UNDERKEEP_DESCENT` for post-acquisition death/respawn. Verify the HUD reads tier 3 and 14/28 after acquisition, the gate opens only after collection, the empty reliquary persists for the process lifetime, and the Chapter IV terminal remains honest.
+Manual F5 acceptance: select Chapter III and use `CH3_BOSS` for the complete encounter, `CH3_REWARD_TEST` for a short pickup/action check, or `CH3_UNDERKEEP_DESCENT` for post-acquisition death/respawn. Verify the HUD reads tier 3 and 14/28 after acquisition, the gate opens only after collection, the empty reliquary persists for the process lifetime, and the Underkeep E prompt fades into the single-player/single-HUD `CH4_START` threshold.

@@ -1,86 +1,275 @@
-[gd_scene load_steps=12 format=3]
+[gd_scene load_steps=50 format=3]
 
-[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_underkeep_descent.gd" id="1_script"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/underkeep_descent_backdrop.png" id="2_backdrop"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/r3_grid_aligned/ossuary_stairs_496x200.png" id="3_stairs"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/r3_grid_aligned/wet_arch_256x336.png" id="4_arch"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/r3_grid_aligned/rusted_gate_264x296.png" id="5_gate"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/shallow_water_edge.png" id="6_water"]
-[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/submerged_statue.png" id="7_statue"]
-[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/underkeep_water_drip.wav" id="8_drip"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/areas/chapter_03_underkeep_descent.gd" id="1"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/fx/underkeep_animated_sprite.gd" id="2"]
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/fx/underkeep_drip_point.gd" id="3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/underkeep_descent_backdrop_v2.png" id="4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_bed/water_bed_2304x108.png" id="5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_body/water_body_01.png" id="6"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_body/water_body_02.png" id="7"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_body/water_body_03.png" id="8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_body/water_body_04.png" id="9"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_back_01.png" id="10"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_back_02.png" id="11"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_back_03.png" id="12"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_back_04.png" id="13"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_back_05.png" id="14"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_back_06.png" id="15"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_front_01.png" id="16"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_front_02.png" id="17"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_front_03.png" id="18"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_front_04.png" id="19"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_front_05.png" id="20"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/water_surface/surface_front_06.png" id="21"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/highlights/highlight_01.png" id="22"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/highlights/highlight_02.png" id="23"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/highlights/highlight_03.png" id="24"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/highlights/highlight_04.png" id="25"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/drainage_grates/wall_drain_grate.png" id="26"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/submerged_reliquaries/drowned_reliquary.png" id="27"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/broken_beams/collapsed_oak_beam.png" id="28"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/rusted_bars/half_submerged_bars.png" id="29"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/chains/hanging_chain.png" id="30"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/submerged_statues/bell_saint_statue.png" id="31"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/props/underkeep_gate/drowned_underkeep_gate.png" id="32"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/fx/dripping_water/water_drop.png" id="33"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/ripples/ripple_01.png" id="34"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/ripples/ripple_02.png" id="35"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/ripples/ripple_03.png" id="36"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/ripples/ripple_04.png" id="37"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/ripples/ripple_05.png" id="38"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/underkeep_water_drip.wav" id="39"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/foam/drain_foam_01.png" id="40"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/foam/drain_foam_02.png" id="41"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/foam/drain_foam_03.png" id="42"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/foam/drain_foam_04.png" id="43"]
 
 [sub_resource type="RectangleShape2D" id="FloorShape"]
 size = Vector2(2304, 108)
 
-[sub_resource type="RectangleShape2D" id="ExitShape"]
-size = Vector2(260, 300)
+[sub_resource type="RectangleShape2D" id="WaterShape"]
+size = Vector2(2304, 116)
 
-[sub_resource type="AtlasTexture" id="WaterSurfaceAtlas"]
-atlas = ExtResource("6_water")
-region = Rect2(0, 20, 768, 4)
+[sub_resource type="RectangleShape2D" id="ExitShape"]
+size = Vector2(210, 280)
 
 [node name="UnderkeepDescent" type="Node2D"]
-script = ExtResource("1_script")
+script = ExtResource("1")
 
-[node name="Backdrop" type="Sprite2D" parent="."]
+[node name="BackgroundArchitecture" type="Node2D" parent="."]
 z_index = -100
+
+[node name="Backdrop" type="Sprite2D" parent="BackgroundArchitecture"]
 position = Vector2(1152, 360)
 texture_filter = 1
-texture = ExtResource("2_backdrop")
+texture = ExtResource("4")
 
-[node name="OssuaryStairs" type="Sprite2D" parent="."]
-z_index = -30
-position = Vector2(478, 472)
+[node name="DrainGrateWest" type="Sprite2D" parent="BackgroundArchitecture"]
+position = Vector2(388, 425)
 texture_filter = 1
-texture = ExtResource("3_stairs")
+texture = ExtResource("26")
 
-[node name="WetArch01" type="Sprite2D" parent="."]
-z_index = -60
-position = Vector2(712, 404)
+[node name="DrainGrateEast" type="Sprite2D" parent="BackgroundArchitecture"]
+position = Vector2(1650, 420)
 texture_filter = 1
-texture = ExtResource("4_arch")
+texture = ExtResource("26")
 
-[node name="WetArch02" type="Sprite2D" parent="."]
-z_index = -60
-position = Vector2(1450, 404)
+[node name="HangingChain01" type="Sprite2D" parent="BackgroundArchitecture"]
+position = Vector2(820, 245)
 texture_filter = 1
-texture = ExtResource("4_arch")
+texture = ExtResource("30")
 
-[node name="SubmergedSaint" type="Sprite2D" parent="."]
-z_index = -30
-position = Vector2(1260, 490)
+[node name="HangingChain02" type="Sprite2D" parent="BackgroundArchitecture"]
+position = Vector2(1880, 230)
 texture_filter = 1
-texture = ExtResource("7_statue")
+texture = ExtResource("30")
 
-[node name="UnderkeepGate" type="Sprite2D" parent="."]
-z_index = -30
-position = Vector2(2140, 424)
-texture_filter = 1
-texture = ExtResource("5_gate")
+[node name="MidgroundNarrativeProps" type="Node2D" parent="."]
+z_index = -35
 
-[node name="WaterBodyBehind01" type="Sprite2D" parent="."]
-z_index = -30
-position = Vector2(1040, 620)
+[node name="CollapsedOakBeam" type="Sprite2D" parent="MidgroundNarrativeProps"]
+position = Vector2(340, 546)
 texture_filter = 1
-texture = ExtResource("6_water")
+texture = ExtResource("28")
 
-[node name="WaterBodyBehind02" type="Sprite2D" parent="."]
-z_index = -30
-position = Vector2(1776, 620)
+[node name="DrownedReliquary" type="Sprite2D" parent="MidgroundNarrativeProps"]
+position = Vector2(800, 538)
 texture_filter = 1
-texture = ExtResource("6_water")
+texture = ExtResource("27")
 
-[node name="WaterSurfaceForeground01" type="Sprite2D" parent="."]
-z_index = 20
-position = Vector2(1040, 614)
+[node name="BellSaintStatue" type="Sprite2D" parent="MidgroundNarrativeProps"]
+position = Vector2(1280, 455)
 texture_filter = 1
-texture = SubResource("WaterSurfaceAtlas")
+texture = ExtResource("31")
 
-[node name="WaterSurfaceForeground02" type="Sprite2D" parent="."]
-z_index = 20
-position = Vector2(1776, 614)
+[node name="HalfSubmergedBars" type="Sprite2D" parent="MidgroundNarrativeProps"]
+position = Vector2(1720, 548)
 texture_filter = 1
-texture = SubResource("WaterSurfaceAtlas")
+texture = ExtResource("29")
+
+[node name="DrownedUnderkeepGate" type="Sprite2D" parent="MidgroundNarrativeProps"]
+position = Vector2(2150, 430)
+texture_filter = 1
+texture = ExtResource("32")
+
+[node name="WaterLayers" type="Node2D" parent="."]
+
+[node name="WaterBed" type="Sprite2D" parent="WaterLayers"]
+z_index = -32
+position = Vector2(1152, 666)
+texture_filter = 1
+texture = ExtResource("5")
+
+[node name="Body01" type="Sprite2D" parent="WaterLayers"]
+z_index = -25
+position = Vector2(384, 666)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("6"), ExtResource("7"), ExtResource("8"), ExtResource("9")])
+frames_per_second = 3.0
+
+[node name="Body02" type="Sprite2D" parent="WaterLayers"]
+z_index = -25
+position = Vector2(1152, 666)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("7"), ExtResource("8"), ExtResource("9"), ExtResource("6")])
+frames_per_second = 3.0
+
+[node name="Body03" type="Sprite2D" parent="WaterLayers"]
+z_index = -25
+position = Vector2(1920, 666)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("8"), ExtResource("9"), ExtResource("6"), ExtResource("7")])
+frames_per_second = 3.0
+
+[node name="SurfaceBack01" type="Sprite2D" parent="WaterLayers"]
+z_index = 8
+position = Vector2(384, 608)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15")])
+frames_per_second = 7.0
+
+[node name="SurfaceBack02" type="Sprite2D" parent="WaterLayers"]
+z_index = 8
+position = Vector2(1152, 608)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("12"), ExtResource("13"), ExtResource("14"), ExtResource("15"), ExtResource("10"), ExtResource("11")])
+frames_per_second = 7.0
+
+[node name="SurfaceBack03" type="Sprite2D" parent="WaterLayers"]
+z_index = 8
+position = Vector2(1920, 608)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("14"), ExtResource("15"), ExtResource("10"), ExtResource("11"), ExtResource("12"), ExtResource("13")])
+frames_per_second = 7.0
+
+[node name="Highlights01" type="Sprite2D" parent="WaterLayers"]
+z_index = 9
+position = Vector2(384, 650)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("22"), ExtResource("23"), ExtResource("24"), ExtResource("25")])
+frames_per_second = 4.0
+
+[node name="Highlights02" type="Sprite2D" parent="WaterLayers"]
+z_index = 9
+position = Vector2(1152, 650)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("24"), ExtResource("25"), ExtResource("22"), ExtResource("23")])
+frames_per_second = 4.0
+
+[node name="Highlights03" type="Sprite2D" parent="WaterLayers"]
+z_index = 9
+position = Vector2(1920, 650)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("23"), ExtResource("24"), ExtResource("25"), ExtResource("22")])
+frames_per_second = 4.0
+
+[node name="DrainFoamWest" type="Sprite2D" parent="WaterLayers"]
+z_index = 10
+position = Vector2(390, 606)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("40"), ExtResource("41"), ExtResource("42"), ExtResource("43")])
+frames_per_second = 6.0
+
+[node name="DrainFoamEast" type="Sprite2D" parent="WaterLayers"]
+z_index = 10
+position = Vector2(1650, 606)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("42"), ExtResource("43"), ExtResource("40"), ExtResource("41")])
+frames_per_second = 6.0
+
+[node name="SurfaceFront01" type="Sprite2D" parent="WaterLayers"]
+z_index = 13
+position = Vector2(384, 614)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("16"), ExtResource("17"), ExtResource("18"), ExtResource("19"), ExtResource("20"), ExtResource("21")])
+frames_per_second = 7.0
+
+[node name="SurfaceFront02" type="Sprite2D" parent="WaterLayers"]
+z_index = 13
+position = Vector2(1152, 614)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("18"), ExtResource("19"), ExtResource("20"), ExtResource("21"), ExtResource("16"), ExtResource("17")])
+frames_per_second = 7.0
+
+[node name="SurfaceFront03" type="Sprite2D" parent="WaterLayers"]
+z_index = 13
+position = Vector2(1920, 614)
+texture_filter = 1
+script = ExtResource("2")
+frames = Array[Texture2D]([ExtResource("20"), ExtResource("21"), ExtResource("16"), ExtResource("17"), ExtResource("18"), ExtResource("19")])
+frames_per_second = 7.0
+
+[node name="WaterInteractionArea" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterInteractionArea"]
+position = Vector2(1152, 565)
+shape = SubResource("WaterShape")
+
+[node name="TransientWaterEffects" type="Node2D" parent="."]
+
+[node name="DripPoint01" type="Node2D" parent="."]
+position = Vector2(520, 240)
+script = ExtResource("3")
+waterline_y = 612.0
+drop_texture = ExtResource("33")
+ripple_frames = Array[Texture2D]([ExtResource("34"), ExtResource("35"), ExtResource("36"), ExtResource("37"), ExtResource("38")])
+audio_stream = ExtResource("39")
+
+[node name="DripPoint02" type="Node2D" parent="."]
+position = Vector2(1140, 195)
+script = ExtResource("3")
+minimum_delay = 3.1
+maximum_delay = 4.5
+waterline_y = 612.0
+drop_texture = ExtResource("33")
+ripple_frames = Array[Texture2D]([ExtResource("34"), ExtResource("35"), ExtResource("36"), ExtResource("37"), ExtResource("38")])
+audio_stream = ExtResource("39")
+
+[node name="DripPoint03" type="Node2D" parent="."]
+position = Vector2(1810, 225)
+script = ExtResource("3")
+minimum_delay = 2.8
+maximum_delay = 4.4
+waterline_y = 612.0
+drop_texture = ExtResource("33")
+ripple_frames = Array[Texture2D]([ExtResource("34"), ExtResource("35"), ExtResource("36"), ExtResource("37"), ExtResource("38")])
+audio_stream = ExtResource("39")
 
 [node name="Floor" type="StaticBody2D" parent="."]
 collision_layer = 1
@@ -91,34 +280,24 @@ position = Vector2(1152, 666)
 shape = SubResource("FloorShape")
 
 [node name="ChapterFourExitArea" type="Area2D" parent="."]
-position = Vector2(2150, 468)
+position = Vector2(2160, 465)
 collision_layer = 0
 collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ChapterFourExitArea"]
 shape = SubResource("ExitShape")
 
-[node name="WaterDrip" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(1420, 250)
-stream = ExtResource("8_drip")
-volume_db = -12.0
-max_distance = 1800.0
-
-[node name="WaterDripTimer" type="Timer" parent="."]
-wait_time = 3.4
-autostart = true
-
 [node name="TransitionPrompt" type="Label" parent="."]
-z_index = 14
-offset_left = 1750.0
-offset_top = 294.0
-offset_right = 2290.0
-offset_bottom = 356.0
+z_index = 30
+offset_left = 1800.0
+offset_top = 295.0
+offset_right = 2294.0
+offset_bottom = 350.0
 theme_override_colors/font_color = Color(0.69, 0.82, 0.84, 0.98)
 theme_override_colors/font_outline_color = Color(0.02, 0.04, 0.07, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 14
-text = "E · DESCEND TO THE DROWNED UNDERKEEP / 下行至淹没地牢"
+text = "E · DESCEND TO THE DROWNED UNDERKEEP / 下行至沉没下堡"
 horizontal_alignment = 1
 
 [node name="AreaTitle" type="Label" parent="."]

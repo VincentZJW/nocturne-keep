@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d0116g1nn4gdc"
-path="res://.godot/imported/ossuary_stairs.png-17bdd30abc2ee431e3c23cd4c0cbb53b.ctex"
+uid="uid://b4p0fc8a7nd4i"
+path="res://.godot/imported/landing_02.png-afd54e3b91d22042ec0f52d4be32272b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/ossuary_stairs.png"
-dest_files=["res://.godot/imported/ossuary_stairs.png-17bdd30abc2ee431e3c23cd4c0cbb53b.ctex"]
+source_file="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/environment/water_transition/water/splashes/landing_02.png"
+dest_files=["res://.godot/imported/landing_02.png-afd54e3b91d22042ec0f52d4be32272b.ctex"]
 
 [params]
 

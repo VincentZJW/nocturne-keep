@@ -96,7 +96,6 @@ func _generate_antechamber_props() -> int:
 func _generate_transition_props() -> int:
 	var failures: int = 0
 	failures += _save(_draw_reliquary(), "props/boss/bell_reliquary.png")
-	failures += _save(_draw_ossuary_stairs(), "environment/water_transition/ossuary_stairs.png")
 	failures += _save(_draw_wet_arch(), "environment/water_transition/wet_arch.png")
 	failures += _save(_draw_rusted_gate(), "environment/water_transition/rusted_gate.png")
 	failures += _save(_draw_shallow_water(), "environment/water_transition/shallow_water_edge.png")
@@ -542,14 +541,6 @@ func _draw_reliquary() -> Image:
 	]), Color("16131d"))
 	_fill_circle(image, Vector2i(90, 80), 24, Color(0.31, 0.58, 0.68, 0.22))
 	_draw_bell_glyph(image, Vector2i(90, 80), true)
-	return image
-
-
-func _draw_ossuary_stairs() -> Image:
-	var image: Image = _new_image(Vector2i(640, 256))
-	for step: int in range(10):
-		_rect(image, Rect2i(step * 54, step * 22, 640 - step * 54, 28), STONE_MID.darkened(float(step) * 0.035))
-		_rect(image, Rect2i(step * 54, step * 22, 640 - step * 54, 4), STONE_LIGHT)
 	return image
 
 

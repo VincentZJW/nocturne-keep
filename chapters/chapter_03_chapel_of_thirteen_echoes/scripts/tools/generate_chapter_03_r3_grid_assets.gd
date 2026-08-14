@@ -34,11 +34,6 @@ const VARIANTS: Array[Dictionary] = [
 		"size": Vector2i(256, 336),
 	},
 	{
-		"source": ROOT + "/assets/environment/water_transition/ossuary_stairs.png",
-		"target": ROOT + "/assets/environment/r3_grid_aligned/ossuary_stairs_496x200.png",
-		"size": Vector2i(496, 200),
-	},
-	{
 		"source": ROOT + "/assets/environment/water_transition/rusted_gate.png",
 		"target": ROOT + "/assets/environment/r3_grid_aligned/rusted_gate_264x296.png",
 		"size": Vector2i(264, 296),

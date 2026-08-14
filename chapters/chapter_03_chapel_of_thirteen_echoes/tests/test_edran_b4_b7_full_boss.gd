@@ -125,7 +125,7 @@ func _validate_main_and_reward_contracts() -> void:
 	_check(post_room != null,"post-Boss reward room loads")
 	var registry_profile: ChapterStartProfile = ChapterRegistry.get_chapter_or_null(ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP)
 	_check(registry_profile != null,"Chapter IV entrance remains registered")
-	_check(not ResourceLoader.exists(registry_profile.main_scene_path,"PackedScene"),"Chapter IV remains an honest planned boundary, not a fabricated scene")
+	_check(ResourceLoader.exists(registry_profile.main_scene_path,"PackedScene"),"Chapter IV formal threshold scene exists")
 
 
 func _validate_frames(path: String,animations: Array[StringName],label: String) -> void:

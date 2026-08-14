@@ -281,8 +281,8 @@ func _assert_terminal_boundaries(controller: Chapter03RoomTransitionController) 
 			"underkeep descent becomes active"
 		)
 	_expect(
-		not ResourceLoader.exists(ChapterRegistry.CHAPTER_04_SCENE_PATH, "PackedScene"),
-		"Chapter IV remains an explicit planned boundary"
+		ResourceLoader.exists(ChapterRegistry.CHAPTER_04_SCENE_PATH, "PackedScene"),
+		"Chapter IV formal threshold exists"
 	)
 
 

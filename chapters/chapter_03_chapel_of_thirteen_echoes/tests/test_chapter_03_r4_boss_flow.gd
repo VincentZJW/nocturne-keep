@@ -111,8 +111,8 @@ func _run() -> void:
 		"UnderkeepDescent"
 	) as Chapter03UnderkeepDescent
 	_expect(
-		not ResourceLoader.exists(terminal.CHAPTER_FOUR_SCENE, "PackedScene"),
-		"Chapter IV remains an explicit planned boundary"
+		ResourceLoader.exists(terminal.CHAPTER_FOUR_SCENE, "PackedScene"),
+		"Chapter IV formal threshold exists"
 	)
 	session.begin_debug_run()
 	route.queue_free()

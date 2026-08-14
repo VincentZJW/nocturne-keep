@@ -70,12 +70,12 @@ func _run() -> void:
 		_expect(level.get_node_or_null("GameplayWorld/Chapter03BossAreas/BossSanctum/BossIntegrationAnchor") is Marker2D, "typed Edran integration anchor missing")
 		_expect(level.get_node_or_null("GameplayWorld/Chapter03BossAreas/BossSanctum/BossExitBlocker") is StaticBody2D, "Boss death gate missing")
 		level.free()
-	_expect(not ResourceLoader.exists("res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn", "PackedScene"), "Chapter IV unexpectedly exists; update transition QA")
+	_expect(ResourceLoader.exists("res://chapters/chapter_04_drowned_underkeep/scenes/level/drowned_underkeep.tscn", "PackedScene"), "Chapter IV threshold scene is missing")
 	if _failures > 0:
 		push_error("CH3_BOSS_ENV_TEST: FAIL count=%d" % _failures)
 		quit(1)
 		return
-	print("CH3_BOSS_ENV_TEST: PASS visual_assets=%d audio_assets=%d scenes=5 spawns=4 main=true boss_hook=partial chapter4=planned" % [REQUIRED_ASSETS.size(), REQUIRED_AUDIO.size()])
+	print("CH3_BOSS_ENV_TEST: PASS visual_assets=%d audio_assets=%d scenes=5 spawns=4 main=true boss_hook=partial chapter4=threshold" % [REQUIRED_ASSETS.size(), REQUIRED_AUDIO.size()])
 	quit(0)
 
 

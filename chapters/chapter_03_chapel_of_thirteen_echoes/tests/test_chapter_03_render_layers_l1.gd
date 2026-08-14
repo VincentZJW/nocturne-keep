@@ -108,13 +108,23 @@ func _assert_underkeep_water_split() -> void:
 	)
 	if underkeep == null:
 		return
-	for index: int in range(1, 3):
-		var body: Sprite2D = underkeep.get_node("WaterBodyBehind%02d" % index) as Sprite2D
-		var surface: Sprite2D = underkeep.get_node(
-			"WaterSurfaceForeground%02d" % index
+	for index: int in range(1, 4):
+		var body: Sprite2D = underkeep.get_node_or_null(
+			"WaterLayers/Body%02d" % index
 		) as Sprite2D
-		_expect(_effective_z(body) == RenderLayerContract.PROPS_BEHIND_ACTORS, "water body %d must stay behind actors" % index)
-		_expect(_effective_z(surface) == RenderLayerContract.LIMITED_FOREGROUND, "water surface %d must use limited foreground" % index)
+		var surface: Sprite2D = underkeep.get_node_or_null(
+			"WaterLayers/SurfaceFront%02d" % index
+		) as Sprite2D
+		_expect(body != null, "water body %d exists" % index)
+		_expect(surface != null, "water surface %d exists" % index)
+		if body == null or surface == null:
+			continue
+		_expect(_effective_z(body) < RenderLayerContract.PLAYER, "water body %d must stay behind actors" % index)
+		_expect(
+			_effective_z(surface) > RenderLayerContract.PLAYER
+			and _effective_z(surface) <= RenderLayerContract.LIMITED_FOREGROUND,
+			"water surface %d must stay inside limited foreground" % index
+		)
 		_expect(surface.texture != null and surface.texture.get_height() <= 4, "water surface %d exceeds four-pixel occlusion budget" % index)
 	_assert_no_y_sort(underkeep)
 	underkeep.queue_free()

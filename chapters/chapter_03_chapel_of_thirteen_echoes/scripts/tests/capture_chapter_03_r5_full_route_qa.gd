@@ -91,16 +91,11 @@ func _run() -> void:
 	) as Chapter03UnderkeepDescent
 	_place_player(player, Vector2(2100, 584))
 	await _settle()
-	underkeep._on_body_entered(player)
-	var interact: InputEventAction = InputEventAction.new()
-	interact.action = &"interact"
-	interact.pressed = true
-	interact.strength = 1.0
-	underkeep._unhandled_input(interact)
-	assert(underkeep.prompt.text.contains("PLANNED"), "Chapter IV boundary did not explain its planned state")
+	underkeep._on_exit_body_entered(player)
+	assert(underkeep.prompt.text.contains("DESCEND"), "Chapter IV boundary prompt is missing")
 	await process_frame
 	await process_frame
-	await _capture("chapter_03_r5_chapter_04_planned_boundary_main.png")
+	await _capture("chapter_03_r5_chapter_04_threshold_main.png")
 
 	config.reset_to_defaults()
 	print("CH3_R5_MAIN_CAPTURE PASS images=%d formal_route=true" % _captures)
