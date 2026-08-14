@@ -1,5 +1,34 @@
 # Development Log
 
+## 2026-08-09 — CH4-W0 Soul-Lock Twin Keys reward audit
+
+Status: audit complete — no weapon, reward, Boss, Player, scene, inventory, equipment or persistence implementation changed; stop point is CH4-W0
+
+- Loaded the repository guide, README, technical architecture and all four permanent chapter-production policies, plus the Game Designer and Godot Gameplay Scripter skills. The approved scope is read-only CH4-W0: identify the existing reward architecture and exact future ownership without creating a duplicate system.
+- Formal authority remains `res://scenes/bootstrap/main_bootstrap.tscn`. The saved route is `CH4_AREA_14` Core of Drowned Gaol (Ormund) → `CH4_AREA_15` Broken Soul Reservoir (existing reward facility) → `CH4_AREA_16` Hall of Drowned Memories → registered `CH5_START`.
+- The existing reusable weapon stack is `WeaponData` + `WeaponInventory` + `EquipmentManager` + `WeaponPickup` + `PlayerWeaponVisual`. Inventory already rejects duplicate IDs; formal saves already serialize owned weapon IDs, equipped weapon ID and ChapterSession story flags. Debug sessions deliberately disable disk persistence.
+- Existing formal weapon values are unchanged: Veilbound 10/20, Ravenfang 12/24, Crimson Masque 14/28 and Thirteenfold Absolution 14/28. No `soul_lock_twin_keys` WeaponData, pickup, SpriteFrames or EquipmentManager mapping currently exists.
+- Ormund currently emits `death_sequence_started`, plays `death_start` (0.55 s), `death_collapse` (0.65 s) and then `soul_release`, whose start emits the one-shot `defeated` signal. The Boss room controller writes `ch4_boss_defeated` and `ch4_reward_unlocked`, shows 1.45 s dialogue and unlocks only the Area 15 exit.
+- Area 15 already owns the formal placeholder `RewardController`, interaction Area, visual and locked Area 16 exit. Its current collection only writes `ch4_reward_collected` and `ch4_memory_passage_unlocked`; it grants no weapon. Area 16 correctly refuses the Chapter V transition until `ch4_memory_passage_unlocked` is present.
+- Implementation direction for later approved stages: replace the Area 15 placeholder in place, compose the existing `WeaponPickup`/Inventory/Equipment path, add one Chapter IV WeaponData and one Player visual set, extend the existing EquipmentManager and PlayerWeaponVisual mappings, and coordinate the saved Boss/reward rooms through the existing controllers. Do not create a second reward room or parallel reward service.
+- Verification baseline: exact Godot 4.7.1 editor/import/parse exited 0. The existing formal `test_chapter_04_q4_boss_flow.gd` passed through MainBootstrap, Ormund P1/P2/death, reward locked/collected, memory passage and `CH5_START`, with no red script/resource/runtime error.
+- This is an audit-only milestone. Per the user's Git rule, no commit is created.
+
+## 2026-08-08 — CH4-BGM-CLARITY-0 Soul Gaoler Ormund clarity audit
+
+Status: audit complete — no score, MIDI, OGG, track Resource, Boss runtime or Main integration changed; clarity recomposition awaits approval
+
+- Loaded the repository workflow, audio-production skill, formal generator, P1/P2 score JSON, Standard MIDI, OGG analysis, track registry/resources, existing CH4-M5 QA and MainBootstrap route. F5 authority remains `res://scenes/bootstrap/main_bootstrap.tscn`; formal audition spawns remain `CH4_BOSS_PHASE_01` and `CH4_BOSS_PHASE_02`.
+- Verified export parity instead of inferring from filenames: P1 MIDI and JSON both contain 604 note events; P2 MIDI and JSON both contain 970. The clutter is therefore authored into `generate_soul_gaoler_ormund_score.py`, not introduced by MIDI/OGG export.
+- P1 averages 10.07 score events per bar, peaks at 11 simultaneous note events / 8 active timbre tracks / 7 low tonal notes, and reaches two independent melodic strands. The principal congestion is `A_prime_The_Gaoler_Returns`, especially bars 45, 51 and 54; secondary collisions occur in `B_The_Prisoners` and `E_The_Empty_Cell`.
+- P2 averages 13.47 events per bar, peaks at 11 simultaneous note events / 9 active timbre tracks / 7 low tonal notes, and reaches four independent thematic strands in `Final_Lock`: Gaoler, full Soul, a separate choir Soul fragment and Undertow. Bars 51 and 58 are the worst peaks; `B2_Soul_Cage_Rupture` bar 13 and `E2_Chains_Against_Souls` bar 43 are secondary congestion points.
+- The nominal Boss identity is only the five-note `D-C-Bb-A-Eb` cell (intervals `-2,-2,-1,-6`). It is distinctive but does not satisfy the requested 8–12-note question/answer melody or provide an independent cadence; its six treatments further fragment the identity. The seven-note Soul Prison line is consequently more complete and often reads as a competing lead rather than a response.
+- Harmony changes every 2.07 bars on average in P1, but P2 accelerates to 1.71 bars with fourteen one-bar harmonic runs. C-sharp minor, E-flat minor, B minor, A-flat major, chromatic Gaoler inversions and the Soul theme's descending semitones weaken the D-minor centre when combined.
+- Locked the next-stage subtraction plan: replace the five-note cell with one 8–12-note Ormund question/answer theme; reduce Soul to a 3–5-note phrase-ending response; keep Undertow as a 2–4-note descending bass/transition cell; limit P1 to one lead and 4–6 active layers, P2 to one lead plus brief response and 5–7 layers; separate contrabass, cello, bass trombone, horn and viola registers; simplify chain/timpani density and remove sustained counterpoint.
+- Proposed form is P1 `Intro -> A -> B -> A' -> C -> A'' -> loop` and P2 existing transition -> `A2 -> B2 -> C2 -> A3 -> Finale -> loop`. The current transition cue and guarded MusicManager handoff remain untouched unless later layer auditions prove a content-only trim is necessary.
+- Planned direct-overwrite set for the approved recomposition stage is the existing authoritative generator; the two existing P1/P2 score JSON, MIDI, analysis JSON and OGG masters; their two existing Track Resources if durations change; and the existing focused audio test/QA report. No parallel `_clean`, `_v3`, `_final` or replacement master is planned.
+- This stage is deliberately audit-only. No commit is created, matching the user's standing rule that review-only work without substantive game/audio changes should not form a commit.
+
 ## 2026-08-08 — CH4-MELODY-1–4 Soul Gaoler Ormund thematic enrichment
 
 Status: formal score/render/Main/runtime work complete; deterministic QA PASS; subjective listening acceptance remains a manual user gate
@@ -7522,6 +7551,28 @@ Status: complete — W1–W5 final reward boundary, process-restart recovery, tr
 - Final report, manifests and ten Main frames: `docs/qa/chapter_03_thirteenfold_absolution/w5/`.
 - Manual route: enable Debug Chapter Start for Chapter III. `CH3_BOSS` proves the full fight-to-pickup flow; `CH3_REWARD_TEST` is the fast real pickup/action check; `CH3_UNDERKEEP_DESCENT` proves already-owned death/respawn. Confirm tier 3 and 14/28, gate locked before pickup/open after, empty return and honest planned Chapter IV prompt.
 - No Player timing/Hitbox/movement/stamina, Boss balance/AI, enemies, Chapter IV content, title/Continue UI or unrelated dirty worktree changes were modified. W5 is complete and stops here for user acceptance.
+
+## 2026-08-02 — Chapter IV characters CH4-C2 through CH4-C7 continuous production
+
+### Goal and approved scope
+
+- The user explicitly approved continuous execution of every remaining Chapter IV enemy and Boss character stage without intermediate approval pauses.
+- Execute `CH4-C2` creature concepts, `CH4-C3` elite/Boss concepts, `CH4-C4` seven normal enemies, `CH4-C5` the Underkeep Executioner, `CH4-C6` both Soul Gaoler Ormund phases and `CH4-C7` the character trial/Main/F5 forced QA.
+- Preserve the C0 tuning lock, Player 100 HP and the equipped Chapter III reward weapon at 14 Normal / 28 Dash. Do not modify Chapters I–III or unrelated dirty worktree content.
+
+### Owned paths and production rules
+
+- Own only `res://chapters/chapter_04_drowned_underkeep/` character assets/scenes/scripts/resources/tests/docs, necessary Chapter IV Registry/Debug additions, and `res://docs/qa/chapter_04_characters/` evidence.
+- Generate original concept art with the built-in image generation workflow, then redraw runtime art from low-resolution Godot `Image` structures; concept images must never be directly downscaled into SpriteFrames.
+- Reuse shared typed Health/Hitbox/Hurtbox/Encounter/Loot contracts. Add Chapter IV-local config, Poise, projectile/pull/water context and a dedicated Ormund controller instead of copying a prior chapter AI tree.
+- Final authority is `res://scenes/bootstrap/main_bootstrap.tscn`; exact Godot 4.7.1 import, deterministic tests, Main bootstrap execution and reproducible F5 routes are required before completion.
+
+### Risks and stop point
+
+- The repository contains substantial unrelated modified/untracked Chapter I/III files. Do not stage, revert or absorb them into Chapter IV commits.
+- The current Chapter IV scene is only a threshold. Character production may extend it into a saved combat/trial route, but this task does not claim the complete Chapter IV environment-art milestone.
+- Stop only after C2–C7 are implemented and verified, then wait for user playtest acceptance.
+
 ## 2026-08-06 — R0 enemy presence, Chapter IV route and creature-art audit
 
 Status: audit complete; no gameplay, scene, resource or art file changed
@@ -7666,6 +7717,7 @@ Status: root cause fixed; exact Godot 4.7.1 Main and route regressions pass; use
 
 - F5 with the existing Chapter IV `CH4_AREA_05` debug spawn. Leave at least one enemy from encounter 01 alive, move right into encounter 02, and verify Sewer Maw/Mirefin/Bog Toad wake, pursue, attack and receive J/Dash Attack damage instead of remaining inert.
 - Clear both groups and confirm the Cistern east gate opens; continue through Areas 06–13 to the existing Ormund Boss room. Output should contain no project script/resource red error. The macOS system CA-certificate diagnostic printed only by headless test processes is engine/platform noise and not a gameplay error.
+
 ## 2026-08-09 — CH4-W1–W5 Soul-Lock Twin Keys permanent Boss reward
 
 Status: complete — formal reward, persistence, Main integration and forced QA passed
