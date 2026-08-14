@@ -33,42 +33,44 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	var balance_a: Dictionary = await _replay_fight(
-		&"BALANCE_A_STANDARD", 480, 0.88, 0.82, &"standard"
+	var initial: Dictionary = await _replay_fight(
+		&"INITIAL_STANDARD", 560, 0.82, 0.72, &"standard"
 	)
-	var balance_b: Dictionary = await _replay_fight(
-		&"BALANCE_B_STANDARD", 460, 0.90, 0.84, &"standard"
+	var standard: Dictionary = await _replay_fight(
+		&"FINAL_STANDARD", 500, 0.87, 0.80, &"standard"
 	)
-	var conservative: Dictionary = await _replay_fight(
-		&"B_CONSERVATIVE", 460, 0.90, 0.84, &"conservative"
+	var conservative_a: Dictionary = await _replay_fight(
+		&"FINAL_CONSERVATIVE_A", 500, 0.87, 0.80, &"conservative"
 	)
-	var aggressive: Dictionary = await _replay_fight(
-		&"B_AGGRESSIVE", 460, 0.90, 0.84, &"aggressive"
+	var conservative_b: Dictionary = await _replay_fight(
+		&"FINAL_CONSERVATIVE_B", 500, 0.87, 0.80, &"conservative"
+	)
+	var aggressive_a: Dictionary = await _replay_fight(
+		&"FINAL_AGGRESSIVE_A", 500, 0.87, 0.80, &"aggressive"
+	)
+	var aggressive_b: Dictionary = await _replay_fight(
+		&"FINAL_AGGRESSIVE_B", 500, 0.87, 0.80, &"aggressive"
 	)
 
-	_expect(balance_a.result == &"VICTORY", "Balance A replay reaches Boss defeat")
-	_expect(balance_b.result == &"VICTORY", "Balance B replay reaches Boss defeat")
-	_expect(conservative.result == &"VICTORY", "conservative 14/28 replay can finish")
-	_expect(aggressive.result == &"VICTORY", "aggressive 14/28 replay can finish")
-	_expect(balance_b.time_seconds < balance_a.time_seconds, "Balance B is less attritional than A")
+	for result: Dictionary in [standard, conservative_a, conservative_b, aggressive_a, aggressive_b]:
+		_expect(result.result == &"VICTORY", "%s 14/28 replay can finish" % result.run)
+	_expect(standard.time_seconds < initial.time_seconds, "Final tune remains less attritional than initial 560/.82/.72")
 	_expect(
-		conservative.time_seconds >= 270.0 and conservative.time_seconds <= 360.0,
-		"conservative completion is 4.5 to 6 minutes"
+		conservative_a.time_seconds >= 300.0 and conservative_a.time_seconds <= 390.0,
+		"conservative completion is 5 to 6.5 minutes"
 	)
 	_expect(
-		balance_b.time_seconds >= 180.0 and balance_b.time_seconds <= 270.0,
-		"standard completion is 3 to 4.5 minutes"
+		standard.time_seconds >= 240.0 and standard.time_seconds <= 330.0,
+		"standard completion is 4 to 5.5 minutes"
 	)
 	_expect(
-		aggressive.time_seconds >= 150.0 and aggressive.time_seconds <= 210.0,
-		"aggressive completion is 2.5 to 3.5 minutes"
+		aggressive_a.time_seconds >= 180.0 and aggressive_a.time_seconds <= 270.0,
+		"aggressive completion is 3 to 4.5 minutes"
 	)
-	_expect(balance_b.longest_no_output_window < 3.0, "standard replay has no 3-second lockout")
-	_expect(conservative.deaths == 0, "conservative route does not require blood-magic sustain")
-	_print_replay(balance_a)
-	_print_replay(balance_b)
-	_print_replay(conservative)
-	_print_replay(aggressive)
+	_expect(standard.longest_no_output_window < 3.0, "standard replay has no 3-second lockout")
+	_expect(conservative_a.deaths == 0, "conservative route does not require blood-magic sustain")
+	for result: Dictionary in [initial, standard, conservative_a, conservative_b, aggressive_a, aggressive_b]:
+		_print_replay(result)
 	for failure: String in _failures:
 		push_error("SOUL GAOLER REPLAY: %s" % failure)
 	print("SOUL GAOLER ORMUND FULL-FIGHT REPLAYS | %s" % ("PASS" if _failures.is_empty() else "FAIL"))
@@ -206,7 +208,7 @@ func _navigation_time(style: StringName, phase: int) -> float:
 	match style:
 		&"conservative": return 7.4 if phase == 1 else 6.8
 		&"standard": return 6.4 if phase == 1 else 5.8
-		&"aggressive": return 6.2 if phase == 1 else 5.6
+		&"aggressive": return 6.52 if phase == 1 else 5.92
 	return 6.0
 
 

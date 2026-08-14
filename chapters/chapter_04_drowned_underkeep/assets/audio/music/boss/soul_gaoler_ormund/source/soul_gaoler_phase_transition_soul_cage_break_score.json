@@ -1,45 +1,49 @@
 {
   "title": "The Soul Cage Gives Way / 魂笼崩裂",
   "seed": 4041915,
-  "bpm": 104.0,
-  "time_signature": "4/4",
-  "bars": 4,
-  "duration_seconds": 9.230770833333333,
+  "bpm": 128.0,
+  "render_quarter_bpm": 192.0,
+  "time_signature": "6/8",
+  "bars": 10,
+  "duration_seconds": 9.375,
   "loop_begin_seconds": 0.0,
   "loop_end_seconds": 0.0,
   "loops": false,
   "sections": {
     "Chain_Breaks": [
       1,
-      1
-    ],
-    "Soul_Cage_Rupture": [
-      2,
       2
     ],
-    "Flood_Surge": [
+    "Soul_Cage_Rupture": [
       3,
-      3
+      4
+    ],
+    "Flood_Surge": [
+      5,
+      6
     ],
     "Final_Impact": [
-      4,
-      4
+      7,
+      8
     ]
   },
+  "ormund_theme": [
+    50,
+    48,
+    46,
+    45,
+    39,
+    41,
+    40,
+    38,
+    45
+  ],
   "gaoler_motif": [
     50,
     48,
     46,
     45,
     39
-  ],
-  "soul_response": [
-    41,
-    44,
-    43,
-    47,
-    46,
-    40
   ],
   "soul_prison_theme": [
     65,
@@ -56,20 +60,17 @@
     51,
     50
   ],
-  "gaoler_theme_variations": [
-    "A_LOW_BRASS",
-    "B_CELLO",
-    "C_SOUL_MIRROR",
-    "D_ANTIPHONAL_FRAGMENTS",
-    "E_FRACTURED",
-    "F_CHROMATIC_INVERSION"
+  "normal_active_layer_target": [
+    5,
+    7
   ],
+  "chain_role": "phrase-ending and structural accents only",
   "sample_provenance": "fully synthesized locally; no samples or external services",
   "events": [
     {
       "track": "soul",
       "start_beat": 0.0,
-      "duration_beats": 15.2,
+      "duration_beats": 29.8,
       "midi_note": 26,
       "velocity": 62,
       "pan": 0.0
@@ -77,7 +78,7 @@
     {
       "track": "water",
       "start_beat": 0.0,
-      "duration_beats": 15.3,
+      "duration_beats": 29.9,
       "midi_note": 31,
       "velocity": 43,
       "pan": -0.35
@@ -85,55 +86,55 @@
     {
       "track": "brass",
       "start_beat": 0.0,
-      "duration_beats": 3.6,
+      "duration_beats": 4.2,
       "midi_note": 38,
-      "velocity": 48,
+      "velocity": 50,
       "pan": 0.0
     },
     {
       "track": "chain",
-      "start_beat": 2.0,
-      "duration_beats": 0.62,
+      "start_beat": 3.0,
+      "duration_beats": 0.55,
       "midi_note": 69,
       "velocity": 86,
       "pan": -0.65
     },
     {
       "track": "chain",
-      "start_beat": 4.0,
-      "duration_beats": 0.72,
+      "start_beat": 6.0,
+      "duration_beats": 0.62,
       "midi_note": 74,
       "velocity": 94,
       "pan": 0.65
     },
     {
       "track": "gate",
-      "start_beat": 8.0,
-      "duration_beats": 1.85,
+      "start_beat": 12.0,
+      "duration_beats": 1.35,
       "midi_note": 35,
       "velocity": 96,
       "pan": 0.0
     },
     {
       "track": "water",
-      "start_beat": 12.0,
-      "duration_beats": 3.4,
+      "start_beat": 18.0,
+      "duration_beats": 4.2,
       "midi_note": 26,
       "velocity": 84,
       "pan": 0.0
     },
     {
       "track": "gate",
-      "start_beat": 15.0,
-      "duration_beats": 0.72,
+      "start_beat": 23.1,
+      "duration_beats": 0.62,
       "midi_note": 31,
       "velocity": 112,
       "pan": 0.0
     },
     {
       "track": "timpani",
-      "start_beat": 15.0,
-      "duration_beats": 0.7,
+      "start_beat": 23.1,
+      "duration_beats": 0.58,
       "midi_note": 31,
       "velocity": 110,
       "pan": 0.0

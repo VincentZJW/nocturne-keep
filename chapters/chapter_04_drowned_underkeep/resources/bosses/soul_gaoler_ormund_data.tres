@@ -5,7 +5,7 @@
 [resource]
 script = ExtResource("1_o6oa3")
 display_name = &"Soul Gaoler Ormund"
-max_health = 460
+max_health = 500
 patrol_speed = 0.0
 chase_speed = 48.0
 ground_acceleration = 300.0
@@ -19,14 +19,14 @@ attack_range = 118.0
 hurt_duration = 0.12
 knockback_speed = 55.0
 initial_idle_duration = 0.0
-total_health = 460
-phase_one_damage_multiplier = 0.9
+total_health = 500
+phase_one_damage_multiplier = 0.87
 phase_one_poise = 130
 phase_one_stagger_duration = 0.82
 phase_one_player_turn_duration = 1.05
 phase_one_turn_duration = 0.5
 phase_one_combo_budget = 2
-phase_two_damage_multiplier = 0.84
+phase_two_damage_multiplier = 0.8
 phase_two_poise = 158
 phase_two_stagger_duration = 0.65
 phase_two_stagger_protection = 3.8

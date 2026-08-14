@@ -1106,10 +1106,10 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0d4p4"]
-size = Vector2(44, 92)
+size = Vector2(46, 97)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_tsccy"]
-size = Vector2(50, 98)
+size = Vector2(52, 103)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x1s1j"]
 size = Vector2(100, 48)
@@ -1129,7 +1129,7 @@ script = ExtResource("1_ayq3k")
 config = ExtResource("2_hypen")
 
 [node name="VisualRoot" type="Node2D" parent="." unique_id=1246645441]
-scale = Vector2(0.6, 0.6)
+scale = Vector2(0.63, 0.63)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="VisualRoot" unique_id=1760419767]
 texture_filter = 1
@@ -1139,12 +1139,12 @@ animation = &"dormant"
 autoplay = "dormant"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1119300541]
-position = Vector2(0, -46)
+position = Vector2(0, -48.5)
 shape = SubResource("RectangleShape2D_0d4p4")
 
 [node name="HealthComponent" type="Node" parent="." unique_id=613258622]
 script = ExtResource("214_cyuee")
-max_health = 460
+max_health = 500
 
 [node name="PoiseComponent" type="Node" parent="." unique_id=659981857]
 script = ExtResource("215_50jrp")
@@ -1161,7 +1161,7 @@ faction = &"enemy"
 hit_policy_path = NodePath("../DamagePolicy")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=211930603]
-position = Vector2(0, -49)
+position = Vector2(0, -51.5)
 shape = SubResource("RectangleShape2D_tsccy")
 
 [node name="FacingRoot" type="Node2D" parent="." unique_id=579782489]

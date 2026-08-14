@@ -58,15 +58,15 @@ The Phase 2 score is a fixed-seed project-owned composition rendered with local 
 
 | Track ID | Cue | Tempo/meter | Runtime gain | Loop |
 | --- | --- | --- | --- | --- |
-| `CH4_BOSS_SOUL_GAOLER_PHASE_01` | The Weight of the Last Key / 末钥之重 | 78 BPM, 4/4 | -11.5 dB; dialogue Duck -6 dB | 0.000–184.615375 s |
-| `CH4_BOSS_SOUL_GAOLER_TRANSITION` | The Soul Cage Gives Way / 魂笼崩裂 | 104 BPM, 4/4 | -8.5 dB | one shot, 9.230771 s |
-| `CH4_BOSS_SOUL_GAOLER_PHASE_02` | The Gaol Breaks Within / 狱锁自内崩裂 | 104 BPM, 4/4 | -10 dB | 0.000–166.153854 s |
+| `CH4_BOSS_SOUL_GAOLER_PHASE_01` | The Weight of the Last Key / 末钥之重 | 102 BPM, 6/8 | -11.5 dB; dialogue Duck -6 dB | 0.000–150.588229 s |
+| `CH4_BOSS_SOUL_GAOLER_TRANSITION` | The Soul Cage Gives Way / 魂笼崩裂 | 128 BPM, 6/8 | -8.5 dB | one shot, 9.375 s |
+| `CH4_BOSS_SOUL_GAOLER_PHASE_02` | The Gaol Breaks Within / 狱锁自内崩裂 | 128 BPM, 6/8 | -10 dB | 0.000–150.000 s |
 
-The shared gaoler motif is the original descending pitch set D–C–B-flat–A–E-flat. Phase 1 presents it in complete bass/brass statements over three alternating weight/chain/water rhythmic beds. Phase 2 fragments and displaces the same motif among low strings, bass brass and chain attacks; it is a recomposition with new section lengths and harmonic pressure, not a tempo-stretched Phase 1 master.
+The original Ormund theme is the nine-note pitch line D–C–B-flat–A–E-flat–F–E–D–A. Phase 1 states it through one low lead at a time over a two-pulse 6/8 low-string bed. Phase 2 shortens the same identity into accented statements and answers while a syncopated cello layer increases forward pressure. Chains remain phrase-ending or structural accents rather than a continuous percussion ostinato. Both phases target five to seven normally active layers, preserving melody/bass/percussion separation.
 
-Phase 1 has seven formal regions: 4-bar submerged Intro, 12-bar `A_The_Warden`, 10-bar `B_The_Chains`, 10-bar `C_The_Flood`, 8-bar `D_The_Cage`, 12-bar `A_prime_The_Gaoler_Advances` and a 4-bar loop return. Phase 2 has 14-bar `A2_Broken_Gaoler`, 12-bar `B2_Soul_Cage_Rupture`, 12-bar `C2_Undertow`, 10-bar `D2_No_Prison_Holds`, 18-bar `Final_Lock` and a 6-bar loop return.
+Phase 1 uses the compact form `Intro → A → B → A′ → C_Undertow → A″ → Loop` across 128 bars. Phase 2 uses `A2 → B2 → C2_Undertow → A3 → Final_Lock → Loop` across 160 bars. This follows the Chapter III production method—compound meter, clear ostinato, stronger second-phase subdivision and contiguous sections—without copying the Pontiff melody, religious timbre or thirteen-bell identity.
 
-The saved Boss transition is 8 frames over 9.230769 seconds. Its typed events are aligned to the bridge at 1.153846 s (`first_chain_break`), 2.307692 s (`second_chain_break`), 4.615385 s (`soul_cage_collapse`), 6.923077 s (`flood_surge`) and 8.653846 s (`final_iron_impact`). The controller attenuates Phase 1 to -24 dB, plays the non-looping bridge, then performs a guarded 0.18-second Phase 2 handoff. Intro dialogue uses the shared Music-bus Duck at 6 dB; death fades all music over 2.0 seconds; retry clears the guard and starts Phase 1; `CH4_BOSS_PHASE_02` is a true MainBootstrap direct Phase 2 route.
+The saved Boss transition remains an 8-frame, 9.230769-second gameplay sequence. Its non-looping musical bridge now lasts 9.375 seconds at 128 BPM/6/8, covering all typed events at 1.153846 s (`first_chain_break`), 2.307692 s (`second_chain_break`), 4.615385 s (`soul_cage_collapse`), 6.923077 s (`flood_surge`) and 8.653846 s (`final_iron_impact`) before the guarded Phase 2 handoff. Intro dialogue uses the shared Music-bus Duck at 6 dB; death fades all music over 2.0 seconds; retry clears the guard and starts Phase 1; `CH4_BOSS_PHASE_02` is a true MainBootstrap direct Phase 2 route.
 
 All three masters are fixed-seed, project-owned 48 kHz stereo Vorbis renders. Their source score JSON, Standard MIDI, analysis JSON and generator are retained under the Chapter IV Boss audio tree. No recorded/downloaded sample, commercial melody, religious text or remote generation service is used.
 

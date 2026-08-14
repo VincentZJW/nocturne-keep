@@ -10,6 +10,8 @@
 
 第三章Boss固定武器`Thirteenfold Absolution / 十三重赦刃`已完成W1–W5最终闭环：埃德兰死亡后播放4.20秒重铸演出，Boss环境与重铸均完成后开放遗物龛；正式拾取唯一武器后自动装备97帧视觉与`14/28`伤害，遗物龛永久空置并开放Underkeep。两个独立Godot进程已验证存档/重载、死亡/重生、回访不重复生成及Debug不写正式存档。`CH3_BOSS`、`CH3_POST_BOSS`、`CH3_REWARD_TEST`、`CH3_UNDERKEEP_DESCENT`现为四个可信Main调试状态。详见[最终规格](docs/design/chapter_03_thirteenfold_absolution_spec.md)与[W5 QA](docs/qa/chapter_03_thirteenfold_absolution/w5/report.md)。后续Underkeep UD0–UD5已将下行区重构为动态浅水排水墓窟，并接通正式`CH4_START`门槛场景；这不代表第四章完整地图已经完成。规格与证据见[Underkeep设计规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/chapter_03_underkeep_descent_spec.md)和[Underkeep QA](docs/qa/chapter_03_underkeep_descent/report.md)。
 
+第四章Boss终版专项入口为`CH4_BOSS_PHASE_01`（Phase 2直达仍为`CH4_BOSS_PHASE_02`）。奥蒙德现使用102→128 BPM、6/8的两阶段原创配乐；最终平衡为500 HP、0.87/0.80受伤倍率和0.63最近邻视觉缩放，上一轮的Combo Budget、Player Turn、转身时间、追踪及反击窗口保持不变。击败后进入Broken Soul Reservoir，等待魂锁遗匣演出结束，靠近`Soul-Lock Twin Keys / 魂锁双钥`并按E即可通过真实InputMap链路唯一领取、自动装备16/32武器并解锁Memory Passage。
+
 埃德兰现已追加正式元素魔法与召唤节奏：`Cinder Absolution`火焰弹、`Litany of Stillness`冰矛、`Mire of the Unburied`黑泥领域，以及Phase 1两只/Phase 2三只（唱诗尸壳最多一只）的召唤上限。玩家状态由统一组件管理，HUD以信号显示燃烧、冻结与黑泥减速；死亡、重生和跨房间会清理状态。开发直达点新增`CH3_BOSS_MAGIC_TEST`、`CH3_BOSS_FIRE_TEST`、`CH3_BOSS_ICE_TEST`、`CH3_BOSS_MIRE_TEST`和`CH3_BOSS_SUMMON_MAGIC_COMBO`。规格见[埃德兰元素魔法规格](chapters/chapter_03_chapel_of_thirteen_echoes/docs/edran_elemental_magic_spec.md)，Main强制QA见[元素魔法QA报告](docs/qa/chapter_03_edran_elemental_magic/report.md)。
 
 第二章普通敌人美术 Stage 1 已接入正式 Silent Court 路线：空壳侍从、王庭戟卫、哀悼铠甲、血烛侍祭与倒悬猎兽均通过 F5/Main 使用章节内正式概念图与扩展 64×64 SpriteFrames。验收索引见 `docs/qa/chapter_02_enemy_boss_art_rework/stage_1_report.md`。

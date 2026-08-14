@@ -110,7 +110,13 @@ func _run() -> void:
 	_check(not inventory.owns_weapon(&"soul_lock_twin_keys"), "Boss defeat alone must not grant the reward")
 	_check(not session.has_story_flag(&"ch4_memory_passage_unlocked"), "Boss defeat alone must not unlock Chapter V route")
 	if reward != null:
-		_check(reward.collect_for_qa(), "Soul-Lock Twin Keys must collect once")
+		_check(await _wait_for_reward_claimable(reward), "Soul-Lock reward presentation must become claimable")
+		player.global_position = reward.pickup.global_position
+		player.velocity = Vector2.ZERO
+		reward.pickup._on_body_entered(player)
+		_check(reward.pickup.prompt.visible, "Soul-Lock pickup must show the real E prompt")
+		_check(player.can_process_gameplay_interaction(), "Reward presentation must restore Player interaction input")
+		await _press_action_once(&"interact")
 	await process_frame
 	_check(session.has_story_flag(&"ch4_reward_collected"), "Reward collection flag must persist")
 	_check(session.has_story_flag(&"ch4_memory_passage_unlocked"), "Memory passage flag must persist")
@@ -119,7 +125,7 @@ func _run() -> void:
 	_check(equipment.equipped_weapon_id == &"soul_lock_twin_keys", "Soul-Lock Twin Keys must auto-equip")
 	_check(equipment.get_normal_attack_damage() == 16, "Soul-Lock normal damage must be 16")
 	_check(equipment.get_dash_attack_damage() == 32, "Soul-Lock Dash damage must be 32")
-	_check(reward != null and not reward.collect_for_qa(), "Soul-Lock duplicate pickup must be rejected")
+	_check(reward != null and reward.is_collected(), "Soul-Lock duplicate pickup guard must remain collected")
 
 	_check(controller._swap_room(&"CH4_AREA_16", &"EntryWest"), "Main must load Hall of Drowned Memories")
 	await process_frame
@@ -232,6 +238,15 @@ func _wait_for_room(controller: Chapter04RoomTransitionController, room_id: Stri
 	for _frame: int in 300:
 		await process_frame
 		if controller.active_room_id == room_id and not controller.is_transitioning():
+			return true
+	return false
+
+
+func _wait_for_reward_claimable(reward: Chapter04RewardController) -> bool:
+	var deadline_ms: int = Time.get_ticks_msec() + 10000
+	while Time.get_ticks_msec() < deadline_ms:
+		await process_frame
+		if reward.get_current_stage() == &"claimable":
 			return true
 	return false
 

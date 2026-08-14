@@ -4,14 +4,14 @@ extends Node
 ## Central debug-start preferences. This service has no _ready() side effects and
 ## never changes scenes. ChapterStartRouter consumes it behind a debug-build gate.
 
-@export var debug_chapter_start_enabled: bool = false
-@export var debug_start_chapter_id: StringName = ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS
-@export var debug_start_spawn_id: StringName = &"dark_forest_tutorial_spawn"
+@export var debug_chapter_start_enabled: bool = true
+@export var debug_start_chapter_id: StringName = ChapterRegistry.CHAPTER_04_DROWNED_UNDERKEEP
+@export var debug_start_spawn_id: StringName = &"CH4_BOSS_PHASE_01"
 @export var debug_reset_chapter_state_on_run: bool = true
 @export var debug_use_test_currency: bool = true
 @export_range(0, 999999, 1) var debug_test_currency: int = 30
 @export var debug_start_full_health: bool = true
-@export var debug_skip_chapter_intro: bool = false
+@export var debug_skip_chapter_intro: bool = true
 @export var debug_show_chapter_select: bool = false
 
 

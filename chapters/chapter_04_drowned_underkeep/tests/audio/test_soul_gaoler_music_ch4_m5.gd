@@ -9,6 +9,7 @@ const TRANSITION: StringName = &"CH4_BOSS_SOUL_GAOLER_TRANSITION"
 const PHASE_01_SCORE: String = "res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/source/soul_gaoler_phase_01_submerged_chains_score.json"
 const PHASE_02_SCORE: String = "res://chapters/chapter_04_drowned_underkeep/assets/audio/music/boss/soul_gaoler_ormund/source/soul_gaoler_phase_02_broken_cage_score.json"
 const GAOLER_THEME: Array[int] = [50, 48, 46, 45, 39]
+const ORMUND_THEME: Array[int] = [50, 48, 46, 45, 39, 41, 40, 38, 45]
 const SOUL_THEME: Array[int] = [65, 68, 67, 65, 64, 63, 62]
 const UNDERTOW_THEME: Array[int] = [57, 55, 51, 50]
 
@@ -71,7 +72,7 @@ func _run() -> void:
 		await _dwell_formal_track(manager, PHASE_01, _formal_dwell_seconds, "Phase 1")
 		boss.set_physics_process(true)
 
-	# One real-time transition validates the authored 9.23-second bridge against
+	# One real-time transition validates the authored 9.375-second bridge against
 	# the five named Boss-animation sync points.
 	boss.health_component.set_current_health(roundi(boss.health_component.max_health * 0.50))
 	_expect(boss.is_physics_processing(), "Formal Main Boss physics was disabled at transition start")
@@ -145,14 +146,17 @@ func _validate_definitions() -> void:
 	var bridge: MusicTrackDefinition = MusicManagerService.REGISTRY.find_track(TRANSITION)
 	_expect(p1 != null and p2 != null and bridge != null, "Chapter IV music registry is incomplete")
 	if p1 != null:
-		_expect(p1.loops and is_equal_approx(p1.bpm, 78.0), "Phase 1 loop/BPM contract drifted")
-		_expect(absf(p1.loop_end_seconds - 184.615375) < 0.002, "Phase 1 duration drifted")
+		_expect(p1.loops and is_equal_approx(p1.bpm, 102.0), "Phase 1 loop/BPM contract drifted")
+		_expect(p1.beats_per_bar == 6 and p1.beat_unit == 8, "Phase 1 meter is not 6/8")
+		_expect(absf(p1.loop_end_seconds - 150.588229) < 0.002, "Phase 1 duration drifted")
 	if p2 != null:
-		_expect(p2.loops and is_equal_approx(p2.bpm, 104.0), "Phase 2 loop/BPM contract drifted")
-		_expect(absf(p2.loop_end_seconds - 166.153854) < 0.002, "Phase 2 duration drifted")
+		_expect(p2.loops and is_equal_approx(p2.bpm, 128.0), "Phase 2 loop/BPM contract drifted")
+		_expect(p2.beats_per_bar == 6 and p2.beat_unit == 8, "Phase 2 meter is not 6/8")
+		_expect(absf(p2.loop_end_seconds - 150.0) < 0.002, "Phase 2 duration drifted")
 	if bridge != null:
-		_expect(not bridge.loops and is_equal_approx(bridge.bpm, 104.0), "Transition loop/BPM contract drifted")
-		_expect(bridge.stream != null and absf(bridge.stream.get_length() - 9.230771) < 0.03, "Transition duration drifted")
+		_expect(not bridge.loops and is_equal_approx(bridge.bpm, 128.0), "Transition loop/BPM contract drifted")
+		_expect(bridge.beats_per_bar == 6 and bridge.beat_unit == 8, "Transition meter is not 6/8")
+		_expect(bridge.stream != null and absf(bridge.stream.get_length() - 9.375) < 0.03, "Transition duration drifted")
 
 
 func _validate_melody_contracts() -> void:
@@ -162,17 +166,23 @@ func _validate_melody_contracts() -> void:
 	if phase_one.is_empty() or phase_two.is_empty():
 		return
 	for score: Dictionary in [phase_one, phase_two]:
+		_expect(String(score.get("time_signature", "")) == "6/8", "Score time signature drifted")
+		_expect(_numeric_array_matches(score.get("ormund_theme", []) as Array, ORMUND_THEME), "Nine-note Ormund theme drifted")
 		_expect(_numeric_array_matches(score.get("gaoler_motif", []) as Array, GAOLER_THEME), "Gaoler theme identity drifted")
 		_expect(_numeric_array_matches(score.get("soul_prison_theme", []) as Array, SOUL_THEME), "Soul Prison theme identity drifted")
 		_expect(_numeric_array_matches(score.get("undertow_motif", []) as Array, UNDERTOW_THEME), "Undertow motif identity drifted")
-		var variations: Array = score.get("gaoler_theme_variations", []) as Array
-		_expect(variations.size() >= 6, "Gaoler theme has fewer than six authored variations")
+		var layer_target: Array = score.get("normal_active_layer_target", []) as Array
+		_expect(
+			layer_target.size() == 2 and int(layer_target[0]) == 5 and int(layer_target[1]) == 7,
+			"Active-layer target drifted"
+		)
+		_expect(String(score.get("chain_role", "")).contains("phrase-ending"), "Chains became a continuous rhythm layer")
 	var p1_sections: Dictionary = phase_one.get("sections", {}) as Dictionary
 	var p2_sections: Dictionary = phase_two.get("sections", {}) as Dictionary
-	_expect(p1_sections.size() == 8 and p1_sections.has("E_The_Empty_Cell"), "Phase 1 rich-form section contract drifted")
-	_expect(p2_sections.size() == 7 and p2_sections.has("E2_Chains_Against_Souls"), "Phase 2 rich-form section contract drifted")
-	_expect(p1_sections.has("B_The_Prisoners") and p1_sections.has("C_The_Flood"), "Phase 1 theme-absence regions are missing")
-	_expect(p2_sections.has("C2_Undertow_Hunt") and p2_sections.has("Final_Lock"), "Phase 2 Undertow/Final Lock regions are missing")
+	_expect(p1_sections.size() == 6 and p1_sections.has("A_double_prime"), "Phase 1 compact-form section contract drifted")
+	_expect(p1_sections.has("B") and p1_sections.has("C_Undertow"), "Phase 1 B/Undertow regions are missing")
+	_expect(p2_sections.size() == 5 and p2_sections.has("A3"), "Phase 2 compact-form section contract drifted")
+	_expect(p2_sections.has("C2_Undertow") and p2_sections.has("Final_Lock"), "Phase 2 Undertow/Final Lock regions are missing")
 
 
 func _load_score(path: String) -> Dictionary:

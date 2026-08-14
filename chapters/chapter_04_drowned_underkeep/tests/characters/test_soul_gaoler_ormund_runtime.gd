@@ -18,15 +18,15 @@ func _run() -> void:
 	await process_frame
 	var config:=boss.config as SoulGaolerOrmundConfig
 	_check(config!=null,"Boss config type")
-	_check(boss.health_component.current_health==460,"shared Boss health is 460")
-	_check(is_equal_approx(config.phase_one_damage_multiplier,0.90),"Phase I mitigation is 0.90")
-	_check(is_equal_approx(config.phase_two_damage_multiplier,0.84),"Phase II mitigation is 0.84")
+	_check(boss.health_component.current_health==500,"shared Boss health is 500")
+	_check(is_equal_approx(config.phase_one_damage_multiplier,0.87),"Phase I mitigation is 0.87")
+	_check(is_equal_approx(config.phase_two_damage_multiplier,0.80),"Phase II mitigation is 0.80")
 	_check(config.phase_one_poise==130 and config.phase_two_poise==158,"phase Poise is rebalanced")
 	_check(is_equal_approx(config.phase_one_stagger_duration,0.82),"Phase I Stagger reward is 0.82 seconds")
 	_check(is_equal_approx(config.phase_two_stagger_duration,0.65),"Phase II Stagger reward is 0.65 seconds")
 	_check(boss.get_combo_budget()==2,"Phase I starts with two-action Combo Budget")
 	_check(is_equal_approx(boss.scale.x,1.0),"Boss body transform remains unscaled")
-	_check(is_equal_approx(boss.get_node("VisualRoot").scale.x,0.60),"Boss presentation resolves to the target heavy-humanoid height ratio")
+	_check(is_equal_approx(boss.get_node("VisualRoot").scale.x,0.63),"Boss presentation resolves to the adjusted heavy-humanoid height ratio")
 	_check(boss.phase==1,"starts in Phase I")
 	_check(boss.animated_sprite.sprite_frames.get_animation_names().size()==47,"complete 47-animation runtime set")
 	for required:StringName in [&"halberd_sweep_active",&"phase_transition",&"chainstorm_cleave_active",&"flooded_judgment_active",&"soul_release"]:
@@ -41,7 +41,7 @@ func _run() -> void:
 	_check(boss.current_state==boss.PHASE_TRANSITION,"55 percent health starts transition")
 	boss.complete_debug_phase_transition()
 	_check(boss.phase==2,"transition enters Phase II")
-	_check(is_equal_approx(boss.damage_policy.damage_multiplier,0.84),"Phase II mitigation active")
+	_check(is_equal_approx(boss.damage_policy.damage_multiplier,0.80),"Phase II mitigation active")
 	_check(boss.get_combo_budget() in [2,3],"Phase II uses bounded two-to-three action combos")
 	boss._start_action(&"chainstorm_cleave")
 	_check(boss.attack_phase==&"Windup","attack begins with telegraphed windup")

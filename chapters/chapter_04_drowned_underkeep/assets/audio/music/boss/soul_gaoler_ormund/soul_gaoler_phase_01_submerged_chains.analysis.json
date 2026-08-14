@@ -1,11 +1,11 @@
 {
   "sample_rate": 48000,
   "channels": 2,
-  "sample_count": 8861538,
-  "duration_seconds": 184.615375,
-  "peak_dbfs": -3.0980393476346837,
-  "rms_dbfs": -17.83480181059758,
+  "sample_count": 7228235,
+  "duration_seconds": 150.58822916666668,
+  "peak_dbfs": -3.0980386080356075,
+  "rms_dbfs": -17.91288705178699,
   "boundary_delta": 0.0,
-  "boundary_rms_20ms": 0.021932737587950467,
-  "sha256": "1f20c6871333511247018d623629a0d3ce6c2040c72253122ac876f910564877"
+  "boundary_rms_20ms": 0.07723468850518174,
+  "sha256": "b6320691cc9ef59a387f930b5a9f11219b4ce001e4f6c7ccf6451e5e9449a2c6"
 }

@@ -40,10 +40,10 @@ func _run() -> void:
 
 
 func _validate_configuration(config: SoulGaolerOrmundConfig) -> void:
-	_expect(config.total_health == 460, "Max HP is 460")
+	_expect(config.total_health == 500, "Max HP is 500")
 	_expect(is_equal_approx(config.phase_two_threshold_ratio, 0.55), "Phase II remains at 55 percent")
-	_expect(is_equal_approx(config.phase_one_damage_multiplier, 0.90), "P1 damage taken is 0.90")
-	_expect(is_equal_approx(config.phase_two_damage_multiplier, 0.84), "P2 damage taken is 0.84")
+	_expect(is_equal_approx(config.phase_one_damage_multiplier, 0.87), "P1 damage taken is 0.87")
+	_expect(is_equal_approx(config.phase_two_damage_multiplier, 0.80), "P2 damage taken is 0.80")
 	_expect(config.phase_one_poise == 130 and config.phase_two_poise == 158, "Poise is 130/158")
 	_expect(is_equal_approx(config.phase_one_stagger_duration, 0.82), "P1 Stagger is 0.82 seconds")
 	_expect(is_equal_approx(config.phase_two_stagger_duration, 0.65), "P2 Stagger is 0.65 seconds")
@@ -62,31 +62,31 @@ func _validate_scene_geometry(boss: SoulGaolerOrmund) -> void:
 	var hurt_shape: RectangleShape2D = (boss.get_node("Hurtbox/CollisionShape2D") as CollisionShape2D).shape as RectangleShape2D
 	var melee_shape: RectangleShape2D = (boss.get_node("FacingRoot/MeleeHitbox/CollisionShape2D") as CollisionShape2D).shape as RectangleShape2D
 	var area_shape: RectangleShape2D = (boss.get_node("AreaHitbox/CollisionShape2D") as CollisionShape2D).shape as RectangleShape2D
-	_expect(body_shape.size == Vector2(44, 92), "body collider follows the 1.8x heavy humanoid torso")
-	_expect(hurt_shape.size == Vector2(50, 98), "Hurtbox follows the reduced presentation")
+	_expect(body_shape.size == Vector2(46, 97), "body collider follows the 5 percent larger heavy humanoid torso")
+	_expect(hurt_shape.size == Vector2(52, 103), "Hurtbox follows the adjusted presentation")
 	_expect(melee_shape.size == Vector2(100, 48), "frontal melee Hitbox does not cover the back")
 	_expect(area_shape.size == Vector2(180, 96), "explicit area attacks retain reduced 360-degree coverage")
-	_expect(boss.get_node("VisualRoot").scale == Vector2(0.6, 0.6), "Boss presentation is 60 percent of source pixels")
-	var p1_ratio: float = (172.0 * 0.6) / 57.0
-	var p2_ratio: float = (170.0 * 0.6) / 57.0
-	_expect(p1_ratio >= 1.65 and p1_ratio <= 1.82, "P1 visual height ratio is about 1.81x Player")
-	_expect(p2_ratio >= 1.65 and p2_ratio <= 1.82, "P2 visual height ratio is about 1.79x Player")
+	_expect(boss.get_node("VisualRoot").scale == Vector2(0.63, 0.63), "Boss presentation is 63 percent of source pixels")
+	var p1_ratio: float = (172.0 * 0.63) / 57.0
+	var p2_ratio: float = (170.0 * 0.63) / 57.0
+	_expect(p1_ratio >= 1.85 and p1_ratio <= 1.92, "P1 visual height ratio is about 1.90x Player")
+	_expect(p2_ratio >= 1.85 and p2_ratio <= 1.92, "P2 visual height ratio is about 1.88x Player")
 
 
 func _validate_damage_policy(boss: SoulGaolerOrmund) -> void:
 	var probe: HitboxComponent = HitboxComponent.new()
 	probe.damage = 14
-	boss.damage_policy.damage_multiplier = 0.90
-	_expect(boss.damage_policy.resolve_damage(probe) == 13, "14 damage resolves to 13 in P1")
+	boss.damage_policy.damage_multiplier = 0.87
+	_expect(boss.damage_policy.resolve_damage(probe) == 12, "14 damage resolves to 12 in P1")
 	probe.damage = 28
-	_expect(boss.damage_policy.resolve_damage(probe) == 25, "28 damage resolves to 25 in P1")
-	boss.damage_policy.damage_multiplier = 0.84
+	_expect(boss.damage_policy.resolve_damage(probe) == 24, "28 damage resolves to 24 in P1")
+	boss.damage_policy.damage_multiplier = 0.80
 	probe.damage = 14
-	_expect(boss.damage_policy.resolve_damage(probe) == 12, "14 damage resolves to 12 in P2")
+	_expect(boss.damage_policy.resolve_damage(probe) == 11, "14 damage resolves to 11 in P2")
 	probe.damage = 28
-	_expect(boss.damage_policy.resolve_damage(probe) == 24, "28 damage resolves to 24 in P2")
+	_expect(boss.damage_policy.resolve_damage(probe) == 22, "28 damage resolves to 22 in P2")
 	probe.queue_free()
-	boss.damage_policy.damage_multiplier = 0.90
+	boss.damage_policy.damage_multiplier = 0.87
 
 
 func _validate_combo_and_player_turn(boss: SoulGaolerOrmund, player: Player) -> void:
@@ -182,7 +182,7 @@ func _validate_back_crossing_repetition(boss: SoulGaolerOrmund, player: Player) 
 func _print_balance_comparison(config: SoulGaolerOrmundConfig) -> void:
 	var variants: Array[Dictionary] = [
 		{"name": "A", "hp": 480, "p1": 0.88, "p2": 0.82},
-		{"name": "B", "hp": 460, "p1": 0.90, "p2": 0.84},
+		{"name": "FINAL", "hp": 500, "p1": 0.87, "p2": 0.80},
 	]
 	for variant: Dictionary in variants:
 		var hp: int = variant["hp"] as int

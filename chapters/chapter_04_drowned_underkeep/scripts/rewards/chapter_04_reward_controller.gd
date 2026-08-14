@@ -28,6 +28,7 @@ const FLAG_MEMORY_PASSAGE_UNLOCKED: StringName = &"ch4_memory_passage_unlocked"
 @export_range(0.1, 2.0, 0.05) var reliquary_rise_duration: float = 1.45
 @export_range(0.1, 2.0, 0.05) var key_formation_duration: float = 1.20
 @export_range(0.1, 2.0, 0.05) var inspection_hold_duration: float = 0.85
+@export_range(1, 240, 1) var transition_lock_wait_frames: int = 120
 
 @onready var pickup: WeaponPickup = get_node(pickup_path) as WeaponPickup
 @onready var reliquary: Sprite2D = get_node(reliquary_path) as Sprite2D
@@ -106,7 +107,10 @@ func _run_reward_sequence() -> void:
 	_presentation_running = true
 	_presentation_token += 1
 	var token: int = _presentation_token
-	_lock_player()
+	if not await _acquire_player_lock_after_transition():
+		_presentation_running = false
+		call_deferred("_run_reward_sequence")
+		return
 	await get_tree().create_timer(water_settle_duration).timeout
 	if not _sequence_is_valid(token):
 		return
@@ -233,10 +237,31 @@ func _set_stage(stage: StringName, text: String) -> void:
 	reward_stage_changed.emit(stage)
 
 
-func _lock_player() -> void:
+func _acquire_player_lock_after_transition() -> bool:
 	_player = get_tree().get_first_node_in_group("player") as Player
 	if _player == null:
-		return
+		return true
+	# The room transition controller briefly owns a LOCKED profile while the
+	# reward room enters. Capturing that transient profile caused the sequence
+	# to restore LOCKED after the reliquary finished, leaving the visible E
+	# prompt unusable. Wait until that external lock has been released, then
+	# take and restore only our own presentation lock.
+	var frames_waited: int = 0
+	while (
+		is_instance_valid(_player)
+		and _player.get_input_profile() == Player.InputProfile.LOCKED
+		and frames_waited < transition_lock_wait_frames
+	):
+		await get_tree().physics_frame
+		frames_waited += 1
+	if not is_instance_valid(_player):
+		_player = null
+		return false
+	if _player.get_input_profile() == Player.InputProfile.LOCKED:
+		push_warning(
+			"Chapter04RewardController deferred presentation because the room transition still owns Player input"
+		)
+		return false
 	_previous_profile = _player.get_input_profile()
 	_previous_invulnerability = _player.hurtbox != null and _player.hurtbox.is_invulnerable
 	_owns_player_lock = true
@@ -244,6 +269,7 @@ func _lock_player() -> void:
 	_player.velocity = Vector2.ZERO
 	if _player.hurtbox != null:
 		_player.hurtbox.set_invulnerable(true)
+	return true
 
 
 func _restore_player() -> void:
@@ -253,6 +279,7 @@ func _restore_player() -> void:
 	if _player.hurtbox != null and not _previous_invulnerability:
 		_player.hurtbox.set_invulnerable(false)
 	_owns_player_lock = false
+	_player = null
 
 
 func _sequence_is_valid(token: int) -> bool:
