@@ -15,6 +15,9 @@ const P1_ACTIONS: Array[StringName] = [
 	&"prison_hook_drag",
 	&"floodgate_charge",
 	&"soul_cage_pulse",
+	&"drowned_javelin",
+	&"gaolers_verdict",
+	&"iron_grave",
 ]
 const P2_ACTIONS: Array[StringName] = [
 	&"chainstorm_cleave",
@@ -22,6 +25,14 @@ const P2_ACTIONS: Array[StringName] = [
 	&"drowned_cell_rupture",
 	&"soul_shackle",
 	&"flooded_judgment",
+	&"halberd_sweep",
+	&"chain_anchor_slam",
+	&"prison_hook_drag",
+	&"floodgate_charge",
+	&"soul_cage_pulse",
+	&"drowned_javelin",
+	&"gaolers_verdict",
+	&"iron_grave",
 ]
 
 var _failures: PackedStringArray = []
@@ -137,7 +148,7 @@ func _replay_fight(
 		var best_recovery: float = 0.0
 		for action_index: int in budget:
 			var action: StringName = actions[(cycle * 2 + action_index) % actions.size()]
-			var timing: Vector3 = replay_config.action_timing(action)
+			var timing: Vector3 = replay_config.action_timing_for_phase(action, cycle_phase)
 			boss_sequence += timing.x + timing.y + timing.z
 			# Recovery is a real output opportunity, so separate attacks do not
 			# combine into one artificial lockout interval.
@@ -181,9 +192,16 @@ func _replay_fight(
 			boss.poise_component.reset_to_full()
 			boss.transition_state(boss.COMBAT)
 		if boss.current_state == boss.PHASE_TRANSITION:
-			telemetry.time_seconds += replay_config.phase_transition_duration
-			telemetry.phase_one_seconds += replay_config.phase_transition_duration
+			var phase_entry_duration: float = (
+				replay_config.phase_transition_duration
+				+ replay_config.phase_two_opening_telegraph
+				+ replay_config.phase_two_opening_active
+				+ replay_config.phase_two_opening_recovery
+			)
+			telemetry.time_seconds += phase_entry_duration
+			telemetry.phase_one_seconds += phase_entry_duration
 			boss.complete_debug_phase_transition()
+			boss.complete_debug_phase_two_opening()
 		# Controlled mistakes preserve threat without allowing a replay profile to
 		# become an accidental invulnerability benchmark.
 		var mistake_period: int = 7 if style == &"conservative" else (10 if style == &"standard" else 13)

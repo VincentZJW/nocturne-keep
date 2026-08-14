@@ -75,6 +75,7 @@ func _bind_runtime() -> void:
 	boss.phase_changed.connect(_on_phase_changed)
 	boss.phase_transition_started.connect(_on_phase_transition_started)
 	boss.phase_transition_cue.connect(_on_phase_transition_cue)
+	boss.boss_attack_cue.connect(_on_boss_attack_cue)
 	boss.death_sequence_started.connect(_on_death_started)
 	boss.defeated.connect(_on_boss_defeated)
 	player.respawned.connect(_on_player_respawned)
@@ -232,6 +233,13 @@ func _on_phase_transition_cue(cue_name: StringName, elapsed_seconds: float) -> v
 	_last_music_sync_seconds = elapsed_seconds
 	get_parent().set_meta(&"ormund_music_sync_cue", cue_name)
 	get_parent().set_meta(&"ormund_music_sync_seconds", elapsed_seconds)
+
+
+func _on_boss_attack_cue(action: StringName, cue_name: StringName) -> void:
+	# Preserve a typed presentation hook for distinct metal, chain, water and
+	# prison-pike SFX without coupling combat timing to an audio implementation.
+	get_parent().set_meta(&"ormund_attack_cue_action", action)
+	get_parent().set_meta(&"ormund_attack_cue_name", cue_name)
 
 
 func _on_death_started() -> void:

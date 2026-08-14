@@ -753,7 +753,7 @@ animations = [{
 }],
 "loop": 0,
 "name": &"phase_transition",
-"speed": 0.866667
+"speed": 4.0
 }, {
 "frames": [{
 "duration": 1.0,

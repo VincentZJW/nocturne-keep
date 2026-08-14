@@ -140,3 +140,27 @@ Flags:
 ## Human acceptance boundary
 
 Automated runtime contracts and rendered Main evidence are PASS. Human playtesting should still judge Boss music, dialogue cadence, attack fairness and the visual clarity of the temporary reward presentation. Final reward content remains the only deliberately unresolved design item.
+
+## 2026-08-14 attack-variety addendum
+
+The formal Boss now connects its 2.00-second Phase-II transformation directly
+to the one-use `Judgment of the Broken Gaol` opener (1.40 telegraph / 0.24
+active / 40 damage / 0.85 punish). The transformation and opener keep the Boss
+Hurtbox closed until the punish recovery, replacing the former 9.230769-second
+free-output state without locking Player movement.
+
+The production attack pool now also contains:
+
+- `drowned_javelin`: ranged, straight, non-homing, final 0.25-second aim lock,
+  22 damage and a 6/5-second P1/P2 internal cooldown;
+- `gaolers_verdict`: heavy direct 28 / ground shockwave 18 through one shared
+  target ledger;
+- `iron_grave`: telegraphed 22-damage prison pikes, with a separately warned
+  second wave in Phase II.
+
+Close/Mid/Far/HighPressure categories, immediate-repeat prevention, category
+history, distance guards and prohibited follow-ups extend decision variety.
+They do not change the saved 500 HP, 0.87/0.80 damage multipliers, Boss scale,
+existing base-action damage, Player Turn, delayed turn or Combo Budget. Focused
+results and 16 formal Main captures are under
+`res://docs/qa/chapter_04_ormund_attack_variety/`.

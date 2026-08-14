@@ -7783,3 +7783,51 @@ Status: implementation, automated Main/F5 QA and Godot desktop handoff complete;
 - Final Boss adjustment is 0.63 nearest-neighbour presentation scale (5% above 0.60, still far below the original 1.0), 46×97 Body, 52×103 Hurtbox, 500 HP and 0.87/0.80 damage-taken multipliers. The saved 1.05/0.82-second Player Turns, 0.50/0.40-second turns, action timing, tracking, Combo Budget and hit volumes were not changed.
 - Exact Godot 4.7.1 results: import/parse PASS; runtime PASS; geometry/balance PASS; five final 14/28 combat replays PASS (standard 261.1 s, conservative 380.6 s, skilled 180.2 s); real E reward 10/10 PASS; formal Main Q4 flow PASS through Boss death, reward, Memory Passage and `CH5_START`; music contract/real bridge/10 Boss cycles/20 transition guards/direct Phase 2 PASS; 90-second formal-room dwell for each phase PASS without deck leakage.
 - Desktop Control launched the real non-headless Main build with the saved `CH4_BOSS_PHASE_01` debug start and confirmed `DEBUG CHAPTER START ACTIVE | CHAPTER_04_DROWNED_UNDERKEEP`. Game execution was then stopped cleanly, and Godot was left open on the saved formal Boss room `ch4_14_core_of_drowned_gaol.tscn` for the user's manual acceptance pass.
+
+## 2026-08-14 — CH4-ORMUND-ATTACK-0–6 Phase II opening and attack-variety milestone
+
+Status: implementation, production-resource QA and MainBootstrap graphical evidence complete; manual feel acceptance remains with the user.
+
+- Loaded `AGENTS.md`, README, technical architecture, all four permanent chapter-production policies and the Godot Gameplay Scripter skill. Scope is restricted to Soul Gaoler Ormund's saved combat config/controller/scene, Boss-owned attack effects, focused tests and QA documentation. Player code/data, Chapters I–III, Chapter IV ordinary enemies, Boss HP/defense/scale, current base-action damage, reward and BGM are excluded.
+- Formal authority remains `res://scenes/bootstrap/main_bootstrap.tscn`; saved arena is `res://chapters/chapter_04_drowned_underkeep/scenes/rooms/ch4_14_core_of_drowned_gaol.tscn`; formal Boss is `Enemies/SoulGaolerOrmund`; existing debug starts are `CH4_BOSS_PHASE_01` and `CH4_BOSS_PHASE_02`.
+- Audit found the free-output root cause: the formal embedded runtime animation played its eight frames at 8 FPS (1.00 second), while `PhaseTransition` remained active for 9.230769 seconds; a parallel named SpriteFrames resource still used 0.866667 FPS, confirming stale duplicate timing rather than the formal scene's actual playback rate. The Boss Hurtbox remained enabled, attack selection stayed disabled for the full state, and the state returned directly to `Combat` without a fixed Phase-II opener. With the 0.20-second repeating normal thrust and current stamina-limited Dash chain, this created roughly 46 normal-animation opportunities or an initial four-Dash burst plus regenerated Dash opportunities before the first Phase-II selection.
+- Existing attack pool contains five P1 actions (`halberd_sweep`, `chain_anchor_slam`, `prison_hook_drag`, `floodgate_charge`, `soul_cage_pulse`) and five P2 actions (`chainstorm_cleave`, `undertow_pull`, `drowned_cell_rupture`, `soul_shackle`, `flooded_judgment`). Selection is distance-gated but not categorized. Immediate repeats are blocked, a Combo permits one high-pressure action, P1/P2 Combo Budget is 2 with every fourth P2 sequence allowed 3, and forced Player Turn is 1.05/0.82 seconds. Delayed turns and attack direction lock already exist and must remain.
+- Planned implementation: compress the true transformation to 2.0 seconds and connect it directly to one 1.40-second `judgment_of_the_broken_gaol` ground opener (40 damage, jump plus marked safe-gap solutions, 0.24 active, 0.85 recovery); add non-homing `drowned_javelin` (22), shared-ledger `gaolers_verdict` direct/shockwave (28/18) and telegraphed `iron_grave` (22, two P2 waves); then integrate Close/Mid/Far/HighPressure history guards without increasing Combo Budget or removing Player Turn.
+- Verification plan: exact Godot 4.7.1 import/parse; 30 transition cycles; 20 triggers per new attack; shared-attack-ID damage gates; direction-lock/safe-gap/telegraph assertions; existing runtime/balance/reward/music regressions; five 14/28 full-fight replays through production resources; rendered MainBootstrap evidence and a final desktop F5 handoff at the saved Boss room. Honest subjective dodge/readability acceptance remains a manual playtest item.
+- Replaced the 9.230769-second state/one-second-animation mismatch with one synchronized 2.00-second protected transformation and a direct, one-use `judgment_of_the_broken_gaol` opener. The opener owns a 1.40-second four-cue telegraph, 0.24-second 40-damage low ground wave with two safe gaps, and a 0.85-second Hurtbox-open punish window. Direct `CH4_BOSS_PHASE_02` starts through the same opening contract; retry/new Phase I resets it.
+- Added Boss-owned typed combat effects and centralized production tuning for `drowned_javelin` (22, straight 520 px/s projectile, 0.25-second aim lock, 1.5-second harmless embed), `gaolers_verdict` (28 direct / 18 shockwave with one shared damage ledger), and `iron_grave` (22, 0.88-second telegraph; P2 3+4 pikes with a new 0.74-second second-wave warning). Existing formal animation families are reused as distinct readable postures; the new effect presentation never changes Player code, Boss base damage, HP, defense, scale, reward or BGM.
+- Replaced flat distance choice with Close/Mid/Far/HighPressure categories, deterministic candidate rotation and recent action/category guards. Immediate repeats, three same-category actions, adjacent High Pressure actions, airborne Iron-Grave→Javelin traps and Opening→Charge are blocked. Combo Budget, Player Turn, delayed turn and direction lock remain saved at their prior values.
+- Exact Godot 4.7.1 verification: import/parse PASS; attack-variety test PASS (`30` transitions, `20` Javelin, `20` Verdict, `20` Iron Grave, real 40/28/22 damage and shared-ledger settlement); existing runtime PASS; balance PASS; Main integration PASS; formal Q4 Boss/death/reward/Chapter-V flow PASS. Six deterministic 14/28 production-resource replays passed: standard `257.4 s`, two conservative `379.6 s`, two aggressive `191.8 s` (plus initial baseline `313.0 s`).
+- Graphical MainBootstrap QA entered the saved `CH4_AREA_14` formal room and captured 16 original 1280×720 images under `docs/qa/chapter_04_ormund_attack_variety/` for spacing, Player Turn/back position, all three attacks, protected transition, opening telegraph/active/punish and the P2 two-wave Iron Grave. The final graphical capture exited without a red diagnostic. Full results and manual F5 steps are preserved in `docs/qa/chapter_04_ormund_attack_variety/report.md`.
+- Desktop Control launched the exact Godot 4.7.1 Main build through the saved `CH4_BOSS_PHASE_01` debug start, confirmed `DEBUG CHAPTER START ACTIVE | CHAPTER_04_DROWNED_UNDERKEEP`, the formal `Core of the Drowned Gaol` room and the live `Soul Gaoler Ormund / 魂狱看守·奥蒙德` Phase-I banner. Godot's Output/Debugger showed zero red errors and zero warnings. The live `Nocturne Keep (DEBUG)` window was left open at the Boss encounter for manual acceptance.
+
+### Exact commands and actual results
+
+```text
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit
+PASS — exit 0; import/parse produced no warning or error.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_attack_variety.gd
+PASS — transitions 30; Javelin 20; Verdict 20; Iron Grave 20.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund.gd
+PASS — runtime contract.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_balance.gd
+PASS — geometry and balance contract.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_balance_replays.gd
+PASS — standard 257.4 s; conservative 379.6 s; aggressive 191.8 s.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_chapter_04_main_integration.gd
+PASS — formal Main integration.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_chapter_04_q4_boss_flow.gd
+PASS — Boss/death/reward/Chapter-V route.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/audio/test_soul_gaoler_music_ch4_m5.gd
+PASS — music and bridge regression unchanged.
+
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --path . --audio-driver Dummy --script chapters/chapter_04_drowned_underkeep/tests/scenes/capture_soul_gaoler_ormund_balance_main_qa.gd
+PASS — 16 MainBootstrap captures at 1280×720; no red diagnostic.
+```
