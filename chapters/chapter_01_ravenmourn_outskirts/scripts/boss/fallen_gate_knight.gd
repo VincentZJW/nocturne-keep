@@ -116,6 +116,28 @@ var _attack_gap_source_id: int = 0
 var _shield_bash_cooldown_remaining: float = 0.0
 var _last_selected_attack: StringName = &"None"
 var _attack_rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var far_pressure: float = 0.0
+var close_pressure: float = 0.0
+var air_pressure: float = 0.0
+var crossup_pressure: float = 0.0
+var dash_pressure: float = 0.0
+var attack_pressure: float = 0.0
+var _behavior_clock: float = 0.0
+var _behavior_sample_timer: float = 0.0
+var _behavior_events: Array[Dictionary] = []
+var _previous_target_side: float = 0.0
+var _previous_target_action: StringName = &"None"
+var _previous_target_movement: StringName = &"idle"
+var _adaptive_decision_reason: StringName = &"base"
+var _gate_wave_spawned_for_id: int = -1
+var observed_jump_count: int = 0
+var observed_double_jump_count: int = 0
+var observed_crossup_count: int = 0
+var observed_dash_through_count: int = 0
+
+const BEHAVIOR_REACTION_DELAY: float = 0.40
+const BEHAVIOR_DECAY_PER_SECOND: float = 0.14
+const BEHAVIOR_SAMPLE_INTERVAL: float = 0.20
 
 
 func _ready() -> void:
@@ -157,6 +179,7 @@ func _physics_process(delta: float) -> void:
 	_shield_bash_cooldown_remaining = maxf(0.0, _shield_bash_cooldown_remaining - delta)
 	_combat_clock += delta
 	_attack_gap_remaining = maxf(0.0, _attack_gap_remaining - delta)
+	_observe_target_behavior(delta)
 	match current_state:
 		BOSS_INTRO, SHIELD_BLOCK, SHIELD_BREAK, PHASE_TRANSITION, HURT_SHIELDED, HURT_UNSHIELDED:
 			_process_timed_state(delta)
@@ -177,6 +200,7 @@ func _physics_process(delta: float) -> void:
 func activate(new_target: Player) -> void:
 	if is_dead():
 		return
+	_reset_behavior_context()
 	set_target(new_target)
 	room_engaged = true
 	ai_active = true
@@ -231,6 +255,7 @@ func reset_boss() -> void:
 	_shield_bash_cooldown_remaining = 0.0
 	_last_selected_attack = &"None"
 	_attack_rng.seed = config.attack_selection_seed
+	_reset_behavior_context()
 	room_engaged = false
 	ai_active = false
 	target = null
@@ -303,7 +328,7 @@ func is_attack_window_active() -> bool:
 
 func get_debug_summary() -> String:
 	var profile: Dictionary[StringName, Variant] = get_current_attack_geometry_profile()
-	return "%s  P%d  STATE %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATTACK %s  RANGE %.0f  HIT %s %s W%.0f OFF %.0f  BASH CD %.2f WT %.0f%%  ACTIVE END %.2f  GAP %.2f  NEXT %s  MEASURED %.3f  REACT %s L%.2f H%.2f  TURN %s R%.2f A%.2f T%.2f COMMIT %s  FACE %+.0f  SIDE %s  DIST %.0f  COUNTER %s ESC %s" % [
+	var base_summary: String = "%s  P%d  STATE %s  BODY %d/%d  SH %d/%d %s  ANIM %s  ATTACK %s  RANGE %.0f  HIT %s %s W%.0f OFF %.0f  BASH CD %.2f WT %.0f%%  ACTIVE END %.2f  GAP %.2f  NEXT %s  MEASURED %.3f  REACT %s L%.2f H%.2f  TURN %s R%.2f A%.2f T%.2f COMMIT %s  FACE %+.0f  SIDE %s  DIST %.0f  COUNTER %s ESC %s" % [
 		get_enemy_type_name(), current_phase, current_state,
 		health_component.current_health, health_component.max_health,
 		shield_component.shield_current_health, shield_component.shield_max_health,
@@ -321,6 +346,11 @@ func get_debug_summary() -> String:
 		_get_current_turn_total_remaining(), "YES" if _turn_facing_committed else "no",
 		facing_direction, shield_component.last_hit_side, _get_player_distance(),
 		_player_counter_action, "YES" if _player_escape_success else "no",
+	]
+	return "%s  AI[%s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d]" % [
+		base_summary, _adaptive_decision_reason, far_pressure, close_pressure,
+		air_pressure, crossup_pressure, dash_pressure, observed_jump_count,
+		observed_double_jump_count, observed_crossup_count, observed_dash_through_count,
 	]
 
 
@@ -675,7 +705,7 @@ func _start_next_attack() -> bool:
 			started = _start_attack(selected)
 	else:
 		var phase_two: Array[StringName] = [COMBO_SLASH, JUMP_SMASH, CHARGE_THRUST, SHOCKWAVE_STRIKE]
-		started = _start_attack(phase_two[attack_cycle % phase_two.size()])
+		started = _start_attack(_select_adaptive_phase_two_attack(phase_two))
 	if started:
 		attack_cycle += 1
 	return started
@@ -697,23 +727,106 @@ func _select_phase_one_attack(distance: float) -> StringName:
 	if distance <= config.heavy_overhead_trigger_range:
 		candidates.append(HEAVY_OVERHEAD)
 		weights.append(config.heavy_overhead_selection_weight)
+	if distance >= 112.0:
+		# Gate Severance reuses the formal shockwave windup, then releases a
+		# low, non-tracking ground blade.  The direction locks with the windup.
+		# The remaining roll deliberately keeps the approach option alive, so
+		# learned spacing cannot turn the counter into a deterministic answer.
+		var severance_offer_chance: float = lerpf(0.55, 0.70, far_pressure)
+		if _attack_rng.randf() <= severance_offer_chance:
+			candidates.append(SHOCKWAVE_STRIKE)
+			weights.append(0.34 * (1.0 + far_pressure * 1.2))
 	if candidates.is_empty():
 		return &""
 	var total_weight: float = 0.0
-	for weight: float in weights:
-		total_weight += weight
-	var roll: float = _attack_rng.randf() * total_weight
 	for candidate_index: int in range(candidates.size()):
-		roll -= weights[candidate_index]
-		if roll <= 0.0:
+		weights[candidate_index] *= _adaptive_phase_one_multiplier(candidates[candidate_index])
+		total_weight += weights[candidate_index]
+	_cap_counter_weight(candidates, weights, HEAVY_OVERHEAD, 0.70)
+	total_weight = _sum_weights(weights)
+	var adaptive_roll: float = _attack_rng.randf() * total_weight
+	for candidate_index: int in range(candidates.size()):
+		adaptive_roll -= weights[candidate_index]
+		if adaptive_roll <= 0.0:
+			_record_adaptive_decision(candidates[candidate_index], candidates, weights)
 			return candidates[candidate_index]
+	_record_adaptive_decision(candidates.back(), candidates, weights)
 	return candidates.back()
 
 
 func _get_attack_engagement_range() -> float:
 	if current_phase == 1:
-		return maxf(config.sword_slash_trigger_range, config.heavy_overhead_trigger_range)
-	return config.attack_range
+		return 330.0
+	return 360.0
+
+
+func _select_adaptive_phase_two_attack(candidates: Array[StringName]) -> StringName:
+	if candidates.is_empty():
+		return &""
+	var weights: Array[float] = []
+	var total_weight: float = 0.0
+	for attack_state: StringName in candidates:
+		var weight: float = _adaptive_phase_two_multiplier(attack_state)
+		weights.append(weight)
+		total_weight += weight
+	_cap_counter_weight(candidates, weights, JUMP_SMASH, 0.70)
+	total_weight = _sum_weights(weights)
+	var roll: float = _attack_rng.randf() * total_weight
+	for index: int in range(candidates.size()):
+		roll -= weights[index]
+		if roll <= 0.0:
+			_record_adaptive_decision(candidates[index], candidates, weights)
+			return candidates[index]
+	_record_adaptive_decision(candidates.back(), candidates, weights)
+	return candidates.back()
+
+
+func _adaptive_phase_one_multiplier(attack_state: StringName) -> float:
+	var multiplier: float = 1.0
+	match attack_state:
+		SHIELD_BASH:
+			multiplier *= 1.0 + close_pressure * 0.45 + attack_pressure * 0.25
+		SWORD_SLASH:
+			multiplier *= 1.0 + close_pressure * 0.35
+		HEAVY_OVERHEAD:
+			# Rising Gate Cleave: the authored overhead remains committed and
+			# punishable, but becomes more likely after repeated aerial cross-ups.
+			multiplier *= 1.0 + air_pressure * 0.55 + crossup_pressure * 1.25
+		SHOCKWAVE_STRIKE:
+			multiplier *= 1.0 + far_pressure * 0.85
+	return clampf(multiplier, 0.35, 2.50)
+
+
+func _adaptive_phase_two_multiplier(attack_state: StringName) -> float:
+	var multiplier: float = 1.0
+	match attack_state:
+		COMBO_SLASH:
+			multiplier *= 1.0 + close_pressure * 0.55 + attack_pressure * 0.20
+		JUMP_SMASH:
+			multiplier *= 1.0 + air_pressure * 0.50 + crossup_pressure * 1.20
+		CHARGE_THRUST:
+			multiplier *= 1.0 + dash_pressure * 0.42 + far_pressure * 0.28
+		SHOCKWAVE_STRIKE:
+			multiplier *= 1.0 + far_pressure * 0.95
+	return clampf(multiplier, 0.35, 2.55)
+
+
+func _cap_counter_weight(
+	candidates: Array[StringName], weights: Array[float], counter_action: StringName, probability_cap: float
+) -> void:
+	var counter_index: int = candidates.find(counter_action)
+	if counter_index < 0 or candidates.size() < 2:
+		return
+	var other_weight: float = _sum_weights(weights) - weights[counter_index]
+	var maximum_counter_weight: float = other_weight * probability_cap / (1.0 - probability_cap)
+	weights[counter_index] = minf(weights[counter_index], maximum_counter_weight)
+
+
+func _sum_weights(weights: Array[float]) -> float:
+	var total: float = 0.0
+	for weight: float in weights:
+		total += weight
+	return total
 
 
 func _start_attack(attack_state: StringName) -> bool:
@@ -793,6 +906,11 @@ func _on_animation_frame_changed() -> void:
 		SHOCKWAVE_STRIKE:
 			active = animated_sprite.frame in [3, 4]
 			damage = config.shockwave_damage
+			if active and _gate_wave_spawned_for_id != current_attack_id:
+				_gate_wave_spawned_for_id = current_attack_id
+				_spawn_gate_severance_wave()
+			_end_attack_window()
+			return
 	_set_attack_window(active, damage)
 
 
@@ -1059,6 +1177,173 @@ func _get_player_distance() -> float:
 	if not _has_target():
 		return INF
 	return absf(target.global_position.x - global_position.x)
+
+
+func _observe_target_behavior(delta: float) -> void:
+	_behavior_clock += delta
+	var decay: float = BEHAVIOR_DECAY_PER_SECOND * delta
+	far_pressure = maxf(0.0, far_pressure - decay)
+	close_pressure = maxf(0.0, close_pressure - decay)
+	air_pressure = maxf(0.0, air_pressure - decay)
+	crossup_pressure = maxf(0.0, crossup_pressure - decay)
+	dash_pressure = maxf(0.0, dash_pressure - decay)
+	attack_pressure = maxf(0.0, attack_pressure - decay)
+	_apply_due_behavior_events()
+	if not _has_target():
+		return
+	_behavior_sample_timer -= delta
+	if _behavior_sample_timer <= 0.0:
+		_behavior_sample_timer = BEHAVIOR_SAMPLE_INTERVAL
+		var distance: float = _get_player_distance()
+		if distance >= 205.0:
+			_queue_behavior_event(&"far", 0.055)
+		elif distance <= 68.0:
+			_queue_behavior_event(&"close", 0.055)
+		if not target.is_on_floor():
+			_queue_behavior_event(&"air", 0.045)
+	var side: float = signf(target.global_position.x - global_position.x)
+	var action_name: StringName = (
+		target.action_controller.get_action_state_name()
+		if target.action_controller != null else &"None"
+	)
+	var movement_name: StringName = target.get_movement_state_name()
+	if (
+		not is_zero_approx(_previous_target_side)
+		and side != _previous_target_side
+		and not target.is_on_floor()
+		and absf(target.global_position.y - global_position.y) < 112.0
+	):
+		observed_crossup_count += 1
+		_queue_behavior_event(&"crossup", 0.30)
+	if movement_name != _previous_target_movement:
+		if movement_name in [&"jump_start", &"double_jump"]:
+			observed_jump_count += 1
+		if movement_name == &"double_jump":
+			observed_double_jump_count += 1
+	if action_name != _previous_target_action:
+		if String(action_name).contains("Dash"):
+			_queue_behavior_event(&"dash", 0.22)
+		elif String(action_name).contains("Attack"):
+			_queue_behavior_event(&"attack", 0.15)
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and String(action_name).contains("Dash"):
+		observed_dash_through_count += 1
+	_previous_target_side = side
+	_previous_target_action = action_name
+	_previous_target_movement = movement_name
+
+
+func _queue_behavior_event(kind_name: StringName, amount: float) -> void:
+	_behavior_events.append({
+		&"at": _behavior_clock + BEHAVIOR_REACTION_DELAY,
+		&"kind": kind_name,
+		&"amount": amount * (1.12 if current_phase == 2 else 1.0),
+	})
+
+
+func _apply_due_behavior_events() -> void:
+	while (
+		not _behavior_events.is_empty()
+		and float(_behavior_events.front().get(&"at", INF)) <= _behavior_clock
+	):
+		var event: Dictionary = _behavior_events.pop_front()
+		var amount: float = float(event.get(&"amount", 0.0))
+		var kind_name: StringName = StringName(event.get(&"kind", &""))
+		match kind_name:
+			&"far": far_pressure = minf(1.0, far_pressure + amount)
+			&"close": close_pressure = minf(1.0, close_pressure + amount)
+			&"air": air_pressure = minf(1.0, air_pressure + amount)
+			&"crossup": crossup_pressure = minf(1.0, crossup_pressure + amount)
+			&"dash": dash_pressure = minf(1.0, dash_pressure + amount)
+			&"attack": attack_pressure = minf(1.0, attack_pressure + amount)
+
+
+func _record_adaptive_decision(
+	action: StringName, candidates: Array[StringName], weights: Array[float]
+) -> void:
+	_adaptive_decision_reason = StringName(
+		"%s:F%.2f:C%.2f:A%.2f:X%.2f:D%.2f" % [
+			action, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure,
+		]
+	)
+	if OS.is_debug_build():
+		print(
+			"[BOSS_DECISION] boss=FallenGateKnight phase=%d distance=%.1f pressure=[far=%.2f close=%.2f air=%.2f cross=%.2f dash=%.2f] recent=%s candidates=%s weights=%s selected=%s reason=%s" % [
+				current_phase, _get_player_distance(), far_pressure, close_pressure,
+				air_pressure, crossup_pressure, dash_pressure, _last_selected_attack,
+				candidates, weights, action, _adaptive_decision_reason,
+			]
+		)
+
+
+func _reset_behavior_context() -> void:
+	far_pressure = 0.0
+	close_pressure = 0.0
+	air_pressure = 0.0
+	crossup_pressure = 0.0
+	dash_pressure = 0.0
+	attack_pressure = 0.0
+	_behavior_clock = 0.0
+	_behavior_sample_timer = 0.0
+	_behavior_events.clear()
+	_previous_target_side = 0.0
+	_previous_target_action = &"None"
+	_previous_target_movement = &"idle"
+	_adaptive_decision_reason = &"base"
+	_gate_wave_spawned_for_id = -1
+	observed_jump_count = 0
+	observed_double_jump_count = 0
+	observed_crossup_count = 0
+	observed_dash_through_count = 0
+
+
+func get_behavior_pressures() -> Dictionary[StringName, float]:
+	return {
+		&"far": far_pressure,
+		&"close": close_pressure,
+		&"air": air_pressure,
+		&"crossup": crossup_pressure,
+		&"dash": dash_pressure,
+		&"attack": attack_pressure,
+	}
+
+
+func get_adaptive_decision_reason() -> StringName:
+	return _adaptive_decision_reason
+
+
+func _spawn_gate_severance_wave() -> void:
+	if not is_inside_tree():
+		return
+	var wave: HitboxComponent = HitboxComponent.new()
+	wave.name = "GateSeveranceWave"
+	wave.faction = &"enemy"
+	wave.attack_kind = &"boss_gate_severance"
+	wave.collision_layer = 64
+	wave.collision_mask = 8
+	wave.z_index = 3
+	var collision: CollisionShape2D = CollisionShape2D.new()
+	var shape: RectangleShape2D = RectangleShape2D.new()
+	shape.size = Vector2(42.0, 18.0)
+	collision.shape = shape
+	wave.add_child(collision)
+	var blade: Polygon2D = Polygon2D.new()
+	blade.polygon = PackedVector2Array([
+		Vector2(-22.0, 6.0), Vector2(-8.0, -8.0), Vector2(18.0, -5.0),
+		Vector2(26.0, 0.0), Vector2(18.0, 5.0), Vector2(-8.0, 8.0),
+	])
+	blade.color = Color("93a8b8")
+	wave.add_child(blade)
+	get_parent().add_child(wave)
+	wave.global_position = global_position + Vector2(facing_direction * 44.0, -8.0)
+	wave.begin_attack(current_attack_id, config.shockwave_damage, facing_direction, self)
+	var tween: Tween = wave.create_tween()
+	tween.set_trans(Tween.TRANS_LINEAR)
+	tween.tween_property(wave, "global_position:x", wave.global_position.x + facing_direction * 285.0, 0.78)
+	tween.finished.connect(func() -> void:
+		if is_instance_valid(wave):
+			wave.end_attack()
+			wave.queue_free()
+	)
 
 
 func _configure_attack_geometry() -> void:

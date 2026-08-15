@@ -80,3 +80,39 @@ No critical hits, armor formula, attributes, status effects, Player combo tree, 
 Player Attack/Dash Attack damage now resolves from equipped `WeaponData`: Veilbound 10/20 and Ravenfang 12/24. Normal enemies use 30/50/50/40/30 HP, Shield Guard uses an additional 30 Shield, and Gate Knight uses 180 Body/100 Shield. This preserves established hit counts. Player HP/Stamina and every enemy/Boss outgoing damage/timing remain unchanged. Shield visuals now use ratios so 30/100-point shields retain intact/damaged/critical readability.
 
 Regular-enemy drop resolution and the fixed first-Boss reward are composed outside AI and damage components; see `loot_drop_system_spec.md` and `weapon_system_spec.md`. No store, upgrade, affix or Chapter II gameplay is present.
+
+## Boss player-behavior adaptation contract
+
+Chapter I–IV Bosses may observe the Player's already-resolved position, velocity,
+ground/air state, movement/action state, distance and side changes. They may not
+read raw `Input`, pending commands or future intent. Every observation is queued
+behind a Boss-specific reaction delay, contributes to bounded 0–1 pressure, and
+decays when the behavior stops.
+
+| Boss | Close | Mid | Far | Reaction | Decay/s | Phase-2 growth |
+| --- | ---: | --- | ---: | ---: | ---: | ---: |
+| Fallen Gate Knight | <=68 | 68–205 | >=205 | 0.40 s | 0.14 | +12% |
+| Hollow Duchess | <=66 | 66–205 | >=205 | 0.28 s | 0.17 | +16% |
+| Thirteenth Pontiff | <=78 | 78–205 | >=205 | 0.32 s | 0.15 | +14% |
+| Soul Gaoler Ormund | <=92 | 92–250 | >=250 | 0.35 s | 0.16 | +16% |
+
+Crossup responses require learned pressure (`>= 0.42`), not a first jump. An
+observed airborne side crossing adds 0.30 only after the reaction delay. Counter
+candidates are capped at 70%; range counters remain weighted, never mandatory.
+Selectors still apply phase legality, cooldown, combo budget, hazard/freeze rules,
+recent history, recovery and Player Turn before adaptation. Once windup starts,
+the attack direction/choice remains committed, so the Player can deliberately
+change range or trajectory and punish a stale read.
+
+Ormund's `Iron Grave` remains 22 direct damage plus one refreshed, non-stacking
+Bleed instance (1 HP/s for 5 s). Each ground zone is now a 3–5 weapon cluster
+containing both a sword and a spear/prison pike, with long/medium/short profiles
+and five slight upward angles. Its warning is 0.88 s (Phase-2 second wave 0.82 s),
+tips appear in the latter half, emergence takes 0.16 s, and two narrow hitbox
+columns arm at 40% emergence. Full-extension hold is 0.44 s and retraction is
+0.24 s. Phase 2 preserves distinct, separately telegraphed two-wave placement.
+
+Ormund's learned crossup response reuses the existing chain visual family as
+`Backchain Reversal / 回狱锁反`. It keeps the heavy turn/direction commitment,
+uses the existing hook-drag damage, and cannot bypass combo, cooldown, recovery
+or Player-turn gates.

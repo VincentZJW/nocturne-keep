@@ -98,3 +98,20 @@ The legacy shared 0.42-second field remains only as a defensive fallback for mal
 Body/Shield are 180/100. Every outgoing Boss damage and attack timing remains unchanged. The complete Death animation emits `boss_defeated`; Main's independent `BossRewardController` then grants 30 coins once and reveals Ravenfang Daggers at `(6210,592)`. The pickup persists through Player death, auto-equips on E, and must be collected before `CastleEntranceTrigger` loads the threshold. The Boss never rolls the normal-enemy loot table.
 
 The fixed reward uses a restrained coin-bag/text presentation and an original 0.22-second procedural two-tone chime. Headless tests skip audio stream construction; graphical F5 creates it at runtime, so no external audio asset or leaked test playback is introduced.
+
+## Player-behavior adaptation
+
+The Gate Knight observes resolved Player movement/action state, position, velocity,
+grounded state, side crossings and a short decaying history. It never reads raw
+`Input` state. Observations enter the selector only after a 0.40-second reaction
+delay; Phase 2 grows pressure 12% faster while retaining the same delay. Pressure
+decays at 0.14 per second, so a fully learned habit clears in about 7.1 seconds.
+
+- Close is `<= 68 px`, Far is `>= 205 px`, and the space between is Mid.
+- Repeated airborne crossings bias the existing Heavy Overhead / Jump Smash into
+  `Rising Gate Cleave`; the counter candidate is capped at 70%.
+- Far play can offer `Gate Severance`, a low, non-homing 285 px/s ground sword
+  wave, at 55–70% rather than forcing it. Its 8 damage remains below the Boss's
+  heavy attack.
+- An attack that has entered windup remains committed. Cooldowns, recovery,
+  turn timing and the existing Player-turn gaps still own when the Boss may act.

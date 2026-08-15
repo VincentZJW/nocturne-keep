@@ -112,6 +112,27 @@ var _mire_telegraph: PontiffMireTelegraph
 var _active_mire: PontiffMireZone
 var _debug_magic_mode: StringName = &""
 var _target_was_frozen: bool = false
+var far_pressure: float = 0.0
+var close_pressure: float = 0.0
+var air_pressure: float = 0.0
+var crossup_pressure: float = 0.0
+var dash_pressure: float = 0.0
+var attack_pressure: float = 0.0
+var _behavior_clock: float = 0.0
+var _behavior_sample_timer: float = 0.0
+var _behavior_events: Array[Dictionary] = []
+var _previous_target_side: float = 0.0
+var _previous_target_action: StringName = &"None"
+var _previous_target_movement: StringName = &"idle"
+var _adaptive_decision_reason: StringName = &"base"
+var observed_jump_count: int = 0
+var observed_double_jump_count: int = 0
+var observed_crossup_count: int = 0
+var observed_dash_through_count: int = 0
+
+const BEHAVIOR_REACTION_DELAY: float = 0.32
+const BEHAVIOR_DECAY_PER_SECOND: float = 0.15
+const BEHAVIOR_SAMPLE_INTERVAL: float = 0.20
 
 
 func _ready() -> void:
@@ -134,6 +155,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_tick_cooldowns(delta)
+	_observe_target_behavior(delta)
 	if not is_on_floor():
 		velocity.y += config.gravity * delta
 	if current_state in [State.DORMANT, State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
@@ -176,6 +198,7 @@ func _physics_process(delta: float) -> void:
 func activate(player: Player = null) -> void:
 	if current_state != State.DORMANT:
 		return
+	_reset_behavior_context()
 	target = player if player != null else get_tree().get_first_node_in_group("player") as Player
 	hurtbox.set_enabled(true)
 	_attack_gap_timer = 0.45
@@ -428,24 +451,32 @@ func _select_weighted_attack(candidates: Array[Attack], phase_02: bool) -> Attac
 	for candidate: Attack in candidates:
 		if candidate not in [Attack.SUMMON, Attack.PROCESSION, Attack.FIRE_SPELL, Attack.ICE_SPELL, Attack.MIRE_SPELL]:
 			utility_count += 1
-	var weights: Array[int] = []
-	var total_weight: int = 0
+	var weights: Array[float] = []
+	var total_weight: float = 0.0
 	for candidate: Attack in candidates:
-		var weight: int = 1
+		var weight: float = 1.0
 		match candidate:
-			Attack.SUMMON: weight = 22
-			Attack.PROCESSION: weight = 27
-			Attack.FIRE_SPELL: weight = 18
-			Attack.ICE_SPELL: weight = 13 if phase_02 else 10
-			Attack.MIRE_SPELL: weight = 15 if phase_02 else 10
-			_: weight = maxi(1, roundi(float(27 if phase_02 else 40) / float(maxi(1, utility_count))))
+			Attack.SUMMON: weight = 22.0
+			Attack.PROCESSION: weight = 27.0
+			Attack.FIRE_SPELL: weight = 18.0
+			Attack.ICE_SPELL: weight = 13.0 if phase_02 else 10.0
+			Attack.MIRE_SPELL: weight = 15.0 if phase_02 else 10.0
+			_: weight = maxf(1.0, float(27 if phase_02 else 40) / float(maxi(1, utility_count)))
+		weight *= _adaptive_attack_multiplier(candidate)
 		weights.append(weight)
 		total_weight += weight
-	var roll: int = randi_range(1, maxi(1, total_weight))
+	var rebuke_index: int = candidates.find(Attack.BELL_CLEAVE)
+	if rebuke_index >= 0 and candidates.size() > 1:
+		var ordinary_weight: float = total_weight - weights[rebuke_index]
+		weights[rebuke_index] = minf(weights[rebuke_index], ordinary_weight * 0.70 / 0.30)
+		total_weight = ordinary_weight + weights[rebuke_index]
+	var roll: float = randf_range(0.0, maxf(0.01, total_weight))
 	for index: int in range(candidates.size()):
 		roll -= weights[index]
 		if roll <= 0:
+			_record_adaptive_decision(candidates[index], candidates, weights)
 			return candidates[index]
+	_record_adaptive_decision(candidates.back(), candidates, weights)
 	return candidates.back()
 
 
@@ -1151,3 +1182,132 @@ func _idle_animation() -> StringName:
 
 func _selection_range() -> float:
 	return config.chain_judgment_range + 80.0 if _phase == 2 else config.thrust_range + 80.0
+
+
+func _observe_target_behavior(delta: float) -> void:
+	_behavior_clock += delta
+	var decay: float = BEHAVIOR_DECAY_PER_SECOND * delta
+	far_pressure = maxf(0.0, far_pressure - decay)
+	close_pressure = maxf(0.0, close_pressure - decay)
+	air_pressure = maxf(0.0, air_pressure - decay)
+	crossup_pressure = maxf(0.0, crossup_pressure - decay)
+	dash_pressure = maxf(0.0, dash_pressure - decay)
+	attack_pressure = maxf(0.0, attack_pressure - decay)
+	_apply_due_behavior_events()
+	if target == null or not is_instance_valid(target) or target.is_dead():
+		return
+	_behavior_sample_timer -= delta
+	if _behavior_sample_timer <= 0.0:
+		_behavior_sample_timer = BEHAVIOR_SAMPLE_INTERVAL
+		var distance: float = absf(target.global_position.x - global_position.x)
+		if distance >= 205.0: _queue_behavior_event(&"far", 0.055)
+		elif distance <= 78.0: _queue_behavior_event(&"close", 0.055)
+		if not target.is_on_floor(): _queue_behavior_event(&"air", 0.045)
+		if absf(target.velocity.x) >= 225.0: _queue_behavior_event(&"dash", 0.035)
+	var side: float = signf(target.global_position.x - global_position.x)
+	var action_name: StringName = target.action_controller.get_action_state_name() if target.action_controller != null else &"None"
+	var movement_name: StringName = target.get_movement_state_name()
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and not target.is_on_floor() and absf(target.global_position.y - global_position.y) < 112.0:
+		observed_crossup_count += 1
+		_queue_behavior_event(&"crossup", 0.30)
+	if movement_name != _previous_target_movement:
+		if movement_name in [&"jump_start", &"double_jump"]: observed_jump_count += 1
+		if movement_name == &"double_jump": observed_double_jump_count += 1
+	if action_name != _previous_target_action:
+		if String(action_name).contains("Dash"): _queue_behavior_event(&"dash", 0.22)
+		elif String(action_name).contains("Attack"): _queue_behavior_event(&"attack", 0.15)
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and String(action_name).contains("Dash"):
+		observed_dash_through_count += 1
+	_previous_target_side = side
+	_previous_target_action = action_name
+	_previous_target_movement = movement_name
+
+
+func _queue_behavior_event(kind_name: StringName, amount: float) -> void:
+	_behavior_events.append({&"at": _behavior_clock + BEHAVIOR_REACTION_DELAY, &"kind": kind_name, &"amount": amount * (1.14 if _phase == 2 else 1.0)})
+
+
+func _apply_due_behavior_events() -> void:
+	while not _behavior_events.is_empty() and float(_behavior_events.front().get(&"at", INF)) <= _behavior_clock:
+		var event: Dictionary = _behavior_events.pop_front()
+		var amount: float = float(event.get(&"amount", 0.0))
+		var kind_name := StringName(event.get(&"kind", &""))
+		match kind_name:
+			&"far": far_pressure = minf(1.0, far_pressure + amount)
+			&"close": close_pressure = minf(1.0, close_pressure + amount)
+			&"air": air_pressure = minf(1.0, air_pressure + amount)
+			&"crossup": crossup_pressure = minf(1.0, crossup_pressure + amount)
+			&"dash": dash_pressure = minf(1.0, dash_pressure + amount)
+			&"attack": attack_pressure = minf(1.0, attack_pressure + amount)
+
+
+func _adaptive_attack_multiplier(attack: Attack) -> float:
+	var multiplier: float = 1.0
+	match attack:
+		Attack.FIRE_SPELL:
+			multiplier *= 1.0 + far_pressure * 0.80
+		Attack.ICE_SPELL:
+			multiplier *= 1.0 + air_pressure * 0.40
+		Attack.MIRE_SPELL:
+			multiplier *= 1.0 + dash_pressure * 0.75
+		Attack.SUMMON, Attack.PROCESSION:
+			multiplier *= 1.0 + far_pressure * 0.35
+		Attack.SWEEP, Attack.THRUST, Attack.CENSER, Attack.CHAIN_JUDGMENT:
+			multiplier *= 1.0 + close_pressure * 0.62 + attack_pressure * 0.25
+		Attack.BELL_CLEAVE:
+			# Existing crozier/censer art becomes Bellward Rebuke when selected
+			# against a learned crossup pattern; its authored windup remains intact.
+			multiplier *= 1.0 + crossup_pressure * 1.65 + air_pressure * 0.35
+		_:
+			pass
+	return clampf(multiplier, 0.35, 2.75)
+
+
+func _record_adaptive_decision(
+	attack: Attack, candidates: Array[Attack], weights: Array[float]
+) -> void:
+	_adaptive_decision_reason = StringName("%s:F%.2f:C%.2f:A%.2f:X%.2f:D%.2f" % [Attack.keys()[attack], far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure])
+	if OS.is_debug_build():
+		var distance: float = absf(target.global_position.x - global_position.x) if target != null and is_instance_valid(target) else INF
+		var candidate_names: Array[StringName] = []
+		for candidate: Attack in candidates:
+			candidate_names.append(StringName(Attack.keys()[candidate]))
+		var recent_attack: Attack = _last_phase_02_attack if _phase == 2 else _last_phase_01_attack
+		print("[BOSS_DECISION] boss=ThirteenthPontiff phase=%d distance=%.1f pressure=[far=%.2f close=%.2f air=%.2f cross=%.2f dash=%.2f] recent=%s candidates=%s weights=%s selected=%s reason=%s" % [_phase, distance, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure, Attack.keys()[recent_attack], candidate_names, weights, Attack.keys()[attack], _adaptive_decision_reason])
+
+
+func get_behavior_pressures() -> Dictionary[StringName, float]:
+	return {&"far": far_pressure, &"close": close_pressure, &"air": air_pressure, &"crossup": crossup_pressure, &"dash": dash_pressure, &"attack": attack_pressure}
+
+
+func get_adaptive_decision_reason() -> StringName:
+	return _adaptive_decision_reason
+
+
+func get_debug_summary() -> String:
+	return "EDRAN P%d %s HP %d/%d AI[%s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d]" % [
+		_phase, State.keys()[current_state], health_component.current_health,
+		health_component.max_health, _adaptive_decision_reason, far_pressure,
+		close_pressure, air_pressure, crossup_pressure, dash_pressure,
+		observed_jump_count, observed_double_jump_count, observed_crossup_count, observed_dash_through_count,
+	]
+
+
+func _reset_behavior_context() -> void:
+	far_pressure = 0.0
+	close_pressure = 0.0
+	air_pressure = 0.0
+	crossup_pressure = 0.0
+	dash_pressure = 0.0
+	attack_pressure = 0.0
+	_behavior_clock = 0.0
+	_behavior_sample_timer = 0.0
+	_behavior_events.clear()
+	_previous_target_side = 0.0
+	_previous_target_action = &"None"
+	_previous_target_movement = &"idle"
+	_adaptive_decision_reason = &"base"
+	observed_jump_count = 0
+	observed_double_jump_count = 0
+	observed_crossup_count = 0
+	observed_dash_through_count = 0

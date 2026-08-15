@@ -40,6 +40,14 @@ func _run() -> void:
 	root.add_child(boss)
 	await process_frame
 	boss.activate()
+	_check(is_equal_approx(boss.BEHAVIOR_REACTION_DELAY,0.32),"Edran behavior reaction delay is 0.32s")
+	_check(boss.get_behavior_pressures().size()==6,"Edran exposes six decaying behavior pressures")
+	var base_rebuke:float=boss._adaptive_attack_multiplier(ThirteenthPontiffEdran.Attack.BELL_CLEAVE)
+	boss.crossup_pressure=0.8
+	var learned_rebuke:float=boss._adaptive_attack_multiplier(ThirteenthPontiffEdran.Attack.BELL_CLEAVE)
+	_check(learned_rebuke>base_rebuke,"Bellward Rebuke responds to delayed cross-up pressure")
+	_check(learned_rebuke<=2.75,"Edran adaptive weighting remains capped")
+	boss._reset_behavior_context()
 	boss.phase_changed.connect(_on_phase_changed)
 	boss.defeated.connect(_on_defeated)
 	_check(boss.config.phase_transition_health == 198,"55 percent boundary is 198 HP")

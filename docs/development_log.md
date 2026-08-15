@@ -7845,3 +7845,81 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
 - Extended the existing Player status owner with one typed Bleed timer/state. Confirmed Javelin and Iron-Grave direct hits retain 22 damage and apply 1 HP at t=1–5 seconds; rejected i-frame hits do not apply Bleed, re-hits refresh one instance, DOT produces no Hurt/knockback/hitstop, and lethal DOT enters the existing death flow. A compact dark-crimson Player effect and status-HUD slot reuse existing presentation infrastructure.
 - Exact Godot 4.7.1 results: editor import/parse PASS; focused Phase-II/Bleed test PASS (`20` transitions, `30` flips, `20` normal hits, `10` Dash hits, `5` staggers, `40` Bleed-source hits); attack-variety/runtime/balance PASS; five final combat replays PASS with zero visual violations; Chapter III Burn/Freeze/Mire regression PASS (`986` assertions); Main integration and Q4 Boss→reward→Chapter-V flow PASS; 16-image graphical MainBootstrap capture PASS without a project red diagnostic.
 - Full audit, commands, evidence and the required `Ormund Phase 2 Visual + Bleed QA` table are preserved in `docs/qa/chapter_04_ormund_phase2_bleed/report.md`.
+# 2026-08-15 — BOSS-AI / Iron Grave behavior-adaptation milestone
+
+- Workflow loaded: `AGENTS.md`, chapter character workflow, production checklist,
+  QA standard, and render-layer contract.
+- Approved scope: overwrite the four formal Chapter I–IV Boss controllers and
+  the existing Soul Gaoler attack-effect/config resources; no enemy, chapter,
+  reward, or player-stat changes.
+- Audit: no shared Boss AI base or combat-context object exists. Fallen Gate
+  Knight and Hollow Duchess use distance-weighted local selectors; Edran uses a
+  weighted spell/melee selector; Ormund has recent attack/category histories and
+  combo budgets but a deterministic first-usable rotation. None records a
+  decaying 4–6 second history of observed Player outcomes.
+- Iron Grave audit: `soul_gaoler_attack_effect.gd` draws one uniform pike per
+  hazard with a full-height rectangular hitbox and a circle/polyline telegraph.
+- Implementation goal: delayed, decaying, capped weighted adaptation based only
+  on observed Player position, velocity, grounded state and resolved action
+  state; preserve committed windups, cooldowns, recovery and player-turn gates.
+  Replace the existing Iron Grave drawing in place with mixed weapon clusters
+  and an emergence-tracking hitbox while preserving direct damage and Bleed.
+- Verification plan: exact Godot 4.7.1 headless parse/import, existing per-Boss
+  regression suites, focused adaptation/Iron Grave assertions, MainBootstrap
+  Boss debug routes, Output/Debugger audit, then leave only Chapter IV Boss open
+  for manual acceptance.
+
+### Implementation and verification
+
+- Rebuilt the existing Iron Grave effect in place as 3–5 mixed weapon clusters.
+  Every cluster guarantees a long spear/prison pike plus a long/broken sword,
+  varies among five upward angles and three length tiers, exposes two tips late
+  in the 0.88-second warning, rises over 0.16 seconds, arms two narrow growing
+  collision columns at 40%, holds for 0.44 seconds and retracts over 0.24
+  seconds. Phase-2 wave two now has its own 0.82-second warning. Direct damage
+  remains 22 and confirmed hits retain refreshed, non-stacking 1 HP/s x 5 s
+  Bleed.
+- Added delayed, decaying 0–1 behavior pressures to all four existing Boss
+  controllers without a shared parallel framework. Observations use only
+  resolved position, velocity, grounded state, movement/action state and side
+  crossings. Reaction delays are 0.40/0.28/0.32/0.35 seconds; Phase 2 pressure
+  growth is +12/+16/+14/+16%; explicit anti-crossup choices are capped at 70%.
+  No Boss controller reads raw `Input`.
+- Added distinct responses through existing Boss vocabularies: Gate Severance
+  and Rising Gate Cleave, Silk Curtain, Bellward Rebuke, and Backchain Reversal.
+  Cooldowns, committed windups, recovery, freeze protections, combo budgets and
+  Player Turn remain authoritative.
+- Exact Godot 4.7.1 import/parse — PASS. Chapter I geometry and formal Boss
+  regressions — PASS. Chapter II 70-cycle test, five full fights/284 attacks and
+  Main integration — PASS (the Main test retains one pre-existing exit-time
+  ObjectDB leak warning). Chapter III B4–B7 and 986-assertion elemental/freeze
+  regressions — PASS. Chapter IV runtime, 30-transition/20-per-attack variety,
+  balance, five final full-fight replays, Main integration and Q4 P1/P2/death/
+  reward/CH5 route — PASS.
+- Automated evidence is complete for parsing, state legality, collision timing,
+  damage, Bleed, phase rules and saved Main routes. Visual readability and the
+  requested “adaptive but baitable” combat feel remain `PARTIAL` until the user
+  performs the sequential Chapter IV → III → II → I manual Boss passes. Full
+  evidence is in `docs/qa/boss_behavior_adaptation_iron_grave_report.md`.
+- The final graphical editor launch exposed one stale Chapter-II collision-audit
+  helper call that still used the former two-argument camera API. The tool now
+  calls `configure_camera_for_world_y()`; an exact 4.7.1 editor import/parse
+  rerun passed, allowing the manual Boss handoff to continue without that red
+  parse diagnostic.
+
+```text
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_boss_attack_geometry.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_first_level_boss.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_boss.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_full_fights.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_main_integration.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b4_b7_full_boss.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_elemental_magic.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_runtime.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_attack_variety.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_balance.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_soul_gaoler_ormund_balance_replays.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/characters/test_chapter_04_main_integration.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_04_drowned_underkeep/tests/scenes/test_chapter_04_q4_boss_flow.gd
+```

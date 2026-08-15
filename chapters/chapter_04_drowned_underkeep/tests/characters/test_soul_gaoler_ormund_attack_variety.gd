@@ -150,6 +150,9 @@ func _validate_iron_grave_20() -> void:
 		var pike_health_before: int = player.health_component.current_health
 		boss._active_effects[0]._begin_active()
 		boss._active_effects[1]._begin_active()
+		boss._active_effects[0]._physics_process(0.08)
+		boss._active_effects[1]._physics_process(0.08)
+		_expect(boss._active_effects[0].is_damage_active(), "iron grave %d arms after visible emergence" % run)
 		_expect(boss._active_effects[0].hitbox.try_hit(player.hurtbox), "iron grave %d first pike resolves" % run)
 		_expect(not boss._active_effects[1].hitbox.try_hit(player.hurtbox), "iron grave %d same-wave overlap cannot double-hit" % run)
 		_expect(player.health_component.current_health == pike_health_before - 22, "iron grave %d applies one 22-damage result" % run)

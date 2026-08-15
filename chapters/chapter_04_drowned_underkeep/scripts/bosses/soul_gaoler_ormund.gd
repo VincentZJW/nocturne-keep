@@ -99,6 +99,31 @@ var _camera_shake_remaining: float = 0.0
 var _camera_shake_duration: float = 0.0
 var _camera_shake_strength: float = 0.0
 var _camera_base_offset: Vector2 = Vector2.ZERO
+var far_pressure: float = 0.0
+var close_pressure: float = 0.0
+var air_pressure: float = 0.0
+var crossup_pressure: float = 0.0
+var dash_pressure: float = 0.0
+var attack_pressure: float = 0.0
+var _behavior_clock: float = 0.0
+var _behavior_sample_timer: float = 0.0
+var _behavior_events: Array[Dictionary] = []
+var _previous_target_side: float = 0.0
+var _previous_target_action: StringName = &"None"
+var _previous_target_movement: StringName = &"idle"
+var _adaptive_decision_reason: StringName = &"base"
+var observed_jump_count: int = 0
+var observed_double_jump_count: int = 0
+var observed_crossup_count: int = 0
+var observed_dash_through_count: int = 0
+var _backchain_cooldown: float = 0.0
+var _melee_hitbox_default_position: Vector2 = Vector2.ZERO
+var _decision_rng: RandomNumberGenerator = RandomNumberGenerator.new()
+
+const BEHAVIOR_REACTION_DELAY: float = 0.35
+const BEHAVIOR_DECAY_PER_SECOND: float = 0.16
+const BEHAVIOR_SAMPLE_INTERVAL: float = 0.20
+const BACKCHAIN_REVERSAL: StringName = &"backchain_reversal"
 
 
 func complete_debug_phase_transition() -> void:
@@ -130,6 +155,8 @@ func _on_common_ready() -> void:
 	health_component.reset_to_full()
 	damage_policy.damage_multiplier = _boss_config().phase_one_damage_multiplier
 	poise_component.configure(_boss_config().phase_one_poise, 1.35)
+	_melee_hitbox_default_position = melee_hitbox.position
+	_decision_rng.seed = 4404
 	_reset_combo_sequence()
 	hurtbox.hit_resolving.connect(_on_hit_resolving)
 	health_component.health_changed.connect(_on_health_changed)
@@ -153,6 +180,8 @@ func _process_enemy_state(delta: float) -> void:
 	_cell_rupture_cooldown = maxf(0.0, _cell_rupture_cooldown - delta)
 	_javelin_cooldown = maxf(0.0, _javelin_cooldown - delta)
 	_stagger_protection = maxf(0.0, _stagger_protection - delta)
+	_backchain_cooldown = maxf(0.0, _backchain_cooldown - delta)
+	_observe_target_behavior(delta)
 	_process_camera_shake(delta)
 	poise_component.advance(delta, current_state in [STAGGER, PHASE_TRANSITION])
 	if current_state == INTRO:
@@ -222,20 +251,50 @@ func _process_combat(delta: float) -> void:
 func _select_action(distance_x: float) -> StringName:
 	var target_near_edge: bool = _is_target_near_arena_edge()
 	var category: StringName = _preferred_category(distance_x)
-	var candidates: Array[StringName] = _actions_for_category(category)
-	_rotate_candidates(candidates)
-	var selected: StringName = _first_usable_action(candidates, target_near_edge)
-	if not selected.is_empty():
-		return selected
-	# A category guard or cooldown must not create a new idle gap. Move outward
-	# through the logical distance neighbours while preserving all history rules.
-	for fallback_category: StringName in _fallback_categories(category):
-		candidates = _actions_for_category(fallback_category)
-		_rotate_candidates(candidates)
-		selected = _first_usable_action(candidates, target_near_edge)
-		if not selected.is_empty():
-			return selected
-	return &""
+	var candidates: Array[StringName] = []
+	for source_category: StringName in [category] + _fallback_categories(category):
+		for candidate: StringName in _actions_for_category(source_category):
+			if candidate not in candidates and _can_use_action(candidate, target_near_edge):
+				candidates.append(candidate)
+	if crossup_pressure >= 0.42 and _backchain_cooldown <= 0.0 and _can_use_action(BACKCHAIN_REVERSAL, target_near_edge):
+		candidates.append(BACKCHAIN_REVERSAL)
+	if candidates.is_empty():
+		return &""
+	var weights: Array[float] = []
+	var total_weight: float = 0.0
+	for candidate: StringName in candidates:
+		var weight: float = _adaptive_action_weight(candidate, category)
+		weights.append(weight)
+		total_weight += weight
+	_cap_counter_weight(candidates, weights, BACKCHAIN_REVERSAL, 0.70)
+	total_weight = _sum_adaptive_weights(weights)
+	var roll: float = _decision_rng.randf_range(0.0, total_weight)
+	for index: int in range(candidates.size()):
+		roll -= weights[index]
+		if roll <= 0.0:
+			_record_adaptive_decision(candidates[index], category, candidates, weights)
+			return candidates[index]
+	_record_adaptive_decision(candidates.back(), category, candidates, weights)
+	return candidates.back()
+
+
+func _cap_counter_weight(
+	candidates: Array[StringName], weights: Array[float], counter_action: StringName, probability_cap: float
+) -> void:
+	var counter_index: int = candidates.find(counter_action)
+	if counter_index < 0 or candidates.size() < 2:
+		return
+	var other_weight: float = _sum_adaptive_weights(weights) - weights[counter_index]
+	weights[counter_index] = minf(
+		weights[counter_index], other_weight * probability_cap / (1.0 - probability_cap)
+	)
+
+
+func _sum_adaptive_weights(weights: Array[float]) -> float:
+	var total: float = 0.0
+	for weight: float in weights:
+		total += weight
+	return total
 
 
 func _preferred_category(distance_x: float) -> StringName:
@@ -330,6 +389,8 @@ func _can_use_action(action: StringName, target_near_edge: bool) -> bool:
 		return false
 	if action == &"flooded_judgment" and _judgment_cooldown > 0.0:
 		return false
+	if action == BACKCHAIN_REVERSAL and (_backchain_cooldown > 0.0 or crossup_pressure < 0.42):
+		return false
 	if _opening_followup_pending and action == &"floodgate_charge":
 		return false
 	return true
@@ -357,7 +418,7 @@ func _is_high_pressure_action(action: StringName) -> bool:
 func _action_category(action: StringName) -> StringName:
 	if _is_high_pressure_action(action):
 		return CATEGORY_HIGH_PRESSURE
-	if action in [&"halberd_sweep", &"gaolers_verdict", &"prison_hook_drag", &"soul_shackle"]:
+	if action in [&"halberd_sweep", &"gaolers_verdict", &"prison_hook_drag", &"soul_shackle", BACKCHAIN_REVERSAL]:
 		return CATEGORY_CLOSE
 	if action in [&"chain_anchor_slam", &"soul_cage_pulse", &"iron_grave"]:
 		return CATEGORY_MID
@@ -490,6 +551,8 @@ func _start_action(action: StringName) -> void:
 		)
 	elif action == &"iron_grave":
 		_prepare_iron_grave_wave(false)
+	elif action == BACKCHAIN_REVERSAL:
+		_backchain_cooldown = 4.6
 	if _is_high_pressure_action(action):
 		_high_pressure_used_in_combo = true
 	boss_action_started.emit(action, phase)
@@ -540,6 +603,10 @@ func _begin_active() -> void:
 		_begin_verdict_impact()
 	elif active_action != &"iron_grave":
 		var hitbox: HitboxComponent = area_hitbox if active_action in [&"soul_cage_pulse", &"drowned_cell_rupture", &"flooded_judgment"] else melee_hitbox
+		if active_action == BACKCHAIN_REVERSAL:
+			# The chain is authored behind the committed facing.  The facing itself
+			# remains locked, so this cannot become an instant 180-degree counter.
+			hitbox.position = Vector2(-absf(_melee_hitbox_default_position.x) - 18.0, _melee_hitbox_default_position.y - 10.0)
 		hitbox.attack_kind = StringName("enemy_%s" % active_action)
 		hitbox.begin_attack(current_attack_id, action_damage, facing_direction, self)
 	if active_action == &"iron_grave" and phase == 2:
@@ -554,6 +621,7 @@ func _begin_active() -> void:
 
 func _begin_recovery() -> void:
 	_end_hitboxes()
+	melee_hitbox.position = _melee_hitbox_default_position
 	boss_action_active.emit(active_action, false)
 	attack_phase = &"Recovery"
 	action_timer = action_recovery_duration
@@ -642,7 +710,7 @@ func _prepare_iron_grave_wave(second_wave: bool) -> void:
 	_next_attack_id += 1
 	var center_x: float = target.global_position.x if has_valid_target() else global_position.x
 	var bounds: Vector2 = get_movement_bounds() if has_movement_bounds() else Vector2(global_position.x - 520.0, global_position.x + 520.0)
-	var spacing: float = 52.0
+	var spacing: float = 72.0
 	var start_x: float = center_x - spacing * float(pike_count - 1) * 0.5
 	if second_wave and has_valid_target():
 		start_x = target.global_position.x - spacing * float(pike_count - 1) * 0.5
@@ -657,10 +725,10 @@ func _prepare_iron_grave_wave(second_wave: bool) -> void:
 		pike.global_position = Vector2(x, global_position.y - 9.0)
 		pike.configure_zone(
 			SoulGaolerAttackEffect.EffectKind.PRISON_PIKE,
-			Vector2(32.0, 82.0),
+			Vector2(58.0, 92.0),
 			telegraph,
-			0.22,
-			0.20,
+			0.44,
+			0.24,
 			_boss_config().iron_grave_damage,
 			wave_attack_id,
 			self,
@@ -678,6 +746,7 @@ func _action_animation(action: StringName, phase_name: StringName) -> StringName
 		&"drowned_javelin": animation_root = &"soul_shackle" if phase == 2 else &"prison_hook_drag"
 		&"gaolers_verdict": animation_root = &"chainstorm_cleave" if phase == 2 else &"chain_anchor_slam"
 		&"iron_grave": animation_root = &"drowned_cell_rupture" if phase == 2 else &"soul_cage_pulse"
+		BACKCHAIN_REVERSAL: animation_root = &"soul_shackle" if phase == 2 else &"prison_hook_drag"
 	return StringName("%s_%s" % [animation_root, phase_name])
 
 
@@ -950,6 +1019,7 @@ func _action_damage(action: StringName) -> int:
 		&"drowned_javelin": return _boss_config().drowned_javelin_damage
 		&"gaolers_verdict": return _boss_config().gaolers_verdict_direct_damage
 		&"iron_grave": return _boss_config().iron_grave_damage
+		BACKCHAIN_REVERSAL: return _boss_config().hook_drag_damage
 	return 1
 
 
@@ -961,6 +1031,7 @@ func _end_hitboxes() -> void:
 
 func _on_attack_cancelled() -> void:
 	_end_hitboxes()
+	melee_hitbox.position = _melee_hitbox_default_position
 	_cancel_active_effects()
 	attack_phase = &"None"
 	active_action = &""
@@ -1026,6 +1097,7 @@ func begin_combat(player_target: Player) -> void:
 		_recent_attack_history.clear()
 		_recent_category_history.clear()
 		_normal_action_since_high_pressure = true
+		_reset_behavior_context()
 	_combat_enabled = true
 	set_physics_process(true)
 	hurtbox.set_enabled(true)
@@ -1060,7 +1132,7 @@ func is_combat_enabled() -> bool:
 func get_attack_phase_name() -> StringName: return attack_phase
 func is_attack_window_active() -> bool: return (melee_hitbox != null and melee_hitbox.is_active) or (area_hitbox != null and area_hitbox.is_active)
 func get_debug_summary() -> String:
-	return "Soul Gaoler Ormund P%d %s HP %d/%d POISE %d/%d %s/%s COMBO %d/%d TURN %.2f LOCK %s OPEN %s FX %d" % [
+	return "Soul Gaoler Ormund P%d %s HP %d/%d POISE %d/%d %s/%s COMBO %d/%d TURN %.2f LOCK %s OPEN %s FX %d AI[%s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d]" % [
 		phase,
 		current_state,
 		health_component.current_health,
@@ -1075,6 +1147,9 @@ func get_debug_summary() -> String:
 		str(direction_locked),
 		str(phase2_opening_used),
 		_active_effects.size(),
+		_adaptive_decision_reason, far_pressure, close_pressure, air_pressure,
+		crossup_pressure, dash_pressure, observed_jump_count,
+		observed_double_jump_count, observed_crossup_count, observed_dash_through_count,
 	]
 func get_combo_count() -> int: return combo_count
 func get_combo_budget() -> int: return combo_budget
@@ -1090,6 +1165,113 @@ func get_phase_visual_redirect_count() -> int: return _phase_visual_redirect_cou
 func is_phase_one_visual_active() -> bool:
 	return animated_sprite != null and _is_phase_one_visual_animation(animated_sprite.animation)
 func is_phase_two_opening_active() -> bool: return current_state == PHASE_TWO_OPENING
+
+
+func _observe_target_behavior(delta: float) -> void:
+	_behavior_clock += delta
+	var decay: float = BEHAVIOR_DECAY_PER_SECOND * delta
+	far_pressure = maxf(0.0, far_pressure - decay)
+	close_pressure = maxf(0.0, close_pressure - decay)
+	air_pressure = maxf(0.0, air_pressure - decay)
+	crossup_pressure = maxf(0.0, crossup_pressure - decay)
+	dash_pressure = maxf(0.0, dash_pressure - decay)
+	attack_pressure = maxf(0.0, attack_pressure - decay)
+	_apply_due_behavior_events()
+	if not has_valid_target():
+		return
+	_behavior_sample_timer -= delta
+	if _behavior_sample_timer <= 0.0:
+		_behavior_sample_timer = BEHAVIOR_SAMPLE_INTERVAL
+		var distance: float = absf(target.global_position.x - global_position.x)
+		if distance >= 250.0:
+			_queue_behavior_event(&"far", 0.055)
+		elif distance <= 92.0:
+			_queue_behavior_event(&"close", 0.055)
+		if not target.is_on_floor():
+			_queue_behavior_event(&"air", 0.045)
+	var side: float = signf(target.global_position.x - global_position.x)
+	var action_name: StringName = target.action_controller.get_action_state_name() if target.action_controller != null else &"None"
+	var movement_name: StringName = target.get_movement_state_name()
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and not target.is_on_floor() and absf(target.global_position.y - global_position.y) < 118.0:
+		observed_crossup_count += 1
+		_queue_behavior_event(&"crossup", 0.30)
+		if String(action_name).contains("Dash"):
+			_queue_behavior_event(&"dash", 0.20)
+	if movement_name != _previous_target_movement:
+		if movement_name in [&"jump_start", &"double_jump"]: observed_jump_count += 1
+		if movement_name == &"double_jump": observed_double_jump_count += 1
+	if action_name != _previous_target_action:
+		if String(action_name).contains("Dash"):
+			_queue_behavior_event(&"dash", 0.22)
+		elif String(action_name).contains("Attack"):
+			_queue_behavior_event(&"attack", 0.16)
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and String(action_name).contains("Dash"):
+		observed_dash_through_count += 1
+	_previous_target_side = side
+	_previous_target_action = action_name
+	_previous_target_movement = movement_name
+
+
+func _queue_behavior_event(kind_name: StringName, amount: float) -> void:
+	_behavior_events.append({&"at": _behavior_clock + BEHAVIOR_REACTION_DELAY, &"kind": kind_name, &"amount": amount * (1.16 if phase == 2 else 1.0)})
+
+
+func _apply_due_behavior_events() -> void:
+	while not _behavior_events.is_empty() and float(_behavior_events.front().get(&"at", INF)) <= _behavior_clock:
+		var event: Dictionary = _behavior_events.pop_front()
+		var amount: float = float(event.get(&"amount", 0.0))
+		match event.get(&"kind", &"") as StringName:
+			&"far": far_pressure = minf(1.0, far_pressure + amount)
+			&"close": close_pressure = minf(1.0, close_pressure + amount)
+			&"air": air_pressure = minf(1.0, air_pressure + amount)
+			&"crossup": crossup_pressure = minf(1.0, crossup_pressure + amount)
+			&"dash": dash_pressure = minf(1.0, dash_pressure + amount)
+			&"attack": attack_pressure = minf(1.0, attack_pressure + amount)
+
+
+func _adaptive_action_weight(action: StringName, preferred: StringName) -> float:
+	var weight: float = 1.0 if _action_category(action) == preferred else 0.42
+	if action in [&"drowned_javelin", &"iron_grave", &"undertow_pull", &"floodgate_charge"]:
+		weight *= 1.0 + far_pressure * (0.80 if action == &"drowned_javelin" else 0.60)
+	if action in [&"halberd_sweep", &"gaolers_verdict", &"prison_hook_drag", &"soul_shackle"]:
+		weight *= 1.0 + close_pressure * 0.70 + attack_pressure * 0.25
+	if action == &"iron_grave":
+		weight *= 1.0 + dash_pressure * 0.35
+	if action == BACKCHAIN_REVERSAL:
+		# Weight is capped against the ordinary pool, keeping the observed
+		# anti-crossup response below the 70% fairness ceiling.
+		weight *= 1.5 + crossup_pressure * 2.0
+	if not _recent_attack_history.is_empty() and _recent_attack_history.back() == action:
+		weight *= 0.20
+	return maxf(0.05, weight)
+
+
+func _record_adaptive_decision(
+	action: StringName,
+	preferred: StringName,
+	candidates: Array[StringName],
+	weights: Array[float]
+) -> void:
+	_adaptive_decision_reason = StringName("%s:%s" % [preferred, action])
+	if OS.is_debug_build():
+		var distance: float = absf(target.global_position.x - global_position.x) if has_valid_target() else INF
+		print("[BOSS_DECISION] boss=SoulGaolerOrmund phase=%d distance=%.1f pressure=[far=%.2f close=%.2f air=%.2f cross=%.2f dash=%.2f] recent=%s candidates=%s weights=%s selected=%s reason=%s" % [phase, distance, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure, _recent_attack_history, candidates, weights, action, _adaptive_decision_reason])
+
+
+func _reset_behavior_context() -> void:
+	far_pressure = 0.0; close_pressure = 0.0; air_pressure = 0.0
+	crossup_pressure = 0.0; dash_pressure = 0.0; attack_pressure = 0.0
+	_behavior_clock = 0.0; _behavior_sample_timer = 0.0; _behavior_events.clear()
+	_previous_target_side = 0.0; _previous_target_action = &"None"; _previous_target_movement = &"idle"; _adaptive_decision_reason = &"base"
+	observed_jump_count = 0; observed_double_jump_count = 0; observed_crossup_count = 0; observed_dash_through_count = 0
+
+
+func get_behavior_pressures() -> Dictionary[StringName, float]:
+	return {&"far": far_pressure, &"close": close_pressure, &"air": air_pressure, &"crossup": crossup_pressure, &"dash": dash_pressure, &"attack": attack_pressure}
+
+
+func get_adaptive_decision_reason() -> StringName:
+	return _adaptive_decision_reason
 func get_phase_two_opening_safe_gaps() -> PackedFloat32Array:
 	return get_meta(&"phase_two_opening_safe_gaps", PackedFloat32Array()) as PackedFloat32Array
 func _boss_config() -> SoulGaolerOrmundConfig: return config as SoulGaolerOrmundConfig

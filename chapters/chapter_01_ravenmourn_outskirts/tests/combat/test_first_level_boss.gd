@@ -382,6 +382,11 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 		boss._on_animation_frame_changed()
 		var expected_damage: int = profile["damage"] as int
 		var hitbox: HitboxComponent = boss._get_hitbox_for_attack_state(profile["state"] as StringName)
+		if profile["state"] as StringName == FallenGateKnight.SHOCKWAVE_STRIKE:
+			hitbox = boss.get_parent().get_node_or_null("GateSeveranceWave") as HitboxComponent
+			_expect(hitbox != null, "Gate Severance did not release its committed ground wave")
+			if hitbox == null:
+				continue
 		_expect(hitbox.is_active, "%s did not open its active frame" % profile["state"])
 		_expect(hitbox.try_hit(target_hurtbox), "%s did not hit target" % profile["state"])
 		_expect(target_health.current_health == 100 - expected_damage, "%s damage mismatch" % profile["state"])
@@ -394,6 +399,8 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 			"Normal Attack interrupted locked Boss state %s" % profile["state"]
 		)
 		boss._end_attack_window()
+		if profile["state"] as StringName == FallenGateKnight.SHOCKWAVE_STRIKE and is_instance_valid(hitbox):
+			hitbox.queue_free()
 	target_root.queue_free()
 
 

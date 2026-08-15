@@ -172,6 +172,27 @@ var _death_passage_line_emitted: bool = false
 var _death_echo_line_emitted: bool = false
 var _defeat_emitted: bool = false
 var _phase_1_sprite_frames: SpriteFrames
+var far_pressure: float = 0.0
+var close_pressure: float = 0.0
+var air_pressure: float = 0.0
+var crossup_pressure: float = 0.0
+var dash_pressure: float = 0.0
+var attack_pressure: float = 0.0
+var _behavior_clock: float = 0.0
+var _behavior_sample_timer: float = 0.0
+var _behavior_events: Array[Dictionary] = []
+var _previous_target_side: float = 0.0
+var _previous_target_action: StringName = &"None"
+var _previous_target_movement: StringName = &"idle"
+var _adaptive_decision_reason: StringName = &"base"
+var observed_jump_count: int = 0
+var observed_double_jump_count: int = 0
+var observed_crossup_count: int = 0
+var observed_dash_through_count: int = 0
+
+const BEHAVIOR_REACTION_DELAY: float = 0.28
+const BEHAVIOR_DECAY_PER_SECOND: float = 0.17
+const BEHAVIOR_SAMPLE_INTERVAL: float = 0.20
 
 
 func _ready() -> void:
@@ -198,6 +219,7 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	_tick_cooldowns(delta)
+	_observe_target_behavior(delta)
 	_state_elapsed += delta
 	_apply_gravity(delta)
 	match _state:
@@ -285,6 +307,7 @@ func activate(target: Player, retry_intro: bool = false) -> void:
 	if target == null or _state != State.DORMANT:
 		return
 	_target = target
+	_reset_behavior_context()
 	_intro_retry = retry_intro
 	_enter_state(State.INTRO)
 
@@ -318,6 +341,7 @@ func reset_boss() -> void:
 	_death_passage_line_emitted = false
 	_death_echo_line_emitted = false
 	_defeat_emitted = false
+	_reset_behavior_context()
 	_facing_direction = -1.0
 	_apply_facing()
 	health_component.reset_to_full()
@@ -395,11 +419,16 @@ func get_player_distance() -> float:
 
 
 func get_debug_status() -> String:
-	return "DUCHESS | %s | P%d | HP %d/%d | POISE %d/%d | ATK %s | GAP %.2f | CHAIN %d | FACE %+.0f | DIST %.1f | TURN %.2f | SIDE %.2f | RIP %.2f | PHANTOM %.2f | FINAL %.2f" % [
+	var base_status: String = "DUCHESS | %s | P%d | HP %d/%d | POISE %d/%d | ATK %s | GAP %.2f | CHAIN %d | FACE %+.0f | DIST %.1f | TURN %.2f | SIDE %.2f | RIP %.2f | PHANTOM %.2f | FINAL %.2f" % [
 		get_state_name(), _phase, health_component.current_health, health_component.max_health,
 		_current_poise, get_max_poise(), _current_attack, _attack_gap_remaining, _chain_count,
 		_facing_direction, get_player_distance(), _state_elapsed if _state == State.TURN else 0.0,
 		_side_step_cooldown, _riposte_cooldown, _phantom_cooldown, _final_cooldown,
+	]
+	return "%s | AI %s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d" % [
+		base_status, _adaptive_decision_reason, far_pressure, close_pressure,
+		air_pressure, crossup_pressure, dash_pressure, observed_jump_count,
+		observed_double_jump_count, observed_crossup_count, observed_dash_through_count,
 	]
 
 
@@ -477,6 +506,11 @@ func _select_attack(distance: float) -> StringName:
 	if distance <= config.side_cut_selection_range and _side_step_cooldown <= 0.0 and _defensive_moves_in_row < 2:
 		candidates.append(ATTACK_SIDE_CUT)
 		weights.append(0.15)
+	elif crossup_pressure >= 0.42 and _side_step_cooldown <= 0.0 and _defensive_moves_in_row < 2:
+		# Silk Curtain reuses the authored sidestep/fan arc.  It is selected on a
+		# delayed history signal, never on the current input frame.
+		candidates.append(ATTACK_SIDE_CUT)
+		weights.append(0.12)
 	if _phase >= 2:
 		if distance <= config.double_lunge_selection_range:
 			candidates.append(ATTACK_DOUBLE)
@@ -490,9 +524,17 @@ func _select_attack(distance: float) -> StringName:
 			weights.append(0.22)
 	if candidates.is_empty():
 		return &""
+	if candidates.size() == 1 and candidates[0] == ATTACK_PHANTOM:
+		# At long range the phantom response competes with closing distance;
+		# it never becomes a guaranteed answer to spacing.
+		var phantom_offer_chance: float = lerpf(0.55, 0.70, far_pressure)
+		if _rng.randf() > phantom_offer_chance:
+			return &""
 	for index: int in range(candidates.size()):
 		if candidates[index] == _last_attack:
 			weights[index] *= config.overused_attack_weight if _same_attack_count >= 2 else config.repeated_attack_weight
+		weights[index] *= _adaptive_attack_multiplier(candidates[index])
+	_cap_counter_weight(candidates, weights, ATTACK_SIDE_CUT, 0.70)
 	var total: float = 0.0
 	for weight: float in weights:
 		total += weight
@@ -500,8 +542,25 @@ func _select_attack(distance: float) -> StringName:
 	for index: int in range(candidates.size()):
 		roll -= weights[index]
 		if roll <= 0.0:
+			_record_adaptive_decision(candidates[index], candidates, weights)
 			return candidates[index]
+	_record_adaptive_decision(candidates.back(), candidates, weights)
 	return candidates.back()
+
+
+func _cap_counter_weight(
+	candidates: Array[StringName], weights: Array[float], counter_action: StringName, probability_cap: float
+) -> void:
+	var counter_index: int = candidates.find(counter_action)
+	if counter_index < 0 or candidates.size() < 2:
+		return
+	var other_weight: float = 0.0
+	for index: int in range(weights.size()):
+		if index != counter_index:
+			other_weight += weights[index]
+	weights[counter_index] = minf(
+		weights[counter_index], other_weight * probability_cap / (1.0 - probability_cap)
+	)
 
 
 func _start_attack(attack_name: StringName) -> void:
@@ -859,6 +918,103 @@ func _consume_attack_id() -> int:
 	if _next_attack_id <= 0:
 		_next_attack_id = 1
 	return result
+
+
+func _observe_target_behavior(delta: float) -> void:
+	_behavior_clock += delta
+	var decay: float = BEHAVIOR_DECAY_PER_SECOND * delta
+	far_pressure = maxf(0.0, far_pressure - decay)
+	close_pressure = maxf(0.0, close_pressure - decay)
+	air_pressure = maxf(0.0, air_pressure - decay)
+	crossup_pressure = maxf(0.0, crossup_pressure - decay)
+	dash_pressure = maxf(0.0, dash_pressure - decay)
+	attack_pressure = maxf(0.0, attack_pressure - decay)
+	_apply_due_behavior_events()
+	if _target == null or not is_instance_valid(_target) or _target.is_dead(): return
+	_behavior_sample_timer -= delta
+	if _behavior_sample_timer <= 0.0:
+		_behavior_sample_timer = BEHAVIOR_SAMPLE_INTERVAL
+		var distance: float = absf(_target.global_position.x - global_position.x)
+		if distance >= 205.0: _queue_behavior_event(&"far", 0.055)
+		elif distance <= 66.0: _queue_behavior_event(&"close", 0.055)
+		if not _target.is_on_floor(): _queue_behavior_event(&"air", 0.045)
+	var side: float = signf(_target.global_position.x - global_position.x)
+	var action_name: StringName = _target.action_controller.get_action_state_name() if _target.action_controller != null else &"None"
+	var movement_name: StringName = _target.get_movement_state_name()
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and not _target.is_on_floor() and absf(_target.global_position.y - global_position.y) < 100.0:
+		observed_crossup_count += 1
+		_queue_behavior_event(&"crossup", 0.30)
+	if movement_name != _previous_target_movement:
+		if movement_name in [&"jump_start", &"double_jump"]: observed_jump_count += 1
+		if movement_name == &"double_jump": observed_double_jump_count += 1
+	if action_name != _previous_target_action:
+		if String(action_name).contains("Dash"): _queue_behavior_event(&"dash", 0.22)
+		elif String(action_name).contains("Attack"): _queue_behavior_event(&"attack", 0.15)
+	if not is_zero_approx(_previous_target_side) and side != _previous_target_side and String(action_name).contains("Dash"):
+		observed_dash_through_count += 1
+	_previous_target_side = side
+	_previous_target_action = action_name
+	_previous_target_movement = movement_name
+
+
+func _queue_behavior_event(kind_name: StringName, amount: float) -> void:
+	_behavior_events.append({&"at": _behavior_clock + BEHAVIOR_REACTION_DELAY, &"kind": kind_name, &"amount": amount * (1.16 if _phase == 2 else 1.0)})
+
+
+func _apply_due_behavior_events() -> void:
+	while not _behavior_events.is_empty() and float(_behavior_events.front().get(&"at", INF)) <= _behavior_clock:
+		var event: Dictionary = _behavior_events.pop_front()
+		var amount: float = float(event.get(&"amount", 0.0))
+		match StringName(event.get(&"kind", &"")):
+			&"far": far_pressure = minf(1.0, far_pressure + amount)
+			&"close": close_pressure = minf(1.0, close_pressure + amount)
+			&"air": air_pressure = minf(1.0, air_pressure + amount)
+			&"crossup": crossup_pressure = minf(1.0, crossup_pressure + amount)
+			&"dash": dash_pressure = minf(1.0, dash_pressure + amount)
+			&"attack": attack_pressure = minf(1.0, attack_pressure + amount)
+
+
+func _adaptive_attack_multiplier(action: StringName) -> float:
+	var multiplier: float = 1.0
+	match action:
+		ATTACK_RAPIER, ATTACK_FAN:
+			multiplier *= 1.0 + close_pressure * 0.55
+		ATTACK_RIPOSTE:
+			multiplier *= 1.0 + attack_pressure * 0.70
+		ATTACK_SIDE_CUT:
+			multiplier *= 1.0 + crossup_pressure * 1.65 + air_pressure * 0.25
+		ATTACK_PHANTOM:
+			multiplier *= 1.0 + far_pressure * 0.78
+		ATTACK_DOUBLE:
+			multiplier *= 1.0 + dash_pressure * 0.35
+		_:
+			pass
+	return clampf(multiplier, 0.35, 2.65)
+
+
+func _record_adaptive_decision(
+	action: StringName, candidates: Array[StringName], weights: Array[float]
+) -> void:
+	_adaptive_decision_reason = StringName("%s:F%.2f:C%.2f:A%.2f:X%.2f:D%.2f" % [action, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure])
+	if OS.is_debug_build():
+		var distance: float = absf(_target.global_position.x - global_position.x) if _target != null and is_instance_valid(_target) else INF
+		print("[BOSS_DECISION] boss=HollowDuchess phase=%d distance=%.1f pressure=[far=%.2f close=%.2f air=%.2f cross=%.2f dash=%.2f] recent=%s candidates=%s weights=%s selected=%s reason=%s" % [_phase, distance, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure, _last_attack, candidates, weights, action, _adaptive_decision_reason])
+
+
+func _reset_behavior_context() -> void:
+	far_pressure = 0.0; close_pressure = 0.0; air_pressure = 0.0
+	crossup_pressure = 0.0; dash_pressure = 0.0; attack_pressure = 0.0
+	_behavior_clock = 0.0; _behavior_sample_timer = 0.0; _behavior_events.clear()
+	_previous_target_side = 0.0; _previous_target_action = &"None"; _previous_target_movement = &"idle"; _adaptive_decision_reason = &"base"
+	observed_jump_count = 0; observed_double_jump_count = 0; observed_crossup_count = 0; observed_dash_through_count = 0
+
+
+func get_behavior_pressures() -> Dictionary[StringName, float]:
+	return {&"far": far_pressure, &"close": close_pressure, &"air": air_pressure, &"crossup": crossup_pressure, &"dash": dash_pressure, &"attack": attack_pressure}
+
+
+func get_adaptive_decision_reason() -> StringName:
+	return _adaptive_decision_reason
 
 
 func _spawn_phantom_routes() -> void:

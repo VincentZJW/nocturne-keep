@@ -131,3 +131,20 @@ Runtime masters, score JSON, MIDI, stems and deterministic generator are stored
 under `assets/audio/music/boss/hollow_duchess/`. The former 6.6-second Phase-1
 motif and former Phase-2 master remain only as unreferenced historical source;
 neither TrackDefinition nor the formal Main scene references them.
+
+## Player-behavior adaptation
+
+Seraphine now weights her existing dance vocabulary from observed outcomes only:
+position, velocity, grounded/airborne state, completed Player action state and
+side crossings. Raw Player input is not inspected. Her 0.28-second reaction delay
+is the fastest of the first four Bosses; pressure decays at 0.17 per second and
+Phase 2 learns 16% faster without removing telegraphs or recovery.
+
+- Close is `<= 66 px`, Far is `>= 205 px`, otherwise Mid.
+- Close/attack pressure favors rapier, fan and riposte; Far pressure raises the
+  existing Phantom/Fan lane pressure without creating a new projectile system.
+- Repeated crossups bias the existing `side_step_cut` presentation as
+  `Silk Curtain / 丝幕反舞`; its total counter probability is capped at 70%.
+- Existing waltz steps, defensive-move limits, phase rules and committed windups
+  remain authoritative, allowing a sudden range change or fake jump to punish a
+  decision based on older behavior.

@@ -30,10 +30,23 @@ func _run_tests() -> void:
 	await _test_left_right_collision_ranges(boss, target)
 	_test_shield_bash_timing(boss)
 	_test_shield_bash_selection_and_cooldown(boss)
+	_test_adaptive_counter_contract(boss)
 	target.queue_free()
 	main.queue_free()
 	await process_frame
 	_finish()
+
+
+func _test_adaptive_counter_contract(boss: FallenGateKnight) -> void:
+	_expect(is_equal_approx(boss.BEHAVIOR_REACTION_DELAY, 0.40), "Boss I behavior reaction delay is 0.40s")
+	_expect(boss.get_behavior_pressures().size() == 6, "Boss I exposes six decaying behavior pressures")
+	var base_overhead: float = boss._adaptive_phase_one_multiplier(boss.HEAVY_OVERHEAD)
+	boss.crossup_pressure = 0.8
+	boss.air_pressure = 0.6
+	var counter_overhead: float = boss._adaptive_phase_one_multiplier(boss.HEAVY_OVERHEAD)
+	_expect(counter_overhead > base_overhead, "Rising Gate Cleave weight responds to delayed aerial cross-up pressure")
+	_expect(counter_overhead <= 2.50, "Boss I adaptive counter weighting remains capped")
+	boss._reset_behavior_context()
 
 
 func _create_target() -> Node2D:

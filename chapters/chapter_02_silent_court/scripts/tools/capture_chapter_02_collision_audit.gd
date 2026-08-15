@@ -36,7 +36,7 @@ func _run() -> void:
 	player.hurtbox.set_invulnerable(true)
 	player.global_position = Vector2(5200, 584)
 	player.velocity = Vector2.ZERO
-	level._configure_camera(0, 720)
+	level.configure_camera_for_world_y(player.global_position.y)
 	for _frame: int in range(24):
 		await process_frame
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT.get_base_dir()))

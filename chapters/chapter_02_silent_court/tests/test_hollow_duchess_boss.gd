@@ -62,6 +62,14 @@ func _run() -> void:
 
 func _validate_config(boss: HollowDuchess) -> void:
 	var config: HollowDuchessConfig = boss.config
+	_expect(is_equal_approx(boss.BEHAVIOR_REACTION_DELAY, 0.28), "Duchess behavior reaction delay must be 0.28s")
+	_expect(boss.get_behavior_pressures().size() == 6, "Duchess exposes six decaying behavior pressures")
+	var base_curtain: float = boss._adaptive_attack_multiplier(boss.ATTACK_SIDE_CUT)
+	boss.crossup_pressure = 0.8
+	var learned_curtain: float = boss._adaptive_attack_multiplier(boss.ATTACK_SIDE_CUT)
+	_expect(learned_curtain > base_curtain, "Silk Curtain responds to delayed cross-up pressure")
+	_expect(learned_curtain <= 2.65, "Duchess adaptive weighting remains capped")
+	boss._reset_behavior_context()
 	_expect(config.max_health == 220, "max HP must be 220")
 	_expect(is_equal_approx(config.phase_2_threshold, 0.55), "phase threshold must be 55%")
 	_expect(config.max_poise == 60, "max Poise must be 60")

@@ -57,7 +57,7 @@ extends EnemyGroundConfig
 @export var verdict_direction_lock: float = 0.28
 @export var iron_grave_telegraph: float = 0.88
 @export var iron_grave_second_wave_delay: float = 0.52
-@export var iron_grave_second_wave_telegraph: float = 0.74
+@export var iron_grave_second_wave_telegraph: float = 0.82
 
 @export_group("Phase I timings", "phase_one_")
 @export var phase_one_halberd_sweep_timing: Vector3 = Vector3(0.60, 0.15, 0.90)
@@ -68,6 +68,7 @@ extends EnemyGroundConfig
 @export var phase_one_drowned_javelin_timing: Vector3 = Vector3(0.82, 0.12, 0.92)
 @export var phase_one_gaolers_verdict_timing: Vector3 = Vector3(1.12, 0.22, 1.42)
 @export var phase_one_iron_grave_timing: Vector3 = Vector3(0.88, 0.24, 1.00)
+@export var phase_one_backchain_reversal_timing: Vector3 = Vector3(0.62, 0.14, 0.92)
 
 @export_group("Phase II timings", "phase_two_")
 @export var phase_two_chainstorm_timing: Vector3 = Vector3(0.58, 0.22, 1.15)
@@ -78,6 +79,7 @@ extends EnemyGroundConfig
 @export var phase_two_drowned_javelin_timing: Vector3 = Vector3(0.72, 0.12, 0.82)
 @export var phase_two_gaolers_verdict_timing: Vector3 = Vector3(0.94, 0.22, 1.22)
 @export var phase_two_iron_grave_timing: Vector3 = Vector3(0.88, 1.50, 0.84)
+@export var phase_two_backchain_reversal_timing: Vector3 = Vector3(0.54, 0.14, 0.78)
 
 @export_category("New attack damage")
 @export var drowned_javelin_damage: int = 22
@@ -96,6 +98,7 @@ func action_timing(action: StringName) -> Vector3:
 		&"drowned_javelin": return phase_one_drowned_javelin_timing if phase_one_drowned_javelin_timing.x > 0.0 else Vector3(0.82, 0.12, 0.92)
 		&"gaolers_verdict": return phase_one_gaolers_verdict_timing
 		&"iron_grave": return phase_one_iron_grave_timing
+		&"backchain_reversal": return phase_one_backchain_reversal_timing
 		&"chainstorm_cleave": return phase_two_chainstorm_timing
 		&"undertow_pull": return phase_two_undertow_timing
 		&"drowned_cell_rupture": return phase_two_cell_rupture_timing
@@ -110,6 +113,7 @@ func action_timing_for_phase(action: StringName, current_phase: int) -> Vector3:
 			&"drowned_javelin": return phase_two_drowned_javelin_timing
 			&"gaolers_verdict": return phase_two_gaolers_verdict_timing
 			&"iron_grave": return phase_two_iron_grave_timing
+			&"backchain_reversal": return phase_two_backchain_reversal_timing
 	return action_timing(action)
 
 

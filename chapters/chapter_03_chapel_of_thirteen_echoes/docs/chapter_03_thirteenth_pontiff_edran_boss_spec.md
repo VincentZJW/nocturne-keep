@@ -317,3 +317,18 @@ The audit found no old Edran combat scene, Boss script, Data Resource, SpriteFra
 - **B7 complete:** deterministic B1–B7 contracts, 20 battle-state regressions (10 Boss wins, 5 player deaths, 5 Phase 2 retries), summon/attack stress, isolated-scene execution, exact Godot 4.7.1 parse/import and MainBootstrap captures pass. Visual feel and fairness still require manual playtesting.
 
 Fast Main/F5 starts are `CH3_BOSS`, `CH3_BOSS_PHASE_02`, `CH3_BOSS_SUMMON_TEST` and `CH3_POST_BOSS`. The forced QA matrix and 32+ Main screenshots are recorded in `res://docs/qa/chapter_03_boss_b4_b7/report.md`.
+
+## Player-behavior adaptation
+
+Edran observes only resolved spatial and combat outcomes. His 0.32-second delayed
+events feed six 0–1 pressures, decay at 0.15 per second, and grow 14% faster in
+Phase 2. No raw `Input` function is used.
+
+- Close is `<= 78 px`, Far is `>= 205 px`, otherwise Mid.
+- Far favors the existing Cinder Absolution and summons; airborne behavior raises
+  Litany of Stillness; high movement/Dash behavior raises Mire; close/attack
+  pressure favors crozier, censer, sweep and thrust.
+- Repeated crossups bias the existing `bell_cleave` family as
+  `Bellward Rebuke / 钟戒斥令`, capped to at most 70% of the weighted pool.
+- Freeze immunity, summon caps, magic cooldowns, danger-zone limits, recovery and
+  committed spell windups remain ahead of adaptation in the selector.
