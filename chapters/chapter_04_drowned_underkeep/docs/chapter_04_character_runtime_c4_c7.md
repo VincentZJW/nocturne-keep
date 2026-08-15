@@ -50,6 +50,13 @@ Boss production uses 192×192 transparent frames: 46 named authored animation gr
 frames, plus the runtime `idle` compatibility alias in the final `SpriteFrames` resource. Phase
 II is not a tint: helm, torso cage, stance, grip, cape and weapon silhouette are redrawn.
 
+Phase II visual selection is authoritative at the Boss animation entry point. Once `phase == 2`,
+Phase-I-only animation requests are redirected to their matching Phase-II families; attack,
+hurt, stagger, recovery and turn code cannot change the gameplay phase or restore Phase-I art.
+The Javelin and Iron Grave retain their 22 direct damage and additionally apply the shared Player
+`BLEED` status after a confirmed direct hit: 1 HP at one-second intervals for five seconds, one
+active instance, re-hit refresh, and no Hurt, knockback or hitstop from DOT ticks.
+
 ## Main integration and reproducible routes
 
 The formal Chapter IV level instances `CharacterTrial` at `DrownedUnderkeep/CharacterTrial` and

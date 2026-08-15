@@ -15,6 +15,9 @@ enum EffectKind {
 const ENEMY_HITBOX_LAYER: int = 64
 const PLAYER_HURTBOX_MASK: int = 8
 const WORLD_MASK: int = 1
+const BLEED_DURATION: float = 5.0
+const BLEED_TICK_DAMAGE: int = 1
+const BLEED_TICK_INTERVAL: float = 1.0
 
 var kind: EffectKind = EffectKind.GROUND_RIFT
 var telegraph_duration: float = 0.0
@@ -27,6 +30,7 @@ var hitbox: HitboxComponent
 var attack_id: int = 0
 var damage: int = 1
 var attack_kind: StringName = &"ormund_hazard"
+var applies_bleed: bool = false
 var _telegraph_remaining: float = 0.0
 var _active_remaining: float = 0.0
 var _linger_remaining: float = 0.0
@@ -44,7 +48,8 @@ func configure_zone(
 	new_attack_id: int,
 	owner_source: Node2D,
 	shared_targets: Dictionary[int, bool],
-	kind_name: StringName
+	kind_name: StringName,
+	bleed_on_hit: bool = false
 ) -> void:
 	kind = effect_kind
 	visual_size = size
@@ -55,6 +60,7 @@ func configure_zone(
 	attack_id = new_attack_id
 	source = owner_source
 	attack_kind = kind_name
+	applies_bleed = bleed_on_hit
 	_build_hitbox(shared_targets)
 	_telegraph_remaining = telegraph_duration
 	queue_redraw()
@@ -77,6 +83,7 @@ func configure_javelin(
 	attack_id = new_attack_id
 	source = owner_source
 	attack_kind = &"drowned_javelin"
+	applies_bleed = true
 	velocity = direction.normalized() * speed
 	rotation = velocity.angle()
 	_build_hitbox(shared_targets)
@@ -102,7 +109,26 @@ func _build_hitbox(shared_targets: Dictionary[int, bool]) -> void:
 	collision_shape.shape = rectangle
 	hitbox.add_child(collision_shape)
 	hitbox.set_shared_target_ledger(shared_targets)
+	hitbox.hit_confirmed.connect(_on_hit_confirmed)
 	hitbox.end_attack()
+
+
+func _on_hit_confirmed(
+	target_hurtbox: HurtboxComponent,
+	_damage_value: int,
+	_attack_id_value: int
+) -> void:
+	if not applies_bleed or target_hurtbox == null:
+		return
+	var target_player: Player = target_hurtbox.get_parent() as Player
+	if target_player == null or target_player.status_effect_controller == null:
+		return
+	target_player.status_effect_controller.apply_bleed(
+		attack_kind,
+		BLEED_DURATION,
+		BLEED_TICK_DAMAGE,
+		BLEED_TICK_INTERVAL
+	)
 
 
 func _physics_process(delta: float) -> void:

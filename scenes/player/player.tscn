@@ -64,6 +64,15 @@ texture_filter = 1
 sprite_frames = ExtResource("17_burn_frames")
 animation = &"active"
 
+[node name="BleedFX" type="AnimatedSprite2D" parent="VisualRoot/StatusEffects"]
+visible = false
+modulate = Color(0.52, 0.1, 0.14, 0.72)
+position = Vector2(0, -4)
+scale = Vector2(0.72, 0.72)
+texture_filter = 1
+sprite_frames = ExtResource("17_burn_frames")
+animation = &"active"
+
 [node name="FreezeFX" type="AnimatedSprite2D" parent="VisualRoot/StatusEffects"]
 visible = false
 texture_filter = 1

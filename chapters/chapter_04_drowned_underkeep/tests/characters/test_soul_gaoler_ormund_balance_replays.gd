@@ -65,6 +65,7 @@ func _run() -> void:
 
 	for result: Dictionary in [standard, conservative_a, conservative_b, aggressive_a, aggressive_b]:
 		_expect(result.result == &"VICTORY", "%s 14/28 replay can finish" % result.run)
+		_expect(result.phase_visual_violations == 0, "%s records zero Phase-I visual regressions" % result.run)
 	_expect(standard.time_seconds < initial.time_seconds, "Final tune remains less attritional than initial 560/.82/.72")
 	_expect(
 		conservative_a.time_seconds >= 300.0 and conservative_a.time_seconds <= 390.0,
@@ -134,6 +135,7 @@ func _replay_fight(
 		"longest_boss_sequence": 0.0,
 		"longest_no_output_window": 0.0,
 		"result": &"IN_PROGRESS",
+		"phase_visual_violations": 0,
 	}
 	var cycle: int = 0
 	while not boss.health_component.is_dead() and cycle < 80:
@@ -209,6 +211,7 @@ func _replay_fight(
 			telemetry.player_hit_count += 1
 
 	telemetry.result = &"VICTORY" if boss.health_component.is_dead() else &"TIMEOUT"
+	telemetry.phase_visual_violations = boss.get_phase_visual_violation_count()
 	telemetry.average_punish_window = (
 		telemetry.punish_window_total / float(maxi(1, telemetry.punish_window_count))
 	)

@@ -45,7 +45,7 @@ layout_mode = 3
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -212.0
+offset_left = -274.0
 offset_top = 18.0
 offset_right = -18.0
 offset_bottom = 50.0
@@ -185,10 +185,35 @@ offset_bottom = 20.0
 theme_override_font_sizes/font_size = 10
 text = "3.0"
 
-[node name="Freeze" type="Control" parent="HUD/StatusHud"]
+[node name="Bleed" type="Control" parent="HUD/StatusHud"]
 layout_mode = 0
 offset_left = 62.0
 offset_right = 118.0
+offset_bottom = 22.0
+
+[node name="Icon" type="TextureRect" parent="HUD/StatusHud/Bleed"]
+modulate = Color(0.58, 0.12, 0.17, 0.9)
+layout_mode = 0
+offset_right = 18.0
+offset_bottom = 18.0
+texture_filter = 1
+texture = ExtResource("7_burn_icon")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Time" type="Label" parent="HUD/StatusHud/Bleed"]
+layout_mode = 0
+offset_left = 20.0
+offset_right = 56.0
+offset_bottom = 20.0
+theme_override_colors/font_color = Color(0.78, 0.31, 0.34, 1)
+theme_override_font_sizes/font_size = 10
+text = "5.0"
+
+[node name="Freeze" type="Control" parent="HUD/StatusHud"]
+layout_mode = 0
+offset_left = 124.0
+offset_right = 180.0
 offset_bottom = 22.0
 
 [node name="Icon" type="TextureRect" parent="HUD/StatusHud/Freeze"]
@@ -210,8 +235,8 @@ text = "3.0"
 
 [node name="Mire" type="Control" parent="HUD/StatusHud"]
 layout_mode = 0
-offset_left = 124.0
-offset_right = 194.0
+offset_left = 186.0
+offset_right = 256.0
 offset_bottom = 22.0
 
 [node name="Icon" type="TextureRect" parent="HUD/StatusHud/Mire"]

@@ -11,6 +11,7 @@ signal status_changed(effect_id: StringName, remaining: float, duration: float)
 signal all_statuses_cleared
 
 const BURN: StringName = &"burn"
+const BLEED: StringName = &"bleed"
 const FREEZE: StringName = &"freeze"
 const FREEZE_IMMUNITY: StringName = &"freeze_immunity"
 const MIRE_SLOW: StringName = &"mire_slow"
@@ -19,12 +20,14 @@ const MIRE_MOVEMENT_SOURCE: StringName = &"edran_mire"
 @export_node_path("Player") var player_path: NodePath = NodePath("..")
 @export_node_path("HealthComponent") var health_component_path: NodePath = NodePath("../HealthComponent")
 @export_node_path("AnimatedSprite2D") var burn_fx_path: NodePath = NodePath("../VisualRoot/StatusEffects/BurnFX")
+@export_node_path("AnimatedSprite2D") var bleed_fx_path: NodePath = NodePath("../VisualRoot/StatusEffects/BleedFX")
 @export_node_path("AnimatedSprite2D") var freeze_fx_path: NodePath = NodePath("../VisualRoot/StatusEffects/FreezeFX")
 @export_node_path("AnimatedSprite2D") var mire_fx_path: NodePath = NodePath("../VisualRoot/StatusEffects/MireFX")
 
 @onready var player: Player = get_node_or_null(player_path) as Player
 @onready var health_component: HealthComponent = get_node_or_null(health_component_path) as HealthComponent
 @onready var burn_fx: AnimatedSprite2D = get_node_or_null(burn_fx_path) as AnimatedSprite2D
+@onready var bleed_fx: AnimatedSprite2D = get_node_or_null(bleed_fx_path) as AnimatedSprite2D
 @onready var freeze_fx: AnimatedSprite2D = get_node_or_null(freeze_fx_path) as AnimatedSprite2D
 @onready var mire_fx: AnimatedSprite2D = get_node_or_null(mire_fx_path) as AnimatedSprite2D
 
@@ -34,6 +37,13 @@ var _burn_remaining: float = 0.0
 var _burn_tick_interval: float = 1.0
 var _burn_tick_remaining: float = 0.0
 var _burn_tick_damage: int = 0
+
+var _bleed_source_id: StringName = &""
+var _bleed_duration: float = 0.0
+var _bleed_remaining: float = 0.0
+var _bleed_tick_interval: float = 1.0
+var _bleed_tick_remaining: float = 0.0
+var _bleed_tick_damage: int = 0
 
 var _freeze_source_id: StringName = &""
 var _freeze_duration: float = 0.0
@@ -47,6 +57,7 @@ var _mire_remaining: float = 0.0
 var _mire_move_multiplier: float = 1.0
 var _mire_dash_multiplier: float = 1.0
 var _burn_visual_generation: int = 0
+var _bleed_visual_generation: int = 0
 var _freeze_visual_generation: int = 0
 var _mire_visual_generation: int = 0
 
@@ -57,6 +68,7 @@ func _ready() -> void:
 		set_physics_process(false)
 		return
 	_set_fx_active(burn_fx, false)
+	_set_fx_active(bleed_fx, false)
 	_set_fx_active(freeze_fx, false)
 	_set_fx_active(mire_fx, false)
 
@@ -68,6 +80,7 @@ func _physics_process(delta: float) -> void:
 func advance(delta: float) -> void:
 	var safe_delta: float = maxf(0.0, delta)
 	_tick_burn(safe_delta)
+	_tick_bleed(safe_delta)
 	_tick_freeze(safe_delta)
 	_tick_mire(safe_delta)
 	if _freeze_immunity_remaining > 0.0:
@@ -99,6 +112,31 @@ func apply_burn(
 	else:
 		status_applied.emit(BURN, duration)
 	status_changed.emit(BURN, _burn_remaining, _burn_duration)
+	return true
+
+
+func apply_bleed(
+	source_id: StringName,
+	duration: float = 5.0,
+	tick_damage: int = 1,
+	tick_interval: float = 1.0
+) -> bool:
+	if player == null or player.is_dead() or duration <= 0.0 or tick_damage <= 0:
+		return false
+	var was_active: bool = is_bleeding()
+	_bleed_source_id = source_id
+	_bleed_duration = duration
+	_bleed_remaining = duration
+	_bleed_tick_interval = maxf(0.01, tick_interval)
+	_bleed_tick_remaining = _bleed_tick_interval
+	_bleed_tick_damage = tick_damage
+	_bleed_visual_generation += 1
+	_set_fx_active(bleed_fx, true)
+	if was_active:
+		status_refreshed.emit(BLEED, duration)
+	else:
+		status_applied.emit(BLEED, duration)
+	status_changed.emit(BLEED, _bleed_remaining, _bleed_duration)
 	return true
 
 
@@ -155,6 +193,9 @@ func clear_effect(effect_id: StringName, source_id: StringName = &"") -> void:
 		BURN:
 			if source_id.is_empty() or source_id == _burn_source_id:
 				_expire_burn(true)
+		BLEED:
+			if source_id.is_empty() or source_id == _bleed_source_id:
+				_expire_bleed(true)
 		FREEZE:
 			if source_id.is_empty() or source_id == _freeze_source_id:
 				_expire_freeze(false, true)
@@ -165,6 +206,7 @@ func clear_effect(effect_id: StringName, source_id: StringName = &"") -> void:
 
 func clear_all() -> void:
 	_expire_burn(false)
+	_expire_bleed(false)
 	_expire_freeze(false, false)
 	_expire_mire(false)
 	_freeze_immunity_remaining = 0.0
@@ -173,6 +215,10 @@ func clear_all() -> void:
 
 func is_burning() -> bool:
 	return _burn_remaining > 0.0
+
+
+func is_bleeding() -> bool:
+	return _bleed_remaining > 0.0
 
 
 func is_frozen() -> bool:
@@ -198,6 +244,7 @@ func get_dash_multiplier() -> float:
 func get_remaining(effect_id: StringName) -> float:
 	match effect_id:
 		BURN: return _burn_remaining
+		BLEED: return _bleed_remaining
 		FREEZE: return _freeze_remaining
 		FREEZE_IMMUNITY: return _freeze_immunity_remaining
 		MIRE_SLOW: return _mire_remaining
@@ -207,6 +254,7 @@ func get_remaining(effect_id: StringName) -> float:
 func get_active_effect_ids() -> Array[StringName]:
 	var result: Array[StringName] = []
 	if is_burning(): result.append(BURN)
+	if is_bleeding(): result.append(BLEED)
 	if is_frozen(): result.append(FREEZE)
 	if is_mired(): result.append(MIRE_SLOW)
 	return result
@@ -229,6 +277,26 @@ func _tick_burn(delta: float) -> void:
 	status_changed.emit(BURN, _burn_remaining, _burn_duration)
 	if is_zero_approx(_burn_remaining):
 		_expire_burn(true)
+
+
+func _tick_bleed(delta: float) -> void:
+	if not is_bleeding():
+		return
+	var active_delta: float = minf(delta, _bleed_remaining)
+	_bleed_remaining = maxf(0.0, _bleed_remaining - active_delta)
+	_bleed_tick_remaining -= active_delta
+	while _bleed_tick_remaining <= 0.0001 and (is_bleeding() or is_zero_approx(_bleed_remaining)):
+		if health_component == null or health_component.is_dead():
+			_expire_bleed(true)
+			return
+		health_component.take_damage(_bleed_tick_damage)
+		_bleed_tick_remaining += _bleed_tick_interval
+		if health_component.is_dead():
+			_expire_bleed(true)
+			return
+	status_changed.emit(BLEED, _bleed_remaining, _bleed_duration)
+	if is_zero_approx(_bleed_remaining):
+		_expire_bleed(true)
 
 
 func _tick_freeze(delta: float) -> void:
@@ -257,6 +325,16 @@ func _expire_burn(animate_exit: bool) -> void:
 	_burn_visual_generation += 1
 	_finish_or_hide_fx(burn_fx, &"extinguish", 0.32, BURN, _burn_visual_generation, animate_exit)
 	status_expired.emit(BURN)
+
+
+func _expire_bleed(animate_exit: bool) -> void:
+	if _bleed_remaining <= 0.0 and _bleed_source_id.is_empty():
+		return
+	_bleed_remaining = 0.0
+	_bleed_source_id = &""
+	_bleed_visual_generation += 1
+	_finish_or_hide_fx(bleed_fx, &"extinguish", 0.24, BLEED, _bleed_visual_generation, animate_exit)
+	status_expired.emit(BLEED)
 
 
 func _expire_freeze(grant_immunity: bool, animate_exit: bool) -> void:
@@ -322,6 +400,7 @@ func _hide_fx_if_current(effect: AnimatedSprite2D, effect_id: StringName, genera
 	var current_generation: int = 0
 	match effect_id:
 		BURN: current_generation = _burn_visual_generation
+		BLEED: current_generation = _bleed_visual_generation
 		FREEZE: current_generation = _freeze_visual_generation
 		MIRE_SLOW: current_generation = _mire_visual_generation
 	if generation == current_generation:

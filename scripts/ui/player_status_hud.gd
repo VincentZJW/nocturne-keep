@@ -12,6 +12,8 @@ extends Control
 ) as PlayerStatusEffectController
 @onready var burn_slot: Control = $Burn
 @onready var burn_time: Label = $Burn/Time
+@onready var bleed_slot: Control = $Bleed
+@onready var bleed_time: Label = $Bleed/Time
 @onready var freeze_slot: Control = $Freeze
 @onready var freeze_time: Label = $Freeze/Time
 @onready var mire_slot: Control = $Mire
@@ -33,6 +35,8 @@ func _on_status_changed(effect_id: StringName, remaining: float, _duration: floa
 	match effect_id:
 		PlayerStatusEffectController.BURN:
 			_set_slot(burn_slot, burn_time, remaining)
+		PlayerStatusEffectController.BLEED:
+			_set_slot(bleed_slot, bleed_time, remaining)
 		PlayerStatusEffectController.FREEZE:
 			_set_slot(freeze_slot, freeze_time, remaining)
 		PlayerStatusEffectController.MIRE_SLOW:
@@ -43,6 +47,7 @@ func _on_status_changed(effect_id: StringName, remaining: float, _duration: floa
 func _on_status_expired(effect_id: StringName) -> void:
 	match effect_id:
 		PlayerStatusEffectController.BURN: burn_slot.visible = false
+		PlayerStatusEffectController.BLEED: bleed_slot.visible = false
 		PlayerStatusEffectController.FREEZE: freeze_slot.visible = false
 		PlayerStatusEffectController.MIRE_SLOW: mire_slot.visible = false
 	_update_visibility()
@@ -50,6 +55,7 @@ func _on_status_expired(effect_id: StringName) -> void:
 
 func _on_all_statuses_cleared() -> void:
 	burn_slot.visible = false
+	bleed_slot.visible = false
 	freeze_slot.visible = false
 	mire_slot.visible = false
 	visible = false
@@ -61,4 +67,4 @@ func _set_slot(slot: Control, label: Label, remaining: float) -> void:
 
 
 func _update_visibility() -> void:
-	visible = burn_slot.visible or freeze_slot.visible or mire_slot.visible
+	visible = burn_slot.visible or bleed_slot.visible or freeze_slot.visible or mire_slot.visible

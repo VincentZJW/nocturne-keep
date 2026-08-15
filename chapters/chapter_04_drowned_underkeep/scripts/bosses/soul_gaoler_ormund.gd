@@ -33,6 +33,13 @@ const CATEGORY_CLOSE: StringName = &"Close"
 const CATEGORY_MID: StringName = &"Mid"
 const CATEGORY_FAR: StringName = &"Far"
 const CATEGORY_HIGH_PRESSURE: StringName = &"HighPressure"
+const PHASE_TWO_ANIMATION_ROOTS: Dictionary[StringName, StringName] = {
+	&"halberd_sweep": &"chainstorm_cleave",
+	&"chain_anchor_slam": &"chainstorm_cleave",
+	&"prison_hook_drag": &"soul_shackle",
+	&"floodgate_charge": &"undertow_pull",
+	&"soul_cage_pulse": &"drowned_cell_rupture",
+}
 
 @export_node_path("HitboxComponent") var melee_hitbox_path: NodePath = NodePath("FacingRoot/MeleeHitbox")
 @export_node_path("HitboxComponent") var area_hitbox_path: NodePath = NodePath("AreaHitbox")
@@ -77,6 +84,8 @@ var _recent_category_history: Array[StringName] = []
 var phase2_opening_used: bool = false
 var _opening_recovery_started: bool = false
 var _opening_followup_pending: bool = false
+var _phase_visual_violation_count: int = 0
+var _phase_visual_redirect_count: int = 0
 var _active_effects: Array[SoulGaolerAttackEffect] = []
 var _shared_hit_targets: Dictionary[int, bool] = {}
 var _locked_aim_position: Vector2 = Vector2.ZERO
@@ -656,7 +665,8 @@ func _prepare_iron_grave_wave(second_wave: bool) -> void:
 			wave_attack_id,
 			self,
 			shared_targets,
-			&"iron_grave_wave_2" if second_wave else &"iron_grave_wave_1"
+			&"iron_grave_wave_2" if second_wave else &"iron_grave_wave_1",
+			true
 		)
 		_track_effect(pike)
 	boss_attack_cue.emit(&"iron_grave", &"wave_2_telegraph" if second_wave else &"wave_1_telegraph")
@@ -665,10 +675,55 @@ func _prepare_iron_grave_wave(second_wave: bool) -> void:
 func _action_animation(action: StringName, phase_name: StringName) -> StringName:
 	var animation_root: StringName = action
 	match action:
-		&"drowned_javelin": animation_root = &"prison_hook_drag"
-		&"gaolers_verdict": animation_root = &"chain_anchor_slam"
+		&"drowned_javelin": animation_root = &"soul_shackle" if phase == 2 else &"prison_hook_drag"
+		&"gaolers_verdict": animation_root = &"chainstorm_cleave" if phase == 2 else &"chain_anchor_slam"
 		&"iron_grave": animation_root = &"drowned_cell_rupture" if phase == 2 else &"soul_cage_pulse"
 	return StringName("%s_%s" % [animation_root, phase_name])
+
+
+func play_animation(animation_name: StringName, restart: bool = false) -> void:
+	var resolved_animation: StringName = _resolve_phase_visual_animation(animation_name)
+	if resolved_animation != animation_name:
+		_phase_visual_redirect_count += 1
+	super.play_animation(resolved_animation, restart)
+	if phase == 2 and _is_phase_one_visual_animation(animated_sprite.animation):
+		_phase_visual_violation_count += 1
+		push_error(
+			"ORMUND_PHASE_VISUAL_VIOLATION requested=%s resolved=%s active=%s"
+			% [animation_name, resolved_animation, animated_sprite.animation]
+		)
+
+
+func _resolve_phase_visual_animation(animation_name: StringName) -> StringName:
+	if phase != 2:
+		return animation_name
+	match animation_name:
+		&"idle_p1": return &"idle_p2"
+		&"walk_p1": return &"move_p2"
+		&"turn_p1": return &"turn_p2"
+		&"light_hit_p1": return &"light_hit_p2"
+		&"stagger_p1": return &"stagger_p2"
+	var animation_text: String = String(animation_name)
+	for phase_one_root: StringName in PHASE_TWO_ANIMATION_ROOTS:
+		var prefix: String = "%s_" % phase_one_root
+		if animation_text.begins_with(prefix):
+			return StringName(
+				"%s_%s" % [
+					PHASE_TWO_ANIMATION_ROOTS[phase_one_root],
+					animation_text.trim_prefix(prefix),
+				]
+			)
+	return animation_name
+
+
+func _is_phase_one_visual_animation(animation_name: StringName) -> bool:
+	if animation_name in [&"idle_p1", &"walk_p1", &"turn_p1", &"light_hit_p1", &"stagger_p1"]:
+		return true
+	var animation_text: String = String(animation_name)
+	for phase_one_root: StringName in PHASE_TWO_ANIMATION_ROOTS:
+		if animation_text.begins_with("%s_" % phase_one_root):
+			return true
+	return false
 
 
 func _track_effect(effect: SoulGaolerAttackEffect) -> void:
@@ -1030,6 +1085,10 @@ func get_recent_attack_history() -> Array[StringName]: return _recent_attack_his
 func get_recent_category_history() -> Array[StringName]: return _recent_category_history.duplicate()
 func get_active_effect_count() -> int: return _active_effects.size()
 func get_javelin_cooldown() -> float: return _javelin_cooldown
+func get_phase_visual_violation_count() -> int: return _phase_visual_violation_count
+func get_phase_visual_redirect_count() -> int: return _phase_visual_redirect_count
+func is_phase_one_visual_active() -> bool:
+	return animated_sprite != null and _is_phase_one_visual_animation(animated_sprite.animation)
 func is_phase_two_opening_active() -> bool: return current_state == PHASE_TWO_OPENING
 func get_phase_two_opening_safe_gaps() -> PackedFloat32Array:
 	return get_meta(&"phase_two_opening_safe_gaps", PackedFloat32Array()) as PackedFloat32Array
