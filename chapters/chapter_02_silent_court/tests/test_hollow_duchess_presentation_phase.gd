@@ -71,10 +71,21 @@ func _run() -> void:
 	_expect(boss.get_attack_damage(&"side_step_cut") == 14, "Phase 2 Side Cut runtime damage mismatch")
 	_expect(boss.get_attack_damage(&"double_waltz_lunge", 1) == 10, "Phase 2 Double Lunge 1 damage mismatch")
 	_expect(boss.get_attack_damage(&"double_waltz_lunge", 2) == 14, "Phase 2 Double Lunge 2 damage mismatch")
-	_expect(boss.get_attack_damage(&"phantom_dancer_sweep") == 12, "Phase 2 Phantom damage mismatch")
+	_expect(boss.get_attack_damage(&"flying_fan") == 16, "Flying Fan runtime damage mismatch")
+	_expect(boss.get_attack_damage(&"phantom_dancer_sweep") == 42, "Marionette Guillotine damage mismatch")
 	_expect(boss.get_attack_damage(&"final_waltz_crossing") == 10, "Phase 2 Final Waltz damage mismatch")
-	probe.queue_free()
+	probe.free()
 	Engine.time_scale = 1.0
+	if music_manager != null:
+		music_manager.stop_music()
+		for deck_name: StringName in [&"MusicDeckA", &"MusicDeckB", &"MusicTransitionStinger"]:
+			var deck: AudioStreamPlayer = music_manager.get_node_or_null(NodePath(deck_name)) as AudioStreamPlayer
+			if deck != null:
+				deck.stream = null
+	current_scene = null
+	level.queue_free()
+	for _frame: int in range(5):
+		await process_frame
 	_finish()
 
 

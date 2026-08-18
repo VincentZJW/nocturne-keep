@@ -1314,36 +1314,98 @@ func get_adaptive_decision_reason() -> StringName:
 func _spawn_gate_severance_wave() -> void:
 	if not is_inside_tree():
 		return
+	var wave_attack_id: int = current_attack_id
+	var wave_direction: float = facing_direction
 	var wave: HitboxComponent = HitboxComponent.new()
 	wave.name = "GateSeveranceWave"
 	wave.faction = &"enemy"
 	wave.attack_kind = &"boss_gate_severance"
 	wave.collision_layer = 64
 	wave.collision_mask = 8
-	wave.z_index = 3
+	wave.z_index = 16
 	var collision: CollisionShape2D = CollisionShape2D.new()
+	collision.name = "CollisionShape2D"
 	var shape: RectangleShape2D = RectangleShape2D.new()
-	shape.size = Vector2(42.0, 18.0)
+	shape.size = config.shockwave_collision_size
 	collision.shape = shape
 	wave.add_child(collision)
-	var blade: Polygon2D = Polygon2D.new()
-	blade.polygon = PackedVector2Array([
-		Vector2(-22.0, 6.0), Vector2(-8.0, -8.0), Vector2(18.0, -5.0),
-		Vector2(26.0, 0.0), Vector2(18.0, 5.0), Vector2(-8.0, 8.0),
-	])
-	blade.color = Color("93a8b8")
-	wave.add_child(blade)
+	var visual_root: Node2D = Node2D.new()
+	visual_root.name = "CrescentVisual"
+	wave.add_child(visual_root)
+	_add_gate_wave_layer(visual_root, PackedVector2Array([
+		Vector2(-66.0, 11.0), Vector2(-53.0, -9.0), Vector2(-28.0, -24.0),
+		Vector2(7.0, -26.0), Vector2(38.0, -17.0), Vector2(66.0, 0.0),
+		Vector2(37.0, -7.0), Vector2(7.0, -11.0), Vector2(-24.0, -8.0),
+		Vector2(-49.0, 3.0),
+	]), Color("111720"))
+	_add_gate_wave_layer(visual_root, PackedVector2Array([
+		Vector2(-62.0, 8.0), Vector2(-50.0, -8.0), Vector2(-26.0, -21.0),
+		Vector2(8.0, -23.0), Vector2(37.0, -14.0), Vector2(61.0, 0.0),
+		Vector2(35.0, -5.0), Vector2(8.0, -8.0), Vector2(-23.0, -5.0),
+		Vector2(-47.0, 5.0),
+	]), Color("aebbc4"))
+	_add_gate_wave_layer(visual_root, PackedVector2Array([
+		Vector2(-54.0, 1.0), Vector2(-37.0, -11.0), Vector2(-11.0, -17.0),
+		Vector2(16.0, -16.0), Vector2(43.0, -7.0), Vector2(55.0, -1.0),
+		Vector2(29.0, -6.0), Vector2(2.0, -9.0), Vector2(-25.0, -5.0),
+	]), Color("edf1ef"))
+	_add_gate_wave_layer(visual_root, PackedVector2Array([
+		Vector2(-38.0, 8.0), Vector2(-14.0, 3.0), Vector2(15.0, 5.0),
+		Vector2(36.0, 11.0), Vector2(14.0, 10.0), Vector2(-14.0, 8.0),
+	]), Color("443039"))
+	for mote_index: int in range(6):
+		var mote: Polygon2D = Polygon2D.new()
+		var mote_x: float = -55.0 + float(mote_index * 17)
+		var mote_y: float = 16.0 + float((mote_index % 3) * 5)
+		mote.polygon = PackedVector2Array([
+			Vector2(mote_x, mote_y), Vector2(mote_x + 3.0, mote_y - 2.0),
+			Vector2(mote_x + 5.0, mote_y + 1.0), Vector2(mote_x + 2.0, mote_y + 3.0),
+		])
+		mote.color = Color("59616a") if mote_index % 2 == 0 else Color("69414a")
+		visual_root.add_child(mote)
 	get_parent().add_child(wave)
-	wave.global_position = global_position + Vector2(facing_direction * 44.0, -8.0)
-	wave.begin_attack(current_attack_id, config.shockwave_damage, facing_direction, self)
+	wave.global_position = global_position + Vector2(wave_direction * 50.0, -26.0)
+	var target_scale: Vector2 = Vector2(
+		wave_direction * config.shockwave_visual_size.x / 132.0,
+		config.shockwave_visual_size.y / 52.0
+	)
+	visual_root.scale = Vector2(target_scale.x * 0.28, target_scale.y * 0.52)
+	wave.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	var tween: Tween = wave.create_tween()
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(visual_root, "scale", target_scale, config.shockwave_spawn_duration)
+	tween.parallel().tween_property(wave, "modulate:a", 1.0, config.shockwave_spawn_duration)
+	tween.tween_callback(func() -> void:
+		if is_instance_valid(wave):
+			wave.begin_attack(wave_attack_id, config.shockwave_damage, wave_direction, self)
+	)
 	tween.set_trans(Tween.TRANS_LINEAR)
-	tween.tween_property(wave, "global_position:x", wave.global_position.x + facing_direction * 285.0, 0.78)
+	tween.tween_property(
+		wave, "global_position:x",
+		wave.global_position.x + wave_direction * config.shockwave_travel_distance,
+		config.shockwave_travel_duration
+	)
+	tween.tween_callback(func() -> void:
+		if is_instance_valid(wave):
+			wave.end_attack()
+	)
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	tween.tween_property(wave, "modulate:a", 0.0, config.shockwave_dissipate_duration)
+	tween.parallel().tween_property(
+		visual_root, "scale:y", target_scale.y * 0.34, config.shockwave_dissipate_duration
+	)
 	tween.finished.connect(func() -> void:
 		if is_instance_valid(wave):
 			wave.end_attack()
 			wave.queue_free()
 	)
+
+
+func _add_gate_wave_layer(parent: Node2D, points: PackedVector2Array, color: Color) -> void:
+	var layer: Polygon2D = Polygon2D.new()
+	layer.polygon = points
+	layer.color = color
+	parent.add_child(layer)
 
 
 func _configure_attack_geometry() -> void:

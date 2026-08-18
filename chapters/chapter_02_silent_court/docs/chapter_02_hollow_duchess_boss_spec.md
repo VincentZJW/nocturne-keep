@@ -30,7 +30,9 @@ HollowDuchess (CharacterBody2D)
 │   ├── DoubleLungeHitbox1
 │   ├── DoubleLungeHitbox2
 │   └── FinalWaltzHitbox
-└── RouteTelegraph
+├── RouteTelegraph
+├── runtime Flying Fan projectile (one outbound/return Hitbox)
+└── two runtime Marionette Guillotine routes (shared hit ledger)
 ```
 
 `HollowDuchessConfig` is the sole Boss tuning source. Existing shared `HealthComponent`, `HitboxComponent` and `HurtboxComponent` retain bounded health, faction filtering and one-hit-per-attack-ID settlement. The room controller owns activation, door/camera/input lock, CP05 retry and presentation; the Boss script owns only combat decisions and state.
@@ -66,6 +68,7 @@ Core neutral flow is `Dormant -> Intro -> Idle -> Evaluate -> Approach/Retreat/T
 | Fan Slash | 0.54 / 0.14 / 0.72 s | 13 | raised blade fan and two narrow angled volumes; jump above or leave close range |
 | Backstep Riposte | 0.24 backstep + 0.22 pause + 0.30 / 0.10 / 0.72 s | 12 | retreats before a committed return thrust; punish the recovery, cooldown 3.6 s |
 | Side-Step Cut | 0.38 sidestep + 0.12 prepare + 0.32 / 0.11 / 0.66 s | 12 | lateral reposition then direction-locked cut; cooldown 2.9 s |
+| Flying Fan | 0.72 / 0.82 / 0.72 s | 16 | locks the target direction, flies out and returns once as the same bladed fan; jump or cross its fixed route |
 
 ### Phase transition
 
@@ -76,10 +79,22 @@ At 121 HP or below, the current action is allowed to settle before `PhaseTransit
 | Attack | Timing | Damage | Read and counter |
 | --- | --- | ---: | --- |
 | Double Waltz Lunge | 0.48 windup, 0.10 hit 1, 0.27 gap, 0.11 hit 2, 0.80 recovery | 9 + 12 | first thrust baits an early response; second remains direction-locked |
-| Phantom Dancer Sweep | 0.75 lane telegraph, 0.72 crossing, 0.82 recovery | 10 | two translucent dancers cross fixed floor/elevated lanes; real Boss remains visible; cooldown 4.5 s |
+| Flying Fan | 0.72 / 0.82 / 0.72 s | 16 | Phase 2 keeps the same one-pass boomerang contract, with Far pressure increasing selection weight rather than projectile speed |
+| Marionette Guillotine / 双偶横断 | 1.35 s warning, 0.82 s crossing, 1.25 s recovery | 42 once | two complete court dagger marionettes enter from opposite arena edges on the ground lane; strings, crimson route line and translucent bodies telegraph a double-jump escape; both share one attack ID and target ledger |
 | Final Waltz Crossing | 0.90 prepare, three 0.68 passes with 0.43 gaps, 1.15 recovery | 8 per pass | available at 25% HP; route line precedes each crossing; cooldown 7.0 s |
 
-Phantom routes are non-solid, use distinct attack IDs and free themselves at route completion. Final Waltz uses one fresh attack ID per pass, so a target cannot be damaged twice during one pass but can be hit by separate passes.
+Flying Fan is a formal 32×32 gothic blade-fan presentation with black hub,
+ivory/silver blades and restrained crimson inlay. It is not a homing projectile:
+the target side is committed at windup, the outbound and return paths reuse one
+Hitbox and one attack ID, and a target can settle damage only once.
+
+Marionette Guillotine replaces the old vague silhouette sweep. The paired
+figures retain mask/head, hair, torso, jointed arms and legs, suspension strings
+and two forward daggers throughout the crossing. They are non-solid, share one
+attack ID and one target ledger, and free themselves at route completion. Its
+10-second cooldown and minimum two-other-attack spacing prevent repetition; it
+is selected by Phase 2 cadence and distance pressure, never by an instantaneous
+Player jump. Final Waltz still uses one fresh attack ID per pass.
 
 ## Pixel art and animations
 
@@ -89,7 +104,7 @@ Phantom routes are non-solid, use distinct attack IDs and free themselves at rou
 - Format: 96×96 transparent PNG, nearest-neighbor, no antialiasing or mipmaps.
 - Palette: porcelain white, black/plum/crimson gown, pale steel rapier, muted violet soul mist.
 
-Twenty named sequences provide 101 original frames: `idle`, `intro`, `elegant_walk`, `turn`, `sidestep`, `backstep`, `rapier_thrust_windup`, `rapier_thrust_active`, `rapier_thrust_recovery`, `fan_slash_windup`, `fan_slash_active`, `fan_slash_recovery`, `riposte`, `phase_transition`, `double_lunge`, `phantom_dance`, `final_waltz`, `light_hit`, `stagger` and `death`. Left display uses `flip_h`; source images are not duplicated.
+Twenty named body sequences provide 101 original frames: `idle`, `intro`, `elegant_walk`, `turn`, `sidestep`, `backstep`, `rapier_thrust_windup`, `rapier_thrust_active`, `rapier_thrust_recovery`, `fan_slash_windup`, `fan_slash_active`, `fan_slash_recovery`, `riposte`, `phase_transition`, `double_lunge`, `phantom_dance`, `final_waltz`, `light_hit`, `stagger` and `death`. The fan projectile is generated as a crisp 32×32 ImageTexture; the existing `effects/phantom_dancer.png` is a 384×192 two-variant sheet used by the paired marionettes. Left display uses `flip_h`; source images are not duplicated.
 
 ## Room, HUD, reset and ending
 
@@ -105,7 +120,12 @@ The first encounter then uses the complete 6.4-second five-line presentation and
 
 ## Verification boundary
 
-Automated evidence proves configuration, 70 attack cycles, phase/Poise/reset, five complete 222–226-second live-component simulations and Main composition. Graphical evidence was captured from the legal Bootstrap/CH2_BOSS path, not an isolated preview. Manual acceptance must still judge tell readability, punish-window feel, camera framing at arena extremes and whether phase-two lanes remain readable during real evasive play.
+Automated evidence proves configuration, 80 base attack cycles, 20 additional
+paired-marionette repetitions, shared 42-damage settlement, calculated `83.36
+px` double-jump clearance, distance-weight selection, phase/Poise/reset, five
+complete 223–226-second live-component simulations and Main composition.
+Graphical acceptance remains required for the fan's apparent return path,
+marionette silhouette readability and practical double-jump timing.
 
 ## Two-phase battle-music contract (2026-08-05)
 
@@ -141,8 +161,10 @@ is the fastest of the first four Bosses; pressure decays at 0.17 per second and
 Phase 2 learns 16% faster without removing telegraphs or recovery.
 
 - Close is `<= 66 px`, Far is `>= 205 px`, otherwise Mid.
-- Close/attack pressure favors rapier, fan and riposte; Far pressure raises the
-  existing Phantom/Fan lane pressure without creating a new projectile system.
+- Close/attack pressure favors rapier, fan slash and riposte. Far pressure raises
+  the formal Flying Fan and Marionette Guillotine selection weights; seeded QA
+  produces 9 Flying Fans and 18 total ranged decisions in 30 Far samples versus
+  4 Flying Fans in 30 Close samples.
 - Repeated crossups bias the existing `side_step_cut` presentation as
   `Silk Curtain / 丝幕反舞`; its total counter probability is capped at 70%.
 - Existing waltz steps, defensive-move limits, phase rules and committed windups

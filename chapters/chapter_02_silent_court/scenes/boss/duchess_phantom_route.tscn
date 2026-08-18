@@ -8,19 +8,22 @@
 size = Vector2(36, 52)
 
 [node name="DuchessPhantomRoute" type="Node2D"]
+z_index = 16
 script = ExtResource("1_route")
 
 [node name="Telegraph" type="Line2D" parent="."]
 z_index = -1
-width = 3.0
-default_color = Color(0.66, 0.55, 0.76, 0.72)
+width = 5.0
+default_color = Color(0.55, 0.22, 0.31, 0.78)
 texture_filter = 1
 
 [node name="Phantom" type="Sprite2D" parent="."]
 texture_filter = 1
 texture = ExtResource("2_phantom")
-position = Vector2(0, -26)
-modulate = Color(0.75, 0.82, 0.95, 0.68)
+position = Vector2(0, -54)
+region_enabled = true
+region_rect = Rect2(0, 0, 192, 192)
+modulate = Color(0.88, 0.91, 0.96, 0.94)
 
 [node name="Hitbox" type="Area2D" parent="."]
 collision_layer = 64
@@ -29,7 +32,7 @@ monitoring = false
 monitorable = false
 script = ExtResource("3_hitbox")
 faction = &"enemy"
-attack_kind = &"boss_phantom_dancer"
+attack_kind = &"boss_marionette_guillotine"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
 position = Vector2(0, -26)

@@ -68,7 +68,16 @@ func _run() -> void:
 	if entrance != null:
 		_expect(entrance.z_index == 8 and not entrance.z_as_relative, "Boss entrance must remain behind Player")
 	if threshold != null:
-		_expect(threshold.get_transition_stage() == &"idle", "Boss threshold did not initialize idle")
+		# A legal Debug Chapter Start may already have requested the saved Boss
+		# threshold during these first four frames. Both the untouched idle state
+		# and an authored transition stage prove the same formal controller owns
+		# the Main route; an unknown stage still fails composition QA.
+		_expect(
+			threshold.get_transition_stage() in [
+				&"idle", &"fading_out", &"blackout", &"fading_in", &"complete"
+			],
+			"Boss threshold entered an unknown transition stage"
+		)
 	if reliquary != null and player != null and interaction_prompt != null:
 		_expect(reliquary.z_index == 8 and not reliquary.z_as_relative, "Reliquary must remain behind Player")
 		_expect(interaction_prompt.z_index == 20 and not interaction_prompt.z_as_relative, "Reliquary prompt layer mismatch")

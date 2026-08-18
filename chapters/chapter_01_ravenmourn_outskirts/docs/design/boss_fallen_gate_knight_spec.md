@@ -110,8 +110,13 @@ decays at 0.14 per second, so a fully learned habit clears in about 7.1 seconds.
 - Close is `<= 68 px`, Far is `>= 205 px`, and the space between is Mid.
 - Repeated airborne crossings bias the existing Heavy Overhead / Jump Smash into
   `Rising Gate Cleave`; the counter candidate is capped at 70%.
-- Far play can offer `Gate Severance`, a low, non-homing 285 px/s ground sword
-  wave, at 55–70% rather than forcing it. Its 8 damage remains below the Boss's
-  heavy attack.
+- Far play can offer `Gate Severance`, a low, non-homing ground sword wave at
+  55–70% rather than forcing it. The committed release now materializes for
+  `0.10 s`, then carries a wide `132 × 52 px` layered crescent `330 px` in
+  `0.78 s` (about `423 px/s`) before a restrained `0.16 s` dissipation. Its
+  compact `58 × 20 px` collision stays inside the charcoal core; steel and
+  bone-white edges, a thin old-blood tear and sparse debris communicate the
+  volume without enlarging damage. Its 8 damage remains below the Boss's heavy
+  attack, the direction locks at release, and it never tracks the Player.
 - An attack that has entered windup remains committed. Cooldowns, recovery,
   turn timing and the existing Player-turn gaps still own when the Boss may act.

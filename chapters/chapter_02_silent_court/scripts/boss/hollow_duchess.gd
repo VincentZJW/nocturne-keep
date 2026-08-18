@@ -31,6 +31,9 @@ enum State {
 	FAN_SLASH_WINDUP,
 	FAN_SLASH_ACTIVE,
 	FAN_SLASH_RECOVERY,
+	FLYING_FAN_WINDUP,
+	FLYING_FAN_ACTIVE,
+	FLYING_FAN_RECOVERY,
 	BACKSTEP_RIPOSTE_PREPARE,
 	BACKSTEP_RIPOSTE_WINDUP,
 	BACKSTEP_RIPOSTE_ACTIVE,
@@ -72,6 +75,9 @@ const STATE_NAMES: Dictionary[State, StringName] = {
 	State.FAN_SLASH_WINDUP: &"FanSlashWindup",
 	State.FAN_SLASH_ACTIVE: &"FanSlashActive",
 	State.FAN_SLASH_RECOVERY: &"FanSlashRecovery",
+	State.FLYING_FAN_WINDUP: &"FlyingFanWindup",
+	State.FLYING_FAN_ACTIVE: &"FlyingFanActive",
+	State.FLYING_FAN_RECOVERY: &"FlyingFanRecovery",
 	State.BACKSTEP_RIPOSTE_PREPARE: &"BackstepRipostePrepare",
 	State.BACKSTEP_RIPOSTE_WINDUP: &"BackstepRiposteWindup",
 	State.BACKSTEP_RIPOSTE_ACTIVE: &"BackstepRiposteActive",
@@ -99,6 +105,7 @@ const STATE_NAMES: Dictionary[State, StringName] = {
 
 const ATTACK_RAPIER: StringName = &"rapier_thrust"
 const ATTACK_FAN: StringName = &"fan_slash"
+const ATTACK_FLYING_FAN: StringName = &"flying_fan"
 const ATTACK_RIPOSTE: StringName = &"backstep_riposte"
 const ATTACK_SIDE_CUT: StringName = &"side_step_cut"
 const ATTACK_DOUBLE: StringName = &"double_waltz_lunge"
@@ -154,6 +161,13 @@ var _riposte_cooldown: float = 0.0
 var _side_step_cooldown: float = 0.0
 var _phantom_cooldown: float = 0.0
 var _final_cooldown: float = 0.0
+var _flying_fan_cooldown: float = 0.0
+var _flying_fan_direction: float = 1.0
+var _flying_fan_target_x: float = 0.0
+var _flying_fan_texture: ImageTexture
+var _active_flying_fans: Array[HitboxComponent] = []
+var _attacks_since_phantom: int = 2
+var _phantom_attack_id: int = 0
 var _defensive_moves_in_row: int = 0
 var _movement_direction: float = 0.0
 var _intro_retry: bool = false
@@ -253,6 +267,12 @@ func _physics_process(delta: float) -> void:
 			_timed_transition(config.fan_slash_active, State.FAN_SLASH_RECOVERY)
 		State.FAN_SLASH_RECOVERY:
 			_finish_attack_after(config.fan_slash_recovery)
+		State.FLYING_FAN_WINDUP:
+			_timed_transition(config.flying_fan_windup, State.FLYING_FAN_ACTIVE)
+		State.FLYING_FAN_ACTIVE:
+			_timed_transition(config.flying_fan_active, State.FLYING_FAN_RECOVERY)
+		State.FLYING_FAN_RECOVERY:
+			_finish_attack_after(config.flying_fan_recovery)
 		State.BACKSTEP_RIPOSTE_PREPARE:
 			_timed_transition(config.pause_after_backstep, State.BACKSTEP_RIPOSTE_WINDUP)
 		State.BACKSTEP_RIPOSTE_WINDUP:
@@ -334,6 +354,10 @@ func reset_boss() -> void:
 	_side_step_cooldown = 0.0
 	_phantom_cooldown = 0.0
 	_final_cooldown = 0.0
+	_flying_fan_cooldown = 0.0
+	_attacks_since_phantom = config.phantom_min_other_attacks
+	_phantom_attack_id = 0
+	_clear_flying_fans()
 	_defensive_moves_in_row = 0
 	_final_pass_elapsed = 0.0
 	_death_player_line_emitted = false
@@ -397,6 +421,8 @@ func get_attack_damage(attack_name: StringName, strike_index: int = 0) -> int:
 			return _phase_damage(config.rapier_thrust_damage, config.phase_2_rapier_thrust_damage)
 		ATTACK_FAN:
 			return _phase_damage(config.fan_slash_damage, config.phase_2_fan_slash_damage)
+		ATTACK_FLYING_FAN:
+			return config.flying_fan_damage
 		ATTACK_RIPOSTE:
 			return _phase_damage(config.riposte_damage, config.phase_2_riposte_damage)
 		ATTACK_SIDE_CUT:
@@ -419,11 +445,12 @@ func get_player_distance() -> float:
 
 
 func get_debug_status() -> String:
-	var base_status: String = "DUCHESS | %s | P%d | HP %d/%d | POISE %d/%d | ATK %s | GAP %.2f | CHAIN %d | FACE %+.0f | DIST %.1f | TURN %.2f | SIDE %.2f | RIP %.2f | PHANTOM %.2f | FINAL %.2f" % [
+	var base_status: String = "DUCHESS | %s | P%d | HP %d/%d | POISE %d/%d | ATK %s | GAP %.2f | CHAIN %d | FACE %+.0f | DIST %.1f | TURN %.2f | SIDE %.2f | RIP %.2f | FAN %.2f | PUPPET %.2f/%d | FINAL %.2f" % [
 		get_state_name(), _phase, health_component.current_health, health_component.max_health,
 		_current_poise, get_max_poise(), _current_attack, _attack_gap_remaining, _chain_count,
 		_facing_direction, get_player_distance(), _state_elapsed if _state == State.TURN else 0.0,
-		_side_step_cooldown, _riposte_cooldown, _phantom_cooldown, _final_cooldown,
+		_side_step_cooldown, _riposte_cooldown, _flying_fan_cooldown,
+		_phantom_cooldown, _attacks_since_phantom, _final_cooldown,
 	]
 	return "%s | AI %s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d" % [
 		base_status, _adaptive_decision_reason, far_pressure, close_pressure,
@@ -500,6 +527,14 @@ func _select_attack(distance: float) -> StringName:
 	if distance <= config.fan_slash_range:
 		candidates.append(ATTACK_FAN)
 		weights.append(0.35)
+	if _flying_fan_cooldown <= 0.0:
+		var fan_zone_multiplier: float = config.flying_fan_close_multiplier
+		if distance >= config.flying_fan_far_distance:
+			fan_zone_multiplier = config.flying_fan_far_multiplier
+		elif distance >= config.flying_fan_mid_distance:
+			fan_zone_multiplier = config.flying_fan_mid_multiplier
+		candidates.append(ATTACK_FLYING_FAN)
+		weights.append(config.flying_fan_base_weight * fan_zone_multiplier)
 	if distance <= config.riposte_selection_range and _riposte_cooldown <= 0.0 and _can_backstep():
 		candidates.append(ATTACK_RIPOSTE)
 		weights.append(0.15)
@@ -515,24 +550,32 @@ func _select_attack(distance: float) -> StringName:
 		if distance <= config.double_lunge_selection_range:
 			candidates.append(ATTACK_DOUBLE)
 			weights.append(0.30)
-		if _phantom_cooldown <= 0.0:
+		if _phantom_cooldown <= 0.0 and _attacks_since_phantom >= config.phantom_min_other_attacks:
 			candidates.append(ATTACK_PHANTOM)
-			weights.append(0.18)
+			weights.append(1.20 if distance >= config.flying_fan_far_distance else 0.18)
 		var health_ratio: float = float(health_component.current_health) / float(health_component.max_health)
 		if health_ratio <= config.final_waltz_health_threshold and _final_cooldown <= 0.0:
 			candidates.append(ATTACK_FINAL)
 			weights.append(0.22)
+	if distance >= config.flying_fan_far_distance:
+		# Closing the gap remains a weighted outcome. This keeps Flying Fan a
+		# frequent ranged answer without turning distance into a hard trigger.
+		candidates.append(&"")
+		weights.append(
+			config.flying_fan_phase_2_approach_weight
+			if _phase >= 2 else config.flying_fan_phase_1_approach_weight
+		)
+	elif distance >= config.flying_fan_mid_distance and candidates.size() <= 2:
+		candidates.append(&"")
+		weights.append(1.30)
 	if candidates.is_empty():
 		return &""
-	if candidates.size() == 1 and candidates[0] == ATTACK_PHANTOM:
-		# At long range the phantom response competes with closing distance;
-		# it never becomes a guaranteed answer to spacing.
-		var phantom_offer_chance: float = lerpf(0.55, 0.70, far_pressure)
-		if _rng.randf() > phantom_offer_chance:
-			return &""
 	for index: int in range(candidates.size()):
-		if candidates[index] == _last_attack:
-			weights[index] *= config.overused_attack_weight if _same_attack_count >= 2 else config.repeated_attack_weight
+		if not candidates[index].is_empty() and candidates[index] == _last_attack:
+			if candidates[index] == ATTACK_FLYING_FAN:
+				weights[index] *= config.flying_fan_repeat_multiplier
+			else:
+				weights[index] *= config.overused_attack_weight if _same_attack_count >= 2 else config.repeated_attack_weight
 		weights[index] *= _adaptive_attack_multiplier(candidates[index])
 	_cap_counter_weight(candidates, weights, ATTACK_SIDE_CUT, 0.70)
 	var total: float = 0.0
@@ -566,6 +609,10 @@ func _cap_counter_weight(
 func _start_attack(attack_name: StringName) -> void:
 	_current_attack = attack_name
 	_chain_count += 1
+	if attack_name == ATTACK_PHANTOM:
+		_attacks_since_phantom = 0
+	else:
+		_attacks_since_phantom = mini(99, _attacks_since_phantom + 1)
 	_same_attack_count = _same_attack_count + 1 if _last_attack == attack_name else 1
 	_last_attack = attack_name
 	attack_started.emit(attack_name)
@@ -576,6 +623,11 @@ func _start_attack(attack_name: StringName) -> void:
 		ATTACK_FAN:
 			_defensive_moves_in_row = 0
 			_enter_state(State.FAN_SLASH_WINDUP)
+		ATTACK_FLYING_FAN:
+			_flying_fan_cooldown = config.flying_fan_cooldown
+			_defensive_moves_in_row = 0
+			_commit_flying_fan_target()
+			_enter_state(State.FLYING_FAN_WINDUP)
 		ATTACK_RIPOSTE:
 			_riposte_cooldown = config.backstep_riposte_cooldown
 			_defensive_moves_in_row += 1
@@ -823,6 +875,13 @@ func _enter_state(next_state: State) -> void:
 			_open_hitbox(fan_hitbox, get_attack_damage(ATTACK_FAN), ATTACK_FAN)
 		State.FAN_SLASH_RECOVERY:
 			_play_animation(&"fan_slash_recovery")
+		State.FLYING_FAN_WINDUP:
+			_play_animation(&"fan_slash_windup")
+		State.FLYING_FAN_ACTIVE:
+			_play_animation(&"fan_slash_active")
+			_spawn_flying_fan()
+		State.FLYING_FAN_RECOVERY:
+			_play_animation(&"fan_slash_recovery")
 		State.BACKSTEP_RIPOSTE_PREPARE, State.BACKSTEP_RIPOSTE_WINDUP:
 			_play_animation(&"riposte")
 		State.BACKSTEP_RIPOSTE_ACTIVE:
@@ -842,6 +901,7 @@ func _enter_state(next_state: State) -> void:
 		State.PHASE_TRANSITION:
 			_disable_all_hitboxes()
 			_clear_phantoms()
+			_clear_flying_fans()
 			hurtbox.set_invulnerable(true)
 			if phase_transition_sprite_frames != null:
 				animated_sprite.sprite_frames = phase_transition_sprite_frames
@@ -860,8 +920,8 @@ func _enter_state(next_state: State) -> void:
 			_play_animation(&"phantom_dance")
 			_spawn_phantom_routes()
 		State.PHANTOM_DANCE_ACTIVE:
-			_active_attack_id = _consume_attack_id()
-			attack_active.emit(ATTACK_PHANTOM, _active_attack_id)
+			_active_attack_id = _phantom_attack_id
+			attack_active.emit(ATTACK_PHANTOM, _phantom_attack_id)
 		State.PHANTOM_DANCE_RECOVERY:
 			_play_animation(&"fan_slash_recovery")
 		State.FINAL_WALTZ_PREPARE:
@@ -881,6 +941,7 @@ func _enter_state(next_state: State) -> void:
 		State.DEATH:
 			_disable_all_hitboxes()
 			_clear_phantoms()
+			_clear_flying_fans()
 			hurtbox.set_enabled(false)
 			_play_animation(&"death")
 
@@ -894,6 +955,8 @@ func _exit_state(old_state: State) -> void:
 		_disable_all_hitboxes()
 	if old_state == State.FINAL_WALTZ_ACTIVE:
 		final_hitbox.end_attack()
+	if old_state == State.FLYING_FAN_ACTIVE:
+		_clear_flying_fans()
 
 
 func _open_hitbox(hitbox: HitboxComponent, damage: int, attack_name: StringName) -> void:
@@ -979,6 +1042,9 @@ func _adaptive_attack_multiplier(action: StringName) -> float:
 	match action:
 		ATTACK_RAPIER, ATTACK_FAN:
 			multiplier *= 1.0 + close_pressure * 0.55
+		ATTACK_FLYING_FAN:
+			if far_pressure >= 0.50:
+				multiplier *= config.flying_fan_far_pressure_multiplier
 		ATTACK_RIPOSTE:
 			multiplier *= 1.0 + attack_pressure * 0.70
 		ATTACK_SIDE_CUT:
@@ -1017,37 +1083,136 @@ func get_adaptive_decision_reason() -> StringName:
 	return _adaptive_decision_reason
 
 
-func _spawn_phantom_routes() -> void:
-	if phantom_route_scene == null or _target == null:
+func _commit_flying_fan_target() -> void:
+	_flying_fan_direction = _facing_direction
+	_flying_fan_target_x = global_position.x + _flying_fan_direction * config.flying_fan_min_travel
+	if _target == null or not is_instance_valid(_target):
 		return
-	var center_x: float = clampf(
-		_target.global_position.x,
-		_arena_left + config.phantom_route_edge_margin,
-		_arena_right - config.phantom_route_edge_margin
+	var direction: float = signf(_target.global_position.x - global_position.x)
+	if not is_zero_approx(direction):
+		_flying_fan_direction = direction
+		_facing_direction = direction
+		_apply_facing()
+	_flying_fan_target_x = _target.global_position.x
+
+
+func _spawn_flying_fan() -> void:
+	if not is_inside_tree():
+		return
+	var fan: HitboxComponent = HitboxComponent.new()
+	fan.name = "FlyingFan"
+	fan.faction = &"enemy"
+	fan.attack_kind = &"boss_flying_fan"
+	fan.collision_layer = 64
+	fan.collision_mask = 8
+	fan.z_index = 17
+	var collision: CollisionShape2D = CollisionShape2D.new()
+	var shape: RectangleShape2D = RectangleShape2D.new()
+	shape.size = Vector2(30.0, 26.0)
+	collision.shape = shape
+	fan.add_child(collision)
+	var sprite: Sprite2D = Sprite2D.new()
+	sprite.name = "BladedFanVisual"
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	sprite.texture = _get_flying_fan_texture()
+	sprite.scale = Vector2(_flying_fan_direction * 1.5, 1.5)
+	fan.add_child(sprite)
+	get_parent().add_child(fan)
+	fan.global_position = global_position + Vector2(_flying_fan_direction * 38.0, -36.0)
+	var release_x: float = fan.global_position.x
+	var travel_distance: float = clampf(
+		absf(_flying_fan_target_x - release_x) + 42.0,
+		config.flying_fan_min_travel,
+		config.flying_fan_max_travel
 	)
-	# The boss body origin is the floor contact point. Keep one route at body
-	# height and one elevated route so the visual and hitbox lanes match Main.
-	var lanes: Array[float] = [
-		_spawn_position.y,
-		_spawn_position.y - config.phantom_elevated_lane_offset,
+	var outbound_x: float = clampf(
+		release_x + _flying_fan_direction * travel_distance,
+		_arena_left + 28.0,
+		_arena_right - 28.0
+	)
+	_active_attack_id = _consume_attack_id()
+	fan.begin_attack(_active_attack_id, config.flying_fan_damage, _flying_fan_direction, self)
+	attack_active.emit(ATTACK_FLYING_FAN, _active_attack_id)
+	_active_flying_fans.append(fan)
+	var tween: Tween = fan.create_tween()
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	tween.tween_property(fan, "global_position:x", outbound_x, config.flying_fan_outbound_duration)
+	tween.parallel().tween_property(fan, "rotation", _flying_fan_direction * TAU * 2.0, config.flying_fan_outbound_duration)
+	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN_OUT)
+	tween.tween_property(fan, "global_position:x", release_x, config.flying_fan_return_duration)
+	tween.parallel().tween_property(fan, "rotation", _flying_fan_direction * TAU * 4.0, config.flying_fan_return_duration)
+	tween.tween_property(fan, "modulate:a", 0.0, 0.06)
+	tween.finished.connect(func() -> void:
+		_active_flying_fans.erase(fan)
+		if is_instance_valid(fan):
+			fan.end_attack()
+			fan.queue_free()
+	)
+
+
+func _get_flying_fan_texture() -> ImageTexture:
+	if _flying_fan_texture != null:
+		return _flying_fan_texture
+	var image: Image = Image.create(32, 32, false, Image.FORMAT_RGBA8)
+	image.fill(Color(0.0, 0.0, 0.0, 0.0))
+	image.fill_rect(Rect2i(6, 10, 14, 13), Color("4f2030"))
+	image.fill_rect(Rect2i(11, 7, 10, 19), Color("743044"))
+	image.fill_rect(Rect2i(18, 9, 6, 15), Color("9d4456"))
+	var pivot: Vector2i = Vector2i(6, 16)
+	var blade_ends: Array[Vector2i] = [
+		Vector2i(24, 4), Vector2i(29, 9), Vector2i(31, 16),
+		Vector2i(29, 23), Vector2i(24, 28),
 	]
+	for blade_end: Vector2i in blade_ends:
+		_draw_fan_pixel_line(image, pivot, blade_end, 3, Color("100c15"))
+		_draw_fan_pixel_line(image, pivot, blade_end, 1, Color("d7dee1"))
+	image.fill_rect(Rect2i(3, 13, 7, 7), Color("100c15"))
+	image.fill_rect(Rect2i(4, 14, 5, 5), Color("a47b47"))
+	image.fill_rect(Rect2i(5, 15, 3, 3), Color("e1c48b"))
+	_flying_fan_texture = ImageTexture.create_from_image(image)
+	return _flying_fan_texture
+
+
+func _draw_fan_pixel_line(
+	image: Image, start: Vector2i, finish: Vector2i, width: int, color: Color
+) -> void:
+	var steps: int = maxi(absi(finish.x - start.x), absi(finish.y - start.y))
+	for step: int in range(steps + 1):
+		var amount: float = float(step) / float(maxi(1, steps))
+		var point: Vector2i = Vector2i(
+			roundi(lerpf(float(start.x), float(finish.x), amount)),
+			roundi(lerpf(float(start.y), float(finish.y), amount))
+		)
+		image.fill_rect(Rect2i(point - Vector2i(width / 2, width / 2), Vector2i(width, width)), color)
+
+
+func _clear_flying_fans() -> void:
+	for fan: HitboxComponent in _active_flying_fans:
+		if fan != null and is_instance_valid(fan):
+			fan.end_attack()
+			fan.queue_free()
+	_active_flying_fans.clear()
+
+
+func _spawn_phantom_routes() -> void:
+	if phantom_route_scene == null:
+		return
+	_phantom_attack_id = _consume_attack_id()
+	_active_attack_id = _phantom_attack_id
+	var shared_target_ledger: Dictionary[int, bool] = {}
+	var left_x: float = _arena_left + config.phantom_route_edge_margin
+	var right_x: float = _arena_right - config.phantom_route_edge_margin
 	for index: int in range(2):
 		var route: DuchessPhantomRoute = phantom_route_scene.instantiate() as DuchessPhantomRoute
 		if route == null:
 			continue
 		get_parent().add_child(route)
-		var direction: float = 1.0 if index == 0 else -1.0
-		var start: Vector2 = Vector2(
-			center_x - direction * config.phantom_route_half_length,
-			lanes[index]
-		)
-		var finish: Vector2 = Vector2(
-			center_x + direction * config.phantom_route_half_length,
-			lanes[index]
-		)
+		var start: Vector2 = Vector2(left_x if index == 0 else right_x, _spawn_position.y)
+		var finish: Vector2 = Vector2(right_x if index == 0 else left_x, _spawn_position.y)
 		route.configure_route(
 			start, finish, config.phantom_telegraph, config.phantom_active,
-			get_attack_damage(ATTACK_PHANTOM), _consume_attack_id(), self
+			get_attack_damage(ATTACK_PHANTOM), _phantom_attack_id, self,
+			index, shared_target_ledger, config.phantom_hitbox_size
 		)
 		route.route_finished.connect(_on_phantom_finished)
 		_active_phantoms.append(route)
@@ -1202,6 +1367,7 @@ func _tick_cooldowns(delta: float) -> void:
 	_side_step_cooldown = maxf(0.0, _side_step_cooldown - delta)
 	_phantom_cooldown = maxf(0.0, _phantom_cooldown - delta)
 	_final_cooldown = maxf(0.0, _final_cooldown - delta)
+	_flying_fan_cooldown = maxf(0.0, _flying_fan_cooldown - delta)
 
 
 func _play_animation(animation_name: StringName) -> void:

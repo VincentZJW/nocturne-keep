@@ -65,8 +65,9 @@ extends Resource
 @export var phase_2_chain_recovery: float = 0.99
 @export var backstep_riposte_cooldown: float = 3.6
 @export var side_step_cut_cooldown: float = 2.9
-@export var phantom_dance_cooldown: float = 4.5
+@export var phantom_dance_cooldown: float = 10.0
 @export var final_waltz_cooldown: float = 7.0
+@export var flying_fan_cooldown: float = 3.2
 
 @export_category("Rapier Thrust")
 @export var rapier_thrust_windup: float = 0.46
@@ -83,6 +84,26 @@ extends Resource
 @export_range(1, 20, 1) var fan_slash_damage: int = 13
 @export_range(1, 20, 1) var phase_2_fan_slash_damage: int = 16
 @export var fan_slash_range: float = 70.0
+
+@export_category("Flying Fan")
+@export var flying_fan_windup: float = 0.72
+@export var flying_fan_active: float = 0.82
+@export var flying_fan_recovery: float = 0.72
+@export_range(1, 99, 1) var flying_fan_damage: int = 16
+@export var flying_fan_outbound_duration: float = 0.38
+@export var flying_fan_return_duration: float = 0.38
+@export var flying_fan_min_travel: float = 180.0
+@export var flying_fan_max_travel: float = 420.0
+@export var flying_fan_mid_distance: float = 128.0
+@export var flying_fan_far_distance: float = 205.0
+@export var flying_fan_base_weight: float = 1.0
+@export var flying_fan_close_multiplier: float = 0.30
+@export var flying_fan_mid_multiplier: float = 1.20
+@export var flying_fan_far_multiplier: float = 2.20
+@export var flying_fan_far_pressure_multiplier: float = 1.25
+@export var flying_fan_repeat_multiplier: float = 0.20
+@export var flying_fan_phase_1_approach_weight: float = 3.30
+@export var flying_fan_phase_2_approach_weight: float = 2.00
 
 @export_category("Backstep Riposte")
 @export var backstep_duration: float = 0.24
@@ -115,14 +136,16 @@ extends Resource
 @export_range(1, 20, 1) var double_lunge_damage_1: int = 10
 @export_range(1, 20, 1) var double_lunge_damage_2: int = 14
 
-@export_category("Phantom Dancer Sweep")
-@export var phantom_telegraph: float = 0.75
-@export var phantom_active: float = 0.72
-@export var phantom_recovery: float = 0.82
-@export_range(1, 20, 1) var phantom_damage: int = 12
+@export_category("Marionette Guillotine")
+@export var phantom_telegraph: float = 1.35
+@export var phantom_active: float = 0.82
+@export var phantom_recovery: float = 1.25
+@export_range(1, 99, 1) var phantom_damage: int = 42
 @export var phantom_route_half_length: float = 520.0
-@export var phantom_route_edge_margin: float = 560.0
-@export var phantom_elevated_lane_offset: float = 64.0
+@export var phantom_route_edge_margin: float = 42.0
+@export var phantom_elevated_lane_offset: float = 0.0
+@export var phantom_hitbox_size: Vector2 = Vector2(66.0, 50.0)
+@export_range(0, 8, 1) var phantom_min_other_attacks: int = 2
 
 @export_category("Final Waltz Crossing")
 @export_range(0.05, 0.5, 0.01) var final_waltz_health_threshold: float = 0.25

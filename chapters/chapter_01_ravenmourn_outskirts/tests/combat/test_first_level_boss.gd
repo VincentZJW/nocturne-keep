@@ -24,7 +24,8 @@ func _run_tests() -> void:
 	_test_room_entry(player, boss, room, respawn, hud)
 	_test_boss_turn_response(player, boss)
 	_test_boss_shield_and_phase(player, boss, hud)
-	_test_boss_attack_profiles(main, boss)
+	await _test_boss_attack_profiles(main, boss)
+	await _test_gate_severance_repetition(boss)
 	_test_boss_death_and_exit(main, player, boss, room)
 	_test_room_reset(player, boss, room, respawn)
 	main.queue_free()
@@ -387,6 +388,14 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 			_expect(hitbox != null, "Gate Severance did not release its committed ground wave")
 			if hitbox == null:
 				continue
+			_expect(not hitbox.is_active, "Gate Severance armed before its 0.10s materialization")
+			var visual: Node2D = hitbox.get_node_or_null("CrescentVisual") as Node2D
+			_expect(visual != null and visual.get_child_count() >= 10, "Gate Severance lacks layered crescent presentation")
+			var collision: CollisionShape2D = hitbox.get_node("CollisionShape2D") as CollisionShape2D
+			var rectangle: RectangleShape2D = collision.shape as RectangleShape2D
+			_expect(rectangle.size == boss.config.shockwave_collision_size, "Gate Severance collision size mismatch")
+			for _frame: int in range(8):
+				await physics_frame
 		_expect(hitbox.is_active, "%s did not open its active frame" % profile["state"])
 		_expect(hitbox.try_hit(target_hurtbox), "%s did not hit target" % profile["state"])
 		_expect(target_health.current_health == 100 - expected_damage, "%s damage mismatch" % profile["state"])
@@ -401,7 +410,25 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 		boss._end_attack_window()
 		if profile["state"] as StringName == FallenGateKnight.SHOCKWAVE_STRIKE and is_instance_valid(hitbox):
 			hitbox.queue_free()
+			await process_frame
 	target_root.queue_free()
+
+
+func _test_gate_severance_repetition(boss: FallenGateKnight) -> void:
+	for iteration: int in range(20):
+		boss.current_attack_id = 120_000 + iteration
+		boss._spawn_gate_severance_wave()
+		var wave: HitboxComponent = boss.get_parent().get_node_or_null("GateSeveranceWave") as HitboxComponent
+		_expect(wave != null, "Gate Severance repetition %d did not spawn" % (iteration + 1))
+		if wave == null:
+			continue
+		for _frame: int in range(8):
+			await physics_frame
+		_expect(wave.is_active, "Gate Severance repetition %d did not arm" % (iteration + 1))
+		wave.end_attack()
+		wave.queue_free()
+		await process_frame
+	print("GATE_SEVERANCE_VISUAL_CYCLES: PASS triggers=20 layered_crescent=true")
 
 
 func _test_room_reset(player: Player, boss: FallenGateKnight, room: BossRoomController, respawn: PlayerRespawnController) -> void:

@@ -64,6 +64,13 @@ extends Resource
 @export var charge_thrust_attack_gap: float = 1.12
 @export var jump_smash_attack_gap: float = 1.16
 @export var shockwave_strike_attack_gap: float = 1.10
+@export_category("Gate Severance presentation")
+@export var shockwave_visual_size: Vector2 = Vector2(132.0, 52.0)
+@export var shockwave_collision_size: Vector2 = Vector2(58.0, 20.0)
+@export var shockwave_travel_distance: float = 330.0
+@export var shockwave_spawn_duration: float = 0.10
+@export var shockwave_travel_duration: float = 0.78
+@export var shockwave_dissipate_duration: float = 0.16
 @export_range(0.4, 0.65, 0.05) var post_attack_move_multiplier: float = 0.50
 @export_category("Shield Bash authored timing")
 @export var shield_bash_windup: float = 0.46

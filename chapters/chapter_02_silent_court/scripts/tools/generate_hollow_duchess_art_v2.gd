@@ -69,6 +69,12 @@ const TRANSITION_ANIMATIONS: Dictionary = {
 
 
 func _initialize() -> void:
+	if "--marionette-only" in OS.get_cmdline_user_args():
+		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(EFFECTS_ROOT))
+		_write_marionette_effect()
+		print("HOLLOW_DUCHESS_MARIONETTE_EFFECT: PASS")
+		quit(0)
+		return
 	for path: String in [PHASE_1_ROOT, PHASE_2_ROOT, TRANSITION_ROOT, EFFECTS_ROOT, ANIMATIONS_ROOT]:
 		DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(path))
 	var phase_1_total: int = _write_set(PHASE_1_ROOT, PHASE_1_ANIMATIONS, false)
@@ -563,13 +569,7 @@ func _draw_death(image: Image, animation: StringName, frame: int, count: int, ph
 
 
 func _write_effects() -> void:
-	var phantom: Image = _draw_character_frame(&"phantom_dancer_sweep", 4, 7, true)
-	for py: int in range(phantom.get_height()):
-		for px: int in range(phantom.get_width()):
-			var color: Color = phantom.get_pixel(px, py)
-			if color.a > 0.0:
-				phantom.set_pixel(px, py, Color(COLD_LIGHT.r, COLD_LIGHT.g, COLD_LIGHT.b, minf(0.58, color.a)))
-	phantom.save_png(ProjectSettings.globalize_path(EFFECTS_ROOT + "/phantom_dancer.png"))
+	_write_marionette_effect()
 	var glint: Image = Image.create(24, 24, false, Image.FORMAT_RGBA8)
 	glint.fill(CLEAR)
 	_draw_segment(glint, Vector2i(3, 12), Vector2i(21, 12), 1, PALE_STEEL)
@@ -583,6 +583,100 @@ func _write_effects() -> void:
 			var point: Vector2i = Vector2i(8 + (shard * 13 + index * 5) % 34, 7 + (shard * 9 + index * 4) % 35)
 			_poly(shards, _points([point.x - 2, point.y + 2, point.x, point.y - 4, point.x + 3, point.y + 1]), PORCELAIN_SHADE)
 		shards.save_png(ProjectSettings.globalize_path("%s/mask_shatter_%02d.png" % [EFFECTS_ROOT, index + 1]))
+
+
+func _write_marionette_effect() -> void:
+	var sheet: Image = Image.create(384, 192, false, Image.FORMAT_RGBA8)
+	sheet.fill(CLEAR)
+	_draw_marionette(sheet, 0, false)
+	_draw_marionette(sheet, 192, true)
+	sheet.save_png(ProjectSettings.globalize_path(EFFECTS_ROOT + "/phantom_dancer.png"))
+
+
+func _draw_marionette(image: Image, offset_x: int, feminine: bool) -> void:
+	var center_x: int = offset_x + 96
+	var mask_center: Vector2i = Vector2i(center_x, 45)
+	# Four taut strings make the summoned bodies read as controlled puppets.
+	for string_x: int in [center_x - 16, center_x - 6, center_x + 8, center_x + 19]:
+		_draw_segment(image, Vector2i(string_x, 4), Vector2i(string_x, 57), 1, COLD_LIGHT)
+		_circle(image, Vector2i(string_x, 57), 2, OLD_GOLD)
+	# Porcelain head and cracked mask.
+	_circle(image, mask_center, 15 if feminine else 14, OUTLINE)
+	_circle(image, mask_center, 11 if feminine else 10, PORCELAIN)
+	_draw_segment(image, mask_center + Vector2i(-2, -8), mask_center + Vector2i(3, 8), 1, OXBLOOD)
+	_pixel(image, center_x - 4, 43, DULL_CRIMSON)
+	_pixel(image, center_x + 5, 43, COLD_LIGHT)
+	if feminine:
+		_poly(image, _points([
+			center_x - 17, 31, center_x - 7, 22, center_x + 9, 24,
+			center_x + 18, 34, center_x + 14, 50, center_x - 15, 49,
+		]), BLACK_PLUM)
+		# Restore the porcelain face above the hair mass so the second puppet
+		# reads as a complete court marionette at gameplay scale.
+		_circle(image, mask_center + Vector2i(1, 1), 9, PORCELAIN)
+		_draw_segment(image, mask_center + Vector2i(-1, -6), mask_center + Vector2i(4, 7), 1, OXBLOOD)
+		_pixel(image, center_x - 3, 44, DULL_CRIMSON)
+		_pixel(image, center_x + 5, 44, COLD_LIGHT)
+	else:
+		_poly(image, _points([
+			center_x - 15, 31, center_x - 9, 24, center_x + 12, 26,
+			center_x + 17, 36, center_x + 11, 40, center_x - 13, 39,
+		]), DEEP_PLUM)
+	# Articulated torso, shoulder joints and court costume.
+	_poly(image, _points([
+		center_x - 19, 59, center_x - 12, 53, center_x + 13, 53,
+		center_x + 20, 61, center_x + 13, 104, center_x - 13, 104,
+	]), OUTLINE)
+	_poly(image, _points([
+		center_x - 14, 61, center_x - 9, 58, center_x + 9, 58,
+		center_x + 14, 63, center_x + 9, 99, center_x - 9, 99,
+	]), OXBLOOD if feminine else DEEP_PLUM)
+	image.fill_rect(Rect2i(center_x - 3, 58, 6, 41), OLD_GOLD)
+	_circle(image, Vector2i(center_x - 18, 62), 4, OLD_GOLD)
+	_circle(image, Vector2i(center_x + 18, 62), 4, OLD_GOLD)
+	# Both arms drive two short daggers forward; blade heights remain separated.
+	_draw_segment(image, Vector2i(center_x + 17, 64), Vector2i(center_x + 39, 69), 7, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 17, 65), Vector2i(center_x + 38, 69), 4, BONE_SHADE)
+	_circle(image, Vector2i(center_x + 40, 69), 4, OLD_GOLD)
+	_draw_segment(image, Vector2i(center_x + 41, 69), Vector2i(center_x + 68, 63), 5, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 42, 69), Vector2i(center_x + 67, 63), 2, PALE_STEEL)
+	_draw_segment(image, Vector2i(center_x + 14, 78), Vector2i(center_x + 36, 87), 7, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 14, 78), Vector2i(center_x + 35, 86), 4, STEEL)
+	_circle(image, Vector2i(center_x + 37, 87), 4, OLD_GOLD)
+	_draw_segment(image, Vector2i(center_x + 38, 87), Vector2i(center_x + 62, 91), 5, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 39, 87), Vector2i(center_x + 61, 91), 2, PALE_STEEL)
+	# Rear arm counterbalances the attack and preserves a complete body silhouette.
+	_draw_segment(image, Vector2i(center_x - 17, 66), Vector2i(center_x - 35, 80), 7, OUTLINE)
+	_draw_segment(image, Vector2i(center_x - 16, 66), Vector2i(center_x - 34, 79), 4, BONE_SHADE)
+	_circle(image, Vector2i(center_x - 35, 81), 4, OLD_GOLD)
+	# Distinct lower bodies: split court tails for the man, torn skirt for the woman.
+	if feminine:
+		_poly(image, _points([
+			center_x - 13, 97, center_x + 12, 97, center_x + 24, 128,
+			center_x + 10, 132, center_x, 122, center_x - 11, 133,
+			center_x - 25, 127,
+		]), OUTLINE)
+		_poly(image, _points([
+			center_x - 9, 100, center_x + 9, 100, center_x + 18, 124,
+			center_x + 7, 127, center_x, 116, center_x - 9, 128,
+			center_x - 19, 123,
+		]), OXBLOOD)
+	else:
+		image.fill_rect(Rect2i(center_x - 13, 100, 26, 16), OUTLINE)
+		image.fill_rect(Rect2i(center_x - 9, 101, 18, 13), BLACK_PLUM)
+	# Fully articulated legs and pointed ballroom shoes.
+	_draw_segment(image, Vector2i(center_x - 8, 113), Vector2i(center_x - 18, 145), 9, OUTLINE)
+	_draw_segment(image, Vector2i(center_x - 7, 114), Vector2i(center_x - 17, 144), 5, STEEL)
+	_draw_segment(image, Vector2i(center_x + 8, 113), Vector2i(center_x + 23, 143), 9, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 7, 114), Vector2i(center_x + 22, 142), 5, BONE_SHADE)
+	_poly(image, _points([center_x - 25, 150, center_x - 18, 141, center_x - 7, 149]), OUTLINE)
+	_poly(image, _points([center_x + 17, 148, center_x + 22, 140, center_x + 35, 149]), OUTLINE)
+	# Small cold soul joints retain supernatural readability without reverting to silhouettes.
+	for joint: Vector2i in [
+		Vector2i(center_x - 18, 62), Vector2i(center_x + 18, 62),
+		Vector2i(center_x - 8, 113), Vector2i(center_x + 8, 113),
+	]:
+		_circle(image, joint, 2, COLD_LIGHT)
 
 
 func _write_previews() -> void:

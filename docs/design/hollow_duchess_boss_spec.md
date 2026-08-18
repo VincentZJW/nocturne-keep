@@ -51,10 +51,24 @@ Phase 1 remains `res://chapters/chapter_02_silent_court/assets/boss/hollow_duche
 | Backstep riposte | 12 | 14 |
 | Side-step cut | 12 | 14 |
 | Double lunge | unavailable | 10 / 14 |
-| Phantom dancer sweep | unavailable | 12 |
+| Flying Fan | 16 | 16 |
+| Marionette Guillotine | unavailable | 42 once per paired crossing |
 | Final waltz crossing | unavailable | 10 per pass |
 
 The 0.85 multiplier belongs to `HollowDuchessHitPolicy`, not Player WeaponData. No HP is restored at transition. Windups and recovery remain readable; the Phase 2 attack gap is only marginally tighter than Phase 1.
+
+Flying Fan commits the target direction after a 0.72-second windup, uses one
+32×32 gothic bladed-fan Hitbox for its 0.38-second outbound and 0.38-second
+return paths, and cannot retarget after release. Its 3.2-second cooldown and
+distance weights are `0.30 / 1.20 / 2.20` for Close/Mid/Far; Far pressure adds
+`×1.25`, while immediate repetition reduces the weight to `×0.20`.
+
+Phase 2's former ambiguous silhouette sweep is now `Marionette Guillotine /
+双偶横断`: two fully drawn, dagger-bearing court marionettes telegraph from
+opposite edges for 1.35 seconds, cross the ground lane in 0.82 seconds, then
+leave a 1.25-second punish window. They share one attack ID and target ledger,
+so one cast settles at most 42 damage. Cooldown is 10 seconds and at least two
+other legal attacks must occur before it can re-enter the selector.
 
 ## Defeat, reliquary and Chapter III gate
 
