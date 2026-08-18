@@ -145,15 +145,29 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shield_hit/shield_hit_01.png" id="114_suf0i"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shield_hit/shield_hit_02.png" id="115_3h50u"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shield_hit/shield_hit_03.png" id="116_77qbn"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike/shockwave_strike_07.png" id="123_6eoym"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/stagger/stagger_01.png" id="123_jfxs5"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike/shockwave_strike_08.png" id="124_b6o3h"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/stagger/stagger_02.png" id="124_ca2vg"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/stagger/stagger_03.png" id="125_753wa"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike/shockwave_strike_09.png" id="125_ciian"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike/shockwave_strike_10.png" id="126_bqppf"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/stagger/stagger_04.png" id="126_sw6nm"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_01.png" id="127_1xw2x"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_02.png" id="128_3eapr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_03.png" id="129_knjcg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_04.png" id="130_6abr8"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_05.png" id="131_alvgr"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_06.png" id="132_82p8x"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_active/sword_slash_active_01.png" id="132_iwvb4"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_active/sword_slash_active_02.png" id="133_56d3c"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_07.png" id="133_btwvg"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_08.png" id="134_8cgih"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_recovery/sword_slash_recovery_01.png" id="134_mr8oy"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_09.png" id="135_8ewfe"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_recovery/sword_slash_recovery_02.png" id="135_f8r41"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_recovery/sword_slash_recovery_03.png" id="136_33fhx"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/shockwave_strike_shielded/shockwave_strike_shielded_10.png" id="136_c3tix"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_windup/sword_slash_windup_01.png" id="137_jgr0s"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_windup/sword_slash_windup_02.png" id="138_kr1mv"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/fallen_gate_knight/sprites/sword_slash_windup/sword_slash_windup_03.png" id="139_ta4yf"]
@@ -657,27 +671,74 @@ animations = [{
 "speed": 12.0
 }, {
 "frames": [{
-"duration": 1.0,
+"duration": 1.7,
 "texture": ExtResource("68_qfpx7")
 }, {
-"duration": 1.0,
+"duration": 1.7,
 "texture": ExtResource("69_jwk0t")
 }, {
-"duration": 1.0,
+"duration": 1.7,
 "texture": ExtResource("70_ab0bg")
 }, {
-"duration": 1.0,
+"duration": 1.7,
 "texture": ExtResource("71_a2wyq")
 }, {
-"duration": 1.0,
+"duration": 2.0,
 "texture": ExtResource("72_suu4i")
 }, {
-"duration": 1.0,
+"duration": 1.1,
 "texture": ExtResource("73_3wofm")
+}, {
+"duration": 1.0,
+"texture": ExtResource("123_6eoym")
+}, {
+"duration": 0.8,
+"texture": ExtResource("124_b6o3h")
+}, {
+"duration": 1.1,
+"texture": ExtResource("125_ciian")
+}, {
+"duration": 1.6,
+"texture": ExtResource("126_bqppf")
 }],
 "loop": 0,
 "name": &"shockwave_strike",
-"speed": 8.8
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.7,
+"texture": ExtResource("127_1xw2x")
+}, {
+"duration": 1.7,
+"texture": ExtResource("128_3eapr")
+}, {
+"duration": 1.7,
+"texture": ExtResource("129_knjcg")
+}, {
+"duration": 1.7,
+"texture": ExtResource("130_6abr8")
+}, {
+"duration": 2.0,
+"texture": ExtResource("131_alvgr")
+}, {
+"duration": 1.1,
+"texture": ExtResource("132_82p8x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("133_btwvg")
+}, {
+"duration": 0.8,
+"texture": ExtResource("134_8cgih")
+}, {
+"duration": 1.1,
+"texture": ExtResource("135_8ewfe")
+}, {
+"duration": 1.6,
+"texture": ExtResource("136_c3tix")
+}],
+"loop": 0,
+"name": &"shockwave_strike_shielded",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,

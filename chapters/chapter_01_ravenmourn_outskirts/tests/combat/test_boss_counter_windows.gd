@@ -170,20 +170,31 @@ func _test_natural_active_close(
 	if attack_state in [
 		FallenGateKnight.HEAVY_OVERHEAD,
 		FallenGateKnight.JUMP_SMASH,
-		FallenGateKnight.SHOCKWAVE_STRIKE,
 	]:
 		active_frame = 3
 		close_frame = 5
+	if attack_state == FallenGateKnight.SHOCKWAVE_STRIKE:
+		active_frame = 7
+		close_frame = 8
 	boss.current_phase = phase
 	boss.current_state = attack_state
-	boss.current_attack_id = 940_000 + ATTACK_ORDER.find(attack_state)
+	boss.current_attack_id = maxi(
+		boss.current_attack_id + 1,
+		940_000 + ATTACK_ORDER.find(attack_state)
+	)
 	boss._attack_gap_source_id = 0
 	boss._attack_gap_remaining = 0.0
 	boss._combat_clock = 3.0
 	boss.play_animation(animation_name, true)
 	boss.animated_sprite.set_frame_and_progress(active_frame, 0.0)
 	boss._on_animation_frame_changed()
-	_expect(boss.is_attack_window_active(), "%s active frame did not open Hitbox" % attack_state)
+	if attack_state == FallenGateKnight.SHOCKWAVE_STRIKE:
+		_expect(
+			boss.get_parent().get_node_or_null("GateSeveranceWave") != null,
+			"ShockwaveStrike contact frame did not create its travelling Hitbox"
+		)
+	else:
+		_expect(boss.is_attack_window_active(), "%s active frame did not open Hitbox" % attack_state)
 	boss._combat_clock += 0.10
 	boss.animated_sprite.set_frame_and_progress(close_frame, 0.0)
 	boss._on_animation_frame_changed()
@@ -192,6 +203,11 @@ func _test_natural_active_close(
 		is_equal_approx(boss.get_attack_gap_remaining(), expected_gap),
 		"%s natural active close did not start configured gap" % attack_state
 	)
+	if attack_state == FallenGateKnight.SHOCKWAVE_STRIKE:
+		var wave: HitboxComponent = boss.get_parent().get_node_or_null("GateSeveranceWave") as HitboxComponent
+		if wave != null:
+			boss.get_parent().remove_child(wave)
+			wave.queue_free()
 
 
 func _animation_for_attack(attack_state: StringName) -> StringName:
@@ -335,7 +351,7 @@ func _attack_active_end_time(boss: FallenGateKnight, attack_state: StringName) -
 		FallenGateKnight.JUMP_SMASH:
 			return 5.0 / frames.get_animation_speed(&"jump_smash")
 		FallenGateKnight.SHOCKWAVE_STRIKE:
-			return 5.0 / frames.get_animation_speed(&"shockwave_strike")
+			return _animation_time_through_frame(frames, &"shockwave_strike", 7)
 	return 0.0
 
 

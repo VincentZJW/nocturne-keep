@@ -1,5 +1,18 @@
 # Development Log
 
+## 2026-08-18 — CH1-SWORD-WAVE Ground-Rising Blue Sword Wave rework
+
+Status: implementation, exact-engine regression, MainBootstrap verification and meaningful commit complete; manual visual-feel acceptance remains the user's gate
+
+- Loaded the repository guide, README, technical architecture, all four permanent chapter-production policies and the Godot gameplay workflow. The approved stop point is the completed Sword Wave rework plus Main/F5 Chapter I Boss handoff; no other Boss skill, enemy, Player system, chapter, balance value or BGM is in scope.
+- Audited the formal Boss scene/script/config/SpriteFrames, generator, focused tests, Main route and runtime wave construction. The existing `boss_gate_severance` attack has no independent formal projectile resource: `_spawn_gate_severance_wave()` dynamically creates a 132×42 horizontal Polygon2D crescent with one 96×26 rectangle at `Vector2(52, -10)`, visually placing it above the bridge rather than rooting it to the floor.
+- Locked the implementation plan: preserve 8 damage, 330 px travel, 0.78 s travel duration, current recovery gap and weighted far-distance AI; replace the six-frame short release with a ten-frame raise/hold/vertical-impact/recovery animation, create one canonical 12-frame cold-blue rising-blade VFX, use a ground-base plus vertical-core collision contract, and release only on the authored blade-contact frame.
+- Planned verification: exact Godot 4.7.1 import/parse, focused animation-art and Boss runtime suites, 20 deterministic releases, standing near/mid/far and jump/double-jump paths, left/right orientation, three MainBootstrap Chapter I Boss launches, Output/Debugger review and final user manual playtest.
+- Replaced the runtime horizontal crescent with one canonical 12-frame, nearest-neighbour ground-rising blue blade. The authored 10-frame Boss action now raises and holds the greatsword, drives it into the bridge and releases on exact contact frame 8; Phase I has a shield-coherent animation while Phase II uses the unshielded form. The attack uses a narrow vertical core plus grounded base instead of the old single wide rectangle.
+- Preserved the existing 8 damage, 330 px travel, 0.78-second travel duration, 0.10-second materialization, 0.16-second dissipation, 1.10-second post-attack gap and weighted Phase II AI selection. No other Boss action, Player rule, chapter, music or balance value changed.
+- Exact Godot 4.7.1 results: import/parse PASS; formal art PASS (`42` animations, `179` frames, `12` wave frames); 20/20 natural releases; standing hits 20/20 at 90/210/340 px and in both directions; walk-out, jump, double-jump and dash avoidance 10/10 each; all Boss counter windows PASS; 20 controlled fights completed with every Phase II action used at least 15 times; three configured MainBootstrap Chapter I Boss launches PASS. Final commands contained no red script, resource, Output or Debugger error.
+- QA evidence and manual F5 acceptance steps: `docs/qa/chapter_01_ground_rising_blue_sword_wave/qa_results.md`. The local Debug Start is intentionally set to Chapter I `boss_checkpoint` for the user's manual session and is excluded from the commit.
+
 ## 2026-08-14 — CH4-BOSS-BALANCE-0–5 Soul Gaoler Ormund combat rebalance
 
 Status: implementation, focused runtime QA, Main integration and production-component full-fight replays complete; final human-feel acceptance remains the user's manual gate

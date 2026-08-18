@@ -144,7 +144,8 @@ func _test_main_structure(main: Node2D, boss: FallenGateKnight, room: BossRoomCo
 		&"combo_slash_2": 12.0,
 		&"jump_smash": 9.8,
 		&"charge_thrust": 11.0,
-		&"shockwave_strike": 8.8,
+		&"shockwave_strike": 10.0,
+		&"shockwave_strike_shielded": 10.0,
 		&"turn_shielded": 23.076923,
 		&"turn_unshielded": 23.076923,
 	}
@@ -373,7 +374,7 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 		{"state": FallenGateKnight.COMBO_SLASH, "frame": 2, "damage": 10, "phase": 2},
 		{"state": FallenGateKnight.JUMP_SMASH, "frame": 3, "damage": 15, "phase": 2},
 		{"state": FallenGateKnight.CHARGE_THRUST, "frame": 2, "damage": 12, "phase": 2},
-		{"state": FallenGateKnight.SHOCKWAVE_STRIKE, "frame": 3, "damage": 8, "phase": 2},
+		{"state": FallenGateKnight.SHOCKWAVE_STRIKE, "frame": 7, "damage": 8, "phase": 2},
 	]
 	for profile: Dictionary in profiles:
 		target_health.reset_to_full()
@@ -390,11 +391,17 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 			if hitbox == null:
 				continue
 			_expect(not hitbox.is_active, "Gate Severance armed before its 0.10s materialization")
-			var visual: Node2D = hitbox.get_node_or_null("CrescentVisual") as Node2D
-			_expect(visual != null and visual.get_child_count() >= 10, "Gate Severance lacks layered crescent presentation")
-			var collision: CollisionShape2D = hitbox.get_node("CollisionShape2D") as CollisionShape2D
-			var rectangle: RectangleShape2D = collision.shape as RectangleShape2D
-			_expect(rectangle.size == boss.config.shockwave_collision_size, "Gate Severance collision size mismatch")
+			var visual: AnimatedSprite2D = hitbox.get_node_or_null("RisingBladeVisual") as AnimatedSprite2D
+			_expect(visual != null, "Gate Severance lacks canonical rising-blade presentation")
+			if visual != null:
+				_expect(visual.sprite_frames.get_frame_count(&"erupt") == 12, "Gate Severance VFX is not 12 frames")
+				_expect(visual.texture_filter == CanvasItem.TEXTURE_FILTER_NEAREST, "Gate Severance VFX is not nearest-neighbour")
+			var core_collision: CollisionShape2D = hitbox.get_node("CoreCollisionShape2D") as CollisionShape2D
+			var base_collision: CollisionShape2D = hitbox.get_node("BaseCollisionShape2D") as CollisionShape2D
+			var core_rectangle: RectangleShape2D = core_collision.shape as RectangleShape2D
+			var base_rectangle: RectangleShape2D = base_collision.shape as RectangleShape2D
+			_expect(core_rectangle.size == boss.config.shockwave_collision_size, "Gate Severance core collision mismatch")
+			_expect(base_rectangle.size == boss.config.shockwave_base_collision_size, "Gate Severance base collision mismatch")
 			for _frame: int in range(8):
 				await physics_frame
 		_expect(hitbox.is_active, "%s did not open its active frame" % profile["state"])
@@ -416,11 +423,30 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 
 
 func _test_gate_severance_repetition(boss: FallenGateKnight) -> void:
-	_expect(boss.config.shockwave_visual_size == Vector2(132.0, 42.0), "Gate Severance visual contract mismatch")
-	_expect(boss.config.shockwave_collision_size == Vector2(96.0, 26.0), "Gate Severance collision contract mismatch")
-	_expect(boss.config.shockwave_spawn_offset == Vector2(52.0, -10.0), "Gate Severance spawn offset mismatch")
-	var horizontal_coverage: float = boss.config.shockwave_collision_size.x / boss.config.shockwave_visual_size.x
-	_expect(horizontal_coverage >= 0.70 and horizontal_coverage <= 0.85, "Gate Severance collision does not cover 70-85%% of the visual core")
+	_expect(boss.config.shockwave_visual_size == Vector2(80.0, 88.0), "Gate Severance visual contract mismatch")
+	_expect(boss.config.shockwave_visual_size.y > boss.config.shockwave_visual_size.x, "Gate Severance is not vertically dominant")
+	_expect(boss.config.shockwave_collision_size == Vector2(34.0, 34.0), "Gate Severance core collision contract mismatch")
+	_expect(boss.config.shockwave_base_collision_size == Vector2(78.0, 14.0), "Gate Severance base collision contract mismatch")
+	_expect(boss.config.shockwave_spawn_offset == Vector2(52.0, 44.0), "Gate Severance is not rooted to the bridge surface")
+	# The projectile must not exist during raise/hold/downward travel. It is born
+	# only when authored frame 07 reaches the bridge surface.
+	boss.current_state = FallenGateKnight.SHOCKWAVE_STRIKE
+	boss.current_attack_id = 119_999
+	boss._gate_wave_spawned_for_id = -1
+	for precontact_frame: int in range(7):
+		boss.animated_sprite.frame = precontact_frame
+		boss._on_animation_frame_changed()
+		_expect(
+			boss.get_parent().get_node_or_null("GateSeveranceWave") == null,
+			"Gate Severance released before ground-contact frame %d" % precontact_frame
+		)
+	boss.animated_sprite.frame = 7
+	boss._on_animation_frame_changed()
+	var contact_wave: HitboxComponent = boss.get_parent().get_node_or_null("GateSeveranceWave") as HitboxComponent
+	_expect(contact_wave != null, "Gate Severance did not release on exact ground-contact frame")
+	if contact_wave != null:
+		contact_wave.queue_free()
+		await process_frame
 	for iteration: int in range(20):
 		boss.current_attack_id = 120_000 + iteration
 		boss._spawn_gate_severance_wave()
@@ -431,15 +457,20 @@ func _test_gate_severance_repetition(boss: FallenGateKnight) -> void:
 		for _frame: int in range(8):
 			await physics_frame
 		_expect(wave.is_active, "Gate Severance repetition %d did not arm" % (iteration + 1))
+		_expect(wave.get_node_or_null("CoreCollisionShape2D") != null, "Gate Severance lacks vertical core")
+		_expect(wave.get_node_or_null("BaseCollisionShape2D") != null, "Gate Severance lacks ground base")
 		wave.end_attack()
 		wave.queue_free()
 		await process_frame
-	print("GATE_SEVERANCE_VISUAL_CYCLES: PASS triggers=20 layered_crescent=true")
+	print("GATE_SEVERANCE_VISUAL_CYCLES: PASS triggers=20 rising_blue_blade=true vfx_frames=12")
 
 
 func _test_gate_severance_spatial_paths(main: Node2D, boss: FallenGateKnight) -> void:
 	var original_time_scale: float = Engine.time_scale
-	Engine.time_scale = 8.0
+	# Four-times stress keeps the Area2D sweep below the 78 px ground-base span;
+	# eight-times stepping can teleport the test wave over a 22 px target and
+	# measures discrete test tunnelling rather than the formal 1x gameplay path.
+	Engine.time_scale = 4.0
 	var target_root: Node2D = Node2D.new()
 	target_root.name = "GateSeveranceSpatialTarget"
 	var target_health: HealthComponent = HealthComponent.new()

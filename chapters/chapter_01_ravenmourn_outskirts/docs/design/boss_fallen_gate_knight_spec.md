@@ -110,16 +110,19 @@ decays at 0.14 per second, so a fully learned habit clears in about 7.1 seconds.
 - Close is `<= 68 px`, Far is `>= 205 px`, and the space between is Mid.
 - Repeated airborne crossings bias the existing Heavy Overhead / Jump Smash into
   `Rising Gate Cleave`; the counter candidate is capped at 70%.
-- Far play can offer `Gate Severance`, a low, non-homing ground sword wave at
-  55–70% rather than forcing it. The committed release now materializes for
-  `0.10 s`, then carries a wide `132 × 42 px` horizontal layered crescent `330 px` in
-  `0.78 s` (about `423 px/s`) before a restrained `0.16 s` dissipation. Its
-  `96 × 26 px` chest-height collision covers 72.7% of the visible core without
-  including debris; steel and
-  bone-white edges, a thin old-blood tear and sparse debris communicate the
-  volume without turning the full effect into damage. Near/Mid/Far standing
-  probes and both facings resolve 20/20, while walk, jump, double-jump and dash
-  counter probes remain avoidable. Its 8 damage remains below the Boss's heavy
-  attack, the direction locks at release, and it never tracks the Player.
+- Far play can offer `Gate Severance` at 55–70% rather than forcing it. The
+  committed animation is a ten-frame two-hand sequence: 0.68 s raise, 0.20 s
+  held overhead telegraph, 0.21 s vertical downward drive, exact bridge-contact
+  release and 0.27 s recovery. The full energy blade never appears before the
+  greatsword reaches the ground.
+- The release materializes for `0.10 s`, then carries one canonical 12-frame,
+  cold-blue `80 × 88 px` ground-rising crescent `330 px` in `0.78 s` (about
+  `423 px/s`) before a restrained `0.16 s` dissipation. A `34 × 34 px` vertical
+  core plus `78 × 14 px` ground base replaces the old giant horizontal rectangle:
+  standing targets cross the dangerous lower blade while properly timed jumps
+  clear it. Indigo outline, royal-blue plane, azure edge and a cyan-white cutting
+  core make the upward, forward-leaning blade readable without a fireball shape.
+  Damage remains 8, direction commits at release, the wave stays on its original
+  ground baseline and it never tracks the Player.
 - An attack that has entered windup remains committed. Cooldowns, recovery,
   turn timing and the existing Player-turn gaps still own when the Boss may act.

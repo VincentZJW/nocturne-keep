@@ -14,6 +14,8 @@ const CONCEPTS: String = ROOT + "/concept_art"
 const FRAME_WIDTH: int = 128
 const FRAME_HEIGHT: int = 96
 const EFFECT_SIZE: int = 96
+const GATE_WAVE_WIDTH: int = 96
+const GATE_WAVE_HEIGHT: int = 112
 const CLEAR: Color = Color(0.0, 0.0, 0.0, 0.0)
 const OUTLINE: Color = Color("070a0f")
 const DEEP_IRON: Color = Color("111821")
@@ -51,7 +53,8 @@ const ANIMATIONS: Dictionary = {
 	&"shield_bash": 5,
 	&"shield_block": 4,
 	&"shield_break": 5,
-	&"shockwave_strike": 6,
+	&"shockwave_strike_shielded": 10,
+	&"shockwave_strike": 10,
 	&"sword_slash": 5,
 	&"turn_shielded": 3,
 	&"turn_unshielded": 3,
@@ -90,7 +93,7 @@ const PHASE_ONE_ANIMATIONS: Array[StringName] = [
 	&"sword_slash_windup", &"sword_slash_active", &"sword_slash_recovery",
 	&"heavy_overhead", &"heavy_overhead_windup", &"heavy_overhead_active",
 	&"heavy_overhead_recovery", &"shield_break", &"hurt_shielded",
-	&"light_hit", &"death_start",
+	&"shockwave_strike_shielded", &"light_hit", &"death_start",
 ]
 
 
@@ -114,6 +117,7 @@ func _initialize() -> void:
 			total += 1
 	_write_shield_condition_art()
 	_write_break_effects()
+	_write_gate_severance_effect()
 	_write_concept_derivatives()
 	_write_runtime_preview()
 	print("FALLEN_GATE_KNIGHT_ART_V3: PASS animations=%d frames=%d" % [ANIMATIONS.size(), total])
@@ -402,9 +406,23 @@ func _get_sword_pose(
 			var jump_tips: Array[Vector2i] = [Vector2i(x + 52, 1), Vector2i(x + 48, 1), Vector2i(x + 45, 1), Vector2i(FRAME_WIDTH - 4, y + 10), Vector2i(FRAME_WIDTH - 9, FRAME_HEIGHT - 3), Vector2i(x + 49, y + 86)]
 			grip = jump_grips[frame]
 			tip = jump_tips[frame]
-		&"shockwave_strike":
-			var shock_grips: Array[Vector2i] = [Vector2i(x + 1, y + 38), Vector2i(x - 3, y + 32), Vector2i(x - 6, y + 31), Vector2i(x - 5, y + 38), Vector2i(x - 3, y + 57), Vector2i(x + 4, y + 42)]
-			var shock_tips: Array[Vector2i] = [Vector2i(x + 50, 1), Vector2i(x + 47, 1), Vector2i(x + 44, 1), Vector2i(FRAME_WIDTH - 4, y + 18), Vector2i(FRAME_WIDTH - 10, FRAME_HEIGHT - 3), Vector2i(x + 49, y + 87)]
+		&"shockwave_strike", &"shockwave_strike_shielded":
+			# Authored vertical commitment: four-frame raise, held overhead telegraph,
+			# two-frame downward drive, exact ground contact, then short recovery.
+			var shock_grips: Array[Vector2i] = [
+				Vector2i(x + 4, y + 42), Vector2i(x + 1, y + 36),
+				Vector2i(x - 3, y + 31), Vector2i(x - 6, y + 29),
+				Vector2i(x - 7, y + 29), Vector2i(x - 5, y + 34),
+				Vector2i(x - 3, y + 43), Vector2i(x, y + 58),
+				Vector2i(x + 2, y + 52), Vector2i(x + 5, y + 44),
+			]
+			var shock_tips: Array[Vector2i] = [
+				Vector2i(x + 44, y + 84), Vector2i(x + 48, y + 14),
+				Vector2i(x + 41, 1), Vector2i(x + 34, 1),
+				Vector2i(x + 31, 1), Vector2i(x + 47, y + 8),
+				Vector2i(x + 70, y + 38), Vector2i(x + 65, FRAME_HEIGHT - 2),
+				Vector2i(x + 58, y + 84), Vector2i(x + 49, y + 86),
+			]
 			grip = shock_grips[frame]
 			tip = shock_tips[frame]
 		&"sword_slash_windup", &"heavy_overhead_windup", &"thrust_windup":
@@ -555,8 +573,15 @@ func _draw_animation_fx(
 		for spark: int in range(5 + frame * 3):
 			var point: Vector2i = origin + Vector2i(-25 + (spark * 13 + frame * 7) % 56, 9 + (spark * 11) % 57)
 			_pixel(image, point.x, point.y, SOUL_LIT if spark % 3 == 0 else RUST_LIT)
-	if animation == &"shockwave_strike" and frame in [3, 4]:
-		_draw_shockwave(image, origin + Vector2i(35, 81), frame - 3)
+	if animation in [&"shockwave_strike", &"shockwave_strike_shielded"]:
+		if frame in [3, 4, 5]:
+			# Cold-blue charge lives on the blade during the held telegraph; the
+			# full energy blade never appears before physical ground contact.
+			var charge_y: int = 10 + (frame - 3) * 4
+			_draw_segment(image, origin + Vector2i(29, charge_y), origin + Vector2i(34, charge_y + 22), 2, SOUL_BLUE)
+			_pixel(image, origin.x + 31, charge_y - 2, SOUL_LIT)
+		if frame == 7:
+			_draw_ground_impact(image, origin + Vector2i(50, 88))
 	if animation in [&"shield_hit", &"shield_block"] and frame > 0:
 		_draw_impact(image, origin + Vector2i(-42, 35), frame)
 	if animation in [&"hurt", &"hurt_unshielded", &"stagger"]:
@@ -629,6 +654,66 @@ func _write_break_effects() -> void:
 		if frame < 3:
 			_draw_impact(effect, Vector2i(30, 45), frame)
 		effect.save_png(ProjectSettings.globalize_path("%s/shield_break_fx_%02d.png" % [EFFECTS, frame + 1]))
+
+
+func _write_gate_severance_effect() -> void:
+	# One canonical runtime VFX family: a ground-rooted, upward-rising blue
+	# crescent flame. Its height is deliberately greater than its width and its
+	# tip leans toward the committed attack direction.
+	var growth: Array[float] = [0.18, 0.34, 0.52, 0.72, 0.90, 1.0, 1.0, 0.98, 0.92, 0.78, 0.56, 0.30]
+	for frame: int in range(growth.size()):
+		var effect: Image = Image.create(GATE_WAVE_WIDTH, GATE_WAVE_HEIGHT, false, Image.FORMAT_RGBA8)
+		effect.fill(CLEAR)
+		var amount: float = growth[frame]
+		var base_y: int = 108
+		var height: int = maxi(16, roundi(100.0 * amount))
+		var tip_y: int = base_y - height
+		var base_left: int = 8 + roundi((1.0 - amount) * 18.0)
+		var base_right: int = 84 - roundi((1.0 - amount) * 8.0)
+		var middle_y: int = base_y - roundi(float(height) * 0.53)
+		var shoulder_y: int = base_y - roundi(float(height) * 0.78)
+		# Dark indigo outline: broad broken ground root, concave rear edge and
+		# aggressively tapered forward tip.
+		_poly(effect, PackedVector2Array([
+			Vector2(base_left, base_y), Vector2(base_left + 10, base_y - 13),
+			Vector2(30, middle_y + 7), Vector2(42, shoulder_y + 4),
+			Vector2(70, tip_y), Vector2(64, shoulder_y + 18),
+			Vector2(71, middle_y + 2), Vector2(base_right, base_y - 10),
+			Vector2(base_right - 7, base_y),
+		]), Color("101834"))
+		# Royal-blue blade plane.
+		_poly(effect, PackedVector2Array([
+			Vector2(base_left + 7, base_y - 3), Vector2(base_left + 15, base_y - 15),
+			Vector2(34, middle_y + 6), Vector2(46, shoulder_y + 6),
+			Vector2(67, tip_y + 5), Vector2(61, shoulder_y + 19),
+			Vector2(67, middle_y + 6), Vector2(base_right - 7, base_y - 10),
+			Vector2(base_right - 12, base_y - 3),
+		]), Color("2451a4"))
+		# Azure inner edge and cyan-white cutting core remain separated from the
+		# indigo flame tail so the effect reads as a blade, not a fireball.
+		_poly(effect, PackedVector2Array([
+			Vector2(base_left + 16, base_y - 5), Vector2(38, middle_y + 8),
+			Vector2(51, shoulder_y + 8), Vector2(65, tip_y + 8),
+			Vector2(57, shoulder_y + 22), Vector2(61, middle_y + 11),
+			Vector2(base_right - 17, base_y - 7),
+		]), Color("3f96dd"))
+		_draw_segment(effect, Vector2i(base_left + 19, base_y - 7), Vector2i(62, tip_y + 12), 3, Color("82d8f3"))
+		_draw_segment(effect, Vector2i(base_left + 24, base_y - 7), Vector2i(58, tip_y + 20), 1, Color("d9fbff"))
+		# Small broken flame tongues and impact cracks reinforce the ground source
+		# without obscuring either the Boss or Player.
+		for tongue: int in range(3):
+			var tongue_x: int = 14 + tongue * 22
+			var tongue_height: int = 6 + ((frame + tongue) % 3) * 3
+			_poly(effect, _points([
+				tongue_x, base_y - 1, tongue_x + 5, base_y - tongue_height,
+				tongue_x + 9, base_y - 2, tongue_x + 12, base_y,
+			]), Color("253173"))
+		if frame in [3, 4, 5, 6]:
+			_draw_segment(effect, Vector2i(7, base_y), Vector2i(1, base_y - 4), 1, OLD_SILVER)
+			_draw_segment(effect, Vector2i(83, base_y), Vector2i(93, base_y - 3), 1, SOUL_BLUE)
+		var output: String = "%s/gate_severance_wave_%02d.png" % [EFFECTS, frame + 1]
+		if effect.save_png(ProjectSettings.globalize_path(output)) != OK:
+			push_error("Cannot save Gate Severance VFX frame: %s" % output)
 
 
 func _write_concept_derivatives() -> void:
@@ -710,6 +795,14 @@ func _draw_impact(image: Image, center: Vector2i, frame: int) -> void:
 	var reach: int = 7 + frame * 3
 	for ray: Vector2i in [Vector2i(-reach, -2), Vector2i(-5, -reach), Vector2i(reach, -5), Vector2i(reach, 4)]:
 		_draw_segment(image, center, center + ray, 2, PALE_STEEL if ray.x < 0 else GOLD_LIT)
+
+
+func _draw_ground_impact(image: Image, center: Vector2i) -> void:
+	_draw_segment(image, center - Vector2i(14, 0), center + Vector2i(17, 0), 2, SOUL_BLUE)
+	_draw_segment(image, center - Vector2i(5, 0), center - Vector2i(14, -5), 1, OLD_SILVER)
+	_draw_segment(image, center + Vector2i(4, 0), center + Vector2i(18, -4), 1, SOUL_LIT)
+	for dust: Vector2i in [Vector2i(-17, -4), Vector2i(-10, -8), Vector2i(10, -7), Vector2i(19, -3)]:
+		_circle(image, center + dust, 1, Color("59616a"))
 
 
 func _crop_and_save(source: Image, rectangle: Rect2i, output: String) -> void:

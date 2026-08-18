@@ -30,6 +30,16 @@ const SUPPLEMENTAL: Dictionary = {
 	&"death_start": {&"frames": 3, &"fps": 7.0, &"loop": false},
 	&"combo_slash": {&"frames": 6, &"fps": 12.0, &"loop": false},
 	&"stagger": {&"frames": 4, &"fps": 10.0, &"loop": false},
+	# 0.88 s raise, 0.20 s held telegraph, committed downward cut, exact
+	# ground-contact release and short recovery. Durations are in 0.1 s units.
+	&"shockwave_strike": {
+		&"frames": 10, &"fps": 10.0, &"loop": false,
+		&"durations": [1.7, 1.7, 1.7, 1.7, 2.0, 1.1, 1.0, 0.8, 1.1, 1.6],
+	},
+	&"shockwave_strike_shielded": {
+		&"frames": 10, &"fps": 10.0, &"loop": false,
+		&"durations": [1.7, 1.7, 1.7, 1.7, 2.0, 1.1, 1.0, 0.8, 1.1, 1.6],
+	},
 }
 
 
@@ -58,7 +68,11 @@ func _initialize() -> void:
 				push_error("Missing Fallen Gate Knight texture: %s" % texture_path)
 				quit(1)
 				return
-			frames.add_frame(animation, texture)
+			var duration: float = 1.0
+			if definition.has(&"durations"):
+				var durations: Array = definition[&"durations"] as Array
+				duration = float(durations[frame_index])
+			frames.add_frame(animation, texture, duration)
 			added_frames += 1
 	var save_error: Error = ResourceSaver.save(frames, RESOURCE_PATH)
 	if save_error != OK:

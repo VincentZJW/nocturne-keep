@@ -138,6 +138,13 @@ var observed_dash_through_count: int = 0
 const BEHAVIOR_REACTION_DELAY: float = 0.40
 const BEHAVIOR_DECAY_PER_SECOND: float = 0.14
 const BEHAVIOR_SAMPLE_INTERVAL: float = 0.20
+const GATE_SEVERANCE_FRAME_COUNT: int = 12
+const GATE_SEVERANCE_VFX_BASE: String = (
+	"res://chapters/chapter_01_ravenmourn_outskirts/assets/boss/"
+	+ "fallen_gate_knight/effects/gate_severance_wave_"
+)
+
+var _gate_severance_frames: SpriteFrames
 
 
 func _ready() -> void:
@@ -863,7 +870,10 @@ func _start_attack(attack_state: StringName) -> bool:
 		CHARGE_THRUST:
 			play_animation(&"charge_thrust", true)
 		SHOCKWAVE_STRIKE:
-			play_animation(&"shockwave_strike", true)
+			play_animation(
+				&"shockwave_strike_shielded" if current_phase == 1 else &"shockwave_strike",
+				true
+			)
 	return true
 
 
@@ -904,11 +914,15 @@ func _on_animation_frame_changed() -> void:
 			active = animated_sprite.frame in [2, 3]
 			damage = config.charge_thrust_damage
 		SHOCKWAVE_STRIKE:
-			active = animated_sprite.frame in [3, 4]
+			# The travelling blade is released only on authored frame 07 (zero-based):
+			# the exact frame where the greatsword reaches the bridge surface.
+			active = animated_sprite.frame == 7
 			damage = config.shockwave_damage
 			if active and _gate_wave_spawned_for_id != current_attack_id:
 				_gate_wave_spawned_for_id = current_attack_id
 				_spawn_gate_severance_wave()
+			elif animated_sprite.frame >= 8 and _gate_wave_spawned_for_id == current_attack_id:
+				_record_natural_attack_active_end()
 			_end_attack_window()
 			return
 	_set_attack_window(active, damage)
@@ -1323,66 +1337,43 @@ func _spawn_gate_severance_wave() -> void:
 	wave.collision_layer = 64
 	wave.collision_mask = 8
 	wave.z_index = 16
-	var collision: CollisionShape2D = CollisionShape2D.new()
-	collision.name = "CollisionShape2D"
-	var shape: RectangleShape2D = RectangleShape2D.new()
-	shape.size = config.shockwave_collision_size
-	collision.shape = shape
-	wave.add_child(collision)
-	var visual_root: Node2D = Node2D.new()
-	visual_root.name = "CrescentVisual"
-	wave.add_child(visual_root)
-	# Keep the blade's long axis horizontal. The upper and lower curves taper
-	# together into one forward tip instead of climbing toward the sky.
-	_add_gate_wave_layer(visual_root, PackedVector2Array([
-		Vector2(-66.0, 3.0), Vector2(-54.0, -8.0), Vector2(-29.0, -16.0),
-		Vector2(6.0, -18.0), Vector2(39.0, -11.0), Vector2(66.0, 0.0),
-		Vector2(39.0, 5.0), Vector2(7.0, 8.0), Vector2(-25.0, 7.0),
-		Vector2(-52.0, 9.0),
-	]), Color("111720"))
-	_add_gate_wave_layer(visual_root, PackedVector2Array([
-		Vector2(-61.0, 2.0), Vector2(-49.0, -7.0), Vector2(-25.0, -13.0),
-		Vector2(8.0, -15.0), Vector2(37.0, -9.0), Vector2(61.0, 0.0),
-		Vector2(36.0, 3.0), Vector2(8.0, 6.0), Vector2(-23.0, 5.0),
-		Vector2(-47.0, 7.0),
-	]), Color("aebbc4"))
-	_add_gate_wave_layer(visual_root, PackedVector2Array([
-		Vector2(-54.0, 0.0), Vector2(-37.0, -8.0), Vector2(-11.0, -11.0),
-		Vector2(17.0, -10.0), Vector2(43.0, -5.0), Vector2(56.0, 0.0),
-		Vector2(29.0, 1.0), Vector2(2.0, 3.0), Vector2(-25.0, 3.0),
-	]), Color("edf1ef"))
-	_add_gate_wave_layer(visual_root, PackedVector2Array([
-		Vector2(-40.0, 10.0), Vector2(-15.0, 6.0), Vector2(15.0, 7.0),
-		Vector2(38.0, 11.0), Vector2(14.0, 13.0), Vector2(-16.0, 13.0),
-	]), Color("443039"))
-	for mote_index: int in range(6):
-		var mote: Polygon2D = Polygon2D.new()
-		var mote_x: float = -55.0 + float(mote_index * 17)
-		var mote_y: float = 14.0 + float((mote_index % 3) * 3)
-		mote.polygon = PackedVector2Array([
-			Vector2(mote_x, mote_y), Vector2(mote_x + 3.0, mote_y - 2.0),
-			Vector2(mote_x + 5.0, mote_y + 1.0), Vector2(mote_x + 2.0, mote_y + 3.0),
-		])
-		mote.color = Color("59616a") if mote_index % 2 == 0 else Color("69414a")
-		visual_root.add_child(mote)
+	_add_gate_severance_collision(
+		wave, "CoreCollisionShape2D", config.shockwave_collision_size,
+		Vector2(wave_direction * config.shockwave_core_collision_offset.x, config.shockwave_core_collision_offset.y)
+	)
+	_add_gate_severance_collision(
+		wave, "BaseCollisionShape2D", config.shockwave_base_collision_size,
+		Vector2(wave_direction * config.shockwave_base_collision_offset.x, config.shockwave_base_collision_offset.y)
+	)
+	var visual: AnimatedSprite2D = AnimatedSprite2D.new()
+	visual.name = "RisingBladeVisual"
+	visual.sprite_frames = _get_gate_severance_frames()
+	visual.animation = &"erupt"
+	visual.centered = true
+	visual.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	visual.flip_h = wave_direction < 0.0
+	visual.position = Vector2(0.0, -config.shockwave_visual_size.y * 0.5)
+	visual.scale = Vector2(
+		config.shockwave_visual_size.x / 96.0,
+		config.shockwave_visual_size.y / 112.0
+	)
+	wave.add_child(visual)
 	get_parent().add_child(wave)
 	wave.global_position = global_position + Vector2(
 		wave_direction * config.shockwave_spawn_offset.x,
 		config.shockwave_spawn_offset.y
 	)
-	var target_scale: Vector2 = Vector2(
-		wave_direction * config.shockwave_visual_size.x / 132.0,
-		config.shockwave_visual_size.y / 42.0
-	)
-	visual_root.scale = Vector2(target_scale.x * 0.28, target_scale.y * 0.52)
+	var target_scale: Vector2 = visual.scale
+	visual.scale = Vector2(target_scale.x * 0.62, target_scale.y * 0.14)
 	wave.modulate = Color(1.0, 1.0, 1.0, 0.0)
 	var tween: Tween = wave.create_tween()
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.tween_property(visual_root, "scale", target_scale, config.shockwave_spawn_duration)
+	tween.tween_property(visual, "scale", target_scale, config.shockwave_spawn_duration)
 	tween.parallel().tween_property(wave, "modulate:a", 1.0, config.shockwave_spawn_duration)
 	tween.tween_callback(func() -> void:
 		if is_instance_valid(wave):
 			wave.begin_attack(wave_attack_id, config.shockwave_damage, wave_direction, self)
+			visual.play(&"erupt")
 	)
 	tween.set_trans(Tween.TRANS_LINEAR)
 	tween.tween_property(
@@ -1397,7 +1388,7 @@ func _spawn_gate_severance_wave() -> void:
 	tween.set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 	tween.tween_property(wave, "modulate:a", 0.0, config.shockwave_dissipate_duration)
 	tween.parallel().tween_property(
-		visual_root, "scale:y", target_scale.y * 0.34, config.shockwave_dissipate_duration
+		visual, "scale:y", target_scale.y * 0.34, config.shockwave_dissipate_duration
 	)
 	tween.finished.connect(func() -> void:
 		if is_instance_valid(wave):
@@ -1406,11 +1397,34 @@ func _spawn_gate_severance_wave() -> void:
 	)
 
 
-func _add_gate_wave_layer(parent: Node2D, points: PackedVector2Array, color: Color) -> void:
-	var layer: Polygon2D = Polygon2D.new()
-	layer.polygon = points
-	layer.color = color
-	parent.add_child(layer)
+func _add_gate_severance_collision(
+	wave: HitboxComponent, node_name: String, size: Vector2, offset: Vector2
+) -> void:
+	var collision: CollisionShape2D = CollisionShape2D.new()
+	collision.name = node_name
+	collision.position = offset
+	var shape: RectangleShape2D = RectangleShape2D.new()
+	shape.size = size
+	collision.shape = shape
+	wave.add_child(collision)
+
+
+func _get_gate_severance_frames() -> SpriteFrames:
+	if _gate_severance_frames != null:
+		return _gate_severance_frames
+	_gate_severance_frames = SpriteFrames.new()
+	_gate_severance_frames.remove_animation(&"default")
+	_gate_severance_frames.add_animation(&"erupt")
+	_gate_severance_frames.set_animation_loop(&"erupt", false)
+	_gate_severance_frames.set_animation_speed(&"erupt", config.shockwave_visual_fps)
+	for frame_index: int in range(GATE_SEVERANCE_FRAME_COUNT):
+		var texture_path: String = "%s%02d.png" % [GATE_SEVERANCE_VFX_BASE, frame_index + 1]
+		var texture: Texture2D = load(texture_path) as Texture2D
+		if texture == null:
+			push_error("Missing canonical Gate Severance VFX frame: %s" % texture_path)
+			continue
+		_gate_severance_frames.add_frame(&"erupt", texture)
+	return _gate_severance_frames
 
 
 func _configure_attack_geometry() -> void:

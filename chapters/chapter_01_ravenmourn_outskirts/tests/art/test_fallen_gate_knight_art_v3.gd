@@ -14,7 +14,8 @@ const EXPECTED_ANIMATIONS: Dictionary = {
 	&"death": 7, &"heavy_overhead": 6, &"hurt_shielded": 3,
 	&"hurt_unshielded": 3, &"idle_shielded": 4, &"idle_unshielded": 4,
 	&"jump_smash": 6, &"phase_transition": 5, &"shield_bash": 5,
-	&"shield_block": 4, &"shield_break": 5, &"shockwave_strike": 6,
+	&"shield_block": 4, &"shield_break": 5, &"shockwave_strike": 10,
+	&"shockwave_strike_shielded": 10,
 	&"sword_slash": 5, &"turn_shielded": 3, &"turn_unshielded": 3,
 	&"walk_shielded": 6, &"walk_unshielded": 6,
 	&"dormant": 4, &"intro": 6, &"approach_shielded": 6,
@@ -50,7 +51,7 @@ func _run() -> void:
 	_test_shield_states()
 	_test_main_reference()
 	if _failures.is_empty():
-		print("FALLEN_GATE_KNIGHT_ART_V3_TEST: PASS animations=41 frames=165 concepts=7 shield_states=4 main=true")
+		print("FALLEN_GATE_KNIGHT_ART_V3_TEST: PASS animations=42 frames=179 concepts=7 shield_states=4 gate_wave=12 main=true")
 		quit(0)
 		return
 	for failure: String in _failures:
@@ -72,7 +73,7 @@ func _test_sprite_frames() -> void:
 	_expect(frames != null, "SpriteFrames resource cannot load")
 	if frames == null:
 		return
-	_expect(frames.get_animation_names().size() == EXPECTED_ANIMATIONS.size(), "SpriteFrames animation count is not 41")
+	_expect(frames.get_animation_names().size() == EXPECTED_ANIMATIONS.size(), "SpriteFrames animation count is not 42")
 	var total: int = 0
 	for animation_variant: Variant in EXPECTED_ANIMATIONS.keys():
 		var animation: StringName = animation_variant as StringName
@@ -87,9 +88,14 @@ func _test_sprite_frames() -> void:
 			_expect(texture != null, "Null frame: %s[%d]" % [animation, frame_index])
 			if texture != null:
 				_expect(texture.get_size() == Vector2(128, 96), "Frame is not 128x96: %s[%d]" % [animation, frame_index])
-	_expect(total == 165, "Total frame count is not 165")
+	_expect(total == 179, "Total frame count is not 179")
 	var resource_text: String = FileAccess.get_file_as_string(SPRITE_FRAMES_PATH)
 	_expect(not resource_text.contains("reference/deprecated"), "Runtime SpriteFrames references archived art")
+	for effect_index: int in range(12):
+		var effect_path: String = ROOT + "/effects/gate_severance_wave_%02d.png" % (effect_index + 1)
+		_expect(FileAccess.file_exists(effect_path), "Missing Gate Severance VFX frame %d" % (effect_index + 1))
+		var effect: Image = Image.load_from_file(ProjectSettings.globalize_path(effect_path))
+		_expect(effect.get_size() == Vector2i(96, 112), "Gate Severance VFX frame has wrong canvas")
 
 
 func _test_shield_states() -> void:
