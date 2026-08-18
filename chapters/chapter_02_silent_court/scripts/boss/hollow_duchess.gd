@@ -551,8 +551,18 @@ func _select_attack(distance: float) -> StringName:
 			candidates.append(ATTACK_DOUBLE)
 			weights.append(0.30)
 		if _phantom_cooldown <= 0.0 and _attacks_since_phantom >= config.phantom_min_other_attacks:
+			var phantom_zone_multiplier: float = config.phantom_close_multiplier
+			if distance >= config.flying_fan_far_distance:
+				phantom_zone_multiplier = config.phantom_far_multiplier
+			elif distance >= config.flying_fan_mid_distance:
+				phantom_zone_multiplier = config.phantom_mid_multiplier
+			var phantom_weight: float = config.phantom_base_weight * phantom_zone_multiplier
+			if distance >= config.flying_fan_far_distance and far_pressure >= 0.50:
+				phantom_weight *= config.phantom_far_pressure_multiplier
+			if _last_attack == ATTACK_PHANTOM:
+				phantom_weight *= config.phantom_recent_multiplier
 			candidates.append(ATTACK_PHANTOM)
-			weights.append(1.20 if distance >= config.flying_fan_far_distance else 0.18)
+			weights.append(phantom_weight)
 		var health_ratio: float = float(health_component.current_health) / float(health_component.max_health)
 		if health_ratio <= config.final_waltz_health_threshold and _final_cooldown <= 0.0:
 			candidates.append(ATTACK_FINAL)
@@ -574,6 +584,8 @@ func _select_attack(distance: float) -> StringName:
 		if not candidates[index].is_empty() and candidates[index] == _last_attack:
 			if candidates[index] == ATTACK_FLYING_FAN:
 				weights[index] *= config.flying_fan_repeat_multiplier
+			elif candidates[index] == ATTACK_PHANTOM:
+				pass # Marionette already applies its dedicated recent-use multiplier.
 			else:
 				weights[index] *= config.overused_attack_weight if _same_attack_count >= 2 else config.repeated_attack_weight
 		weights[index] *= _adaptive_attack_multiplier(candidates[index])
@@ -735,8 +747,10 @@ func _process_phase_transition(delta: float) -> void:
 		phase_changed.emit(_phase)
 		poise_changed.emit(_current_poise, get_max_poise())
 		phase_transition_completed.emit()
-		_attack_gap_remaining = config.phase_2_entry_gap
-		_enter_state(State.IDLE)
+		# The ceremonial Phase-II opener is the same formal attack used by the
+		# normal selector. It is not a duplicate cutscene-only implementation.
+		_attack_gap_remaining = 0.0
+		_start_attack(ATTACK_PHANTOM)
 
 
 func _process_final_prepare(delta: float) -> void:
@@ -1050,7 +1064,7 @@ func _adaptive_attack_multiplier(action: StringName) -> float:
 		ATTACK_SIDE_CUT:
 			multiplier *= 1.0 + crossup_pressure * 1.65 + air_pressure * 0.25
 		ATTACK_PHANTOM:
-			multiplier *= 1.0 + far_pressure * 0.78
+			pass # Distance and Far-pressure multipliers are applied exactly once in selection.
 		ATTACK_DOUBLE:
 			multiplier *= 1.0 + dash_pressure * 0.35
 		_:
@@ -1064,7 +1078,14 @@ func _record_adaptive_decision(
 	_adaptive_decision_reason = StringName("%s:F%.2f:C%.2f:A%.2f:X%.2f:D%.2f" % [action, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure])
 	if OS.is_debug_build():
 		var distance: float = absf(_target.global_position.x - global_position.x) if _target != null and is_instance_valid(_target) else INF
-		print("[BOSS_DECISION] boss=HollowDuchess phase=%d distance=%.1f pressure=[far=%.2f close=%.2f air=%.2f cross=%.2f dash=%.2f] recent=%s candidates=%s weights=%s selected=%s reason=%s" % [_phase, distance, far_pressure, close_pressure, air_pressure, crossup_pressure, dash_pressure, _last_attack, candidates, weights, action, _adaptive_decision_reason])
+		var zone: String = "close"
+		if distance >= config.flying_fan_far_distance:
+			zone = "far"
+		elif distance >= config.flying_fan_mid_distance:
+			zone = "mid"
+		var phantom_index: int = candidates.find(ATTACK_PHANTOM)
+		var phantom_weight: float = weights[phantom_index] if phantom_index >= 0 else 0.0
+		print("[DUCHESS_DECISION] phase=%d zone=%s distance=%.1f marionette_weight=%.2f recent=%s selected=%s candidates=%s weights=%s" % [_phase, zone, distance, phantom_weight, _last_attack, action, candidates, weights])
 
 
 func _reset_behavior_context() -> void:

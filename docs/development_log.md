@@ -8000,3 +8000,66 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
 /Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_full_fights.gd
 /Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_main_integration.gd
 ```
+
+# 2026-08-18 — CH1 Sword Wave + CH2 Marionette targeted runtime repair
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture, chapter
+  scene/character workflows, production checklist, QA standard, render-layer
+  contract and the Godot Gameplay Scripter skill.
+- Approved scope is restricted to Fallen Gate Knight `ShockwaveStrike` / Gate
+  Severance and Hollow Duchess Phase-II `phantom_dancer_sweep` / Marionette
+  Guillotine. Chapters III/IV, Player tuning, Boss HP/defense/BGM and unrelated
+  attacks are excluded. The stop point is a live MainBootstrap handoff at the
+  Chapter-I Boss checkpoint for user acceptance.
+- Audit found Gate Severance's 132x52 presentation paired with a 58x20 collision
+  core (44% horizontal coverage) at world offset `(facing*50,-26)`. The standing
+  Player Hurtbox spans 22x50 around local Y `+2`, so the projectile only grazes
+  its top edge; the authored crescent control points also rise toward the middle
+  instead of reading as a horizontal forward cut.
+- Audit measured the current marionette sheet as 384x192 with each 192x192 cell
+  occupying about 107x147 opaque pixels. The saved Duchess Phase-II idle occupies
+  about 81x90 and the Player idle about 53x54, confirming the puppet is larger
+  than the Boss. The formal attack ID is `phantom_dancer_sweep`; both routes
+  share `boss_marionette_guillotine`, one attack ID/ledger and 42 damage.
+- The puppet is present in the Phase-II selector, but a 10-second cooldown, two
+  mandatory intervening attacks, generic repeated-attack suppression and a
+  coarse far-vs-not-far weight make it visually resemble a one-off. Phase-II
+  transition currently returns to Idle and does not force this same formal
+  skill as its ceremonial opener.
+- Planned verification: exact Godot 4.7.1 import/parse, 20 near/mid/far standing
+  wave paths, 20 left/right paths, four ten-case evasion classes, 20 puppet
+  visual/runtime cycles, 30 Close/Mid/Far selector decisions, shared 42-damage
+  settlement, double-jump clearance, full-fight/Main integration regressions,
+  `git diff --check`, one focused commit and the live Chapter-I Boss handoff.
+
+### Targeted repair result
+
+- Gate Severance now travels as a 132×42 horizontal forward crescent from
+  `(facing × 52, -10)`. Its 96×26 chest-height collision covers 72.7% of the
+  visual core. Near/Mid/Far standing probes resolved 20/20 each; right and left
+  probes resolved 20/20 each; walk-out, jump, double-jump and dash-through
+  counter probes avoided 10/10 each. Direction remains locked at release.
+- Repainted the existing `phantom_dancer.png` in place. Each complete
+  mask/string/jointed-body/two-dagger puppet occupies 51×61 opaque pixels,
+  measured at 67.0% of the Duchess and 107.0% of the formal Player idle. The
+  damage body is 40×34 and both routes still settle one shared 42-damage hit.
+- The same `phantom_dancer_sweep` attack now opens Phase 2. Later selections use
+  a 9-second cooldown, two intervening attacks, configurable
+  Close/Mid/Far `0.25/1.30/2.40`, Far-pressure `×1.25` and recent-use `×0.20`.
+  Seeded 30-decision samples selected Marionette 2 Close / 6 Mid / 10 Far.
+- Automated jump math reports 99.36 px clearance, but real-input timing and
+  visual readability remain manual acceptance rather than an automated PASS.
+- Exact Godot 4.7.1 results: import/parse exit 0; Chapter-I focused combat and
+  geometry exit 0; Chapter-II focused Boss, presentation, five full fights and
+  saved-Main integration all exit 0. The presentation/Main suites retain one
+  known exit-time ObjectDB leak warning and no script/gameplay error.
+
+```text
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit-after 2
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_first_level_boss.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_01_ravenmourn_outskirts/tests/combat/test_boss_attack_geometry.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_boss.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_presentation_phase.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_full_fights.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_main_integration.gd
+```

@@ -65,7 +65,7 @@ extends Resource
 @export var phase_2_chain_recovery: float = 0.99
 @export var backstep_riposte_cooldown: float = 3.6
 @export var side_step_cut_cooldown: float = 2.9
-@export var phantom_dance_cooldown: float = 10.0
+@export var phantom_dance_cooldown: float = 9.0
 @export var final_waltz_cooldown: float = 7.0
 @export var flying_fan_cooldown: float = 3.2
 
@@ -144,8 +144,14 @@ extends Resource
 @export var phantom_route_half_length: float = 520.0
 @export var phantom_route_edge_margin: float = 42.0
 @export var phantom_elevated_lane_offset: float = 0.0
-@export var phantom_hitbox_size: Vector2 = Vector2(66.0, 50.0)
+@export var phantom_hitbox_size: Vector2 = Vector2(40.0, 34.0)
 @export_range(0, 8, 1) var phantom_min_other_attacks: int = 2
+@export var phantom_base_weight: float = 1.0
+@export var phantom_close_multiplier: float = 0.25
+@export var phantom_mid_multiplier: float = 1.30
+@export var phantom_far_multiplier: float = 2.40
+@export var phantom_far_pressure_multiplier: float = 1.25
+@export var phantom_recent_multiplier: float = 0.20
 
 @export_category("Final Waltz Crossing")
 @export_range(0.05, 0.5, 0.01) var final_waltz_health_threshold: float = 0.25

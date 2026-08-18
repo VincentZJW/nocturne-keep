@@ -80,7 +80,7 @@ At 121 HP or below, the current action is allowed to settle before `PhaseTransit
 | --- | --- | ---: | --- |
 | Double Waltz Lunge | 0.48 windup, 0.10 hit 1, 0.27 gap, 0.11 hit 2, 0.80 recovery | 9 + 12 | first thrust baits an early response; second remains direction-locked |
 | Flying Fan | 0.72 / 0.82 / 0.72 s | 16 | Phase 2 keeps the same one-pass boomerang contract, with Far pressure increasing selection weight rather than projectile speed |
-| Marionette Guillotine / 双偶横断 | 1.35 s warning, 0.82 s crossing, 1.25 s recovery | 42 once | two complete court dagger marionettes enter from opposite arena edges on the ground lane; strings, crimson route line and translucent bodies telegraph a double-jump escape; both share one attack ID and target ledger |
+| Marionette Guillotine / 双偶横断 | 1.35 s warning, 0.82 s crossing, 1.25 s recovery | 42 once | two complete, Player-scale court dagger marionettes enter from opposite arena edges on a compact 40×34 ground lane; strings, crimson route line and translucent bodies telegraph a double-jump escape; both share one attack ID and target ledger |
 | Final Waltz Crossing | 0.90 prepare, three 0.68 passes with 0.43 gaps, 1.15 recovery | 8 per pass | available at 25% HP; route line precedes each crossing; cooldown 7.0 s |
 
 Flying Fan is a formal 32×32 gothic blade-fan presentation with black hub,
@@ -90,11 +90,15 @@ Hitbox and one attack ID, and a target can settle damage only once.
 
 Marionette Guillotine replaces the old vague silhouette sweep. The paired
 figures retain mask/head, hair, torso, jointed arms and legs, suspension strings
-and two forward daggers throughout the crossing. They are non-solid, share one
-attack ID and one target ledger, and free themselves at route completion. Its
-10-second cooldown and minimum two-other-attack spacing prevent repetition; it
-is selected by Phase 2 cadence and distance pressure, never by an instantaneous
-Player jump. Final Waltz still uses one fresh attack ID per pass.
+and two forward daggers throughout the crossing. Their 51×61 px opaque bounds
+are 67% of the Duchess and 107% of the Player, so they read as court murder
+puppets rather than two additional Boss-sized bodies. They are non-solid, share
+one attack ID and one target ledger, and free themselves at route completion.
+The formal attack is also the Phase-II ceremonial opener. Its 9-second cooldown
+and minimum two-other-attack spacing prevent repetition; subsequent selection
+uses configurable Close/Mid/Far weights 0.25/1.30/2.40, Far pressure ×1.25 and
+recent-use ×0.20. It is never selected from instantaneous Player jump input.
+Final Waltz still uses one fresh attack ID per pass.
 
 ## Pixel art and animations
 
@@ -122,7 +126,9 @@ The first encounter then uses the complete 6.4-second five-line presentation and
 
 Automated evidence proves configuration, 80 base attack cycles, 20 additional
 paired-marionette repetitions, shared 42-damage settlement, calculated `83.36
-px` double-jump clearance, distance-weight selection, phase/Poise/reset, five
+px` double-jump clearance in the former 66×50 route. The compact 40×34 route
+now measures `99.36 px` calculated clearance; distance-weight selection,
+phase/Poise/reset, five
 complete 223–226-second live-component simulations and Main composition.
 Graphical acceptance remains required for the fan's apparent return path,
 marionette silhouette readability and practical double-jump timing.

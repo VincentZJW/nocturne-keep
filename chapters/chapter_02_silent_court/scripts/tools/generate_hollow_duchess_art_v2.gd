@@ -595,88 +595,56 @@ func _write_marionette_effect() -> void:
 
 func _draw_marionette(image: Image, offset_x: int, feminine: bool) -> void:
 	var center_x: int = offset_x + 96
-	var mask_center: Vector2i = Vector2i(center_x, 45)
-	# Four taut strings make the summoned bodies read as controlled puppets.
-	for string_x: int in [center_x - 16, center_x - 6, center_x + 8, center_x + 19]:
-		_draw_segment(image, Vector2i(string_x, 4), Vector2i(string_x, 57), 1, COLD_LIGHT)
-		_circle(image, Vector2i(string_x, 57), 2, OLD_GOLD)
-	# Porcelain head and cracked mask.
-	_circle(image, mask_center, 15 if feminine else 14, OUTLINE)
-	_circle(image, mask_center, 11 if feminine else 10, PORCELAIN)
-	_draw_segment(image, mask_center + Vector2i(-2, -8), mask_center + Vector2i(3, 8), 1, OXBLOOD)
-	_pixel(image, center_x - 4, 43, DULL_CRIMSON)
-	_pixel(image, center_x + 5, 43, COLD_LIGHT)
+	var mask_center: Vector2i = Vector2i(center_x, 105)
+	# The complete summon is deliberately 59 pixels tall (91..149): roughly
+	# two-thirds of Seraphine and player-sized, while preserving mask, strings,
+	# articulated joints and two staggered court daggers at gameplay scale.
+	for string_x: int in [center_x - 8, center_x - 2, center_x + 5, center_x + 11]:
+		_draw_segment(image, Vector2i(string_x, 92), Vector2i(string_x, 113), 1, COLD_LIGHT)
+	_circle(image, mask_center, 7, OUTLINE)
+	_circle(image, mask_center, 5, PORCELAIN)
+	_draw_segment(image, mask_center + Vector2i(-1, -4), mask_center + Vector2i(2, 4), 1, OXBLOOD)
+	_pixel(image, center_x - 2, 104, DULL_CRIMSON)
+	_pixel(image, center_x + 3, 104, COLD_LIGHT)
 	if feminine:
-		_poly(image, _points([
-			center_x - 17, 31, center_x - 7, 22, center_x + 9, 24,
-			center_x + 18, 34, center_x + 14, 50, center_x - 15, 49,
-		]), BLACK_PLUM)
-		# Restore the porcelain face above the hair mass so the second puppet
-		# reads as a complete court marionette at gameplay scale.
-		_circle(image, mask_center + Vector2i(1, 1), 9, PORCELAIN)
-		_draw_segment(image, mask_center + Vector2i(-1, -6), mask_center + Vector2i(4, 7), 1, OXBLOOD)
-		_pixel(image, center_x - 3, 44, DULL_CRIMSON)
-		_pixel(image, center_x + 5, 44, COLD_LIGHT)
+		_poly(image, _points([center_x - 8, 101, center_x - 4, 96, center_x + 5, 97, center_x + 9, 103, center_x + 7, 111, center_x - 7, 110]), BLACK_PLUM)
+		_circle(image, mask_center, 4, PORCELAIN)
+		_pixel(image, center_x - 2, 104, DULL_CRIMSON)
+		_pixel(image, center_x + 2, 104, COLD_LIGHT)
 	else:
-		_poly(image, _points([
-			center_x - 15, 31, center_x - 9, 24, center_x + 12, 26,
-			center_x + 17, 36, center_x + 11, 40, center_x - 13, 39,
-		]), DEEP_PLUM)
-	# Articulated torso, shoulder joints and court costume.
-	_poly(image, _points([
-		center_x - 19, 59, center_x - 12, 53, center_x + 13, 53,
-		center_x + 20, 61, center_x + 13, 104, center_x - 13, 104,
-	]), OUTLINE)
-	_poly(image, _points([
-		center_x - 14, 61, center_x - 9, 58, center_x + 9, 58,
-		center_x + 14, 63, center_x + 9, 99, center_x - 9, 99,
-	]), OXBLOOD if feminine else DEEP_PLUM)
-	image.fill_rect(Rect2i(center_x - 3, 58, 6, 41), OLD_GOLD)
-	_circle(image, Vector2i(center_x - 18, 62), 4, OLD_GOLD)
-	_circle(image, Vector2i(center_x + 18, 62), 4, OLD_GOLD)
-	# Both arms drive two short daggers forward; blade heights remain separated.
-	_draw_segment(image, Vector2i(center_x + 17, 64), Vector2i(center_x + 39, 69), 7, OUTLINE)
-	_draw_segment(image, Vector2i(center_x + 17, 65), Vector2i(center_x + 38, 69), 4, BONE_SHADE)
-	_circle(image, Vector2i(center_x + 40, 69), 4, OLD_GOLD)
-	_draw_segment(image, Vector2i(center_x + 41, 69), Vector2i(center_x + 68, 63), 5, OUTLINE)
-	_draw_segment(image, Vector2i(center_x + 42, 69), Vector2i(center_x + 67, 63), 2, PALE_STEEL)
-	_draw_segment(image, Vector2i(center_x + 14, 78), Vector2i(center_x + 36, 87), 7, OUTLINE)
-	_draw_segment(image, Vector2i(center_x + 14, 78), Vector2i(center_x + 35, 86), 4, STEEL)
-	_circle(image, Vector2i(center_x + 37, 87), 4, OLD_GOLD)
-	_draw_segment(image, Vector2i(center_x + 38, 87), Vector2i(center_x + 62, 91), 5, OUTLINE)
-	_draw_segment(image, Vector2i(center_x + 39, 87), Vector2i(center_x + 61, 91), 2, PALE_STEEL)
-	# Rear arm counterbalances the attack and preserves a complete body silhouette.
-	_draw_segment(image, Vector2i(center_x - 17, 66), Vector2i(center_x - 35, 80), 7, OUTLINE)
-	_draw_segment(image, Vector2i(center_x - 16, 66), Vector2i(center_x - 34, 79), 4, BONE_SHADE)
-	_circle(image, Vector2i(center_x - 35, 81), 4, OLD_GOLD)
-	# Distinct lower bodies: split court tails for the man, torn skirt for the woman.
+		_poly(image, _points([center_x - 8, 101, center_x - 5, 97, center_x + 6, 98, center_x + 9, 103, center_x + 5, 105, center_x - 7, 105]), DEEP_PLUM)
+	# Narrow articulated torso and visible shoulder pins.
+	_poly(image, _points([center_x - 9, 114, center_x - 6, 111, center_x + 7, 111, center_x + 10, 115, center_x + 7, 132, center_x - 7, 132]), OUTLINE)
+	_poly(image, _points([center_x - 6, 115, center_x - 4, 113, center_x + 4, 113, center_x + 7, 116, center_x + 4, 130, center_x - 4, 130]), OXBLOOD if feminine else DEEP_PLUM)
+	_draw_segment(image, Vector2i(center_x, 114), Vector2i(center_x, 130), 2, OLD_GOLD)
+	for shoulder_x: int in [center_x - 9, center_x + 9]:
+		_circle(image, Vector2i(shoulder_x, 115), 2, OLD_GOLD)
+	# Forward arm and primary dagger; the second blade sits three pixels lower.
+	_draw_segment(image, Vector2i(center_x + 8, 116), Vector2i(center_x + 18, 120), 4, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 8, 116), Vector2i(center_x + 18, 120), 2, BONE_SHADE)
+	_circle(image, Vector2i(center_x + 19, 120), 2, OLD_GOLD)
+	_draw_segment(image, Vector2i(center_x + 20, 120), Vector2i(center_x + 31, 117), 3, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 20, 120), Vector2i(center_x + 30, 117), 1, PALE_STEEL)
+	_draw_segment(image, Vector2i(center_x + 7, 123), Vector2i(center_x + 17, 127), 4, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 7, 123), Vector2i(center_x + 17, 127), 2, STEEL)
+	_circle(image, Vector2i(center_x + 18, 127), 2, OLD_GOLD)
+	_draw_segment(image, Vector2i(center_x + 19, 127), Vector2i(center_x + 29, 130), 3, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 19, 127), Vector2i(center_x + 28, 130), 1, PALE_STEEL)
+	# Rear arm and distinct court tails keep both variants complete, not silhouettes.
+	_draw_segment(image, Vector2i(center_x - 8, 117), Vector2i(center_x - 16, 125), 4, OUTLINE)
+	_draw_segment(image, Vector2i(center_x - 8, 117), Vector2i(center_x - 16, 125), 2, BONE_SHADE)
 	if feminine:
-		_poly(image, _points([
-			center_x - 13, 97, center_x + 12, 97, center_x + 24, 128,
-			center_x + 10, 132, center_x, 122, center_x - 11, 133,
-			center_x - 25, 127,
-		]), OUTLINE)
-		_poly(image, _points([
-			center_x - 9, 100, center_x + 9, 100, center_x + 18, 124,
-			center_x + 7, 127, center_x, 116, center_x - 9, 128,
-			center_x - 19, 123,
-		]), OXBLOOD)
+		_poly(image, _points([center_x - 7, 130, center_x + 6, 130, center_x + 11, 141, center_x + 4, 143, center_x, 138, center_x - 5, 144, center_x - 11, 140]), OXBLOOD)
 	else:
-		image.fill_rect(Rect2i(center_x - 13, 100, 26, 16), OUTLINE)
-		image.fill_rect(Rect2i(center_x - 9, 101, 18, 13), BLACK_PLUM)
-	# Fully articulated legs and pointed ballroom shoes.
-	_draw_segment(image, Vector2i(center_x - 8, 113), Vector2i(center_x - 18, 145), 9, OUTLINE)
-	_draw_segment(image, Vector2i(center_x - 7, 114), Vector2i(center_x - 17, 144), 5, STEEL)
-	_draw_segment(image, Vector2i(center_x + 8, 113), Vector2i(center_x + 23, 143), 9, OUTLINE)
-	_draw_segment(image, Vector2i(center_x + 7, 114), Vector2i(center_x + 22, 142), 5, BONE_SHADE)
-	_poly(image, _points([center_x - 25, 150, center_x - 18, 141, center_x - 7, 149]), OUTLINE)
-	_poly(image, _points([center_x + 17, 148, center_x + 22, 140, center_x + 35, 149]), OUTLINE)
-	# Small cold soul joints retain supernatural readability without reverting to silhouettes.
-	for joint: Vector2i in [
-		Vector2i(center_x - 18, 62), Vector2i(center_x + 18, 62),
-		Vector2i(center_x - 8, 113), Vector2i(center_x + 8, 113),
-	]:
-		_circle(image, joint, 2, COLD_LIGHT)
+		_poly(image, _points([center_x - 7, 130, center_x + 7, 130, center_x + 5, 138, center_x, 135, center_x - 5, 139]), BLACK_PLUM)
+	_draw_segment(image, Vector2i(center_x - 4, 136), Vector2i(center_x - 8, 147), 4, OUTLINE)
+	_draw_segment(image, Vector2i(center_x - 4, 136), Vector2i(center_x - 8, 146), 2, STEEL)
+	_draw_segment(image, Vector2i(center_x + 4, 136), Vector2i(center_x + 10, 147), 4, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 4, 136), Vector2i(center_x + 10, 146), 2, BONE_SHADE)
+	_draw_segment(image, Vector2i(center_x - 10, 148), Vector2i(center_x - 5, 147), 2, OUTLINE)
+	_draw_segment(image, Vector2i(center_x + 8, 147), Vector2i(center_x + 13, 148), 2, OUTLINE)
+	for joint: Vector2i in [Vector2i(center_x - 9, 115), Vector2i(center_x + 9, 115), Vector2i(center_x - 4, 136), Vector2i(center_x + 4, 136)]:
+		_circle(image, joint, 1, COLD_LIGHT)
 
 
 func _write_previews() -> void:

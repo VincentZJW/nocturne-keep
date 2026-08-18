@@ -65,8 +65,9 @@ extends Resource
 @export var jump_smash_attack_gap: float = 1.16
 @export var shockwave_strike_attack_gap: float = 1.10
 @export_category("Gate Severance presentation")
-@export var shockwave_visual_size: Vector2 = Vector2(132.0, 52.0)
-@export var shockwave_collision_size: Vector2 = Vector2(58.0, 20.0)
+@export var shockwave_visual_size: Vector2 = Vector2(132.0, 42.0)
+@export var shockwave_collision_size: Vector2 = Vector2(96.0, 26.0)
+@export var shockwave_spawn_offset: Vector2 = Vector2(52.0, -10.0)
 @export var shockwave_travel_distance: float = 330.0
 @export var shockwave_spawn_duration: float = 0.10
 @export var shockwave_travel_duration: float = 0.78

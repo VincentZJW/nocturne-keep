@@ -38,7 +38,7 @@ func configure_route(
 	source: Node2D,
 	variant_index: int = 0,
 	shared_target_ledger: Dictionary[int, bool] = {},
-	hitbox_size: Vector2 = Vector2(66.0, 50.0)
+	hitbox_size: Vector2 = Vector2(40.0, 34.0)
 ) -> void:
 	_start_position = start_position
 	_end_position = end_position

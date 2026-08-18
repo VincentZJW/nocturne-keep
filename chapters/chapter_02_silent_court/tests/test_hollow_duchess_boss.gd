@@ -98,18 +98,20 @@ func _validate_config(boss: HollowDuchess) -> void:
 	_expect(is_equal_approx(config.phantom_telegraph, 1.35), "Marionette telegraph mismatch")
 	_expect(is_equal_approx(config.phantom_active, 0.82), "Marionette crossing duration mismatch")
 	_expect(is_equal_approx(config.phantom_recovery, 1.25), "Marionette recovery mismatch")
-	_expect(is_equal_approx(config.phantom_dance_cooldown, 10.0), "Marionette cooldown mismatch")
+	_expect(is_equal_approx(config.phantom_dance_cooldown, 9.0), "Marionette cooldown mismatch")
 	_expect(config.phantom_min_other_attacks == 2, "Marionette attack-spacing rule mismatch")
+	_expect(config.phantom_hitbox_size == Vector2(40.0, 34.0), "Marionette compact hitbox mismatch")
+	_validate_marionette_art_scale()
 	var movement: PlayerMovementConfig = load(
 		"res://resources/player/player_movement_config.tres"
 	) as PlayerMovementConfig
 	var one_jump_height: float = (
 		movement.jump_velocity * movement.jump_velocity / (2.0 * movement.gravity)
 	)
-	# The hit volume rises 50 px above the ballroom baseline. The Player's feet
+	# The hit volume rises 34 px above the ballroom baseline. The Player's feet
 	# extend roughly 27 px below its origin, so two authored jumps leave a clear
 	# vertical safety margin while a single jump remains deliberately tight.
-	var double_jump_clearance: float = one_jump_height * 2.0 - 27.0 - 50.0
+	var double_jump_clearance: float = one_jump_height * 2.0 - 27.0 - config.phantom_hitbox_size.y
 	_expect(double_jump_clearance >= 70.0, "Marionette lane lacks double-jump clearance")
 	print("MARIONETTE_DOUBLE_JUMP_CLEARANCE: %.2f px" % double_jump_clearance)
 	_expect(config.final_waltz_damage == 10, "Final Waltz damage mismatch")
@@ -130,6 +132,7 @@ func _validate_distance_selection(boss: HollowDuchess, player: Player) -> void:
 	boss.far_pressure = 0.60
 	player.global_position = boss.global_position + Vector2(260.0, 0.0)
 	var flying_fan_count: int = 0
+	var far_phantom_count: int = 0
 	var ranged_count: int = 0
 	for _sample: int in range(30):
 		boss._flying_fan_cooldown = 0.0
@@ -138,14 +141,34 @@ func _validate_distance_selection(boss: HollowDuchess, player: Player) -> void:
 		var selected: StringName = boss._select_attack(260.0)
 		if selected == boss.ATTACK_FLYING_FAN:
 			flying_fan_count += 1
+		if selected == boss.ATTACK_PHANTOM:
+			far_phantom_count += 1
 		if selected in [boss.ATTACK_FLYING_FAN, boss.ATTACK_PHANTOM]:
 			ranged_count += 1
 		if not selected.is_empty():
 			boss._same_attack_count = boss._same_attack_count + 1 if boss._last_attack == selected else 1
 			boss._last_attack = selected
-	_expect(flying_fan_count >= 9 and flying_fan_count <= 13, "30 far decisions selected Flying Fan %d times (target 9-13)" % flying_fan_count)
-	_expect(ranged_count >= 18 and ranged_count <= 23, "30 far decisions selected ranged attacks %d times (target 18-23)" % ranged_count)
-	print("HOLLOW_DUCHESS_FAR_SELECTION: samples=30 flying_fan=%d ranged=%d" % [flying_fan_count, ranged_count])
+	_expect(far_phantom_count >= 6 and far_phantom_count <= 11, "30 far decisions selected Marionette %d times (target 6-11)" % far_phantom_count)
+	_expect(ranged_count >= 16 and ranged_count <= 25, "30 far decisions selected ranged attacks %d times (target 16-25)" % ranged_count)
+	print("HOLLOW_DUCHESS_FAR_SELECTION: samples=30 flying_fan=%d marionette=%d ranged=%d" % [flying_fan_count, far_phantom_count, ranged_count])
+	# Mid distance must sit between close and far Marionette pressure.
+	boss._rng.seed = 20260819
+	boss.far_pressure = 0.0
+	boss.close_pressure = 0.0
+	boss._last_attack = &""
+	boss._same_attack_count = 0
+	player.global_position = boss.global_position + Vector2(160.0, 0.0)
+	var mid_phantom_count: int = 0
+	for _sample: int in range(30):
+		boss._flying_fan_cooldown = 0.0
+		boss._phantom_cooldown = 0.0
+		boss._attacks_since_phantom = boss.config.phantom_min_other_attacks
+		var selected: StringName = boss._select_attack(160.0)
+		if selected == boss.ATTACK_PHANTOM:
+			mid_phantom_count += 1
+		if not selected.is_empty():
+			boss._same_attack_count = boss._same_attack_count + 1 if boss._last_attack == selected else 1
+			boss._last_attack = selected
 	# Close range keeps Flying Fan legal but deliberately uncommon.  This proves
 	# the selector is weighted by distance rather than hard-coded to one skill.
 	boss._rng.seed = 20260818
@@ -155,6 +178,7 @@ func _validate_distance_selection(boss: HollowDuchess, player: Player) -> void:
 	boss._same_attack_count = 0
 	player.global_position = boss.global_position + Vector2(50.0, 0.0)
 	var close_fan_count: int = 0
+	var close_phantom_count: int = 0
 	for _sample: int in range(30):
 		boss._flying_fan_cooldown = 0.0
 		boss._phantom_cooldown = 0.0
@@ -162,12 +186,15 @@ func _validate_distance_selection(boss: HollowDuchess, player: Player) -> void:
 		var selected: StringName = boss._select_attack(50.0)
 		if selected == boss.ATTACK_FLYING_FAN:
 			close_fan_count += 1
+		if selected == boss.ATTACK_PHANTOM:
+			close_phantom_count += 1
 		if not selected.is_empty():
 			boss._same_attack_count = boss._same_attack_count + 1 if boss._last_attack == selected else 1
 			boss._last_attack = selected
 	_expect(close_fan_count <= 6, "30 close decisions selected Flying Fan %d times (maximum 6)" % close_fan_count)
 	_expect(close_fan_count < flying_fan_count, "Close range did not reduce Flying Fan selection")
-	print("HOLLOW_DUCHESS_CLOSE_SELECTION: samples=30 flying_fan=%d" % close_fan_count)
+	_expect(close_phantom_count < mid_phantom_count and mid_phantom_count < far_phantom_count, "Marionette distance weighting is not Close < Mid < Far")
+	print("HOLLOW_DUCHESS_DISTANCE_SELECTION: close_marionette=%d mid_marionette=%d far_marionette=%d close_fan=%d" % [close_phantom_count, mid_phantom_count, far_phantom_count, close_fan_count])
 	# Ten seconds at Far must build pressure after the 0.28-second observation
 	# delay; returning Close for ten seconds must decay that old evidence.
 	boss._reset_behavior_context()
@@ -202,6 +229,38 @@ func _validate_flying_fan_runtime(boss: HollowDuchess) -> void:
 	_expect(sprite != null and sprite.texture != null, "Flying Fan lacks formal pixel visual")
 	if sprite != null and sprite.texture != null:
 		_expect(sprite.texture.get_size() == Vector2(32.0, 32.0), "Flying Fan pixel texture size mismatch")
+
+
+func _validate_marionette_art_scale() -> void:
+	var puppet_texture: Texture2D = load("res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/effects/phantom_dancer.png") as Texture2D
+	var duchess_texture: Texture2D = load("res://chapters/chapter_02_silent_court/assets/boss/hollow_duchess/phase_02_unmasked/phase_02_idle/phase_02_idle_01.png") as Texture2D
+	var player_texture: Texture2D = load("res://shared/assets/player/animations/ravenfang/idle/idle_01.png") as Texture2D
+	var puppet: Image = puppet_texture.get_image()
+	var duchess: Image = duchess_texture.get_image()
+	var player: Image = player_texture.get_image()
+	var puppet_bounds: Rect2i = _alpha_bounds(puppet, Rect2i(0, 0, 192, 192))
+	var duchess_bounds: Rect2i = _alpha_bounds(duchess, Rect2i(0, 0, duchess.get_width(), duchess.get_height()))
+	var player_bounds: Rect2i = _alpha_bounds(player, Rect2i(0, 0, player.get_width(), player.get_height()))
+	var boss_ratio: float = float(puppet_bounds.size.y) / float(duchess_bounds.size.y)
+	var player_ratio: float = float(puppet_bounds.size.y) / float(player_bounds.size.y)
+	_expect(boss_ratio >= 0.648 and boss_ratio <= 0.78, "Marionette height is not approximately 65-78%% of Duchess")
+	_expect(player_ratio >= 0.90 and player_ratio <= 1.10, "Marionette height is not 90-110%% of Player")
+	print("MARIONETTE_ART_SCALE: puppet=%s duchess=%s player=%s boss_ratio=%.3f player_ratio=%.3f" % [puppet_bounds, duchess_bounds, player_bounds, boss_ratio, player_ratio])
+
+
+func _alpha_bounds(image: Image, region: Rect2i) -> Rect2i:
+	var minimum: Vector2i = Vector2i(region.end.x, region.end.y)
+	var maximum: Vector2i = Vector2i(region.position.x - 1, region.position.y - 1)
+	for y: int in range(region.position.y, region.end.y):
+		for x: int in range(region.position.x, region.end.x):
+			if image.get_pixel(x, y).a > 0.05:
+				minimum.x = mini(minimum.x, x)
+				minimum.y = mini(minimum.y, y)
+				maximum.x = maxi(maximum.x, x)
+				maximum.y = maxi(maximum.y, y)
+	if maximum.x < minimum.x:
+		return Rect2i()
+	return Rect2i(minimum, maximum - minimum + Vector2i.ONE)
 
 
 func _validate_marionette_runtime(boss: HollowDuchess) -> void:
@@ -295,6 +354,7 @@ func _validate_phase_and_poise(boss: HollowDuchess, player: Player) -> void:
 	_expect(boss.health_component.current_health == 121, "Phase transition restored HP")
 	_expect(boss.get_current_poise() == 80, "Phase 2 Poise did not increase to 80")
 	_expect(boss.is_phase_transition_completed(), "Phase transition completion flag missing")
+	_expect(boss.get_current_attack() == &"phantom_dancer_sweep", "Phase 2 did not open with the formal Marionette Guillotine attack")
 	var mitigation_probe: HitboxComponent = HitboxComponent.new()
 	mitigation_probe.damage = 20
 	_expect(boss.hurtbox.hit_policy.resolve_damage(mitigation_probe) == 17, "Phase 2 damage reduction is not 15%")

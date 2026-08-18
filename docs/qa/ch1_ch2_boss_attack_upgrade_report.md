@@ -36,11 +36,14 @@ was changed.
 - Revised visual: same formal controller now builds a layered wide crescent;
   there is no parallel `_v2`/`_new` resource.
 - Visual width: 132 px.
-- Visual height: 52 px.
-- Crescent curvature: thick root, full center belly and tapered broken tips;
+- Visual height: 42 px.
+- Crescent curvature: horizontal forward-cut silhouette with a broad body and
+  tapered broken tips; its primary tangent stays within the requested ±10°;
   charcoal core + steel secondary arc + bone-white cutting edge + restrained
   dark-red air tear + stone debris.
-- Hitbox: 58×20 px core only.
+- Hitbox: 96×26 px chest/abdomen core only (72.7% of the 132 px visual width).
+- Release offset: `(facing × 52, -10)` from the Boss origin, low enough to
+  overlap the saved standing Player Hurtbox rather than grazing above it.
 - Materialize / travel / dissipate: 0.10 / 0.78 / 0.16 s.
 - Travel: 330 px, approximately 423 px/s.
 - Damage: 8, unchanged.
@@ -48,6 +51,10 @@ was changed.
   Gate Severance and charge are weighted options, never a guaranteed branch.
 - Direction: locked at release; non-homing.
 - Release sync: authored `ShockwaveStrike` frame 3/4 callback.
+- Standing-path collision: Near 20/20, Mid 20/20 and Far 20/20.
+- Facing collision: Right 20/20 and Left 20/20.
+- Counter checks: walk-out, jump, double-jump and dash-through each avoided
+  10/10 probes without changing the fixed release direction.
 - 20-cycle test: `PASS`; all cycles spawned, armed only after materialization,
   retained layered presentation, damaged once and cleaned up.
 
@@ -87,6 +94,9 @@ Visual score remains pending manual review rather than being self-awarded.
 - Puppet design: distinct court-attendant and court-dancer variants with mask,
   head/hair, torso, jointed arms/legs, suspension strings and two visible
   forward silver daggers.
+- Runtime opaque bounds: 51×61 px per puppet, versus the Duchess's 83×91 px
+  Phase-II idle and the current Player's 55×57 px idle. This is 67.0% of the
+  Duchess and 107.0% of the Player by geometric-mean scale.
 - Telegraph: 1.35 s, with visible puppets, pulsing strings/route and committed
   forward dagger posture.
 - Travel time: 0.82 s across the saved arena.
@@ -94,12 +104,21 @@ Visual score remains pending manual review rather than being self-awarded.
 - Shared settlement: both routes use the same attack ID and shared target
   ledger. Runtime probe settled 42 once; the second puppet was rejected and
   could not produce 84.
-- Hitbox: 66×50 px ground-lane volume, excluding strings.
-- Double-jump safe margin: 83.36 px from saved Player jump/gravity and authored
+- Hitbox: 40×34 px ground-lane body volume, excluding strings and long daggers.
+- Double-jump calculated safe margin: 99.36 px from saved Player jump/gravity and authored
   hit-volume top. This exceeds the requested 12–20 px deterministic minimum;
-  single jump remains deliberately tight.
-- Cooldown: 10 s.
+- the visual judgment and real-input timing remain manual acceptance items.
+- Cooldown: 9 s.
 - Attack spacing: at least two other legal attacks.
+- Phase-II entrance: after the existing transformation settles, the controller
+  calls the same formal `phantom_dancer_sweep` path as its ceremonial opener;
+  there is no duplicate intro-only implementation.
+- Selection weights: base 1.00; Close 0.25, Mid 1.30, Far 2.40; Far-pressure
+  ×1.25; immediate recent-use ×0.20. Seeded 30-decision samples selected
+  Marionette 2 Close / 6 Mid / 10 Far (Far target band 7–11).
+- Decision telemetry is emitted only when the selector resolves an action as
+  `[DUCHESS_DECISION]`, including phase, range zone, distance and effective
+  Marionette weight.
 - Recovery: 1.25 s.
 - Boss exclusivity: the Boss remains in its controller pose until both route
   travel and recovery settle; no simultaneous attack state can begin.
@@ -112,7 +131,7 @@ Visual score remains pending manual review rather than being self-awarded.
 | --- | --- | --- |
 | Exact 4.7.1 import/parse | PASS | headless editor exited 0 |
 | CH1 formal Boss combat | PASS | `FIRST_LEVEL_BOSS_TEST`, including 20 Gate Severance cycles |
-| CH2 focused Boss | PASS | 80 base cycles + 20 marionette cycles; selector/damage/clearance assertions |
+| CH2 focused Boss | PASS | 80 base cycles + 20 marionette cycles; 2/6/10 Close/Mid/Far selections; scale, damage and calculated-clearance assertions |
 | CH2 presentation | PASS | state/presentation suite; one known exit-time ObjectDB warning, no gameplay error |
 | CH2 full fights | PASS | five production-component fights, approximately 223–226 s |
 | CH2 saved Main composition | PASS | Boss, threshold, layers, CP05, HUD, reliquary and mirror path |
@@ -124,20 +143,15 @@ also retained for this work session at `/tmp/ch2_boss_focus.log` and
 
 ## Main/F5 manual acceptance
 
-The local debug handoff uses:
+The local debug handoff for this delivery uses:
 
 ```gdscript
-debug_start_chapter_id = ChapterRegistry.CHAPTER_02_SILENT_COURT
-debug_start_spawn_id = &"CH2_BOSS_MUSIC_PHASE_01"
+debug_start_chapter_id = ChapterRegistry.CHAPTER_01_RAVENMOURN_OUTSKIRTS
+debug_start_spawn_id = &"boss_checkpoint"
 ```
 
-Press F5 (or use the game window left open by Codex). In Phase 1, stay beyond
-205 px to observe repeated Flying Fan decisions, then close distance during its
-windup and confirm the committed throw still completes. At 121 HP enter Phase
-2, wait for two other attacks and the 10-second cooldown, then verify two full
-dagger marionettes cross from opposite sides. Double jump over the ground lane,
-then deliberately take one later cast and confirm one 42-point settlement.
-
-After Chapter II acceptance, switch only the local debug handoff to
-`CHAPTER_01_RAVENMOURN_OUTSKIRTS / CH1_BOSS` to judge Gate Severance crescent
-weight, left/right direction, release sync, jump clearance and dissipation.
+Press F5 (or use the game window left open by Codex) and judge Gate Severance
+crescent weight, horizontal travel, left/right direction, release sync,
+standing-path contact, jump/dash avoidance and dissipation. After the user
+accepts Chapter I, the next requested handoff will switch only the local debug
+configuration to the Chapter-II Boss for Marionette visual/timing review.

@@ -26,6 +26,7 @@ func _run_tests() -> void:
 	_test_boss_shield_and_phase(player, boss, hud)
 	await _test_boss_attack_profiles(main, boss)
 	await _test_gate_severance_repetition(boss)
+	await _test_gate_severance_spatial_paths(main, boss)
 	_test_boss_death_and_exit(main, player, boss, room)
 	_test_room_reset(player, boss, room, respawn)
 	main.queue_free()
@@ -415,6 +416,11 @@ func _test_boss_attack_profiles(main: Node2D, boss: FallenGateKnight) -> void:
 
 
 func _test_gate_severance_repetition(boss: FallenGateKnight) -> void:
+	_expect(boss.config.shockwave_visual_size == Vector2(132.0, 42.0), "Gate Severance visual contract mismatch")
+	_expect(boss.config.shockwave_collision_size == Vector2(96.0, 26.0), "Gate Severance collision contract mismatch")
+	_expect(boss.config.shockwave_spawn_offset == Vector2(52.0, -10.0), "Gate Severance spawn offset mismatch")
+	var horizontal_coverage: float = boss.config.shockwave_collision_size.x / boss.config.shockwave_visual_size.x
+	_expect(horizontal_coverage >= 0.70 and horizontal_coverage <= 0.85, "Gate Severance collision does not cover 70-85%% of the visual core")
 	for iteration: int in range(20):
 		boss.current_attack_id = 120_000 + iteration
 		boss._spawn_gate_severance_wave()
@@ -429,6 +435,89 @@ func _test_gate_severance_repetition(boss: FallenGateKnight) -> void:
 		wave.queue_free()
 		await process_frame
 	print("GATE_SEVERANCE_VISUAL_CYCLES: PASS triggers=20 layered_crescent=true")
+
+
+func _test_gate_severance_spatial_paths(main: Node2D, boss: FallenGateKnight) -> void:
+	var original_time_scale: float = Engine.time_scale
+	Engine.time_scale = 8.0
+	var target_root: Node2D = Node2D.new()
+	target_root.name = "GateSeveranceSpatialTarget"
+	var target_health: HealthComponent = HealthComponent.new()
+	target_health.name = "HealthComponent"
+	target_health.max_health = 100
+	var target_hurtbox: HurtboxComponent = HurtboxComponent.new()
+	target_hurtbox.name = "Hurtbox"
+	target_hurtbox.faction = &"player"
+	target_hurtbox.collision_layer = 8
+	target_hurtbox.collision_mask = 64
+	target_hurtbox.health_component_path = NodePath("../HealthComponent")
+	var target_shape: CollisionShape2D = CollisionShape2D.new()
+	target_shape.name = "CollisionShape2D"
+	target_shape.position = Vector2(0.0, 2.0)
+	var target_rectangle: RectangleShape2D = RectangleShape2D.new()
+	target_rectangle.size = Vector2(22.0, 50.0)
+	target_shape.shape = target_rectangle
+	target_hurtbox.add_child(target_shape)
+	target_root.add_child(target_health)
+	target_root.add_child(target_hurtbox)
+	main.add_child(target_root)
+	await _wait_physics_frames(3)
+	var standing_distances: Array[float] = [90.0, 210.0, 340.0]
+	for distance: float in standing_distances:
+		var hit_count: int = 0
+		for iteration: int in range(20):
+			if await _run_gate_wave_path(boss, target_root, target_health, distance, 1.0, 0.0):
+				hit_count += 1
+		_expect(hit_count == 20, "Gate Severance standing %.0fpx path hit %d/20" % [distance, hit_count])
+		print("GATE_SEVERANCE_STANDING_PATH: distance=%.0f hits=%d/20" % [distance, hit_count])
+	for direction: float in [1.0, -1.0]:
+		var directional_hits: int = 0
+		for iteration: int in range(20):
+			if await _run_gate_wave_path(boss, target_root, target_health, 210.0, direction, 0.0):
+				directional_hits += 1
+		_expect(directional_hits == 20, "Gate Severance direction %.0f hit %d/20" % [direction, directional_hits])
+		print("GATE_SEVERANCE_DIRECTION_PATH: direction=%.0f hits=%d/20" % [direction, directional_hits])
+	for evasion: Dictionary in [
+		{&"name": "walk_out", &"y": 0.0, &"distance": -80.0},
+		{&"name": "jump", &"y": -76.0, &"distance": 210.0},
+		{&"name": "double_jump", &"y": -124.0, &"distance": 210.0},
+		{&"name": "dash_through", &"y": 0.0, &"distance": -110.0},
+	]:
+		var avoided: int = 0
+		for iteration: int in range(10):
+			if not await _run_gate_wave_path(
+				boss, target_root, target_health, float(evasion[&"distance"]), 1.0, float(evasion[&"y"])
+			):
+				avoided += 1
+		_expect(avoided == 10, "Gate Severance %s avoidance %d/10" % [evasion[&"name"], avoided])
+		print("GATE_SEVERANCE_EVASION_PATH: kind=%s avoided=%d/10" % [evasion[&"name"], avoided])
+	target_root.queue_free()
+	await process_frame
+	Engine.time_scale = original_time_scale
+
+
+func _run_gate_wave_path(
+	boss: FallenGateKnight,
+	target_root: Node2D,
+	target_health: HealthComponent,
+	distance: float,
+	direction: float,
+	vertical_offset: float
+) -> bool:
+	boss.set_facing_direction(direction)
+	target_root.global_position = boss.global_position + Vector2(distance * direction, vertical_offset)
+	target_health.reset_to_full()
+	boss.current_attack_id += 1
+	boss._spawn_gate_severance_wave()
+	for _frame: int in range(14):
+		await physics_frame
+	var was_hit: bool = target_health.current_health < target_health.max_health
+	var wave: HitboxComponent = boss.get_parent().get_node_or_null("GateSeveranceWave") as HitboxComponent
+	if wave != null and is_instance_valid(wave):
+		wave.end_attack()
+		wave.queue_free()
+		await process_frame
+	return was_hit
 
 
 func _test_room_reset(player: Player, boss: FallenGateKnight, room: BossRoomController, respawn: PlayerRespawnController) -> void:

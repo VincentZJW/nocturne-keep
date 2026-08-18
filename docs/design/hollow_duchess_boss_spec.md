@@ -65,10 +65,13 @@ distance weights are `0.30 / 1.20 / 2.20` for Close/Mid/Far; Far pressure adds
 
 Phase 2's former ambiguous silhouette sweep is now `Marionette Guillotine /
 双偶横断`: two fully drawn, dagger-bearing court marionettes telegraph from
-opposite edges for 1.35 seconds, cross the ground lane in 0.82 seconds, then
-leave a 1.25-second punish window. They share one attack ID and target ledger,
-so one cast settles at most 42 damage. Cooldown is 10 seconds and at least two
-other legal attacks must occur before it can re-enter the selector.
+opposite edges for 1.35 seconds, cross a compact 40×34 ground lane in 0.82
+seconds, then leave a 1.25-second punish window. Each puppet occupies 51×61
+opaque pixels (67% of the Duchess, 107% of the Player). They share one attack ID
+and target ledger, so one cast settles at most 42 damage. The same formal skill
+opens Phase 2; later use has a 9-second cooldown and at least two other legal
+attacks. Configurable Close/Mid/Far multipliers are 0.25/1.30/2.40, with Far
+pressure ×1.25 and immediate recent-use ×0.20.
 
 ## Defeat, reliquary and Chapter III gate
 
