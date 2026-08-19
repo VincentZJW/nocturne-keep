@@ -749,23 +749,39 @@ func _spawn_gravity_judgment() -> void:
 
 
 func resolve_weight_of_absolution_for_player(player: Player) -> Dictionary:
-	var result: Dictionary = {&"hp_before": 0, &"hp_after": 0, &"amount_changed": 0, &"compressed": false}
+	var result: Dictionary = {
+		&"hp_before": 0,
+		&"target_hp": 0,
+		&"hp_after": 0,
+		&"amount_changed": 0,
+		&"compressed": false,
+		&"branch": &"INVALID_TARGET",
+	}
 	if player == null or not is_instance_valid(player) or player.health_component == null:
 		return result
 	var hp_before: int = player.health_component.current_health
+	var target_hp: int = hp_before
+	var branch: StringName = &"ALREADY_AT_OR_BELOW_FLOOR"
 	if hp_before > config.gravity_health_threshold:
-		player.health_component.set_current_health(config.gravity_health_threshold)
+		target_hp = config.gravity_health_threshold
+		branch = &"FORCE_TO_50"
 		result[&"compressed"] = true
-	else:
-		player.health_component.take_damage(config.gravity_direct_damage)
+	elif hp_before > config.gravity_health_floor:
+		target_hp = maxi(hp_before - config.gravity_direct_damage, config.gravity_health_floor)
+		branch = &"DAMAGE_20_WITH_FLOOR"
+	# This is one bounded HealthComponent mutation. It never routes through
+	# Hurtbox/PlayerHurtController, so the judgment cannot emit physical hit,
+	# knockback, hit-stop, blood, death, or healing events.
+	player.health_component.set_current_health(target_hp)
 	var hp_after: int = player.health_component.current_health
 	result[&"hp_before"] = hp_before
+	result[&"target_hp"] = target_hp
 	result[&"hp_after"] = hp_after
 	result[&"amount_changed"] = hp_before - hp_after
+	result[&"branch"] = branch
 	if OS.is_debug_build():
-		print("[WEIGHT_OF_ABSOLUTION] hp_before=%d branch=%s amount_changed=%d hp_after=%d" % [
-			hp_before, "compress_to_50" if bool(result[&"compressed"]) else "direct_20",
-			int(result[&"amount_changed"]), hp_after,
+		print("[EDRAN_WEIGHT_OF_ABSOLUTION] implementation_state=IMPLEMENTED phase=%d hp_before=%d branch=%s target_hp=%d hp_after=%d cooldown=%.2f" % [
+			_phase, hp_before, branch, target_hp, hp_after, config.gravity_cooldown,
 		])
 	return result
 

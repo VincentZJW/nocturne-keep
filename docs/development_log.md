@@ -8188,3 +8188,42 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
   the broader route harness also exposes a pre-existing Underkeep drip teardown
   error outside this Boss-only scope. Manual combat feel, telegraph contrast and
   standing/walk/zigzag/Dash readability remain the final user acceptance step.
+
+# 2026-08-19 — EDRAN-WEIGHT-1 latest-rule completion
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture, chapter scene
+  and character workflows, production checklist, QA standard and the Godot
+  Gameplay Scripter skill. Scope remains exclusively Edran's existing Phase-2
+  `The Weight of Absolution`; no other Boss, enemy, Player statistic, weapon,
+  level, BGM or summon behavior is authorized.
+- Audit classified the saved implementation as `IMPLEMENTED BUT OUTDATED`
+  (STATE C). The formal scene, selector entry, state chain, VFX/SFX, cooldown,
+  recent-magic suppression, pre-seal interruption, cast armour and Main route
+  already existed. The outdated branch still applied raw 20 damage to every HP
+  value at or below 50, producing 35→15, 20→0 and lethal settlement; the saved
+  Final Seal also occurred at 0.90 seconds instead of the latest 1.40-second
+  timeline.
+- Replaced settlement with one bounded HealthComponent mutation: `>50 → 50`,
+  `(20,50] → max(HP-20,20)`, `<=20 → unchanged`. The floor is spell-local; no
+  global Player minimum, heal, Hurtbox event, physical hurt, knockback or death
+  path was added. Debug output now records the exact implementation state,
+  phase, one of the three approved branches, target HP, actual HP and cooldown.
+- Aligned the existing formal presentation with the requested 1.70-second
+  timeline: bell audio at 0.35, bell apparition at 0.55, thirteen seals at
+  0.80, downward pressure at 1.00 and Final Seal/cast armour at 1.40. Settlement
+  applies a 0.28-second visual-only Player compression/cold tint and restores
+  presentation cleanly without touching collision or movement values.
+- Focused exact-Godot result: PASS, 93 assertions and all 17 authoritative HP
+  cases. The test also drives the production Phase-2 selector (not the debug
+  force API), which selects `WEIGHT_OF_ABSOLUTION`, settles 90→50 and completes
+  recovery. Phase-1 candidate exclusion remains PASS. Existing elemental
+  regression remains PASS at 986 assertions; B4–B7 full-Boss transition/death/
+  reward regression remains PASS.
+
+```text
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --version
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit-after 5
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_judgment_magic.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_elemental_magic.gd
+/Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b4_b7_full_boss.gd
+```

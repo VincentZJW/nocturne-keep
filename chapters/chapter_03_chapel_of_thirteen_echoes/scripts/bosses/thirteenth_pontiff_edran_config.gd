@@ -201,13 +201,14 @@ extends Resource
 
 @export_category("The Weight of Absolution")
 @export var gravity_cast_time: float = 1.70
-@export var gravity_final_seal_time: float = 0.90
+@export var gravity_final_seal_time: float = 1.40
 @export var gravity_cooldown: float = 21.0
 @export var gravity_interrupt_cooldown: float = 9.0
 @export var gravity_first_cast_delay: float = 8.0
 @export var gravity_recovery: float = 1.35
 @export_range(1, 99, 1) var gravity_direct_damage: int = 20
 @export_range(1, 999, 1) var gravity_health_threshold: int = 50
+@export_range(1, 999, 1) var gravity_health_floor: int = 20
 @export var gravity_post_pressure_lock: float = 1.75
 
 @export_category("Fourteenth Seat")

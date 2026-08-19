@@ -73,13 +73,15 @@ func _test_position_history(boss: ThirteenthPontiffEdran) -> void:
 func _test_health_matrix(boss: ThirteenthPontiffEdran, player: Player) -> void:
 	var expected: Dictionary[int, int] = {
 		100: 50, 90: 50, 80: 50, 60: 50, 51: 50,
-		50: 30, 49: 29, 40: 20, 35: 15, 30: 10, 21: 1, 20: 0, 10: 0,
+		50: 30, 49: 29, 45: 25, 40: 20, 35: 20, 30: 20, 25: 20,
+		21: 20, 20: 20, 15: 15, 10: 10, 1: 1,
 	}
 	for hp_before: int in expected:
 		player.health_component.set_current_health(hp_before)
 		var result: Dictionary = boss.resolve_weight_of_absolution_for_player(player)
 		_expect(player.health_component.current_health == expected[hp_before], "gravity HP %d becomes %d" % [hp_before, expected[hp_before]])
 		_expect(int(result.get(&"amount_changed", -1)) == hp_before - expected[hp_before], "gravity HP %d reports exact delta" % hp_before)
+		_expect(int(result.get(&"target_hp", -1)) == expected[hp_before], "gravity HP %d reports exact target" % hp_before)
 		if player.is_dead():
 			player.respawn_at(Vector2.ZERO)
 		else:
@@ -126,8 +128,8 @@ func _test_selector_contract(boss: ThirteenthPontiffEdran, player: Player) -> vo
 	_expect(boss.config.lightning_damage == 18, "each lightning strike deals 18")
 	_expect(is_equal_approx(boss.config.gravity_cooldown, 21.0), "gravity full cooldown is 21s")
 	_expect(is_equal_approx(boss.config.gravity_first_cast_delay, 8.0), "gravity opening grace is 8s")
-	_expect(is_equal_approx(boss.config.gravity_final_seal_time, 0.90), "gravity interrupt window closes at 0.90s")
-	_expect(boss.config.gravity_health_threshold == 50 and boss.config.gravity_direct_damage == 20, "gravity uses authoritative 50/20 rule")
+	_expect(is_equal_approx(boss.config.gravity_final_seal_time, 1.40), "gravity Final Seal occurs at 1.40s")
+	_expect(boss.config.gravity_health_threshold == 50 and boss.config.gravity_direct_damage == 20 and boss.config.gravity_health_floor == 20, "gravity uses authoritative 50/20/floor-20 rule")
 	boss._phase = 1
 	boss._gravity_cooldown = 0.0
 	boss._phase_02_elapsed = 99.0
@@ -200,6 +202,36 @@ func _test_runtime_spells(boss: ThirteenthPontiffEdran, player: Player) -> void:
 	_expect(boss.current_state == ThirteenthPontiffEdran.State.STAGGER, "pre-seal Poise break interrupts gravity")
 	_expect(is_equal_approx(boss._gravity_cooldown, boss.config.gravity_interrupt_cooldown), "interrupted gravity uses partial cooldown")
 	poise_hit.free()
+	await create_timer(0.10).timeout
+	# Exercise the production Phase-2 selector, not debug_force_attack. All other
+	# formal candidates are put on cooldown so the test proves the saved selector
+	# can choose and complete the signature spell through its normal state chain.
+	boss.current_state = ThirteenthPontiffEdran.State.IDLE
+	boss._action_locked = false
+	boss._phase = 2
+	boss._phase_02_elapsed = boss.config.gravity_first_cast_delay
+	boss._attack_gap_timer = 0.0
+	boss._last_magic = ThirteenthPontiffEdran.Attack.FIRE_SPELL
+	boss._last_phase_02_attack = ThirteenthPontiffEdran.Attack.FIRE_SPELL
+	boss._gravity_cooldown = 0.0
+	boss._magic_global_cooldown = 0.0
+	boss._post_gravity_pressure_lock = 0.0
+	boss._ice_suppression_timer = 0.0
+	boss._fire_cooldown = 99.0
+	boss._ice_cooldown = 99.0
+	boss._mire_cooldown = 99.0
+	boss._lightning_cooldown = 99.0
+	boss._hollow_toll_cooldown = 99.0
+	boss._scripture_burial_cooldown = 99.0
+	boss._procession_cooldown = 99.0
+	boss._fourteenth_seat_cooldown = 99.0
+	player.status_effect_controller.clear_all()
+	player.health_component.set_current_health(90)
+	boss._start_selected_phase_02_attack(999.0)
+	await create_timer(0.25).timeout
+	_expect(boss._last_phase_02_attack == ThirteenthPontiffEdran.Attack.WEIGHT_OF_ABSOLUTION, "formal Phase-2 selector chooses Weight of Absolution")
+	_expect(player.health_component.current_health == 50, "formal selector cast settles HP through HealthComponent")
+	_expect(not boss._action_locked, "formal selector cast completes recovery")
 
 
 func _expect(condition: bool, message: String) -> void:
@@ -210,7 +242,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("EDRAN_JUDGMENT_MAGIC | PASS assertions=%d history_delay=1.0 bolts=3 hp_cases=13" % _assertions)
+		print("EDRAN_JUDGMENT_MAGIC | PASS assertions=%d history_delay=1.0 bolts=3 hp_cases=17" % _assertions)
 		quit(0)
 		return
 	for failure: String in _failures:

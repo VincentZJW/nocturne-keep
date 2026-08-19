@@ -15,11 +15,13 @@ AI scheduler or status system.
 - The Weight of Absolution is Phase 2 only and cannot enter the selector during
   its first 8 seconds, while the Player is frozen, or inside the post-judgment
   pressure lock. Its 1.70-second tracked seal is interruptible by Poise break
-  before 0.90 seconds; Final Seal grants cast armour. A completed cast uses the
-  formal `HealthComponent`: HP above 50 becomes exactly 50, while HP at or below
-  50 takes 20 direct damage. It therefore never heals and normal death/HUD
-  signals remain authoritative. Full/partial cooldowns are 21/9 seconds and
-  recovery is 1.35 seconds.
+  before the 1.40-second Final Seal; Final Seal grants cast armour. A completed
+  cast performs one bounded `HealthComponent.set_current_health()` mutation:
+  HP above 50 becomes exactly 50; HP in `(20, 50]` loses 20 without crossing
+  below 20; HP at or below 20 is unchanged. This spell therefore cannot kill or
+  heal the Player, does not invoke ordinary Hurtbox/hit-reaction behavior, and
+  still updates the signal-driven HP HUD immediately. Full/partial cooldowns
+  are 21/9 seconds and recovery is 1.35 seconds.
 - Lightning raises weight at Mid/Far distance through existing `far_pressure`;
   only already-recorded movement distance provides the small standing-target
   modifier. Gravity is a low-weight signature candidate, not a distance/input
