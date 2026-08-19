@@ -25,6 +25,7 @@ const PHASE_01_COMBAT_DB: float = -12.0
 @export_node_path("PlayerRespawnController") var respawn_controller_path: NodePath
 @export_node_path("HollowDuchessBossHud") var boss_hud_path: NodePath
 @export_node_path("Control") var intro_card_path: NodePath
+@export_node_path("Control") var phase_title_path: NodePath
 @export_node_path("Label") var dialogue_label_path: NodePath
 @export_node_path("HollowDuchessBallroomFx") var ballroom_fx_path: NodePath
 @export_node_path("DuchessEncounterPresentation") var presentation_path: NodePath
@@ -41,7 +42,9 @@ const PHASE_01_COMBAT_DB: float = -12.0
 @onready var respawn_controller: PlayerRespawnController = get_node_or_null(respawn_controller_path) as PlayerRespawnController
 @onready var boss_hud: HollowDuchessBossHud = get_node_or_null(boss_hud_path) as HollowDuchessBossHud
 @onready var intro_card: Control = get_node_or_null(intro_card_path) as Control
+@onready var phase_title: Control = get_node_or_null(phase_title_path) as Control
 @onready var dialogue_label: Label = get_node_or_null(dialogue_label_path) as Label
+@onready var dialogue_panel: Control = dialogue_label.get_parent() as Control if dialogue_label != null else null
 @onready var ballroom_fx: HollowDuchessBallroomFx = get_node_or_null(ballroom_fx_path) as HollowDuchessBallroomFx
 @onready var presentation: DuchessEncounterPresentation = get_node_or_null(
 	presentation_path
@@ -54,6 +57,7 @@ var intro_seen: bool = false
 var _default_camera_left: int = 0
 var _default_camera_right: int = 0
 var _default_camera_zoom: Vector2 = Vector2.ONE
+var _default_camera_offset: Vector2 = Vector2.ZERO
 var _dialogue_tween: Tween
 var _card_tween: Tween
 
@@ -84,10 +88,12 @@ func _initialize_room() -> void:
 	_default_camera_left = player.player_camera.limit_left
 	_default_camera_right = player.player_camera.limit_right
 	_default_camera_zoom = player.player_camera.zoom
+	_default_camera_offset = player.player_camera.offset
 	_set_door_closed(rear_door, false)
 	_set_door_closed(exit_door, true)
 	intro_card.visible = false
-	dialogue_label.visible = false
+	phase_title.visible = false
+	dialogue_panel.visible = false
 	respawn_controller.set_spawn_point(checkpoint)
 
 
@@ -114,7 +120,9 @@ func _begin_encounter() -> void:
 	_set_door_closed(rear_door, true)
 	_set_door_closed(exit_door, true)
 	_lock_camera()
+	_begin_intro_camera_reveal()
 	player.set_input_profile(Player.InputProfile.LOCKED)
+	boss.hurtbox.set_invulnerable(true)
 	intro_card.visible = false
 	activation_area.set_deferred("monitoring", false)
 	boss.activate(player, intro_seen)
@@ -125,40 +133,64 @@ func _begin_encounter() -> void:
 
 func _on_boss_combat_started() -> void:
 	intro_card.visible = false
+	phase_title.visible = false
 	var camera_tween: Tween = create_tween()
-	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom, 0.24)
+	camera_tween.set_parallel(true)
+	camera_tween.tween_property(player.player_camera, "zoom", _default_camera_zoom, 0.39)
+	camera_tween.tween_property(player.player_camera, "offset", _default_camera_offset, 0.39)
+	await camera_tween.finished
+	boss_hud.show_for_combat()
+	boss.hurtbox.set_invulnerable(false)
 	player.set_input_profile(Player.InputProfile.FULL)
 	if music_manager != null:
 		music_manager.set_music_volume(PHASE_01_COMBAT_DB, 0.55)
 
 
 func _on_intro_line_requested(text: String) -> void:
-	_show_dialogue("瑟芙琳：%s" % text, 2.2)
+	_show_dialogue("SERAPHINE\n%s" % text, 0.72)
 
 
 func _on_presentation_dialogue_requested(speaker: String, text: String, duration: float) -> void:
-	_show_dialogue("%s：%s" % [speaker, text], duration)
+	_show_dialogue("%s\n%s" % [_format_speaker(speaker), text], duration)
 
 
 func _on_presentation_title_requested(title: String, subtitle: String) -> void:
-	var title_label: Label = intro_card.get_node_or_null("Title") as Label
-	if title_label != null:
-		title_label.text = "%s\n%s" % [title, subtitle]
-	intro_card.modulate.a = 1.0
-	intro_card.visible = true
+	var target: Control = phase_title if title.contains("UNMASKED") else intro_card
+	var title_label: Label = target.get_node_or_null("Name") as Label
+	var subtitle_label: Label = target.get_node_or_null(
+		"Chinese" if target == phase_title else "Epithet"
+	) as Label
+	if target == phase_title:
+		title_label.text = title
+		subtitle_label.text = subtitle
+	else:
+		title_label.text = "%s / %s" % [title, subtitle]
+	target.modulate.a = 0.0
+	target.visible = true
 	if _card_tween != null and _card_tween.is_valid():
 		_card_tween.kill()
 	_card_tween = create_tween()
-	_card_tween.tween_interval(1.05)
-	_card_tween.tween_property(intro_card, "modulate:a", 0.0, 0.22)
+	_card_tween.tween_property(target, "modulate:a", 1.0, 0.18)
+	_card_tween.tween_interval(0.58 if target == phase_title else 0.70)
+	_card_tween.tween_property(target, "modulate:a", 0.0, 0.24)
 	_card_tween.tween_callback(func() -> void:
-		intro_card.visible = false
-		intro_card.modulate.a = 1.0
+		target.visible = false
+		target.modulate.a = 1.0
 	)
 
 
 func _on_death_line_requested(speaker: String, text: String) -> void:
-	_show_dialogue("%s：%s" % [speaker, text], 0.72)
+	_show_dialogue("%s\n%s" % [_format_speaker(speaker), text], 0.72)
+
+
+func _format_speaker(speaker: String) -> String:
+	match speaker.strip_edges():
+		"瑟芙琳":
+			return "SERAPHINE"
+		"夜巡守卫":
+			return "NIGHT WARDEN"
+		_:
+			return speaker.to_upper()
 
 
 func _on_boss_phase_changed(phase: int) -> void:
@@ -213,7 +245,8 @@ func apply_persisted_clear_state() -> void:
 	_set_door_closed(rear_door, false)
 	_set_door_closed(exit_door, false)
 	intro_card.visible = false
-	dialogue_label.visible = false
+	phase_title.visible = false
+	dialogue_panel.visible = false
 	presentation.reset_presentation()
 	boss_hud.hide_immediately()
 	presentation.reset_presentation()
@@ -235,7 +268,8 @@ func _on_player_respawned(_spawn_position: Vector2) -> void:
 	_set_door_closed(exit_door, true)
 	activation_area.set_deferred("monitoring", not external_entry_flow_enabled)
 	intro_card.visible = false
-	dialogue_label.visible = false
+	phase_title.visible = false
+	dialogue_panel.visible = false
 	boss_hud.hide_immediately()
 	_release_camera()
 	room_reset.emit()
@@ -256,7 +290,7 @@ func _show_dialogue(text: String, duration: float) -> void:
 		music_manager.duck_for_dialogue(DIALOGUE_DUCK_DB, 0.18)
 	dialogue_label.text = text
 	dialogue_label.modulate.a = 1.0
-	dialogue_label.visible = true
+	dialogue_panel.visible = true
 	_dialogue_tween = create_tween()
 	_dialogue_tween.tween_interval(duration)
 	_dialogue_tween.tween_property(dialogue_label, "modulate:a", 0.0, 0.25)
@@ -264,7 +298,7 @@ func _show_dialogue(text: String, duration: float) -> void:
 
 
 func _finish_dialogue() -> void:
-	dialogue_label.visible = false
+	dialogue_panel.visible = false
 	if music_manager != null:
 		music_manager.restore_after_dialogue(0.25)
 
@@ -281,14 +315,34 @@ func _set_door_closed(door: StaticBody2D, closed: bool) -> void:
 func _lock_camera() -> void:
 	player.player_camera.limit_left = camera_left
 	player.player_camera.limit_right = camera_right
-	player.player_camera.zoom = _default_camera_zoom * 0.82
+	player.player_camera.zoom = _default_camera_zoom
+	player.player_camera.offset = _default_camera_offset
 	player.player_camera.reset_smoothing()
+
+
+func _begin_intro_camera_reveal() -> void:
+	var horizontal_offset: float = clampf(
+		(boss.global_position.x - player.global_position.x) * 0.32, 0.0, 360.0
+	)
+	player.player_camera.offset = _default_camera_offset
+	var camera_tween: Tween = create_tween()
+	camera_tween.set_parallel(true)
+	camera_tween.tween_property(
+		player.player_camera, "zoom", _default_camera_zoom * 0.82, 0.65
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	camera_tween.tween_property(
+		player.player_camera,
+		"offset",
+		_default_camera_offset + Vector2(horizontal_offset, 0.0),
+		0.65
+	).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 
 
 func _release_camera() -> void:
 	player.player_camera.limit_left = _default_camera_left
 	player.player_camera.limit_right = _default_camera_right
 	player.player_camera.zoom = _default_camera_zoom
+	player.player_camera.offset = _default_camera_offset
 	player.player_camera.reset_smoothing()
 
 
@@ -296,7 +350,8 @@ func _validate_dependencies() -> bool:
 	if (
 		player == null or boss == null or activation_area == null or rear_door == null
 		or exit_door == null or checkpoint == null or respawn_controller == null
-		or boss_hud == null or intro_card == null or dialogue_label == null
+		or boss_hud == null or intro_card == null or phase_title == null
+		or dialogue_label == null or dialogue_panel == null
 		or presentation == null
 	):
 		push_error("HollowDuchessRoomController scene composition is incomplete")

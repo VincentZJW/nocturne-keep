@@ -164,8 +164,8 @@ extends Resource
 @export var final_waltz_telegraph_length: float = 310.0
 
 @export_category("Presentation")
-@export var intro_full_duration: float = 6.4
-@export var intro_retry_duration: float = 1.25
+@export var intro_full_duration: float = 6.8
+@export var intro_retry_duration: float = 1.35
 @export var death_duration: float = 3.70
 @export var death_player_line_time: float = 0.65
 @export var death_boss_line_time: float = 1.25

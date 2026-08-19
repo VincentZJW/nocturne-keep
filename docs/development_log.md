@@ -8076,3 +8076,53 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
 /Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_full_fights.gd
 /Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script chapters/chapter_02_silent_court/tests/test_hollow_duchess_main_integration.gd
 ```
+
+# 2026-08-19 — CH2–CH4 Boss Intro / Dialogue / Boss Name UI unification
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture, the chapter
+  scene/character workflows, production checklist, QA standard, render-layer
+  contract, plus the Godot Gameplay Scripter and Narrative Designer skills.
+- Approved scope is presentation-only: extract the saved Chapter-III Edran
+  runtime as the sole UI authority, then align the existing Chapter-II Duchess
+  and Chapter-IV Ormund intro dialogue, name reveal, phase reveal and Boss HUD.
+  Boss combat logic, AI, health/damage tuning, BGM content, story wording,
+  environment art, Player abilities, ordinary enemies and Chapter I are excluded.
+- Source audit: Edran uses the engine default font/fallback (no custom Font
+  override), a 28 px bilingual name line with 6 px outline, 13 px secondary
+  title with 5 px outline, 16 px centered bottom dialogue, no typewriter and
+  automatic line advance. The saved title timings are 0.18 s fade-in, 0.70 s
+  hold and 0.24 s fade-out; dialogue duck/restore are 6 dB over 0.18/0.25 s.
+  Intro UI is CanvasLayer 70; its title bounds are `(318,244)-(962,344)`,
+  dialogue bottom margins are `180 / -132 / -180 / -42`, and phase-title bounds
+  are `(280,214)-(1000,324)`.
+- Chapter-II divergence: framed 22 px centered title, bare bottom Label,
+  bottom-anchored custom Boss HUD, no dedicated Edran-format phase title, and
+  a Boss hurtbox that is not explicitly invulnerable through the presentation.
+- Chapter-IV divergence: runtime-built UI at different positions and sizes,
+  no outlined name/phase reveal, a 118 px dialogue box at a different bottom
+  offset, and no short Phase-II title reveal. Its intro already locks Player
+  input/invulnerability and Boss activation until dialogue ends.
+- Owned files: the existing Chapter-II ballroom scene/controller/HUD, the
+  existing Chapter-IV Boss-room controller, focused UI regression/capture
+  coverage, this development log and one QA report. Chapter III is read-only
+  visual authority except for regression evidence. Planned validation is exact
+  Godot 4.7.1 import/parse, focused CH2/CH3/CH4 Main-route UI assertions,
+  graphical captures at the saved 1280x720 debug viewport, Output/Debugger
+  audit, `git diff --check`, one meaningful commit, and a live CH2 Boss handoff.
+- Implementation complete: Chapter II and IV now use Edran's exact saved title,
+  dialogue, Phase-II and top Boss-HUD geometry/typography/timing. Speaker names
+  use the same first-line English format (`SERAPHINE`, `EDRAN`, `ORMUND`, or
+  `NIGHT WARDEN`); existing story bodies were not rewritten. Chapter II keeps
+  the Duchess invulnerable and Player locked through the name/camera return,
+  while Chapter IV continues to use its established external-intro combat gate.
+- Main-route evidence: `docs/qa/boss_intro_ui_unification/` contains 12 saved
+  1280x720 captures (Dialogue, Boss Name, HP HUD and Phase II for CH2/CH3/CH4).
+  The capture harness entered all chapters through `MainBootstrap`; Chapter III
+  was not changed.
+- Verification: Godot 4.7.1 import/parse PASS; UI contract PASS; Duchess
+  presentation PASS; Duchess Main integration PASS; Edran B4-B7 protection
+  PASS; Ormund Q4/Main flow PASS; graphical capture PASS for all three chapters.
+  The Chapter-II forced-exit harness retains known ObjectDB/resource teardown
+  warnings after PASS, but no missing-node, gameplay-script or UI-contract error
+  occurred in the targeted runtime captures. Subjective pacing/camera framing
+  remains for the requested live Chapter-II manual acceptance.

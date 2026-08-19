@@ -5,7 +5,6 @@ extends Control
 
 @onready var name_label: Label = %BossName
 @onready var health_bar: ProgressBar = %HealthBar
-@onready var health_value: Label = %HealthValue
 @onready var phase_label: Label = %PhaseLabel
 @onready var poise_bar: ProgressBar = %PoiseBar
 
@@ -25,7 +24,6 @@ func bind_boss(new_boss: HollowDuchess) -> void:
 	boss.health_component.health_changed.connect(_on_health_changed)
 	boss.phase_changed.connect(_on_phase_changed)
 	boss.poise_changed.connect(_on_poise_changed)
-	boss.combat_started.connect(show_for_combat)
 	boss.boss_defeated.connect(_on_boss_defeated)
 	name_label.text = "%s / %s" % [boss.config.display_name_en, boss.config.display_name_zh]
 	_on_health_changed(boss.health_component.current_health, boss.health_component.max_health)
@@ -50,11 +48,12 @@ func hide_immediately() -> void:
 func _on_health_changed(current: int, maximum: int) -> void:
 	health_bar.max_value = float(maximum)
 	health_bar.value = float(current)
-	health_value.text = "%03d / %03d" % [current, maximum]
 
 
 func _on_phase_changed(phase: int) -> void:
-	phase_label.text = "PHASE 2 · UNMASKED" if phase >= 2 else "PHASE 1"
+	phase_label.text = "PHASE %s  |  %s" % [
+		"II" if phase >= 2 else "I", "UNMASKED" if phase >= 2 else "DORMANT"
+	]
 
 
 func _on_poise_changed(current: int, maximum: int) -> void:
@@ -78,8 +77,6 @@ func _disconnect_boss() -> void:
 		boss.phase_changed.disconnect(_on_phase_changed)
 	if boss.poise_changed.is_connected(_on_poise_changed):
 		boss.poise_changed.disconnect(_on_poise_changed)
-	if boss.combat_started.is_connected(show_for_combat):
-		boss.combat_started.disconnect(show_for_combat)
 	if boss.boss_defeated.is_connected(_on_boss_defeated):
 		boss.boss_defeated.disconnect(_on_boss_defeated)
 	boss = null

@@ -28,8 +28,8 @@ func _ready() -> void:
 	if animation_player == null:
 		push_error("DuchessEncounterPresentation requires AnimationPlayer")
 		return
-	_install_animation(&"intro_full", 6.4, &"intro_progress")
-	_install_animation(&"intro_retry", 1.25, &"intro_progress")
+	_install_animation(&"intro_full", 6.8, &"intro_progress")
+	_install_animation(&"intro_retry", 1.35, &"intro_progress")
 	_install_animation(&"phase_transition_full", 4.4, &"phase_progress")
 	set_process(false)
 
@@ -70,14 +70,14 @@ func _process(_delta: float) -> void:
 
 
 func _process_full_intro_markers() -> void:
-	var thresholds: Array[float] = [0.10, 0.27, 0.43, 0.59, 0.74, 0.88]
+	var thresholds: Array[float] = [0.08, 0.20, 0.32, 0.44, 0.56, 0.80]
 	while _intro_marker < thresholds.size() and intro_progress >= thresholds[_intro_marker]:
 		match _intro_marker:
-			0: dialogue_requested.emit("瑟芙琳", "七年了……这座舞厅仍记得你的脚步。", 0.86)
-			1: dialogue_requested.emit("夜巡守卫", "你认识我？", 0.76)
-			2: dialogue_requested.emit("瑟芙琳", "我只记得，殿下一直在等一个打开门的人。", 0.90)
-			3: dialogue_requested.emit("夜巡守卫", "那个人是我？", 0.76)
-			4: dialogue_requested.emit("瑟芙琳", "跳完这支舞，你自然会想起来。", 0.88)
+			0: dialogue_requested.emit("瑟芙琳", "七年了……这座舞厅仍记得你的脚步。", 0.72)
+			1: dialogue_requested.emit("夜巡守卫", "你认识我？", 0.72)
+			2: dialogue_requested.emit("瑟芙琳", "我只记得，殿下一直在等一个打开门的人。", 0.72)
+			3: dialogue_requested.emit("夜巡守卫", "那个人是我？", 0.72)
+			4: dialogue_requested.emit("瑟芙琳", "跳完这支舞，你自然会想起来。", 1.00)
 			5: title_requested.emit("THE HOLLOW DUCHESS, SERAPHINE", "空心公爵夫人·瑟芙琳")
 		_intro_marker += 1
 

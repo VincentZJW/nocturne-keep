@@ -40,5 +40,5 @@ double_lunge_damage_1 = 10
 double_lunge_damage_2 = 14
 phantom_damage = 42
 final_waltz_damage = 10
-intro_full_duration = 6.4
-intro_retry_duration = 1.25
+intro_full_duration = 6.8
+intro_retry_duration = 1.35

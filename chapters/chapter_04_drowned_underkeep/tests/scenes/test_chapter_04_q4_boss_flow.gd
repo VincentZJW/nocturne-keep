@@ -67,6 +67,20 @@ func _run() -> void:
 	_check(boss != null and flow != null, "formal Main boss room must bind Ormund and its flow controller")
 	_check(reward_exit != null and reward_exit.is_locked(), "Boss reward exit must begin locked")
 	_check(boss_room.has_node("BossFlowUI/BossHUD"), "Boss HUD must exist in Main runtime")
+	var boss_title: Control = boss_room.get_node_or_null("BossFlowUI/BossTitle") as Control
+	var boss_title_name: Label = boss_room.get_node_or_null("BossFlowUI/BossTitle/Name") as Label
+	var dialogue_panel: Control = boss_room.get_node_or_null("BossFlowUI/DialoguePanel") as Control
+	var dialogue_label: Label = boss_room.get_node_or_null("BossFlowUI/DialoguePanel/Dialogue") as Label
+	var phase_title_name: Label = boss_room.get_node_or_null("BossFlowUI/PhaseTitle/Name") as Label
+	var boss_hud: Control = boss_room.get_node_or_null("BossFlowUI/BossHUD") as Control
+	_check(boss_title != null and boss_title.position == Vector2(318.0, 244.0), "Ormund Boss title must use Edran bounds origin")
+	_check(boss_title != null and boss_title.size == Vector2(644.0, 100.0), "Ormund Boss title must use Edran bounds size")
+	_check(boss_title_name != null and boss_title_name.get_theme_font_size("font_size") == 28, "Ormund Boss name must use Edran 28 px type")
+	_check(boss_title_name != null and boss_title_name.get_theme_constant("outline_size") == 6, "Ormund Boss name must use Edran 6 px outline")
+	_check(dialogue_panel != null and dialogue_panel.offset_left == 180.0 and dialogue_panel.offset_bottom == -42.0, "Ormund dialogue must use Edran bottom margins")
+	_check(dialogue_label != null and dialogue_label.get_theme_font_size("font_size") == 16, "Ormund dialogue must use Edran 16 px type")
+	_check(phase_title_name != null and phase_title_name.get_theme_font_size("font_size") == 25, "Ormund Phase title must use Edran 25 px type")
+	_check(boss_hud != null and boss_hud.offset_left == 340.0 and boss_hud.offset_top == 18.0, "Ormund Boss HUD must use Edran top anchor geometry")
 	if boss != null and flow != null:
 		flow.skip_intro_for_qa()
 		await process_frame
