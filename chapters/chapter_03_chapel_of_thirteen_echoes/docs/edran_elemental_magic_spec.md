@@ -1,5 +1,32 @@
 # Edran elemental magic specification
 
+## Judgment rites extension — 2026-08-19
+
+`Threefold Judgment / 三重雷裁` and `The Weight of Absolution / 赦罪之重`
+extend the same bounded spell selector documented below; neither owns a second
+AI scheduler or status system.
+
+- Threefold Judgment is available in both phases. The existing delayed behavior
+  context now retains 2.0 seconds of resolved Player positions at 0.10-second
+  intervals. Each of three bolts independently selects the nearest sample to
+  `now - 1.0s`, telegraphs for 0.65 seconds, resolves one 18-damage Hitbox with
+  a unique attack ID, and leaves a 1.00/0.85-second Phase 1/2 punish window.
+  Cooldowns are 10.5 seconds in Phase 1 and 8.5 seconds in Phase 2.
+- The Weight of Absolution is Phase 2 only and cannot enter the selector during
+  its first 8 seconds, while the Player is frozen, or inside the post-judgment
+  pressure lock. Its 1.70-second tracked seal is interruptible by Poise break
+  before 0.90 seconds; Final Seal grants cast armour. A completed cast uses the
+  formal `HealthComponent`: HP above 50 becomes exactly 50, while HP at or below
+  50 takes 20 direct damage. It therefore never heals and normal death/HUD
+  signals remain authoritative. Full/partial cooldowns are 21/9 seconds and
+  recovery is 1.35 seconds.
+- Lightning raises weight at Mid/Far distance through existing `far_pressure`;
+  only already-recorded movement distance provides the small standing-target
+  modifier. Gravity is a low-weight signature candidate, not a distance/input
+  counter, and receives only a 1.20 HP weight multiplier above 75 HP.
+- The gravity rite suppresses Freeze and the highest-pressure follow-ups for
+  1.75 seconds. Existing Fire, Ice and Mire damage/timing remain unchanged.
+
 Date: 2026-07-30
 Runtime: Godot 4.7.1, `MainBootstrap -> Chapter03Route -> CH3_BOSS`
 

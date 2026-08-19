@@ -1,0 +1,30 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/spells/pontiff_lightning_strike.gd" id="1_script"]
+[ext_resource type="Script" path="res://scripts/combat/hitbox_component.gd" id="2_hitbox"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/gate_stone_open.wav" id="3_strike_audio"]
+
+[sub_resource type="CircleShape2D" id="StrikeShape"]
+radius = 24.0
+
+[node name="PontiffLightningStrike" type="Node2D"]
+z_index = 18
+script = ExtResource("1_script")
+
+[node name="Hitbox" type="Area2D" parent="."]
+collision_layer = 64
+collision_mask = 8
+monitoring = false
+monitorable = false
+script = ExtResource("2_hitbox")
+faction = &"enemy"
+attack_kind = &"edran_threefold_judgment"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox"]
+disabled = true
+shape = SubResource("StrikeShape")
+
+[node name="StrikeAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_strike_audio")
+volume_db = -10.0
+max_distance = 900.0

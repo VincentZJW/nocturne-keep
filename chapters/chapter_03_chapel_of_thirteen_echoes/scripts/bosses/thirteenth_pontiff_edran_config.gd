@@ -184,6 +184,32 @@ extends Resource
 @export_range(0.1, 1.0, 0.05) var mire_move_multiplier: float = 0.35
 @export_range(0.1, 1.0, 0.05) var mire_dash_multiplier: float = 0.70
 
+@export_category("Threefold Judgment")
+@export var lightning_windup: float = 0.85
+@export var lightning_position_delay: float = 1.0
+@export var lightning_history_duration: float = 2.0
+@export var lightning_history_sample_interval: float = 0.10
+@export var lightning_telegraph_duration: float = 0.65
+@export var lightning_strike_interval: float = 0.70
+@export var lightning_active_duration: float = 0.18
+@export var lightning_visual_duration: float = 0.32
+@export_range(1, 99, 1) var lightning_damage: int = 18
+@export var phase_1_lightning_cooldown: float = 10.5
+@export var phase_2_lightning_cooldown: float = 8.5
+@export var phase_1_lightning_recovery: float = 1.0
+@export var phase_2_lightning_recovery: float = 0.85
+
+@export_category("The Weight of Absolution")
+@export var gravity_cast_time: float = 1.70
+@export var gravity_final_seal_time: float = 0.90
+@export var gravity_cooldown: float = 21.0
+@export var gravity_interrupt_cooldown: float = 9.0
+@export var gravity_first_cast_delay: float = 8.0
+@export var gravity_recovery: float = 1.35
+@export_range(1, 99, 1) var gravity_direct_damage: int = 20
+@export_range(1, 999, 1) var gravity_health_threshold: int = 50
+@export var gravity_post_pressure_lock: float = 1.75
+
 @export_category("Fourteenth Seat")
 @export var fourteenth_seat_health_ratio: float = 0.25
 @export var fourteenth_seat_warning: float = 1.05

@@ -1,5 +1,14 @@
 # Chapter III Boss Specification — The Thirteenth Pontiff, Edran
 
+## Judgment magic integration
+
+The formal Boss selector also owns `threefold_judgment` in both phases and the
+Phase-2-only `weight_of_absolution`. They share turn/action locks, cooldowns,
+recent magic suppression, stagger/death cleanup and the existing adaptive
+decision log. Threefold Judgment attacks historical footprints; the Weight of
+Absolution is the deliberately telegraphed signature sure-hit whose Final Seal
+settles health through `HealthComponent` (`>50 -> 50`, otherwise `-20`).
+
 Status: **B1–B3 implemented; Phase 1 production art and summons visually reworked; B4 remains pending**
 
 Scope owner: Chapter III Boss B0–B7

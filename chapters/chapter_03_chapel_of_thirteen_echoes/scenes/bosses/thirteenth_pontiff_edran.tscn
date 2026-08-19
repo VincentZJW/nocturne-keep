@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3]
+[gd_scene load_steps=28 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/thirteenth_pontiff_edran.gd" id="1_boss"]
 [ext_resource type="Resource" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/resources/bosses/thirteenth_pontiff_edran_data.tres" id="2_config"]
@@ -18,6 +18,8 @@
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_ice_lance.tscn" id="16_ice_lance"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_mire_telegraph.tscn" id="17_mire_telegraph"]
 [ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_mire_zone.tscn" id="18_mire_zone"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_lightning_strike.tscn" id="19_lightning"]
+[ext_resource type="PackedScene" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/bosses/spells/pontiff_gravity_judgment.tscn" id="20_gravity"]
 
 [sub_resource type="RectangleShape2D" id="BodyShape"]
 size = Vector2(36, 78)
@@ -54,6 +56,8 @@ fireball_scene = ExtResource("15_fireball")
 ice_lance_scene = ExtResource("16_ice_lance")
 mire_telegraph_scene = ExtResource("17_mire_telegraph")
 mire_zone_scene = ExtResource("18_mire_zone")
+lightning_strike_scene = ExtResource("19_lightning")
+gravity_judgment_scene = ExtResource("20_gravity")
 
 [node name="VisualRoot" type="Node2D" parent="."]
 position = Vector2(0, -44)

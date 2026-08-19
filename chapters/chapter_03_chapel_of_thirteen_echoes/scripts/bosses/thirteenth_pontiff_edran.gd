@@ -29,6 +29,12 @@ enum State {
 	MIRE_TARGET_LOCK,
 	MIRE_SPELL_ACTIVATE,
 	MIRE_SPELL_RECOVERY,
+	LIGHTNING_SPELL_WINDUP,
+	LIGHTNING_SPELL_RELEASE,
+	LIGHTNING_SPELL_RECOVERY,
+	GRAVITY_SPELL_WINDUP,
+	GRAVITY_FINAL_SEAL,
+	GRAVITY_SPELL_RECOVERY,
 	STAGGER,
 	TRANSITION_PENDING,
 	PHASE_TRANSITION,
@@ -52,6 +58,8 @@ enum Attack {
 	FIRE_SPELL,
 	ICE_SPELL,
 	MIRE_SPELL,
+	THREEFOLD_JUDGMENT,
+	WEIGHT_OF_ABSOLUTION,
 }
 
 @export var config: ThirteenthPontiffEdranConfig
@@ -62,6 +70,8 @@ enum Attack {
 @export var ice_lance_scene: PackedScene
 @export var mire_telegraph_scene: PackedScene
 @export var mire_zone_scene: PackedScene
+@export var lightning_strike_scene: PackedScene
+@export var gravity_judgment_scene: PackedScene
 @export var auto_activate: bool = false
 
 @onready var sprite: AnimatedSprite2D = $VisualRoot/AnimatedSprite2D as AnimatedSprite2D
@@ -104,12 +114,20 @@ var _defeat_emitted: bool = false
 var _fire_cooldown: float = 0.0
 var _ice_cooldown: float = 0.0
 var _mire_cooldown: float = 0.0
+var _lightning_cooldown: float = 0.0
+var _gravity_cooldown: float = 0.0
 var _magic_global_cooldown: float = 0.0
 var _frozen_major_grace: float = 0.0
+var _ice_suppression_timer: float = 0.0
+var _post_gravity_pressure_lock: float = 0.0
+var _phase_02_elapsed: float = 0.0
 var _last_magic: Attack = Attack.SWEEP
 var _spell_sequence_id: int = 0
 var _mire_telegraph: PontiffMireTelegraph
 var _active_mire: PontiffMireZone
+var _active_lightning_strikes: Array[PontiffLightningStrike] = []
+var _gravity_judgment: PontiffGravityJudgment
+var _gravity_final_seal: bool = false
 var _debug_magic_mode: StringName = &""
 var _target_was_frozen: bool = false
 var far_pressure: float = 0.0
@@ -120,6 +138,9 @@ var dash_pressure: float = 0.0
 var attack_pressure: float = 0.0
 var _behavior_clock: float = 0.0
 var _behavior_sample_timer: float = 0.0
+var _position_sample_timer: float = 0.0
+var _player_position_history: Array[Dictionary] = []
+var _lightning_targets: Array[Vector2] = []
 var _behavior_events: Array[Dictionary] = []
 var _previous_target_side: float = 0.0
 var _previous_target_action: StringName = &"None"
@@ -226,6 +247,8 @@ func debug_force_attack(attack_name: StringName) -> bool:
 		&"cinder_absolution": _run_fire_spell()
 		&"litany_of_stillness": _run_ice_spell()
 		&"mire_of_the_unburied": _run_mire_spell()
+		&"threefold_judgment": _run_threefold_judgment()
+		&"weight_of_absolution": _run_weight_of_absolution()
 		_: return false
 	return true
 
@@ -241,6 +264,7 @@ func debug_enter_phase_02_immediate() -> void:
 		return
 	_transition_emitted = true
 	_phase = 2
+	_phase_02_elapsed = 0.0
 	health_component.set_current_health(config.phase_transition_health)
 	current_poise = config.phase_02_max_poise
 	if phase_02_frames != null:
@@ -314,8 +338,14 @@ func _tick_cooldowns(delta: float) -> void:
 	_fire_cooldown = maxf(0.0, _fire_cooldown - delta)
 	_ice_cooldown = maxf(0.0, _ice_cooldown - delta)
 	_mire_cooldown = maxf(0.0, _mire_cooldown - delta)
+	_lightning_cooldown = maxf(0.0, _lightning_cooldown - delta)
+	_gravity_cooldown = maxf(0.0, _gravity_cooldown - delta)
 	_magic_global_cooldown = maxf(0.0, _magic_global_cooldown - delta)
 	_frozen_major_grace = maxf(0.0, _frozen_major_grace - delta)
+	_ice_suppression_timer = maxf(0.0, _ice_suppression_timer - delta)
+	_post_gravity_pressure_lock = maxf(0.0, _post_gravity_pressure_lock - delta)
+	if _phase == 2:
+		_phase_02_elapsed += delta
 	var frozen_now: bool = _target_is_frozen()
 	if _target_was_frozen and not frozen_now:
 		_frozen_major_grace = config.frozen_major_attack_grace
@@ -358,6 +388,7 @@ func _start_selected_attack(distance: float) -> void:
 		Attack.FIRE_SPELL: _run_fire_spell()
 		Attack.ICE_SPELL: _run_ice_spell()
 		Attack.MIRE_SPELL: _run_mire_spell()
+		Attack.THREEFOLD_JUDGMENT: _run_threefold_judgment()
 		_: _run_melee_attack(selected)
 
 
@@ -370,10 +401,11 @@ func _start_selected_phase_02_attack(distance: float) -> void:
 		candidates.append(Attack.BELL_CLEAVE)
 	if distance <= config.chain_judgment_range:
 		candidates.append(Attack.CHAIN_JUDGMENT)
-	if _hollow_toll_cooldown <= 0.0 and not _target_is_frozen() and _frozen_major_grace <= 0.0:
+	if _hollow_toll_cooldown <= 0.0 and _post_gravity_pressure_lock <= 0.0 and not _target_is_frozen() and _frozen_major_grace <= 0.0:
 		candidates.append(Attack.HOLLOW_TOLL)
 	if (
 		_scripture_burial_cooldown <= 0.0
+		and _post_gravity_pressure_lock <= 0.0
 		and _hollow_toll_cooldown > 0.0
 		and not _has_active_mire()
 		and not _target_is_frozen()
@@ -385,6 +417,7 @@ func _start_selected_phase_02_attack(distance: float) -> void:
 	if (
 		float(health_component.current_health) / float(config.max_health) <= config.fourteenth_seat_health_ratio
 		and _fourteenth_seat_cooldown <= 0.0
+		and _post_gravity_pressure_lock <= 0.0
 		and not _has_active_mire()
 		and not _target_is_frozen()
 		and _frozen_major_grace <= 0.0
@@ -409,6 +442,8 @@ func _start_selected_phase_02_attack(distance: float) -> void:
 		Attack.FIRE_SPELL: _run_fire_spell()
 		Attack.ICE_SPELL: _run_ice_spell()
 		Attack.MIRE_SPELL: _run_mire_spell()
+		Attack.THREEFOLD_JUDGMENT: _run_threefold_judgment()
+		Attack.WEIGHT_OF_ABSOLUTION: _run_weight_of_absolution()
 
 
 func _append_magic_candidates(candidates: Array[Attack]) -> void:
@@ -418,7 +453,7 @@ func _append_magic_candidates(candidates: Array[Attack]) -> void:
 	if _fire_cooldown <= 0.0 and _last_magic != Attack.FIRE_SPELL:
 		if statuses == null or not statuses.is_burning():
 			candidates.append(Attack.FIRE_SPELL)
-	if _ice_cooldown <= 0.0 and _last_magic != Attack.ICE_SPELL and not _target_is_frozen():
+	if _ice_cooldown <= 0.0 and _ice_suppression_timer <= 0.0 and _last_magic != Attack.ICE_SPELL and not _target_is_frozen():
 		if summon_director == null or summon_director.get_active_count() <= 1:
 			candidates.append(Attack.ICE_SPELL)
 	if (
@@ -428,6 +463,21 @@ func _append_magic_candidates(candidates: Array[Attack]) -> void:
 		and _active_danger_zone_count() < 2
 	):
 		candidates.append(Attack.MIRE_SPELL)
+	if (
+		_lightning_cooldown <= 0.0
+		and _last_magic != Attack.THREEFOLD_JUDGMENT
+		and _post_gravity_pressure_lock <= 0.0
+	):
+		candidates.append(Attack.THREEFOLD_JUDGMENT)
+	if (
+		_phase == 2
+		and _gravity_cooldown <= 0.0
+		and _phase_02_elapsed >= config.gravity_first_cast_delay
+		and _last_magic != Attack.WEIGHT_OF_ABSOLUTION
+		and not _target_is_frozen()
+		and _post_gravity_pressure_lock <= 0.0
+	):
+		candidates.append(Attack.WEIGHT_OF_ABSOLUTION)
 
 
 func _can_select_summon(phase_02: bool) -> bool:
@@ -449,7 +499,7 @@ func _can_select_summon(phase_02: bool) -> bool:
 func _select_weighted_attack(candidates: Array[Attack], phase_02: bool) -> Attack:
 	var utility_count: int = 0
 	for candidate: Attack in candidates:
-		if candidate not in [Attack.SUMMON, Attack.PROCESSION, Attack.FIRE_SPELL, Attack.ICE_SPELL, Attack.MIRE_SPELL]:
+		if candidate not in [Attack.SUMMON, Attack.PROCESSION, Attack.FIRE_SPELL, Attack.ICE_SPELL, Attack.MIRE_SPELL, Attack.THREEFOLD_JUDGMENT, Attack.WEIGHT_OF_ABSOLUTION]:
 			utility_count += 1
 	var weights: Array[float] = []
 	var total_weight: float = 0.0
@@ -461,6 +511,11 @@ func _select_weighted_attack(candidates: Array[Attack], phase_02: bool) -> Attac
 			Attack.FIRE_SPELL: weight = 18.0
 			Attack.ICE_SPELL: weight = 13.0 if phase_02 else 10.0
 			Attack.MIRE_SPELL: weight = 15.0 if phase_02 else 10.0
+			Attack.THREEFOLD_JUDGMENT: weight = 18.0 if phase_02 else 13.0
+			Attack.WEIGHT_OF_ABSOLUTION:
+				weight = 8.0
+				if target != null and target.health_component.current_health > 75:
+					weight *= 1.20
 			_: weight = maxf(1.0, float(27 if phase_02 else 40) / float(maxi(1, utility_count)))
 		weight *= _adaptive_attack_multiplier(candidate)
 		weights.append(weight)
@@ -494,6 +549,12 @@ func _start_debug_magic() -> void:
 		&"fire": _run_fire_spell()
 		&"ice": _run_ice_spell()
 		&"mire": _run_mire_spell()
+		&"lightning": _run_threefold_judgment()
+		&"gravity":
+			if _phase == 2:
+				_run_weight_of_absolution()
+			else:
+				_run_threefold_judgment()
 		&"combo":
 			var cycle: int = _attack_cursor % 4
 			_attack_cursor += 1
@@ -507,11 +568,12 @@ func _start_debug_magic() -> void:
 				2: _run_ice_spell() if not _target_is_frozen() else _run_fire_spell()
 				_: _run_mire_spell() if not _has_active_mire() else _run_fire_spell()
 		_:
-			var magic_cycle: int = _attack_cursor % 3
+			var magic_cycle: int = _attack_cursor % 4
 			_attack_cursor += 1
 			if magic_cycle == 0: _run_fire_spell()
 			elif magic_cycle == 1: _run_ice_spell()
-			else: _run_mire_spell()
+			elif magic_cycle == 2: _run_mire_spell()
+			else: _run_threefold_judgment()
 
 
 func _run_fire_spell() -> void:
@@ -585,6 +647,133 @@ func _run_mire_spell() -> void:
 	if not await _spell_wait(config.mire_recovery, sequence_id):
 		return
 	_finish_spell(Attack.MIRE_SPELL)
+
+
+func _run_threefold_judgment() -> void:
+	if not _begin_spell(State.LIGHTNING_SPELL_WINDUP, &"ice_spell_windup", Attack.THREEFOLD_JUDGMENT):
+		return
+	_lightning_cooldown = (
+		config.phase_2_lightning_cooldown if _phase == 2
+		else config.phase_1_lightning_cooldown
+	)
+	_lightning_targets.clear()
+	var sequence_id: int = _spell_sequence_id
+	if not await _spell_wait(config.lightning_windup, sequence_id):
+		return
+	_set_state(State.LIGHTNING_SPELL_RELEASE, &"ice_spell_release")
+	for bolt_index: int in range(3):
+		if not _can_continue_spell(sequence_id):
+			_cleanup_pending_magic()
+			return
+		var target_position: Vector2 = get_historical_player_position(config.lightning_position_delay)
+		_lightning_targets.append(target_position)
+		_spawn_lightning_strike(target_position)
+		if OS.is_debug_build():
+			print("[THREEFOLD_JUDGMENT] bolt=%d now=%.2f sample_time=%.2f target=%s current=%s error=%.2f" % [
+				bolt_index + 1, _behavior_clock, _behavior_clock - config.lightning_position_delay,
+				target_position, target.global_position if target != null else Vector2.ZERO,
+				get_historical_sample_error(config.lightning_position_delay),
+			])
+		if bolt_index < 2 and not await _spell_wait(config.lightning_strike_interval, sequence_id):
+			return
+	if not await _spell_wait(config.lightning_telegraph_duration, sequence_id):
+		return
+	_set_state(State.LIGHTNING_SPELL_RECOVERY, &"ice_spell_recovery")
+	var recovery: float = config.phase_2_lightning_recovery if _phase == 2 else config.phase_1_lightning_recovery
+	if not await _spell_wait(recovery, sequence_id):
+		return
+	_finish_spell(Attack.THREEFOLD_JUDGMENT)
+
+
+func _spawn_lightning_strike(target_position: Vector2) -> void:
+	if lightning_strike_scene == null:
+		return
+	var strike: PontiffLightningStrike = lightning_strike_scene.instantiate() as PontiffLightningStrike
+	if strike == null:
+		return
+	_next_attack_id += 1
+	strike.telegraph_duration = config.lightning_telegraph_duration
+	strike.active_duration = config.lightning_active_duration
+	strike.visual_duration = config.lightning_visual_duration
+	strike.initialize(_next_attack_id, config.lightning_damage, self)
+	strike.tree_exited.connect(_on_lightning_strike_exited.bind(strike), CONNECT_ONE_SHOT)
+	get_parent().add_child(strike)
+	strike.global_position = target_position
+	_active_lightning_strikes.append(strike)
+
+
+func _on_lightning_strike_exited(strike: PontiffLightningStrike) -> void:
+	_active_lightning_strikes.erase(strike)
+
+
+func _run_weight_of_absolution() -> void:
+	if _phase != 2 or _target_is_frozen():
+		_attack_gap_timer = 0.20
+		return
+	if not _begin_spell(State.GRAVITY_SPELL_WINDUP, &"mire_spell_windup", Attack.WEIGHT_OF_ABSOLUTION):
+		return
+	_gravity_cooldown = config.gravity_cooldown
+	_gravity_final_seal = false
+	var sequence_id: int = _spell_sequence_id
+	_spawn_gravity_judgment()
+	if not await _spell_wait(config.gravity_final_seal_time, sequence_id):
+		return
+	_gravity_final_seal = true
+	_set_state(State.GRAVITY_FINAL_SEAL, &"mire_spell_target_lock")
+	if _gravity_judgment != null:
+		_gravity_judgment.set_final_seal()
+	if not await _spell_wait(config.gravity_cast_time - config.gravity_final_seal_time, sequence_id):
+		return
+	var result: Dictionary = resolve_weight_of_absolution_for_player(target)
+	if _gravity_judgment != null:
+		_gravity_judgment.show_resolution(bool(result.get(&"compressed", false)))
+	_set_state(State.GRAVITY_SPELL_RECOVERY, &"mire_spell_recovery")
+	_ice_suppression_timer = config.gravity_post_pressure_lock
+	_post_gravity_pressure_lock = config.gravity_post_pressure_lock
+	if not await _spell_wait(config.gravity_recovery, sequence_id):
+		return
+	_cleanup_gravity_judgment()
+	_gravity_final_seal = false
+	_finish_spell(Attack.WEIGHT_OF_ABSOLUTION)
+
+
+func _spawn_gravity_judgment() -> void:
+	_cleanup_gravity_judgment()
+	if gravity_judgment_scene == null or target == null:
+		return
+	_gravity_judgment = gravity_judgment_scene.instantiate() as PontiffGravityJudgment
+	if _gravity_judgment == null:
+		return
+	_gravity_judgment.initialize(target, config.gravity_cast_time)
+	get_parent().add_child(_gravity_judgment)
+
+
+func resolve_weight_of_absolution_for_player(player: Player) -> Dictionary:
+	var result: Dictionary = {&"hp_before": 0, &"hp_after": 0, &"amount_changed": 0, &"compressed": false}
+	if player == null or not is_instance_valid(player) or player.health_component == null:
+		return result
+	var hp_before: int = player.health_component.current_health
+	if hp_before > config.gravity_health_threshold:
+		player.health_component.set_current_health(config.gravity_health_threshold)
+		result[&"compressed"] = true
+	else:
+		player.health_component.take_damage(config.gravity_direct_damage)
+	var hp_after: int = player.health_component.current_health
+	result[&"hp_before"] = hp_before
+	result[&"hp_after"] = hp_after
+	result[&"amount_changed"] = hp_before - hp_after
+	if OS.is_debug_build():
+		print("[WEIGHT_OF_ABSOLUTION] hp_before=%d branch=%s amount_changed=%d hp_after=%d" % [
+			hp_before, "compress_to_50" if bool(result[&"compressed"]) else "direct_20",
+			int(result[&"amount_changed"]), hp_after,
+		])
+	return result
+
+
+func _cleanup_gravity_judgment() -> void:
+	if _gravity_judgment != null and is_instance_valid(_gravity_judgment):
+		_gravity_judgment.finish()
+	_gravity_judgment = null
 
 
 func _begin_spell(state: State, animation: StringName, attack: Attack) -> bool:
@@ -684,6 +873,12 @@ func _cleanup_pending_magic() -> void:
 	if _mire_telegraph != null and is_instance_valid(_mire_telegraph):
 		_mire_telegraph.finish()
 	_mire_telegraph = null
+	for strike: PontiffLightningStrike in _active_lightning_strikes.duplicate():
+		if strike != null and is_instance_valid(strike):
+			strike.cancel()
+	_active_lightning_strikes.clear()
+	_cleanup_gravity_judgment()
+	_gravity_final_seal = false
 
 
 func _clear_all_magic() -> void:
@@ -720,6 +915,9 @@ func _is_spell_state(state: State) -> bool:
 		State.ICE_SPELL_WINDUP, State.ICE_SPELL_RELEASE, State.ICE_SPELL_RECOVERY,
 		State.MIRE_SPELL_WINDUP, State.MIRE_TARGET_LOCK, State.MIRE_SPELL_ACTIVATE,
 		State.MIRE_SPELL_RECOVERY,
+		State.LIGHTNING_SPELL_WINDUP, State.LIGHTNING_SPELL_RELEASE,
+		State.LIGHTNING_SPELL_RECOVERY, State.GRAVITY_SPELL_WINDUP,
+		State.GRAVITY_FINAL_SEAL, State.GRAVITY_SPELL_RECOVERY,
 	]
 
 
@@ -733,6 +931,8 @@ func _configure_debug_mode_from_run() -> void:
 		&"CH3_BOSS_FIRE_TEST": _debug_magic_mode = &"fire"
 		&"CH3_BOSS_ICE_TEST": _debug_magic_mode = &"ice"
 		&"CH3_BOSS_MIRE_TEST": _debug_magic_mode = &"mire"
+		&"CH3_BOSS_LIGHTNING_TEST": _debug_magic_mode = &"lightning"
+		&"CH3_BOSS_GRAVITY_TEST": _debug_magic_mode = &"gravity"
 		&"CH3_BOSS_MAGIC_TEST": _debug_magic_mode = &"magic"
 		&"CH3_BOSS_SUMMON_MAGIC_COMBO": _debug_magic_mode = &"combo"
 
@@ -1025,6 +1225,9 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 			_play_animation(&"light_hit")
 		return
 	current_poise = maxi(0, current_poise - poise_damage)
+	if current_state == State.GRAVITY_FINAL_SEAL and _gravity_final_seal:
+		current_poise = maxi(1, current_poise)
+		return
 	if current_poise <= 0 and _stagger_protection_timer <= 0.0:
 		_run_stagger()
 	elif not _is_spell_state(current_state):
@@ -1034,6 +1237,9 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 func _run_stagger() -> void:
 	if current_state in [State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
 		return
+	var interrupted_gravity: bool = current_state == State.GRAVITY_SPELL_WINDUP and not _gravity_final_seal
+	if interrupted_gravity:
+		_gravity_cooldown = config.gravity_interrupt_cooldown
 	_action_locked = true
 	_spell_sequence_id += 1
 	_cleanup_pending_magic()
@@ -1097,6 +1303,7 @@ func _run_phase_transition() -> void:
 		phase_transition_stage_reached.emit(animation)
 		await get_tree().create_timer(step_duration).timeout
 	_phase = 2
+	_phase_02_elapsed = 0.0
 	current_poise = config.phase_02_max_poise
 	if phase_02_frames != null:
 		sprite.sprite_frames = phase_02_frames
@@ -1196,6 +1403,10 @@ func _observe_target_behavior(delta: float) -> void:
 	_apply_due_behavior_events()
 	if target == null or not is_instance_valid(target) or target.is_dead():
 		return
+	_position_sample_timer -= delta
+	if _position_sample_timer <= 0.0:
+		_position_sample_timer = config.lightning_history_sample_interval
+		_record_player_position(target.global_position)
 	_behavior_sample_timer -= delta
 	if _behavior_sample_timer <= 0.0:
 		_behavior_sample_timer = BEHAVIOR_SAMPLE_INTERVAL
@@ -1250,6 +1461,12 @@ func _adaptive_attack_multiplier(attack: Attack) -> float:
 			multiplier *= 1.0 + air_pressure * 0.40
 		Attack.MIRE_SPELL:
 			multiplier *= 1.0 + dash_pressure * 0.75
+		Attack.THREEFOLD_JUDGMENT:
+			multiplier *= 1.0 + far_pressure * 0.95
+			if get_recent_player_movement_distance(1.0) <= 12.0:
+				multiplier *= 1.20
+		Attack.WEIGHT_OF_ABSOLUTION:
+			multiplier *= 1.0
 		Attack.SUMMON, Attack.PROCESSION:
 			multiplier *= 1.0 + far_pressure * 0.35
 		Attack.SWEEP, Attack.THRUST, Attack.CENSER, Attack.CHAIN_JUDGMENT:
@@ -1285,12 +1502,54 @@ func get_adaptive_decision_reason() -> StringName:
 
 
 func get_debug_summary() -> String:
-	return "EDRAN P%d %s HP %d/%d AI[%s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d]" % [
+	var history_position: Vector2 = get_historical_player_position(config.lightning_position_delay)
+	return "EDRAN P%d %s HP %d/%d AI[%s F%.2f C%.2f A%.2f X%.2f D%.2f J%d DJ%d X%d DT%d] POS[now=%s past=%s bolts=%s]" % [
 		_phase, State.keys()[current_state], health_component.current_health,
 		health_component.max_health, _adaptive_decision_reason, far_pressure,
 		close_pressure, air_pressure, crossup_pressure, dash_pressure,
 		observed_jump_count, observed_double_jump_count, observed_crossup_count, observed_dash_through_count,
+		target.global_position if target != null and is_instance_valid(target) else Vector2.ZERO,
+		history_position, _lightning_targets,
 	]
+
+
+func _record_player_position(position: Vector2) -> void:
+	_player_position_history.append({&"time": _behavior_clock, &"position": position})
+	var oldest_time: float = _behavior_clock - config.lightning_history_duration
+	while not _player_position_history.is_empty() and float(_player_position_history.front().get(&"time", 0.0)) < oldest_time:
+		_player_position_history.pop_front()
+
+
+func get_historical_player_position(delay: float) -> Vector2:
+	if _player_position_history.is_empty():
+		return target.global_position if target != null and is_instance_valid(target) else global_position
+	var requested_time: float = _behavior_clock - maxf(0.0, delay)
+	var best_position: Vector2 = Vector2(_player_position_history.front().get(&"position", global_position))
+	var best_error: float = INF
+	for sample: Dictionary in _player_position_history:
+		var error: float = absf(float(sample.get(&"time", 0.0)) - requested_time)
+		if error < best_error:
+			best_error = error
+			best_position = Vector2(sample.get(&"position", best_position))
+	return best_position
+
+
+func get_historical_sample_error(delay: float) -> float:
+	if _player_position_history.is_empty():
+		return INF
+	var requested_time: float = _behavior_clock - maxf(0.0, delay)
+	var best_error: float = INF
+	for sample: Dictionary in _player_position_history:
+		best_error = minf(best_error, absf(float(sample.get(&"time", 0.0)) - requested_time))
+	return best_error
+
+
+func get_recent_player_movement_distance(duration: float) -> float:
+	if _player_position_history.size() < 2:
+		return 0.0
+	var start: Vector2 = get_historical_player_position(duration)
+	var finish: Vector2 = Vector2(_player_position_history.back().get(&"position", start))
+	return start.distance_to(finish)
 
 
 func _reset_behavior_context() -> void:
@@ -1302,7 +1561,10 @@ func _reset_behavior_context() -> void:
 	attack_pressure = 0.0
 	_behavior_clock = 0.0
 	_behavior_sample_timer = 0.0
+	_position_sample_timer = 0.0
 	_behavior_events.clear()
+	_player_position_history.clear()
+	_lightning_targets.clear()
 	_previous_target_side = 0.0
 	_previous_target_action = &"None"
 	_previous_target_movement = &"idle"

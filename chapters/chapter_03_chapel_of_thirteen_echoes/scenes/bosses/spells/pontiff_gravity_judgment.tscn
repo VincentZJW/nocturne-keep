@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/spells/pontiff_gravity_judgment.gd" id="1_script"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/gate_bell_sequence.wav" id="2_bell_audio"]
+
+[node name="PontiffGravityJudgment" type="Node2D"]
+z_index = 19
+script = ExtResource("1_script")
+
+[node name="BellAudio" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("2_bell_audio")
+volume_db = -7.0
+max_distance = 1000.0

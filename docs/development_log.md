@@ -8126,3 +8126,65 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
   warnings after PASS, but no missing-node, gameplay-script or UI-contract error
   occurred in the targeted runtime captures. Subjective pacing/camera framing
   remains for the requested live Chapter-II manual acceptance.
+# 2026-08-19 — EDRAN-MAGIC-0 preflight: Threefold Judgment + Weight of Absolution
+
+- Workflow loaded: `AGENTS.md`, README, technical architecture, chapter scene
+  and character workflows, production checklist and QA standard. The approved
+  scope is Chapter III's formal Edran encounter only; Chapters I/II/IV, Player
+  base statistics/movement/weapons, ordinary enemies, BGM, summons, existing
+  Fire/Ice/Mire tuning and Boss HP/defence are excluded.
+- Runtime audit: `MainBootstrap` remains the F5 authority. Edran is the saved
+  `ThirteenthPontiffEdran` scene driven by one typed state/attack selector,
+  delayed behavior-pressure context, recent-attack suppression, chain budget,
+  shared magic cooldown and formal `HealthComponent`/Hitbox/Hurtbox APIs.
+  Fire and Ice use typed projectiles; Mire uses a tracked telegraph/zone; legacy
+  litany fields use the Chapter-III timed-field AOE.
+- Position-history finding: the behavior context samples outcomes but does not
+  yet preserve positions. EDRAN-MAGIC-1 will extend that same context with a
+  0.10-second, 2.0-second bounded history. Every Threefold bolt will independently
+  sample the closest entry to `now - 1.0s`; current input is never read.
+- Health finding: Player health is owned by `HealthComponent`; bounded
+  `set_current_health()` emits the HUD signal and `take_damage()` preserves
+  death handling. There is no separate special-damage API. The second supplied
+  rule is authoritative: HP above 50 becomes exactly 50; HP at or below 50 takes
+  20 direct damage through `HealthComponent`. Ordinary Hurtbox invulnerability
+  cannot cancel this explicitly sure-hit judgment.
+- Implementation plan: add Chapter-III-local formal lightning and gravity VFX
+  scenes, extend Edran's existing config/selector/states/cooldowns/debug summary,
+  preserve pre-Final-Seal Poise interruption and add Final-Seal cast armour,
+  then run focused history, HP-matrix, phase/cooldown, Main-route and exact Godot
+  4.7.1 import tests. Stop point is a live F5 `CH3_BOSS` handoff after one
+  meaningful commit; no later milestone is authorized.
+
+### EDRAN-MAGIC-1–5 implementation and verification
+
+- Added Threefold Judgment to the formal Phase 1/2 selector. Edran's existing
+  behavior context now stores a bounded 2.0-second Player position history at
+  0.10-second intervals. The three strikes sample `now - 1.0s` independently,
+  use unique one-hit attack IDs, 18 damage, 0.65-second chapel telegraphs and
+  10.5/8.5-second Phase 1/2 cooldowns. No Player input is queried.
+- Added the Phase-2-only Weight of Absolution to the same selector. It has an
+  8-second opening grace, 21-second full cooldown, 9-second interrupted
+  cooldown, 0.90-second Poise interrupt window, Final-Seal cast armour,
+  1.35-second recovery and 1.75-second Freeze/high-pressure follow-up lock.
+  Settlement uses `HealthComponent`: `>50 -> 50`, otherwise `take_damage(20)`.
+- Added original Chapter-III-local programmatic chapel VFX scenes: a
+  thirteen-node cold-white/pale-blue lightning seal and a tracked black-blue
+  thirteenth-bell gravity judgment. Their saved nodes reuse the existing
+  chapter-owned stone-pressure and thirteen-bell SFX at restrained volume;
+  existing Fire/Ice/Mire timings, Boss stats, BGM, summons, other chapters and
+  Player tuning were not changed.
+- Exact Godot 4.7.1 import/parse: PASS (exit 0). Focused judgment test: PASS,
+  65 assertions, formal 18-damage one-hit lightning resolution and saved SFX
+  nodes, three
+  independently resampled historical targets and all 13
+  HP boundary cases. Existing elemental suite: PASS, 986 assertions. Existing
+  B4–B7 full Boss regression: PASS, including transition, six original Phase-2
+  attacks, death and reward interface.
+- Saved Main authority remains
+  `res://scenes/bootstrap/main_bootstrap.tscn`. A headless F5-equivalent run
+  entered the saved Chapter-III route through `CH3_BOSS` and exited 0. Forced
+  quit retains the repository's known exit-time ObjectDB/resource-use warnings;
+  the broader route harness also exposes a pre-existing Underkeep drip teardown
+  error outside this Boss-only scope. Manual combat feel, telegraph contrast and
+  standing/walk/zigzag/Dash readability remain the final user acceptance step.
