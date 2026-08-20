@@ -161,6 +161,30 @@ These values deliberately exceed Chapter II without multiplying several opaque d
 
 ## 7. Phase 2 skill table
 
+### Mandatory Phase 2 opening judgment
+
+The first `Weight of Absolution / 赦罪之重` is not selected from the normal
+weighted attack pool. The formal runtime order is fixed:
+
+`Phase transition → Phase 2 dialogue complete → forced Weight of Absolution →`
+`Final Seal → HP settlement → recovery → normal Phase 2 selector`.
+
+Normal Phase 2 AI remains disabled until the forced cast completes. The opening
+cast ignores distance, behavior pressure, recent-attack weighting and its normal
+cooldown, then starts the regular 21-second cooldown on completion. Later casts
+may enter the ordinary weighted pool.
+
+Final-Seal settlement uses the real Player `HealthComponent` exactly once:
+
+| Player HP before | Player HP after |
+|---:|---:|
+| Above 50 | 50 |
+| 21–50 | `max(current - 20, 20)` |
+| 20 or below | unchanged |
+
+The 20-HP floor is spell-local: it prevents this judgment from reducing Player
+HP below 20, but it does not heal a Player who was already below 20.
+
 | Skill | Damage | Timing | Range/selection | Recovery and fairness contract |
 |---|---:|---|---|---|
 | Bell-Bound Cleave / 钟缚横断 | 18 | 0.52 windup / 0.15 active / 0.68 recovery | Forward mid-range | No active tracking; rear safe zone remains |
@@ -170,7 +194,11 @@ These values deliberately exceed Chapter II without multiplying several opaque d
 | Procession of the Unburied / 未葬者行列 | — | Uses bounded summon sequence | 2 Penitents or Penitent + Husk | 6.8–8.0 s cooldown; max 3 active; never produces all three in one cast |
 | The Fourteenth Seat / 第十四席 | 20 | 0.95–1.15 telegraph | Unlocks below 25% HP; marked local burst | At least 6.5 s cooldown; cannot overlap summon completion or another major area lock |
 
-Attack choice must consider Player distance/height, current summons, active danger zones, previous skill, cooldown, phase and HP. The selector must enforce no consecutive summons, no consecutive large area locks, no consecutive Hollow Toll, zero summon weight at cap, max two active danger zones and mandatory recovery after two attacks.
+After the mandatory opening judgment has completed, attack choice must consider
+Player distance/height, current summons, active danger zones, previous skill,
+cooldown, phase and HP. The selector must enforce no consecutive summons, no
+consecutive large area locks, no consecutive Hollow Toll, zero summon weight at
+cap, max two active danger zones and mandatory recovery after two attacks.
 
 ## 8. Summon contract
 

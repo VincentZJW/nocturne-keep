@@ -11,6 +11,7 @@ signal death_sequence_started
 signal defeated
 signal state_changed(state_name: StringName)
 signal attack_window_changed(attack_name: StringName, active: bool)
+signal phase_02_flow_event(event_name: StringName)
 
 enum State {
 	DORMANT,
@@ -128,6 +129,13 @@ var _active_mire: PontiffMireZone
 var _active_lightning_strikes: Array[PontiffLightningStrike] = []
 var _gravity_judgment: PontiffGravityJudgment
 var _gravity_final_seal: bool = false
+var _phase_02_transition_complete: bool = false
+var _phase_02_dialogue_active: bool = false
+var _phase_02_dialogue_complete: bool = false
+var _phase_02_opening_gravity_started: bool = false
+var _phase_02_opening_gravity_completed: bool = false
+var _phase_02_opening_cast_active: bool = false
+var _phase_02_normal_ai_enabled: bool = false
 var _debug_magic_mode: StringName = &""
 var _target_was_frozen: bool = false
 var far_pressure: float = 0.0
@@ -183,6 +191,10 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
 		move_and_slide()
 		return
+	if _phase == 2 and not _phase_02_normal_ai_enabled and not _is_spell_state(current_state):
+		velocity.x = move_toward(velocity.x, 0.0, config.deceleration * delta)
+		move_and_slide()
+		return
 	if target == null or not is_instance_valid(target):
 		target = get_tree().get_first_node_in_group("player") as Player
 	if current_state in [State.ATTACK, State.SUMMON, State.TURN, State.STAGGER] or _action_locked:
@@ -220,6 +232,7 @@ func activate(player: Player = null) -> void:
 	if current_state != State.DORMANT:
 		return
 	_reset_behavior_context()
+	_reset_phase_02_opening_flow()
 	target = player if player != null else get_tree().get_first_node_in_group("player") as Player
 	hurtbox.set_enabled(true)
 	_attack_gap_timer = 0.45
@@ -265,6 +278,12 @@ func debug_enter_phase_02_immediate() -> void:
 	_transition_emitted = true
 	_phase = 2
 	_phase_02_elapsed = 0.0
+	_phase_02_transition_complete = true
+	_phase_02_dialogue_complete = true
+	_phase_02_opening_gravity_started = true
+	_phase_02_opening_gravity_completed = true
+	_phase_02_opening_cast_active = false
+	_phase_02_normal_ai_enabled = true
 	health_component.set_current_health(config.phase_transition_health)
 	current_poise = config.phase_02_max_poise
 	if phase_02_frames != null:
@@ -281,6 +300,32 @@ func is_phase_02() -> bool:
 
 func get_phase() -> int:
 	return _phase
+
+
+func notify_phase_02_dialogue_started() -> void:
+	if _transition_emitted and not _phase_02_dialogue_complete:
+		_phase_02_dialogue_active = true
+		_trace_phase_02_flow(&"PHASE_2_DIALOGUE_BEGIN")
+
+
+func notify_phase_02_dialogue_finished() -> void:
+	if not _transition_emitted or _phase_02_dialogue_complete:
+		return
+	_phase_02_dialogue_active = false
+	_phase_02_dialogue_complete = true
+	_trace_phase_02_flow(&"PHASE_2_DIALOGUE_END")
+
+
+func is_phase_02_opening_gravity_started() -> bool:
+	return _phase_02_opening_gravity_started
+
+
+func is_phase_02_opening_gravity_completed() -> bool:
+	return _phase_02_opening_gravity_completed
+
+
+func is_phase_02_normal_ai_enabled() -> bool:
+	return _phase_02_normal_ai_enabled
 
 
 func play_cinematic_animation(animation_name: StringName) -> void:
@@ -471,6 +516,7 @@ func _append_magic_candidates(candidates: Array[Attack]) -> void:
 		candidates.append(Attack.THREEFOLD_JUDGMENT)
 	if (
 		_phase == 2
+		and _phase_02_opening_gravity_completed
 		and _gravity_cooldown <= 0.0
 		and _phase_02_elapsed >= config.gravity_first_cast_delay
 		and _last_magic != Attack.WEIGHT_OF_ABSOLUTION
@@ -706,13 +752,27 @@ func _on_lightning_strike_exited(strike: PontiffLightningStrike) -> void:
 	_active_lightning_strikes.erase(strike)
 
 
-func _run_weight_of_absolution() -> void:
-	if _phase != 2 or _target_is_frozen():
+func _run_weight_of_absolution(forced_opening: bool = false) -> void:
+	if _phase != 2 or (not forced_opening and _target_is_frozen()):
 		_attack_gap_timer = 0.20
 		return
-	if not _begin_spell(State.GRAVITY_SPELL_WINDUP, &"mire_spell_windup", Attack.WEIGHT_OF_ABSOLUTION):
+	if forced_opening:
+		if _phase_02_opening_gravity_started or current_state in [State.DEATH_SEQUENCE, State.DEAD]:
+			return
+		_phase_02_opening_gravity_started = true
+		_phase_02_opening_cast_active = true
+		_action_locked = true
+		_spell_sequence_id += 1
+		_last_magic = Attack.WEIGHT_OF_ABSOLUTION
+		_set_state(State.GRAVITY_SPELL_WINDUP, &"mire_spell_windup")
+		_trace_phase_02_flow(&"GRAVITY_STATE_ENTER")
+		_trace_phase_02_flow(&"GRAVITY_CAST_ANIMATION_BEGIN")
+	elif not _begin_spell(
+		State.GRAVITY_SPELL_WINDUP, &"mire_spell_windup", Attack.WEIGHT_OF_ABSOLUTION
+	):
 		return
-	_gravity_cooldown = config.gravity_cooldown
+	else:
+		_gravity_cooldown = config.gravity_cooldown
 	_gravity_final_seal = false
 	var sequence_id: int = _spell_sequence_id
 	_spawn_gravity_judgment()
@@ -720,14 +780,17 @@ func _run_weight_of_absolution() -> void:
 		return
 	_gravity_final_seal = true
 	_set_state(State.GRAVITY_FINAL_SEAL, &"mire_spell_target_lock")
+	_trace_phase_02_flow(&"GRAVITY_FINAL_SEAL")
 	if _gravity_judgment != null:
 		_gravity_judgment.set_final_seal()
 	if not await _spell_wait(config.gravity_cast_time - config.gravity_final_seal_time, sequence_id):
 		return
 	var result: Dictionary = resolve_weight_of_absolution_for_player(target)
+	_trace_phase_02_flow(&"GRAVITY_HP_RESOLVE")
 	if _gravity_judgment != null:
 		_gravity_judgment.show_resolution(bool(result.get(&"compressed", false)))
 	_set_state(State.GRAVITY_SPELL_RECOVERY, &"mire_spell_recovery")
+	_trace_phase_02_flow(&"GRAVITY_RECOVERY_BEGIN")
 	_ice_suppression_timer = config.gravity_post_pressure_lock
 	_post_gravity_pressure_lock = config.gravity_post_pressure_lock
 	if not await _spell_wait(config.gravity_recovery, sequence_id):
@@ -735,6 +798,11 @@ func _run_weight_of_absolution() -> void:
 	_cleanup_gravity_judgment()
 	_gravity_final_seal = false
 	_finish_spell(Attack.WEIGHT_OF_ABSOLUTION)
+	if forced_opening:
+		_gravity_cooldown = config.gravity_cooldown
+		_phase_02_opening_cast_active = false
+		_phase_02_opening_gravity_completed = true
+		_trace_phase_02_flow(&"GRAVITY_COMPLETE")
 
 
 func _spawn_gravity_judgment() -> void:
@@ -1241,6 +1309,9 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 			_play_animation(&"light_hit")
 		return
 	current_poise = maxi(0, current_poise - poise_damage)
+	if _phase_02_opening_cast_active and _is_spell_state(current_state):
+		current_poise = maxi(1, current_poise)
+		return
 	if current_state == State.GRAVITY_FINAL_SEAL and _gravity_final_seal:
 		current_poise = maxi(1, current_poise)
 		return
@@ -1252,6 +1323,8 @@ func _on_hit_resolving(hitbox: HitboxComponent) -> void:
 
 func _run_stagger() -> void:
 	if current_state in [State.TRANSITION_PENDING, State.PHASE_TRANSITION, State.DEATH_SEQUENCE, State.DEAD]:
+		return
+	if _phase_02_opening_cast_active:
 		return
 	var interrupted_gravity: bool = current_state == State.GRAVITY_SPELL_WINDUP and not _gravity_final_seal
 	if interrupted_gravity:
@@ -1276,6 +1349,8 @@ func _on_health_changed(current: int, _maximum: int) -> void:
 	if _phase != 1 or current > config.phase_transition_health or _transition_emitted or current_state == State.DEAD:
 		return
 	_transition_emitted = true
+	_reset_phase_02_opening_flow()
+	_trace_phase_02_flow(&"PHASE_2_THRESHOLD_REACHED")
 	health_component.set_current_health(config.phase_transition_health)
 	_action_locked = true
 	velocity = Vector2.ZERO
@@ -1293,6 +1368,7 @@ func _run_phase_transition() -> void:
 	if current_state != State.TRANSITION_PENDING:
 		return
 	_set_state(State.PHASE_TRANSITION)
+	_trace_phase_02_flow(&"PHASE_2_TRANSITION_BEGIN")
 	phase_transition_started.emit()
 	var previous_input_profile: Player.InputProfile = Player.InputProfile.FULL
 	var player_was_invulnerable: bool = false
@@ -1326,13 +1402,23 @@ func _run_phase_transition() -> void:
 	_set_state(State.IDLE,&"phase_02_idle")
 	phase_changed.emit(2)
 	await get_tree().create_timer(config.phase_02_ready_delay).timeout
+	_phase_02_transition_complete = true
+	while not _phase_02_dialogue_complete and current_state not in [State.DEATH_SEQUENCE, State.DEAD]:
+		await get_tree().process_frame
+	if current_state in [State.DEATH_SEQUENCE, State.DEAD]:
+		return
 	hurtbox.set_invulnerable(false)
-	_action_locked = false
-	_attack_gap_timer = config.phase_02_min_attack_gap
 	if target != null:
 		if target.hurtbox != null and not player_was_invulnerable:
 			target.hurtbox.set_invulnerable(false)
 		target.set_input_profile(previous_input_profile)
+	_trace_phase_02_flow(&"GRAVITY_OPENING_REQUESTED")
+	await _run_weight_of_absolution(true)
+	if not _phase_02_opening_gravity_completed or current_state in [State.DEATH_SEQUENCE, State.DEAD]:
+		return
+	_phase_02_normal_ai_enabled = true
+	_attack_gap_timer = config.phase_02_min_attack_gap
+	_trace_phase_02_flow(&"PHASE_2_NORMAL_AI_BEGIN")
 	phase_transition_finished.emit()
 
 
@@ -1366,6 +1452,49 @@ func _run_death_sequence() -> void:
 	if not _defeat_emitted:
 		_defeat_emitted = true
 		defeated.emit()
+
+
+func _reset_phase_02_opening_flow() -> void:
+	_phase_02_transition_complete = false
+	_phase_02_dialogue_active = false
+	_phase_02_dialogue_complete = false
+	_phase_02_opening_gravity_started = false
+	_phase_02_opening_gravity_completed = false
+	_phase_02_opening_cast_active = false
+	_phase_02_normal_ai_enabled = false
+
+
+func _trace_phase_02_flow(event_name: StringName) -> void:
+	phase_02_flow_event.emit(event_name)
+	if not OS.is_debug_build():
+		return
+	var player_instance_id: int = 0
+	var player_hp: int = -1
+	var health_path: String = "<none>"
+	if target != null and is_instance_valid(target):
+		player_instance_id = target.get_instance_id()
+		if target.health_component != null:
+			player_hp = target.health_component.current_health
+			health_path = String(target.health_component.get_path())
+	var message: String = (
+		"[EDRAN_PHASE2_FLOW] event=%s time=%.3f phase=%d state=%s dialogue_active=%s "
+		+ "transition_complete=%s gravity_started=%s gravity_completed=%s animation=%s "
+		+ "player_instance_id=%d health_component_path=%s player_hp=%d"
+	) % [
+			event_name,
+			Time.get_ticks_msec() / 1000.0,
+			_phase,
+			get_state_name(),
+			_phase_02_dialogue_active,
+			_phase_02_transition_complete,
+			_phase_02_opening_gravity_started,
+			_phase_02_opening_gravity_completed,
+			sprite.animation,
+			player_instance_id,
+			health_path,
+			player_hp,
+		]
+	print(message)
 
 
 func _set_state(next_state: State, animation_name: StringName = &"") -> void:

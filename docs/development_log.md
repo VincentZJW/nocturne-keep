@@ -8227,3 +8227,52 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
 /Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_elemental_magic.gd
 /Users/vincentz/Downloads/Godot.app/Contents/MacOS/Godot --headless --path . --script res://chapters/chapter_03_chapel_of_thirteen_echoes/tests/test_edran_b4_b7_full_boss.gd
 ```
+
+## 2026-08-20 — CH3 Edran Phase-2 forced-opening runtime repair (preflight)
+
+- Approved scope: repair only the formal Phase-2 transition chain for The
+  Thirteenth Pontiff, Edran so the completed dialogue hands off to one mandatory
+  `Weight of Absolution` cast before normal Phase-2 AI begins. Preserve existing
+  HP rules, combat tuning, chapter route and unrelated systems.
+- Root cause confirmed from saved code and prior live output: the Boss-owned
+  structural transition and Sanctum-owned dialogue ran concurrently without a
+  completion handshake. The Boss restored control and enabled the weighted
+  Phase-2 selector immediately after its local timer; `WEIGHT_OF_ABSOLUTION`
+  therefore remained only an optional candidate behind an eight-second gate.
+- Owned implementation files: Edran Boss controller, Chapter III Boss room
+  signal wiring, focused runtime/HP tests, existing Chapter III QA evidence and
+  this development log. The local Debug Run Config remains a user-facing CH3
+  Boss launch setting and is not part of the planned commit.
+- Required verification: exact Godot 4.7.1 import/parse; focused spell and full
+  Boss regressions; three fresh MainBootstrap runs proving dialogue end → forced
+  spell → Final Seal → one HP mutation `60→50` → recovery → normal Phase-2 AI;
+  boundary HP tests; visual/runtime evidence; Output/Debugger clean check.
+- Stop point: one meaningful commit, then open the formal Chapter III Boss route
+  in Godot for manual acceptance. Do not continue to another milestone.
+
+### Implementation and verification
+
+- Added an explicit saved-room/Boss dialogue-completion handshake. Edran now
+  holds normal Phase-2 AI until the formal Sanctum presentation finishes, then
+  directly runs one mandatory `Weight of Absolution` through windup, Final
+  Seal, settlement and recovery. Only afterward does the ordinary weighted
+  selector become available; the 21-second repeat cooldown starts on opening
+  cast completion.
+- Added a typed ordered-flow signal and debug trace for every transition stage,
+  including the real Player instance ID, HealthComponent path, HP, Boss state
+  and animation. The opening cast keeps Poise stability without making the Boss
+  invulnerable; Player control is restored before the cast presentation.
+- Formal MainBootstrap branch QA: PASS across five fresh routes—`60→50` three
+  times, `50→30` once and `20→20` once. Each route reached the saved Boss room,
+  completed dialogue, played cast/Final Seal VFX, used exactly one health
+  mutation when required, finished recovery and only then enabled normal AI.
+- Deterministic HP matrix: PASS for 17 values, including `100→50`, `51→50`,
+  `50→30`, `40→20`, `35→20`, `20→20` and `15→15`. The floor is spell-local:
+  this spell cannot reduce HP below 20 and does not heal an already-lower value.
+- Regressions: judgment suite PASS (93 assertions), elemental suite PASS (986),
+  B4–B7 Boss suite PASS (20 battle regressions), MU2/MU3 music suites PASS.
+  Exact Godot 4.7.1 import/parse exits 0; its timed editor exit reports only the
+  benign filesystem scan-abort warning, with no script/resource error.
+- Graphical Main QA: PASS with five distinct 1280×720 captures under
+  `docs/qa/chapter_03_edran_phase_02_forced_opening/`. Manual timing/readability
+  acceptance remains for the user in the live `CH3_BOSS` route.

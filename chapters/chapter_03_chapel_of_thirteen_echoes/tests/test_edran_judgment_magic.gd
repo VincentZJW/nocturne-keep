@@ -137,6 +137,7 @@ func _test_selector_contract(boss: ThirteenthPontiffEdran, player: Player) -> vo
 	boss._append_magic_candidates(phase_one_candidates)
 	_expect(ThirteenthPontiffEdran.Attack.WEIGHT_OF_ABSOLUTION not in phase_one_candidates, "gravity is absent in Phase 1")
 	boss._phase = 2
+	boss._phase_02_opening_gravity_completed = true
 	boss._last_magic = ThirteenthPontiffEdran.Attack.FIRE_SPELL
 	var phase_two_candidates: Array[ThirteenthPontiffEdran.Attack] = []
 	boss._append_magic_candidates(phase_two_candidates)

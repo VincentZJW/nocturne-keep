@@ -32,6 +32,9 @@ func _ready() -> void:
 	sanctum.intro_environment_finished.connect(_on_intro_environment_finished)
 	sanctum.dialogue_started.connect(_on_dialogue_started)
 	sanctum.dialogue_finished.connect(_on_dialogue_finished)
+	sanctum.phase_transition_environment_finished.connect(
+		_on_phase_transition_environment_finished
+	)
 	boss.activated.connect(_on_boss_activated)
 	boss.defeated.connect(_on_boss_defeated)
 	boss.phase_transition_started.connect(_on_phase_transition_started)
@@ -89,7 +92,12 @@ func _on_phase_transition_started() -> void:
 	var music_manager: MusicManagerService = _get_music_manager()
 	if music_manager != null and music_manager.get_current_track_id() == PHASE_01_TRACK_ID:
 		music_manager.set_music_volume(TRANSITION_MUSIC_DB, 0.75)
+	boss.notify_phase_02_dialogue_started()
 	sanctum.play_phase_transition_environment()
+
+
+func _on_phase_transition_environment_finished() -> void:
+	boss.notify_phase_02_dialogue_finished()
 
 
 func _on_phase_transition_stage_reached(stage_name: StringName) -> void:

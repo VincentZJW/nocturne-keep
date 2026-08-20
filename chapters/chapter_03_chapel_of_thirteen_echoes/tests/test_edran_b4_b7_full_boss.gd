@@ -53,12 +53,15 @@ func _run() -> void:
 	_check(boss.config.phase_transition_health == 198,"55 percent boundary is 198 HP")
 	_check(boss.config.phase_transition_duration >= 4.5 and boss.config.phase_transition_duration <= 6.0,"transition duration is 4.5-6.0 seconds")
 	boss.health_component.set_current_health(198)
+	boss.notify_phase_02_dialogue_started()
+	boss.notify_phase_02_dialogue_finished()
 	var transition_elapsed: float = 0.0
-	while not boss.is_phase_02() and transition_elapsed < 6.5:
+	while not boss.is_phase_02_normal_ai_enabled() and transition_elapsed < 10.5:
 		await physics_frame
 		transition_elapsed += 1.0/60.0
-	await create_timer(boss.config.phase_02_ready_delay + 0.08).timeout
 	_check(boss.is_phase_02(),"full protected transition reaches Phase 2")
+	_check(boss.is_phase_02_opening_gravity_completed(),"mandatory Phase 2 opening gravity completes")
+	_check(boss.is_phase_02_normal_ai_enabled(),"normal Phase 2 AI begins after opening gravity")
 	_check(_phase_changed_count == 1,"phase change emits once")
 	_check(not boss.hurtbox.is_invulnerable,"Boss becomes vulnerable after transition")
 	_check(boss.current_poise == 145,"Phase 2 starts with 145 Poise")
