@@ -2,7 +2,7 @@ extends SceneTree
 
 const BOOTSTRAP: String = "res://scenes/bootstrap/main_bootstrap.tscn"
 const ROUTE: String = "res://chapters/chapter_03_chapel_of_thirteen_echoes/scenes/level/chapter_03_route.tscn"
-const OUTPUT: String = "res://docs/qa/chapter_03_edran_phase_02_forced_opening"
+const OUTPUT: String = "res://docs/qa/chapter_03_weight_of_absolution_art_rework"
 
 var _captures: int = 0
 
@@ -42,6 +42,10 @@ func _run() -> void:
 	if boss.current_state == ThirteenthPontiffEdran.State.DORMANT:
 		_fail("Edran did not complete the formal intro and activate")
 		return
+	# Keep caster and target in one Main/F5-equivalent camera composition so the
+	# evidence proves both halves of the ritual presentation.
+	boss.global_position = player.global_position + Vector2(300.0, 0.0)
+	boss.velocity = Vector2.ZERO
 	player.hurtbox.set_invulnerable(true)
 	player.health_component.set_current_health(60)
 	boss.health_component.set_current_health(boss.config.phase_transition_health)
@@ -52,22 +56,27 @@ func _run() -> void:
 	if not await _wait_until(func() -> bool: return boss.current_state == ThirteenthPontiffEdran.State.GRAVITY_SPELL_WINDUP, 1200):
 		_fail("forced gravity windup did not start")
 		return
-	await _capture("02_forced_gravity_windup.png")
+	boss.global_position = player.global_position + Vector2(300.0, 0.0)
+	boss.velocity = Vector2.ZERO
+	await _wait_seconds(0.78)
+	await _capture("02_weight_cast_ritual.png")
 	if not await _wait_until(func() -> bool: return boss.current_state == ThirteenthPontiffEdran.State.GRAVITY_FINAL_SEAL, 360):
 		_fail("Final Seal did not start")
 		return
-	await _capture("03_gravity_final_seal_hp_60.png")
+	await _wait_seconds(0.12)
+	await _capture("03_thirteenth_bell_and_judgment_seal.png")
 	if not await _wait_until(func() -> bool: return boss.current_state == ThirteenthPontiffEdran.State.GRAVITY_SPELL_RECOVERY, 360):
 		_fail("gravity recovery did not start")
 		return
 	if player.health_component.current_health != 50:
 		_fail("formal HP settlement was %d instead of 50" % player.health_component.current_health)
 		return
-	await _capture("04_gravity_resolved_hp_50.png")
+	await _wait_frames(3)
+	await _capture("04_final_judgment_hp_50.png")
 	if not await _wait_until(func() -> bool: return boss.is_phase_02_normal_ai_enabled(), 600):
 		_fail("normal Phase 2 AI did not begin after recovery")
 		return
-	await _capture("05_phase_02_normal_ai_after_gravity.png")
+	await _capture("05_phase_02_recovery_complete.png")
 	debug.reset_to_defaults()
 	var music_manager: MusicManagerService = root.get_node_or_null("MusicManager") as MusicManagerService
 	if music_manager != null:
@@ -110,10 +119,21 @@ func _wait_until(predicate: Callable, maximum_frames: int) -> bool:
 	return false
 
 
-func _capture(file_name: String) -> void:
-	for _frame: int in range(2):
+func _wait_frames(frame_count: int) -> void:
+	for _frame: int in range(frame_count):
 		await process_frame
-	await RenderingServer.frame_post_draw
+
+
+func _wait_seconds(duration: float) -> void:
+	await create_timer(duration).timeout
+
+
+func _capture(file_name: String) -> void:
+	# Main-loop QA scripts can run with the headless display driver, where
+	# RenderingServer.frame_post_draw is not guaranteed to be emitted.
+	for _frame: int in range(3):
+		await process_frame
+	RenderingServer.force_draw(false)
 	DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(OUTPUT))
 	var path: String = "%s/%s" % [OUTPUT, file_name]
 	var error: Error = root.get_texture().get_image().save_png(ProjectSettings.globalize_path(path))

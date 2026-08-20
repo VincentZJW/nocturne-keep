@@ -185,6 +185,33 @@ Final-Seal settlement uses the real Player `HealthComponent` exactly once:
 The 20-HP floor is spell-local: it prevents this judgment from reducing Player
 HP below 20, but it does not heal a Player who was already below 20.
 
+### Weight of Absolution presentation contract
+
+The formal saved presentation is
+`scenes/bosses/spells/pontiff_gravity_judgment.tscn`; it consumes the chapter
+assets under
+`assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/` and does
+not procedurally draw placeholder circles, lines or a polygon bell.
+
+- Edran uses three dedicated Phase 2 animations:
+  `weight_of_absolution_windup`, `weight_of_absolution_final_seal` and
+  `weight_of_absolution_recovery`. The upright crozier, raised declaring hand
+  and forward Final-Seal pressure distinguish the rite from Mire.
+- The target rite is five-layered: caster aura; detailed Thirteenth Sacred Bell;
+  thirteen-sector absolution seal; descending spatial compression; and a
+  narrow final judgment impact. Screen vignette, a four-pixel downward camera
+  load and compressed chapel candles support the event without hiding combat.
+- The formal palette is void navy `#070A14`, sacred blue `#526B83`, cold silver
+  `#C6D3DB`/`#EDF3F3`, antique gold `#9A7B45`/`#C3AA6A`, and restrained violet
+  grey `#625D76`.
+- Three original saved SFX live under
+  `assets/audio/boss/weight_of_absolution/`: bell invocation, seal lock and
+  final judgment. They use low bell partials, chapel-like decay and stone/metal
+  pressure rather than an explosive or science-fiction transient.
+- Presentation code never owns HP. The Boss still performs exactly one bounded
+  `HealthComponent` mutation at Final Seal and retains the 21-second ordinary
+  Phase 2 cooldown after the mandatory opening cast.
+
 | Skill | Damage | Timing | Range/selection | Recovery and fairness contract |
 |---|---:|---|---|---|
 | Bell-Bound Cleave / 钟缚横断 | 18 | 0.52 windup / 0.15 active / 0.68 recovery | Forward mid-range | No active tracking; rear safe zone remains |

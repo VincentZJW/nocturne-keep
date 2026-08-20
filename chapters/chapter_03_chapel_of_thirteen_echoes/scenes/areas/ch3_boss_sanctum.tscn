@@ -109,7 +109,7 @@ position = Vector2(1950, 250)
 texture_filter = 1
 texture = ExtResource("9_censer")
 
-[node name="Candles" type="Node2D" parent="Presentation"]
+[node name="Candles" type="Node2D" parent="Presentation" groups=["chapter_03_judgment_candles"]]
 z_index = -30
 
 [node name="Candle01" type="Sprite2D" parent="Presentation/Candles"]

@@ -1,13 +1,79 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=7 format=3]
 
 [ext_resource type="Script" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/scripts/bosses/spells/pontiff_gravity_judgment.gd" id="1_script"]
-[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/gate_bell_sequence.wav" id="2_bell_audio"]
+[ext_resource type="SpriteFrames" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/weight_of_absolution_effects.tres" id="2_frames"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/ui/judgment_vignette.png" id="3_vignette"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/weight_of_absolution/absolution_bell_invocation.wav" id="4_bell"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/weight_of_absolution/absolution_seal_lock.wav" id="5_lock"]
+[ext_resource type="AudioStream" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/audio/boss/weight_of_absolution/absolution_final_judgment.wav" id="6_impact"]
 
 [node name="PontiffGravityJudgment" type="Node2D"]
-z_index = 19
+z_index = 24
 script = ExtResource("1_script")
 
-[node name="BellAudio" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("2_bell_audio")
+[node name="CasterAura" type="AnimatedSprite2D" parent="."]
+top_level = true
+z_index = 1
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"cast_aura"
+
+[node name="TargetRite" type="Node2D" parent="."]
+
+[node name="Compression" type="AnimatedSprite2D" parent="TargetRite"]
+z_index = -1
+position = Vector2(0, -70)
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"compression"
+
+[node name="SacredBell" type="AnimatedSprite2D" parent="TargetRite"]
+z_index = 2
+position = Vector2(0, -106)
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"sacred_bell"
+
+[node name="JudgmentSeal" type="AnimatedSprite2D" parent="TargetRite"]
+z_index = -2
+position = Vector2(0, 0)
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"judgment_seal"
+
+[node name="FinalImpact" type="AnimatedSprite2D" parent="TargetRite"]
+z_index = 3
+position = Vector2(0, -43)
+texture_filter = 1
+sprite_frames = ExtResource("2_frames")
+animation = &"final_impact"
+
+[node name="ScreenAtmosphere" type="CanvasLayer" parent="."]
+layer = 7
+
+[node name="JudgmentVignette" type="TextureRect" parent="ScreenAtmosphere"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture_filter = 1
+texture = ExtResource("3_vignette")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="BellInvocation" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("4_bell")
+volume_db = -8.0
+max_distance = 1400.0
+
+[node name="SealLock" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_lock")
+volume_db = -10.0
+max_distance = 1400.0
+
+[node name="FinalJudgment" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("6_impact")
 volume_db = -7.0
-max_distance = 1000.0
+max_distance = 1400.0

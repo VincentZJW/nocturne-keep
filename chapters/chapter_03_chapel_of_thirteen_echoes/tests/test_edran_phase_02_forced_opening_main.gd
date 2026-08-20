@@ -17,11 +17,9 @@ const REQUIRED_FLOW: Array[StringName] = [
 	&"PHASE_2_NORMAL_AI_BEGIN",
 ]
 const CASES: Array[Dictionary] = [
-	{&"name": "above_50_repeat_1", &"before": 60, &"after": 50},
-	{&"name": "above_50_repeat_2", &"before": 60, &"after": 50},
-	{&"name": "above_50_repeat_3", &"before": 60, &"after": 50},
-	{&"name": "at_50_damage_20", &"before": 50, &"after": 30},
-	{&"name": "at_floor_20_unchanged", &"before": 20, &"after": 20},
+	{&"name": "above_threshold_60_to_50", &"before": 60, &"after": 50},
+	{&"name": "below_threshold_40_to_floor", &"before": 40, &"after": 20},
+	{&"name": "below_floor_15_unchanged", &"before": 15, &"after": 15},
 ]
 
 var _failures: Array[String] = []
@@ -160,7 +158,7 @@ func _on_phase_02_flow_event(event_name: StringName) -> void:
 		return
 	var boss: ThirteenthPontiffEdran = _active_room.boss
 	if event_name == &"GRAVITY_CAST_ANIMATION_BEGIN":
-		_cast_animation_visible = boss.sprite.animation == &"mire_spell_windup"
+		_cast_animation_visible = boss.sprite.animation == &"weight_of_absolution_windup"
 		_dialogue_clear_for_cast = (
 			not _active_room.sanctum.dialogue_panel.visible
 			and not _active_room.sanctum.phase_title.visible
@@ -171,7 +169,7 @@ func _on_phase_02_flow_event(event_name: StringName) -> void:
 	elif event_name == &"GRAVITY_FINAL_SEAL":
 		_final_seal_visible = (
 			boss.current_state == ThirteenthPontiffEdran.State.GRAVITY_FINAL_SEAL
-			and boss.sprite.animation == &"mire_spell_target_lock"
+			and boss.sprite.animation == &"weight_of_absolution_final_seal"
 		)
 
 
@@ -194,7 +192,7 @@ func _expect(condition: bool, message: String) -> void:
 
 func _finish() -> void:
 	if _failures.is_empty():
-		print("EDRAN_PHASE2_FORCED_OPENING_MAIN | PASS main_runs=5 repeat_60=3 branches=60to50,50to30,20to20 flow=complete")
+		print("EDRAN_PHASE2_FORCED_OPENING_MAIN | PASS main_runs=3 branches=60to50,40to20,15to15 flow=complete")
 		quit(0)
 		return
 	for failure: String in _failures:

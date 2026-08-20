@@ -127,6 +127,16 @@
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_02/mire_spell_windup/mire_spell_windup_02.png" id="99_0lgih"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_02/mire_spell_windup/mire_spell_windup_03.png" id="100_j4g6g"]
 [ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/magic_phase_02/mire_spell_windup/mire_spell_windup_04.png" id="101_wajjl"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_windup/weight_of_absolution_windup_01.png" id="102_weight_w1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_windup/weight_of_absolution_windup_02.png" id="103_weight_w2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_windup/weight_of_absolution_windup_03.png" id="104_weight_w3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_windup/weight_of_absolution_windup_04.png" id="105_weight_w4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_final_seal/weight_of_absolution_final_seal_01.png" id="106_weight_f1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_final_seal/weight_of_absolution_final_seal_02.png" id="107_weight_f2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_final_seal/weight_of_absolution_final_seal_03.png" id="108_weight_f3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_recovery/weight_of_absolution_recovery_01.png" id="109_weight_r1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_recovery/weight_of_absolution_recovery_02.png" id="110_weight_r2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/phase_02/weight_of_absolution_recovery/weight_of_absolution_recovery_03.png" id="111_weight_r3"]
 
 [resource]
 animations = [{
@@ -547,6 +557,51 @@ animations = [{
 "loop": 0,
 "name": &"mire_spell_windup",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("106_weight_f1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("107_weight_f2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("108_weight_f3")
+}],
+"loop": 0,
+"name": &"weight_of_absolution_final_seal",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("109_weight_r1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("110_weight_r2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("111_weight_r3")
+}],
+"loop": 0,
+"name": &"weight_of_absolution_recovery",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("102_weight_w1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("103_weight_w2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("104_weight_w3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("105_weight_w4")
+}],
+"loop": 0,
+"name": &"weight_of_absolution_windup",
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,

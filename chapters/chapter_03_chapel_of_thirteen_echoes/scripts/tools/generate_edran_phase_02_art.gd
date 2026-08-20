@@ -52,6 +52,9 @@ const PHASE_02_ANIMATIONS: Dictionary[StringName, int] = {
 	&"scripture_burial": 7,
 	&"procession_summon": 7,
 	&"fourteenth_seat": 8,
+	&"weight_of_absolution_windup": 4,
+	&"weight_of_absolution_final_seal": 3,
+	&"weight_of_absolution_recovery": 3,
 	&"light_hit": 2,
 	&"hurt": 3,
 	&"stagger": 4,
@@ -111,6 +114,14 @@ func _draw_frame_legacy(animation: StringName, frame: int, count: int, transitio
 	if animation in [&"light_hit", &"hurt", &"stagger"]:
 		x -= frame * 2
 		lean = -4
+	if animation == &"weight_of_absolution_windup":
+		lean = frame
+		y += frame / 2
+	elif animation == &"weight_of_absolution_final_seal":
+		lean = 4 + frame * 2
+		y += 1 + frame
+	elif animation == &"weight_of_absolution_recovery":
+		lean = maxi(0, 4 - frame * 2)
 	if animation.begins_with("death_"):
 		y += roundi(progress * 10.0)
 		lean = -roundi(progress * 10.0)
@@ -179,21 +190,48 @@ func _draw_phase_02(image: Image, animation: StringName, frame: int, progress: f
 		left_hand = Vector2i(x-20+roundi(progress*34.0), y+36+roundi(progress*18.0))
 	if animation == &"censer_chain_hit_02":
 		left_hand = Vector2i(x+roundi(progress*20.0), y+38+roundi(progress*32.0))
+	if animation == &"weight_of_absolution_windup":
+		right_hand = Vector2i(x+15+lean,y+40-roundi(progress*9.0))
+		left_hand = Vector2i(x-19+lean,y+39-roundi(progress*22.0))
+	elif animation == &"weight_of_absolution_final_seal":
+		right_hand = Vector2i(x+17+lean,y+29)
+		left_hand = Vector2i(x-23+lean,y+16+frame*2)
+	elif animation == &"weight_of_absolution_recovery":
+		right_hand = Vector2i(x+17+lean,y+34+frame*3)
+		left_hand = Vector2i(x-21+lean,y+22+frame*6)
 	_line(image, Vector2i(x+13+lean,y+28), right_hand, 9, OUTLINE)
 	_line(image, Vector2i(x+13+lean,y+28), right_hand, 5, BONE_DARK)
 	_line(image, Vector2i(x-13+lean,y+29), left_hand, 9, OUTLINE)
 	_line(image, Vector2i(x-13+lean,y+29), left_hand, 5, BONE)
-	var blade_tip: Vector2i = right_hand + Vector2i(24, -13)
+	var is_absolution: bool = animation.begins_with("weight_of_absolution")
+	var blade_tip: Vector2i = (
+		right_hand + Vector2i(2, -44) if is_absolution
+		else right_hand + Vector2i(24, -13)
+	)
 	_line(image, right_hand, blade_tip, 8, OUTLINE)
 	_line(image, right_hand, blade_tip, 5, IRON)
 	_line(image, right_hand + Vector2i(2,-1), blade_tip - Vector2i(2,-1), 2, STEEL)
 	_line(image, blade_tip-Vector2i(4,-1), blade_tip, 2, SOUL_LIT)
 	_line(image, right_hand-Vector2i(5,5), right_hand+Vector2i(6,5), 3, GOLD)
+	if is_absolution:
+		# Upright pontifical crozier, crescent bell and thirteen-count crown.
+		_circle_outline(image, blade_tip + Vector2i(0, 7), 11, GOLD)
+		_circle_outline(image, blade_tip + Vector2i(0, 7), 7, SOUL)
+		_fill(image, Rect2i(blade_tip.x-4,blade_tip.y+4,9,7),VOID)
+		for relic: int in range(5):
+			_pixel(image, blade_tip.x-8+relic*4,blade_tip.y-3+abs(relic-2),GOLD_LIT)
+		# Raised open palm remains readable instead of becoming a second weapon.
+		_fill(image,Rect2i(left_hand.x-4,left_hand.y-3,8,7),OUTLINE)
+		_fill(image,Rect2i(left_hand.x-2,left_hand.y-2,5,5),BONE)
+		for finger: int in range(3):
+			_line(image,left_hand+Vector2i(-2+finger*2,-2),left_hand+Vector2i(-3+finger*3,-8),1,BONE)
 	var censer: Vector2i = left_hand + Vector2i(-8, 25)
 	if animation == &"censer_chain_hit_01":
 		censer = left_hand + Vector2i(22, 10)
 	elif animation == &"censer_chain_hit_02":
 		censer = left_hand + Vector2i(5, 23)
+	elif is_absolution:
+		censer = Vector2i(x-25+lean,y+57)
 	_line(image, left_hand, censer, 1, STEEL)
 	for link: int in range(4):
 		var lp: Vector2i = Vector2(left_hand).lerp(Vector2(censer), float(link+1)/5.0).round()
@@ -223,6 +261,16 @@ func _draw_action_fx(image: Image, animation: StringName, frame: int, progress: 
 			var angle: float = TAU*float(seal)/13.0
 			var p: Vector2i = center+Vector2i(roundi(cos(angle)*25.0),45+roundi(sin(angle)*14.0))
 			_fill(image,Rect2i(p.x-1,p.y-1,3,3),GOLD_LIT)
+	if animation.begins_with("weight_of_absolution"):
+		# Downward sacred motes and a restrained apse halo sell ritual pressure.
+		_line(image,center+Vector2i(-28,56),center+Vector2i(-28,20),1,SOUL)
+		_line(image,center+Vector2i(28,56),center+Vector2i(28,20),1,SOUL)
+		_line(image,center+Vector2i(-28,20),center+Vector2i(0,-2),2,GOLD_LIT)
+		_line(image,center+Vector2i(0,-2),center+Vector2i(28,20),2,GOLD_LIT)
+		for mote: int in range(13):
+			var mx: int = center.x-30+(mote*11)%61
+			var my: int = center.y+5+(mote*13+frame*5)%64
+			_fill(image,Rect2i(mx,my,2,4),SOUL_LIT if mote%3==0 else STEEL)
 
 
 func _write_previews_and_concepts() -> void:

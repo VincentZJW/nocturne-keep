@@ -764,11 +764,13 @@ func _run_weight_of_absolution(forced_opening: bool = false) -> void:
 		_action_locked = true
 		_spell_sequence_id += 1
 		_last_magic = Attack.WEIGHT_OF_ABSOLUTION
-		_set_state(State.GRAVITY_SPELL_WINDUP, &"mire_spell_windup")
+		_set_state(State.GRAVITY_SPELL_WINDUP, &"weight_of_absolution_windup")
 		_trace_phase_02_flow(&"GRAVITY_STATE_ENTER")
 		_trace_phase_02_flow(&"GRAVITY_CAST_ANIMATION_BEGIN")
 	elif not _begin_spell(
-		State.GRAVITY_SPELL_WINDUP, &"mire_spell_windup", Attack.WEIGHT_OF_ABSOLUTION
+		State.GRAVITY_SPELL_WINDUP,
+		&"weight_of_absolution_windup",
+		Attack.WEIGHT_OF_ABSOLUTION
 	):
 		return
 	else:
@@ -779,7 +781,7 @@ func _run_weight_of_absolution(forced_opening: bool = false) -> void:
 	if not await _spell_wait(config.gravity_final_seal_time, sequence_id):
 		return
 	_gravity_final_seal = true
-	_set_state(State.GRAVITY_FINAL_SEAL, &"mire_spell_target_lock")
+	_set_state(State.GRAVITY_FINAL_SEAL, &"weight_of_absolution_final_seal")
 	_trace_phase_02_flow(&"GRAVITY_FINAL_SEAL")
 	if _gravity_judgment != null:
 		_gravity_judgment.set_final_seal()
@@ -789,7 +791,7 @@ func _run_weight_of_absolution(forced_opening: bool = false) -> void:
 	_trace_phase_02_flow(&"GRAVITY_HP_RESOLVE")
 	if _gravity_judgment != null:
 		_gravity_judgment.show_resolution(bool(result.get(&"compressed", false)))
-	_set_state(State.GRAVITY_SPELL_RECOVERY, &"mire_spell_recovery")
+	_set_state(State.GRAVITY_SPELL_RECOVERY, &"weight_of_absolution_recovery")
 	_trace_phase_02_flow(&"GRAVITY_RECOVERY_BEGIN")
 	_ice_suppression_timer = config.gravity_post_pressure_lock
 	_post_gravity_pressure_lock = config.gravity_post_pressure_lock
@@ -812,7 +814,7 @@ func _spawn_gravity_judgment() -> void:
 	_gravity_judgment = gravity_judgment_scene.instantiate() as PontiffGravityJudgment
 	if _gravity_judgment == null:
 		return
-	_gravity_judgment.initialize(target, config.gravity_cast_time)
+	_gravity_judgment.initialize(target, config.gravity_cast_time, self)
 	get_parent().add_child(_gravity_judgment)
 
 

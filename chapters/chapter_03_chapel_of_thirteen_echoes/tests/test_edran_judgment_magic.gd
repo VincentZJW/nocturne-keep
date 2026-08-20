@@ -44,7 +44,14 @@ func _test_resource_contract(boss: ThirteenthPontiffEdran) -> void:
 	_expect(lightning != null and lightning.get_node_or_null("Hitbox") is HitboxComponent, "lightning owns formal one-hit Hitbox")
 	_expect(lightning != null and lightning.get_node_or_null("StrikeAudio") is AudioStreamPlayer2D, "lightning owns formal strike audio")
 	_expect(gravity != null, "gravity judgment visual instantiates")
-	_expect(gravity != null and gravity.get_node_or_null("BellAudio") is AudioStreamPlayer2D, "gravity judgment owns formal bell audio")
+	_expect(gravity != null and gravity.get_node_or_null("BellInvocation") is AudioStreamPlayer2D, "gravity judgment owns formal bell invocation audio")
+	_expect(gravity != null and gravity.get_node_or_null("SealLock") is AudioStreamPlayer2D, "gravity judgment owns formal seal-lock audio")
+	_expect(gravity != null and gravity.get_node_or_null("FinalJudgment") is AudioStreamPlayer2D, "gravity judgment owns formal judgment-impact audio")
+	_expect(gravity != null and gravity.get_node_or_null("CasterAura") is AnimatedSprite2D, "gravity judgment owns the caster ritual layer")
+	_expect(gravity != null and gravity.get_node_or_null("TargetRite/SacredBell") is AnimatedSprite2D, "gravity judgment owns the thirteenth sacred bell layer")
+	_expect(gravity != null and gravity.get_node_or_null("TargetRite/JudgmentSeal") is AnimatedSprite2D, "gravity judgment owns the absolution seal layer")
+	_expect(gravity != null and gravity.get_node_or_null("TargetRite/Compression") is AnimatedSprite2D, "gravity judgment owns the spatial compression layer")
+	_expect(gravity != null and gravity.get_node_or_null("TargetRite/FinalImpact") is AnimatedSprite2D, "gravity judgment owns the final punishment layer")
 	if lightning != null:
 		lightning.free()
 	if gravity != null:

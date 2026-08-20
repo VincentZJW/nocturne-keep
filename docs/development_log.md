@@ -8276,3 +8276,23 @@ Status: implementation and automated Main/F5 QA complete; live Godot Boss-room h
 - Graphical Main QA: PASS with five distinct 1280×720 captures under
   `docs/qa/chapter_03_edran_phase_02_forced_opening/`. Manual timing/readability
   acceptance remains for the user in the live `CH3_BOSS` route.
+
+## 2026-08-20 · Edran「赦罪之重」正式美术演出重制
+
+Status: implementation, formal-asset generation, MainBootstrap QA and focused regressions complete; manual visual/audio acceptance remains the user gate
+
+### Milestone preflight
+
+- 工作流已加载：根目录 `AGENTS.md`、章节场景/人物工作流、章节生产检查清单与强制 QA 标准；本轮采用“主题确认 → 正式章节资产 → 保存场景接入 → Main/F5 → QA”顺序。
+- 目标：仅重制第三章 Boss 埃德兰 Phase 2 专属必中魔法 `The Weight of Absolution / 赦罪之重` 的施法动作、圣钟、十三分区审判圣印、空间压迫、Final Seal、Player反应、屏幕氛围与三段原创音效。
+- 逻辑审计：Phase 2 对话结束后的强制施放链已经存在，`gravity_cast_time = 1.70`、Final Seal `1.40`、恢复 `1.35`，HP规则仍为 `>50 → 50`、`20<HP<=50 → max(20, HP-20)`、`<=20` 不变。该逻辑不得改动。
+- 美术根因：正式 `pontiff_gravity_judgment.gd` 仍以 `_draw()` 生成无纹样钟形多边形、13个机械同心圆、5条压力线和结算圆；Boss同时复用 `mire_spell_*` 动作，缺少独立宗教审判姿态与三段声音层次。
+- Owned files：第三章埃德兰Phase 2生成器与SpriteFrames、赦罪之重法术脚本/场景、第三章圣所烛火分组、章节专属正式VFX/SFX、Boss规格、QA证据与本日志。不会修改其他章节、Player基础能力、其他法术、Boss数值或剧情文本。
+- 测试：Godot 4.7.1导入/解析、聚焦HP矩阵、Boss/元素/音乐回归、MainBootstrap `CH3_BOSS` 三次正式分支（60→50、40→20、15→15）、视觉截图与Output/Debugger检查。
+- Stop point：形成一次有意义提交，保留用户现有 `scripts/systems/debug_run_config.gd` 的CH3 Boss本地入口但不纳入提交，然后打开Godot第三章Boss供人工验收。
+- 以第三章正式资源替换运行时 `_draw()` 几何占位：21张透明像素VFX组成带浮雕、裂纹、厚重钟唇和13枚礼拜堂符号的圣钟，13分区天平审判圣印、教宗施法光环、空间压缩与最终裁定冲击；法术场景不再绘制旧圆圈、压力线或多边形钟影。
+- 新增三个埃德兰专属动作：`weight_of_absolution_windup`（4帧）、`weight_of_absolution_final_seal`（3帧）和`weight_of_absolution_recovery`（3帧），明确表现权杖竖立、副手宣判、Final Seal前压与恢复；不再复用Mire动作。
+- 接入三段原创SFX：低沉远钟/礼拜堂混响、石质审判圣印锁定、最终钟击与压迫；运行时同时驱动Player头顶圣钟、脚下圣印、身体压缩、屏幕暗角、4px向下镜头压力和圣堂烛火压低。
+- MainBootstrap强制施放与HP规则未变。正式三分支通过：`60→50`、`40→20`、`15→15`；每次完整顺序均为对白结束→强制施法→Final Seal→单次HealthComponent结算→恢复→Phase 2常规AI。低于20点不会继续扣血，也不会被抬回20。
+- Exact Godot 4.7.1：editor import/parse PASS；judgment suite PASS（100 assertions）；forced Main suite PASS（3/3 branches）；B4–B7 full Boss PASS（20 regressions）；elemental spell PASS（986 assertions）。图形Main捕获5张、正式资产表1张，GUI运行无红色Output/Debugger错误。
+- QA报告和截图位于 `docs/qa/chapter_03_weight_of_absolution_art_rework/`。`scripts/systems/debug_run_config.gd` 是用户已有的本地CH3 Boss入口修改，继续排除在本次提交之外。

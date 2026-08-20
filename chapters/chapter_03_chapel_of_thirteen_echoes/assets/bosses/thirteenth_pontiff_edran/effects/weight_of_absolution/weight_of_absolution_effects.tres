@@ -1,0 +1,50 @@
+[gd_resource type="SpriteFrames" load_steps=21 format=3]
+
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/bell/bell_01.png" id="1_bell1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/bell/bell_02.png" id="2_bell2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/bell/bell_03.png" id="3_bell3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/bell/bell_04.png" id="4_bell4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/seal/seal_01.png" id="5_seal1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/seal/seal_02.png" id="6_seal2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/seal/seal_03.png" id="7_seal3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/seal/seal_04.png" id="8_seal4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/cast_aura/cast_aura_01.png" id="9_aura1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/cast_aura/cast_aura_02.png" id="10_aura2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/cast_aura/cast_aura_03.png" id="11_aura3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/cast_aura/cast_aura_04.png" id="12_aura4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/compression/compression_01.png" id="13_compress1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/compression/compression_02.png" id="14_compress2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/compression/compression_03.png" id="15_compress3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/compression/compression_04.png" id="16_compress4"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/impact/impact_01.png" id="17_impact1"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/impact/impact_02.png" id="18_impact2"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/impact/impact_03.png" id="19_impact3"]
+[ext_resource type="Texture2D" path="res://chapters/chapter_03_chapel_of_thirteen_echoes/assets/bosses/thirteenth_pontiff_edran/effects/weight_of_absolution/impact/impact_04.png" id="20_impact4"]
+
+[resource]
+animations = [{
+"frames": [{"duration": 1.0, "texture": ExtResource("9_aura1")}, {"duration": 1.0, "texture": ExtResource("10_aura2")}, {"duration": 1.0, "texture": ExtResource("11_aura3")}, {"duration": 1.0, "texture": ExtResource("12_aura4")}],
+"loop": true,
+"name": &"cast_aura",
+"speed": 7.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("1_bell1")}, {"duration": 1.0, "texture": ExtResource("2_bell2")}, {"duration": 1.0, "texture": ExtResource("3_bell3")}, {"duration": 1.0, "texture": ExtResource("4_bell4")}],
+"loop": true,
+"name": &"sacred_bell",
+"speed": 6.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("13_compress1")}, {"duration": 1.0, "texture": ExtResource("14_compress2")}, {"duration": 1.0, "texture": ExtResource("15_compress3")}, {"duration": 1.0, "texture": ExtResource("16_compress4")}],
+"loop": true,
+"name": &"compression",
+"speed": 8.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("17_impact1")}, {"duration": 1.0, "texture": ExtResource("18_impact2")}, {"duration": 1.0, "texture": ExtResource("19_impact3")}, {"duration": 1.0, "texture": ExtResource("20_impact4")}],
+"loop": false,
+"name": &"final_impact",
+"speed": 18.0
+}, {
+"frames": [{"duration": 1.0, "texture": ExtResource("5_seal1")}, {"duration": 1.0, "texture": ExtResource("6_seal2")}, {"duration": 1.0, "texture": ExtResource("7_seal3")}, {"duration": 1.0, "texture": ExtResource("8_seal4")}],
+"loop": true,
+"name": &"judgment_seal",
+"speed": 7.0
+}]
